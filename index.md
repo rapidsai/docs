@@ -6,7 +6,7 @@ permalink: /
 ---
 
 
-# Standards and practices for RAPIDS projects
+# Standards and practices for RAPIDS
 {: .fs-9 }
 
 This site serves as a reference for the agreed standards and practices followed by all RAPIDS repositories and projects. For new contributors, learn the basiscs needed for contributing to RAPIDS. Visit [rapids.ai](http://rapids.ai) for more information.
