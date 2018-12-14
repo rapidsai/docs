@@ -7,6 +7,25 @@ title: Versioning and Tagging
 
 # Versioning and Tagging
 
+## Overview
+
+Summary of the versioning and release methodology used by RAPIDS projects.
+
+### Intended Audience
+
+<div class="code-example" markdown="1">
+
+Managers
+{: .label .label-blue}
+
+Developers
+{: .label .label-green}
+
+Community
+{: .label .label-yellow}
+
+</div>
+
 ## Versioning method
 
 All RAPIDS projects use the [SemVer](https://semver.org/) versioning method for all releases. 
@@ -25,8 +44,8 @@ Using SemVer for versioning, RAPIDS projects use the notation `vX.Y.Z` for relea
 
 A major release occurs in two ways:
 1. Pre `v1.0.0` - voting from the RAPIDS team on whether the following have been achieved:
-  * the API is stable enough to not trigger another major release within an agreed upon timeframe
-  * the project goals to achive a major release are met
+   * the API is stable enough to not trigger another major release within an agreed upon timeframe
+   * the project goals to achive a major release are met
 2. Post `v1.0.0` - following the SemVer convetions, breaking API changes will trigger this release
 
 Major releases result in incrementing the major version number by 1 and resetting the minor & hotfix/patch version numbers to 0.
