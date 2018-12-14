@@ -11,7 +11,7 @@ title: Versioning and Tagging
 
 Summary of the versioning and release methodology used by RAPIDS projects.
 
-### Intended Audience
+### Intended audience
 
 Community
 {: .label .label-yellow}
