@@ -34,7 +34,7 @@ The title should be at 'Heading level 1'
 
 Each release should be titled as: `[project name] [version] ([release date])`
 
-- The version is the SemVer outlined [here](docs/releases/versions#versioning-method)
+- The version is the SemVer outlined [here](docs/releases/versions/#versioning-method)
 - The release date is formatted as `(DD MMM YYYY)`, e.g. `(05 Jan 2019)`
 - The release date should be `TDB` for the next release
 
