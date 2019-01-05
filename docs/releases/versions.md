@@ -2,10 +2,10 @@
 layout: default
 nav_order: 2
 parent: Releases
-title: Versioning and Tagging
+title: Versions and Tags
 ---
 
-# Versioning and Tagging
+# Versions and Tags
 
 ## Overview
 
