@@ -1,6 +1,6 @@
 ---
 layout: default
-nav_order: 2
+nav_order: 1
 parent: Resources
 title: Code of Conduct
 ---
