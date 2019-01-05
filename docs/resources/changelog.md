@@ -2,10 +2,10 @@
 layout: default
 nav_order: 2
 parent: Resources
-title: Change Log Format
+title: Changelog Format
 ---
 
-# Change Log Format
+# Changelog Format
 
 ## Overview
 
