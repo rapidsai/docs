@@ -12,7 +12,7 @@ permalink: /
 This site serves as a reference for the agreed standards and practices followed by all RAPIDS repositories and projects. For new contributors, learn the basiscs needed for contributing to RAPIDS. Visit [rapids.ai](http://rapids.ai) for more information.
 {: .fs-6 .fw-300 }
 
-[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [View RAPIDS on GitHub](https://github.com/rapidsai){: .btn .fs-5 }
+[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [View Code of Conduct](docs/resources/conduct){: .btn .fs-5 } [View RAPIDS on GitHub](https://github.com/rapidsai){: .btn .fs-5 }
 
 ---
 
