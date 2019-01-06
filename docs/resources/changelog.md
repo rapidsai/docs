@@ -26,17 +26,18 @@ Managers
 
 The changelog is ordered reverse chronologically, which mean the next release is first and previous releases follow.
 
-The changelog is formatted in Markdown.
+The changelog is formatted in [Markdown](https://help.github.com/articles/basic-writing-and-formatting-syntax/) and in the root of the project repository named `CHANGELOG.md`.
 
 ### Title
 
-The title should be at 'Heading level 1'
-
-Each release should be titled as: `[project name] [version] ([release date])`
-
-- The version is the SemVer outlined [here]({{ site.baseurl }}docs/releases/versions/#versioning-method)
-- The release date is formatted as `(DD MMM YYYY)`, e.g. `(05 Jan 2019)`
-- The release date should be `TDB` for the next release
+Each release should be titled as: 
+```
+# [project name] [version] ([release date])
+```
+- `#` - sets the header level to 1
+- `[project name]` - is the name of the project
+- `[version]` - is the SemVer outlined [here]({{ site.baseurl }}docs/releases/versions/#versioning-method)
+- `[release date]` - is formatted as `(DD MMM YYYY)`, e.g. `(05 Jan 2019)` for a known release date; otherwise use `TBD` as a placeholder
 
 ### Body
 
@@ -46,18 +47,19 @@ The body of each release consists of three sections in order:
 - Improvements
 - Bug Fixes
 
-If a section has no items, it can be omitted.
+Each of these three sections should start as 'Header level 2' using `## [section title]` as the format. If a section has no items, it can be omitted.
 
-Each section should be 'Header level 2'. Each section contains an unordered list of the pull requests that are merged into the release.
+For each section there is an unordered list of the pull requests that are merged into the release and their descriptions. The format of each list item is: 
+```
+PR #[pull request number] [description]
+```
+- `[pull request number]` - is the number for the given PR
+- `[description]` - should follow similarly to git commit and PR description messages. Ensure these are concise, but "human readable." Often the PR description can be used.
 
-The format of each item is: `PR #[pull request number] [component name]: [description]`
 
-- The component name is optional, but should be used as often as possible
-- The description should follow similarly to git commit and PR description messages. Often the PR description can be used.
+### Example `CHANGELOG.md` file
 
-
-### Example
-
+```
 # rapidsProject 0.2.0 (TDB)
 
 ## New Features
@@ -78,3 +80,4 @@ The format of each item is: `PR #[pull request number] [component name]: [descri
 
 - PR #1 DataComponent: Creates data component for processing data
 - PR #2 Adds parser for CSV
+```
