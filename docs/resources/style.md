@@ -31,9 +31,7 @@ Individual projects should configure `flake8` to suit their needs, for example t
 
 Git commit messages should convey the change succinctly, but with enough detail to be understood without extra context.
 
-### Format
-
-#### Commit tags
+### Commit tags
 
 Consider starting the first line with a tag (e.g. `DOC Update conda install process`):
 
@@ -49,7 +47,7 @@ Consider starting the first line with a tag (e.g. `DOC Update conda install proc
 
 These help communicate the actions that are being taken, and help others when trying to review changes in a PR.
 
-#### First line
+### First line
 
 The *first line* should be a short description of the changes made, keeping the following in mind:
 - Limit the *first line* to 72 characters or less; use a *third line* for a detailed description
@@ -57,7 +55,7 @@ The *first line* should be a short description of the changes made, keeping the 
 - Use the present tense ("Add feature" not "Added feature")
 - Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
 
-#### Multi-line git messages
+### Multi-line git messages
 
 The *second line* should **always be empty**, if you need to add addtional details start on the *third line*.
 
