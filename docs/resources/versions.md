@@ -1,7 +1,7 @@
 ---
 layout: default
 nav_order: 2
-parent: Releases
+parent: Resources
 title: Versions and Tags
 ---
 
