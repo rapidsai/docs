@@ -54,8 +54,7 @@ For the selection of a `freeze date`, the general guidelines should be followed:
 Managers
 {: .label .label-blue}
 
-1. Beginning of the `freeze date` remind development team to stop accepting new issues for the `M.B` release
-   * Unless they are critical bugs or issues that are determined to be necessary in the release
+1. Beginning of the `freeze date` remind development team to stop accepting new issues for the `M.B` release (unless they are critical bugs/issues)
 2. Wait for confirmation from operations on the branch switch and project board updates
 3. Move any issues that are no longer a part of the `M.B` release to the `M.C` project board
 4. Check open PRs that are no longer a part of the `M.B` release to ensure they are targeted for merge on the `branch-M.C`
