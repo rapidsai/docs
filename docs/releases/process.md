@@ -56,7 +56,7 @@ Managers
 
 1. Beginning of the `freeze date` remind development team to stop accepting new issues for the `M.B` release (unless they are critical bugs/issues)
 2. Wait for confirmation from operations on the branch switch and project board updates
-3. Move any issues that are no longer a part of the `M.B` release to the `M.C` project board
+3. Move any issues that are no longer a part of the `M.B` release to the `M.C` project board or backlog (for backlog remove the issue from the project board)
 4. Check open PRs that are no longer a part of the `M.B` release to ensure they are targeted for merge on the `branch-M.C`
 
 Operations
@@ -65,7 +65,7 @@ Operations
 1. Beginning of the `freeze date` announce the freeze of `branch-M.B`
 2. Fork `branch-M.B` into `branch-M.C` for the new development branch
 3. Switch GitHub default branch of project to `branch-M.C`
-4. Copy release `M.B` project board to `M.C`
+4. Create release `M.C` project board
 5. Notify managers process is complete
 
 ## Release date
