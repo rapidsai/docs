@@ -27,7 +27,7 @@ Related
 {: .label .label-red}
 
 * Hotfix [versioning]({{ site.baseurl }}docs/resources/versions)
-* Major and minor [releases]({{ site.baseurl }}docs/release/process)
+* Major and minor [releases]({{ site.baseurl }}docs/releases/process)
 
 ### Criteria
 
