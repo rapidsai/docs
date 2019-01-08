@@ -16,6 +16,12 @@ Overview of creating a properly formatted pull request for a RAPIDS project.
 Developers
 {: .label .label-green}
 
+### See also
+
+- [Issues]({{ site.baseurl }}docs/contributing/issues)
+- [Code Contributions]({{ site.baseurl }}docs/contributing/code)
+- [Changelog]({{ site.baseurl }}docs/resources/changelog)
+
 ## Create a pull request
 
 Follow the steps [here](https://help.github.com/articles/creating-a-pull-request/) to create a pull request for the correct repository.
@@ -50,7 +56,13 @@ The description should NOT reword the issue description.
 
 All comments and reviews to pull requests must follow the [Code of Conduct]({{ site.baseurl }}docs/resources/conduct/)
 
-## Merge a pull request
+## Lifecycle
+
+### Immediate
+
+After opening the pull request, note the PR number and update the [changelog]({{ site.baseurl }}docs/resources/changelog) to reflect your changes.
+
+### Merging
 
 Once the pull request is ready, update the title to start with `[REVIEW]`.
 

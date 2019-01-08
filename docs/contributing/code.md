@@ -24,6 +24,11 @@ Community
 Developers
 {: .label .label-green}
 
+### See also
+
+- [Issues]({{ site.baseurl }}docs/contributing/issues)
+- [Pull Requests]({{ site.baseurl }}docs/contributing/prs)
+
 ## New developers
 
 If you are new to RAPIDS, make sure to check out <https://rapids.ai/> to help understand the purpose of RAPIDS.
