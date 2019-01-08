@@ -47,9 +47,9 @@ Issues can be closed during the `Initial triage` step and will be appropriately 
 
 ### New issue filed
 
-New issues are typically filed with an issue template from the project. This automatically labels an issue with the type of the issue and the <span class='label' style='background: #e99695'>? - Needs triage</span> label. This helps identify and move issues to the correct project boards for triage.
+New issues are typically filed with an issue template from the project. This automatically labels an issue with the type of the issue and the <span class="label" style="background: #e99695; color: #44434d; text-transform: none">? - Needs Triage</span> label. This helps identify and move issues to the correct project boards for triage.
 
-For issues not using the issue template, these should be marked with the <span class='label' style='background: #e99695'>? - Needs triage</span> label and correct issue type label. Once labeled they should be moved to the appropriate project board for the given issue type.
+For issues not using the issue template, these should be marked with the <span class="label" style="background: #e99695; color: #44434d; text-transform: none">? - Needs Triage</span> label and correct issue type label. Once labeled they should be moved to the appropriate project board for the given issue type.
 
 ### Initial triage
 
