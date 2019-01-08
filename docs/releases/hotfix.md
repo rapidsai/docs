@@ -21,8 +21,8 @@ Operations
 
 ### See also
 
+* [Git branching model]({{ site.baseurl }}docs/resources/git)
 * [Hotfix versioning]({{ site.baseurl }}docs/resources/versions)
-* [Major and minor releases]({{ site.baseurl }}docs/releases/process)
 
 ## Hotfixes
 
