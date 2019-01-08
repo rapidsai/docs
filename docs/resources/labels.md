@@ -37,16 +37,17 @@ Managers
 <tr><td><span class="label" style="background: #fef2c0; color: #44434d; text-transform: none">2 - In Progress</span></td><td>Currenty a work in progress</td></tr>
 <tr><td><span class="label" style="background: #e99695; color: #44434d; text-transform: none">? - Needs Triage</span></td><td>Need team to review and classify</td></tr>
 <tr><td><span class="label" style="background: #bb9ced; color: #44434d; text-transform: none">? - Resolved</span></td><td>Is the issue resolved?</td></tr>
-<tr><td><span class="label" style="background: #d73a4a; color: #44434d; text-transform: none">bug</span></td><td>Something isn't working</td></tr>
-<tr><td><span class="label" style="background: #12367a; color: #44434d; text-transform: none">code quality</span></td><td>Issues relating to improving the quality of code and tests</td></tr>
-<tr><td><span class="label" style="background: #d93f0b; color: #44434d; text-transform: none">doc</span></td><td>Documentation</td></tr>
+<tr><td><span class="label" style="background: #d73a4a; color: #ffffff; text-transform: none">bug</span></td><td>Something isn't working</td></tr>
+<tr><td><span class="label" style="background: #12367a; color: #ffffff; text-transform: none">code quality</span></td><td>Issues relating to improving the quality of code and tests</td></tr>
+<tr><td><span class="label" style="background: #d93f0b; color: #ffffff; text-transform: none">doc</span></td><td>Documentation</td></tr>
 <tr><td><span class="label" style="background: #cccccc; color: #44434d; text-transform: none">duplicate</span></td><td>This issue or pull request already exists</td></tr>
 <tr><td><span class="label" style="background: #a2eeef; color: #44434d; text-transform: none">feature request</span></td><td>New feature or request</td></tr>
 <tr><td><span class="label" style="background: #75aeff; color: #44434d; text-transform: none">git</span></td><td>git issue</td></tr>
-<tr><td><span class="label" style="background: #7057ff; color: #44434d; text-transform: none">good first issue</span></td><td>Good for newcomers</td></tr>
-<tr><td><span class="label" style="background: #008672; color: #44434d; text-transform: none">help wanted</span></td><td>Request for community help</td></tr>
+<tr><td><span class="label" style="background: #7057ff; color: #ffffff; text-transform: none">good first issue</span></td><td>Good for newcomers</td></tr>
+<tr><td><span class="label" style="background: #008672; color: #ffffff; text-transform: none">help wanted</span></td><td>Request for community help</td></tr>
 <tr><td><span class="label" style="background: #e4e669; color: #44434d; text-transform: none">invalid</span></td><td>This doesn't seem right</td></tr>
-
+<tr><td><span class="label" style="background: #2a2c89; color: #ffffff; text-transform: none">proposal</span></td><td>Change current process or code</td></tr>
+<tr><td><span class="label" style="background: #d876e3; color: #ffffff; text-transform: none">question</span></td><td>Further information is requested</td></tr>
 </tbody>
 </table>
 
@@ -59,8 +60,6 @@ Managers
 <tbody>
 
 <tr><td><span class="label" style="background: #c2e0c6; color: #44434d; text-transform: none">3 - Ready for Review</span></td><td>Ready for review by team</td></tr>
-<tr><td><span class="label" style="background: #8cd3ff; color: #44434d; text-transform: none">4 - Needs cuDF Reviewer</span></td><td>Waiting for cuDF reviewer to review or respond</td></tr>
-<tr><td><span class="label" style="background: #d3ff8c; color: #44434d; text-transform: none">4 - Needs libcudf Reviewer</span></td><td>Waiting for libcudf reviewer to review or respond</td></tr>
 <tr><td><span class="label" style="background: #ffb88c; color: #44434d; text-transform: none">4 - Waiting on Author</span></td><td>Waiting for author to respond to review</td></tr>
 <tr><td><span class="label" style="background: #a6e54d; color: #44434d; text-transform: none">5 - Ready to Merge</span></td><td>Testing and reviews complete, ready to merge</td></tr>
 
