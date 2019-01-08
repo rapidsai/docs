@@ -1,7 +1,7 @@
 ---
 layout: default
-nav_order: 3
-parent: Resources
+nav_order: 1
+parent: Maintainers
 title: Labels
 ---
 
@@ -21,6 +21,9 @@ Developers
 
 Managers
 {: .label .label-blue}
+
+Operations
+{: .label .label-purple}
 
 ## Issue labels
 
