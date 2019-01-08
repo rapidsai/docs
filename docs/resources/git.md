@@ -19,6 +19,12 @@ Community
 Developers
 {: .label .label-green}
 
+### See also
+
+* [Versioning and Tagging]({{ site.baseurl }}docs/resources/versions)
+* [Hotfix releases]({{ site.baseurl }}docs/releases/hotfix)
+* [Major and minor releases]({{ site.baseurl }}docs/releases/process)
+
 ## Git branching
 
 ### Approach
