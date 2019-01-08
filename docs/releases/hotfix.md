@@ -35,12 +35,12 @@ Hotfix (or patch) releases are not preplanned and are made to address critical i
 
 A hotfix is a _significant_ bug that affects the _majority_ of users for which there is no _reasonable_ workaround.
 
-So consider:
+So consider these questions:
 
-- __What makes a bug significant?__
-  - Produces incorrect results
-  - Compile or runtime errors with valid input
-  - Major incorrect functionality
+- __Is this bug significant?__
+  - Does it produces incorrect results?
+  - Are there compile or runtime errors with valid input?
+  - Is there major incorrect functionality?
 - __Does it affect the majority of users?__
   - Does the bug affect a common or major function?
   - Is the input that causes the bug a common or edge case?
