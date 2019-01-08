@@ -26,7 +26,7 @@ Developers
 
 ## New developers
 
-If you are new to RAPIDS, make sure to check out [https://rapids.ai/](https://rapids.ai/) to help understand the purpose of RAPIDS.
+If you are new to RAPIDS, make sure to check out <https://rapids.ai/> to help understand the purpose of RAPIDS.
 
 ### Your first issue
 
