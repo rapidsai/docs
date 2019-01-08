@@ -13,6 +13,9 @@ Summary of the RAPIDS release process for hotfixes.
 
 ### Intended audience
 
+Developers
+{: .label .label-green}
+
 Project Leads
 {: .label .label-blue}
 
@@ -30,7 +33,7 @@ Hotfix (or patch) releases are not preplanned and are made to address critical i
 
 ### Criteria
 
-A hotfix is a significant bug that affects the _majority_ of users for which there is no _reasonable_ workaround.
+A hotfix is a _significant_ bug that affects the _majority_ of users for which there is no _reasonable_ workaround.
 
 So consider:
 
@@ -43,30 +46,46 @@ So consider:
   - Is the input that causes the bug a common or edge case?
   - Will the average user encounter the bug during normal, average usage?
 - __Is there a reasonable workaround?__
-  - Is there even a workaround? Can it be communicated effectively?
-  - How many steps or code changes does a workaround take?
-  - When the bug is fixed, does the workaround continue to work?
+  - Is there even a workaround?
+  - Can a potential workaround be communicated effectively to the community?
   - Will the average user understand the workaround?
+  - How many steps/code changes does a workaround take?
+  - When the bug is fixed, does the workaround continue to work?
 
-Also consider the timing and when the next release is scheduled. If the freeze or release date is within a few days, consider waiting and including the hotfix in the release.
+Also consider the timing of when the next release is scheduled. If the freeze or release date is within a few days, consider waiting and including the hotfix in the next release instead.
 
 ### Process
 
-**NOTE:** The processes below use the current release of `M.A`, the next release of `M.B` and future release `M.C` (where `B=A+1`, `C=B+1`) for examples.
+**NOTE:** The processes below use these releases as examples:
+- Current release `M.A.X`
+- Next minor release `M.B.0`  (where `B=A+1`)
+- Next patch release `M.A.Y` (where `Y=X+1`)
 
 Developers
 {: .label .label-green}
-- Implement the fix succinctly
-- Change the minimal amount of code required
-- Update related documentation and unit tests
-- It is acceptable to implement a quick fix and open a new issue for a more in depth solution
+1. Hotfix issues will be assigned to you
+2. Create your branch from `master` NOT the `M.B` branch
+3. Implement the fix succinctly
+  1. Change the minimal amount of code required
+  2. Update related documentation and unit tests
+  3. It is acceptable to implement a quick fix and open a new issue for a more in depth solution
+4. Once complete, create a [pull request]({{ site.baseurl }}docs/contributing/prs) targeting `master`
+5. Notify the project lead
 
 Project Leads
 {: .label .label-blue}
-
-...
+1. During [triage]({{ site.baseurl }}docs/releases/triage), identify potential hotfixes
+2. Ensure that the [hotfix criteria](#criteria) is met
+3. Assign the issue and track its progress
+4. Notify Operations that a hotfix is being worked on
+5. Once notified that the pull request is created, review and approve it. Do NOT merge the pull request.
+6. Notify Operations that the hotfix pull request is ready for merging
 
 Operations
 {: .label .label-purple}
-
-...
+1. Once notified by a Project Lead, review the pull request
+2. Begin testing of conda, containers, and pip for correctness and functionality
+3. Review documentation to ensure version numbers (updating to `M.A.Y`) and instructions are correct
+4. Merge release PR after approval
+5. Monitor process of automated tools
+6. Spot check deliverables to ensure correctness
