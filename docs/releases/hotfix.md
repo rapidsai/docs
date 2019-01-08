@@ -13,7 +13,7 @@ Summary of the RAPIDS release process for hotfixes.
 
 ### Intended audience
 
-Managers
+Project Leads
 {: .label .label-blue}
 
 Operations
@@ -61,7 +61,7 @@ Developers
 - Update related documentation and unit tests
 - It is acceptable to implement a quick fix and open a new issue for a more in depth solution
 
-Managers
+Project Leads
 {: .label .label-blue}
 
 ...
