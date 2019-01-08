@@ -19,7 +19,7 @@ Managers
 Operations
 {: .label .label-purple}
 
-## Related docs
+### Related docs
 
 * [Hotfix versioning]({{ site.baseurl }}docs/resources/versions)
 * [Major and minor releases]({{ site.baseurl }}docs/releases/process)
