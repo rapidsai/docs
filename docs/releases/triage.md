@@ -52,9 +52,11 @@ Each project board has the following columns:
 | Backlog | All other open issues |
 | Closed | Issues that are closed will **automatically** be moved to this column |
 
+**IMPORTANT:** Leveraging the tracking boards for issues, we can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.
+
 By placing the issues in one of these boards filers and the community will see updates to the issue and can get a sense of when they can expect feedback. For example, on a given issue a user may see `Future release in Other Issues` and this allows the filer or the community to comment on if they believe the issue should be addressed faster.
 
-### Process cycle
+## Process cycle
 
 The general process cycle for every issue is:
 
@@ -76,7 +78,8 @@ For issues not using the issue template, these should be marked with the <span c
 
 ### Initial triage
 
-For every new issue the following should be done:
+Project Leads - Daily
+{: .label .label-blue}
 
 1. Ensure the issue type is correct, i.e. is the issue really a bug or is it a feature request?
 2. Review the content of the issue, has the filer provided all of the needed information for that issue type? If not, ask for clarification.
@@ -87,46 +90,46 @@ For every new issue the following should be done:
 
 ### Prioritize & schedule
 
-Once issues have been triaged, we can prioritize and schedule them for a release.
+Once issues have been triaged, we can prioritize and schedule them for a release. 
+
+**IMPORTANT:** Leveraging the tracking boards for issues, we can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.
 
 Project Leads - Daily
 {: .label .label-blue}
 
-1. For issues in the 
-
+1. For each issue in the `Needs prioritizing` column, review the issue and prioritize it.
+2. For issues added to `Hotfix` and  `Next release` columns follow the steps below.
+3. Repeat this process for all 3 tracking boards.
 
 Project Leads - Weekly
 {: .label .label-blue}
 
-1. For 
+1. Archvie all issues in the `Closed` column.
+2. Review all issues in each column of `Next release`, `Future release`, and `Backlog` to make sure issues are still scheduled appropriately.
+3. Prioritize any issues in `Future release`, and `Backlog` columns. `Hotfix` and `Next release` do not need to be re-prioritized as they should be in active development already.
+4. Discuss the status of all issues in `Hotfix` and `Next release` columns to ensure development progress is being made and there are no blockers.
+5. Repeat this process for all 3 tracking boards.
 
-### Hotfix
+#### Hotfix
 
-...
+1. Verify the issue is a [hotfix]({{ site.baseurl }}docs/releases/hotfix).
+2. Identify the project lead(s) needed to resolve the hotfix.
+3. Host a meeting about the proposed hotfix with the stakeholders and operations to determine the path forward.
+4. Assign a developer or team to fix the issue ASAP.
 
-### Next release
+#### Next release
 
-...
-
-### Future release
-
-...
+1. Ensure each issue is added to the release board project.
+2. Communicate to the project lead(s) the priority of the issue.
+3. Update the issue on the release board with the agreed upon priority.
+4. Based on priority of the issue assign a developer or wait for other higher priority issues to be completed first.
 
 ### Assign developer
 
-...
+Developers should be assigned to issues as they are responsible for and limit overcommitting developers. A general rule is to limit active development to **5 or fewer** issues.
 
+**IMPORTANT:** This is crucial for community involvement as an assigned issue looks like the issue is covered and won't receive any input or help.
 
 ### Link to PR
 
-...
-
-## How-to
-
-### Daily
-
-...
-
-### Weekly
-
-...
+Every [Pull Request]({{ site.baseurl }}docs/contributing/prs) should have the issue number in the descriptions of the PR with `Addresses #[issue number]` so when the PR is merged the issue that created the PR will automatically close as well.
