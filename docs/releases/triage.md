@@ -13,12 +13,15 @@ Summary of the issue triage methodology used for RAPIDS projects.
 
 ### Intended audience
 
+Developers
+{: .label .label-green}
+
 Project Leads
 {: .label .label-blue}
 
 ### See also
 
-- Issue Types?
+- [Issues]({{ site.baseurl }}docs/contributing/issues)
 
 ## Triage goals
 
