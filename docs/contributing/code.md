@@ -50,7 +50,7 @@ Remember, if you are unsure about anything, don't hesitate to comment on issues 
 
 Once you have gotten your feet wet and are more comfortable with the code, follow these steps to find prioritized issues.
 
-All RAPIDS projects have project boards for triaging [issues]({{ site.baseurl }}docs/releases/issue-triage) and planning [features]({{ site.baseurl }}docs/releases/planning).
+All RAPIDS projects have project boards for triaging [issues]({{ site.baseurl }}docs/releases/triage) and planning [features]({{ site.baseurl }}docs/releases/planning).
 
 ### What do I work on?
 
