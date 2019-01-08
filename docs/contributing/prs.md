@@ -46,9 +46,14 @@ Pull request titles should be succinct and state how the PR addresses the issue.
 
 ### Description
 
-The description must start with `Addresses #[issue number]`. If the PR addresses multiple issues, use an unordered list.
+The description must start with `Closes #[issue number]`. If the PR [addresses multiple issues](https://help.github.com/articles/closing-issues-using-keywords/#closing-multiple-issues), use an unordered and repeat `Closes #[issue number]` for each issue. For example:
 
-The description should also detail the implementations, challenges, and solutions so reviewers can understand the approach.
+```
+- Closes #45
+- Closes #60
+```
+
+The description should also detail the implementations, challenges, and solutions so reviewers can understand the approach. Liberally reference related pull requests or related issues, especially if this pull request may affect them.
 
 The description should NOT reword the issue description.
 
