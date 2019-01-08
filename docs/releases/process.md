@@ -19,6 +19,11 @@ Managers
 Operations
 {: .label .label-purple}
 
+### See also
+
+* [Git branching model]({{ site.baseurl }}docs/resources/git)
+* [Major and minor release versioning]({{ site.baseurl }}docs/resources/versions)
+
 ## Git branching model
 
 RAPIDS uses a custom git branching model, adapted from git-flow to leverage the tools GitHub provides and also focus on release-driven development. From more details see our guide for our [git branching]({{ site.baseurl }}docs/resources/git) methodology. 
