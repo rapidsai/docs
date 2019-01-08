@@ -9,37 +9,97 @@ title: Release Process
 
 ## Overview
 
-Summary of actions taken to create a new release for RAPIDS projects.
+Summary of the RAPIDS release process for major and minor releases.
 
 ### Intended audience
 
 Managers
 {: .label .label-blue}
 
+Operations
+{: .label .label-purple}
+
 ## Git branching model
 
-...
+RAPIDS uses a custom git branching model, adapted from git-flow to leverage the tools GitHub provides and also focus on release-driven development. From more details see our guide for our [git branching](../resources/git/) methodology. 
 
-## Next release
+### Migrating projects
 
-...
+For RAPIDS projects that are using another branching/development model, continue to develop with that approach until the next **minor** release. Given the version `M.A.0` (where `M` is the major version and `A` is the minor version), create a development branch `branch-M.B` where `B=A+1` from the `master` branch that has the latest minor release.
 
-## Freeze next release and cut new release branch
+From this point forward you can follow the git branching & release model used by the RAPIDS team.
 
-...
+## Major and minor releases
 
-## Merge next release into master and changes into new next release branch
+Both major and minor releases follow the same steps with little variation. For both, release types there are two key dates that need to be known well in advance:
 
-...
+* `Freeze date`
+* `Release date`
 
-## Handle hotfixes
+The `freeze date` will always be several days before the `release date`. This is to ensure there is enough time to finish active development, and to handle any unknown bugs/issues.
 
-...
+## Freeze date
 
-### What determines a hotfix
+### Timing
 
-...
+For the selection of a `freeze date`, the general guidelines should be followed:
+* Choose a `freeze date` at least **3 business days** before a `release date`
+* Consult project leads to ensure key features will make the release with the anticipated date
+* Communicate the decided `freeze date` to the development team immediately to ensure they can meet the deadline
 
-## Automated tooling to support
+### Process
 
-...
+**NOTE:** The processes below use the current release of `M.A`, the next release of `M.B` and future release `M.C` (where `B=A+1`, `C=B+1`) for examples.
+
+Managers
+{: .label .label-blue}
+
+1. Beginning of the `freeze date` remind development team to stop accepting new issues for the `M.B` release
+   * Unless they are critical bugs or issues that are determined to be necessary in the release
+2. Wait for confirmation from operations on the branch switch and project board updates
+3. Move any issues that are no longer a part of the `M.B` release to the `M.C` project board
+4. Check open PRs that are no longer a part of the `M.B` release to ensure they are targeted for merge on the `branch-M.C`
+
+Operations
+{: .label .label-purple}
+
+1. Beginning of the `freeze date` announce the freeze of `branch-M.B`
+2. Fork `branch-M.B` into `branch-M.C` for the new development branch
+3. Switch GitHub default branch of project to `branch-M.C`
+4. Copy release `M.B` project board to `M.C`
+5. Notify managers process is complete
+
+## Release date
+
+### Timing
+
+For the selection of a `release date`, the general guidelines should be followed:
+* Choose a `release date` at least **3-4 weeks** from the previous `release date`
+* Consult project leads to ensure key features will make the release with the anticipated date
+* Communicate the decided `release date` to the development team immediately to ensure they can meet the deadline
+
+### Process
+
+**NOTE:** The processes below use the current release of `M.A`, the next release of `M.B` and future release `M.C` (where `B=A+1`, `C=B+1`) for examples.
+
+Managers
+{: .label .label-blue}
+
+1. Beginning of the `release date` work with developers to close all outstanding issues and PRs
+2. Assist operations team in testing and verifying documentation in release `M.B` PR
+3. Review release `M.B` for approval
+4. Help operations team in spot checking the deliverables post-release
+
+Operations
+{: .label .label-purple}
+
+1. Beginning of the `release date` announce the release of `branch-M.B`
+2. Create release PR from `branch-M.B` that targets `master`
+3. Begin testing of conda, containers, and pip for correctness and functionality
+4. Work with development team to close outstanding PRs
+5. Review documentation to ensure version numbers and instructions are correct
+6. Enlist project reviewers to approve the release PR
+7. Merge release PR after approval
+8. Monitor process of automated tools
+9. Spot check deliverables to ensure correctness
+
