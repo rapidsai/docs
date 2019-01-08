@@ -36,7 +36,7 @@ Each release should be titled as:
 ```
 - `#` - sets the header level to 1
 - `[project name]` - is the name of the project
-- `[version]` - is the SemVer outlined [here]({{ site.baseurl }}docs/releases/versions/#versioning-method)
+- `[version]` - is the SemVer outlined [here]({{ site.baseurl }}docs/resources/versions/#versioning-method)
 - `[release date]` - is formatted as `(DD MMM YYYY)`, e.g. `(05 Jan 2019)` for a known release date; otherwise, use `TBD` as a placeholder
 
 ### Body
