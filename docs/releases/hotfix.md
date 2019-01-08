@@ -21,8 +21,8 @@ Operations
 
 ## Related docs
 
-* Hotfix [versioning]({{ site.baseurl }}docs/resources/versions)
-* Major and minor [releases]({{ site.baseurl }}docs/releases/process)
+* [Hotfix versioning]({{ site.baseurl }}docs/resources/versions)
+* [Major and minor releases]({{ site.baseurl }}docs/releases/process)
 
 ## Hotfixes
 
