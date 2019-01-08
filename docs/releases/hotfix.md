@@ -19,19 +19,18 @@ Managers
 Operations
 {: .label .label-purple}
 
-## Hotfixes
-
-Hotfix (or patch) releases are not preplanned and are made to address critical issues with the current release. The criteria and process below are set as a guideline to help determine what is a hotfix.
-
-Related
-{: .label .label-red}
+## Related docs
 
 * Hotfix [versioning]({{ site.baseurl }}docs/resources/versions)
 * Major and minor [releases]({{ site.baseurl }}docs/releases/process)
 
+## Hotfixes
+
+Hotfix (or patch) releases are not preplanned and are made to address critical issues with the current release. The criteria and process below are set as a guideline to help determine what is a hotfix.
+
 ### Criteria
 
-Hotfixes or patch releases are only made when a certain set of crieter
+...
 
 ### Considerations
 
