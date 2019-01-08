@@ -2,12 +2,21 @@
 layout: default
 nav_order: 3
 parent: Releases
-title: Process for Release
+title: Release Process
 ---
 
-# Process for Release
+# Release Process
 
 ## Overview
+
+Summary of actions taken to create a new release for RAPIDS projects.
+
+### Intended audience
+
+Managers
+{: .label .label-blue}
+
+## Git branching model
 
 ...
 
