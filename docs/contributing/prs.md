@@ -9,22 +9,22 @@ title: Pull Requests
 
 ## Overview
 
-...
+Overview of creating a properly formatted pull request for a RAPIDS project.
 
 ### Intended audience
-
-Community
-{: .label .label-yellow}
 
 Developers
 {: .label .label-green}
 
-Managers
-{: .label .label-blue}
+## Create a pull request
 
-## ...
+Follow the steps [here](https://help.github.com/articles/creating-a-pull-request/) to create a pull request for the correct repository.
 
-## Pull request formatting
+Don't forget to verify the target branch. By default, this is the next release branch, but your issue may need to be merged into a different branch.
+
+Follow the format below for the title and description.
+
+## Format a pull request
 
 ### Title
 
@@ -49,3 +49,11 @@ The description should NOT reword the issue description.
 ### Comments
 
 All comments and reviews to pull requests must follow the [Code of Conduct]({{ site.baseurl }}docs/resources/conduct/)
+
+## Merge a pull request
+
+Once the pull request is ready, update the title to start with `[REVIEW]`.
+
+All pull requests must pass continuous integration [status checks](https://help.github.com/articles/about-status-checks/). If your PR is failing CI but you believe the problem is unrelated to your code, please leave a comment in your PR to explain why.
+
+Pull requests are reviewed by the community and once approved, the PR is merged by an approved reviewer.
