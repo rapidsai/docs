@@ -21,7 +21,7 @@ Operations
 
 ## Git branching model
 
-RAPIDS uses a custom git branching model, adapted from git-flow to leverage the tools GitHub provides and also focus on release-driven development. From more details see our guide for our [git branching](../resources/git/) methodology. 
+RAPIDS uses a custom git branching model, adapted from git-flow to leverage the tools GitHub provides and also focus on release-driven development. From more details see our guide for our [git branching]({{ site.baseurl }}docs/resources/git) methodology. 
 
 ### Migrating projects
 
@@ -38,7 +38,11 @@ Both major and minor releases follow the same steps with little variation. For b
 
 The `freeze date` will always be several days before the `release date`. This is to ensure there is enough time to finish active development, and to handle any unknown bugs/issues.
 
-## Freeze date
+### Hotfixes
+
+Hotfixes have their own process and are described [here]({{ site.baseurl }}docs/releases/hotfixes).
+
+## Freezing
 
 ### Timing
 
@@ -68,7 +72,7 @@ Operations
 4. Create release `M.C` project board
 5. Notify managers process is complete
 
-## Release date
+## Releasing
 
 ### Timing
 
