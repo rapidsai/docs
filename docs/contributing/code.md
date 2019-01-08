@@ -75,4 +75,4 @@ For all others:
 2. Scroll right to find the `PR-Needs Review`
 3. Review the PR (Make sure you follow the [Code of Conduct]({{ site.baseurl }}docs/resources/conduct))
 
-If you are maintainer, also review pull requests in the `PR-Reviewer Approved` column and merge as needed.
+If you are project lead, also review pull requests in the `PR-Reviewer Approved` column and merge as needed.

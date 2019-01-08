@@ -13,7 +13,7 @@ Summary of the RAPIDS release process for major and minor releases.
 
 ### Intended audience
 
-Managers
+Project Leads
 {: .label .label-blue}
 
 Operations
@@ -60,7 +60,7 @@ For the selection of a `freeze date`, the general guidelines should be followed:
 
 **NOTE:** The processes below use the current release of `M.A`, the next release of `M.B` and future release `M.C` (where `B=A+1`, `C=B+1`) for examples.
 
-Managers
+Project Leads
 {: .label .label-blue}
 
 1. Beginning of the `freeze date` remind development team to stop accepting new issues for the `M.B` release (unless they are critical bugs/issues)
@@ -75,7 +75,7 @@ Operations
 2. Fork `branch-M.B` into `branch-M.C` for the new development branch
 3. Switch GitHub default branch of project to `branch-M.C`
 4. Create release `M.C` project board
-5. Notify managers process is complete
+5. Notify project leads process is complete
 
 ## Releasing
 
@@ -90,7 +90,7 @@ For the selection of a `release date`, the general guidelines should be followed
 
 **NOTE:** The processes below use the current release of `M.A`, the next release of `M.B` and future release `M.C` (where `B=A+1`, `C=B+1`) for examples.
 
-Managers
+Project Leads
 {: .label .label-blue}
 
 1. Beginning of the `release date` work with developers to close all outstanding issues and PRs

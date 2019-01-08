@@ -19,7 +19,7 @@ Community
 Developers
 {: .label .label-green}
 
-Managers
+Project Leads
 {: .label .label-blue}
 
 ## Format
