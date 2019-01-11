@@ -49,6 +49,8 @@ Hotfixes have their own process and are described [here]({{ site.baseurl }}docs/
 
 ## Freezing
 
+Freezing is the process of locking down all issues slated for the release and moving issues not in this release to the following release. Additionally, all pending pull requests should be reviewed and aim to be merged before the release date.
+
 ### Timing
 
 For the selection of a `freeze date`, the general guidelines should be followed:
