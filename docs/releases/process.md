@@ -38,25 +38,25 @@ From this point forward you can follow the git branching & release model used by
 
 Both major and minor releases follow the same steps with little variation. For both, release types there are two key dates that need to be known well in advance:
 
-* `Freeze date`
+* `Burn down date`
 * `Release date`
 
-The `freeze date` will always be several days before the `release date`. This is to ensure there is enough time to finish active development, and to handle any unknown bugs/issues.
+The `burn down date` will always be several days before the `release date`. This is to ensure there is enough time to finish active development, and to handle any unknown bugs/issues.
 
 ### Hotfixes
 
 Hotfixes have their own process and are described [here]({{ site.baseurl }}docs/releases/hotfixes).
 
-## Freezing
+## Burn down
 
-Freezing is the process of locking down all issues slated for the release and moving issues not in this release to the following release. Additionally, all pending pull requests should be reviewed and aim to be merged before the release date.
+Burn down is the process of locking down all issues slated for the release and moving issues not in this release to the following release. Additionally, all pending pull requests should be reviewed and aim to be merged before the release date.
 
 ### Timing
 
-For the selection of a `freeze date`, the general guidelines should be followed:
-* Choose a `freeze date` at least **3 business days** before a `release date`
+For the selection of a `burn down date`, the general guidelines should be followed:
+* Choose a `burn down date` at least **3 business days** before a `release date`
 * Consult project leads to ensure key features will make the release with the anticipated date
-* Communicate the decided `freeze date` to the development team immediately to ensure they can meet the deadline
+* Communicate the decided `burn down date` to the development team immediately to ensure they can meet the deadline
 
 ### Process
 
@@ -65,7 +65,7 @@ For the selection of a `freeze date`, the general guidelines should be followed:
 Project Leads
 {: .label .label-blue}
 
-1. Beginning of the `freeze date` remind development team to stop accepting new issues for the `M.B` release (unless they are critical bugs/issues)
+1. Beginning of the `burn down date` remind development team to stop accepting new issues for the `M.B` release (unless they are critical bugs/issues)
 2. Wait for confirmation from operations on the branch switch and project board updates
 3. Move any issues that are no longer a part of the `M.B` release to the `M.C` project board or backlog (for backlog remove the issue from the project board)
 4. Check open PRs that are no longer a part of the `M.B` release to ensure they are targeted for merge on the `branch-M.C`
@@ -73,7 +73,7 @@ Project Leads
 Operations
 {: .label .label-purple}
 
-1. Beginning of the `freeze date` announce the freeze of `branch-M.B`
+1. Beginning of the `burn down date` announce the burn down of `branch-M.B`
 2. Fork `branch-M.B` into `branch-M.C` for the new development branch
 3. Switch GitHub default branch of project to `branch-M.C`
 4. Create release `M.C` project board
