@@ -45,7 +45,7 @@ The `burn down date` will always be several days before the `release date`. This
 
 ### Hotfixes
 
-Hotfixes have their own process and are described [here]({{ site.baseurl }}docs/releases/hotfixes).
+Hotfixes have their own process and are described [here]({{ site.baseurl }}docs/releases/hotfix).
 
 ## Burn down
 
