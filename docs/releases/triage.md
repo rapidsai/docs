@@ -79,6 +79,16 @@ New issues are typically filed with an issue template from the project. This aut
 
 For issues not using the issue template, these should be marked with the <span class="label" style="background: #e99695; color: #44434d; text-transform: none">? - Needs Triage</span> label and correct issue type label. Once labeled they should be moved to the appropriate project board for the given issue type.
 
+### Finding issues
+
+Each tracking board type has a filter that can be used on when using the `Add cards` feature. This limits the results displayed to those that are for the tracking board and does not show pull requests.
+
+| Board | Filter |
+|:------|:-------|
+| Bug Squashing | `is:open is:issue label:bug no:project` |
+| Feature Planning | `is:open is:issue label:"feature request" no:project` |
+| Other Issues | `is:open is:issue -label:bug -label:"feature request" no:project` |
+
 ### Initial triage
 
 Project Leads - Daily
