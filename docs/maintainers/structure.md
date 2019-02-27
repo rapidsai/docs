@@ -1,7 +1,7 @@
 ---
 layout: default
 nav_order: 1
-parent: Maintainers
+parent: RAPIDS Maintainer Docs
 title: Project Structure
 ---
 

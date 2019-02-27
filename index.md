@@ -9,16 +9,16 @@ permalink: /
 # RAPIDS Community and Project Docs
 {: .fs-9 }
 
-This site serves as a reference for the agreed standards and practices followed by all RAPIDS repositories and projects. For new contributors, learn the basiscs needed for contributing to RAPIDS. Visit [rapids.ai](http://rapids.ai) for more information.
+This site serves as a reference for the agreed standards and practices followed by all RAPIDS repositories and projects. For new contributors, learn the basics needed for contributing to RAPIDS. Visit [rapids.ai](http://rapids.ai) for more information.
 {: .fs-6 .fw-300 }
 
-[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [View Code of Conduct]({{ site.baseurl }}docs/resources/conduct){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [View RAPIDS on GitHub](https://github.com/rapidsai){: .btn .fs-5 }
+[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [View Code of Conduct]({{ site.baseurl }}/docs/resources/conduct){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [View RAPIDS on GitHub](https://github.com/rapidsai){: .btn .fs-5 }
 
 ---
 
 ## Getting started
 
-Welcome! We are excited you are here! Before you begin, we ask that everyone review the [Code of Conduct]({{ site.baseurl }}docs/resources/conduct) before contributing.
+Welcome! We are excited you are here! Before you begin, we ask that everyone review the [Code of Conduct]({{ site.baseurl }}/docs/resources/conduct) before contributing.
 
 ### Your first issue
 
@@ -37,11 +37,11 @@ Remember, if you are unsure about anything, don't hesitate to comment on issues 
 
 Once you have gotten your feet wet and are more comfortable with the code, follow these steps to find prioritized issues.
 
-All RAPIDS projects have project boards for triaging [issues]({{ site.baseurl }}docs/releases/traige) and planning [features]({{ site.baseurl }}docs/releases/planning).
+All RAPIDS projects have project boards for triaging [issues]({{ site.baseurl }}/docs/releases/traige) and planning [features]({{ site.baseurl }}/docs/releases/planning).
 
 ### More details
 
-Review the [Code Contributions]({{ site.baseurl }}docs/contributing/code) page.
+Review the [Code Contributions]({{ site.baseurl }}/docs/contributing/code) page.
 
 ## Issues or feedback
 

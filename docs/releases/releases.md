@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Releases
-nav_order: 2
+title: RAPIDS Release Process
+nav_order: 6
 has_children: true
 permalink: docs/releases
 ---

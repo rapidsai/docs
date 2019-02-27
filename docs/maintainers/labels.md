@@ -1,7 +1,7 @@
 ---
 layout: default
 nav_order: 6
-parent: Maintainers
+parent: RAPIDS Maintainer Docs
 title: Labels
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: default
 nav_order: 2
-parent: Resources
+parent: RAPIDS Resources
 title: Changelog Format
 ---
 

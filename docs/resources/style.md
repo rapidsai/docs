@@ -1,7 +1,7 @@
 ---
 layout: default
 nav_order: 4
-parent: Resources
+parent: RAPIDS Resources
 title: Style Guide
 ---
 

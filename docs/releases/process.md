@@ -1,7 +1,7 @@
 ---
 layout: default
 nav_order: 3
-parent: Releases
+parent: RAPIDS Release Process
 title: Release Process
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: default
 nav_order: 4
-parent: Maintainers
+parent: RAPIDS Maintainer Docs
 title: Project Artifacts
 ---
 

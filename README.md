@@ -1,5 +1,5 @@
-# RAPIDS Dev Docs
+# RAPIDS Docs
 
-Jekyll site for RAPIDS developer documentation and stardards.
+Jekyll site for RAPIDS documentation.
 
-https://rapidsai.github.io/devdocs/
+https://rapidsai.github.io/docs/
