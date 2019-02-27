@@ -1,7 +1,7 @@
 ---
 layout: default
 nav_order: 2
-parent: Maintainers
+parent: RAPIDS Maintainer Docs
 title: Project Boards
 ---
 

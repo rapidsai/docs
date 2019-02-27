@@ -1,7 +1,7 @@
 ---
 layout: default
 nav_order: 6
-parent: Resources
+parent: RAPIDS Resources
 title: Versions and Tags
 ---
 

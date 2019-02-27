@@ -1,7 +1,7 @@
 ---
 layout: default
 nav_order: 1
-parent: Resources
+parent: RAPIDS Resources
 title: Code of Conduct
 ---
 

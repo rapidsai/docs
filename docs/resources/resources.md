@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Resources
-nav_order: 3
+title: RAPIDS Resources
+nav_order: 8
 has_children: true
 permalink: docs/resources
 ---

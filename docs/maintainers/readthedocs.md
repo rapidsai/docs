@@ -1,7 +1,7 @@
 ---
 layout: default
 nav_order: 5
-parent: Maintainers
+parent: RAPIDS Maintainer Docs
 title: Read the Docs
 ---
 
