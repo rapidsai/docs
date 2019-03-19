@@ -3,7 +3,7 @@ layout: default
 title: RAPIDS Release Process
 nav_order: 6
 has_children: true
-permalink: docs/releases
+permalink: releases
 ---
 
 # Releases

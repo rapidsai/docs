@@ -3,7 +3,7 @@ layout: default
 title: RAPIDS Resources
 nav_order: 8
 has_children: true
-permalink: docs/resources
+permalink: resources
 ---
 
 # Resources

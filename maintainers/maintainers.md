@@ -3,7 +3,7 @@ layout: default
 title: RAPIDS Maintainer Docs
 nav_order: 7
 has_children: true
-permalink: docs/maintainers
+permalink: maintainers
 ---
 
 # Maintainers
