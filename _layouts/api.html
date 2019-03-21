@@ -11,6 +11,11 @@
         load_page(this.value);
       }
     });
+    var cnt = $('#legacy-libs option').length;
+    if (cnt == 1) {
+      // No legacy libraries to show
+      $('#legacy-libs').hide();
+    }
   });
 
   function load_page(url) {
@@ -24,9 +29,16 @@
           <a href="{{ site.url }}{{ site.baseurl }}/api" class="api-site-title fs-6 lh-tight">RAPIDS API Docs</a>
         </div>
         <div class="api-right-header">
-          <div class="api-links api-links-border">
+          <div class="api-links api-links-label blue">
+            <ul class="list-style-none fs-3 mt-md-1 mb-md-1 pb-4 pb-md-0 js-aux-nav aux-nav">
+              <li class="text-delta fw-700 d-inline-block my-0 mr-0">
+                <i class="fas fa-check-square"></i></br>Stable
+              </li>
+            </ul>
+          </div>
+          <div class="api-links api-links-double">
             <ul class="list-style-none fs-3 fw-500 mt-md-1 mb-md-1 pb-4 pb-md-0 js-aux-nav aux-nav">
-              <li class="text-delta d-inline-block my-0{% unless forloop.last %} mr-2{% endunless %}">Stable Docs</li>
+              <li class="text-delta d-inline-block my-0{% unless forloop.last %} mr-2{% endunless %}">APIS</li>
               {% for lib in site.data.apis %}
               {% assign api = lib[1] %}
               {% for ver in api.stable %}
@@ -43,13 +55,82 @@
               {% endfor %}
               {% endfor %}
             </ul>
+            <ul class="list-style-none fs-3 fw-500 mt-md-1 mb-md-1 pb-4 pb-md-0 js-aux-nav aux-nav">
+                <li class="text-delta d-inline-block my-0{% unless forloop.last %} mr-2{% endunless %}">LIBS</li>
+                {% for lib in site.data.libs %}
+                {% assign api = lib[1] %}
+                {% for ver in api.stable %}
+                  {% assign loc = api.path | append: '/stable' %}
+                  {% if page.path contains loc %}
+                  <li class="d-inline-block fw-900 my-0{% unless forloop.last %} mr-2{% endunless %}">
+                    {{ api.name }}
+                  </li>
+                  {% else %}
+                  <li class="d-inline-block fw-300 my-0{% unless forloop.last %} mr-2{% endunless %}">
+                    <a href="{{ site.url }}{{ site.baseurl }}/api/{{ api.path }}/stable">{{ api.name }}</a>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                {% endfor %}
+              </ul>
           </div>
+          <div class="api-links api-links-label orange">
+            <ul class="list-style-none fs-3 mt-md-1 mb-md-1 pb-4 pb-md-0 js-aux-nav aux-nav">
+              <li class="text-delta fw-700 d-inline-block my-0 mr-0">
+                <i class="fas fa-flask"></i></br>Nightly
+              </li>
+            </ul>
+          </div>
+          <div class="api-links api-links-double">
+            <ul class="list-style-none fs-3 fw-500 mt-md-1 mb-md-1 pb-4 pb-md-0 js-aux-nav aux-nav">
+              <li class="text-delta d-inline-block my-0{% unless forloop.last %} mr-2{% endunless %}">APIS</li>
+              {% for lib in site.data.apis %}
+              {% assign api = lib[1] %}
+              {% for ver in api.stable %}
+                {% assign loc = api.path | append: '/nightly' %}
+                {% if page.path contains loc %}
+                <li class="d-inline-block fw-900 my-0{% unless forloop.last %} mr-2{% endunless %}">
+                  {{ api.name }}
+                </li>
+                {% else %}
+                <li class="d-inline-block fw-300 my-0{% unless forloop.last %} mr-2{% endunless %}">
+                  <a href="{{ site.url }}{{ site.baseurl }}/api/{{ api.path }}/nightly">{{ api.name }}</a>
+                </li>
+                {% endif %}
+              {% endfor %}
+              {% endfor %}
+            </ul>
+            <ul class="list-style-none fs-3 fw-500 mt-md-1 mb-md-1 pb-4 pb-md-0 js-aux-nav aux-nav">
+                <li class="text-delta d-inline-block my-0{% unless forloop.last %} mr-2{% endunless %}">LIBS</li>
+                {% for lib in site.data.libs %}
+                {% assign api = lib[1] %}
+                {% for ver in api.stable %}
+                  {% assign loc = api.path | append: '/nightly' %}
+                  {% if page.path contains loc %}
+                  <li class="d-inline-block fw-900 my-0{% unless forloop.last %} mr-2{% endunless %}">
+                    {{ api.name }}
+                  </li>
+                  {% else %}
+                  <li class="d-inline-block fw-300 my-0{% unless forloop.last %} mr-2{% endunless %}">
+                    <a href="{{ site.url }}{{ site.baseurl }}/api/{{ api.path }}/nightly">{{ api.name }}</a>
+                  </li>
+                  {% endif %}
+                {% endfor %}
+                {% endfor %}
+              </ul>
+          </div>
+          <div class="api-links api-links-label dark-purple">
+              <ul class="list-style-none fs-3 mt-md-1 mb-md-1 pb-4 pb-md-0 js-aux-nav aux-nav">
+                <li class="text-delta fw-700 d-inline-block my-0 mr-0">
+                  <i class="fas fa-history"></i><br/>Legacy
+                </li>
+              </ul>
+            </div>
           <div class="api-links">
             <ul class="list-style-none fs-3 fw-500 mt-md-1 mb-md-1 pb-4 pb-md-0 js-aux-nav aux-nav">
-              <li class="text-delta d-inline-block my-0{% unless forloop.last %} mr-2{% endunless %}">Additional Docs</li>
               <li class="d-inline-block my-0{% unless forloop.last %} mr-2{% endunless %}">
-                <select id="legacy" name="legacy">
-                  <option value="">Legacy</option>
+                <select id="legacy-apis" name="legacy-apis">
+                  <option value="">APIS</option>
                   {% for lib in site.data.apis %}
                   {% assign api = lib[1] %}
                   {% for ver in api.legacy %}
@@ -64,16 +145,16 @@
                 </select>
               </li>
               <li class="d-inline-block my-0{% unless forloop.last %} mr-2{% endunless %}">
-                <select id="nightly" name="nightly">
-                  <option value="">Nightly</option>
-                  {% for lib in site.data.apis %}
+                <select id="legacy-libs" name="legacy-libs">
+                  <option value="">LIBS</option>
+                  {% for lib in site.data.libs %}
                   {% assign api = lib[1] %}
-                  {% for ver in api.nightly %}
-                    {% assign loc = api.path | append: '/nightly' %}
+                  {% for ver in api.legacy %}
+                    {% assign loc = api.path | append: '/' | append: ver.file %}
                     {% if page.path contains loc %}
-                    <option value="{{ site.url }}{{ site.baseurl }}/api/{{ api.path }}/nightly" selected>{{ ver.name }}</option>
+                    <option value="{{ site.url }}{{ site.baseurl }}/api/{{ api.path }}/{{ ver.file }}" selected>{{ ver.name }}</option>
                     {% else %}
-                    <option value="{{ site.url }}{{ site.baseurl }}/api/{{ api.path }}/nightly">{{ ver.name }}</option>
+                    <option value="{{ site.url }}{{ site.baseurl }}/api/{{ api.path }}/{{ ver.file }}">{{ ver.name }}</option>
                     {% endif %}
                   {% endfor %}
                   {% endfor %}
