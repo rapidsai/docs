@@ -9,40 +9,30 @@ permalink: /
 # RAPIDS Community and Project Docs
 {: .fs-9 }
 
-This site serves as a reference for the agreed standards and practices followed by all RAPIDS repositories and projects. For new contributors, learn the basics needed for contributing to RAPIDS. Visit [rapids.ai](http://rapids.ai) for more information.
+The RAPIDS suite of open source software libraries enables end-to-end data science and analytics pipelines entirely on GPUs. RAPIDS is open sourced under the Apache 2.0 open-source license and is intended to be built upon and hardened in the community. We need active contributors to help improve, support and build its future - so the links and resources on this page are here to help you develop on RAPIDS.
 {: .fs-6 .fw-300 }
 
-[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [View Code of Conduct]({{ site.baseurl }}/docs/resources/conduct){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [View RAPIDS on GitHub](https://github.com/rapidsai){: .btn .fs-5 }
+[Get Started]({{ site.baseurl }}/start/){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [API and Library Docs]({{ site.baseurl }}/api){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [RAPIDS on GitHub](https://github.com/rapidsai){: .btn .fs-5 }
 
 ---
 
-## Getting started
+## Documentation Areas
+{: .mb-1 }
 
-Welcome! We are excited you are here! Before you begin, we ask that everyone review the [Code of Conduct]({{ site.baseurl }}/docs/resources/conduct) before contributing.
+Welcome! We are excited you are here! Before you begin, we ask that everyone review the [Code of Conduct]({{ site.baseurl }}/resources/conduct) before contributing. Listed below are descriptions of each of this site sections:
 
-### Your first issue
+- **API Docs:** Links to stable, nightly or legacy APIs and docs for cuDF, libcuDF, cuML, cuGraph and more.
+- **Get Started:** A few helpful resources on getting started with RAPIDS.
+- **Demos:** Links to key RAPIDS Demos and required datasets, such as the End to End Mortgage demo.
+- **Contributing:** Outlines processes for Issues, Code Contributions, and Pull Requests.
+- **RAPIDS Release Process:** Outlines processes for Issue Triage, Release Planning, Release Process, and Hotfix Process.
+- **RAPIDS Maintainer Docs:** Outlines processes for Project Structure, Project Boards, Permissions, Project Artifacts, Read the Docs, and Labels.
+- **RAPIDS Resources:** Coming soon.
 
-1. Read the project's README to learn how to setup the development environment
-2. Find an issue to work on. The best way is to look for the <span class="label" style="background: #7057ff; color: #ffffff; text-transform: none">good first issue</span> or <span class="label" style="background: #008672; color: #ffffff; text-transform: none">help wanted</span> labels
-3. Comment on the issue saying you are going to work on it
-4. Code! Make sure to update unit tests!
-5. When done, [create your pull request]({{ site.baseurl }}docs/contributing/prs)
-6. Verify that CI passes all [status checks](https://help.github.com/articles/about-status-checks/). Fix if needed
-7. Wait for other developers to review your code and update code as needed
-8. Once reviewed and approved, a RAPIDS developer will merge your pull request
 
-Remember, if you are unsure about anything, don't hesitate to comment on issues and ask for clarifications!
+## Contact Us
+{: .mb-1 }
 
-### Seasoned developers
+You can reach out to us at the following or find out more at [Rapids.ai](https://rapids.ai){: target="_blank" }.
 
-Once you have gotten your feet wet and are more comfortable with the code, follow these steps to find prioritized issues.
-
-All RAPIDS projects have project boards for triaging [issues]({{ site.baseurl }}/docs/releases/traige) and planning [features]({{ site.baseurl }}/docs/releases/planning).
-
-### More details
-
-Review the [Code Contributions]({{ site.baseurl }}/docs/contributing/code) page.
-
-## Issues or feedback
-
-File an issue [here](https://github.com/rapidsai/devdocs/issues/new) for any unexpected problems encountered or general feedback with any of the information on this site.
+[Google Groups](https://groups.google.com/forum/#!forum/rapidsai){: target="_blank" .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [RAPIDS Slack](https://join.slack.com/t/rapids-goai/shared_invite/enQtMjE0Njg5NDQ1MDQxLTViZWFiYTY5MDA4NWY3OWViODg0YWM1MGQ1NzgzNTQwOWI1YjE3NGFlOTVhYjQzYWQ4YjI4NzljYzhiOGZmMGM){: target="_blank" .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [Stack Overflow](https://stackoverflow.com/tags/rapids){: target="_blank" .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } 
