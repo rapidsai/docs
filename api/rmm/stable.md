@@ -5,4 +5,4 @@ title: RMM - Stable Docs
 library: rmm
 ---
 
-{% include api-iframe.html library=page.library name=page.name %}
+{% include lib-iframe.html library=page.library name=page.name %}
