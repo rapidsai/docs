@@ -21,7 +21,7 @@ Project Leads
 
 ### See also
 
-- [Issues]({{ site.baseurl }}docs/contributing/issues)
+- [Issues]({{ site.baseurl }}contributing/issues)
 
 ## Triage goals
 
@@ -125,7 +125,7 @@ Project Leads - Weekly
 
 #### Hotfix
 
-1. Verify the issue is a [hotfix]({{ site.baseurl }}docs/releases/hotfix).
+1. Verify the issue is a [hotfix]({{ site.baseurl }}releases/hotfix).
 2. Identify the project lead(s) needed to resolve the hotfix.
 3. Host a meeting about the proposed hotfix with the stakeholders and operations to determine the path forward.
 4. Assign a developer or team to fix the issue ASAP.
@@ -145,4 +145,4 @@ Developers should be assigned to issues as they are responsible for and limit ov
 
 ### Link to PR
 
-Every [Pull Request]({{ site.baseurl }}docs/contributing/prs) should have the issue number in the descriptions of the PR with `Addresses #[issue number]` so when the PR is merged the issue that created the PR will automatically close as well.
+Every [Pull Request]({{ site.baseurl }}contributing/prs) should have the issue number in the descriptions of the PR with `Addresses #[issue number]` so when the PR is merged the issue that created the PR will automatically close as well.

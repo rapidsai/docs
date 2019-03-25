@@ -18,8 +18,8 @@ Project Leads
 
 ### See also
 
-- [Versions and Tags]({{ site.baseurl }}docs/resources/versions)
-- [Release Process]({{ site.baseurl }}docs/releases/process)
+- [Versions and Tags]({{ site.baseurl }}resources/versions)
+- [Release Process]({{ site.baseurl }}releases/process)
 
 ## Planning process
 
@@ -28,7 +28,7 @@ Project Leads
 **NOTE:** The processes below use the current release of `M.A`, the next release of `M.B` and future release `M.C` (where `B=A+1`, `C=B+1`) for examples.
 
 Releases are planned in two phases:
-1. `Fuzzy planning` from [Issue Triage]({{ site.baseurl }}docs/releases/triage) which is ongoing.
+1. `Fuzzy planning` from [Issue Triage]({{ site.baseurl }}releases/triage) which is ongoing.
 2. `Focus planning` which starts when release `M.B` is **frozen**.
 
 ### Release boards
@@ -41,7 +41,7 @@ Each release board has the following columns:
 
 | Column | Purpose |
 |:-------|:--------|
-| Issue-Needs prioritizing | Issues that have gone through the [Issue Triage]({{ site.baseurl }}docs/releases/triage) process and need to be prioritized |
+| Issue-Needs prioritizing | Issues that have gone through the [Issue Triage]({{ site.baseurl }}releases/triage) process and need to be prioritized |
 | Issue-P0 | Issues that should be worked on first |
 | Issue-P1 | Issues that should be worked on only if all `P0` issues are complete or assigned |
 | Issue-P2 | Issues that should be worked on only if all `P1` issues are complete or assigned |
