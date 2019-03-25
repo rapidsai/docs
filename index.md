@@ -6,43 +6,41 @@ permalink: /
 ---
 
 
-# RAPIDS Community and Project Docs
+# RAPIDS Docs
 {: .fs-9 }
 
-This site serves as a reference for the agreed standards and practices followed by all RAPIDS repositories and projects. For new contributors, learn the basics needed for contributing to RAPIDS. Visit [rapids.ai](http://rapids.ai) for more information.
+This site serves as a collection of all the documentation for RAPIDS. Whether you're new to RAPIDS, looking to contribute, or are a part of the RAPIDS team the docs here will help guide you. Visit [rapids.ai](http://rapids.ai) for more information on the overall project.
 {: .fs-6 .fw-300 }
 
-[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [View Code of Conduct]({{ site.baseurl }}/docs/resources/conduct){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [View RAPIDS on GitHub](https://github.com/rapidsai){: .btn .fs-5 }
+[Get started with RAPIDS]({{ site.baseurl }}start){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [Contribute to RAPIDS]({{ site.baseurl }}contributing){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [View RAPIDS on GitHub](https://github.com/rapidsai){: .btn .btn-green .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
 ---
 
-## Getting started
+### Stay connected
 
-Welcome! We are excited you are here! Before you begin, we ask that everyone review the [Code of Conduct]({{ site.baseurl }}/docs/resources/conduct) before contributing.
+<div class="footer-help-section">
+    <div class="footer-help-box">
+        <div class="footer-help-box-image"><i class="fas fa-users fa-4x"></i></div>
+        <p>Google Groups</p>
+        <a href="https://groups.google.com/forum/#!forum/rapidsai" class="btn btn-green">Contact Us</a>
+    </div>
+    <div class="footer-help-box">
+        <div class="footer-help-box-image"><i class="fab fa-twitter fa-4x"></i></div>
+        <p>Twitter</p>
+        <a href="https://twitter.com/rapidsai" target="_blank" class="btn btn-blue">Tweet Us</a>
+    </div>
+    <div class="footer-help-box">
+        <div class="footer-help-box-image"><i class="fab fa-slack fa-4x"></i></div>
+        <p>Slack</p>
+        <a href="https://join.slack.com/t/rapids-goai/shared_invite/enQtMjE0Njg5NDQ1MDQxLTViZWFiYTY5MDA4NWY3OWViODg0YWM1MGQ1NzgzNTQwOWI1YjE3NGFlOTVhYjQzYWQ4YjI4NzljYzhiOGZmMGM" target="_blank" class="btn btn-purple">Message Us</a>
+    </div>
+    <div class="footer-help-box">
+        <div class="footer-help-box-image"><i class="fab fa-stack-overflow fa-4x"></i></div>
+        <p>Stack Overflow</p>
+        <a href="https://stackoverflow.com/tags/rapids" target="_blank" class="btn">Ask Us</a>
+    </div>
+</div>
 
-### Your first issue
+### Issues or feedback
 
-1. Read the project's README to learn how to setup the development environment
-2. Find an issue to work on. The best way is to look for the <span class="label" style="background: #7057ff; color: #ffffff; text-transform: none">good first issue</span> or <span class="label" style="background: #008672; color: #ffffff; text-transform: none">help wanted</span> labels
-3. Comment on the issue saying you are going to work on it
-4. Code! Make sure to update unit tests!
-5. When done, [create your pull request]({{ site.baseurl }}docs/contributing/prs)
-6. Verify that CI passes all [status checks](https://help.github.com/articles/about-status-checks/). Fix if needed
-7. Wait for other developers to review your code and update code as needed
-8. Once reviewed and approved, a RAPIDS developer will merge your pull request
-
-Remember, if you are unsure about anything, don't hesitate to comment on issues and ask for clarifications!
-
-### Seasoned developers
-
-Once you have gotten your feet wet and are more comfortable with the code, follow these steps to find prioritized issues.
-
-All RAPIDS projects have project boards for triaging [issues]({{ site.baseurl }}/docs/releases/traige) and planning [features]({{ site.baseurl }}/docs/releases/planning).
-
-### More details
-
-Review the [Code Contributions]({{ site.baseurl }}/docs/contributing/code) page.
-
-## Issues or feedback
-
-File an issue [here](https://github.com/rapidsai/devdocs/issues/new) for any unexpected problems encountered or general feedback with any of the information on this site.
+File an issue [here](https://github.com/rapidsai/docs/issues/new) for any unexpected problems encountered or general feedback with any of the information on this site.
