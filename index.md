@@ -12,7 +12,7 @@ permalink: /
 This site serves as a collection of all the documentation for RAPIDS. Whether you're new to RAPIDS, looking to contribute, or are a part of the RAPIDS team the docs here will help guide you. Visit [rapids.ai](http://rapids.ai) for more information on the overall project.
 {: .fs-6 .fw-300 }
 
-[Get started with RAPIDS]({{ site.baseurl }}start){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [Contribute to RAPIDS]({{ site.baseurl }}contributing){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [View RAPIDS on GitHub](https://github.com/rapidsai){: .btn .btn-green .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[Get started with RAPIDS]({{ site.url }}{{ site.baseurl }}/start){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [Contribute to RAPIDS]({{ site.url }}{{ site.baseurl }}/contributing){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [View RAPIDS on GitHub](https://github.com/rapidsai){: .btn .btn-green .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
 ---
 

@@ -14,7 +14,7 @@ RAPIDS can only grow with community support and it is vital to include developer
 
 ## Getting started
 
-Welcome! We are excited you are here! Before you begin, we ask that everyone review the [Code of Conduct]({{ site.baseurl }}resources/conduct) before contributing.
+Welcome! We are excited you are here! Before you begin, we ask that everyone review the [Code of Conduct]({{ site.url }}{{ site.baseurl }}/resources/conduct) before contributing.
 
 ### Your first issue
 
@@ -22,7 +22,7 @@ Welcome! We are excited you are here! Before you begin, we ask that everyone rev
 2. Find an issue to work on. The best way is to look for the <span class="label" style="background: #7057ff; color: #ffffff; text-transform: none">good first issue</span> or <span class="label" style="background: #008672; color: #ffffff; text-transform: none">help wanted</span> labels
 3. Comment on the issue saying you are going to work on it
 4. Code! Make sure to update unit tests!
-5. When done, [create your pull request]({{ site.baseurl }}contributing/prs)
+5. When done, [create your pull request]({{ site.url }}{{ site.baseurl }}/contributing/prs)
 6. Verify that CI passes all [status checks](https://help.github.com/articles/about-status-checks/). Fix if needed
 7. Wait for other developers to review your code and update code as needed
 8. Once reviewed and approved, a RAPIDS developer will merge your pull request
@@ -33,11 +33,11 @@ Remember, if you are unsure about anything, don't hesitate to comment on issues 
 
 Once you have gotten your feet wet and are more comfortable with the code, follow these steps to find prioritized issues.
 
-All RAPIDS projects have project boards for triaging [issues]({{ site.baseurl }}releases/traige) and planning [features]({{ site.baseurl }}releases/planning).
+All RAPIDS projects have project boards for triaging [issues]({{ site.url }}{{ site.baseurl }}/releases/traige) and planning [features]({{ site.url }}{{ site.baseurl }}/releases/planning).
 
 ### More details
 
-Review the [Code Contributions]({{ site.baseurl }}contributing/code) page.
+Review the [Code Contributions]({{ site.url }}{{ site.baseurl }}/contributing/code) page.
 
 ## Issues or feedback
 
