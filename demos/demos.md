@@ -9,5 +9,5 @@ permalink: demos
 # Demos
 {:.no_toc}
 
-RAPIDS can only grow with community support and it is vital to include developers at all levels. Reporting bugs, fixing them, and/or creating new features are all vital for the success of RAPIDS. The following pages outline our approach for contributing to RAPIDS.
+RAPIDS demos allow users to test drive RAPIDS with sample datasets and notebooks.
 {: .fs-6 .fw-300 }
