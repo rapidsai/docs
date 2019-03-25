@@ -21,9 +21,9 @@ Developers
 
 ### See also
 
-* [Versioning and Tagging]({{ site.baseurl }}resources/versions)
-* [Hotfix releases]({{ site.baseurl }}releases/hotfix)
-* [Major and minor releases]({{ site.baseurl }}releases/process)
+* [Versioning and Tagging]({{ site.url }}{{ site.baseurl }}/resources/versions)
+* [Hotfix releases]({{ site.url }}{{ site.baseurl }}/releases/hotfix)
+* [Major and minor releases]({{ site.url }}{{ site.baseurl }}/releases/process)
 
 ## Git branching
 
