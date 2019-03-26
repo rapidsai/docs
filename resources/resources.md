@@ -1,6 +1,7 @@
 ---
 layout: default
-title: RAPIDS Resources
+title: Resources
+parent: RAPIDS Maintainer Docs
 nav_order: 8
 has_children: true
 permalink: resources

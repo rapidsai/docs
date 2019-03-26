@@ -1,7 +1,8 @@
 ---
 layout: default
 nav_order: 2
-parent: RAPIDS Release Process
+parent: Release Docs
+grand_parent: RAPIDS Maintainer Docs
 title: Release Planning
 ---
 

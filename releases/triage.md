@@ -1,7 +1,8 @@
 ---
 layout: default
 nav_order: 1
-parent: RAPIDS Release Process
+parent: Release Docs
+grand_parent: RAPIDS Maintainer Docs
 title: Issue Triage
 ---
 
