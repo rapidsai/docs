@@ -2,6 +2,7 @@
 layout: default
 nav_order: 1
 parent: Datasets
+grand_parent: Demos
 title: Mortgage Visualization Data
 permalink: datasets/mortgage-viz-data
 ---

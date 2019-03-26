@@ -2,6 +2,7 @@
 layout: default
 nav_order: 1
 parent: Containers
+grand_parent: Demos
 title: RAPIDS Demo Container
 permalink: containers/rapids-demo
 ---
