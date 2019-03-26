@@ -1,6 +1,7 @@
 ---
 layout: default
-title: RAPIDS Release Process
+title: Release Docs
+parent: RAPIDS Maintainer Docs
 nav_order: 6
 has_children: true
 permalink: releases

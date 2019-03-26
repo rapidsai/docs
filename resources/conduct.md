@@ -1,7 +1,8 @@
 ---
 layout: default
 nav_order: 1
-parent: RAPIDS Resources
+parent: Resources
+grand_parent: RAPIDS Maintainer Docs
 title: Code of Conduct
 ---
 

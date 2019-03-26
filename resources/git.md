@@ -1,7 +1,8 @@
 ---
 layout: default
 nav_order: 3
-parent: RAPIDS Resources
+parent: Resources
+grand_parent: RAPIDS Maintainer Docs
 title: Git Methodology 
 ---
 
