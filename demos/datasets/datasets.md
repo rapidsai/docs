@@ -13,4 +13,4 @@ permalink: datasets
 Datasets listed here are used in RAPIDS containers, demos, and notebooks. Each dataset describes the data, the data source, how to use the data, and links for download.
 {: .fs-6 .fw-300 }
 
-File an issue [here](https://github.com/rapidsai/demos/issues/new) for any issues encountered with the datasets.
+File an issue [here](https://github.com/rapidsai/docs/issues/new) for any issues encountered with the datasets.
