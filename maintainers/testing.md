@@ -89,25 +89,7 @@ Overall goal, follow the open source ecosystem for infrastructure choices
 
 ## Datasets
 
-- Many tests depend on the presence of specific datasets in order to properly verify code correctness.
-- Some datasets are small enough that they can be included with the source code, but others are relatively large and cannot practically coexist with the source. In both cases, the test executable should not assume datasets are located in a particular place (either with a relative path, since the executable could be moved, or an absolute path, since different machines will likely use different absolute paths), so the location of the datasets must be provided at test runtime.
-- There are three mechanisms that allow tests to locate datasets on disk:
-  - Users can set the environment variable `RAPIDS_DATASET_ROOT_DIR` to the path of the directory containing the datasets needed by tests.
-  - Users can pass the flag `-DRAPIDS_DATASET_ROOT_DIR=<root dir>` to the `cmake` command when building from source. If the environment variable described above is not set, this setting will be used.
-  - Finally, test developers can specify a default directory to use in the event that both the environment variable and the build option are not set. Since this is essentially hardcoding a path in the test executable, users should be made aware of what the location is as well as the options they have (the `RAPIDS_DATASET_ROOT_DIR` env var and the `-DRAPIDS_DATASET_ROOT_DIR=<root dir>` build option) for overriding it.
-
-### Test developer API
-
-- `const std::string& get_rapids_dataset_root_dir(const std::string& defaultRdrd)`
-  - Tests that need to access the dataset directory should use this function for properly retrieving the dataset root directory defined by the user at build-time or runtime, or a specific default hardcoded in the test passed in as `defaultRdrd`.
-  - An example is shown below:
-```
-    const std::string& rapidsDatasetRootDir = get_rapids_dataset_root_dir("/datasets");
-    readDataset(rapidsDatasetRootDir + "/golden_data/web-BerkStan.pagerank_val_0.85.bin");
-```
-In the above example, if the tests are built with `-DRAPIDS_DATASET_ROOT_DIR=/bar` and the environment variable `RAPIDS_DATASET_ROOT_DIR` is set to `/foo`, the `readDataset()` call will get `/foo/golden_data/web-BerkStan.pagerank_val_0.85.bin`. If the environment variable is not set, the call will get `/bar/golden_data/web-BerkStan.pagerank_val_0.85.bin`. Finally, if the user didn't set the environment var and didn't use the build flag, the call will get `/datasets/golden_data/web-BerkStan.pagerank_val_0.85.bin`.
-
-*NOTE: At the moment, only the `cugraph` library has adopted the `get_rapids_dataset_root_dir()` functionality.*
+- Many tests depend on the presence of specific datasets in order to properly verify code correctness. See [datasets]({{ site.url }}{{ site.baseurl }}/maintainers/datasets) for more details.
 
 ## Integration / Workflow Testing and Benchmarking
 
