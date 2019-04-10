@@ -107,6 +107,8 @@ Overall goal, follow the open source ecosystem for infrastructure choices
 ```
 In the above example, if the tests are built with `-DRAPIDS_DATASET_ROOT_DIR=/bar` and the environment variable `RAPIDS_DATASET_ROOT_DIR` is set to `/foo`, the `readDataset()` call will get `/foo/golden_data/web-BerkStan.pagerank_val_0.85.bin`. If the environment variable is not set, the call will get `/bar/golden_data/web-BerkStan.pagerank_val_0.85.bin`. Finally, if the user didn't set the environment var and didn't use the build flag, the call will get `/datasets/golden_data/web-BerkStan.pagerank_val_0.85.bin`.
 
+*NOTE: At the moment, only the `cugraph` library has adopted the `get_rapids_dataset_root_dir()` functionality.*
+
 ## Integration / Workflow Testing and Benchmarking
 
 - Runs nightly to ensure the different libraries integrate as expected similar to how other Python libraries integrate (i.e. cuDF with cuML vs Pandas with SKLearn)
