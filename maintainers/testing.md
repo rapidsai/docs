@@ -27,20 +27,9 @@ Operations
 Overall goal, follow the open source ecosystem for infrastructure choices
 
 ### Jenkins
+Open source project for CI/CD and general automation that is very extensible and well adopted
 
-- Open source project for CI/CD and general automation that is very extensible and well adopted
-- gpuCI
-  - Build scripts are standardized across RAPIDS projects
-    - CPU builds with conda & pip
-    - GPU builds & unit tests
-    - Executing style & changelog checks
-    - Planned to be open sourced soon
-  - Standardization allows for scripts to create and config jobs
-    - [https://gpuci.gpuopenanalytics.com/view/gpuCIv2/job/gpuCIv2/job/Rapids%20Seed%20Job/](https://gpuci.gpuopenanalytics.com/view/gpuCIv2/job/gpuCIv2/job/Rapids%20Seed%20Job/)
-    - Uses Jenkins job-dsl plugin
-    - Creates 125+ Jenkins jobs to perform everything listed in this document
-    - Handles the links between Jenkins & GitHub
-  - Custom plugin written & open sourced by RAPIDS to better handle GPU testing with nvidia-docker
+[gpuCI]({{ site.url }}{{ site.baseurl }}/maintainers/gpuci) is built on top of Jenkins with a variety of plugins.
 
 ### GitHub
 
