@@ -38,7 +38,7 @@ This is an overview of the tools used in gpuCI
     - Executing style & changelog checks
     - Planned to be open sourced soon
   - Standardization allows for scripts to create and config jobs
-    - [https://gpuci.gpuopenanalytics.com/view/gpuCIv2/job/gpuCIv2/job/Rapids%20Seed%20Job/](https://gpuci.gpuopenanalytics.com/view/gpuCIv2/job/gpuCIv2/job/Rapids%20Seed%20Job/)
+    - [https://gpuci.gpuopenanalytics.com/view/all/job/Rapids Seed Job/](https://gpuci.gpuopenanalytics.com/view/all/job/Rapids%20Seed%20Job/)
     - Uses Jenkins job-dsl plugin
     - Creates 125+ Jenkins jobs to perform everything listed in this document
     - Handles the links between Jenkins & GitHub
@@ -62,11 +62,55 @@ The conda environment can be used in the scripts with `source activate gdf`
 
 ### Pull requests
 
-TODO
+Pull requests trigger test builds using [GitHub pull request builder plugin](https://wiki.jenkins.io/display/JENKINS/GitHub+pull+request+builder+plugin).
+
+Each PR is build with four types of jobs.
+
+#### Changelog
+
+Uses the `ci/checks/changelog.sh` script to determine success or failure
+
+#### Style
+
+Uses the `ci/checks/style.sh` script to determine success or failure
+
+#### CPU builds
+
+Each PR is built in a container with a matrix of parameters:
+- CUDA 9.2 & 10.0
+- Python 3.6 & 3.7
+
+This allows for testing compilation against multiple CUDA and Python versions.
+
+#### GPU build
+
+Each PR is built in a container using CUDA 10.0 and Python 3.6. the purpose of this job is primarily for testing with a GPU present.
+
+Due to limited GPU resources and high volume of pull requests, it's not currently practical to matrix test GPUs. In the future, artifacts produced in the CPU steps will be reused in a matrix of GPU tests so GPU resources are used only to test instead of compiling and testing.
 
 ### Branch
 
-TODO
+Branch builds occur when a PR is merged and once per day.
+
+#### CPU builds
+
+Each branch is built in a container with a matrix of parameters:
+- CUDA 9.2 & 10.0
+- Python 3.6 & 3.7
+
+These builds can publish nightly conda packages.
+
+#### GPU build
+
+Each branch is built in a container using CUDA 10.0 and Python 3.6. the purpose of this job is primarily for testing with a GPU present.
+
+#### Pip build
+
+This only runs if the branch is `master`. Runs in a container with a matrix of parameters:
+- CUDA 9.2 & 10.0
+- Python 3.6 & 3.7
+
+The resulting wheels are uploaded to [PyPI](https://pypi.org/).
 
 ## Scripts
 
