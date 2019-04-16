@@ -116,6 +116,8 @@ The resulting wheels are uploaded to [PyPI](https://pypi.org/).
 
 These scripts are a standardized way for gpuCI to build projects. This allows for rapid integration and immediate feedback in pull requests on build changes.
 
+All scripts are executed with the working directory as the project's root directory. For example, the prebuild script is run as `source ci/cpu/prebuid.sh`. Keep this in mind if the scripts need to access other files or scripts in the project.
+
 ### Directory structure
 
 - ci
