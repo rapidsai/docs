@@ -30,23 +30,30 @@ This is an overview of the tools used in gpuCI
 
 ### Jenkins
 
-- Open source project for CI/CD and general automation that is very extensible and well adopted
-- gpuCI
-  - Build scripts are standardized across RAPIDS projects
-    - CPU builds with conda & pip
-    - GPU builds & unit tests
-    - Executing style & changelog checks
-    - Planned to be open sourced soon
-  - Standardization allows for scripts to create and config jobs
-    - [https://gpuci.gpuopenanalytics.com/view/all/job/Rapids Seed Job/](https://gpuci.gpuopenanalytics.com/view/all/job/Rapids%20Seed%20Job/)
-    - Uses Jenkins job-dsl plugin
-    - Creates 125+ Jenkins jobs to perform everything listed in this document
-    - Handles the links between Jenkins & GitHub
-  - Custom [plugin](https://github.com/gpuopenanalytics/remote-docker-plugin) written & open sourced by RAPIDS to better handle GPU testing with nvidia-docker
+Jenkins is an open source project for CI/CD and general automation that is very extensible and well adopted
+
+### gpuCI
+
+gpuCI is made of two pieces: definitions for standardized build and test scripts in all RAPIDS projects' repositories and code to generate the Jenkins build jobs which use those standardized scripts.
+
+The build and scripts are used for
+- CPU builds with conda & pip
+- GPU builds & unit tests
+- Executing style & changelog checks
+
+This standardization allows for scripts to create and config jobs. These generation scripts are planned to be open sourced soon.
+- [https://gpuci.gpuopenanalytics.com/view/all/job/Rapids Seed Job/](https://gpuci.gpuopenanalytics.com/view/all/job/Rapids%20Seed%20Job/)
+- Uses Jenkins job-dsl plugin
+- Creates all the Jenkins jobs for every RAPIDS project
+- Handles the bi-directional links between Jenkins & GitHub
+
+### remote-docker-plugin
+
+gpuCI uses a custom [plugin](https://github.com/gpuopenanalytics/remote-docker-plugin) written and open sourced by RAPIDS to better handle GPU testing on Jenkins using [nvidia-docker](https://github.com/NVIDIA/nvidia-docker).
 
 ### Docker containers
 
-All jobs which use Docker use the `gpuci/rapidsai-base` images.
+All jobs which use Docker run inside of the `gpuci/rapidsai-base` images.
 
 [Docker Hub](https://hub.docker.com/r/gpuci/rapidsai-base)
 
@@ -64,7 +71,7 @@ The conda environment can be used in the scripts with `source activate gdf`
 
 Pull requests trigger test builds using [GitHub pull request builder plugin](https://wiki.jenkins.io/display/JENKINS/GitHub+pull+request+builder+plugin).
 
-Each PR is build with four types of jobs.
+Each PR is built with the following four types of jobs.
 
 #### Changelog
 
@@ -90,7 +97,7 @@ Due to limited GPU resources and high volume of pull requests, it's not currentl
 
 ### Branch
 
-Branch builds occur when a PR is merged and once per day.
+Branch builds occur when a PR is merged and once per day. Currently, which branches to build is manually configured.
 
 #### CPU builds
 
@@ -143,7 +150,7 @@ Variables:
 - COMMIT_HASH
 - REPORT_HASH
 
-Executed as a check to see if the changelog was updated. It's up the script to determine if the changelog was updated and exit with 0 for success or non-zero for error.
+Executed as a check to see if the changelog was updated. It's up the scripts to determine if the changelog was updated and exit with 0 for success or non-zero for error.
 
 If not provided, a simple check of whether `CHANGELOG.md` has been updated and if it contains the `PR_ID`.
 
@@ -242,7 +249,9 @@ Docker: No
 Variables:
     - BRANCH
 
-This script is run with a parameter of `major`, `minor`, or `patch` to indicate what to release. The script should calculate the next version and update the source code, build scripts, and documentation with the new version.
+This script is run with a parameter of `major`, `minor`, or `patch` to indicate what to release. gpuCI determines this based on where the commit is coming from. Merge commits from `branch-*` are minor releases whereas commits directly to master are patch releases. Major releases must be manually triggered.
+
+The script should calculate the next version and update the source code, build scripts, and documentation with the new version.
 
 **Note:** The script must export `NEXT_FULL_TAG` as the full `x.y.z` version.
 
