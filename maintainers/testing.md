@@ -87,6 +87,10 @@ Overall goal, follow the open source ecosystem for infrastructure choices
     - I.E. cuDF PyTests:
       - [https://github.com/rapidsai/cudf/tree/branch-0.7/python/cudf/tests](https://github.com/rapidsai/cudf/tree/branch-0.7/python/cudf/tests)
 
+## Datasets
+
+- Many tests depend on the presence of specific datasets in order to properly verify code correctness. See [datasets]({{ site.url }}{{ site.baseurl }}/maintainers/datasets) for more details.
+
 ## Integration / Workflow Testing and Benchmarking
 
 - Runs nightly to ensure the different libraries integrate as expected similar to how other Python libraries integrate (i.e. cuDF with cuML vs Pandas with SKLearn)
