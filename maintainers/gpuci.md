@@ -37,7 +37,7 @@ Jenkins is an open source project for CI/CD and general automation that is very 
 gpuCI is made of two pieces: definitions for standardized build and test scripts in all RAPIDS projects' repositories and code to generate the Jenkins build jobs which use those standardized scripts.
 
 The build and scripts are used for
-- CPU builds with conda & pip
+- CPU builds with conda
 - GPU builds & unit tests
 - Executing style & changelog checks
 
@@ -111,14 +111,6 @@ These builds can publish nightly conda packages.
 
 Each branch is built in a container using CUDA 10.0 and Python 3.6. the purpose of this job is primarily for testing with a GPU present.
 
-#### Pip build
-
-This only runs if the branch is `master`. Runs in a container with a matrix of parameters:
-- CUDA 9.2 & 10.0
-- Python 3.6 & 3.7
-
-The resulting wheels are uploaded to [PyPI](https://pypi.org/).
-
 ## Scripts
 
 These scripts are a standardized way for gpuCI to build projects. This allows for rapid integration and immediate feedback in pull requests on build changes.
@@ -142,13 +134,13 @@ All scripts are executed with the working directory as the project's root direct
 
 ### ci/checks/changelog.sh
 
-Required: No
-Job type: PR only
-Docker: No
-Variables:
-- PR_ID
-- COMMIT_HASH
-- REPORT_HASH
+- Required: No
+- Job type: PR only
+- Docker: `gpuci/rapidsai-base:cuda9.2-ubuntu16.04-gcc5-py3.6`
+- Variables:
+  - PR_ID
+  - COMMIT_HASH
+  - REPORT_HASH
 
 Executed as a check to see if the changelog was updated. It's up the scripts to determine if the changelog was updated and exit with 0 for success or non-zero for error.
 
@@ -156,33 +148,33 @@ If not provided, a simple check of whether `CHANGELOG.md` has been updated and i
 
 ### ci/checks/style.sh
 
-Required: Yes
-Job type: PR only
-Docker: `gpuci/rapidsai-base:cuda9.2-ubuntu16.04-gcc5-py3.6`
-Variables:
-- PR_ID
-- COMMIT_HASH
-- REPORT_HASH
-- DOCKER_IMAGE
+- Required: Yes
+- Job type: PR only
+- Docker: `gpuci/rapidsai-base:cuda9.2-ubuntu16.04-gcc5-py3.6`
+- Variables:
+  - PR_ID
+  - COMMIT_HASH
+  - REPORT_HASH
+  - DOCKER_IMAGE
 
 Executed as a check to ensure code style is correct. `flake8` is available in the common conda environment.
 
 ### ci/cpu/prebuild.sh
 
-Required: No
-Job type: Both
-Docker: No
-Variables:
-    - DOCKER_IMAGE
-    - PR_ID
-    - COMMIT_HASH
-    - REPORT_HASH
-    - CUDA
-    - PYTHON
-    - UBUNTU
-    - ghprbPullAuthorLogin
-    - ghprbSourceBranch
-    - CONDA_USERNAME
+- Required: No
+- Job type: Both
+- Docker: `gpuci/rapidsai-base:cuda${CUDA}-ubuntu${UBUNTU}-gcc5-py${PYTHON}`
+- Variables:
+  - DOCKER_IMAGE
+  - PR_ID
+  - COMMIT_HASH
+  - REPORT_HASH
+  - CUDA
+  - PYTHON
+  - UBUNTU
+  - ghprbPullAuthorLogin
+  - ghprbSourceBranch
+  - CONDA_USERNAME
 
 If provided, gpuCI will source this file before building. This allows for setting any environment variables required for the build script. For example,  translating `CUDA` or `PYTHON`, or setting a variable to enable additional tests for some combinations of `CUDA` and `PYTHON`.
 
@@ -190,21 +182,20 @@ Many RAPIDS projects have two components: python and C/C++. For these projects, 
 
 ### ci/cpu/build.sh
 
-Required: Yes
-Job type: Both
-Docker: `gpuci/rapidsai-base:cuda${CUDA}-ubuntu${UBUNTU}-gcc5-py${PYTHON}`
-Variables:
-    - DOCKER_IMAGE
-    - PR_ID
-    - COMMIT_HASH
-    - REPORT_HASH
-    - CUDA
-    - PYTHON
-    - UBUNTU
-    - ghprbPullAuthorLogin
-    - ghprbSourceBranch
-    - CONDA_USERNAME
-    - GIT_BRANCH
+- Required: Yes
+- Job type: Both
+- Docker: `gpuci/rapidsai-base:cuda${CUDA}-ubuntu${UBUNTU}-gcc5-py${PYTHON}`
+- Variables:
+  - PR_ID
+  - COMMIT_HASH
+  - REPORT_HASH
+  - CUDA
+  - PYTHON
+  - UBUNTU
+  - ghprbPullAuthorLogin
+  - ghprbSourceBranch
+  - CONDA_USERNAME
+  - GIT_BRANCH
 
 This script actually builds the code inside of a container. For most RAPIDS projects this means building the conda package. There is no GPU available, so testing in this script is limited to CPU only code.
 
@@ -215,27 +206,25 @@ Additionally, this script should upload packages to Anaconda if necessary. The `
 
 ### ci/gpu/prebuild.sh
 
-Required: No
-Job type: Both
-Docker: `gpuci/rapidsai-base:cuda10.0-ubuntu16.04-gcc5-py$3.6`
-Variables:
-    - DOCKER_IMAGE
-    - PR_ID
-    - COMMIT_HASH
-    - REPORT_HASH
+- Required: No
+- Job type: Both
+- Docker: `gpuci/rapidsai-base:cuda10.0-ubuntu16.04-gcc5-py$3.6`
+- Variables:
+  - PR_ID
+  - COMMIT_HASH
+  - REPORT_HASH
 
 If provided, gpuCI will source this file before building. This allows for setting any environment variables required for the build script.
 
 ### ci/gpu/build.sh
 
-Required: Yes
-Job type: Both
-Docker: `gpuci/rapidsai-base:cuda10.0-ubuntu16.04-gcc5-py$3.6`
-Variables:
-    - DOCKER_IMAGE
-    - PR_ID
-    - COMMIT_HASH
-    - REPORT_HASH
+- Required: Yes
+- Job type: Both
+- Docker: `gpuci/rapidsai-base:cuda10.0-ubuntu16.04-gcc5-py$3.6`
+- Variables:
+  - PR_ID
+  - COMMIT_HASH
+  - REPORT_HASH
 
 This script actually builds the code inside of a container. A GPU is available so this script should execute any tests requiring a GPU.
 
@@ -243,11 +232,11 @@ If the tests output in in XML format in `test-results/*.xml` or a file named `ju
 
 ### ci/releases/update-version.sh
 
-Required: Only if auto-releasing is enabled
-Job type: Master Branch only
-Docker: No
-Variables:
-    - BRANCH
+- Required: Only if auto-releasing is enabled
+- Job type: Master Branch only
+- Docker: No
+- Variables:
+  - BRANCH
 
 This script is run with a parameter of `major`, `minor`, or `patch` to indicate what to release. gpuCI determines this based on where the commit is coming from. Merge commits from `branch-*` are minor releases whereas commits directly to master are patch releases. Major releases must be manually triggered.
 
