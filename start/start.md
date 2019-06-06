@@ -30,7 +30,7 @@ Contains a configurator tool to help you choose between the various methods for 
 
 ### 10 Minutes to cuDF
 {: .mb-1 }
-#### **[cuDF Docs](https://rapidsai.github.io/projects/cudf/en/latest/10min.html){: target="_blank"}**
+#### **[cuDF Post](https://rapidsai.github.io/projects/cudf/en/latest/10min.html){: target="_blank"}**
 {: .mt-1 .mb-1 }
 Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is geared mainly for new users.
 {: .mb-7 }
@@ -38,7 +38,7 @@ Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is
 
 ### 10 Minutes to Dask-XGBoost
 {: .mb-1 }
-#### **[cuDF Docs](https://rapidsai.github.io/projects/cudf/en/0.7.0/dask-xgb-10min.html){: target="_blank"}**
+#### **[Dask-XGBoost Post](https://rapidsai.github.io/projects/cudf/en/0.7.0/dask-xgb-10min.html){: target="_blank"}**
 {: .mt-1 .mb-1 }
 A short introduction to XGBoost with a distributed CUDA DataFrame via Dask-cuDF.
 {: .mb-7 }
