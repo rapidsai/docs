@@ -28,22 +28,6 @@ Contains a configurator tool to help you choose between the various methods for 
 {: .mt-1 .mb-7 }
 
 
-### 10 Minutes to cuDF
-{: .mb-1 }
-#### **[cuDF Docs](https://rapidsai.github.io/projects/cudf/en/latest/10min.html){: target="_blank"}**
-{: .mt-1 .mb-1 }
-Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is geared mainly for new users.
-{: .mb-7 }
-
-
-### 10 Minutes to Dask-XGBoost
-{: .mb-1 }
-#### **[cuDF Docs](https://rapidsai.github.io/projects/cudf/en/0.7.0/dask-xgb-10min.html){: target="_blank"}**
-{: .mt-1 .mb-1 }
-A short introduction to XGBoost with a distributed CUDA DataFrame via Dask-cuDF.
-{: .mb-7 }
-
-
 ### GDF CheatSheet
 {: .mb-1 }
 #### **[PDF Download](https://rapids.ai/assets/files/cheatsheet.pdf){: target="_blank"}**
@@ -52,11 +36,27 @@ Handy PDF reference guide for handling GPU Data Frames (GDF) with cuDF.
 {: .mb-7 }
 
 
-### Linear Models with cuDF and cuML XGBoost
+### 10 Minutes to cuDF
 {: .mb-1 }
-#### **[Blog Post](https://medium.com/rapids-ai/essential-machine-learning-with-linear-models-in-rapids-part-1-of-a-series-992fab0240da){: target="_blank"}**
+#### **[cuDF Docs](https://rapidsai.github.io/projects/cudf/en/0.7.0/10min.html){: target="_blank"}**
 {: .mt-1 .mb-1 }
-A robust blog post with notebook example using RAPIDS libraries for linear models.
+Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is geared mainly for new users.
+{: .mb-7 }
+
+
+### 10 Minutes to Dask-XGBoost
+{: .mb-1 }
+#### **[Dask-XGBoost Docs](https://rapidsai.github.io/projects/cudf/en/0.7.0/dask-xgb-10min.html){: target="_blank"}**
+{: .mt-1 .mb-1 }
+A short introduction to XGBoost with a distributed CUDA DataFrame via Dask-cuDF.
+{: .mb-7 }
+
+
+### Multi-GPU with Dask-cuDF
+{: .mb-1 }
+#### **[Dask-XGBoost Docs](https://rapidsai.github.io/projects/cudf/en/0.7.0/dask-cudf.htmll){: target="_blank"}**
+{: .mt-1 .mb-1 }
+Overview of using Dask for Multi-GPU cuDF solutions, on both a single machine or multiple GPUs across many machines in a cluster.
 {: .mb-7 }
 
 
@@ -64,5 +64,15 @@ A robust blog post with notebook example using RAPIDS libraries for linear model
 {: .mb-1 }
 #### **[Github Repo](https://github.com/rapidsai/notebooks){: target="_blank"}**
 {: .mt-1 .mb-1 }
-A Github repository with examples of XGBoost, cuML demos, cuGraph demos, and more.
+A Github repository with our introductory examples of XGBoost, cuML demos, cuGraph demos, and more.
 {: .mb-7 }
+
+
+### Our Extended Collection of Example NoteBooks
+{: .mb-1 }
+#### **[Github Repo](https://github.com/rapidsai/notebooks-extended){: target="_blank"}**
+{: .mt-1 .mb-1 }
+A second Github repository with our extended collection of notebook examples.
+{: .mb-7 }
+
+
