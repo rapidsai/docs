@@ -11,7 +11,7 @@ title: gpuCI
 
 Outlines how gpuCI is configured for RAPIDS and how to integrate other projects
 
-gpuCI is accessible here: https://gpuci.gpuopenanalytics.com/
+gpuCI is accessible here: <https://gpuci.gpuopenanalytics.com/>
 
 ### Intended audience
 
