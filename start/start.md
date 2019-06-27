@@ -11,15 +11,6 @@ permalink: start
 The RAPIDS data science framework is a collection of libraries for running end-to-end data science pipelines completely on the GPU. The interaction is designed to have a familiar look and feel to working in Python, but utilizes optimized NVIDIA® CUDA® primitives and high-bandwidth GPU memory under the hood. Below are some links to help getting started with the RAPIDS libraries.
 {: .fs-6 .fw-300 }
 
-### Intended audience
-
-Community
-{: .label .label-yellow}
-
-Developers
-{: .label .label-green}
-
-
 ### Installation Tool
 {: .mb-1 }
 #### **[Rapids.AI](https://rapids.ai/start.html#get-rapids){: target="_blank"}**
