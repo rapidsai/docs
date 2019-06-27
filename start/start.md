@@ -32,6 +32,10 @@ Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is
 A short introduction to XGBoost with a distributed CUDA DataFrame via Dask-cuDF.
 {: .mb-7 }
 
+### Using RAPIDS + XGBoost4J-Spark
+#### **[Github Repo](https://github.com/rapidsai/spark-examples){: target="_blank"}**
+Getting started guide and source code for XGBoost4J-Spark, along with notebooks and examples.
+{: .mb-7 }
 
 ### Multi-GPU with Dask-cuDF
 #### **[Dask-XGBoost Docs](https://rapidsai.github.io/projects/cudf/en/latest/dask-cudf.htmll){: target="_blank"}**
