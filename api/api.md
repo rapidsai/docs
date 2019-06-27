@@ -12,14 +12,6 @@ permalink: api
 Access our current "stable" API docs for all RAPIDS libraries below. In addition, explore our "nightly" docs containing the latest features and updates for the next release.
 {: .fs-6 .fw-300 }
 
-## Intended audience
-
-Community
-{: .label .label-yellow}
-
-Developers
-{: .label .label-green}
-
 ## RAPIDS APIs
 
 {% include api-docs.html data=site.data.apis %}
