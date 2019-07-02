@@ -46,7 +46,7 @@ For each project there are 3 issue tracking boards and 1 release tracking board:
 
 Bug Squashing, Feature Planning and Other Issues are permanent tracking boards, and are used as the basis for release planning. The Release board is not pernament and is closed once a release is completed.  The example boards above are from the [cuDF](https://github.com/rapidsai/cudf) project.
 
-Each permanent project board has the following columns:
+Each permanent project board (Bug Squashing, Feature Planning,and Other Issues) has the following columns:
 
 | Column | Purpose |
 |:-------|:--------|
@@ -60,9 +60,9 @@ Each permanent project board has the following columns:
 See [Release Board](https://docs.rapids.ai/releases/planning/) for the column definition that pertain to the Relase Board.
 
 **IMPORTANT:** 
-Leveraging the tracking boards for issues management: PICs can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.
+In leveraging the tracking boards for issue management, PICs can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.
 
-By placing the issues in one of these boards (Bug Squashing, Feature Planning, or Other Issues filers and the community will see updates to the issue and can get a sense of when they can expect feedback. For example, on a given issue a user may see `Future release in Other Issues` and this allows the filer or the community to comment on if they believe the issue should be addressed faster.
+By placing the issues in one of these permanent boards (Bug Squashing, Feature Planning, or Other Issues) filers and the community will see updates to the issue and can get a sense of when they can expect feedback. For example, on a given issue a user may see `Future release in Other Issues` and this allows the filer or the community to comment on if they believe the issue should be addressed faster.
 
 ## Process cycle
 
