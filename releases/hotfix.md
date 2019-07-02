@@ -85,7 +85,7 @@ Project Leads
 Operations
 {: .label .label-purple}
 1. Once notified by a Project Lead, review the pull request
-2. Begin testing of conda, containers, and pip for correctness and functionality
+2. Begin testing of conda, containers for correctness and functionality
 3. Review documentation to ensure version numbers (updating to `M.A.Y`) and instructions are correct
 4. Merge release PR after approval
 5. Monitor process of automated tools
