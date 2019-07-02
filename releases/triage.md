@@ -57,9 +57,12 @@ Each permanent project board has the following columns:
 | Backlog | All other open issues |
 | Closed | Issues that are closed will **automatically** be moved to this column |
 
-**IMPORTANT:** Leveraging the tracking boards for issues, we can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.
+See [Release Board](https://docs.rapids.ai/releases/planning/) for the column definition that pertain to the Relase Board.
 
-By placing the issues in one of these boards filers and the community will see updates to the issue and can get a sense of when they can expect feedback. For example, on a given issue a user may see `Future release in Other Issues` and this allows the filer or the community to comment on if they believe the issue should be addressed faster.
+**IMPORTANT:** 
+Leveraging the tracking boards for issues management: PICs can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.
+
+By placing the issues in one of these boards (Bug Squashing, Feature Planning, or Other Issues filers and the community will see updates to the issue and can get a sense of when they can expect feedback. For example, on a given issue a user may see `Future release in Other Issues` and this allows the filer or the community to comment on if they believe the issue should be addressed faster.
 
 ## Process cycle
 
