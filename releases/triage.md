@@ -42,9 +42,9 @@ For each project there are 3 issue tracking boards and 1 release tracking board:
 - [Bug Squashing](https://github.com/rapidsai/cudf/projects/1) - track and prioritize bugs
 - [Feature Planning](https://github.com/rapidsai/cudf/projects/9) - track and prioritize feature requests
 - [Other Issues](https://github.com/rapidsai/cudf/projects/10) - track documentation, questions, and other issues
-- [Release] - tracks the progress of the 
+- [Release] (https://github.com/rapidsai/cudf/projects/14tracks) - the progress of the current release
 
-These boards are permanent, and are used as the basis for release planning. The example boards above are from the [cuDF](https://github.com/rapidsai/cudf) project.
+Bug Squashing, Feature Planning and Other Issues are permanent tracking boards, and are used as the basis for release planning. The Release board is not pernament and is closed once a release is completed.  The example boards above are from the [cuDF](https://github.com/rapidsai/cudf) project.
 
 Each permanent project board has the following columns:
 
