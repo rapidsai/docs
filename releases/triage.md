@@ -110,7 +110,7 @@ Project Leads - Daily
 
 Once issues have been triaged, we can prioritize and schedule them for a release. 
 
-**IMPORTANT:** Leveraging the tracking boards for issues, we can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.
+**IMPORTANT:** By leveraging the tracking boards for issues, project leads can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.
 
 Project Leads - Daily
 {: .label .label-blue}
