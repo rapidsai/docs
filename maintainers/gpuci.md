@@ -133,8 +133,7 @@ git commit -am "Merge branch-0.7 into branch-0.8"
 git push <personal fork> branch-0.8-merge-0.7
 ```
 
-Once this is done, open a PR that targets the new default branch (`branch-0.8` in this example) with your change
-s. Once this PR is approved and merged, the auto-merger PR should automatically be merged since it will contain the same commit hashes.
+Once this is done, open a PR that targets the new default branch (`branch-0.8` in this example) with your changes. Once this PR is approved and merged, the auto-merger PR should automatically be merged since it will contain the same commit hashes.
 
 ## Scripts
 
