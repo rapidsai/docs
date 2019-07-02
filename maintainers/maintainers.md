@@ -23,7 +23,7 @@ Project Leads
 Operations
 {: .label .label-purple}
 
-### Release v0.9 Schedule
+## Release v0.9 Schedule
 
 **NOTE:** *Dates are subject to change at anytime*
 
