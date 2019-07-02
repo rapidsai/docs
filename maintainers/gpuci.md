@@ -113,7 +113,7 @@ Each branch is built in a container using CUDA 10.0 and Python 3.6. the purpose 
 
 #### Auto-mergers
 
-During the release process, the branch for the next release will be created and set as default. Once this happens, the auto-merger branch jobs will be activated. Auto-mergers will automatically merge any commits made to the release branch to the latest default branch during burn down.
+During the release process, the branch for the next release is created and set as default. Once this happens, the auto-merger branch jobs are activated. Auto-mergers automatically merge any commits made to the release branch to the latest default branch during burn down.
 
 **When Auto Merging Fails**
 
