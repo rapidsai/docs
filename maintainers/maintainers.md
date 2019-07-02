@@ -32,4 +32,4 @@ Operations
 | New Development | Mon, Jun 24th | Tue, Aug 6th | 30 days |
 | Burn Down | Wed, Aug 7th | Tue, Aug 13th | 5 days |
 | Code Freeze/Testing | Wed, Aug 14th | Tue, Aug 20th | 5 days |
-| Release | Mon, June 24th | Wed, Aug 21st | 1 day |
+| Release | Mon, Aug 24th | Wed, Aug 21st | 1 day |
