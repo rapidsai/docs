@@ -111,6 +111,30 @@ These builds can publish nightly conda packages.
 
 Each branch is built in a container using CUDA 10.0 and Python 3.6. the purpose of this job is primarily for testing with a GPU present.
 
+#### Auto-mergers
+
+During the release process, the branch for the next release is created and set as default. Once this happens, the auto-merger branch jobs are activated. Auto-mergers automatically merge any commits made to the release branch to the latest default branch during burn down.
+
+**When Auto Merging Fails**
+
+It is important to note that the auto-merge jobs will sometimes fail due to merge conflicts, and will request a manual merge to be done. *Never* use the GitHub Web UI to fix the merge conflicts as it will cause changes in the default branch to be merged into the release branch. Please use the following steps to fix the merge conflicts manually:
+
+Using the example of `branch-0.7` release branch and a new default `branch-0.8`.
+
+```
+git checkout branch-0.7
+git pull <rapidsai remote>
+git checkout branch-0.8
+git pull <rapidsai remote>
+git checkout -b branch-0.8-merge-0.7
+git merge branch-0.7
+# Fix any merge conflicts caused by this merge
+git commit -am "Merge branch-0.7 into branch-0.8"
+git push <personal fork> branch-0.8-merge-0.7
+```
+
+Once this is done, open a PR that targets the new default branch (`branch-0.8` in this example) with your changes. Once this PR is approved and merged, the auto-merger PR should automatically be merged since it will contain the same commit hashes.
+
 ## Scripts
 
 These scripts are a standardized way for gpuCI to build projects. This allows for rapid integration and immediate feedback in pull requests on build changes.
