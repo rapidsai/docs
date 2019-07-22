@@ -38,7 +38,7 @@ Getting started guide and source code for XGBoost4J-Spark, along with notebooks 
 {: .mb-7 }
 
 ### Multi-GPU with Dask-cuDF
-#### **[Dask-XGBoost Docs](https://rapidsai.github.io/projects/cudf/en/latest/dask-cudf.htmll){: target="_blank"}**
+#### **[Dask-XGBoost Docs](https://rapidsai.github.io/projects/cudf/en/latest/dask-cudf.html){: target="_blank"}**
 Overview of using Dask for Multi-GPU cuDF solutions, on both a single machine or multiple GPUs across many machines in a cluster.
 {: .mb-7 }
 
