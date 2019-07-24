@@ -51,7 +51,7 @@ Each Release board has the following columns:
 | PR-Reviewer approved | PRs move **automatically** to this column when approved by reviewer |
 | Done | Issues and PRs that are closed will **automatically** be moved to this column |
 
-**IMPORTANT:** By leveraging the release board for issues, Project Leads can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.
+**IMPORTANT:** By leveraging the Release board for issues, Project Leads can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.  We can also use labels on the issues/PRs to filter and _prioritize_ work.
 
 #### Using the release board
 - Assigning and priortizing work
