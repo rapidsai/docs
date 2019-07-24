@@ -44,7 +44,7 @@ For each project there are 3 issue tracking boards and 1 release tracking board:
 - [Other Issues](https://github.com/rapidsai/cudf/projects/10) - track documentation, questions, and other issues
 - [Release](https://github.com/rapidsai/cudf/projects/14) - tracks the progress of the current release
 
-Bug Squashing, Feature Planning and Other Issues are permanent tracking boards, and are used as the basis for release planning. The Release board is not pernament and is closed once a release is completed.  The example boards above are from the [cuDF](https://github.com/rapidsai/cudf) project.
+Bug Squashing, Feature Planning and Other Issues are permanent tracking boards, and are used as the basis for release planning. The Release board is not permanent and is closed once a release is completed.  The example boards above are from the [cuDF](https://github.com/rapidsai/cudf) project.
 
 Each permanent project board (Bug Squashing, Feature Planning,and Other Issues) has the following columns:
 
@@ -57,10 +57,10 @@ Each permanent project board (Bug Squashing, Feature Planning,and Other Issues) 
 | Backlog | All other open issues |
 | Closed | Issues that are closed will **automatically** be moved to this column |
 
-See [Release Board](https://docs.rapids.ai/releases/planning/) for the column definition that pertain to the Relase Board.
+See [Release Board](https://docs.rapids.ai/releases/planning/) for the column definition that pertain to the Release Board.
 
 **IMPORTANT:** 
-In leveraging the tracking boards for issue management, project leads can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.
+In leveraging the tracking boards for issue management, project leads can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom. We can also use labels on the issues/PRs to filter and _prioritize_ work.
 
 By placing the issues in one of these permanent boards (Bug Squashing, Feature Planning, or Other Issues) filers and the community will see updates to the issue and can get a sense of when they can expect feedback. For example, on a given issue a user may see `Future release in Other Issues` and this allows the filer or the community to comment on if they believe the issue should be addressed faster.
 
@@ -125,7 +125,7 @@ Project Leads - Weekly
 1. Archvie all issues in the `Closed` column.
 2. Review all issues in each column of `Next release`, `Future release`, and `Backlog` to make sure issues are still scheduled appropriately.
 3. Prioritize any issues in `Future release`, and `Backlog` columns. `Hotfix` and `Next release` do not need to be re-prioritized as they should be in active development already.
-4. Discuss with the team the status of all issues in `Hotfix` and `Next release` columns to ensure development progress is being made and there are no blockers.
+4. Discuss the status of all issues with the team in `Hotfix` and `Next release` columns to ensure development progress is being made and there are no blockers.
 5. Repeat this process for all 3 tracking boards.
 
 #### Hotfix
