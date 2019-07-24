@@ -36,9 +36,9 @@ Releases are planned in two phases:
 
 RAPIDS projects use GitHub project boards for tracking releases with a customized setup and automation that is copied from existing boards.
 
-For each project there is a release board for each release. As an example [v0.5 Release](https://github.com/rapidsai/cudf/projects/5) tracks the progress for the v0.5 release. Release boards are closed once a release is completed, and are labeled `vM.A Release` where `M` & `A` are the major & minor release version numbers.
+For each project there is a Release board for each release. As an example [v0.5 Release](https://github.com/rapidsai/cudf/projects/5) tracks the progress for the v0.5 release. Release boards are closed once a release is completed, and are labeled `vM.A Release` where `M` & `A` are the major & minor release version numbers.
 
-Each release board has the following columns:
+Each Release board has the following columns:
 
 | Column | Purpose |
 |:-------|:--------|
@@ -51,7 +51,7 @@ Each release board has the following columns:
 | PR-Reviewer approved | PRs move **automatically** to this column when approved by reviewer |
 | Done | Issues and PRs that are closed will **automatically** be moved to this column |
 
-**IMPORTANT:** Leveraging the release board for issues, we can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.
+**IMPORTANT:** By leveraging the Release board for issues, Project Leads can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.  We can also use labels on the issues/PRs to filter and _prioritize_ work.
 
 #### Using the release board
 - Assigning and priortizing work
