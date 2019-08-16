@@ -48,6 +48,6 @@ A Github repository with our introductory examples of XGBoost, cuML demos, cuGra
 {: .mb-7 }
 
 ### Our Extended Collection of Example NoteBooks
-#### **[Github Repo](https://github.com/rapidsai/notebooks-extended){: target="_blank"}**
+#### **[Github Repo](https://github.com/rapidsai/notebooks-contrib){: target="_blank"}**
 A Github repository with examples of XGBoost, cuML demos, cuGraph demos, and more.
 {: .mb-7 }
