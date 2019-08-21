@@ -9,7 +9,7 @@ permalink: containers/rapids-demo
 
 # RAPIDS Demo Container
 
-Get started with our preconfigured RAPIDS demo container, featuring several demo notebooks using cuDF, cuML, Dask, and XGBoost
+Get started with our preconfigured RAPIDS demo container, featuring several demo notebooks using cuDF, cuML, cuGraph, Dask, and XGBoost
 {: .fs-6 .fw-300 }
 
 1. TOC

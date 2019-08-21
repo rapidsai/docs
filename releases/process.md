@@ -106,11 +106,10 @@ Operations
 
 1. Beginning of the `release date` announce the release of `branch-M.B`
 2. Create release PR from `branch-M.B` that targets `master`
-3. Begin testing of conda, containers, and pip for correctness and functionality
+3. Begin testing of conda, containers, and notebooks for correctness and functionality
 4. Work with development team to close outstanding PRs
 5. Review documentation to ensure version numbers and instructions are correct
 6. Enlist project reviewers to approve the release PR
 7. Merge release PR after approval
 8. Monitor process of automated tools
 9. Spot check deliverables to ensure correctness
-
