@@ -13,6 +13,7 @@ RAPIDS projects use an established set of guidelines and procedures for all proj
 {: .fs-6 .fw-300 }
 
 ### Intended audience
+{:.no_toc}
 
 Developers
 {: .label .label-green}
@@ -22,6 +23,12 @@ Project Leads
 
 Operations
 {: .label .label-purple}
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
 
 ## Release v0.10 Schedule
 
