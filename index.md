@@ -21,7 +21,7 @@ This site serves as a collection of all the documentation for RAPIDS. Whether yo
 <div class="footer-help-section">
     <div class="footer-help-box">
         <div class="footer-help-box-image"><i class="fas fa-users fa-4x"></i></div>
-        <a href="https://groups.google.com/forum/#!forum/rapidsai" class="btn">Google Groups</a>
+        <a href="https://groups.google.com/forum/#!forum/rapidsai" target="_blank" class="btn">Google Groups</a>
     </div>
     <div class="footer-help-box">
         <div class="footer-help-box-image"><i class="fab fa-twitter fa-4x"></i></div>
