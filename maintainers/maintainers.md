@@ -13,7 +13,6 @@ RAPIDS projects use an established set of guidelines and procedures for all proj
 {: .fs-6 .fw-300 }
 
 ### Intended audience
-{:.no_toc}
 
 Developers
 {: .label .label-green}
@@ -24,17 +23,9 @@ Project Leads
 Operations
 {: .label .label-purple}
 
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
-
 ## Release v0.10 Schedule
 
-Current release in active development with nightly builds.
-
-**NOTE:** *Dates are subject to change at anytime*
+**NOTE:** *Dates are subject to change at anytime. Completed release schedules are posted [here]({{ site.url }}{{ site.baseurl }}/releases/schedule).*
 
 | Phase | Start | End | Duration |
 |:------|:------|:----|:---------|
@@ -43,13 +34,3 @@ Current release in active development with nightly builds.
 | Code Freeze/Testing | Thu, Oct 3rd | Tue, Oct 8th | 4 days |
 | Release | Wed, Oct 9th | Wed, Oct 9th | 1 day |
 
-## Completed Releases
-
-### Release v0.09 Schedule
-
-| Phase | Start | End | Duration |
-|:------|:------|:----|:---------|
-| New Development | Mon, Jun 24th | Tue, Aug 6th | 30 days |
-| Burn Down | Wed, Aug 7th | Tue, Aug 13th | 5 days |
-| Code Freeze/Testing | Wed, Aug 14th | Tue, Aug 20th | 5 days |
-| Release | Wed, Aug 21st | Wed, Aug 21st | 1 day |
