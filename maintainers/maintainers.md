@@ -23,9 +23,22 @@ Project Leads
 Operations
 {: .label .label-purple}
 
-## Release v0.9 Schedule
+## Release v0.10 Schedule
+
+Current release in active development with nightly builds.
 
 **NOTE:** *Dates are subject to change at anytime*
+
+| Phase | Start | End | Duration |
+|:------|:------|:----|:---------|
+| New Development | Wed, Aug 14th | Wed, Sep 25th | 30 days |
+| Burn Down | Thu, Sep 26th | Wed, Oct 2nd | 5 days |
+| Code Freeze/Testing | Thu, Oct 3rd | Tue, Oct 8th | 4 days |
+| Release | Wed, Oct 9th | Wed, Oct 9th | 1 day |
+
+## Completed Releases
+
+### Release v0.09 Schedule
 
 | Phase | Start | End | Duration |
 |:------|:------|:----|:---------|
