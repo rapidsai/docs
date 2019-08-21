@@ -32,7 +32,7 @@ The current release schedule is posted on the [RAPIDS Maintainers Docs]({{ site.
 
 Historical list of completed releases
 
-### Release v0.09 Schedule
+### Release v0.9 Schedule
 
 | Phase | Start | End | Duration |
 |:------|:------|:----|:---------|
