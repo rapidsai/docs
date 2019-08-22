@@ -17,6 +17,17 @@ Get started with our preconfigured RAPIDS demo container, featuring several demo
 
 ### Current Version
 
+#### RAPIDS 0.9 - 21 August 2019
+
+Versions of libraries included in the `0.9` [images](#rapids-09-images):
+- `cuDF` [v0.9.0](https://github.com/rapidsai/cudf/tree/v0.9.0), `cuML` [v0.9.0](https://github.com/rapidsai/cuml/tree/v0.9.0), `cuGraph` [v0.9.0](https://github.com/rapidsai/cugraph/tree/v0.9.0), `RMM` [v0.9.0](https://github.com/rapidsai/RMM/tree/v0.9.0)
+- `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/cudf-interop), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-0.8)
+
+Updates & changes
+- Updated containers with `v0.9.0` release of cuDF, cuML, cuGraph, cuStrings, RMM, and dask-cuda.
+
+### Former Versions
+
 #### RAPIDS 0.8 - 27 June 2019
 
 Versions of libraries included in the `0.8` [images](#rapids-08-images):
@@ -25,8 +36,6 @@ Versions of libraries included in the `0.8` [images](#rapids-08-images):
 
 Updates & changes
 - Updated containers with `v0.8.0` release of cuDF, cuML, cuGraph, cuStrings, RMM, dask-cuda, dask-cudf, and dask-cuml.
-
-### Former Versions
 
 #### RAPIDS 0.7 - 16 May 2019
 
@@ -106,15 +115,15 @@ $ docker run --runtime=nvidia \
 -p 8787:8787 \
 -p 8786:8786 \
 rapidsai/rapidsai:cuda9.2-runtime-ubuntu16.04
-(rapids) root@container:/rapids/notebooks# bash utils/start-jupyter.sh
 ```
-**NOTE:** This will run [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) on port 8888 on your host machine.
+**NOTE:** This will open a shell with [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) running in the background on port 8888 on your host machine.
 
 ### Use JupyterLab to Explore the Notebooks
 
-Notebooks can be found in the following directories within the 0.7 container:
+Notebooks can be found in the following directories within the container:
 
 * `/rapids/notebooks/xgboost` - XGBoost demo notebooks
+* `/rapids/notebooks/cudf` - cuDF demo notebooks
 * `/rapids/notebooks/cuml` - cuML demo notebooks
 * `/rapids/notebooks/cugraph` - cuGraph demo notebooks
 * `/rapids/notebooks/tutorials` - Tutorials with end-to-end workflows
@@ -169,14 +178,84 @@ Using the image types [above](#tags) `base`, `runtime`, or `devel` we use the fo
 tag naming scheme for RAPIDS images:
 
 ```
-0.5-cuda9.2-devel-ubuntu16.04-gcc5-py3.6
-^       ^    ^        ^         ^    ^
-|       |    type     |         |    python version
-|       |             |         |
-|       cuda version  |         gcc version
+0.9-cuda9.2-devel-ubuntu16.04-py3.6
+^       ^    ^        ^         ^
+|       |    type     |         python version
+|       |             |
+|       cuda version  |
 |                     |
 RAPIDS version        linux version
 ```
+
+The `base` and `runtime` image types can be found in the `rapidsai/rapidsai` DockerHub repo, and the `devel` image types can be found in the `rapidsai/rapidsai-dev` DockerHub repo.
+
+### RAPIDS 0.9 Images
+
+#### Ubuntu 16.04
+
+All `ubuntu16.04` images use `gcc 5.4`
+
+**CUDA 9.2**
+
+| Short Tags | Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `cuda9.2-base-ubuntu16.04` | `0.9-cuda9.2-base-ubuntu16.04` | base | 3.6 |
+| `latest`<br>or<br>`cuda9.2-runtime-ubuntu16.04` | `0.9-cuda9.2-runtime-ubuntu16.04` | runtime | 3.6 |
+| --- | `0.9-cuda9.2-devel-ubuntu16.04-py3.6` | devel | 3.6 |
+| --- | `0.9-cuda9.2-devel-ubuntu16.04-py3.7` | devel | 3.7 |
+
+**CUDA 10.0**
+
+| Short Tags | Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `cuda10.0-base-ubuntu16.04` | `0.9-cuda10.0-base-ubuntu16.04` | base | 3.6 |
+| `latest`<br>or<br>`cuda10.0-runtime-ubuntu16.04` | `0.9-cuda10.0-runtime-ubuntu16.04` | runtime | 3.6 |
+| --- | `0.9-cuda10.0-devel-ubuntu16.04-py3.6` | devel | 3.6 |
+| --- | `0.9-cuda10.0-devel-ubuntu16.04-py3.7` | devel | 3.7 |
+
+#### Ubuntu 18.04
+
+All `ubuntu18.04` images use `gcc 7.3`
+
+**CUDA 9.2**
+
+| Short Tags | Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `cuda9.2-base-ubuntu18.04` | `0.9-cuda9.2-base-ubuntu18.04` | base | 3.6 |
+| `latest`<br>or<br>`cuda9.2-runtime-ubuntu18.04` | `0.9-cuda9.2-runtime-ubuntu18.04` | runtime | 3.6 |
+| --- | `0.9-cuda9.2-devel-ubuntu18.04-py3.6` | devel | 3.6 |
+| --- | `0.9-cuda9.2-devel-ubuntu18.04-py3.7` | devel | 3.7 |
+
+**CUDA 10.0**
+
+| Short Tags | Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `cuda10.0-base-ubuntu18.04` | `0.9-cuda10.0-base-ubuntu18.04` | base | 3.6 |
+| `latest`<br>or<br>`cuda10.0-runtime-ubuntu18.04` | `0.9-cuda10.0-runtime-ubuntu18.04` | runtime | 3.6 |
+| --- | `0.9-cuda10.0-devel-ubuntu18.04-py3.6` | devel | 3.6 |
+| --- | `0.9-cuda10.0-devel-ubuntu18.04-py3.7` | devel | 3.7 |
+
+#### CentOS 7
+
+All `centos7` images use `gcc 7.3`
+
+**CUDA 9.2**
+
+| Short Tags | Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `cuda9.2-base-centos7` | `0.9-cuda9.2-base-centos7` | base | 3.6 |
+| `cuda9.2-runtime-centos7` | `0.9-cuda9.2-runtime-centos7` | runtime | 3.6 |
+| --- | `0.9-cuda9.2-devel-centos7-py3.6` | devel | 3.6 |
+| --- | `0.9-cuda9.2-devel-centos7-py3.7` | devel | 3.7 |
+
+**CUDA 10.0**
+
+| Short Tags | Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `cuda10.0-base-centos7` | `0.9-cuda10.0-base-centos7` | base | 3.6 |
+| `latest`<br>or<br>`cuda10.0-runtime-centos7` | `0.9-cuda10.0-runtime-centos7` | runtime | 3.6 |
+| --- | `0.9-cuda10.0-devel-centos7-py3.6` | devel | 3.6 |
+| --- | `0.9-cuda10.0-devel-centos7-py3.7` | devel | 3.7 |
 
 ### RAPIDS 0.8 Images
 
