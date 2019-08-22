@@ -76,7 +76,7 @@ Versions of libraries included in the `0.4` [images](#rapids-04-images):
 
 ### Tags
 
-The RAPIDS image is based on the `devel` [nvidia/cuda](https://hub.docker.com/r/nvidia/cuda) image. This means it is a drop-in replacement, making it easy to gain the RAPIDS libraries while maintaining support for existing CUDA applications.
+The RAPIDS image is based on the `runtime` [nvidia/cuda](https://hub.docker.com/r/nvidia/cuda) image. This means it is a drop-in replacement, making it easy to gain the RAPIDS libraries while maintaining support for existing CUDA applications.
 
 RAPIDS images come in three types:
 
@@ -160,7 +160,7 @@ Check out the RAPIDS [documentation](http://rapids.ai/start.html) for more detai
 
 ## More Information
 
-Check out the [cuDF](https://rapidsai.github.io/projects/cudf/en/latest), [cuML](https://rapidsai.github.io/projects/cuml/en/latest), and [XGBoost](https://xgboost.readthedocs.io/en/latest/) API docs.
+Check out the [RAPIDS](https://docs.rapids.ai/api) and [XGBoost](https://xgboost.readthedocs.io/en/latest/) API docs.
 
 Learn how to setup a mult-node cuDF and XGBoost data preparation and distributed training environment by following the [mortgage data example notebook and scripts](https://github.com/rapidsai/notebooks).
 
