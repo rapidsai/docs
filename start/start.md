@@ -23,12 +23,12 @@ Handy PDF reference guide for handling GPU Data Frames (GDF) with cuDF.
 {: .mb-7 }
 
 ### 10 Minutes to cuDF
-#### **[cuDF Post](https://rapidsai.github.io/projects/cudf/en/latest/10min.html){: target="_blank"}**
+#### **[cuDF Post](https://rapidsai.github.io/projects/cudf/en/{{ site.data.releases.stable-docs }}/10min.html){: target="_blank"}**
 Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is geared mainly for new users.
 {: .mb-7 }
 
 ### 10 Minutes to Dask-XGBoost
-#### **[Dask-XGBoost Post](https://rapidsai.github.io/projects/cudf/en/latest/dask-xgb-10min.html){: target="_blank"}**
+#### **[Dask-XGBoost Post](https://rapidsai.github.io/projects/cudf/en/{{ site.data.releases.stable-docs }}/dask-xgb-10min.html){: target="_blank"}**
 A short introduction to XGBoost with a distributed CUDA DataFrame via Dask-cuDF.
 {: .mb-7 }
 
@@ -38,7 +38,7 @@ Getting started guide and source code for XGBoost4J-Spark, along with notebooks 
 {: .mb-7 }
 
 ### Multi-GPU with Dask-cuDF
-#### **[Dask-cuDF Post](https://rapidsai.github.io/projects/cudf/en/latest/dask-cudf.html){: target="_blank"}**
+#### **[Dask-cuDF Post](https://rapidsai.github.io/projects/cudf/en/{{ site.data.releases.stable-docs }}/dask-cudf.html){: target="_blank"}**
 Overview of using Dask for Multi-GPU cuDF solutions, on both a single machine or multiple GPUs across many machines in a cluster.
 {: .mb-7 }
 
