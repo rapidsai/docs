@@ -76,7 +76,7 @@ Make sure to update all of the following
 
 ## Announce
 
-Announce that burn down has began.
+Announce that burn down has begun and when it will end.
 
 Suggested template:
 
