@@ -17,7 +17,7 @@ Download the latest version of the RAPIDS release deck.
 
 ### v0.9 Release
 
-#### **[Deck .pptx](/overview/latest.pptx){: target="_blank"}** | **[Deck .pdf](/overview/latest.pdf){: target="_blank"}**
+#### Download **[pptx](/overview/latest.pptx){: target="_blank"}** | **[pdf](/overview/latest.pdf){: target="_blank"}**
 {: .mb-10 .mt-0 }
 
 
@@ -29,12 +29,12 @@ Download current and previous versions of the RAPIDS release decks.
 
 ### v0.9 Release
 
-#### **[Deck .pptx](/overview/RAPIDS 0.9 Release Deck.pptx){: target="_blank"}** | **[Deck .pdf](/overview/RAPIDS 0.9 Release Deck.pdf){: target="_blank"}**
+#### Download **[pptx](/overview/RAPIDS 0.9 Release Deck.pptx){: target="_blank"}** | **[pdf](/overview/RAPIDS 0.9 Release Deck.pdf){: target="_blank"}**
 {: .mb-7 .mt-0 }
 
 ### v0.8 Release
 
-#### **[Deck .pptx](/overview/RAPIDS 0.8 Release Deck.pptx){: target="_blank"}** | **[Deck .pdf](/overview/RAPIDS 0.8 Release Deck.pdf){: target="_blank"}**
+#### Download **[pptx](/overview/RAPIDS 0.8 Release Deck.pptx){: target="_blank"}** | **[pdf](/overview/RAPIDS 0.8 Release Deck.pdf){: target="_blank"}**
 {: .mb-7 .mt-0 }
 
 
