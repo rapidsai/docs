@@ -64,6 +64,11 @@ This is the most fundamental way to deploy RAPIDS on multiple machines.
     - For more information on the CLI options use `dask-scheduler --help` and `dask-cuda-worker --help`
 
     More information on deploying manually can be found [here](https://docs.dask.org/en/latest/setup/cli.html).
+
+    Dask also supports other options like [SSH](https://docs.dask.org/en/latest/setup/ssh.html) and [NFS](https://docs.dask.org/en/latest/setup/hpc.html#using-a-shared-network-file-system-and-a-job-scheduler).
+
+    While not tested more configuration options to deploy dask in a distributed setting can be found [here](https://docs.dask.org/en/latest/setup.html). 
+    Note that in the context of RAPIDS instead of the tradititonal `dask-worker` we recommend using the `dask-cuda-worker` CLI.
 {: .mb-5}
 
 #### **Kubernetes and Helm**
