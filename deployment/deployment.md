@@ -8,13 +8,21 @@ permalink: deployment
 # Deploying RAPIDS
 {: .no_toc}
 
-The RAPIDS collections of libraries can be deployed across multiple environments ranging from local nodes with a single GPU to complex HPC and cloud clusters. Highlighted below are some methods to deploy rapids libraries in different environments.
+RAPIDS libraries are deployable across multiple environments types:
+1. Single Node Single GPU
+2. Single Node Multiple GPUs
+3. Multiple Nodes, Multiple GPUs
+4. Multiple or Single Node managed by a scheduling service:
+    a. Kubernetes
+    b. SLURM
+
+Included below are guides for deploying to some of these environments.
 {: .fs-6 .fw-300}
 
 ### Single Node Single GPU
-Running RAPIDS libraries in a Single Node Single GPU environment does not involve any additional setup. [Install](https://rapids.ai/start.html#get-rapids) the libraries you need and run in your preferred environment.
+In Single Node, Single GPU environments simply [install](https://rapids.ai/start.html#get-rapids) and import the libraries:
 ```
-import cudf, cuml, cugraph, cuspatial # Good to go!
+>>> import cudf, cuml, cugraph, cuspatial # Good to go!
 ```
 <!--
 Modify the codeblock if needed
@@ -22,68 +30,72 @@ Modify the codeblock if needed
 {: .mb-7 }
 
 ### Single Node Multi GPU
-RAPIDS libraries have the ability to scale up and take advantage of multiple GPUs on a single node. The [Dask-CUDA](https://github.com/rapidsai/dask-cuda) library makes it simple to set up workers on a single node with the `LocalCUDACluster` method.
+RAPIDS libraries also scale up to multiple GPUs on a single node. This is most easily setup using [Dask-CUDA](https://github.com/rapidsai/dask-cuda)'s `LocalCUDACluster` API to detect and start one worker process per available GPU.
 ```
-from dask_cuda import LocalCUDACluster
-from dask.distributed import Client
-import dask_cudf
+>>> from dask_cuda import LocalCUDACluster
+>>> from dask.distributed import Client
+>>> import dask_cudf
 
-IPADDR = "0.0.0.0" # Update to use IP of the node
-cluster = LocalCUDACluster(ip= IPADDR)
-client = Client(clsuter)
+>>> IPADDR = "0.0.0.0" # Change to more specific node IP if desired
+>>> cluster = LocalCUDACluster(ip= IPADDR)
+>>> client = Client(clsuter)
 ```
-
-This [notebook](https://github.com/rapidsai/notebooks-contrib/blob/master/intermediate_notebooks/examples/weather.ipynb) demonstrates the approach discussed above.
 {: .mb-7 }
 <!--
 Include output of client maybe?
 Choose a beginner example instead of intermediate?
 -->
 ### Multi Node Multi GPU
-There are multiple methods of deploying RAPIDS in a Multi-Node setting.
 
 #### **Manual Setup**
-This is the most fundamental way to deploy RAPIDS on multiple machines.
-- Launch the `dask-scheduler` on one node
+This is the most basic means of deploying RAPIDS to multiple hosts. Most more advanced deployments use the same commands with environment configuration & parameter variations.
+- Run the `dask-scheduler` on one node
     ```
     $ dask-scheduler
     ```
-- Launch `dask-cuda-worker` on the rest of the nodes providing the address to the node hosting the scheduler
+- Run `dask-cuda-worker` on each worker node, providing the scheduler node's address. `dask-cuda-worker` will detect available GPUs and fork, starting one dask worker process per GPU.
+
     ```
     $ dask-cuda-worker 127.0.0.1:8786
     Start worker at:   tcp://127.0.0.1:36124
     Registered to: tcp://127.0.0.1:8786
     ```
-- Connect to the cluster in python
+- Connect to the cluster from a Python script
     ```
-    from dask.distributed import Client
-    client = Client(address="127.0.0.1:8786")
+    >>> from dask.distributed import Client
+    >>> # wrap Dask client API use in a main check
+    >>> if __name__ == "__main__":
+    ...     client = Client(address="127.0.0.1:8786")
+    ...     # use_dask_APIs()
     ```
     Notes:
-    - If the node has access to multiple GPUs the `dask-cuda-worker` CLI will start one worker per GPU on the node.
-    - For more information on the CLI options use `dask-scheduler --help` and `dask-cuda-worker --help`
+    - For more information on Dask CLI options use `dask-scheduler --help` and `dask-cuda-worker --help`
 
     More information on deploying manually can be found [here](https://docs.dask.org/en/latest/setup/cli.html).
 
     Dask also supports other options like [SSH](https://docs.dask.org/en/latest/setup/ssh.html) and [NFS](https://docs.dask.org/en/latest/setup/hpc.html#using-a-shared-network-file-system-and-a-job-scheduler).
 
-    While not tested more configuration options to deploy dask in a distributed setting can be found [here](https://docs.dask.org/en/latest/setup.html). 
-    Note that in the context of RAPIDS instead of the tradititonal `dask-worker` we recommend using the `dask-cuda-worker` CLI.
+    `dask-cuda-worker` is a convenient and optional extension of the normal `dask-worker` CLI command. You can also use `dask-worker` directly, manually configuring which GPUs are accessible to which workers:
+    ```
+    $ CUDA_VISIBLE_DEVICES=0 dask-worker localhost:8786 --nprocs 1 --nthreads 1 --memory-limit 0
+    $ CUDA_VISIBLE_DEVICES=1 dask-worker localhost:8786 --nprocs 1 --nthreads 1 --memory-limit 0
+    ```
 {: .mb-5}
 
 #### **Kubernetes and Helm**
-RAPIDS libraries can also be deployed using [Kubernetes](https://kubernetes.io) and [Helm](https://helm.sh). This is useful for deploying RAPIDS on Cloud services like [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com/en-us/).
-- Install Helm based on the [docs](https://helm.sh/docs/using_helm/#installing-helm)
-- Setup a cluster in Google Kubernetes Engines (optional)
+RAPIDS libraries can also be deployed using [Kubernetes](https://kubernetes.io) and [Helm](https://helm.sh). This is useful for deploying RAPIDS on existing Kubernetes clusters, or to managed cloud Kubernetes services.
+- [Install Helm](https://helm.sh/docs/using_helm/#installing-helm)
 - [Link-to-k8-script-and-charts]
 - ```
     $ helm install [link-to-chart] --name rapids-dask --namespace rapids
   ```
 - Check the status of the running pods
   ```
-  kubectl get pods -w --namespace rapids
+  $ kubectl get pods -w --namespace rapids
   ```
-For more information on installing with Kubernetes and Helm visit [link-to-k8-repo]
+  Additional Information:
+GPU scheduling in Kubernetes](https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/) 
+[Dask Kubernetes](https://kubernetes.dask.org/en/latest/)
 {: .mb-5}
 
 #### **Docker**
@@ -99,7 +111,7 @@ For more information on installing with Kubernetes and Helm visit [link-to-k8-re
 
 #### **Cloud deployments**
 
-For deploying RAPIDS on common cloud providers we recommend using Kuberentes and Helm. You can also deploy RAPIDS in other environments.
+You can use a single type of configuration to deploy RAPIDS across multiple cloud providers with Kubernetes and Helm. You can also deploy RAPIDS through other managed service offerings where available.
 
 ##### **Google Dataproc**
 
