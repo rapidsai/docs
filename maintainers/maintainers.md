@@ -31,6 +31,6 @@ Operations
 |:------|:------|:----|:---------|
 | New Development | Wed, Aug 14th | Wed, Sep 25th | 30 days |
 | Burn Down | Thu, Sep 26th | Wed, Oct 2nd | 5 days |
-| Code Freeze/Testing | Thu, Oct 3rd | Tue, Oct 8th | 4 days |
-| Release | Wed, Oct 9th | Wed, Oct 9th | 1 day |
+| Code Freeze/Testing | Thu, Oct 10th | Tue, Oct 15th | 4 days |
+| Release | Wed, Oct 16th | Wed, Oct 16th | 1 day |
 
