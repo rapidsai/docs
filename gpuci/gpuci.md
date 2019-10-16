@@ -74,7 +74,8 @@ This is helpful when trying to troubleshoot issues with the build process and/or
   * `rerun tests`
 * To skip CI testing (for documentation changes) add the following to the title of the PR
   * `[skip ci]`
-  * Note: This functionality will cause the PR CI status to be stuck in a `Pending` state. It will need to be admin merged after approval
+  * **NOTE:** This functionality will cause the PR gpuCI status report to be stuck in a `Pending` state on GitHub
+    * Due to branch protections, it will need to be admin merged after approval
 
 ## Help
 
