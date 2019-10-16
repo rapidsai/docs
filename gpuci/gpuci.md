@@ -45,7 +45,7 @@ For new pull requests (PRs) and pushes to branches trigger jobs on the [gpuCI](h
 
 Any push to a branch triggers a gpuCI job that builds and tests the current code, linking and showing the results as a build status icon on the README
 
-[![Build Status](https://gpuci.gpuopenanalytics.com/buildStatus/icon?job=gpuCI%2Fcudf%2Fbranches%2Fcudf-master)](https://gpuci.gpuopenanalytics.com/view/gpuCI%20-%20build-master/job/gpuCI/job/cudf/job/branches/job/cudf-master/)
+[![Build Status](https://gpuci.gpuopenanalytics.com/buildStatus/icon?job=rapidsai%2Fgpuci%2Fcudf%2Fbranches%2Fcudf-branch-pipeline)](https://gpuci.gpuopenanalytics.com/job/rapidsai/job/gpuci/job/cudf/job/branches/job/cudf-branch-pipeline/)
 
 ### Open PR or Update PR
 
