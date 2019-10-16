@@ -73,7 +73,7 @@ This is helpful when trying to troubleshoot issues with the build process and/or
 * To manually trigger tests in a PR, comment the command
   * `rerun tests`
 * To skip CI testing (for documentation changes) add the following to the title of the PR
-  * `[skip-ci]`
+  * `[skip ci]`
   * Note: This functionality will cause the PR CI status to be stuck in a `Pending` state. It will need to be admin merged after approval
 
 ## Help
