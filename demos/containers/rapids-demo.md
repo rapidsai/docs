@@ -17,6 +17,19 @@ Get started with our preconfigured RAPIDS demo container, featuring several demo
 
 ### Current Version
 
+#### RAPIDS 0.10 - 17 October 2019
+
+Versions of libraries included in the `0.10` [images](#rapids-10-images):
+- `cuDF` [v0.10.0](https://github.com/rapidsai/cudf/tree/v0.10.0), `cuML` [v0.10.0](https://github.com/rapidsai/cuml/tree/v0.10.0), `cuGraph` [v0.10.0](https://github.com/rapidsai/cugraph/tree/v0.10.0), `RMM` [v0.10.0](https://github.com/rapidsai/RMM/tree/v0.10.0), `cuSpatial` [v0.10.0](https://github.com/rapidsai/cuspatial/tree/v0.10.0)
+- `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-0.10-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-0.10)
+
+Updates & changes
+- Added cuSpatial, the GPU-accelerated spatial and trajectory data management and analytics library.
+- Added support for CUDA 10.1.
+- Updated containers with `v0.10.0` release of cuDF, cuML, cuGraph, cuStrings, and RMM, as well as updated versions of xgboost, dask-xgboost, and dask-cuda.
+
+### Former Versions
+
 #### RAPIDS 0.9 - 21 August 2019
 
 Versions of libraries included in the `0.9` [images](#rapids-09-images):
@@ -25,8 +38,6 @@ Versions of libraries included in the `0.9` [images](#rapids-09-images):
 
 Updates & changes
 - Updated containers with `v0.9.0` release of cuDF, cuML, cuGraph, cuStrings, RMM, and dask-cuda.
-
-### Former Versions
 
 #### RAPIDS 0.8 - 27 June 2019
 
@@ -82,14 +93,14 @@ RAPIDS images come in three types:
 
 - `base` - contains a RAPIDS environment ready for use.<br/>Use this image if you want to use RAPIDS as a part of your pipeline.
 - `runtime` - extends the `base` image by adding a notebook server and example notebooks.<br/>Use this image if you want to explore RAPIDS through notebooks and examples.
-- `devel` - extends the `runtime` image by adding the compiler toolchain, the debugging tools, the headers and the libraries for RAPIDS development.<br/>Use this image to develop RAPIDS from source.
+- `devel` - contains the compiler toolchain, the debugging tools, the headers and the libraries for RAPIDS development, as well as the RAPIDS source code and all build artifacts in place.<br/>Use this image to develop RAPIDS from source.
 
 #### Common Tags
 
 For most users the `runtime` image will be sufficient to get started with RAPIDS,
 you can use the following tags to pull the latest stable image:
 - `latest` or `cuda9.2-runtime-ubuntu16.04` <br/>with `gcc 5.4` and `Python 3.6`
-- `cuda10.0-runtime-ubuntu16.04`<br/>with `gcc 7.3` and `Python 3.6`
+- `cuda10.0-runtime-ubuntu18.04`<br/>with `gcc 7.3` and `Python 3.6`
 
 #### Other Tags
 
@@ -178,7 +189,7 @@ Using the image types [above](#tags) `base`, `runtime`, or `devel` we use the fo
 tag naming scheme for RAPIDS images:
 
 ```
-0.9-cuda9.2-devel-ubuntu16.04-py3.6
+0.10-cuda9.2-devel-ubuntu16.04-py3.6
 ^       ^    ^        ^         ^
 |       |    type     |         python version
 |       |             |
@@ -189,7 +200,7 @@ RAPIDS version        linux version
 
 The `base` and `runtime` image types can be found in the `rapidsai/rapidsai` DockerHub repo, and the `devel` image types can be found in the `rapidsai/rapidsai-dev` DockerHub repo.
 
-### RAPIDS 0.9 Images
+### RAPIDS 0.10 Images
 
 #### Ubuntu 16.04
 
@@ -199,19 +210,28 @@ All `ubuntu16.04` images use `gcc 5.4`
 
 | Short Tags | Full Tag | Image Type | Python Version |
 | --- | --- | --- |
-| `cuda9.2-base-ubuntu16.04` | `0.9-cuda9.2-base-ubuntu16.04` | base | 3.6 |
-| `latest`<br>or<br>`cuda9.2-runtime-ubuntu16.04` | `0.9-cuda9.2-runtime-ubuntu16.04` | runtime | 3.6 |
-| --- | `0.9-cuda9.2-devel-ubuntu16.04-py3.6` | devel | 3.6 |
-| --- | `0.9-cuda9.2-devel-ubuntu16.04-py3.7` | devel | 3.7 |
+| `cuda9.2-base-ubuntu16.04` | `0.10-cuda9.2-base-ubuntu16.04` | base | 3.6 |
+| `latest`<br>or<br>`cuda9.2-runtime-ubuntu16.04` | `0.10-cuda9.2-runtime-ubuntu16.04` | runtime | 3.6 |
+| --- | `0.10-cuda9.2-devel-ubuntu16.04-py3.6` | devel | 3.6 |
+| --- | `0.10-cuda9.2-devel-ubuntu16.04-py3.7` | devel | 3.7 |
 
 **CUDA 10.0**
 
 | Short Tags | Full Tag | Image Type | Python Version |
 | --- | --- | --- |
-| `cuda10.0-base-ubuntu16.04` | `0.9-cuda10.0-base-ubuntu16.04` | base | 3.6 |
-| `latest`<br>or<br>`cuda10.0-runtime-ubuntu16.04` | `0.9-cuda10.0-runtime-ubuntu16.04` | runtime | 3.6 |
-| --- | `0.9-cuda10.0-devel-ubuntu16.04-py3.6` | devel | 3.6 |
-| --- | `0.9-cuda10.0-devel-ubuntu16.04-py3.7` | devel | 3.7 |
+| `cuda10.0-base-ubuntu16.04` | `0.10-cuda10.0-base-ubuntu16.04` | base | 3.6 |
+| `cuda10.0-runtime-ubuntu16.04` | `0.10-cuda10.0-runtime-ubuntu16.04` | runtime | 3.6 |
+| --- | `0.10-cuda10.0-devel-ubuntu16.04-py3.6` | devel | 3.6 |
+| --- | `0.10-cuda10.0-devel-ubuntu16.04-py3.7` | devel | 3.7 |
+
+**CUDA 10.1**
+
+| Short Tags | Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `cuda10.1-base-ubuntu16.04` | `0.10-cuda10.1-base-ubuntu16.04` | base | 3.6 |
+| `cuda10.1-runtime-ubuntu16.04` | `0.10-cuda10.1-runtime-ubuntu16.04` | runtime | 3.6 |
+| --- | `0.10-cuda10.1-devel-ubuntu16.04-py3.6` | devel | 3.6 |
+| --- | `0.10-cuda10.1-devel-ubuntu16.04-py3.7` | devel | 3.7 |
 
 #### Ubuntu 18.04
 
@@ -221,19 +241,28 @@ All `ubuntu18.04` images use `gcc 7.3`
 
 | Short Tags | Full Tag | Image Type | Python Version |
 | --- | --- | --- |
-| `cuda9.2-base-ubuntu18.04` | `0.9-cuda9.2-base-ubuntu18.04` | base | 3.6 |
-| `latest`<br>or<br>`cuda9.2-runtime-ubuntu18.04` | `0.9-cuda9.2-runtime-ubuntu18.04` | runtime | 3.6 |
-| --- | `0.9-cuda9.2-devel-ubuntu18.04-py3.6` | devel | 3.6 |
-| --- | `0.9-cuda9.2-devel-ubuntu18.04-py3.7` | devel | 3.7 |
+| `cuda9.2-base-ubuntu18.04` | `0.10-cuda9.2-base-ubuntu18.04` | base | 3.6 |
+| `cuda9.2-runtime-ubuntu18.04` | `0.10-cuda9.2-runtime-ubuntu18.04` | runtime | 3.6 |
+| --- | `0.10-cuda9.2-devel-ubuntu18.04-py3.6` | devel | 3.6 |
+| --- | `0.10-cuda9.2-devel-ubuntu18.04-py3.7` | devel | 3.7 |
 
 **CUDA 10.0**
 
 | Short Tags | Full Tag | Image Type | Python Version |
 | --- | --- | --- |
-| `cuda10.0-base-ubuntu18.04` | `0.9-cuda10.0-base-ubuntu18.04` | base | 3.6 |
-| `latest`<br>or<br>`cuda10.0-runtime-ubuntu18.04` | `0.9-cuda10.0-runtime-ubuntu18.04` | runtime | 3.6 |
-| --- | `0.9-cuda10.0-devel-ubuntu18.04-py3.6` | devel | 3.6 |
-| --- | `0.9-cuda10.0-devel-ubuntu18.04-py3.7` | devel | 3.7 |
+| `cuda10.0-base-ubuntu18.04` | `0.10-cuda10.0-base-ubuntu18.04` | base | 3.6 |
+| `cuda10.0-runtime-ubuntu18.04` | `0.10-cuda10.0-runtime-ubuntu18.04` | runtime | 3.6 |
+| --- | `0.10-cuda10.0-devel-ubuntu18.04-py3.6` | devel | 3.6 |
+| --- | `0.10-cuda10.0-devel-ubuntu18.04-py3.7` | devel | 3.7 |
+
+**CUDA 10.1**
+
+| Short Tags | Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `cuda10.1-base-ubuntu18.04` | `0.10-cuda10.1-base-ubuntu18.04` | base | 3.6 |
+| `cuda10.1-runtime-ubuntu18.04` | `0.10-cuda10.1-runtime-ubuntu18.04` | runtime | 3.6 |
+| --- | `0.10-cuda10.1-devel-ubuntu18.04-py3.6` | devel | 3.6 |
+| --- | `0.10-cuda10.1-devel-ubuntu18.04-py3.7` | devel | 3.7 |
 
 #### CentOS 7
 
@@ -243,19 +272,96 @@ All `centos7` images use `gcc 7.3`
 
 | Short Tags | Full Tag | Image Type | Python Version |
 | --- | --- | --- |
-| `cuda9.2-base-centos7` | `0.9-cuda9.2-base-centos7` | base | 3.6 |
-| `cuda9.2-runtime-centos7` | `0.9-cuda9.2-runtime-centos7` | runtime | 3.6 |
-| --- | `0.9-cuda9.2-devel-centos7-py3.6` | devel | 3.6 |
-| --- | `0.9-cuda9.2-devel-centos7-py3.7` | devel | 3.7 |
+| `cuda9.2-base-centos7` | `0.10-cuda9.2-base-centos7` | base | 3.6 |
+| `cuda9.2-runtime-centos7` | `0.10-cuda9.2-runtime-centos7` | runtime | 3.6 |
+| --- | `0.10-cuda9.2-devel-centos7-py3.6` | devel | 3.6 |
+| --- | `0.10-cuda9.2-devel-centos7-py3.7` | devel | 3.7 |
 
 **CUDA 10.0**
 
 | Short Tags | Full Tag | Image Type | Python Version |
 | --- | --- | --- |
-| `cuda10.0-base-centos7` | `0.9-cuda10.0-base-centos7` | base | 3.6 |
-| `latest`<br>or<br>`cuda10.0-runtime-centos7` | `0.9-cuda10.0-runtime-centos7` | runtime | 3.6 |
-| --- | `0.9-cuda10.0-devel-centos7-py3.6` | devel | 3.6 |
-| --- | `0.9-cuda10.0-devel-centos7-py3.7` | devel | 3.7 |
+| `cuda10.0-base-centos7` | `0.10-cuda10.0-base-centos7` | base | 3.6 |
+| `cuda10.0-runtime-centos7` | `0.10-cuda10.0-runtime-centos7` | runtime | 3.6 |
+| --- | `0.10-cuda10.0-devel-centos7-py3.6` | devel | 3.6 |
+| --- | `0.10-cuda10.0-devel-centos7-py3.7` | devel | 3.7 |
+
+**CUDA 10.1**
+
+| Short Tags | Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `cuda10.1-base-centos7` | `0.10-cuda10.1-base-centos7` | base | 3.6 |
+| `cuda10.1-runtime-centos7` | `0.10-cuda10.1-runtime-centos7` | runtime | 3.6 |
+| --- | `0.10-cuda10.1-devel-centos7-py3.6` | devel | 3.6 |
+| --- | `0.10-cuda10.1-devel-centos7-py3.7` | devel | 3.7 |
+
+### RAPIDS 0.9 Images
+
+#### Ubuntu 16.04
+
+All `ubuntu16.04` images use `gcc 5.4`
+
+**CUDA 9.2**
+
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.9-cuda9.2-base-ubuntu16.04` | base | 3.6 |
+| `0.9-cuda9.2-runtime-ubuntu16.04` | runtime | 3.6 |
+| `0.9-cuda9.2-devel-ubuntu16.04-py3.6` | devel | 3.6 |
+| `0.9-cuda9.2-devel-ubuntu16.04-py3.7` | devel | 3.7 |
+
+**CUDA 10.0**
+
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.9-cuda10.0-base-ubuntu16.04` | base | 3.6 |
+| `0.9-cuda10.0-runtime-ubuntu16.04` | runtime | 3.6 |
+| `0.9-cuda10.0-devel-ubuntu16.04-py3.6` | devel | 3.6 |
+| `0.9-cuda10.0-devel-ubuntu16.04-py3.7` | devel | 3.7 |
+
+#### Ubuntu 18.04
+
+All `ubuntu18.04` images use `gcc 7.3`
+
+**CUDA 9.2**
+
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.9-cuda9.2-base-ubuntu18.04` | base | 3.6 |
+| `0.9-cuda9.2-runtime-ubuntu18.04` | runtime | 3.6 |
+| `0.9-cuda9.2-devel-ubuntu18.04-py3.6` | devel | 3.6 |
+| `0.9-cuda9.2-devel-ubuntu18.04-py3.7` | devel | 3.7 |
+
+**CUDA 10.0**
+
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.9-cuda10.0-base-ubuntu18.04` | base | 3.6 |
+| `0.9-cuda10.0-runtime-ubuntu18.04` | runtime | 3.6 |
+| `0.9-cuda10.0-devel-ubuntu18.04-py3.6` | devel | 3.6 |
+| `0.9-cuda10.0-devel-ubuntu18.04-py3.7` | devel | 3.7 |
+
+#### CentOS 7
+
+All `centos7` images use `gcc 7.3`
+
+**CUDA 9.2**
+
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.9-cuda9.2-base-centos7` | base | 3.6 |
+| `0.9-cuda9.2-runtime-centos7` | runtime | 3.6 |
+| `0.9-cuda9.2-devel-centos7-py3.6` | devel | 3.6 |
+| `0.9-cuda9.2-devel-centos7-py3.7` | devel | 3.7 |
+
+**CUDA 10.0**
+
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.9-cuda10.0-base-centos7` | base | 3.6 |
+| `0.9-cuda10.0-runtime-centos7` | runtime | 3.6 |
+| `0.9-cuda10.0-devel-centos7-py3.6` | devel | 3.6 |
+| `0.9-cuda10.0-devel-centos7-py3.7` | devel | 3.7 |
 
 ### RAPIDS 0.8 Images
 
@@ -265,25 +371,25 @@ All `ubuntu16.04` images use `gcc 5.4`
 
 **CUDA 9.2**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda9.2-base-ubuntu16.04` | `0.8-cuda9.2-base-ubuntu16.04-gcc5-py3.6` | base | 3.6 |
-| - | `0.8-cuda9.2-base-ubuntu16.04-gcc5-py3.7` | base | 3.7 |
-| `latest`<br>or<br>`cuda9.2-runtime-ubuntu16.04` | `0.8-cuda9.2-runtime-ubuntu16.04-gcc5-py3.6` | runtime | 3.6 |
-| - | `0.8-cuda9.2-runtime-ubuntu16.04-gcc5-py3.7` | runtime | 3.7 |
-| `cuda9.2-devel-ubuntu16.04` | `0.8-cuda9.2-devel-ubuntu16.04-gcc5-py3.6` | devel | 3.6 |
-| - | `0.8-cuda9.2-devel-ubuntu16.04-gcc5-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.8-cuda9.2-base-ubuntu16.04-gcc5-py3.6` | base | 3.6 |
+| `0.8-cuda9.2-base-ubuntu16.04-gcc5-py3.7` | base | 3.7 |
+| `0.8-cuda9.2-runtime-ubuntu16.04-gcc5-py3.6` | runtime | 3.6 |
+| `0.8-cuda9.2-runtime-ubuntu16.04-gcc5-py3.7` | runtime | 3.7 |
+| `0.8-cuda9.2-devel-ubuntu16.04-gcc5-py3.6` | devel | 3.6 |
+| `0.8-cuda9.2-devel-ubuntu16.04-gcc5-py3.7` | devel | 3.7 |
 
 **CUDA 10.0**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda10.0-base-ubuntu16.04` | `0.8-cuda10.0-base-ubuntu16.04-gcc5-py3.6` | base | 3.6 |
-| - | `0.8-cuda10.0-base-ubuntu16.04-gcc5-py3.7` | base | 3.7 |
-| `cuda10.0-runtime-ubuntu16.04` | `0.8-cuda10.0-runtime-ubuntu16.04-gcc5-py3.6` | runtime | 3.6 |
-| - | `0.8-cuda10.0-runtime-ubuntu16.04-gcc5-py3.7` | runtime | 3.7 |
-| `cuda10.0-devel-ubuntu16.04` | `0.8-cuda10.0-devel-ubuntu16.04-gcc5-py3.6` | devel | 3.6 |
-| - | `0.8-cuda10.0-devel-ubuntu16.04-gcc5-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.8-cuda10.0-base-ubuntu16.04-gcc5-py3.6` | base | 3.6 |
+| `0.8-cuda10.0-base-ubuntu16.04-gcc5-py3.7` | base | 3.7 |
+| `0.8-cuda10.0-runtime-ubuntu16.04-gcc5-py3.6` | runtime | 3.6 |
+| `0.8-cuda10.0-runtime-ubuntu16.04-gcc5-py3.7` | runtime | 3.7 |
+| `0.8-cuda10.0-devel-ubuntu16.04-gcc5-py3.6` | devel | 3.6 |
+| `0.8-cuda10.0-devel-ubuntu16.04-gcc5-py3.7` | devel | 3.7 |
 
 #### Ubuntu 18.04
 
@@ -291,25 +397,25 @@ All `ubuntu18.04` images use `gcc 7.3`
 
 **CUDA 9.2**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda9.2-base-ubuntu18.04` | `0.8-cuda9.2-base-ubuntu18.04-gcc7-py3.6` | base | 3.6 |
-| - | `0.8-cuda9.2-base-ubuntu18.04-gcc7-py3.7` | base | 3.7 |
-| `cuda9.2-runtime-ubuntu18.04` | `0.8-cuda9.2-runtime-ubuntu18.04-gcc7-py3.6` | runtime | 3.6 |
-| - | `0.8-cuda9.2-runtime-ubuntu18.04-gcc7-py3.7` | runtime | 3.7 |
-| `cuda9.2-devel-ubuntu18.04` | `0.8-cuda9.2-devel-ubuntu18.04-gcc7-py3.6` | devel | 3.6 |
-| - | `0.8-cuda9.2-devel-ubuntu18.04-gcc7-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.8-cuda9.2-base-ubuntu18.04-gcc7-py3.6` | base | 3.6 |
+| `0.8-cuda9.2-base-ubuntu18.04-gcc7-py3.7` | base | 3.7 |
+| `0.8-cuda9.2-runtime-ubuntu18.04-gcc7-py3.6` | runtime | 3.6 |
+| `0.8-cuda9.2-runtime-ubuntu18.04-gcc7-py3.7` | runtime | 3.7 |
+| `0.8-cuda9.2-devel-ubuntu18.04-gcc7-py3.6` | devel | 3.6 |
+| `0.8-cuda9.2-devel-ubuntu18.04-gcc7-py3.7` | devel | 3.7 |
 
 **CUDA 10.0**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda10.0-base-ubuntu18.04` | `0.8-cuda10.0-base-ubuntu18.04-gcc7-py3.6` | base | 3.6 |
-| - | `0.8-cuda10.0-base-ubuntu18.04-gcc7-py3.7` | base | 3.7 |
-| `cuda10.0-runtime-ubuntu18.04` | `0.8-cuda10.0-runtime-ubuntu18.04-gcc7-py3.6` | runtime | 3.6 |
-| - | `0.8-cuda10.0-runtime-ubuntu18.04-gcc7-py3.7` | runtime | 3.7 |
-| `cuda10.0-devel-ubuntu18.04` | `0.8-cuda10.0-devel-ubuntu18.04-gcc7-py3.6` | devel | 3.6 |
-| - | `0.8-cuda10.0-devel-ubuntu18.04-gcc7-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.8-cuda10.0-base-ubuntu18.04-gcc7-py3.6` | base | 3.6 |
+| `0.8-cuda10.0-base-ubuntu18.04-gcc7-py3.7` | base | 3.7 |
+| `0.8-cuda10.0-runtime-ubuntu18.04-gcc7-py3.6` | runtime | 3.6 |
+| `0.8-cuda10.0-runtime-ubuntu18.04-gcc7-py3.7` | runtime | 3.7 |
+| `0.8-cuda10.0-devel-ubuntu18.04-gcc7-py3.6` | devel | 3.6 |
+| `0.8-cuda10.0-devel-ubuntu18.04-gcc7-py3.7` | devel | 3.7 |
 
 #### CentOS 7
 
@@ -317,25 +423,25 @@ All `centos7` images use `gcc 7.3`
 
 **CUDA 9.2**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda9.2-base-centos7` | `0.8-cuda9.2-base-centos7-gcc7-py3.6` | base | 3.6 |
-| - | `0.8-cuda9.2-base-centos7-gcc7-py3.7` | base | 3.7 |
-| `cuda9.2-runtime-centos7` | `0.8-cuda9.2-runtime-centos7-gcc7-py3.6` | runtime | 3.6 |
-| - | `0.8-cuda9.2-runtime-centos7-gcc7-py3.7` | runtime | 3.7 |
-| `cuda9.2-devel-centos7` | `0.8-cuda9.2-devel-centos7-gcc7-py3.6` | devel | 3.6 |
-| - | `0.8-cuda9.2-devel-centos7-gcc7-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.8-cuda9.2-base-centos7-gcc7-py3.6` | base | 3.6 |
+| `0.8-cuda9.2-base-centos7-gcc7-py3.7` | base | 3.7 |
+| `0.8-cuda9.2-runtime-centos7-gcc7-py3.6` | runtime | 3.6 |
+| `0.8-cuda9.2-runtime-centos7-gcc7-py3.7` | runtime | 3.7 |
+| `0.8-cuda9.2-devel-centos7-gcc7-py3.6` | devel | 3.6 |
+| `0.8-cuda9.2-devel-centos7-gcc7-py3.7` | devel | 3.7 |
 
 **CUDA 10.0**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda10.0-base-centos7` | `0.8-cuda10.0-base-centos7-gcc7-py3.6` | base | 3.6 |
-| - | `0.8-cuda10.0-base-centos7-gcc7-py3.7` | base | 3.7 |
-| `cuda10.0-runtime-centos7` | `0.8-cuda10.0-runtime-centos7-gcc7-py3.6` | runtime | 3.6 |
-| - | `0.8-cuda10.0-runtime-centos7-gcc7-py3.7` | runtime | 3.7 |
-| `cuda10.0-devel-centos7` | `0.8-cuda10.0-devel-centos7-gcc7-py3.6` | devel | 3.6 |
-| - | `0.8-cuda10.0-devel-centos7-gcc7-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.8-cuda10.0-base-centos7-gcc7-py3.6` | base | 3.6 |
+| `0.8-cuda10.0-base-centos7-gcc7-py3.7` | base | 3.7 |
+| `0.8-cuda10.0-runtime-centos7-gcc7-py3.6` | runtime | 3.6 |
+| `0.8-cuda10.0-runtime-centos7-gcc7-py3.7` | runtime | 3.7 |
+| `0.8-cuda10.0-devel-centos7-gcc7-py3.6` | devel | 3.6 |
+| `0.8-cuda10.0-devel-centos7-gcc7-py3.7` | devel | 3.7 |
 
 ### RAPIDS 0.7 Images
 
@@ -345,25 +451,25 @@ All `ubuntu16.04` images use `gcc 5.4`
 
 **CUDA 9.2**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda9.2-base-ubuntu16.04` | `0.7-cuda9.2-base-ubuntu16.04-gcc5-py3.6` | base | 3.6 |
-| - | `0.7-cuda9.2-base-ubuntu16.04-gcc5-py3.7` | base | 3.7 |
-| `latest`<br>or<br>`cuda9.2-runtime-ubuntu16.04` | `0.7-cuda9.2-runtime-ubuntu16.04-gcc5-py3.6` | runtime | 3.6 |
-| - | `0.7-cuda9.2-runtime-ubuntu16.04-gcc5-py3.7` | runtime | 3.7 |
-| `cuda9.2-devel-ubuntu16.04` | `0.7-cuda9.2-devel-ubuntu16.04-gcc5-py3.6` | devel | 3.6 |
-| - | `0.7-cuda9.2-devel-ubuntu16.04-gcc5-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.7-cuda9.2-base-ubuntu16.04-gcc5-py3.6` | base | 3.6 |
+| `0.7-cuda9.2-base-ubuntu16.04-gcc5-py3.7` | base | 3.7 |
+| `0.7-cuda9.2-runtime-ubuntu16.04-gcc5-py3.6` | runtime | 3.6 |
+| `0.7-cuda9.2-runtime-ubuntu16.04-gcc5-py3.7` | runtime | 3.7 |
+| `0.7-cuda9.2-devel-ubuntu16.04-gcc5-py3.6` | devel | 3.6 |
+| `0.7-cuda9.2-devel-ubuntu16.04-gcc5-py3.7` | devel | 3.7 |
 
 **CUDA 10.0**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda10.0-base-ubuntu16.04` | `0.7-cuda10.0-base-ubuntu16.04-gcc5-py3.6` | base | 3.6 |
-| - | `0.7-cuda10.0-base-ubuntu16.04-gcc5-py3.7` | base | 3.7 |
-| `cuda10.0-runtime-ubuntu16.04` | `0.7-cuda10.0-runtime-ubuntu16.04-gcc5-py3.6` | runtime | 3.6 |
-| - | `0.7-cuda10.0-runtime-ubuntu16.04-gcc5-py3.7` | runtime | 3.7 |
-| `cuda10.0-devel-ubuntu16.04` | `0.7-cuda10.0-devel-ubuntu16.04-gcc5-py3.6` | devel | 3.6 |
-| - | `0.7-cuda10.0-devel-ubuntu16.04-gcc5-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.7-cuda10.0-base-ubuntu16.04-gcc5-py3.6` | base | 3.6 |
+| `0.7-cuda10.0-base-ubuntu16.04-gcc5-py3.7` | base | 3.7 |
+| `0.7-cuda10.0-runtime-ubuntu16.04-gcc5-py3.6` | runtime | 3.6 |
+| `0.7-cuda10.0-runtime-ubuntu16.04-gcc5-py3.7` | runtime | 3.7 |
+| `0.7-cuda10.0-devel-ubuntu16.04-gcc5-py3.6` | devel | 3.6 |
+| `0.7-cuda10.0-devel-ubuntu16.04-gcc5-py3.7` | devel | 3.7 |
 
 #### Ubuntu 18.04
 
@@ -371,25 +477,25 @@ All `ubuntu18.04` images use `gcc 7.3`
 
 **CUDA 9.2**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda9.2-base-ubuntu18.04` | `0.7-cuda9.2-base-ubuntu18.04-gcc7-py3.6` | base | 3.6 |
-| - | `0.7-cuda9.2-base-ubuntu18.04-gcc7-py3.7` | base | 3.7 |
-| `cuda9.2-runtime-ubuntu18.04` | `0.7-cuda9.2-runtime-ubuntu18.04-gcc7-py3.6` | runtime | 3.6 |
-| - | `0.7-cuda9.2-runtime-ubuntu18.04-gcc7-py3.7` | runtime | 3.7 |
-| `cuda9.2-devel-ubuntu18.04` | `0.7-cuda9.2-devel-ubuntu18.04-gcc7-py3.6` | devel | 3.6 |
-| - | `0.7-cuda9.2-devel-ubuntu18.04-gcc7-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.7-cuda9.2-base-ubuntu18.04-gcc7-py3.6` | base | 3.6 |
+| `0.7-cuda9.2-base-ubuntu18.04-gcc7-py3.7` | base | 3.7 |
+| `0.7-cuda9.2-runtime-ubuntu18.04-gcc7-py3.6` | runtime | 3.6 |
+| `0.7-cuda9.2-runtime-ubuntu18.04-gcc7-py3.7` | runtime | 3.7 |
+| `0.7-cuda9.2-devel-ubuntu18.04-gcc7-py3.6` | devel | 3.6 |
+| `0.7-cuda9.2-devel-ubuntu18.04-gcc7-py3.7` | devel | 3.7 |
 
 **CUDA 10.0**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda10.0-base-ubuntu18.04` | `0.7-cuda10.0-base-ubuntu18.04-gcc7-py3.6` | base | 3.6 |
-| - | `0.7-cuda10.0-base-ubuntu18.04-gcc7-py3.7` | base | 3.7 |
-| `cuda10.0-runtime-ubuntu18.04` | `0.7-cuda10.0-runtime-ubuntu18.04-gcc7-py3.6` | runtime | 3.6 |
-| - | `0.7-cuda10.0-runtime-ubuntu18.04-gcc7-py3.7` | runtime | 3.7 |
-| `cuda10.0-devel-ubuntu18.04` | `0.7-cuda10.0-devel-ubuntu18.04-gcc7-py3.6` | devel | 3.6 |
-| - | `0.7-cuda10.0-devel-ubuntu18.04-gcc7-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.7-cuda10.0-base-ubuntu18.04-gcc7-py3.6` | base | 3.6 |
+| `0.7-cuda10.0-base-ubuntu18.04-gcc7-py3.7` | base | 3.7 |
+| `0.7-cuda10.0-runtime-ubuntu18.04-gcc7-py3.6` | runtime | 3.6 |
+| `0.7-cuda10.0-runtime-ubuntu18.04-gcc7-py3.7` | runtime | 3.7 |
+| `0.7-cuda10.0-devel-ubuntu18.04-gcc7-py3.6` | devel | 3.6 |
+| `0.7-cuda10.0-devel-ubuntu18.04-gcc7-py3.7` | devel | 3.7 |
 
 #### CentOS 7
 
@@ -397,25 +503,25 @@ All `centos7` images use `gcc 7.3`
 
 **CUDA 9.2**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda9.2-base-centos7` | `0.7-cuda9.2-base-centos7-gcc7-py3.6` | base | 3.6 |
-| - | `0.7-cuda9.2-base-centos7-gcc7-py3.7` | base | 3.7 |
-| `cuda9.2-runtime-centos7` | `0.7-cuda9.2-runtime-centos7-gcc7-py3.6` | runtime | 3.6 |
-| - | `0.7-cuda9.2-runtime-centos7-gcc7-py3.7` | runtime | 3.7 |
-| `cuda9.2-devel-centos7` | `0.7-cuda9.2-devel-centos7-gcc7-py3.6` | devel | 3.6 |
-| - | `0.7-cuda9.2-devel-centos7-gcc7-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.7-cuda9.2-base-centos7-gcc7-py3.6` | base | 3.6 |
+| `0.7-cuda9.2-base-centos7-gcc7-py3.7` | base | 3.7 |
+| `0.7-cuda9.2-runtime-centos7-gcc7-py3.6` | runtime | 3.6 |
+| `0.7-cuda9.2-runtime-centos7-gcc7-py3.7` | runtime | 3.7 |
+| `0.7-cuda9.2-devel-centos7-gcc7-py3.6` | devel | 3.6 |
+| `0.7-cuda9.2-devel-centos7-gcc7-py3.7` | devel | 3.7 |
 
 **CUDA 10.0**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda10.0-base-centos7` | `0.7-cuda10.0-base-centos7-gcc7-py3.6` | base | 3.6 |
-| - | `0.7-cuda10.0-base-centos7-gcc7-py3.7` | base | 3.7 |
-| `cuda10.0-runtime-centos7` | `0.7-cuda10.0-runtime-centos7-gcc7-py3.6` | runtime | 3.6 |
-| - | `0.7-cuda10.0-runtime-centos7-gcc7-py3.7` | runtime | 3.7 |
-| `cuda10.0-devel-centos7` | `0.7-cuda10.0-devel-centos7-gcc7-py3.6` | devel | 3.6 |
-| - | `0.7-cuda10.0-devel-centos7-gcc7-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.7-cuda10.0-base-centos7-gcc7-py3.6` | base | 3.6 |
+| `0.7-cuda10.0-base-centos7-gcc7-py3.7` | base | 3.7 |
+| `0.7-cuda10.0-runtime-centos7-gcc7-py3.6` | runtime | 3.6 |
+| `0.7-cuda10.0-runtime-centos7-gcc7-py3.7` | runtime | 3.7 |
+| `0.7-cuda10.0-devel-centos7-gcc7-py3.6` | devel | 3.6 |
+| `0.7-cuda10.0-devel-centos7-gcc7-py3.7` | devel | 3.7 |
 
 ### RAPIDS 0.6 Images
 
@@ -425,25 +531,25 @@ All `ubuntu16.04` images use `gcc 5.4`
 
 **CUDA 9.2**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda9.2-base-ubuntu16.04` | `0.6-cuda9.2-base-ubuntu16.04-gcc5-py3.6` | base | 3.6 |
-| - | `0.6-cuda9.2-base-ubuntu16.04-gcc5-py3.7` | base | 3.7 |
-| `latest`<br>or<br>`cuda9.2-runtime-ubuntu16.04` | `0.6-cuda9.2-runtime-ubuntu16.04-gcc5-py3.6` | runtime | 3.6 |
-| - | `0.6-cuda9.2-runtime-ubuntu16.04-gcc5-py3.7` | runtime | 3.7 |
-| `cuda9.2-devel-ubuntu16.04` | `0.6-cuda9.2-devel-ubuntu16.04-gcc5-py3.6` | devel | 3.6 |
-| - | `0.6-cuda9.2-devel-ubuntu16.04-gcc5-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.6-cuda9.2-base-ubuntu16.04-gcc5-py3.6` | base | 3.6 |
+| `0.6-cuda9.2-base-ubuntu16.04-gcc5-py3.7` | base | 3.7 |
+| `0.6-cuda9.2-runtime-ubuntu16.04-gcc5-py3.6` | runtime | 3.6 |
+| `0.6-cuda9.2-runtime-ubuntu16.04-gcc5-py3.7` | runtime | 3.7 |
+| `0.6-cuda9.2-devel-ubuntu16.04-gcc5-py3.6` | devel | 3.6 |
+| `0.6-cuda9.2-devel-ubuntu16.04-gcc5-py3.7` | devel | 3.7 |
 
 **CUDA 10.0**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda10.0-base-ubuntu16.04` | `0.6-cuda10.0-base-ubuntu16.04-gcc5-py3.6` | base | 3.6 |
-| - | `0.6-cuda10.0-base-ubuntu16.04-gcc5-py3.7` | base | 3.7 |
-| `cuda10.0-runtime-ubuntu16.04` | `0.6-cuda10.0-runtime-ubuntu16.04-gcc5-py3.6` | runtime | 3.6 |
-| - | `0.6-cuda10.0-runtime-ubuntu16.04-gcc5-py3.7` | runtime | 3.7 |
-| `cuda10.0-devel-ubuntu16.04` | `0.6-cuda10.0-devel-ubuntu16.04-gcc5-py3.6` | devel | 3.6 |
-| - | `0.6-cuda10.0-devel-ubuntu16.04-gcc5-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.6-cuda10.0-base-ubuntu16.04-gcc5-py3.6` | base | 3.6 |
+| `0.6-cuda10.0-base-ubuntu16.04-gcc5-py3.7` | base | 3.7 |
+| `0.6-cuda10.0-runtime-ubuntu16.04-gcc5-py3.6` | runtime | 3.6 |
+| `0.6-cuda10.0-runtime-ubuntu16.04-gcc5-py3.7` | runtime | 3.7 |
+| `0.6-cuda10.0-devel-ubuntu16.04-gcc5-py3.6` | devel | 3.6 |
+| `0.6-cuda10.0-devel-ubuntu16.04-gcc5-py3.7` | devel | 3.7 |
 
 #### Ubuntu 18.04
 
@@ -451,25 +557,25 @@ All `ubuntu18.04` images use `gcc 7.3`
 
 **CUDA 9.2**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda9.2-base-ubuntu18.04` | `0.6-cuda9.2-base-ubuntu18.04-gcc7-py3.6` | base | 3.6 |
-| - | `0.6-cuda9.2-base-ubuntu18.04-gcc7-py3.7` | base | 3.7 |
-| `cuda9.2-runtime-ubuntu18.04` | `0.6-cuda9.2-runtime-ubuntu18.04-gcc7-py3.6` | runtime | 3.6 |
-| - | `0.6-cuda9.2-runtime-ubuntu18.04-gcc7-py3.7` | runtime | 3.7 |
-| `cuda9.2-devel-ubuntu18.04` | `0.6-cuda9.2-devel-ubuntu18.04-gcc7-py3.6` | devel | 3.6 |
-| - | `0.6-cuda9.2-devel-ubuntu18.04-gcc7-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.6-cuda9.2-base-ubuntu18.04-gcc7-py3.6` | base | 3.6 |
+| `0.6-cuda9.2-base-ubuntu18.04-gcc7-py3.7` | base | 3.7 |
+| `0.6-cuda9.2-runtime-ubuntu18.04-gcc7-py3.6` | runtime | 3.6 |
+| `0.6-cuda9.2-runtime-ubuntu18.04-gcc7-py3.7` | runtime | 3.7 |
+| `0.6-cuda9.2-devel-ubuntu18.04-gcc7-py3.6` | devel | 3.6 |
+| `0.6-cuda9.2-devel-ubuntu18.04-gcc7-py3.7` | devel | 3.7 |
 
 **CUDA 10.0**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda10.0-base-ubuntu18.04` | `0.6-cuda10.0-base-ubuntu18.04-gcc7-py3.6` | base | 3.6 |
-| - | `0.6-cuda10.0-base-ubuntu18.04-gcc7-py3.7` | base | 3.7 |
-| `cuda10.0-runtime-ubuntu18.04` | `0.6-cuda10.0-runtime-ubuntu18.04-gcc7-py3.6` | runtime | 3.6 |
-| - | `0.6-cuda10.0-runtime-ubuntu18.04-gcc7-py3.7` | runtime | 3.7 |
-| `cuda10.0-devel-ubuntu18.04` | `0.6-cuda10.0-devel-ubuntu18.04-gcc7-py3.6` | devel | 3.6 |
-| - | `0.6-cuda10.0-devel-ubuntu18.04-gcc7-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.6-cuda10.0-base-ubuntu18.04-gcc7-py3.6` | base | 3.6 |
+| `0.6-cuda10.0-base-ubuntu18.04-gcc7-py3.7` | base | 3.7 |
+| `0.6-cuda10.0-runtime-ubuntu18.04-gcc7-py3.6` | runtime | 3.6 |
+| `0.6-cuda10.0-runtime-ubuntu18.04-gcc7-py3.7` | runtime | 3.7 |
+| `0.6-cuda10.0-devel-ubuntu18.04-gcc7-py3.6` | devel | 3.6 |
+| `0.6-cuda10.0-devel-ubuntu18.04-gcc7-py3.7` | devel | 3.7 |
 
 #### CentOS 7
 
@@ -477,25 +583,25 @@ All `centos7` images use `gcc 7.3`
 
 **CUDA 9.2**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda9.2-base-centos7` | `0.6-cuda9.2-base-centos7-gcc7-py3.6` | base | 3.6 |
-| - | `0.6-cuda9.2-base-centos7-gcc7-py3.7` | base | 3.7 |
-| `cuda9.2-runtime-centos7` | `0.6-cuda9.2-runtime-centos7-gcc7-py3.6` | runtime | 3.6 |
-| - | `0.6-cuda9.2-runtime-centos7-gcc7-py3.7` | runtime | 3.7 |
-| `cuda9.2-devel-centos7` | `0.6-cuda9.2-devel-centos7-gcc7-py3.6` | devel | 3.6 |
-| - | `0.6-cuda9.2-devel-centos7-gcc7-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.6-cuda9.2-base-centos7-gcc7-py3.6` | base | 3.6 |
+| `0.6-cuda9.2-base-centos7-gcc7-py3.7` | base | 3.7 |
+| `0.6-cuda9.2-runtime-centos7-gcc7-py3.6` | runtime | 3.6 |
+| `0.6-cuda9.2-runtime-centos7-gcc7-py3.7` | runtime | 3.7 |
+| `0.6-cuda9.2-devel-centos7-gcc7-py3.6` | devel | 3.6 |
+| `0.6-cuda9.2-devel-centos7-gcc7-py3.7` | devel | 3.7 |
 
 **CUDA 10.0**
 
-| Short Tags | Full Tag | Image Type | Python Version |
-| --- | --- | --- | --- |
-| `cuda10.0-base-centos7` | `0.6-cuda10.0-base-centos7-gcc7-py3.6` | base | 3.6 |
-| - | `0.6-cuda10.0-base-centos7-gcc7-py3.7` | base | 3.7 |
-| `cuda10.0-runtime-centos7` | `0.6-cuda10.0-runtime-centos7-gcc7-py3.6` | runtime | 3.6 |
-| - | `0.6-cuda10.0-runtime-centos7-gcc7-py3.7` | runtime | 3.7 |
-| `cuda10.0-devel-centos7` | `0.6-cuda10.0-devel-centos7-gcc7-py3.6` | devel | 3.6 |
-| - | `0.6-cuda10.0-devel-centos7-gcc7-py3.7` | devel | 3.7 |
+| Full Tag | Image Type | Python Version |
+| --- | --- | --- |
+| `0.6-cuda10.0-base-centos7-gcc7-py3.6` | base | 3.6 |
+| `0.6-cuda10.0-base-centos7-gcc7-py3.7` | base | 3.7 |
+| `0.6-cuda10.0-runtime-centos7-gcc7-py3.6` | runtime | 3.6 |
+| `0.6-cuda10.0-runtime-centos7-gcc7-py3.7` | runtime | 3.7 |
+| `0.6-cuda10.0-devel-centos7-gcc7-py3.6` | devel | 3.6 |
+| `0.6-cuda10.0-devel-centos7-gcc7-py3.7` | devel | 3.7 |
 
 ### RAPIDS 0.5 Images
 
