@@ -245,7 +245,7 @@ gpuCI exposes various environment variables that the CI scripts can utilize.
 2. `gpu` - For GPU jobs using the `ci/gpu/` scripts
 3. `style` - For the style checker job using the `ci/checks/style.sh` script
 4. `changelog` - For the changelog checker job using the `ci/checks/changelog.sh` script
-5. `gpu-metrix` - For full GPU matrix test job using the `ci/gpu` scripts
+5. `gpu-matrix` - For full GPU matrix test job using the `ci/gpu` scripts
 
 `SOURCE_BRANCH` is the name of the branch being built. For pull requests, this is the head (or compare) branch.
 
