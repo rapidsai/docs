@@ -161,10 +161,6 @@ All scripts are executed with the working directory as the project's root direct
 - Required: No
 - Job type: PR only
 - Docker: `gpuci/rapidsai-base:cuda9.2-ubuntu16.04-gcc5-py3.6`
-- Variables:
-  - PR_ID
-  - COMMIT_HASH
-  - REPORT_HASH
 
 Executed as a check to see if the changelog was updated. It's up the scripts to determine if the changelog was updated and exit with 0 for success or non-zero for error.
 
@@ -188,17 +184,6 @@ Executed as a check to ensure code style is correct. `flake8` is available in th
 - Required: No
 - Job type: Both
 - Docker: `gpuci/rapidsai-base:cuda${CUDA}-ubuntu${UBUNTU}-gcc5-py${PYTHON}`
-- Variables:
-  - DOCKER_IMAGE
-  - PR_ID
-  - COMMIT_HASH
-  - REPORT_HASH
-  - CUDA
-  - PYTHON
-  - UBUNTU
-  - ghprbPullAuthorLogin
-  - ghprbSourceBranch
-  - CONDA_USERNAME
 
 If provided, gpuCI will source this file before building. This allows for setting any environment variables required for the build script. For example,  translating `CUDA` or `PYTHON`, or setting a variable to enable additional tests for some combinations of `CUDA` and `PYTHON`.
 
@@ -209,17 +194,6 @@ Many RAPIDS projects have two components: python and C/C++. For these projects, 
 - Required: Yes
 - Job type: Both
 - Docker: `gpuci/rapidsai-base:cuda${CUDA}-ubuntu${UBUNTU}-gcc5-py${PYTHON}`
-- Variables:
-  - PR_ID
-  - COMMIT_HASH
-  - REPORT_HASH
-  - CUDA
-  - PYTHON
-  - UBUNTU
-  - ghprbPullAuthorLogin
-  - ghprbSourceBranch
-  - CONDA_USERNAME
-  - GIT_BRANCH
 
 This script actually builds the code inside of a container. For most RAPIDS projects this means building the conda package. There is no GPU available, so testing in this script is limited to CPU only code.
 
@@ -233,10 +207,6 @@ Additionally, this script should upload packages to Anaconda if necessary. The `
 - Required: No
 - Job type: Both
 - Docker: `gpuci/rapidsai-base:cuda10.0-ubuntu16.04-gcc5-py$3.6`
-- Variables:
-  - PR_ID
-  - COMMIT_HASH
-  - REPORT_HASH
 
 If provided, gpuCI will source this file before building. This allows for setting any environment variables required for the build script.
 
@@ -245,10 +215,6 @@ If provided, gpuCI will source this file before building. This allows for settin
 - Required: Yes
 - Job type: Both
 - Docker: `gpuci/rapidsai-base:cuda10.0-ubuntu16.04-gcc5-py$3.6`
-- Variables:
-  - PR_ID
-  - COMMIT_HASH
-  - REPORT_HASH
 
 This script actually builds the code inside of a container. A GPU is available so this script should execute any tests requiring a GPU.
 
@@ -259,8 +225,6 @@ If the tests output in in XML format in `test-results/*.xml` or a file named `ju
 - Required: Only if auto-releasing is enabled
 - Job type: Master Branch only
 - Docker: No
-- Variables:
-  - BRANCH
 
 This script is run with a parameter of `major`, `minor`, or `patch` to indicate what to release. gpuCI determines this based on where the commit is coming from. Merge commits from `branch-*` are minor releases whereas commits directly to master are patch releases. Major releases must be manually triggered.
 
@@ -269,3 +233,23 @@ The script should calculate the next version and update the source code, build s
 **Note:** The script must export `NEXT_FULL_TAG` as the full `x.y.z` version.
 
 After this, gpuCI will commit the changes and tag the commit with `v${NEXT_FULL_TAG}` before pushing to the repository.
+
+## Environment variables
+
+gpuCI exposes various environment variables that the CI scripts can utilize.
+
+`BUILD_MODE` is either `pull-request` or `branch` for PR builds and branch builds respectively.
+
+`BUILD_TYPE` is one of:
+1. `cpu` - For CPU jobs using the `ci/cpu/` scripts
+2. `gpu` - For GPU jobs using the `ci/gpu/` scripts
+3. `style` - For the style checker job using the `ci/checks/style.sh` script
+4. `changelog` - For the changelog checker job using the `ci/checks/changelog.sh` script
+5. `gpu-matrix` - For full GPU matrix test job using the `ci/gpu` scripts
+
+`SOURCE_BRANCH` is the name of the branch being built. For pull requests, this is the head (or compare) branch.
+
+During a pull request build, the following environment variables are exposed:
+- `PR_ID` - The numeric ID of the pull request
+- `PR_AUTHOR` - The username of who opened pull request
+- `TARGET_BRANCH` - The base branch of the pull request

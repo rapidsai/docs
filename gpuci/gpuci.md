@@ -45,7 +45,7 @@ For new pull requests (PRs) and pushes to branches trigger jobs on the [gpuCI](h
 
 Any push to a branch triggers a gpuCI job that builds and tests the current code, linking and showing the results as a build status icon on the README
 
-[![Build Status](https://gpuci.gpuopenanalytics.com/buildStatus/icon?job=gpuCI%2Fcudf%2Fbranches%2Fcudf-master)](https://gpuci.gpuopenanalytics.com/view/gpuCI%20-%20build-master/job/gpuCI/job/cudf/job/branches/job/cudf-master/)
+[![Build Status](https://gpuci.gpuopenanalytics.com/buildStatus/icon?job=rapidsai%2Fgpuci%2Fcudf%2Fbranches%2Fcudf-branch-pipeline)](https://gpuci.gpuopenanalytics.com/job/rapidsai/job/gpuci/job/cudf/job/branches/job/cudf-branch-pipeline/)
 
 ### Open PR or Update PR
 
@@ -73,7 +73,9 @@ This is helpful when trying to troubleshoot issues with the build process and/or
 * To manually trigger tests in a PR, comment the command
   * `rerun tests`
 * To skip CI testing (for documentation changes) add the following to the title of the PR
-  * `[skip-ci]`
+  * `[skip ci]`
+  * **NOTE:** This functionality will cause the PR gpuCI status report to be stuck in a `Pending` state on GitHub
+    * Due to branch protections, it will need to be admin merged after approval
 
 ## Help
 

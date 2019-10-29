@@ -32,6 +32,15 @@ The current release schedule is posted on the [RAPIDS Maintainers Docs]({{ site.
 
 Historical list of completed releases
 
+### Release v0.10 Schedule
+
+| Phase | Start | End | Duration |
+|:------|:------|:----|:---------|
+| New Development | Wed, Aug 14th | Wed, Sep 25th | 30 days |
+| Burn Down | Thu, Sep 26th | Wed, Oct 2nd | 5 days |
+| Code Freeze/Testing | Thu, Oct 10th | Wed, Oct 16th | 5 days |
+| Release | Thu, Oct 17th | Thu, Oct 17th | 1 day |
+
 ### Release v0.9 Schedule
 
 | Phase | Start | End | Duration |
