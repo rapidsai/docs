@@ -23,14 +23,14 @@ Project Leads
 Operations
 {: .label .label-purple}
 
-## Release v0.12 Schedule
+## Release v0.13 Schedule
 
 **NOTE:** *Dates are subject to change at anytime. Completed release schedules are posted [here]({{ site.url }}{{ site.baseurl }}/releases/schedule).*
 
-| Phase | Start | End | Duration |
-|:------|:------|:----|:---------|
-| New Development | Thu, Nov 21st | Wed, Jan 15th | 36 days |
-| Burn Down | Thu, Jan 16th | Thu, Jan 23rd | 5 days |
-| Code Freeze/Testing | Fri, Jan 24th | Wed, Jan 29th | 4 days |
-| Release | Thu, Jan 30th | Thu, Jan 30th | 1 day |
+Phase | Start | End | Duration
+-- | -- | -- | --
+Development | Thu, Jan 16th | Thu, Mar 5th | 34 days
+Burn Down | Fri, Mar 6th | Fri, Mar 13th | 6 days
+Code Freeze/Testing | Mon, Mar 16th | Wed, Mar 18th | 3 days
+Release | Thu, Mar 19th | Thu, Mar 19th | 1 day
 
