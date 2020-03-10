@@ -24,8 +24,8 @@ select the docs that fit your needs.
 
 ## RAPIDS APIs
 
-{% include api-docs.html data=site.data.apis %}
+{% include api-docs.html data=site.data.docs.apis %}
 
 ## RAPIDS Libraries
 
-{% include api-docs.html data=site.data.libs %}
+{% include api-docs.html data=site.data.docs.libs %}
