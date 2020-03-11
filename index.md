@@ -14,7 +14,7 @@ description: |
 This site serves as a collection of all the documentation for RAPIDS. Whether you're new to RAPIDS, looking to contribute, or are a part of the RAPIDS team, the docs here will help guide you. Visit [rapids.ai](http://rapids.ai) for more information on the overall project.
 {: .fs-6 .fw-300 }
 
-[<i class="far fa-file-code"></i> Documentation]({{site.url}}{{site.baseurl}}/api){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-2 } [<i class="fas fa-bolt"></i> Get Started]({{site.url}}{{site.baseurl}}/start){: .btn .fs-4 .mb-4 .mb-md-0 .mr-2 } [<i class="fab fa-github"></i> RAPIDS on GitHub](https://github.com/rapidsai){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
+[<i class="far fa-file-code"></i> Documentation]({% link api/api.md %}){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-2 } [<i class="fas fa-bolt"></i> Get Started]({% link start/start.md %}){: .btn .fs-4 .mb-4 .mb-md-0 .mr-2 } [<i class="fab fa-github"></i> RAPIDS on GitHub](https://github.com/rapidsai){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
 
 ---
 
