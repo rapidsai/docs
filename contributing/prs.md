@@ -18,9 +18,9 @@ Developers
 
 ### See also
 
-- [Issues]({{ site.url }}{{ site.baseurl }}/contributing/issues)
-- [Code Contributions]({{ site.url }}{{ site.baseurl }}/contributing/code)
-- [Changelog]({{ site.url }}{{ site.baseurl }}/resources/changelog)
+- [Issues]({% link contributing/issues.md %})
+- [Code Contributions]({% link contributing/code.md %})
+- [Changelog]({% link resources/changelog.md %})
 
 ## Create a pull request
 
@@ -59,13 +59,13 @@ The description should NOT reword the issue description.
 
 ### Comments
 
-All comments and reviews to pull requests must follow the [Code of Conduct]({{ site.url }}{{ site.baseurl }}/resources/conduct/)
+All comments and reviews to pull requests must follow the [Code of Conduct]({% link resources/conduct.md %})
 
 ## Lifecycle
 
 ### Immediate
 
-After opening the pull request, note the PR number and update the [changelog]({{ site.url }}{{ site.baseurl }}/resources/changelog) to reflect your changes.
+After opening the pull request, note the PR number and update the [changelog]({% link resources/changelog.md %}) to reflect your changes.
 
 ### Merging
 
