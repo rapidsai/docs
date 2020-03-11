@@ -25,7 +25,7 @@ Operations
 
 ## Release v0.13 Schedule
 
-**NOTE:** *Dates are subject to change at anytime. Completed release schedules are posted [here]({{ site.url }}{{ site.baseurl }}/releases/schedule).*
+**NOTE:** *Dates are subject to change at anytime. Completed release schedules are posted [here]({% link releases/schedule.md %}).*
 
 Phase | Start | End | Duration
 -- | -- | -- | --
