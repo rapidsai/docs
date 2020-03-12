@@ -5,7 +5,7 @@ import json
 import os
 
 filepath = sys.argv[1]
-stable_version = int(sys.argv[2])
+nightly_version = int(sys.argv[2])
 
 lib_map_path = os.path.join(os.path.dirname(__file__), "lib_map.json")
 rapids_css_path = os.path.join(os.path.dirname(__file__), "rapids.css")
@@ -13,9 +13,9 @@ rapids_js_path = os.path.join(os.path.dirname(__file__), "rapids.js")
 
 docs_home = "https://docs.rapids.ai/api"
 versions_dict = {
-    "nightly": stable_version + 1,
-    "stable": stable_version,
-    "legacy": stable_version - 1,
+    "nightly": nightly_version,
+    "stable": nightly_version - 1,
+    "legacy": nightly_version - 2,
 }
 with open(lib_map_path) as fp:
     lib_path_dict = json.load(fp)

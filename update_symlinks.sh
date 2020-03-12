@@ -1,31 +1,26 @@
 #!/bin/bash
 #######################################
-# Updates all symlink folders based on a given stable version number
+# Updates all symlink folders based on a given nightly version number
 #
 # Usage:
-# update_symlinks.sh 12
+# update_symlinks.sh 13
 #
 # Positional Arguments:
-#   1) STABLE_VERSION: current RAPIDS stable version (i.e. 12, 13, 14, etc.)
+#   1) NIGHTLY_VERSION: current RAPIDS nightly version (i.e. 13, 14, 15, etc.)
 #######################################
 
 PROJ_ROOT=$(PWD)
-STABLE_VERSION=$1
+NIGHTLY_VERSION=$1
 
-STABLE_FOLDER=$(echo "0.$((${STABLE_VERSION})).0")
-LEGACY_FOLDER=$(echo "0.$((${STABLE_VERSION} - 1)).0")
-NIGHTLY_FOLDER=$(echo "0.$((${STABLE_VERSION} + 1)).0")
-
+STABLE_FOLDER=$(echo "0.$((${NIGHTLY_VERSION} - 1))")
+LEGACY_FOLDER=$(echo "0.$((${NIGHTLY_VERSION} - 2))")
+NIGHTLY_FOLDER=$(echo "0.$((${NIGHTLY_VERSION}))")
 
 for FOLDER in api/*/ ; do
 
   cd ${FOLDER}
   echo ""
   echo "${FOLDER}--------"
-  if [ -d "en" ]; then
-    cd en
-  fi
-
 
   if [ -d "${STABLE_FOLDER}" ]; then
     rm -rf stable latest
