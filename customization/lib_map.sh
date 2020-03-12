@@ -16,7 +16,7 @@
 
 
 SCRIPT_SRC_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" # directory where this script is located
-PROJ_ROOT=$(PWD)
+PROJ_ROOT=$(pwd)
 FOLDER_MAP="{}"
 
 for FOLDER in api/*/ ; do
