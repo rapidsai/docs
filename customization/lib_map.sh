@@ -52,5 +52,5 @@ for FOLDER in api/*/ ; do
   cd ${PROJ_ROOT}
 done
 
-
+echo ${FOLDER_MAP} | jq '.'
 echo ${FOLDER_MAP} | jq '.' > ${SCRIPT_SRC_FOLDER}/lib_map.json
