@@ -8,8 +8,9 @@
 # Positional Arguments:
 #   1) NIGHTLY_VERSION: current RAPIDS nightly version (i.e. 13, 14, 15, etc.)
 #######################################
+set -e
 
-PROJ_ROOT=$(PWD)
+PROJ_ROOT=$(pwd)
 NIGHTLY_VERSION=$1
 
 STABLE_FOLDER=$(echo "0.$((${NIGHTLY_VERSION} - 1))")

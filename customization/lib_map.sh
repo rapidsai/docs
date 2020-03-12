@@ -13,7 +13,7 @@
 #     "nightly": "/cuspatial/en/nightly/api.html",
 #     "legacy": null
 #    }, ...}
-
+set -e
 
 SCRIPT_SRC_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" # directory where this script is located
 PROJ_ROOT=$(pwd)
