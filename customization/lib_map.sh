@@ -27,7 +27,7 @@ for FOLDER in api/*/ ; do
 
   FOLDER_MAP=$(echo ${FOLDER_MAP} | jq ". + {${LIB}: {}}") # initialize empty JSON object for lib
 
-  LIB_ROOT=${DEFAULT_PATH}
+  LIB_ROOT="api/${DEFAULT_PATH}"
   for VERSION in "nightly" "stable" "legacy"; do
     DEFAULT_PATH=${LIB_ROOT}
     FOLDER_MAP=$(echo ${FOLDER_MAP} | jq ".${LIB}.${VERSION} = null")
