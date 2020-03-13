@@ -1,4 +1,16 @@
 #!/bin/bash
+#######################################
+# Recursively customizes all docs in a specified folder relative
+# to the project's root. Intended to be run from the project's
+# root directory
+#
+# Usage:
+# update_symlinks.sh api/ 13
+#
+# Positional Arguments:
+#   1) FOLDER_TO_CUSTOMIZE: project root relative folder to customize (i.e. api/, api/rmm, etc.)
+#   2) CURRENT_NIGHTLY_VERSION: current RAPIDS nightly version (i.e. 13, 14, 15, etc.)
+#######################################
 set -e
 
 FOLDER_TO_CUSTOMIZE=$1
