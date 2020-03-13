@@ -10,7 +10,7 @@ title: Burn Down Guide
 
 ## Overview
 
-This is a guide for the steps required to perform at the start of [burn down]({{ site.url }}{{ site.baseurl }}/releases/process/#burn-down).
+This is a guide for the steps required to perform at the start of [burn down]({% link releases/process.md %}#burn-down).
 
 Given the current development version is `v0.A.0`, then the next version is `v0.B.0` where `B=A+1`.
 

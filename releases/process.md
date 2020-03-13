@@ -22,12 +22,12 @@ Operations
 
 ### See also
 
-* [Git branching model]({{ site.url }}{{ site.baseurl }}/resources/git)
-* [Major and minor release versioning]({{ site.url }}{{ site.baseurl }}/resources/versions)
+* [Git branching model]({% link resources/git.md %})
+* [Major and minor release versioning]({% link resources/versions.md %})
 
 ## Git branching model
 
-RAPIDS uses a custom git branching model, adapted from git-flow to leverage the tools GitHub provides and also focus on release-driven development. From more details see our guide for our [git branching]({{ site.url }}{{ site.baseurl }}/resources/git) methodology. 
+RAPIDS uses a custom git branching model, adapted from git-flow to leverage the tools GitHub provides and also focus on release-driven development. From more details see our guide for our [git branching]({% link resources/git.md %}) methodology. 
 
 ### Migrating projects
 
@@ -46,7 +46,7 @@ The `burn down date` will always be several days before the `release date`. This
 
 ### Hotfixes
 
-Hotfixes have their own process and are described [here]({{ site.url }}{{ site.baseurl }}/releases/hotfix).
+Hotfixes have their own process and are described [here]({% link releases/hotfix.md %}).
 
 ## Burn down
 
