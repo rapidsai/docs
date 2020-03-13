@@ -5,7 +5,7 @@
 # root directory
 #
 # Usage:
-# update_symlinks.sh api/ 13
+# customization/customize_docs_in_folder.sh api/ 13
 #
 # Positional Arguments:
 #   1) FOLDER_TO_CUSTOMIZE: project root relative folder to customize (i.e. api/, api/rmm, etc.)
