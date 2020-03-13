@@ -1,579 +1,2713 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.16"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>libcudf: device_atomics.cuh File Reference</title>
-<link href="tabs.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="jquery.js"></script>
-<script type="text/javascript" src="dynsections.js"></script>
-<link href="search/search.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="search/searchdata.js"></script>
-<script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
-<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
-<div id="titlearea">
-<table cellspacing="0" cellpadding="0">
- <tbody>
- <tr style="height: 56px;">
-  <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">libcudf
-   &#160;<span id="projectnumber">0.13</span>
+ <head>
+  <meta content="text/xhtml;charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="IE=9" http-equiv="X-UA-Compatible"/>
+  <meta content="Doxygen 1.8.16" name="generator"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   libcudf: device_atomics.cuh File Reference
+  </title>
+  <link href="tabs.css" rel="stylesheet" type="text/css"/>
+  <script src="jquery.js" type="text/javascript">
+  </script>
+  <script src="dynsections.js" type="text/javascript">
+  </script>
+  <link href="search/search.css" rel="stylesheet" type="text/css"/>
+  <script src="search/searchdata.js" type="text/javascript">
+  </script>
+  <script src="search/search.js" type="text/javascript">
+  </script>
+  <link href="doxygen.css" rel="stylesheet" type="text/css"/>
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" id="rapids-fa-tag" rel="stylesheet"/>
+  <style id="rapids-selector-css">
+   /* JTD custom theme for RAPIDS */
+/* RAPIDS Color #7253ed */
+
+/* body */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "helvetica neue", helvetica,
+    roboto, noto, "segoe ui", arial, sans-serif;
+  font-size: inherit;
+  line-height: 1.4;
+  color: #5c5962;
+  background-color: #fff;
+}
+
+h1,
+h2,
+.rst-content .toctree-wrapper p.caption,
+h3,
+h4,
+h5,
+h6,
+legend {
+  font-family: -apple-system, BlinkMacSystemFont, "helvetica neue", helvetica,
+    roboto, noto, "segoe ui", arial, sans-serif;
+}
+
+a {
+  color: #7253ed;
+  text-decoration: none;
+  background-image: linear-gradient(#eeebee 0%, #eeebee 100%);
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  background-size: 1px 1px;
+}
+
+a:hover {
+  color: #7253ed;
+  background-image: linear-gradient(
+    rgba(114, 83, 237, 0.45) 0%,
+    rgba(114, 83, 237, 0.45) 100%
+  );
+  background-size: 1px 1px;
+}
+
+a:visited {
+  color: inherit;
+}
+
+.wy-menu-vertical a {
+  color: #5d5962;
+}
+
+.wy-nav-content {
+  max-width: 1000px;
+}
+
+/* side nav */
+.wy-nav-content-wrap {
+  background-color: #fcfcfc;
+}
+
+.wy-nav-side {
+  border-right: 1px solid #eeebee;
+  background-color: #f5f6fa;
+}
+
+.wy-side-nav-search {
+  background-color: #f5f6fa;
+}
+
+.wy-side-nav-search input[type="text"] {
+  border-radius: 0;
+  border-color: #7253ed;
+}
+
+.wy-side-nav-search > a,
+.wy-side-nav-search .wy-dropdown > a {
+  color: #7253ed;
+}
+
+.wy-menu-vertical header,
+.wy-menu-vertical p.caption {
+  color: inherit;
+}
+
+.wy-menu-vertical header,
+.wy-menu-vertical p.caption {
+  color: #7253ed;
+}
+
+.wy-menu-vertical a:hover {
+  background-color: #eaeaea;
+}
+
+.wy-side-nav-search > div.version {
+  color: #5c5962;
+}
+
+/* breakout blocks */
+
+.highlight {
+  background-color: #f6f3ff;
+}
+
+.highlight .k {
+  color: #920b60;
+}
+
+.highlight .nn {
+  color: #7253ed;
+}
+
+.highlight .kk {
+  color: #920b60;
+}
+
+.highlight .kn {
+  color: #920b60;
+}
+
+.highlight .nb {
+  color: #920b60;
+}
+
+.rst-content dl:not(.docutils) dt {
+  background: #f1eeff;
+  color: #491dc3;
+  border-top: solid 3px #7253ed;
+}
+
+.rst-content pre.literal-block,
+.rst-content div[class^="highlight"] {
+  border: none;
+}
+
+.wy-alert.wy-alert-info .wy-alert-title,
+.rst-content .note .wy-alert-title,
+.rst-content .wy-alert-info.attention .wy-alert-title,
+.rst-content .wy-alert-info.caution .wy-alert-title,
+.rst-content .wy-alert-info.danger .wy-alert-title,
+.rst-content .wy-alert-info.error .wy-alert-title,
+.rst-content .wy-alert-info.hint .wy-alert-title,
+.rst-content .wy-alert-info.important .wy-alert-title,
+.rst-content .wy-alert-info.tip .wy-alert-title,
+.rst-content .wy-alert-info.warning .wy-alert-title,
+.rst-content .seealso .wy-alert-title,
+.rst-content .wy-alert-info.admonition-todo .wy-alert-title,
+.rst-content .wy-alert-info.admonition .wy-alert-title,
+.wy-alert.wy-alert-info .rst-content .admonition-title,
+.rst-content .wy-alert.wy-alert-info .admonition-title,
+.rst-content .note .admonition-title,
+.rst-content .wy-alert-info.attention .admonition-title,
+.rst-content .wy-alert-info.caution .admonition-title,
+.rst-content .wy-alert-info.danger .admonition-title,
+.rst-content .wy-alert-info.error .admonition-title,
+.rst-content .wy-alert-info.hint .admonition-title,
+.rst-content .wy-alert-info.important .admonition-title,
+.rst-content .wy-alert-info.tip .admonition-title,
+.rst-content .wy-alert-info.warning .admonition-title,
+.rst-content .seealso .admonition-title,
+.rst-content .wy-alert-info.admonition-todo .admonition-title,
+.rst-content .wy-alert-info.admonition .admonition-title {
+  background-color: #7253ec;
+}
+
+.wy-alert.wy-alert-info,
+.rst-content .note,
+.rst-content .wy-alert-info.attention,
+.rst-content .wy-alert-info.caution,
+.rst-content .wy-alert-info.danger,
+.rst-content .wy-alert-info.error,
+.rst-content .wy-alert-info.hint,
+.rst-content .wy-alert-info.important,
+.rst-content .wy-alert-info.tip,
+.rst-content .wy-alert-info.warning,
+.rst-content .seealso,
+.rst-content .wy-alert-info.admonition-todo,
+.rst-content .wy-alert-info.admonition {
+  background: #f1edff;
+}
+
+/* Selector CSS starts here */
+
+.rapids-home-container__home-btn {
+  position: relative;
+  display: block;
+  padding: 10px 0;
+}
+
+.rapids-home-container__home-btn::before {
+  font-family: "FontAwesome";
+  content: "\f015";
+  font-weight: 400;
+}
+
+.rapids-selector__container {
+  position: relative;
+}
+
+#rapids-sphinx-container {
+  margin: 0 0 34px;
+}
+
+.rapids-selector__container,
+.rapids-home-container {
+  margin: 0 auto;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  #rapids-doxygen-container .rapids-home-container,
+  #rapids-doxygen-container .rapids-selector__container {
+    display: inline-block;
+    margin: 0 0 0 40px;
+  }
+}
+
+.rapids-selector__container * {
+  box-sizing: border-box;
+}
+
+.rapids-home-container__home-btn,
+.rapids-home-container__home-btn:visited,
+.rapids-home-container__home-btn:hover,
+.rapids-selector__selected {
+  color: #7253ed;
+  font-size: 28px;
+  font-weight: 700;
+  text-decoration: none;
+  background-image: linear-gradient(#eeebee 0%, #eeebee 100%);
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  background-size: 1px 1px;
+}
+
+.rapids-selector__selected:hover,
+.rapids-home-container__home-btn:hover {
+  background-image: linear-gradient(
+    rgba(114, 83, 237, 0.45) 0%,
+    rgba(114, 83, 237, 0.45) 100%
+  );
+  background-size: 1px 1px;
+}
+
+.rapids-selector__selected {
+  cursor: pointer;
+  padding: 10px 8px;
+}
+
+.rapids-selector__selected::after {
+  content: "\f0d7";
+  font-family: "FontAwesome";
+  position: absolute;
+  transition: all 250ms ease-in-out;
+  transform: rotate(180deg);
+}
+
+.rapids-selector--hidden .rapids-selector__selected::after {
+  transform: rotate(0);
+}
+
+#rapids-doxygen-container .rapids-selector__selected::after {
+  margin-left: 5px;
+}
+
+#rapids-sphinx-container .rapids-selector__selected::after {
+  right: 0;
+}
+
+.rapids-selector__menu {
+  position: absolute;
+  z-index: 10000; /* keep above 9999 for doxygen compatibility */
+  background-color: #f5f6fa;
+  min-width: 100%;
+  left: 0;
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  transition: all 250ms ease-in-out;
+}
+
+.rapids-selector--hidden .rapids-selector__menu {
+  height: 0 !important;
+  visibility: hidden;
+}
+
+.rapids-selector__menu-item {
+  display: block;
+  padding: 5px 8px 5px;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+a.rapids-selector__menu-item,
+a.rapids-selector__menu-item:visited {
+  color: #5c5962;
+}
+
+a.rapids-selector__menu-item:hover,
+a.rapids-selector__menu-item--selected,
+a.rapids-selector__menu-item--selected:visited {
+  text-decoration: none;
+  background-color: #7253ed;
+  color: white;
+}
+
+a.rapids-selector__menu-item--selected {
+  cursor: default;
+}
+
+.rapids-selector__menu-item:first-child {
+  padding: 10px 0 5px;
+}
+
+.rapids-selector__menu-item:last-child {
+  padding: 5px 0 10px;
+}
+  </style>
+ </head>
+ <body>
+  <div id="top">
+   <!-- do not remove this div, it is closed by doxygen! -->
+   <div id="titlearea">
+    <div id="rapids-doxygen-container">
+     <div class="rapids-home-container">
+      <a class="rapids-home-container__home-btn" href="https://docs.rapids.ai/api">
+       Home
+      </a>
+     </div>
+     <div class="rapids-selector__container rapids-selector--hidden">
+      <div class="rapids-selector__selected">
+       libcudf
+      </div>
+      <div class="rapids-selector__menu">
+       <a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">
+        clx
+       </a>
+       <a class="rapids-selector__menu-item" href="/api/cudf/stable/api.html">
+        cudf
+       </a>
+       <a class="rapids-selector__menu-item" href="/api/cugraph/stable/api.html">
+        cugraph
+       </a>
+       <a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">
+        cuml
+       </a>
+       <a class="rapids-selector__menu-item" href="/api/cusignal/nightly/api.html">
+        cusignal
+       </a>
+       <a class="rapids-selector__menu-item" href="/api/cuspatial/nightly/api.html">
+        cuspatial
+       </a>
+       <a class="rapids-selector__menu-item" href="/api/cuxfilter/nightly">
+        cuxfilter
+       </a>
+       <a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/libcudf/stable/namespacecudf.html">
+        libcudf
+       </a>
+       <a class="rapids-selector__menu-item" href="/api/libnvstrings/stable/annotated.html">
+        libnvstrings
+       </a>
+       <a class="rapids-selector__menu-item" href="/api/nvstrings/stable/api.html">
+        nvstrings
+       </a>
+       <a class="rapids-selector__menu-item" href="/api/rmm/stable/annotated.html">
+        rmm
+       </a>
+      </div>
+     </div>
+     <div class="rapids-selector__container rapids-selector--hidden">
+      <div class="rapids-selector__selected">
+       nightly (0.13)
+      </div>
+      <div class="rapids-selector__menu">
+       <a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/libcudf/nightly/namespacecudf.html">
+        nightly (0.13)
+       </a>
+       <a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">
+        stable (0.12)
+       </a>
+       <a class="rapids-selector__menu-item" href="/api/libcudf/legacy/namespacecudf.html">
+        legacy (0.11)
+       </a>
+      </div>
+     </div>
+    </div>
    </div>
-  </td>
- </tr>
- </tbody>
-</table>
-</div>
-<!-- end header part -->
-<!-- Generated by Doxygen 1.8.16 -->
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+   <!-- end header part -->
+   <!-- Generated by Doxygen 1.8.16 -->
+   <script type="text/javascript">
+    /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
 var searchBox = new SearchBox("searchBox", "search",false,'Search');
 /* @license-end */
-</script>
-<script type="text/javascript" src="menudata.js"></script>
-<script type="text/javascript" src="menu.js"></script>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+   </script>
+   <script src="menudata.js" type="text/javascript">
+   </script>
+   <script src="menu.js" type="text/javascript">
+   </script>
+   <script type="text/javascript">
+    /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
 $(function() {
   initMenu('',true,false,'search.php','Search');
   $(document).ready(function() { init_search(); });
 });
-/* @license-end */</script>
-<div id="main-nav"></div>
-<!-- window showing the filter options -->
-<div id="MSearchSelectWindow"
-     onmouseover="return searchBox.OnSearchSelectShow()"
-     onmouseout="return searchBox.OnSearchSelectHide()"
-     onkeydown="return searchBox.OnSearchSelectKey(event)">
-</div>
-
-<!-- iframe showing the search results (closed by default) -->
-<div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
-</div>
-
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_7b5d38f1875f1b693f62ca6a108a1129.html">utilities</a></li><li class="navelem"><a class="el" href="dir_7459115c3e8bc66ccab4e110bf9d864c.html">legacy</a></li>  </ul>
-</div>
-</div><!-- top -->
-<div class="header">
-  <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#define-members">Macros</a> &#124;
-<a href="#func-members">Functions</a>  </div>
-  <div class="headertitle">
-<div class="title">src/utilities/legacy/device_atomics.cuh File Reference</div>  </div>
-</div><!--header-->
-<div class="contents">
-
-<p>overloads for CUDA atomic operations  
-<a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;cudf/cudf.h&gt;</code><br />
-<code>#include &lt;utilities/legacy/cudf_utils.h&gt;</code><br />
-<code>#include &lt;cudf/wrappers/bool.hpp&gt;</code><br />
-<code>#include &lt;<a class="el" href="timestamps_8hpp_source.html">cudf/wrappers/timestamps.hpp</a>&gt;</code><br />
-<code>#include &lt;cudf/utilities/traits.hpp&gt;</code><br />
-<code>#include &lt;<a class="el" href="wrapper__types_8hpp_source.html">cudf/utilities/legacy/wrapper_types.hpp</a>&gt;</code><br />
-<code>#include &lt;cudf/utilities/error.hpp&gt;</code><br />
-<code>#include &lt;type_traits&gt;</code><br />
-<code>#include &lt;<a class="el" href="src_2utilities_2legacy_2device__operators_8cuh.html">utilities/legacy/device_operators.cuh</a>&gt;</code><br />
-</div><div class="textblock"><div class="dynheader">
-Include dependency graph for src/utilities/legacy/device_atomics.cuh:</div>
-<div class="dyncontent">
-<div class="center"><img src="src_2utilities_2legacy_2device__atomics_8cuh__incl.png" border="0" usemap="#device__atomics_8cuh" alt=""/></div>
-<map name="device__atomics_8cuh" id="device__atomics_8cuh">
-<area shape="rect" title="overloads for CUDA atomic operations" alt="" coords="3723,5,3925,32"/>
-<area shape="rect" href="cudf_8h_source.html" title=" " alt="" coords="1453,355,1585,382"/>
-<area shape="rect" href="cudf__utils_8h_source.html" title=" " alt="" coords="2300,169,2532,211"/>
-<area shape="rect" href="error_8hpp_source.html" title=" " alt="" coords="2723,355,2986,382"/>
-<area shape="rect" href="bool_8hpp_source.html" title=" " alt="" coords="4605,355,4848,382"/>
-<area shape="rect" title=" " alt="" coords="4819,437,4951,464"/>
-<area shape="rect" href="timestamps_8hpp.html" title="Concrete type definitions for int32_t and int64_t timestamps in." alt="" coords="4278,355,4581,382"/>
-<area shape="rect" href="traits_8hpp_source.html" title=" " alt="" coords="3861,177,4133,203"/>
-<area shape="rect" href="wrapper__types_8hpp.html" title="Wrapper structs for for the non&#45;fundamental gdf_dtype types." alt="" coords="3971,348,4203,389"/>
-<area shape="rect" href="src_2utilities_2legacy_2device__operators_8cuh.html" title="definition of the device operators" alt="" coords="3534,80,3786,121"/>
-<area shape="rect" title=" " alt="" coords="2621,437,2713,464"/>
-<area shape="rect" title=" " alt="" coords="2207,661,2299,688"/>
-<area shape="rect" href="types_8h_source.html" title=" " alt="" coords="1869,512,1961,539"/>
-<area shape="rect" href="types_8hpp.html" title="Type declarations for libcudf." alt="" coords="2197,587,2309,613"/>
-<area shape="rect" href="convert__types_8h_source.html" title=" " alt="" coords="1221,437,1393,464"/>
-<area shape="rect" href="io__types_8hpp_source.html" title=" " alt="" coords="934,437,1146,464"/>
-<area shape="rect" href="io__types_8h_source.html" title=" " alt="" coords="1548,512,1791,539"/>
-<area shape="rect" href="io__functions_8hpp_source.html" title=" " alt="" coords="401,437,653,464"/>
-<area shape="rect" href="io__readers_8hpp_source.html" title=" " alt="" coords="677,437,909,464"/>
-<area shape="rect" href="io__writers_8hpp_source.html" title=" " alt="" coords="144,437,376,464"/>
-<area shape="rect" href="legacy_2column_8hpp_source.html" title=" " alt="" coords="1719,437,1911,464"/>
-<area shape="rect" href="functions_8h_source.html" title=" " alt="" coords="1417,437,1620,464"/>
-<area shape="rect" href="io__functions_8h_source.html" title=" " alt="" coords="2036,437,2268,464"/>
-<area shape="rect" title=" " alt="" coords="1863,587,1966,613"/>
-<area shape="rect" title=" " alt="" coords="3027,661,3119,688"/>
-<area shape="rect" title=" " alt="" coords="989,512,1072,539"/>
-<area shape="rect" title=" " alt="" coords="477,587,560,613"/>
-<area shape="rect" title=" " alt="" coords="664,512,747,539"/>
-<area shape="rect" title=" " alt="" coords="873,512,965,539"/>
-<area shape="rect" href="legacy_2table_8hpp_source.html" title=" " alt="" coords="307,512,539,539"/>
-<area shape="rect" title=" " alt="" coords="22,587,114,613"/>
-<area shape="rect" title=" " alt="" coords="270,587,453,613"/>
-<area shape="rect" title=" " alt="" coords="2393,437,2596,464"/>
-<area shape="rect" href="error__utils_8hpp_source.html" title=" " alt="" coords="2532,259,2775,300"/>
-<area shape="rect" href="bitmask__ops_8hpp.html" title=" " alt="" coords="2215,259,2457,300"/>
-<area shape="rect" href="bitmask_8hpp_source.html" title=" " alt="" coords="1938,266,2190,293"/>
-<area shape="rect" title=" " alt="" coords="2788,437,2871,464"/>
-<area shape="rect" title=" " alt="" coords="2895,437,3007,464"/>
-<area shape="rect" title=" " alt="" coords="3031,437,3143,464"/>
-<area shape="rect" title=" " alt="" coords="3713,437,3876,464"/>
-<area shape="rect" title=" " alt="" coords="2175,355,2457,382"/>
-<area shape="rect" title=" " alt="" coords="4159,437,4351,464"/>
-<area shape="rect" title=" " alt="" coords="4375,437,4457,464"/>
-<area shape="rect" title=" " alt="" coords="4052,437,4135,464"/>
-<area shape="rect" title=" " alt="" coords="4533,437,4665,464"/>
-<area shape="rect" href="type__dispatcher_8hpp.html" title="Defines the mapping between cudf::type_id runtime type information." alt="" coords="3911,259,4123,300"/>
-<area shape="rect" href="string__view_8cuh.html" title="Class definition for cudf::string_view." alt="" coords="3306,348,3518,389"/>
-<area shape="rect" href="dictionary_8hpp.html" title="Concrete type definition for dictionary columns." alt="" coords="3643,355,3946,382"/>
-<area shape="rect" title=" " alt="" coords="3218,437,3321,464"/>
-<area shape="rect" title=" " alt="" coords="3345,437,3537,464"/>
-</map>
-</div>
-</div><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl.html">cudf::detail::genericAtomicOperationImpl&lt; T, Op, N &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01Op_00_011_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; T, Op, 1 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01Op_00_012_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; T, Op, 2 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01Op_00_014_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; T, Op, 4 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01Op_00_018_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; T, Op, 8 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01float_00_01DeviceSum_00_014_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; float, DeviceSum, 4 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01int32__t_00_01DeviceSum_00_014_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; int32_t, DeviceSum, 4 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01int64__t_00_01DeviceSum_00_018_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; int64_t, DeviceSum, 8 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01int32__t_00_01DeviceMin_00_014_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; int32_t, DeviceMin, 4 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01int32__t_00_01DeviceMax_00_014_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; int32_t, DeviceMax, 4 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01int64__t_00_01DeviceMin_00_018_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; int64_t, DeviceMin, 8 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01int64__t_00_01DeviceMax_00_018_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; int64_t, DeviceMax, 8 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01DeviceAnd_00_014_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; T, DeviceAnd, 4 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01DeviceAnd_00_018_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; T, DeviceAnd, 8 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01DeviceOr_00_014_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; T, DeviceOr, 4 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01DeviceOr_00_018_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; T, DeviceOr, 8 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01DeviceXor_00_014_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; T, DeviceXor, 4 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01DeviceXor_00_018_01_4.html">cudf::detail::genericAtomicOperationImpl&lt; T, DeviceXor, 8 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1typesAtomicCASImpl.html">cudf::detail::typesAtomicCASImpl&lt; T, N &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1typesAtomicCASImpl_3_01T_00_011_01_4.html">cudf::detail::typesAtomicCASImpl&lt; T, 1 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1typesAtomicCASImpl_3_01T_00_012_01_4.html">cudf::detail::typesAtomicCASImpl&lt; T, 2 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1typesAtomicCASImpl_3_01T_00_014_01_4.html">cudf::detail::typesAtomicCASImpl&lt; T, 4 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcudf_1_1detail_1_1typesAtomicCASImpl_3_01T_00_018_01_4.html">cudf::detail::typesAtomicCASImpl&lt; T, 8 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespacecudf"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecudf.html">cudf</a></td></tr>
-<tr class="memdesc:namespacecudf"><td class="mdescLeft">&#160;</td><td class="mdescRight">cuDF interfaces <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:a82105ebf9504b1e5f303e87714716bdf"><td class="memItemLeft" align="right" valign="top"><a id="a82105ebf9504b1e5f303e87714716bdf"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>DEVICE_ATOMICS_CUH</b></td></tr>
-<tr class="separator:a82105ebf9504b1e5f303e87714716bdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35fe038d186437b4c25a7e14b25de4d4"><td class="memItemLeft" align="right" valign="top"><a id="a35fe038d186437b4c25a7e14b25de4d4"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>errmsg_cast</b>&#160;&#160;&#160;&quot;`long long int` has different size to `int64_t`&quot;</td></tr>
-<tr class="separator:a35fe038d186437b4c25a7e14b25de4d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:adef54f7cad2af1b4fb30f460be6a77de"><td class="memTemplParams" colspan="2"><a id="adef54f7cad2af1b4fb30f460be6a77de"></a>
-template&lt;typename T_output , typename T_input &gt; </td></tr>
-<tr class="memitem:adef54f7cad2af1b4fb30f460be6a77de"><td class="memTemplItemLeft" align="right" valign="top">__forceinline__ __device__ T_output&#160;</td><td class="memTemplItemRight" valign="bottom"><b>cudf::detail::type_reinterpret</b> (T_input value)</td></tr>
-<tr class="separator:adef54f7cad2af1b4fb30f460be6a77de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac63f5b61fc23af128d77caf9ed921309"><td class="memTemplParams" colspan="2">template&lt;typename T , typename BinaryOp &gt; </td></tr>
-<tr class="memitem:ac63f5b61fc23af128d77caf9ed921309"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if_t&lt; std::is_arithmetic&lt; T &gt;::value||std::is_same&lt; T, <a class="el" href="structcudf_1_1detail_1_1wrapper.html">cudf::date32</a> &gt;::value||std::is_same&lt; T, <a class="el" href="structcudf_1_1detail_1_1wrapper.html">cudf::date64</a> &gt;::value||std::is_same&lt; T, <a class="el" href="structcudf_1_1detail_1_1wrapper.html">cudf::timestamp</a> &gt;::value||std::is_same&lt; T, <a class="el" href="structcudf_1_1detail_1_1wrapper.html">cudf::category</a> &gt;::value||std::is_same&lt; T, <a class="el" href="structcudf_1_1detail_1_1wrapper.html">cudf::nvstring_category</a> &gt;::value, T &gt; __forceinline__ __device__&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacecudf.html#ac63f5b61fc23af128d77caf9ed921309">cudf::genericAtomicOperation</a> (T *address, T const &amp;update_value, BinaryOp op)</td></tr>
-<tr class="memdesc:ac63f5b61fc23af128d77caf9ed921309"><td class="mdescLeft">&#160;</td><td class="mdescRight">compute atomic binary operation reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes 'BinaryOp'('old', 'update_value'), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.  <a href="namespacecudf.html#ac63f5b61fc23af128d77caf9ed921309">More...</a><br /></td></tr>
-<tr class="separator:ac63f5b61fc23af128d77caf9ed921309"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acafbd5dbae09b26c92b964e0122d5fc9"><td class="memTemplParams" colspan="2"><a id="acafbd5dbae09b26c92b964e0122d5fc9"></a>
-template&lt;typename BinaryOp &gt; </td></tr>
-<tr class="memitem:acafbd5dbae09b26c92b964e0122d5fc9"><td class="memTemplItemLeft" align="right" valign="top">__forceinline__ __device__ <a class="el" href="structcudf_1_1detail_1_1wrapper.html">cudf::bool8</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>cudf::genericAtomicOperation</b> (<a class="el" href="structcudf_1_1detail_1_1wrapper.html">cudf::bool8</a> *address, <a class="el" href="structcudf_1_1detail_1_1wrapper.html">cudf::bool8</a> const &amp;update_value, BinaryOp op)</td></tr>
-<tr class="separator:acafbd5dbae09b26c92b964e0122d5fc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ffb30b38c5cbcf1c312603477608824"><td class="memTemplParams" colspan="2"><a id="a3ffb30b38c5cbcf1c312603477608824"></a>
-template&lt;typename T , typename BinaryOp &gt; </td></tr>
-<tr class="memitem:a3ffb30b38c5cbcf1c312603477608824"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if_t&lt; <a class="el" href="namespacecudf.html#a90ebb90931abfed637396889b7829173">cudf::is_timestamp</a>&lt; T &gt;), T &gt; __forceinline__ __device__&#160;</td><td class="memTemplItemRight" valign="bottom"><b>cudf::genericAtomicOperation</b> (T *address, T const &amp;update_value, BinaryOp op)</td></tr>
-<tr class="separator:a3ffb30b38c5cbcf1c312603477608824"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f2557402b8fda0c96a9e997ba9ecb9a"><td class="memTemplParams" colspan="2"><a id="a0f2557402b8fda0c96a9e997ba9ecb9a"></a>
-template&lt;typename BinaryOp &gt; </td></tr>
-<tr class="memitem:a0f2557402b8fda0c96a9e997ba9ecb9a"><td class="memTemplItemLeft" align="right" valign="top">__forceinline__ __device__ <a class="el" href="structcudf_1_1experimental_1_1bool8.html">cudf::experimental::bool8</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>cudf::genericAtomicOperation</b> (<a class="el" href="structcudf_1_1experimental_1_1bool8.html">cudf::experimental::bool8</a> *address, <a class="el" href="structcudf_1_1experimental_1_1bool8.html">cudf::experimental::bool8</a> const &amp;update_value, BinaryOp op)</td></tr>
-<tr class="separator:a0f2557402b8fda0c96a9e997ba9ecb9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5d56a957e435f0b5d4a3d7abc53b5a7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ae5d56a957e435f0b5d4a3d7abc53b5a7"><td class="memTemplItemLeft" align="right" valign="top">__forceinline__ __device__ T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#ae5d56a957e435f0b5d4a3d7abc53b5a7">atomicAdd</a> (T *address, T val)</td></tr>
-<tr class="memdesc:ae5d56a957e435f0b5d4a3d7abc53b5a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloads for <code>atomicAdd</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes (old + val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.  <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#ae5d56a957e435f0b5d4a3d7abc53b5a7">More...</a><br /></td></tr>
-<tr class="separator:ae5d56a957e435f0b5d4a3d7abc53b5a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ecae095df404a4cb13e7245eaa7fa0c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a7ecae095df404a4cb13e7245eaa7fa0c"><td class="memTemplItemLeft" align="right" valign="top">__forceinline__ __device__ T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#a7ecae095df404a4cb13e7245eaa7fa0c">atomicMin</a> (T *address, T val)</td></tr>
-<tr class="memdesc:a7ecae095df404a4cb13e7245eaa7fa0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloads for <code>atomicMin</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes the minimum of old and val, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.  <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#a7ecae095df404a4cb13e7245eaa7fa0c">More...</a><br /></td></tr>
-<tr class="separator:a7ecae095df404a4cb13e7245eaa7fa0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74f405a5c950c13eb35cb9ec5144c942"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a74f405a5c950c13eb35cb9ec5144c942"><td class="memTemplItemLeft" align="right" valign="top">__forceinline__ __device__ T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#a74f405a5c950c13eb35cb9ec5144c942">atomicMax</a> (T *address, T val)</td></tr>
-<tr class="memdesc:a74f405a5c950c13eb35cb9ec5144c942"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloads for <code>atomicMax</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes the maximum of old and val, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.  <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#a74f405a5c950c13eb35cb9ec5144c942">More...</a><br /></td></tr>
-<tr class="separator:a74f405a5c950c13eb35cb9ec5144c942"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a518e0df2f4f62ab1fba12fdf5a24dd23"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a518e0df2f4f62ab1fba12fdf5a24dd23"><td class="memTemplItemLeft" align="right" valign="top">__forceinline__ __device__ T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#a518e0df2f4f62ab1fba12fdf5a24dd23">atomicCAS</a> (T *address, T compare, T val)</td></tr>
-<tr class="memdesc:a518e0df2f4f62ab1fba12fdf5a24dd23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloads for <code>atomicCAS</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes (<code>old</code> == <code>compare</code> ? <code>val</code> : <code>old</code>), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.  <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#a518e0df2f4f62ab1fba12fdf5a24dd23">More...</a><br /></td></tr>
-<tr class="separator:a518e0df2f4f62ab1fba12fdf5a24dd23"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa75a45ac643c6ef46bcadb77e26ecc27"><td class="memTemplParams" colspan="2">template&lt;typename T , typename std::enable_if_t&lt; std::is_integral&lt; T &gt;::value, T &gt; *  = nullptr&gt; </td></tr>
-<tr class="memitem:aa75a45ac643c6ef46bcadb77e26ecc27"><td class="memTemplItemLeft" align="right" valign="top">__forceinline__ __device__ T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#aa75a45ac643c6ef46bcadb77e26ecc27">atomicAnd</a> (T *address, T val)</td></tr>
-<tr class="memdesc:aa75a45ac643c6ef46bcadb77e26ecc27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloads for <code>atomicAnd</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes (old &amp; val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.  <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#aa75a45ac643c6ef46bcadb77e26ecc27">More...</a><br /></td></tr>
-<tr class="separator:aa75a45ac643c6ef46bcadb77e26ecc27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82b1ef76ea95088682c36d9515dc7268"><td class="memTemplParams" colspan="2">template&lt;typename T , typename std::enable_if_t&lt; std::is_integral&lt; T &gt;::value, T &gt; *  = nullptr&gt; </td></tr>
-<tr class="memitem:a82b1ef76ea95088682c36d9515dc7268"><td class="memTemplItemLeft" align="right" valign="top">__forceinline__ __device__ T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#a82b1ef76ea95088682c36d9515dc7268">atomicOr</a> (T *address, T val)</td></tr>
-<tr class="memdesc:a82b1ef76ea95088682c36d9515dc7268"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloads for <code>atomicOr</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes (old | val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.  <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#a82b1ef76ea95088682c36d9515dc7268">More...</a><br /></td></tr>
-<tr class="separator:a82b1ef76ea95088682c36d9515dc7268"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4383ce29404055418f85f9e81f34afde"><td class="memTemplParams" colspan="2">template&lt;typename T , typename std::enable_if_t&lt; std::is_integral&lt; T &gt;::value, T &gt; *  = nullptr&gt; </td></tr>
-<tr class="memitem:a4383ce29404055418f85f9e81f34afde"><td class="memTemplItemLeft" align="right" valign="top">__forceinline__ __device__ T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#a4383ce29404055418f85f9e81f34afde">atomicXor</a> (T *address, T val)</td></tr>
-<tr class="memdesc:a4383ce29404055418f85f9e81f34afde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloads for <code>atomicXor</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes (old ^ val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.  <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#a4383ce29404055418f85f9e81f34afde">More...</a><br /></td></tr>
-<tr class="separator:a4383ce29404055418f85f9e81f34afde"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>overloads for CUDA atomic operations </p>
-<p>------------------------------------------------------------------------&mdash;*</p>
-<p>Provides the overloads for all of possible cudf's data types, where cudf's data types are, int8_t, int16_t, int32_t, int64_t, float, double, cudf::date32, cudf::date64, cudf::timestamp, cudf::category, cudf::nvstring_category, cudf::bool8, where CUDA atomic operations are, <code>atomicAdd</code>, <code>atomicMin</code>, <code>atomicMax</code>, <code>atomicCAS</code>. <code>atomicAnd</code>, <code>atomicOr</code>, <code>atomicXor</code> are also supported for integer data types. Also provides <code><a class="el" href="namespacecudf.html#ac63f5b61fc23af128d77caf9ed921309" title="compute atomic binary operation reads the old located at the address in global or shared memory,...">cudf::genericAtomicOperation</a></code> which performs atomic operation </p>
-<h2><a class="anchor" id="autotoc_md165"></a>
-with the given binary operator.</h2>
-</div><h2 class="groupheader">Function Documentation</h2>
-<a id="ae5d56a957e435f0b5d4a3d7abc53b5a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5d56a957e435f0b5d4a3d7abc53b5a7">&#9670;&nbsp;</a></span>atomicAdd()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
+/* @license-end */
+   </script>
+   <div id="main-nav">
+   </div>
+   <!-- window showing the filter options -->
+   <div id="MSearchSelectWindow" onkeydown="return searchBox.OnSearchSelectKey(event)" onmouseout="return searchBox.OnSearchSelectHide()" onmouseover="return searchBox.OnSearchSelectShow()">
+   </div>
+   <!-- iframe showing the search results (closed by default) -->
+   <div id="MSearchResultsWindow">
+    <iframe frameborder="0" id="MSearchResults" name="MSearchResults" src="javascript:void(0)">
+    </iframe>
+   </div>
+   <div class="navpath" id="nav-path">
+    <ul>
+     <li class="navelem">
+      <a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">
+       src
+      </a>
+     </li>
+     <li class="navelem">
+      <a class="el" href="dir_7b5d38f1875f1b693f62ca6a108a1129.html">
+       utilities
+      </a>
+     </li>
+     <li class="navelem">
+      <a class="el" href="dir_7459115c3e8bc66ccab4e110bf9d864c.html">
+       legacy
+      </a>
+     </li>
+    </ul>
+   </div>
+  </div>
+  <!-- top -->
+  <div class="header">
+   <div class="summary">
+    <a href="#nested-classes">
+     Classes
+    </a>
+    |
+    <a href="#namespaces">
+     Namespaces
+    </a>
+    |
+    <a href="#define-members">
+     Macros
+    </a>
+    |
+    <a href="#func-members">
+     Functions
+    </a>
+   </div>
+   <div class="headertitle">
+    <div class="title">
+     src/utilities/legacy/device_atomics.cuh File Reference
+    </div>
+   </div>
+  </div>
+  <!--header-->
+  <div class="contents">
+   <p>
+    overloads for CUDA atomic operations
+    <a href="#details">
+     More...
+    </a>
+   </p>
+   <div class="textblock">
+    <code>
+     #include &lt;cudf/cudf.h&gt;
+    </code>
+    <br/>
+    <code>
+     #include &lt;utilities/legacy/cudf_utils.h&gt;
+    </code>
+    <br/>
+    <code>
+     #include &lt;cudf/wrappers/bool.hpp&gt;
+    </code>
+    <br/>
+    <code>
+     #include &lt;
+     <a class="el" href="timestamps_8hpp_source.html">
+      cudf/wrappers/timestamps.hpp
+     </a>
+     &gt;
+    </code>
+    <br/>
+    <code>
+     #include &lt;cudf/utilities/traits.hpp&gt;
+    </code>
+    <br/>
+    <code>
+     #include &lt;
+     <a class="el" href="wrapper__types_8hpp_source.html">
+      cudf/utilities/legacy/wrapper_types.hpp
+     </a>
+     &gt;
+    </code>
+    <br/>
+    <code>
+     #include &lt;cudf/utilities/error.hpp&gt;
+    </code>
+    <br/>
+    <code>
+     #include &lt;type_traits&gt;
+    </code>
+    <br/>
+    <code>
+     #include &lt;
+     <a class="el" href="src_2utilities_2legacy_2device__operators_8cuh.html">
+      utilities/legacy/device_operators.cuh
+     </a>
+     &gt;
+    </code>
+    <br/>
+   </div>
+   <div class="textblock">
+    <div class="dynheader">
+     Include dependency graph for src/utilities/legacy/device_atomics.cuh:
+    </div>
+    <div class="dyncontent">
+     <div class="center">
+      <img alt="" border="0" src="src_2utilities_2legacy_2device__atomics_8cuh__incl.png" usemap="#device__atomics_8cuh"/>
+     </div>
+     <map id="device__atomics_8cuh" name="device__atomics_8cuh">
+      <area alt="" coords="3723,5,3925,32" shape="rect" title="overloads for CUDA atomic operations"/>
+      <area alt="" coords="1453,355,1585,382" href="cudf_8h_source.html" shape="rect" title=" "/>
+      <area alt="" coords="2300,169,2532,211" href="cudf__utils_8h_source.html" shape="rect" title=" "/>
+      <area alt="" coords="2723,355,2986,382" href="error_8hpp_source.html" shape="rect" title=" "/>
+      <area alt="" coords="4605,355,4848,382" href="bool_8hpp_source.html" shape="rect" title=" "/>
+      <area alt="" coords="4819,437,4951,464" shape="rect" title=" "/>
+      <area alt="" coords="4278,355,4581,382" href="timestamps_8hpp.html" shape="rect" title="Concrete type definitions for int32_t and int64_t timestamps in."/>
+      <area alt="" coords="3861,177,4133,203" href="traits_8hpp_source.html" shape="rect" title=" "/>
+      <area alt="" coords="3971,348,4203,389" href="wrapper__types_8hpp.html" shape="rect" title="Wrapper structs for for the non-fundamental gdf_dtype types."/>
+      <area alt="" coords="3534,80,3786,121" href="src_2utilities_2legacy_2device__operators_8cuh.html" shape="rect" title="definition of the device operators"/>
+      <area alt="" coords="2621,437,2713,464" shape="rect" title=" "/>
+      <area alt="" coords="2207,661,2299,688" shape="rect" title=" "/>
+      <area alt="" coords="1869,512,1961,539" href="types_8h_source.html" shape="rect" title=" "/>
+      <area alt="" coords="2197,587,2309,613" href="types_8hpp.html" shape="rect" title="Type declarations for libcudf."/>
+      <area alt="" coords="1221,437,1393,464" href="convert__types_8h_source.html" shape="rect" title=" "/>
+      <area alt="" coords="934,437,1146,464" href="io__types_8hpp_source.html" shape="rect" title=" "/>
+      <area alt="" coords="1548,512,1791,539" href="io__types_8h_source.html" shape="rect" title=" "/>
+      <area alt="" coords="401,437,653,464" href="io__functions_8hpp_source.html" shape="rect" title=" "/>
+      <area alt="" coords="677,437,909,464" href="io__readers_8hpp_source.html" shape="rect" title=" "/>
+      <area alt="" coords="144,437,376,464" href="io__writers_8hpp_source.html" shape="rect" title=" "/>
+      <area alt="" coords="1719,437,1911,464" href="legacy_2column_8hpp_source.html" shape="rect" title=" "/>
+      <area alt="" coords="1417,437,1620,464" href="functions_8h_source.html" shape="rect" title=" "/>
+      <area alt="" coords="2036,437,2268,464" href="io__functions_8h_source.html" shape="rect" title=" "/>
+      <area alt="" coords="1863,587,1966,613" shape="rect" title=" "/>
+      <area alt="" coords="3027,661,3119,688" shape="rect" title=" "/>
+      <area alt="" coords="989,512,1072,539" shape="rect" title=" "/>
+      <area alt="" coords="477,587,560,613" shape="rect" title=" "/>
+      <area alt="" coords="664,512,747,539" shape="rect" title=" "/>
+      <area alt="" coords="873,512,965,539" shape="rect" title=" "/>
+      <area alt="" coords="307,512,539,539" href="legacy_2table_8hpp_source.html" shape="rect" title=" "/>
+      <area alt="" coords="22,587,114,613" shape="rect" title=" "/>
+      <area alt="" coords="270,587,453,613" shape="rect" title=" "/>
+      <area alt="" coords="2393,437,2596,464" shape="rect" title=" "/>
+      <area alt="" coords="2532,259,2775,300" href="error__utils_8hpp_source.html" shape="rect" title=" "/>
+      <area alt="" coords="2215,259,2457,300" href="bitmask__ops_8hpp.html" shape="rect" title=" "/>
+      <area alt="" coords="1938,266,2190,293" href="bitmask_8hpp_source.html" shape="rect" title=" "/>
+      <area alt="" coords="2788,437,2871,464" shape="rect" title=" "/>
+      <area alt="" coords="2895,437,3007,464" shape="rect" title=" "/>
+      <area alt="" coords="3031,437,3143,464" shape="rect" title=" "/>
+      <area alt="" coords="3713,437,3876,464" shape="rect" title=" "/>
+      <area alt="" coords="2175,355,2457,382" shape="rect" title=" "/>
+      <area alt="" coords="4159,437,4351,464" shape="rect" title=" "/>
+      <area alt="" coords="4375,437,4457,464" shape="rect" title=" "/>
+      <area alt="" coords="4052,437,4135,464" shape="rect" title=" "/>
+      <area alt="" coords="4533,437,4665,464" shape="rect" title=" "/>
+      <area alt="" coords="3911,259,4123,300" href="type__dispatcher_8hpp.html" shape="rect" title="Defines the mapping between cudf::type_id runtime type information."/>
+      <area alt="" coords="3306,348,3518,389" href="string__view_8cuh.html" shape="rect" title="Class definition for cudf::string_view."/>
+      <area alt="" coords="3643,355,3946,382" href="dictionary_8hpp.html" shape="rect" title="Concrete type definition for dictionary columns."/>
+      <area alt="" coords="3218,437,3321,464" shape="rect" title=" "/>
+      <area alt="" coords="3345,437,3537,464" shape="rect" title=" "/>
+     </map>
+    </div>
+   </div>
+   <table class="memberdecls">
+    <tr class="heading">
+     <td colspan="2">
+      <h2 class="groupheader">
+       <a name="nested-classes">
+       </a>
+       Classes
+      </h2>
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl.html">
+       cudf::detail::genericAtomicOperationImpl&lt; T, Op, N &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01Op_00_011_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; T, Op, 1 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01Op_00_012_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; T, Op, 2 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01Op_00_014_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; T, Op, 4 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01Op_00_018_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; T, Op, 8 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01float_00_01DeviceSum_00_014_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; float, DeviceSum, 4 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01int32__t_00_01DeviceSum_00_014_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; int32_t, DeviceSum, 4 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01int64__t_00_01DeviceSum_00_018_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; int64_t, DeviceSum, 8 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01int32__t_00_01DeviceMin_00_014_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; int32_t, DeviceMin, 4 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01int32__t_00_01DeviceMax_00_014_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; int32_t, DeviceMax, 4 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01int64__t_00_01DeviceMin_00_018_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; int64_t, DeviceMin, 8 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01int64__t_00_01DeviceMax_00_018_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; int64_t, DeviceMax, 8 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01DeviceAnd_00_014_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; T, DeviceAnd, 4 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01DeviceAnd_00_018_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; T, DeviceAnd, 8 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01DeviceOr_00_014_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; T, DeviceOr, 4 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01DeviceOr_00_018_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; T, DeviceOr, 8 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01DeviceXor_00_014_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; T, DeviceXor, 4 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1genericAtomicOperationImpl_3_01T_00_01DeviceXor_00_018_01_4.html">
+       cudf::detail::genericAtomicOperationImpl&lt; T, DeviceXor, 8 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1typesAtomicCASImpl.html">
+       cudf::detail::typesAtomicCASImpl&lt; T, N &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1typesAtomicCASImpl_3_01T_00_011_01_4.html">
+       cudf::detail::typesAtomicCASImpl&lt; T, 1 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1typesAtomicCASImpl_3_01T_00_012_01_4.html">
+       cudf::detail::typesAtomicCASImpl&lt; T, 2 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1typesAtomicCASImpl_3_01T_00_014_01_4.html">
+       cudf::detail::typesAtomicCASImpl&lt; T, 4 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:">
+     <td align="right" class="memItemLeft" valign="top">
+      struct
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="structcudf_1_1detail_1_1typesAtomicCASImpl_3_01T_00_018_01_4.html">
+       cudf::detail::typesAtomicCASImpl&lt; T, 8 &gt;
+      </a>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+   </table>
+   <table class="memberdecls">
+    <tr class="heading">
+     <td colspan="2">
+      <h2 class="groupheader">
+       <a name="namespaces">
+       </a>
+       Namespaces
+      </h2>
+     </td>
+    </tr>
+    <tr class="memitem:namespacecudf">
+     <td align="right" class="memItemLeft" valign="top">
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <a class="el" href="namespacecudf.html">
+       cudf
+      </a>
+     </td>
+    </tr>
+    <tr class="memdesc:namespacecudf">
+     <td class="mdescLeft">
+     </td>
+     <td class="mdescRight">
+      cuDF interfaces
+      <br/>
+     </td>
+    </tr>
+    <tr class="separator:">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+   </table>
+   <table class="memberdecls">
+    <tr class="heading">
+     <td colspan="2">
+      <h2 class="groupheader">
+       <a name="define-members">
+       </a>
+       Macros
+      </h2>
+     </td>
+    </tr>
+    <tr class="memitem:a82105ebf9504b1e5f303e87714716bdf">
+     <td align="right" class="memItemLeft" valign="top">
+      <a id="a82105ebf9504b1e5f303e87714716bdf">
+      </a>
+      #define
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <b>
+       DEVICE_ATOMICS_CUH
+      </b>
+     </td>
+    </tr>
+    <tr class="separator:a82105ebf9504b1e5f303e87714716bdf">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:a35fe038d186437b4c25a7e14b25de4d4">
+     <td align="right" class="memItemLeft" valign="top">
+      <a id="a35fe038d186437b4c25a7e14b25de4d4">
+      </a>
+      #define
+     </td>
+     <td class="memItemRight" valign="bottom">
+      <b>
+       errmsg_cast
+      </b>
+      "`long long int` has different size to `int64_t`"
+     </td>
+    </tr>
+    <tr class="separator:a35fe038d186437b4c25a7e14b25de4d4">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+   </table>
+   <table class="memberdecls">
+    <tr class="heading">
+     <td colspan="2">
+      <h2 class="groupheader">
+       <a name="func-members">
+       </a>
+       Functions
+      </h2>
+     </td>
+    </tr>
+    <tr class="memitem:adef54f7cad2af1b4fb30f460be6a77de">
+     <td class="memTemplParams" colspan="2">
+      <a id="adef54f7cad2af1b4fb30f460be6a77de">
+      </a>
+      template&lt;typename T_output , typename T_input &gt;
+     </td>
+    </tr>
+    <tr class="memitem:adef54f7cad2af1b4fb30f460be6a77de">
+     <td align="right" class="memTemplItemLeft" valign="top">
+      __forceinline__ __device__ T_output
+     </td>
+     <td class="memTemplItemRight" valign="bottom">
+      <b>
+       cudf::detail::type_reinterpret
+      </b>
+      (T_input value)
+     </td>
+    </tr>
+    <tr class="separator:adef54f7cad2af1b4fb30f460be6a77de">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:ac63f5b61fc23af128d77caf9ed921309">
+     <td class="memTemplParams" colspan="2">
+      template&lt;typename T , typename BinaryOp &gt;
+     </td>
+    </tr>
+    <tr class="memitem:ac63f5b61fc23af128d77caf9ed921309">
+     <td align="right" class="memTemplItemLeft" valign="top">
+      std::enable_if_t&lt; std::is_arithmetic&lt; T &gt;::value||std::is_same&lt; T,
+      <a class="el" href="structcudf_1_1detail_1_1wrapper.html">
+       cudf::date32
+      </a>
+      &gt;::value||std::is_same&lt; T,
+      <a class="el" href="structcudf_1_1detail_1_1wrapper.html">
+       cudf::date64
+      </a>
+      &gt;::value||std::is_same&lt; T,
+      <a class="el" href="structcudf_1_1detail_1_1wrapper.html">
+       cudf::timestamp
+      </a>
+      &gt;::value||std::is_same&lt; T,
+      <a class="el" href="structcudf_1_1detail_1_1wrapper.html">
+       cudf::category
+      </a>
+      &gt;::value||std::is_same&lt; T,
+      <a class="el" href="structcudf_1_1detail_1_1wrapper.html">
+       cudf::nvstring_category
+      </a>
+      &gt;::value, T &gt; __forceinline__ __device__
+     </td>
+     <td class="memTemplItemRight" valign="bottom">
+      <a class="el" href="namespacecudf.html#ac63f5b61fc23af128d77caf9ed921309">
+       cudf::genericAtomicOperation
+      </a>
+      (T *address, T const &amp;update_value, BinaryOp op)
+     </td>
+    </tr>
+    <tr class="memdesc:ac63f5b61fc23af128d77caf9ed921309">
+     <td class="mdescLeft">
+     </td>
+     <td class="mdescRight">
+      compute atomic binary operation reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes 'BinaryOp'('old', 'update_value'), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+      <a href="namespacecudf.html#ac63f5b61fc23af128d77caf9ed921309">
+       More...
+      </a>
+      <br/>
+     </td>
+    </tr>
+    <tr class="separator:ac63f5b61fc23af128d77caf9ed921309">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:acafbd5dbae09b26c92b964e0122d5fc9">
+     <td class="memTemplParams" colspan="2">
+      <a id="acafbd5dbae09b26c92b964e0122d5fc9">
+      </a>
+      template&lt;typename BinaryOp &gt;
+     </td>
+    </tr>
+    <tr class="memitem:acafbd5dbae09b26c92b964e0122d5fc9">
+     <td align="right" class="memTemplItemLeft" valign="top">
+      __forceinline__ __device__
+      <a class="el" href="structcudf_1_1detail_1_1wrapper.html">
+       cudf::bool8
+      </a>
+     </td>
+     <td class="memTemplItemRight" valign="bottom">
+      <b>
+       cudf::genericAtomicOperation
+      </b>
+      (
+      <a class="el" href="structcudf_1_1detail_1_1wrapper.html">
+       cudf::bool8
+      </a>
+      *address,
+      <a class="el" href="structcudf_1_1detail_1_1wrapper.html">
+       cudf::bool8
+      </a>
+      const &amp;update_value, BinaryOp op)
+     </td>
+    </tr>
+    <tr class="separator:acafbd5dbae09b26c92b964e0122d5fc9">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:a3ffb30b38c5cbcf1c312603477608824">
+     <td class="memTemplParams" colspan="2">
+      <a id="a3ffb30b38c5cbcf1c312603477608824">
+      </a>
+      template&lt;typename T , typename BinaryOp &gt;
+     </td>
+    </tr>
+    <tr class="memitem:a3ffb30b38c5cbcf1c312603477608824">
+     <td align="right" class="memTemplItemLeft" valign="top">
+      std::enable_if_t&lt;
+      <a class="el" href="namespacecudf.html#a90ebb90931abfed637396889b7829173">
+       cudf::is_timestamp
+      </a>
+      &lt; T &gt;), T &gt; __forceinline__ __device__
+     </td>
+     <td class="memTemplItemRight" valign="bottom">
+      <b>
+       cudf::genericAtomicOperation
+      </b>
+      (T *address, T const &amp;update_value, BinaryOp op)
+     </td>
+    </tr>
+    <tr class="separator:a3ffb30b38c5cbcf1c312603477608824">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:a0f2557402b8fda0c96a9e997ba9ecb9a">
+     <td class="memTemplParams" colspan="2">
+      <a id="a0f2557402b8fda0c96a9e997ba9ecb9a">
+      </a>
+      template&lt;typename BinaryOp &gt;
+     </td>
+    </tr>
+    <tr class="memitem:a0f2557402b8fda0c96a9e997ba9ecb9a">
+     <td align="right" class="memTemplItemLeft" valign="top">
+      __forceinline__ __device__
+      <a class="el" href="structcudf_1_1experimental_1_1bool8.html">
+       cudf::experimental::bool8
+      </a>
+     </td>
+     <td class="memTemplItemRight" valign="bottom">
+      <b>
+       cudf::genericAtomicOperation
+      </b>
+      (
+      <a class="el" href="structcudf_1_1experimental_1_1bool8.html">
+       cudf::experimental::bool8
+      </a>
+      *address,
+      <a class="el" href="structcudf_1_1experimental_1_1bool8.html">
+       cudf::experimental::bool8
+      </a>
+      const &amp;update_value, BinaryOp op)
+     </td>
+    </tr>
+    <tr class="separator:a0f2557402b8fda0c96a9e997ba9ecb9a">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:ae5d56a957e435f0b5d4a3d7abc53b5a7">
+     <td class="memTemplParams" colspan="2">
+      template&lt;typename T &gt;
+     </td>
+    </tr>
+    <tr class="memitem:ae5d56a957e435f0b5d4a3d7abc53b5a7">
+     <td align="right" class="memTemplItemLeft" valign="top">
+      __forceinline__ __device__ T
+     </td>
+     <td class="memTemplItemRight" valign="bottom">
+      <a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#ae5d56a957e435f0b5d4a3d7abc53b5a7">
+       atomicAdd
+      </a>
+      (T *address, T val)
+     </td>
+    </tr>
+    <tr class="memdesc:ae5d56a957e435f0b5d4a3d7abc53b5a7">
+     <td class="mdescLeft">
+     </td>
+     <td class="mdescRight">
+      Overloads for
+      <code>
+       atomicAdd
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes (old + val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+      <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#ae5d56a957e435f0b5d4a3d7abc53b5a7">
+       More...
+      </a>
+      <br/>
+     </td>
+    </tr>
+    <tr class="separator:ae5d56a957e435f0b5d4a3d7abc53b5a7">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:a7ecae095df404a4cb13e7245eaa7fa0c">
+     <td class="memTemplParams" colspan="2">
+      template&lt;typename T &gt;
+     </td>
+    </tr>
+    <tr class="memitem:a7ecae095df404a4cb13e7245eaa7fa0c">
+     <td align="right" class="memTemplItemLeft" valign="top">
+      __forceinline__ __device__ T
+     </td>
+     <td class="memTemplItemRight" valign="bottom">
+      <a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#a7ecae095df404a4cb13e7245eaa7fa0c">
+       atomicMin
+      </a>
+      (T *address, T val)
+     </td>
+    </tr>
+    <tr class="memdesc:a7ecae095df404a4cb13e7245eaa7fa0c">
+     <td class="mdescLeft">
+     </td>
+     <td class="mdescRight">
+      Overloads for
+      <code>
+       atomicMin
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes the minimum of old and val, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+      <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#a7ecae095df404a4cb13e7245eaa7fa0c">
+       More...
+      </a>
+      <br/>
+     </td>
+    </tr>
+    <tr class="separator:a7ecae095df404a4cb13e7245eaa7fa0c">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:a74f405a5c950c13eb35cb9ec5144c942">
+     <td class="memTemplParams" colspan="2">
+      template&lt;typename T &gt;
+     </td>
+    </tr>
+    <tr class="memitem:a74f405a5c950c13eb35cb9ec5144c942">
+     <td align="right" class="memTemplItemLeft" valign="top">
+      __forceinline__ __device__ T
+     </td>
+     <td class="memTemplItemRight" valign="bottom">
+      <a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#a74f405a5c950c13eb35cb9ec5144c942">
+       atomicMax
+      </a>
+      (T *address, T val)
+     </td>
+    </tr>
+    <tr class="memdesc:a74f405a5c950c13eb35cb9ec5144c942">
+     <td class="mdescLeft">
+     </td>
+     <td class="mdescRight">
+      Overloads for
+      <code>
+       atomicMax
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes the maximum of old and val, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+      <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#a74f405a5c950c13eb35cb9ec5144c942">
+       More...
+      </a>
+      <br/>
+     </td>
+    </tr>
+    <tr class="separator:a74f405a5c950c13eb35cb9ec5144c942">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:a518e0df2f4f62ab1fba12fdf5a24dd23">
+     <td class="memTemplParams" colspan="2">
+      template&lt;typename T &gt;
+     </td>
+    </tr>
+    <tr class="memitem:a518e0df2f4f62ab1fba12fdf5a24dd23">
+     <td align="right" class="memTemplItemLeft" valign="top">
+      __forceinline__ __device__ T
+     </td>
+     <td class="memTemplItemRight" valign="bottom">
+      <a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#a518e0df2f4f62ab1fba12fdf5a24dd23">
+       atomicCAS
+      </a>
+      (T *address, T compare, T val)
+     </td>
+    </tr>
+    <tr class="memdesc:a518e0df2f4f62ab1fba12fdf5a24dd23">
+     <td class="mdescLeft">
+     </td>
+     <td class="mdescRight">
+      Overloads for
+      <code>
+       atomicCAS
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes (
+      <code>
+       old
+      </code>
+      ==
+      <code>
+       compare
+      </code>
+      ?
+      <code>
+       val
+      </code>
+      :
+      <code>
+       old
+      </code>
+      ), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+      <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#a518e0df2f4f62ab1fba12fdf5a24dd23">
+       More...
+      </a>
+      <br/>
+     </td>
+    </tr>
+    <tr class="separator:a518e0df2f4f62ab1fba12fdf5a24dd23">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:aa75a45ac643c6ef46bcadb77e26ecc27">
+     <td class="memTemplParams" colspan="2">
+      template&lt;typename T , typename std::enable_if_t&lt; std::is_integral&lt; T &gt;::value, T &gt; *  = nullptr&gt;
+     </td>
+    </tr>
+    <tr class="memitem:aa75a45ac643c6ef46bcadb77e26ecc27">
+     <td align="right" class="memTemplItemLeft" valign="top">
+      __forceinline__ __device__ T
+     </td>
+     <td class="memTemplItemRight" valign="bottom">
+      <a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#aa75a45ac643c6ef46bcadb77e26ecc27">
+       atomicAnd
+      </a>
+      (T *address, T val)
+     </td>
+    </tr>
+    <tr class="memdesc:aa75a45ac643c6ef46bcadb77e26ecc27">
+     <td class="mdescLeft">
+     </td>
+     <td class="mdescRight">
+      Overloads for
+      <code>
+       atomicAnd
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes (old &amp; val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+      <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#aa75a45ac643c6ef46bcadb77e26ecc27">
+       More...
+      </a>
+      <br/>
+     </td>
+    </tr>
+    <tr class="separator:aa75a45ac643c6ef46bcadb77e26ecc27">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:a82b1ef76ea95088682c36d9515dc7268">
+     <td class="memTemplParams" colspan="2">
+      template&lt;typename T , typename std::enable_if_t&lt; std::is_integral&lt; T &gt;::value, T &gt; *  = nullptr&gt;
+     </td>
+    </tr>
+    <tr class="memitem:a82b1ef76ea95088682c36d9515dc7268">
+     <td align="right" class="memTemplItemLeft" valign="top">
+      __forceinline__ __device__ T
+     </td>
+     <td class="memTemplItemRight" valign="bottom">
+      <a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#a82b1ef76ea95088682c36d9515dc7268">
+       atomicOr
+      </a>
+      (T *address, T val)
+     </td>
+    </tr>
+    <tr class="memdesc:a82b1ef76ea95088682c36d9515dc7268">
+     <td class="mdescLeft">
+     </td>
+     <td class="mdescRight">
+      Overloads for
+      <code>
+       atomicOr
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes (old | val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+      <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#a82b1ef76ea95088682c36d9515dc7268">
+       More...
+      </a>
+      <br/>
+     </td>
+    </tr>
+    <tr class="separator:a82b1ef76ea95088682c36d9515dc7268">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+    <tr class="memitem:a4383ce29404055418f85f9e81f34afde">
+     <td class="memTemplParams" colspan="2">
+      template&lt;typename T , typename std::enable_if_t&lt; std::is_integral&lt; T &gt;::value, T &gt; *  = nullptr&gt;
+     </td>
+    </tr>
+    <tr class="memitem:a4383ce29404055418f85f9e81f34afde">
+     <td align="right" class="memTemplItemLeft" valign="top">
+      __forceinline__ __device__ T
+     </td>
+     <td class="memTemplItemRight" valign="bottom">
+      <a class="el" href="src_2utilities_2legacy_2device__atomics_8cuh.html#a4383ce29404055418f85f9e81f34afde">
+       atomicXor
+      </a>
+      (T *address, T val)
+     </td>
+    </tr>
+    <tr class="memdesc:a4383ce29404055418f85f9e81f34afde">
+     <td class="mdescLeft">
+     </td>
+     <td class="mdescRight">
+      Overloads for
+      <code>
+       atomicXor
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes (old ^ val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+      <a href="src_2utilities_2legacy_2device__atomics_8cuh.html#a4383ce29404055418f85f9e81f34afde">
+       More...
+      </a>
+      <br/>
+     </td>
+    </tr>
+    <tr class="separator:a4383ce29404055418f85f9e81f34afde">
+     <td class="memSeparator" colspan="2">
+     </td>
+    </tr>
+   </table>
+   <a id="details" name="details">
+   </a>
+   <h2 class="groupheader">
+    Detailed Description
+   </h2>
+   <div class="textblock">
+    <p>
+     overloads for CUDA atomic operations
+    </p>
+    <p>
+     ------------------------------------------------------------------------—*
+    </p>
+    <p>
+     Provides the overloads for all of possible cudf's data types, where cudf's data types are, int8_t, int16_t, int32_t, int64_t, float, double, cudf::date32, cudf::date64, cudf::timestamp, cudf::category, cudf::nvstring_category, cudf::bool8, where CUDA atomic operations are,
+     <code>
+      atomicAdd
+     </code>
+     ,
+     <code>
+      atomicMin
+     </code>
+     ,
+     <code>
+      atomicMax
+     </code>
+     ,
+     <code>
+      atomicCAS
+     </code>
+     .
+     <code>
+      atomicAnd
+     </code>
+     ,
+     <code>
+      atomicOr
+     </code>
+     ,
+     <code>
+      atomicXor
+     </code>
+     are also supported for integer data types. Also provides
+     <code>
+      <a class="el" href="namespacecudf.html#ac63f5b61fc23af128d77caf9ed921309" title="compute atomic binary operation reads the old located at the address in global or shared memory,...">
+       cudf::genericAtomicOperation
+      </a>
+     </code>
+     which performs atomic operation
+    </p>
+    <h2>
+     <a class="anchor" id="autotoc_md165">
+     </a>
+     with the given binary operator.
+    </h2>
+   </div>
+   <h2 class="groupheader">
+    Function Documentation
+   </h2>
+   <a id="ae5d56a957e435f0b5d4a3d7abc53b5a7">
+   </a>
+   <h2 class="memtitle">
+    <span class="permalink">
+     <a href="#ae5d56a957e435f0b5d4a3d7abc53b5a7">
+      ◆
+     </a>
+    </span>
+    atomicAdd()
+   </h2>
+   <div class="memitem">
+    <div class="memproto">
+     <div class="memtemplate">
+      template&lt;typename T &gt;
+     </div>
+     <table class="memname">
+      <tr>
+       <td class="memname">
+        __forceinline__ __device__ T atomicAdd
+       </td>
+       <td>
+        (
+       </td>
+       <td class="paramtype">
+        T *
+       </td>
+       <td class="paramname">
+        <em>
+         address
+        </em>
+        ,
+       </td>
+      </tr>
+      <tr>
+       <td class="paramkey">
+       </td>
+       <td>
+       </td>
+       <td class="paramtype">
+        T
+       </td>
+       <td class="paramname">
+        <em>
+         val
+        </em>
+       </td>
+      </tr>
+      <tr>
+       <td>
+       </td>
+       <td>
+        )
+       </td>
+       <td>
+       </td>
+       <td>
+       </td>
+      </tr>
+     </table>
+    </div>
+    <div class="memdoc">
+     <p>
+      Overloads for
+      <code>
+       atomicAdd
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes (old + val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+     </p>
+     <p>
+      ----------------------------------------------------------------------—* The supported cudf types for
+      <code>
+       atomicAdd
+      </code>
+      are: int8_t, int16_t, int32_t, int64_t, float, double, cudf::date32, cudf::date64, cudf::timestamp, cudf::category, cudf::nvstring_category, cudf::bool8 Cuda natively supports
+      <code>
+       sint32
+      </code>
+      ,
+      <code>
+       uint32
+      </code>
+      ,
+      <code>
+       uint64
+      </code>
+      ,
+      <code>
+       float
+      </code>
+      ,
+      <code>
+       double. (
+      </code>
+      double
+      <code>
+       is supported after Pascal). Other types are implemented by
+      </code>
+      atomicCAS`.
+     </p>
+     <dl class="params">
+      <dt>
+       Parameters
+      </dt>
+      <dd>
+       <table class="params">
         <tr>
-          <td class="memname">__forceinline__ __device__ T atomicAdd </td>
-          <td>(</td>
-          <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>address</em>, </td>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          address
+         </td>
+         <td>
+          The address of old value in global or shared memory
+         </td>
         </tr>
         <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>val</em>&#160;</td>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          val
+         </td>
+         <td>
+          The value to be added
+         </td>
+        </tr>
+       </table>
+      </dd>
+     </dl>
+     <h2>
+      <a class="anchor" id="autotoc_md166">
+      </a>
+      @returns The old value at &lt;tt&gt;address&lt;/tt&gt;
+     </h2>
+    </div>
+   </div>
+   <a id="aa75a45ac643c6ef46bcadb77e26ecc27">
+   </a>
+   <h2 class="memtitle">
+    <span class="permalink">
+     <a href="#aa75a45ac643c6ef46bcadb77e26ecc27">
+      ◆
+     </a>
+    </span>
+    atomicAnd()
+   </h2>
+   <div class="memitem">
+    <div class="memproto">
+     <div class="memtemplate">
+      template&lt;typename T , typename std::enable_if_t&lt; std::is_integral&lt; T &gt;::value, T &gt; *  = nullptr&gt;
+     </div>
+     <table class="memname">
+      <tr>
+       <td class="memname">
+        __forceinline__ __device__ T atomicAnd
+       </td>
+       <td>
+        (
+       </td>
+       <td class="paramtype">
+        T *
+       </td>
+       <td class="paramname">
+        <em>
+         address
+        </em>
+        ,
+       </td>
+      </tr>
+      <tr>
+       <td class="paramkey">
+       </td>
+       <td>
+       </td>
+       <td class="paramtype">
+        T
+       </td>
+       <td class="paramname">
+        <em>
+         val
+        </em>
+       </td>
+      </tr>
+      <tr>
+       <td>
+       </td>
+       <td>
+        )
+       </td>
+       <td>
+       </td>
+       <td>
+       </td>
+      </tr>
+     </table>
+    </div>
+    <div class="memdoc">
+     <p>
+      Overloads for
+      <code>
+       atomicAnd
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes (old &amp; val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+     </p>
+     <p>
+      ----------------------------------------------------------------------—* The supported types for
+      <code>
+       atomicAnd
+      </code>
+      are: singed/unsigned integer 8/16/32/64 bits Cuda natively supports
+      <code>
+       sint32
+      </code>
+      ,
+      <code>
+       uint32
+      </code>
+      ,
+      <code>
+       sint64
+      </code>
+      ,
+      <code>
+       uint64
+      </code>
+      .
+     </p>
+     <dl class="params">
+      <dt>
+       Parameters
+      </dt>
+      <dd>
+       <table class="params">
+        <tr>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          address
+         </td>
+         <td>
+          The address of old value in global or shared memory
+         </td>
         </tr>
         <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          val
+         </td>
+         <td>
+          The value to be computed
+         </td>
         </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Overloads for <code>atomicAdd</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes (old + val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. </p>
-<p>----------------------------------------------------------------------&mdash;* The supported cudf types for <code>atomicAdd</code> are: int8_t, int16_t, int32_t, int64_t, float, double, cudf::date32, cudf::date64, cudf::timestamp, cudf::category, cudf::nvstring_category, cudf::bool8 Cuda natively supports <code>sint32</code>, <code>uint32</code>, <code>uint64</code>, <code>float</code>, <code>double. (</code>double<code>is supported after Pascal). Other types are implemented by</code>atomicCAS`.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>The address of old value in global or shared memory </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>The value to be added</td></tr>
-  </table>
-  </dd>
-</dl>
-<h2><a class="anchor" id="autotoc_md166"></a>
-@returns The old value at &lt;tt&gt;address&lt;/tt&gt;</h2>
-
-</div>
-</div>
-<a id="aa75a45ac643c6ef46bcadb77e26ecc27"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa75a45ac643c6ef46bcadb77e26ecc27">&#9670;&nbsp;</a></span>atomicAnd()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , typename std::enable_if_t&lt; std::is_integral&lt; T &gt;::value, T &gt; *  = nullptr&gt; </div>
-      <table class="memname">
+       </table>
+      </dd>
+     </dl>
+     <h2>
+      <a class="anchor" id="autotoc_md170">
+      </a>
+      @returns The old value at &lt;tt&gt;address&lt;/tt&gt;
+     </h2>
+    </div>
+   </div>
+   <a id="a518e0df2f4f62ab1fba12fdf5a24dd23">
+   </a>
+   <h2 class="memtitle">
+    <span class="permalink">
+     <a href="#a518e0df2f4f62ab1fba12fdf5a24dd23">
+      ◆
+     </a>
+    </span>
+    atomicCAS()
+   </h2>
+   <div class="memitem">
+    <div class="memproto">
+     <div class="memtemplate">
+      template&lt;typename T &gt;
+     </div>
+     <table class="memname">
+      <tr>
+       <td class="memname">
+        __forceinline__ __device__ T atomicCAS
+       </td>
+       <td>
+        (
+       </td>
+       <td class="paramtype">
+        T *
+       </td>
+       <td class="paramname">
+        <em>
+         address
+        </em>
+        ,
+       </td>
+      </tr>
+      <tr>
+       <td class="paramkey">
+       </td>
+       <td>
+       </td>
+       <td class="paramtype">
+        T
+       </td>
+       <td class="paramname">
+        <em>
+         compare
+        </em>
+        ,
+       </td>
+      </tr>
+      <tr>
+       <td class="paramkey">
+       </td>
+       <td>
+       </td>
+       <td class="paramtype">
+        T
+       </td>
+       <td class="paramname">
+        <em>
+         val
+        </em>
+       </td>
+      </tr>
+      <tr>
+       <td>
+       </td>
+       <td>
+        )
+       </td>
+       <td>
+       </td>
+       <td>
+       </td>
+      </tr>
+     </table>
+    </div>
+    <div class="memdoc">
+     <p>
+      Overloads for
+      <code>
+       atomicCAS
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes (
+      <code>
+       old
+      </code>
+      ==
+      <code>
+       compare
+      </code>
+      ?
+      <code>
+       val
+      </code>
+      :
+      <code>
+       old
+      </code>
+      ), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+     </p>
+     <p>
+      -----------------------------------------------------------------------—* The supported cudf types for
+      <code>
+       atomicCAS
+      </code>
+      are: int8_t, int16_t, int32_t, int64_t, float, double, cudf::date32, cudf::date64, cudf::timestamp, cudf::category, cudf::nvstring_category cudf::bool8 Cuda natively supports
+      <code>
+       sint32
+      </code>
+      ,
+      <code>
+       uint32
+      </code>
+      ,
+      <code>
+       uint64
+      </code>
+      . Other types are implemented by
+      <code>
+       atomicCAS
+      </code>
+      .
+     </p>
+     <dl class="params">
+      <dt>
+       Parameters
+      </dt>
+      <dd>
+       <table class="params">
         <tr>
-          <td class="memname">__forceinline__ __device__ T atomicAnd </td>
-          <td>(</td>
-          <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>address</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>val</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Overloads for <code>atomicAnd</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes (old &amp; val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. </p>
-<p>----------------------------------------------------------------------&mdash;* The supported types for <code>atomicAnd</code> are: singed/unsigned integer 8/16/32/64 bits Cuda natively supports <code>sint32</code>, <code>uint32</code>, <code>sint64</code>, <code>uint64</code>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>The address of old value in global or shared memory </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>The value to be computed</td></tr>
-  </table>
-  </dd>
-</dl>
-<h2><a class="anchor" id="autotoc_md170"></a>
-@returns The old value at &lt;tt&gt;address&lt;/tt&gt;</h2>
-
-</div>
-</div>
-<a id="a518e0df2f4f62ab1fba12fdf5a24dd23"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a518e0df2f4f62ab1fba12fdf5a24dd23">&#9670;&nbsp;</a></span>atomicCAS()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">__forceinline__ __device__ T atomicCAS </td>
-          <td>(</td>
-          <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>address</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>compare</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>val</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Overloads for <code>atomicCAS</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes (<code>old</code> == <code>compare</code> ? <code>val</code> : <code>old</code>), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. </p>
-<p>-----------------------------------------------------------------------&mdash;* The supported cudf types for <code>atomicCAS</code> are: int8_t, int16_t, int32_t, int64_t, float, double, cudf::date32, cudf::date64, cudf::timestamp, cudf::category, cudf::nvstring_category cudf::bool8 Cuda natively supports <code>sint32</code>, <code>uint32</code>, <code>uint64</code>. Other types are implemented by <code>atomicCAS</code>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>The address of old value in global or shared memory </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">compare</td><td>The value to be compared </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>The value to be computed</td></tr>
-  </table>
-  </dd>
-</dl>
-<h2><a class="anchor" id="autotoc_md169"></a>
-@returns The old value at &lt;tt&gt;address&lt;/tt&gt;</h2>
-
-</div>
-</div>
-<a id="a74f405a5c950c13eb35cb9ec5144c942"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a74f405a5c950c13eb35cb9ec5144c942">&#9670;&nbsp;</a></span>atomicMax()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">__forceinline__ __device__ T atomicMax </td>
-          <td>(</td>
-          <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>address</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>val</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Overloads for <code>atomicMax</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes the maximum of old and val, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. </p>
-<p>----------------------------------------------------------------------&mdash;* The supported cudf types for <code>atomicMax</code> are: int8_t, int16_t, int32_t, int64_t, float, double, cudf::date32, cudf::date64, cudf::timestamp, cudf::category, cudf::nvstring_category Cuda natively supports <code>sint32</code>, <code>uint32</code>, <code>sint64</code>, <code>uint64</code>. Other types are implemented by <code>atomicCAS</code>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>The address of old value in global or shared memory </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>The value to be computed</td></tr>
-  </table>
-  </dd>
-</dl>
-<h2><a class="anchor" id="autotoc_md168"></a>
-@returns The old value at &lt;tt&gt;address&lt;/tt&gt;</h2>
-
-</div>
-</div>
-<a id="a7ecae095df404a4cb13e7245eaa7fa0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ecae095df404a4cb13e7245eaa7fa0c">&#9670;&nbsp;</a></span>atomicMin()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">__forceinline__ __device__ T atomicMin </td>
-          <td>(</td>
-          <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>address</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>val</em>&#160;</td>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          address
+         </td>
+         <td>
+          The address of old value in global or shared memory
+         </td>
         </tr>
         <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Overloads for <code>atomicMin</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes the minimum of old and val, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. </p>
-<p>----------------------------------------------------------------------&mdash;* The supported cudf types for <code>atomicMin</code> are: int8_t, int16_t, int32_t, int64_t, float, double, cudf::date32, cudf::date64, cudf::timestamp, cudf::category, cudf::nvstring_category Cuda natively supports <code>sint32</code>, <code>uint32</code>, <code>sint64</code>, <code>uint64</code>. Other types are implemented by <code>atomicCAS</code>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>The address of old value in global or shared memory </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>The value to be computed</td></tr>
-  </table>
-  </dd>
-</dl>
-<h2><a class="anchor" id="autotoc_md167"></a>
-@returns The old value at &lt;tt&gt;address&lt;/tt&gt;</h2>
-
-</div>
-</div>
-<a id="a82b1ef76ea95088682c36d9515dc7268"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a82b1ef76ea95088682c36d9515dc7268">&#9670;&nbsp;</a></span>atomicOr()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , typename std::enable_if_t&lt; std::is_integral&lt; T &gt;::value, T &gt; *  = nullptr&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">__forceinline__ __device__ T atomicOr </td>
-          <td>(</td>
-          <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>address</em>, </td>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          compare
+         </td>
+         <td>
+          The value to be compared
+         </td>
         </tr>
         <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>val</em>&#160;</td>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          val
+         </td>
+         <td>
+          The value to be computed
+         </td>
+        </tr>
+       </table>
+      </dd>
+     </dl>
+     <h2>
+      <a class="anchor" id="autotoc_md169">
+      </a>
+      @returns The old value at &lt;tt&gt;address&lt;/tt&gt;
+     </h2>
+    </div>
+   </div>
+   <a id="a74f405a5c950c13eb35cb9ec5144c942">
+   </a>
+   <h2 class="memtitle">
+    <span class="permalink">
+     <a href="#a74f405a5c950c13eb35cb9ec5144c942">
+      ◆
+     </a>
+    </span>
+    atomicMax()
+   </h2>
+   <div class="memitem">
+    <div class="memproto">
+     <div class="memtemplate">
+      template&lt;typename T &gt;
+     </div>
+     <table class="memname">
+      <tr>
+       <td class="memname">
+        __forceinline__ __device__ T atomicMax
+       </td>
+       <td>
+        (
+       </td>
+       <td class="paramtype">
+        T *
+       </td>
+       <td class="paramname">
+        <em>
+         address
+        </em>
+        ,
+       </td>
+      </tr>
+      <tr>
+       <td class="paramkey">
+       </td>
+       <td>
+       </td>
+       <td class="paramtype">
+        T
+       </td>
+       <td class="paramname">
+        <em>
+         val
+        </em>
+       </td>
+      </tr>
+      <tr>
+       <td>
+       </td>
+       <td>
+        )
+       </td>
+       <td>
+       </td>
+       <td>
+       </td>
+      </tr>
+     </table>
+    </div>
+    <div class="memdoc">
+     <p>
+      Overloads for
+      <code>
+       atomicMax
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes the maximum of old and val, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+     </p>
+     <p>
+      ----------------------------------------------------------------------—* The supported cudf types for
+      <code>
+       atomicMax
+      </code>
+      are: int8_t, int16_t, int32_t, int64_t, float, double, cudf::date32, cudf::date64, cudf::timestamp, cudf::category, cudf::nvstring_category Cuda natively supports
+      <code>
+       sint32
+      </code>
+      ,
+      <code>
+       uint32
+      </code>
+      ,
+      <code>
+       sint64
+      </code>
+      ,
+      <code>
+       uint64
+      </code>
+      . Other types are implemented by
+      <code>
+       atomicCAS
+      </code>
+      .
+     </p>
+     <dl class="params">
+      <dt>
+       Parameters
+      </dt>
+      <dd>
+       <table class="params">
+        <tr>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          address
+         </td>
+         <td>
+          The address of old value in global or shared memory
+         </td>
         </tr>
         <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          val
+         </td>
+         <td>
+          The value to be computed
+         </td>
         </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Overloads for <code>atomicOr</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes (old | val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. </p>
-<p>----------------------------------------------------------------------&mdash;* The supported types for <code>atomicOr</code> are: singed/unsigned integer 8/16/32/64 bits Cuda natively supports <code>sint32</code>, <code>uint32</code>, <code>sint64</code>, <code>uint64</code>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>The address of old value in global or shared memory </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>The value to be computed</td></tr>
-  </table>
-  </dd>
-</dl>
-<h2><a class="anchor" id="autotoc_md171"></a>
-@returns The old value at &lt;tt&gt;address&lt;/tt&gt;</h2>
-
-</div>
-</div>
-<a id="a4383ce29404055418f85f9e81f34afde"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4383ce29404055418f85f9e81f34afde">&#9670;&nbsp;</a></span>atomicXor()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , typename std::enable_if_t&lt; std::is_integral&lt; T &gt;::value, T &gt; *  = nullptr&gt; </div>
-      <table class="memname">
+       </table>
+      </dd>
+     </dl>
+     <h2>
+      <a class="anchor" id="autotoc_md168">
+      </a>
+      @returns The old value at &lt;tt&gt;address&lt;/tt&gt;
+     </h2>
+    </div>
+   </div>
+   <a id="a7ecae095df404a4cb13e7245eaa7fa0c">
+   </a>
+   <h2 class="memtitle">
+    <span class="permalink">
+     <a href="#a7ecae095df404a4cb13e7245eaa7fa0c">
+      ◆
+     </a>
+    </span>
+    atomicMin()
+   </h2>
+   <div class="memitem">
+    <div class="memproto">
+     <div class="memtemplate">
+      template&lt;typename T &gt;
+     </div>
+     <table class="memname">
+      <tr>
+       <td class="memname">
+        __forceinline__ __device__ T atomicMin
+       </td>
+       <td>
+        (
+       </td>
+       <td class="paramtype">
+        T *
+       </td>
+       <td class="paramname">
+        <em>
+         address
+        </em>
+        ,
+       </td>
+      </tr>
+      <tr>
+       <td class="paramkey">
+       </td>
+       <td>
+       </td>
+       <td class="paramtype">
+        T
+       </td>
+       <td class="paramname">
+        <em>
+         val
+        </em>
+       </td>
+      </tr>
+      <tr>
+       <td>
+       </td>
+       <td>
+        )
+       </td>
+       <td>
+       </td>
+       <td>
+       </td>
+      </tr>
+     </table>
+    </div>
+    <div class="memdoc">
+     <p>
+      Overloads for
+      <code>
+       atomicMin
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes the minimum of old and val, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+     </p>
+     <p>
+      ----------------------------------------------------------------------—* The supported cudf types for
+      <code>
+       atomicMin
+      </code>
+      are: int8_t, int16_t, int32_t, int64_t, float, double, cudf::date32, cudf::date64, cudf::timestamp, cudf::category, cudf::nvstring_category Cuda natively supports
+      <code>
+       sint32
+      </code>
+      ,
+      <code>
+       uint32
+      </code>
+      ,
+      <code>
+       sint64
+      </code>
+      ,
+      <code>
+       uint64
+      </code>
+      . Other types are implemented by
+      <code>
+       atomicCAS
+      </code>
+      .
+     </p>
+     <dl class="params">
+      <dt>
+       Parameters
+      </dt>
+      <dd>
+       <table class="params">
         <tr>
-          <td class="memname">__forceinline__ __device__ T atomicXor </td>
-          <td>(</td>
-          <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>address</em>, </td>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          address
+         </td>
+         <td>
+          The address of old value in global or shared memory
+         </td>
         </tr>
         <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>val</em>&#160;</td>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          val
+         </td>
+         <td>
+          The value to be computed
+         </td>
+        </tr>
+       </table>
+      </dd>
+     </dl>
+     <h2>
+      <a class="anchor" id="autotoc_md167">
+      </a>
+      @returns The old value at &lt;tt&gt;address&lt;/tt&gt;
+     </h2>
+    </div>
+   </div>
+   <a id="a82b1ef76ea95088682c36d9515dc7268">
+   </a>
+   <h2 class="memtitle">
+    <span class="permalink">
+     <a href="#a82b1ef76ea95088682c36d9515dc7268">
+      ◆
+     </a>
+    </span>
+    atomicOr()
+   </h2>
+   <div class="memitem">
+    <div class="memproto">
+     <div class="memtemplate">
+      template&lt;typename T , typename std::enable_if_t&lt; std::is_integral&lt; T &gt;::value, T &gt; *  = nullptr&gt;
+     </div>
+     <table class="memname">
+      <tr>
+       <td class="memname">
+        __forceinline__ __device__ T atomicOr
+       </td>
+       <td>
+        (
+       </td>
+       <td class="paramtype">
+        T *
+       </td>
+       <td class="paramname">
+        <em>
+         address
+        </em>
+        ,
+       </td>
+      </tr>
+      <tr>
+       <td class="paramkey">
+       </td>
+       <td>
+       </td>
+       <td class="paramtype">
+        T
+       </td>
+       <td class="paramname">
+        <em>
+         val
+        </em>
+       </td>
+      </tr>
+      <tr>
+       <td>
+       </td>
+       <td>
+        )
+       </td>
+       <td>
+       </td>
+       <td>
+       </td>
+      </tr>
+     </table>
+    </div>
+    <div class="memdoc">
+     <p>
+      Overloads for
+      <code>
+       atomicOr
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes (old | val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+     </p>
+     <p>
+      ----------------------------------------------------------------------—* The supported types for
+      <code>
+       atomicOr
+      </code>
+      are: singed/unsigned integer 8/16/32/64 bits Cuda natively supports
+      <code>
+       sint32
+      </code>
+      ,
+      <code>
+       uint32
+      </code>
+      ,
+      <code>
+       sint64
+      </code>
+      ,
+      <code>
+       uint64
+      </code>
+      .
+     </p>
+     <dl class="params">
+      <dt>
+       Parameters
+      </dt>
+      <dd>
+       <table class="params">
+        <tr>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          address
+         </td>
+         <td>
+          The address of old value in global or shared memory
+         </td>
         </tr>
         <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          val
+         </td>
+         <td>
+          The value to be computed
+         </td>
         </tr>
-      </table>
-</div><div class="memdoc">
+       </table>
+      </dd>
+     </dl>
+     <h2>
+      <a class="anchor" id="autotoc_md171">
+      </a>
+      @returns The old value at &lt;tt&gt;address&lt;/tt&gt;
+     </h2>
+    </div>
+   </div>
+   <a id="a4383ce29404055418f85f9e81f34afde">
+   </a>
+   <h2 class="memtitle">
+    <span class="permalink">
+     <a href="#a4383ce29404055418f85f9e81f34afde">
+      ◆
+     </a>
+    </span>
+    atomicXor()
+   </h2>
+   <div class="memitem">
+    <div class="memproto">
+     <div class="memtemplate">
+      template&lt;typename T , typename std::enable_if_t&lt; std::is_integral&lt; T &gt;::value, T &gt; *  = nullptr&gt;
+     </div>
+     <table class="memname">
+      <tr>
+       <td class="memname">
+        __forceinline__ __device__ T atomicXor
+       </td>
+       <td>
+        (
+       </td>
+       <td class="paramtype">
+        T *
+       </td>
+       <td class="paramname">
+        <em>
+         address
+        </em>
+        ,
+       </td>
+      </tr>
+      <tr>
+       <td class="paramkey">
+       </td>
+       <td>
+       </td>
+       <td class="paramtype">
+        T
+       </td>
+       <td class="paramname">
+        <em>
+         val
+        </em>
+       </td>
+      </tr>
+      <tr>
+       <td>
+       </td>
+       <td>
+        )
+       </td>
+       <td>
+       </td>
+       <td>
+       </td>
+      </tr>
+     </table>
+    </div>
+    <div class="memdoc">
+     <p>
+      Overloads for
+      <code>
+       atomicXor
+      </code>
+      reads the
+      <code>
+       old
+      </code>
+      located at the
+      <code>
+       address
+      </code>
+      in global or shared memory, computes (old ^ val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction.
+     </p>
+     <p>
+      ----------------------------------------------------------------------—* The supported types for
+      <code>
+       atomicXor
+      </code>
+      are: singed/unsigned integer 8/16/32/64 bits Cuda natively supports
+      <code>
+       sint32
+      </code>
+      ,
+      <code>
+       uint32
+      </code>
+      ,
+      <code>
+       sint64
+      </code>
+      ,
+      <code>
+       uint64
+      </code>
+      .
+     </p>
+     <dl class="params">
+      <dt>
+       Parameters
+      </dt>
+      <dd>
+       <table class="params">
+        <tr>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          address
+         </td>
+         <td>
+          The address of old value in global or shared memory
+         </td>
+        </tr>
+        <tr>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          val
+         </td>
+         <td>
+          The value to be computed
+         </td>
+        </tr>
+       </table>
+      </dd>
+     </dl>
+     <h2>
+      <a class="anchor" id="autotoc_md172">
+      </a>
+      @returns The old value at &lt;tt&gt;address&lt;/tt&gt;
+     </h2>
+    </div>
+   </div>
+  </div>
+  <!-- contents -->
+  <!-- start footer part -->
+  <hr class="footer"/>
+  <address class="footer">
+   <small>
+    Generated by
+    <a href="http://www.doxygen.org/index.html">
+     <img alt="doxygen" class="footer" src="doxygen.png"/>
+    </a>
+    1.8.16
+   </small>
+  </address>
+  <script defer id="rapids-selector-js">
+   var hiddenClassName = "rapids-selector--hidden";
+var selectorContainers = document.querySelectorAll(
+  ".rapids-selector__container"
+);
 
-<p>Overloads for <code>atomicXor</code> reads the <code>old</code> located at the <code>address</code> in global or shared memory, computes (old ^ val), and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. </p>
-<p>----------------------------------------------------------------------&mdash;* The supported types for <code>atomicXor</code> are: singed/unsigned integer 8/16/32/64 bits Cuda natively supports <code>sint32</code>, <code>uint32</code>, <code>sint64</code>, <code>uint64</code>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>The address of old value in global or shared memory </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>The value to be computed</td></tr>
-  </table>
-  </dd>
-</dl>
-<h2><a class="anchor" id="autotoc_md172"></a>
-@returns The old value at &lt;tt&gt;address&lt;/tt&gt;</h2>
+/**
+ * Closes all open menus. If a click handler event argument is given,
+ * that event target's associated menu will not be closed.
+ * @param {*} e - click event
+ */
+function closeOpenedMenusExcept(e) {
+  e = e || false;
+  for (var i = 0; i < selectorContainers.length; i++) {
+    var selectorContainer = selectorContainers[i];
+    if (e && e.target.parentNode === selectorContainer) continue;
+    selectorContainer.classList.add(hiddenClassName);
+  }
+}
 
-</div>
-</div>
-</div><!-- contents -->
-<!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.16
-</small></address>
-</body>
+/**
+ * Toggles the menu associated with clicked selector
+ * @param {*} container - selector container element
+ */
+function toggleMenu(e) {
+  var container = e.target.parentNode;
+  container.classList.toggle(hiddenClassName);
+}
+
+/**
+ * Returns true if the click event is outside of any of the
+ * selector containers.
+ * @param {*} e - click event
+ */
+function clickIsOutsideOfSelectContainers(e) {
+  var targetEl = e.target;
+
+  do {
+    for (var i = 0; i < selectorContainers.length; i++) {
+      var selector = selectorContainers[i];
+      if (targetEl === selector) return false;
+    }
+    targetEl = targetEl.parentNode;
+  } while (targetEl);
+
+  return true;
+}
+
+/**
+ * Returns true if any of the given elements are clicked
+ * @param {*} e - click event
+ * @param {*} elements - array of elements from document.querySelectorAll
+ */
+function anyElementIsClicked(e, elements) {
+  for (var i = 0; i < elements.length; i++) {
+    var element = elements[i];
+    if (element === e.target) return true;
+  }
+  return false;
+}
+
+/**
+ * Returns true if a selector is clicked
+ * @param {*} e - click event
+ */
+function selectorIsClicked(e) {
+  return anyElementIsClicked(
+    e,
+    document.querySelectorAll(".rapids-selector__selected")
+  );
+}
+
+/**
+ * Returns true if the already selected option is clicked
+ * @param {*} e - click event
+ */
+function selectedOptionIsClicked(e) {
+  return anyElementIsClicked(
+    e,
+    document.querySelectorAll(".rapids-selector__menu-item--selected")
+  );
+}
+
+// Calculate height for dropdown animations
+for (var i = 0; i < selectorContainers.length; i++) {
+  var selector = selectorContainers[i];
+  var menu = selector.querySelector(".rapids-selector__menu");
+  menu.style.height = menu.scrollHeight + "px";
+}
+
+// Selectors click handler
+document.addEventListener("click", function(e) {
+  // Open/close menus on selector click
+  if (selectorIsClicked(e)) {
+    closeOpenedMenusExcept(e);
+    toggleMenu(e);
+  }
+
+  // Close menus on outside click
+  if (clickIsOutsideOfSelectContainers(e)) {
+    closeOpenedMenusExcept();
+  }
+
+  // Prevent navigation and close menu when selected option is clicked
+  if (selectedOptionIsClicked(e)) {
+    e.preventDefault();
+    closeOpenedMenusExcept();
+  }
+});
+  </script>
+ </body>
 </html>
