@@ -29,8 +29,8 @@ Operations
 
 Phase | Start | End | Duration
 -- | -- | -- | --
-Development | Thu, Jan 16th | Thu, Mar 5th | 34 days
-Burn Down | Fri, Mar 6th | Fri, Mar 13th | 6 days
-Code Freeze/Testing | Mon, Mar 16th | Wed, Mar 18th | 3 days
-Release | Thu, Mar 19th | Thu, Mar 19th | 1 day
+Development | Thu, Jan 16th | Fri, Mar 6th | 35 days
+Burn Down | Mon, Mar 9th | Tue, Mar 24th | 12 days
+Code Freeze/Testing | Wed, Mar 25th | Mon, Mar 30th | 4 days
+Release | Thu, Mar 31st | Thu, Mar 31st | 1 day
 
