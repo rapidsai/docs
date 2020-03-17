@@ -11,7 +11,6 @@ lib_map_path = os.path.join(os.path.dirname(__file__), "lib_map.json")
 rapids_css_path = os.path.join(os.path.dirname(__file__), "rapids.css")
 rapids_js_path = os.path.join(os.path.dirname(__file__), "rapids.js")
 
-docs_home = "https://docs.rapids.ai/api"
 versions_dict = {
     "nightly": nightly_version,
     "stable": nightly_version - 1,
@@ -57,7 +56,7 @@ def create_home_container(soup):
     """
     container = soup.new_tag("div", attrs={"class": "rapids-home-container"})
     home_btn = soup.new_tag("a", attrs={"class": "rapids-home-container__home-btn"})
-    home_btn["href"] = docs_home
+    home_btn["href"] = "/api"
     home_btn.string = "Home"
     container.append(home_btn)
     return container
