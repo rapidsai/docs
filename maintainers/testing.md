@@ -29,7 +29,7 @@ Overall goal, follow the open source ecosystem for infrastructure choices
 ### Jenkins
 Open source project for CI/CD and general automation that is very extensible and well adopted
 
-[gpuCI]({{ site.url }}{{ site.baseurl }}/maintainers/gpuci) is built on top of Jenkins with a variety of plugins.
+[gpuCI]({% link maintainers/gpuci.md %}) is built on top of Jenkins with a variety of plugins.
 
 ### GitHub
 
@@ -78,7 +78,7 @@ Open source project for CI/CD and general automation that is very extensible and
 
 ## Datasets
 
-- Many tests depend on the presence of specific datasets in order to properly verify code correctness. See [datasets]({{ site.url }}{{ site.baseurl }}/maintainers/datasets) for more details.
+- Many tests depend on the presence of specific datasets in order to properly verify code correctness. See [datasets]({% link maintainers/datasets.md %}) for more details.
 
 ## Integration / Workflow Testing and Benchmarking
 

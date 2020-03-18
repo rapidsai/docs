@@ -25,8 +25,8 @@ Operations
 
 ### See also
 
-* [Hotfix versioning]({{ site.url }}{{ site.baseurl }}/resources/versions)
-* [Major and minor releases]({{ site.url }}{{ site.baseurl }}/releases/process)
+* [Hotfix versioning]({% link resources/versions.md %})
+* [Major and minor releases]({% link releases/process.md %})
 
 ## Hotfixes
 
@@ -70,12 +70,12 @@ Developers
   1. Change the minimal amount of code required
   2. Update related documentation and unit tests
   3. It is acceptable to implement a quick fix and open a new issue for a more in depth solution
-4. Once complete, create a [pull request]({{ site.url }}{{ site.baseurl }}/contributing/prs) targeting `master`
+4. Once complete, create a [pull request]({% link contributing/prs.md %}) targeting `master`
 5. Notify the project lead
 
 Project Leads
 {: .label .label-blue}
-1. During [triage]({{ site.url }}{{ site.baseurl }}/releases/triage), identify potential hotfixes
+1. During [triage]({% link releases/triage.md %}), identify potential hotfixes
 2. Ensure that the [hotfix criteria](#criteria) is met
 3. Assign the issue and track its progress
 4. Notify Operations that a hotfix is being worked on

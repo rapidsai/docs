@@ -14,16 +14,18 @@ both "stable" and "nightly" versions. The description of each is below to help
 select the docs that fit your needs.
 {: .fs-6 .fw-300 }
 <dl>
-  <dt>Stable</dt>
+  <dt>STABLE</dt>
   <dd>Current release docs; considered to be stable.</dd>
-  <dt>Nightly</dt>
+  <dt>NIGHTLY</dt>
   <dd>Work-in-progress release docs; considered to be unstable and released nightly.</dd>
+  <dt>LEGACY</dt>
+  <dd>Previous release docs; available for reference.</dd>
 </dl>
 
 ## RAPIDS APIs
 
-{% include api-docs.html data=site.data.apis %}
+{% include api-docs.html data=site.data.docs.apis %}
 
 ## RAPIDS Libraries
 
-{% include api-docs.html data=site.data.libs %}
+{% include api-docs.html data=site.data.docs.libs %}
