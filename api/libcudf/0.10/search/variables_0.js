@@ -1,0 +1,10 @@
+var searchData=
+[
+  ['_5fdata_1676',['_data',['../classcudf_1_1detail_1_1column__device__view__base.html#a4d268f4ba99b4149919c9317e9f94038',1,'cudf::detail::column_device_view_base::_data()'],['../classcudf_1_1detail_1_1column__view__base.html#acfe73a38fa04f01be62beb34b2a3f87a',1,'cudf::detail::column_view_base::_data()']]],
+  ['_5fnull_5fcount_1677',['_null_count',['../classcudf_1_1detail_1_1column__device__view__base.html#a7fff9f702b5918553718c43a9a113e45',1,'cudf::detail::column_device_view_base::_null_count()'],['../classcudf_1_1detail_1_1column__view__base.html#abca5b3f93d8cef425990ed6907f25841',1,'cudf::detail::column_view_base::_null_count()']]],
+  ['_5fnull_5fmask_1678',['_null_mask',['../classcudf_1_1detail_1_1column__device__view__base.html#a0f81eaf40c6d60198cffd07c2161a3a8',1,'cudf::detail::column_device_view_base::_null_mask()'],['../classcudf_1_1detail_1_1column__view__base.html#a47cb87ff8d6c42393ad44aa1adb9fa9a',1,'cudf::detail::column_view_base::_null_mask()']]],
+  ['_5fnum_5fchildren_1679',['_num_children',['../classcudf_1_1column__device__view.html#a6f5a8cb3ec321d40009930a6c88bbb9d',1,'cudf::column_device_view']]],
+  ['_5foffset_1680',['_offset',['../classcudf_1_1detail_1_1column__device__view__base.html#a10de5ae9c53bfcd098e50e8157970586',1,'cudf::detail::column_device_view_base::_offset()'],['../classcudf_1_1detail_1_1column__view__base.html#a1ac97d1e5a49bb5a297c9041d4191d75',1,'cudf::detail::column_view_base::_offset()']]],
+  ['_5fsize_1681',['_size',['../classcudf_1_1detail_1_1column__device__view__base.html#a7c12c0021cd00ee452491e107f8ba5d0',1,'cudf::detail::column_device_view_base::_size()'],['../classcudf_1_1detail_1_1column__view__base.html#a6c07b0117a24ee9af3abd0ee4c309b73',1,'cudf::detail::column_view_base::_size()']]],
+  ['_5ftype_1682',['_type',['../classcudf_1_1detail_1_1column__device__view__base.html#a1769f145e660bfa638576f3bcc2ce0b0',1,'cudf::detail::column_device_view_base::_type()'],['../classcudf_1_1detail_1_1column__view__base.html#aae4ea5f9998c7c4a991ef9a81111c7b5',1,'cudf::detail::column_view_base::_type()']]]
+];
