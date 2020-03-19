@@ -71,8 +71,8 @@ An excerpt of the generated JSON file is shown below:
 - A _Home_ button that links to https://docs.rapids.ai/api
 - A _library_ selector that enables navigation to different RAPIDS libraries
 - A _version_ selector that enables navigation to the different versions of each RAPIDS library
-- A `style` tag containing the contents of [rapids.css](rapids.css) in the file's `head`
-- A `script` tag containing the contents of [rapids.js](rapids.js) at the end the file's `body`
+- A `link` tag that points to [custom.css](/assets/css/custom.css) in the file's `head`
+- A `script` tag that points to [custom.js](/assets/js/custom.js) at the end the file's `body`
 - A `link` tag enabling [FontAwesome](https://fontawesome.com/) in the file's `head` (only for Doxygen files)
 
 `customize_doc.py` can be safely run multiple times on a single file without adding duplicate elements to the page.
