@@ -162,7 +162,7 @@ def create_selector(soup, options):
 
 def create_script_tag(soup):
     """
-    Creates and returns a script tag with the contents of rapids.js inside
+    Creates and returns a script tag that points to custom.js
     """
     script_tag = soup.new_tag(
         "script", defer=None, id=script_tag_id, src="/assets/js/custom.js"
