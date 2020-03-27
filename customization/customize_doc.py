@@ -162,23 +162,21 @@ def create_selector(soup, options):
 
 def create_script_tag(soup):
     """
-    Creates and returns a script tag with the contents of rapids.js inside
+    Creates and returns a script tag that points to custom.js
     """
-    with open(rapids_js_path) as fp:
-        js = fp.read()
-    script_tag = soup.new_tag("script", defer=None, id=script_tag_id)
-    script_tag.string = js
+    script_tag = soup.new_tag(
+        "script", defer=None, id=script_tag_id, src="/assets/js/custom.js"
+    )
     return script_tag
 
 
-def create_style_tag(soup):
+def create_css_link_tag(soup):
     """
-    Creates and returns a style tag with the contents of rapids.css inside
+    Creates and returns a link tag that points to custom.css
     """
-    with open(rapids_css_path) as fp:
-        css = fp.read()
-    script_tag = soup.new_tag("style", id=style_tag_id)
-    script_tag.string = css
+    script_tag = soup.new_tag(
+        "link", id=style_tag_id, rel="stylesheet", href="/assets/css/custom.css"
+    )
     return script_tag
 
 
@@ -257,7 +255,7 @@ def main():
     version_selector = create_selector(soup, create_version_options())
     container = soup.new_tag("div", id=f"rapids-{doc_type}-container")
     script_tag = create_script_tag(soup)
-    style_tab = create_style_tag(soup)
+    style_tab = create_css_link_tag(soup)
 
     # Append elements to container
     container.append(home_btn_container)
