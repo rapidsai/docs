@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['initialize_88',['initialize',['../classrmm_1_1Manager.html#a68c4150cc2b88c11c8fc9410949eda77',1,'rmm::Manager']]],
-  ['is_5fequal_89',['is_equal',['../classrmm_1_1mr_1_1device__memory__resource.html#aeaed913bfdd02266062b7880d5bb350f',1,'rmm::mr::device_memory_resource::is_equal()'],['../classrmm_1_1mr_1_1host__memory__resource.html#a2d5e32a5c97753ea04b0645384a182cc',1,'rmm::mr::host_memory_resource::is_equal()']]],
-  ['isinitialized_90',['isInitialized',['../classrmm_1_1Manager.html#a67adeefbaf3b19255cf5ac9afdcdd784',1,'rmm::Manager']]]
+  ['finalize_135',['finalize',['../classrmm_1_1Manager.html#a8270860d9b5672c79749f470f267e740',1,'rmm::Manager']]],
+  ['fixed_5fmultisize_5fmemory_5fresource_136',['fixed_multisize_memory_resource',['../classrmm_1_1mr_1_1fixed__multisize__memory__resource.html#a90bd694c57a454dc770f822d6882b32a',1,'rmm::mr::fixed_multisize_memory_resource']]],
+  ['fixed_5fsize_5fmemory_5fresource_137',['fixed_size_memory_resource',['../classrmm_1_1mr_1_1fixed__size__memory__resource.html#ac25e15734526ef7a80bb41bb3c12403b',1,'rmm::mr::fixed_size_memory_resource']]],
+  ['free_138',['free',['../namespacermm.html#aead4ebd03037672e77e0a04442d651f1',1,'rmm']]]
 ];

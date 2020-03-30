@@ -1,10 +1,7 @@
 var searchData=
 [
-  ['set_5fvalue_41',['set_value',['../classrmm_1_1device__scalar.html#ae4b8e5b4bc61d59c55ea3a2a2577abf9',1,'rmm::device_scalar']]],
-  ['setpointer_42',['setPointer',['../classrmm_1_1LogIt.html#a6bee1f58cdd54d2f4651863c8999d4ca',1,'rmm::LogIt']]],
-  ['size_43',['size',['../structcnmemDevice__t__.html#aa2b1f9393452d7548dd1d801a6915546',1,'cnmemDevice_t_']]],
-  ['stream_44',['stream',['../classrmm_1_1mr_1_1thrust__allocator.html#abf19e367462013c948c074cc9b7eed4b',1,'rmm::mr::thrust_allocator']]],
-  ['streams_45',['streams',['../structcnmemDevice__t__.html#a2c6fb71f221ba9d4af844f7cd929caab',1,'cnmemDevice_t_']]],
-  ['streamsizes_46',['streamSizes',['../structcnmemDevice__t__.html#a735d6a6e1406e1048bbb2e956114639b',1,'cnmemDevice_t_']]],
-  ['supports_5fstreams_47',['supports_streams',['../classrmm_1_1mr_1_1cnmem__memory__resource.html#a5be2df0ff53ce6cb9c494845f5664ee9',1,'rmm::mr::cnmem_memory_resource::supports_streams()'],['../classrmm_1_1mr_1_1cuda__memory__resource.html#af3319eeb30d26e14eb8195e6e159d746',1,'rmm::mr::cuda_memory_resource::supports_streams()'],['../classrmm_1_1mr_1_1device__memory__resource.html#a04598a0abd19625d081a69599360b215',1,'rmm::mr::device_memory_resource::supports_streams()'],['../classrmm_1_1mr_1_1managed__memory__resource.html#ad01bf649a47380eef0bff9fb37d94a23',1,'rmm::mr::managed_memory_resource::supports_streams()']]]
+  ['pinned_5fmemory_5fresource_61',['pinned_memory_resource',['../classrmm_1_1mr_1_1pinned__memory__resource.html',1,'rmm::mr']]],
+  ['pool_5fmemory_5fresource_62',['pool_memory_resource',['../classrmm_1_1mr_1_1pool__memory__resource.html',1,'rmm::mr::pool_memory_resource&lt; Upstream &gt;'],['../classrmm_1_1mr_1_1pool__memory__resource.html#aad99a8039ddd33913576af2307f98fe0',1,'rmm::mr::pool_memory_resource::pool_memory_resource()']]],
+  ['print_63',['print',['../structrmm_1_1mr_1_1detail_1_1block.html#a889973727820b228c54e32f1553d9ece',1,'rmm::mr::detail::block::print()'],['../structrmm_1_1mr_1_1detail_1_1free__list.html#a021e05bd72e93bd3011ebd76e0ab0a9a',1,'rmm::mr::detail::free_list::print()']]],
+  ['ptr_64',['ptr',['../structrmm_1_1mr_1_1detail_1_1block.html#a710ac8fd4586b3617f463744de8ff726',1,'rmm::mr::detail::block']]]
 ];

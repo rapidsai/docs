@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['pinned_5fmemory_5fresource_34',['pinned_memory_resource',['../classrmm_1_1mr_1_1pinned__memory__resource.html',1,'rmm::mr']]]
+  ['new_5fdelete_5fresource_58',['new_delete_resource',['../classrmm_1_1mr_1_1new__delete__resource.html',1,'rmm::mr']]],
+  ['numstreams_59',['numStreams',['../structcnmemDevice__t__.html#a8808c3f31ad0f3b35d0421cd8ed87c9f',1,'cnmemDevice_t_']]]
 ];

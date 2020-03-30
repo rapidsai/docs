@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['new_5fdelete_5fresource_32',['new_delete_resource',['../classrmm_1_1mr_1_1new__delete__resource.html',1,'rmm::mr']]],
-  ['numstreams_33',['numStreams',['../structcnmemDevice__t__.html#a8808c3f31ad0f3b35d0421cd8ed87c9f',1,'cnmemDevice_t_']]]
+  ['managed_54',['MANAGED',['../classrmm_1_1mr_1_1cnmem__memory__resource.html#a53423dac6d804f073c50ee7cbe2f1b08af59a25f2594f469f0bfccad7f8f13744',1,'rmm::mr::cnmem_memory_resource']]],
+  ['managed_5fmemory_5fresource_55',['managed_memory_resource',['../classrmm_1_1mr_1_1managed__memory__resource.html',1,'rmm::mr']]],
+  ['manager_56',['Manager',['../classrmm_1_1Manager.html',1,'rmm']]],
+  ['memory_5fkind_57',['memory_kind',['../classrmm_1_1mr_1_1cnmem__memory__resource.html#a53423dac6d804f073c50ee7cbe2f1b08',1,'rmm::mr::cnmem_memory_resource']]]
 ];
