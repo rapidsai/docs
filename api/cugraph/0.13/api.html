@@ -218,6 +218,11 @@
              Core Number
             </a>
            </li>
+           <li class="toctree-l3">
+            <a class="reference internal" href="#k-truss">
+             K-Truss
+            </a>
+           </li>
           </ul>
          </li>
          <li class="toctree-l2">
@@ -1877,6 +1882,26 @@ number.
               <dd>
                <p>
                 Display the edge list. Compute it if needed.
+               </p>
+               <p>
+                NOTE: If the graph is of type Graph() then the displayed undirected
+edges are the same as displayed by networkx Graph(), but the direction
+could be different i.e. an edge displayed by cugraph as (src, dst)
+could be displayed as (dst, src) by networkx.
+               </p>
+               <p>
+                cugraph.Graph stores symmetrized edgelist internally. For displaying
+undirected edgelist for a Graph the upper trianglar matrix of the
+symmetrized edgelist is returned.
+               </p>
+               <p>
+                networkx.Graph renumbers the input and stores the upper triangle of
+this renumbered input. Since the internal renumbering of networx and
+cugraph is different, the upper triangular matrix of networkx
+renumbered input may not be the same as cugraph’s upper trianglar
+matrix of the symmetrized edgelist. Hence the displayed source and
+destination pairs in both will represent the same edge but node values
+could be swapped.
                </p>
                <dl class="field-list simple">
                 <dt class="field-odd">
@@ -4636,6 +4661,14 @@ identifiers and the corresponding core number values.
             </dd>
            </dl>
           </div>
+          <div class="section" id="k-truss">
+           <h3>
+            K-Truss
+            <a class="headerlink" href="#k-truss" title="Permalink to this headline">
+             ¶
+            </a>
+           </h3>
+          </div>
          </div>
          <div class="section" id="link-analysis">
           <h2>
@@ -4946,6 +4979,50 @@ between vertices based on the relative similarity of their neighbors. If
 first is specified but second is not, or vice versa, an exception will be
 thrown.
              </p>
+             <p>
+              NOTE: If the vertex_pair parameter is not specified then the behavior
+of cugraph.jaccard is different from the behavior of
+networkx.jaccard_coefficient.
+             </p>
+             <p>
+              cugraph.jaccard, in the absence of a specified vertex pair list, will
+use the edges of the graph to construct a vertex pair list and will
+return the jaccard coefficient for those vertex pairs.
+             </p>
+             <p>
+              networkx.jaccard_coefficient, in the absence of a specified vertex
+pair list, will return an upper triangular dense matrix, excluding
+the diagonal as well as vertex pairs that are directly connected
+by an edge in the graph, of jaccard coefficients.  Technically, networkx
+returns a lazy iterator across this upper triangular matrix where
+the actual jaccard coefficient is computed when the iterator is
+dereferenced.  Computing a dense matrix of results is not feasible
+if the number of vertices in the graph is large (100,000 vertices
+would result in 4.9 billion values in that iterator).
+             </p>
+             <p>
+              If your graph is small enough (or you have enough memory and patience)
+you can get the interesting (non-zero) values that are part of the networkx
+solution by doing the following:
+             </p>
+             <div class="doctest highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pairs</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">get_two_hop_neighbors</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">jaccard</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pairs</span><span class="p">)</span>
+</pre>
+              </div>
+             </div>
+             <p>
+              But please remember that cugraph will fill the dataframe with the entire
+solution you request, so you’ll need enough memory to store the 2-hop
+neighborhood dataframe.
+             </p>
              <dl class="field-list">
               <dt class="field-odd">
                Parameters
@@ -4981,7 +5058,9 @@ not already present.
                  <p>
                   A GPU dataframe consisting of two columns representing pairs of
 vertices. If provided, the jaccard coefficient is computed for the
-given vertex pairs, else, it is computed for all vertex pairs.
+given vertex pairs.  If the vertex_pair is not provided then the
+current implementation computes the jaccard coefficient for all
+adjacent vertices in the graph.
                  </p>
                 </dd>
                </dl>
