@@ -32,5 +32,5 @@ Phase | Start | End | Duration
 Development | Thu, Jan 16th | Fri, Mar 6th | 35 days
 Burn Down | Mon, Mar 9th | Tue, Mar 24th | 12 days
 Code Freeze/Testing | Wed, Mar 25th | Mon, Mar 30th | 4 days
-Release | Thu, Mar 31st | Thu, Mar 31st | 1 day
+Release | Tue, Mar 31st | Tue, Mar 31st | 1 day
 
