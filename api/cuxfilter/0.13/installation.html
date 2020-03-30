@@ -21,6 +21,12 @@
   </script>
   <script src="_static/language_data.js">
   </script>
+  <script src="https://unpkg.com/deck.gl@latest/dist.min.js">
+  </script>
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js">
+  </script>
+  <script src="https://unpkg.com/@deck.gl/json@8.1.0/dist.min.js">
+  </script>
   <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js">
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js">
@@ -32,6 +38,7 @@
   <link href="_static/css/theme.css" rel="stylesheet" type="text/css"/>
   <link href="_static/pygments.css" rel="stylesheet" type="text/css"/>
   <link href="_static/custom.css" rel="stylesheet" type="text/css"/>
+  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css" rel="stylesheet" type="text/css"/>
   <link href="_static/jupyter-sphinx.css" rel="stylesheet" type="text/css"/>
   <link href="genindex.html" rel="index" title="Index"/>
   <link href="search.html" rel="search" title="Search"/>
@@ -122,13 +129,18 @@
         </a>
         <ul>
          <li class="toctree-l2">
-          <a class="reference internal" href="#install-cuxfilter-nightly-0-12">
-           Install cuxfilter Nightly(0.12)
+          <a class="reference internal" href="#conda">
+           Conda
           </a>
          </li>
          <li class="toctree-l2">
-          <a class="reference internal" href="#to-run-the-bokeh-server-in-a-jupyter-lab">
-           To run the bokeh server in a jupyter lab
+          <a class="reference internal" href="#docker-container">
+           Docker container
+          </a>
+         </li>
+         <li class="toctree-l2">
+          <a class="reference internal" href="#build-install-from-source">
+           Build/Install from Source
           </a>
          </li>
          <li class="toctree-l2">
@@ -137,8 +149,35 @@
           </a>
           <ul>
            <li class="toctree-l3">
-            <a class="reference internal" href="#download-datasets">
-             Download datasets
+            <a class="reference internal" href="#install-jupyterlab-dependencies">
+             1. Install jupyterlab dependencies
+            </a>
+           </li>
+           <li class="toctree-l3">
+            <a class="reference internal" href="#running-the-server">
+             2.running the server
+            </a>
+           </li>
+           <li class="toctree-l3">
+            <a class="reference internal" href="#libxcomposite-so-1-not-found-error">
+             3. libxcomposite.so.1 not found error
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li class="toctree-l2">
+          <a class="reference internal" href="#download-datasets">
+           Download datasets
+          </a>
+          <ul>
+           <li class="toctree-l3">
+            <a class="reference internal" href="#auto-download-datasets">
+             1. Auto download datasets
+            </a>
+           </li>
+           <li class="toctree-l3">
+            <a class="reference internal" href="#download-manually">
+             2. Download manually
             </a>
            </li>
           </ul>
@@ -240,62 +279,74 @@
            ¶
           </a>
          </h1>
-         <p>
-          NOTE: cuxfilter is in ongoing development and the installation instructions will be updated in the near future.
-         </p>
-         <div class="section" id="install-cuxfilter-nightly-0-12">
+         <div class="section" id="conda">
           <h2>
-           Install cuxfilter Nightly(0.12)
-           <a class="headerlink" href="#install-cuxfilter-nightly-0-12" title="Permalink to this headline">
+           Conda
+           <a class="headerlink" href="#conda" title="Permalink to this headline">
             ¶
            </a>
           </h2>
+          <p>
+           For the most customized way of installing RAPIDS and cuxfilter, visit the selector on the RAPIDS
+           <a class="reference external" href="https://rapids.ai/start.html#rapids-release-selector">
+            Get Started Page
+           </a>
+           .
+          </p>
+          <p>
+           cuxfilter conda example installation:
+          </p>
           <div class="highlight-bash notranslate">
            <div class="highlight">
-            <pre><span></span><span class="c1"># for CUDA 9.2</span>
-conda install -c rapidsai-nightly <span class="nv">cuxfilter</span><span class="o">=</span><span class="m">0</span>.12 <span class="nv">cudatoolkit</span><span class="o">=</span><span class="m">9</span>.2
-
-<span class="c1"># or, for CUDA 10.0</span>
-conda install -c rapidsai-nightly <span class="nv">cuxfilter</span><span class="o">=</span><span class="m">0</span>.12 <span class="nv">cudatoolkit</span><span class="o">=</span><span class="m">10</span>.0
+            <pre><span></span>conda install -c rapidsai -c nvidia -c conda-forge <span class="se">\</span>
+    -c defaults <span class="nv">cuxfilter</span><span class="o">=</span><span class="m">0</span>.12 <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.6 <span class="nv">cudatoolkit</span><span class="o">=</span><span class="m">10</span>.0
 </pre>
            </div>
           </div>
          </div>
-         <div class="section" id="to-run-the-bokeh-server-in-a-jupyter-lab">
+         <div class="section" id="docker-container">
           <h2>
-           To run the bokeh server in a jupyter lab
-           <a class="headerlink" href="#to-run-the-bokeh-server-in-a-jupyter-lab" title="Permalink to this headline">
+           Docker container
+           <a class="headerlink" href="#docker-container" title="Permalink to this headline">
             ¶
            </a>
           </h2>
-          <ol class="arabic simple">
-           <li>
-            <p>
-             Install jupyterlab dependencies
-            </p>
-           </li>
-          </ol>
-          <div class="highlight-bash notranslate">
-           <div class="highlight">
-            <pre><span></span>conda install -c conda-forge jupyterlab
-jupyter labextension install @pyviz/jupyterlab_pyviz
-jupyter labextension install jupyterlab_bokeh
-</pre>
-           </div>
-          </div>
           <p>
-           2.running the server
+           For the most customized way of installing RAPIDS and cuxfilter, visit the selector on the RAPIDS
+           <a class="reference external" href="https://rapids.ai/start.html#rapids-release-selector">
+            Get Started Page
+           </a>
+           .
+          </p>
+          <p>
+           cuxfilter docker example installation:
           </p>
           <div class="highlight-bash notranslate">
            <div class="highlight">
-            <pre><span></span><span class="c1">#enter ip address without http://</span>
-<span class="c1">#current port is the port at which jupyterlab is running</span>
-d.app<span class="o">(</span><span class="nv">notebook_url</span><span class="o">=</span><span class="s1">'ip.addr:current_port'</span><span class="o">)</span>
-<span class="c1"># OR for a separate web app</span>
-d.show<span class="o">(</span><span class="nv">notebook_url</span><span class="o">=</span><span class="s1">'ip.addr:current_port'</span><span class="o">)</span>
+            <pre><span></span><span class="c1"># ex. for CUDA 10.0</span>
+docker pull rapidsai/rapidsai:cuda10.0-runtime-ubuntu16.04
+docker run --gpus all --rm -it -p <span class="m">8888</span>:8888 -p <span class="m">8787</span>:8787 -p <span class="m">8786</span>:8786 <span class="se">\</span>
+    rapidsai/rapidsai:cuda10.0-runtime-ubuntu16.04
+
+<span class="c1"># open http://localhost:8888</span>
 </pre>
            </div>
           </div>
+         </div>
+         <div class="section" id="build-install-from-source">
+          <h2>
+           Build/Install from Source
+           <a class="headerlink" href="#build-install-from-source" title="Permalink to this headline">
+            ¶
+           </a>
+          </h2>
+          <p>
+           See
+           <a class="reference external" href="https://github.com/rapidsai/cuxfilter/blob/branch-0.13/CONTRIBUTING.md#setting-up-your-build-environment">
+            build instructions
+           </a>
+           .
+          </p>
          </div>
          <div class="section" id="troubleshooting">
           <h2>
@@ -304,34 +355,81 @@ d.show<span class="o">(</span><span class="nv">notebook_url</span><span class="o
             ¶
            </a>
           </h2>
-          <ol class="arabic simple">
-           <li>
-            <p>
-             If the await d.preview() throws a libxcomposite.so.1 not found error, execute the following commands:
-            </p>
-           </li>
-          </ol>
-          <div class="highlight-bash notranslate">
-           <div class="highlight">
-            <pre><span></span>apt-get update
-apt-get install libxcomposite1 libxcursor1 libxdamage1 libxfixes3 libxi6 libxrandr2 libxtst6 libcups2 libxss1 libasound2 libpangocairo-1.0-0 libpango-1.0-0 libatk1.0-0 libgtk-3-0 libgdk-pixbuf2.0-0
-</pre>
-           </div>
-          </div>
-          <div class="section" id="download-datasets">
+          <div class="section" id="install-jupyterlab-dependencies">
            <h3>
-            Download datasets
-            <a class="headerlink" href="#download-datasets" title="Permalink to this headline">
+            1. Install jupyterlab dependencies
+            <a class="headerlink" href="#install-jupyterlab-dependencies" title="Permalink to this headline">
              ¶
             </a>
            </h3>
-           <ol class="arabic simple">
-            <li>
-             <p>
-              Auto download datasets
-             </p>
-            </li>
-           </ol>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span>conda install -c conda-forge jupyterlab
+jupyter labextension install @pyviz/jupyterlab_pyviz
+jupyter labextension install jupyterlab_bokeh
+</pre>
+            </div>
+           </div>
+          </div>
+          <div class="section" id="running-the-server">
+           <h3>
+            2.running the server
+            <a class="headerlink" href="#running-the-server" title="Permalink to this headline">
+             ¶
+            </a>
+           </h3>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">#enter ip address without http://</span>
+<span class="c1">#current port is the port at which jupyterlab is running</span>
+d.app<span class="o">(</span><span class="nv">notebook_url</span><span class="o">=</span><span class="s1">'ip.addr:current_port'</span><span class="o">)</span>
+<span class="c1"># OR for a separate web app</span>
+d.show<span class="o">(</span><span class="nv">notebook_url</span><span class="o">=</span><span class="s1">'ip.addr:current_port'</span><span class="o">)</span>
+</pre>
+            </div>
+           </div>
+          </div>
+          <div class="section" id="libxcomposite-so-1-not-found-error">
+           <h3>
+            3. libxcomposite.so.1 not found error
+            <a class="headerlink" href="#libxcomposite-so-1-not-found-error" title="Permalink to this headline">
+             ¶
+            </a>
+           </h3>
+           <p>
+            If using
+            <strong>
+             await d.preview()
+            </strong>
+            throws a
+            <strong>
+             libxcomposite.so.1 not found error
+            </strong>
+            , execute the following commands:
+           </p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span>apt-get update
+apt-get install libxcomposite1 libxcursor1 libxdamage1 libxfixes3 libxi6 libxrandr2 libxtst6 libcups2 libxss1 libasound2 libpangocairo-1.0-0 libpango-1.0-0 libatk1.0-0 libgtk-3-0 libgdk-pixbuf2.0-0
+</pre>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="section" id="download-datasets">
+          <h2>
+           Download datasets
+           <a class="headerlink" href="#download-datasets" title="Permalink to this headline">
+            ¶
+           </a>
+          </h2>
+          <div class="section" id="auto-download-datasets">
+           <h3>
+            1. Auto download datasets
+            <a class="headerlink" href="#auto-download-datasets" title="Permalink to this headline">
+             ¶
+            </a>
+           </h3>
            <p>
             The notebooks inside
             <cite>
@@ -339,13 +437,14 @@ apt-get install libxcomposite1 libxcursor1 libxdamage1 libxfixes3 libxi6 libxran
             </cite>
             already have a check function which verifies whether the example dataset is downloaded, and downloads it if it’s not.
            </p>
-           <ol class="arabic simple" start="2">
-            <li>
-             <p>
-              Download manually
-             </p>
-            </li>
-           </ol>
+          </div>
+          <div class="section" id="download-manually">
+           <h3>
+            2. Download manually
+            <a class="headerlink" href="#download-manually" title="Permalink to this headline">
+             ¶
+            </a>
+           </h3>
            <p>
             While in the directory you want the datasets to be saved, execute the following
            </p>
