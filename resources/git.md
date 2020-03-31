@@ -22,9 +22,9 @@ Developers
 
 ### See also
 
-* [Versioning and Tagging]({{ site.url }}{{ site.baseurl }}/resources/versions)
-* [Hotfix releases]({{ site.url }}{{ site.baseurl }}/releases/hotfix)
-* [Major and minor releases]({{ site.url }}{{ site.baseurl }}/releases/process)
+* [Versioning and Tagging]({% link resources/versions.md %})
+* [Hotfix releases]({% link releases/hotfix.md %})
+* [Major and minor releases]({% link releases/process.md %})
 
 ## Git branching
 
