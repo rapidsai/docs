@@ -84,7 +84,7 @@ Uses the `ci/checks/style.sh` script to determine success or failure
 #### CPU builds
 
 Each PR is built in a container with a matrix of parameters:
-- CUDA 9.2 & 10.0
+- CUDA 10.0, 10.1 & 10.2
 - Python 3.6 & 3.7
 
 This allows for testing compilation against multiple CUDA and Python versions.
@@ -102,7 +102,7 @@ Branch builds occur when a PR is merged and once per day. Currently, which branc
 #### CPU builds
 
 Each branch is built in a container with a matrix of parameters:
-- CUDA 9.2 & 10.0
+- CUDA 10.0, 10.1 & 10.2
 - Python 3.6 & 3.7
 
 These builds can publish nightly conda packages.
@@ -160,7 +160,7 @@ All scripts are executed with the working directory as the project's root direct
 
 - Required: No
 - Job type: PR only
-- Docker: `gpuci/rapidsai-base:cuda9.2-ubuntu16.04-gcc5-py3.6`
+- Docker: `gpuci/rapidsai-base:cuda10.0-ubuntu16.04-gcc5-py3.6`
 
 Executed as a check to see if the changelog was updated. It's up the scripts to determine if the changelog was updated and exit with 0 for success or non-zero for error.
 
@@ -170,7 +170,7 @@ If not provided, a simple check of whether `CHANGELOG.md` has been updated and i
 
 - Required: Yes
 - Job type: PR only
-- Docker: `gpuci/rapidsai-base:cuda9.2-ubuntu16.04-gcc5-py3.6`
+- Docker: `gpuci/rapidsai-base:cuda10.0-ubuntu16.04-gcc5-py3.6`
 - Variables:
   - PR_ID
   - COMMIT_HASH
