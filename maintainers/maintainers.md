@@ -33,4 +33,3 @@ Development | Mon, Mar 9th | Tue, May 5th | 42 days
 Burn Down | Wed, May 6th | Tue, May 12th | 5 days
 Code Freeze/Testing | Wed, May 13th | Tue, May 19th | 5 days
 Release | Wed, May 20th | Wed, May 20th | 1 day
-
