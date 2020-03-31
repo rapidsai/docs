@@ -17,20 +17,21 @@ Get started with our preconfigured RAPIDS demo container, featuring several demo
 
 ### Current Version
 
+#### RAPIDS 0.13 - 31 March 2020
+
+Versions of libraries included in the `0.13` images:
+- `cuDF` [v0.13.0](https://github.com/rapidsai/cudf/tree/v0.13.0), `cuML` [v0.13.0](https://github.com/rapidsai/cuml/tree/v0.13.0), `cuGraph` [v0.13.0](https://github.com/rapidsai/cugraph/tree/v0.13.0), `RMM` [v0.13.0](https://github.com/rapidsai/RMM/tree/v0.13.0), `cuSpatial` [v0.13.0](https://github.com/rapidsai/cuspatial/tree/v0.13.0), `cuxfilter` [v0.13.0](https://github.com/rapidsai/cuxfilter/tree/branch-0.13)
+  - **NOTE:** `cuxfilter` is only available in `runtime` containers
+- `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-0.13-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-0.13)
+
+### Former Version
+
 #### RAPIDS 0.12 - 4 February 2020
 
 Versions of libraries included in the `0.12` images:
 - `cuDF` [v0.12.0](https://github.com/rapidsai/cudf/tree/v0.12.0), `cuML` [v0.12.0](https://github.com/rapidsai/cuml/tree/v0.12.0), `cuGraph` [v0.12.0](https://github.com/rapidsai/cugraph/tree/v0.12.0), `RMM` [v0.12.0](https://github.com/rapidsai/RMM/tree/v0.12.0), `cuSpatial` [v0.12.0](https://github.com/rapidsai/cuspatial/tree/v0.12.0), `cuxfilter` [v0.12.0](https://github.com/rapidsai/cuxfilter/tree/branch-0.12)
   - **NOTE:** `cuxfilter` is only available in `runtime` containers
 - `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-0.12-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-0.12)
-
-### Former Version
-
-#### RAPIDS 0.11 - 11 December 2019
-
-Versions of libraries included in the `0.11` images:
-- `cuDF` [v0.11.0](https://github.com/rapidsai/cudf/tree/v0.11.0), `cuML` [v0.11.0](https://github.com/rapidsai/cuml/tree/v0.11.0), `cuGraph` [v0.11.0](https://github.com/rapidsai/cugraph/tree/v0.11.0), `RMM` [v0.11.0](https://github.com/rapidsai/RMM/tree/v0.11.0), `cuSpatial` [v0.11.0](https://github.com/rapidsai/cuspatial/tree/v0.11.0)
-- `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-0.11-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-0.11)
 
 ### Image Types
 
@@ -72,7 +73,7 @@ Many users do not need a specific platform combination but would like to ensure 
 ## Prerequisites
 
 * NVIDIA Pascal™ GPU architecture or better
-* CUDA [10.0](https://developer.nvidia.com/cuda-downloads) compatible NVIDIA driver
+* CUDA [10](https://developer.nvidia.com/cuda-downloads) compatible NVIDIA driver
 * Ubuntu 16.04/18.04 or CentOS 7
 * Docker CE v18+
 * [nvidia-docker](https://github.com/nvidia/nvidia-docker/wiki/Installation-(version-2.0)) v2+

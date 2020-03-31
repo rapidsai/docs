@@ -32,4 +32,4 @@ Individual projects should configure `flake8` to suit their needs, for example t
 
 Git commit messages should convey the change succinctly, but with enough detail to be understood without extra context.
 
-See the [Git Methodology]({{ site.url }}{{ site.baseurl }}/resources/git/#git-commits) for further details.
+See the [Git Methodology]({% link resources/git.md %}#git-commits) for further details.

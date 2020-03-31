@@ -26,11 +26,20 @@ Operations
 
 ## Current release
 
-The current release schedule is posted on the [RAPIDS Maintainers Docs]({{ site.url }}{{ site.baseurl }}/maintainers) page.
+The current release schedule is posted on the [RAPIDS Maintainers Docs]({% link maintainers/maintainers.md %}) page.
 
 ## Completed Releases
 
 Historical list of completed releases
+
+### Release v0.13 Schedule
+
+Phase | Start | End | Duration
+-- | -- | -- | --
+Development | Thu, Jan 16th | Fri, Mar 6th | 35 days
+Burn Down | Mon, Mar 9th | Thu, Mar 26th | 14 days
+Code Freeze/Testing | Fri, Mar 27th | Mon, Mar 30th | 2 days
+Release | Tue, Mar 31st | Tue, Mar 31st | 1 day
 
 ### Release v0.12 Schedule
 
@@ -38,8 +47,8 @@ Historical list of completed releases
 |:------|:------|:----|:---------|
 | New Development | Thu, Nov 21st | Wed, Jan 15th | 36 days |
 | Burn Down | Thu, Jan 16th | Thu, Jan 23rd | 5 days |
-| Code Freeze/Testing | Fri, Jan 24th | Wed, Jan 29th | 4 days |
-| Release | Thu, Jan 30th | Thu, Jan 30th | 1 day |
+| Code Freeze/Testing | Fri, Jan 24th | Mon, Feb 3rd | 9 days |
+| Release | Tue, Feb 4th | Tue, Feb 4th | 1 day |
 
 ### Release v0.11 Schedule
 

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+ <!--<![endif]-->
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Multi-GPU with Dask-cuDF — cudf 0.13.0a+4804.g61580330a documentation
+  </title>
+  <script src="_static/js/modernizr.min.js" type="text/javascript">
+  </script>
+  <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js" type="text/javascript">
+  </script>
+  <script src="_static/jquery.js">
+  </script>
+  <script src="_static/underscore.js">
+  </script>
+  <script src="_static/doctools.js">
+  </script>
+  <script src="_static/language_data.js">
+  </script>
+  <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js">
+  </script>
+  <script src="_static/js/theme.js" type="text/javascript">
+  </script>
+  <link href="_static/css/theme.css" rel="stylesheet" type="text/css"/>
+  <link href="_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="_static/params.css" rel="stylesheet" type="text/css"/>
+  <link href="genindex.html" rel="index" title="Index"/>
+  <link href="search.html" rel="search" title="Search"/>
+  <link href="dask-xgb-10min.html" rel="next" title="10 Minutes to Dask-XGBoost"/>
+  <link href="10min.html" rel="prev" title="10 Minutes to cuDF and Dask-cuDF"/>
+  <link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"/>
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <div id="rapids-sphinx-container">
+       <div class="rapids-home-container">
+        <a class="rapids-home-container__home-btn" href="/api">
+         Home
+        </a>
+       </div>
+       <div class="rapids-selector__container rapids-selector--hidden">
+        <div class="rapids-selector__selected">
+         cudf
+        </div>
+        <div class="rapids-selector__menu">
+         <a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">
+          clx
+         </a>
+         <a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/stable/api.html">
+          cudf
+         </a>
+         <a class="rapids-selector__menu-item" href="/api/cugraph/stable/api.html">
+          cugraph
+         </a>
+         <a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">
+          cuml
+         </a>
+         <a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">
+          cusignal
+         </a>
+         <a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">
+          cuspatial
+         </a>
+         <a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">
+          cuxfilter
+         </a>
+         <a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">
+          libcudf
+         </a>
+         <a class="rapids-selector__menu-item" href="/api/libnvstrings/stable/annotated.html">
+          libnvstrings
+         </a>
+         <a class="rapids-selector__menu-item" href="/api/nvstrings/stable/api.html">
+          nvstrings
+         </a>
+         <a class="rapids-selector__menu-item" href="/api/rmm/stable/annotated.html">
+          rmm
+         </a>
+        </div>
+       </div>
+       <div class="rapids-selector__container rapids-selector--hidden">
+        <div class="rapids-selector__selected">
+         stable (0.13)
+        </div>
+        <div class="rapids-selector__menu">
+         <a class="rapids-selector__menu-item" href="/api/cudf/nightly/api.html">
+          nightly (0.14)
+         </a>
+         <a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/stable/api.html">
+          stable (0.13)
+         </a>
+         <a class="rapids-selector__menu-item" href="/api/cudf/legacy/api.html">
+          legacy (0.12)
+         </a>
+        </div>
+       </div>
+      </div>
+      <div role="search">
+       <form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+        <input name="q" placeholder="Search docs" type="text"/>
+        <input name="check_keywords" type="hidden" value="yes"/>
+        <input name="area" type="hidden" value="default"/>
+       </form>
+      </div>
+     </div>
+     <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+      <p class="caption">
+       <span class="caption-text">
+        Contents:
+       </span>
+      </p>
+      <ul class="current">
+       <li class="toctree-l1">
+        <a class="reference internal" href="api.html">
+         API Reference
+        </a>
+       </li>
+       <li class="toctree-l1">
+        <a class="reference internal" href="10min.html">
+         10 Minutes to cuDF and Dask-cuDF
+        </a>
+       </li>
+       <li class="toctree-l1 current">
+        <a class="current reference internal" href="#">
+         Multi-GPU with Dask-cuDF
+        </a>
+        <ul>
+         <li class="toctree-l2">
+          <a class="reference internal" href="#what-works">
+           What works
+          </a>
+         </li>
+         <li class="toctree-l2">
+          <a class="reference internal" href="#developing-the-api">
+           Developing the API
+          </a>
+         </li>
+         <li class="toctree-l2">
+          <a class="reference internal" href="#navigating-the-api">
+           Navigating the API
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li class="toctree-l1">
+        <a class="reference internal" href="dask-xgb-10min.html">
+         10 Minutes to Dask-XGBoost
+        </a>
+       </li>
+       <li class="toctree-l1">
+        <a class="reference internal" href="10min-cudf-cupy.html">
+         10 Minutes to cuDF and CuPy
+        </a>
+       </li>
+       <li class="toctree-l1">
+        <a class="reference internal" href="guide-to-udfs.html">
+         Overview of User Defined Functions with cuDF
+        </a>
+       </li>
+       <li class="toctree-l1">
+        <a class="reference internal" href="developer.html">
+         Developer Documentation
+        </a>
+       </li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+    <nav aria-label="top navigation" class="wy-nav-top">
+     <i class="fa fa-bars" data-toggle="wy-nav-top">
+     </i>
+     <a href="index.html">
+      cudf
+     </a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <div aria-label="breadcrumbs navigation" role="navigation">
+       <ul class="wy-breadcrumbs">
+        <li>
+         <a href="index.html">
+          Docs
+         </a>
+         »
+        </li>
+        <li>
+         Multi-GPU with Dask-cuDF
+        </li>
+        <li class="wy-breadcrumbs-aside">
+         <a href="_sources/dask-cudf.md.txt" rel="nofollow">
+          View page source
+         </a>
+        </li>
+       </ul>
+       <hr/>
+      </div>
+      <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+       <div itemprop="articleBody">
+        <style>
+         /* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+        </style>
+        <div class="section" id="multi-gpu-with-dask-cudf">
+         <h1>
+          Multi-GPU with Dask-cuDF
+          <a class="headerlink" href="#multi-gpu-with-dask-cudf" title="Permalink to this headline">
+           ¶
+          </a>
+         </h1>
+         <p>
+          cuDF is a single-GPU library. For Multi-GPU cuDF solutions we use
+          <a class="reference external" href="https://dask.org/">
+           Dask
+          </a>
+          and the
+          <a class="reference external" href="https://github.com/rapidsai/dask-cudf">
+           dask-cudf package
+          </a>
+          , which is able to scale cuDF across multiple GPUs on a single machine, or multiple GPUs across many machines in a cluster.
+         </p>
+         <p>
+          <a class="reference external" href="http://docs.dask.org/en/latest/dataframe.html">
+           Dask DataFrame
+          </a>
+          was originally designed to scale Pandas, orchestrating many Pandas DataFrames spread across many CPUs into a cohesive parallel DataFrame. Because cuDF currently implements only a subset of Pandas’s API, not all Dask DataFrame operations work with cuDF.
+         </p>
+         <p>
+          The following is tested and expected to work:
+         </p>
+         <div class="section" id="what-works">
+          <h2>
+           What works
+           <a class="headerlink" href="#what-works" title="Permalink to this headline">
+            ¶
+           </a>
+          </h2>
+          <ul class="simple">
+           <li>
+            <p>
+             Data ingestion
+            </p>
+            <ul>
+             <li>
+              <p>
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 dask_cudf.read_csv
+                </span>
+               </code>
+              </p>
+             </li>
+             <li>
+              <p>
+               Use standard Dask ingestion with Pandas, then convert to cuDF (For
+Parquet and other formats this is often decently fast)
+              </p>
+             </li>
+            </ul>
+           </li>
+           <li>
+            <p>
+             Linear operations
+            </p>
+            <ul>
+             <li>
+              <p>
+               Element-wise operations:
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 df.x
+                </span>
+                <span class="pre">
+                 +
+                </span>
+                <span class="pre">
+                 df.y
+                </span>
+               </code>
+               ,
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 df
+                </span>
+                <span class="pre">
+                 **
+                </span>
+                <span class="pre">
+                 2
+                </span>
+               </code>
+              </p>
+             </li>
+             <li>
+              <p>
+               Assignment:
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 df['z']
+                </span>
+                <span class="pre">
+                 =
+                </span>
+                <span class="pre">
+                 df.x
+                </span>
+                <span class="pre">
+                 +
+                </span>
+                <span class="pre">
+                 df.y
+                </span>
+               </code>
+              </p>
+             </li>
+             <li>
+              <p>
+               Row-wise selections:
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 df[df.x
+                </span>
+                <span class="pre">
+                 &gt;
+                </span>
+                <span class="pre">
+                 0]
+                </span>
+               </code>
+              </p>
+             </li>
+             <li>
+              <p>
+               Loc:
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 df.loc['2001-01-01':
+                </span>
+                <span class="pre">
+                 '2005-02-02']
+                </span>
+               </code>
+              </p>
+             </li>
+             <li>
+              <p>
+               Date time/string accessors:
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 df.timestamp.dt.dayofweek
+                </span>
+               </code>
+              </p>
+             </li>
+             <li>
+              <p>
+               … and most similar operations in this category that are already implemented in cuDF
+              </p>
+             </li>
+            </ul>
+           </li>
+           <li>
+            <p>
+             Reductions
+            </p>
+            <ul>
+             <li>
+              <p>
+               Like
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 sum
+                </span>
+               </code>
+               ,
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 mean
+                </span>
+               </code>
+               ,
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 max
+                </span>
+               </code>
+               ,
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 count
+                </span>
+               </code>
+               , and so on on
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 Series
+                </span>
+               </code>
+               objects
+              </p>
+             </li>
+             <li>
+              <p>
+               <strike>
+                Support for reductions on full dataframes
+               </strike>
+              </p>
+             </li>
+             <li>
+              <p>
+               <strike>
+                <code class="docutils literal notranslate">
+                 <span class="pre">
+                  std
+                 </span>
+                </code>
+               </strike>
+              </p>
+             </li>
+             <li>
+              <p>
+               Custom reductions with
+               <a class="reference external" href="http://docs.dask.org/en/latest/dataframe-api.html#dask.dataframe.Series.reduction">
+                dask.dataframe.reduction
+               </a>
+              </p>
+             </li>
+            </ul>
+           </li>
+           <li>
+            <p>
+             Groupby aggregations
+            </p>
+            <ul>
+             <li>
+              <p>
+               On single columns:
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 df.groupby('x').y.max()
+                </span>
+               </code>
+              </p>
+             </li>
+             <li>
+              <p>
+               With custom aggregations:
+              </p>
+             </li>
+             <li>
+              <p>
+               <strike>
+                groupby standard deviation
+               </strike>
+              </p>
+             </li>
+             <li>
+              <p>
+               <strike>
+                grouping on multiple columns
+               </strike>
+              </p>
+             </li>
+             <li>
+              <p>
+               <strike>
+                groupby agg for multiple outputs
+               </strike>
+              </p>
+             </li>
+            </ul>
+           </li>
+           <li>
+            <p>
+             Joins:
+            </p>
+            <ul>
+             <li>
+              <p>
+               On full unsorted columns:
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 left.merge(right,
+                </span>
+                <span class="pre">
+                 on='id')
+                </span>
+               </code>
+               (expensive)
+              </p>
+             </li>
+             <li>
+              <p>
+               On sorted indexes:
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 left.merge(right,
+                </span>
+                <span class="pre">
+                 left_index=True,
+                </span>
+                <span class="pre">
+                 right_index=True)
+                </span>
+               </code>
+               (fast)
+              </p>
+             </li>
+             <li>
+              <p>
+               On large and small dataframes:
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 left.merge(cudf_df,
+                </span>
+                <span class="pre">
+                 on='id')
+                </span>
+               </code>
+               (fast)
+              </p>
+             </li>
+            </ul>
+           </li>
+           <li>
+            <p>
+             <strike>
+              Rolling operations
+             </strike>
+            </p>
+           </li>
+           <li>
+            <p>
+             Converting to and from other forms
+            </p>
+            <ul>
+             <li>
+              <p>
+               Dask + Pandas to Dask + cuDF
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 df.map_partitions(cudf.from_pandas)
+                </span>
+               </code>
+              </p>
+             </li>
+             <li>
+              <p>
+               Dask + cuDF to Dask + Pandas
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 df.map_partitions(lambda
+                </span>
+                <span class="pre">
+                 df:
+                </span>
+                <span class="pre">
+                 df.to_pandas())
+                </span>
+               </code>
+              </p>
+             </li>
+             <li>
+              <p>
+               cuDF to Dask + cuDF:
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 dask.dataframe.from_pandas(df,
+                </span>
+                <span class="pre">
+                 npartitions=20)
+                </span>
+               </code>
+              </p>
+             </li>
+             <li>
+              <p>
+               Dask + cuDF to cuDF:
+               <code class="docutils literal notranslate">
+                <span class="pre">
+                 df.compute()
+                </span>
+               </code>
+              </p>
+             </li>
+            </ul>
+           </li>
+          </ul>
+          <p>
+           Additionally all generic Dask operations, like
+           <code class="docutils literal notranslate">
+            <span class="pre">
+             compute
+            </span>
+           </code>
+           ,
+           <code class="docutils literal notranslate">
+            <span class="pre">
+             persist
+            </span>
+           </code>
+           ,
+           <code class="docutils literal notranslate">
+            <span class="pre">
+             visualize
+            </span>
+           </code>
+           and so on work regardless.
+          </p>
+         </div>
+         <div class="section" id="developing-the-api">
+          <h2>
+           Developing the API
+           <a class="headerlink" href="#developing-the-api" title="Permalink to this headline">
+            ¶
+           </a>
+          </h2>
+          <p>
+           Above we mention the following:
+          </p>
+          <blockquote>
+           <div>
+            <p>
+             and most similar operations in this category that are already implemented in cuDF
+            </p>
+           </div>
+          </blockquote>
+          <p>
+           This is because it is difficult to create a comprehensive list of operations in
+the cuDF and Pandas libraries.  The API is large enough to be difficult to track
+effectively.  For any operation that operates row-wise like
+           <code class="docutils literal notranslate">
+            <span class="pre">
+             fillna
+            </span>
+           </code>
+           or
+           <code class="docutils literal notranslate">
+            <span class="pre">
+             query
+            </span>
+           </code>
+           things will likely, but not certainly work.  If operations don’t work
+it is often due to a slight inconsistency between Pandas and cuDF that is
+generally easy to fix.  We encourage users to look at the
+           <a class="reference external" href="https://github.com/rapidsai/cudf/issues">
+            cuDF issue
+tracker
+           </a>
+           to see if their issue has
+already been reported and, if not,
+           <a class="reference external" href="https://github.com/rapidsai/cudf/issues/new">
+            raise a new issue
+           </a>
+           .
+          </p>
+         </div>
+         <div class="section" id="navigating-the-api">
+          <h2>
+           Navigating the API
+           <a class="headerlink" href="#navigating-the-api" title="Permalink to this headline">
+            ¶
+           </a>
+          </h2>
+          <p>
+           This project reuses the
+           <a class="reference external" href="https://docs.dask.org/en/latest/dataframe.html">
+            Dask DataFrame
+           </a>
+           project, which
+was originally designed for Pandas, with the newer library cuDF.  Because we use
+the same Dask classes for both projects there are often methods that are
+implemented for Pandas, but not yet for cuDF.  As a result users looking at the
+full Dask DataFrame API can be misleading, and often lead to frustration when
+operations that are advertised in the Dask API do not work as expected with
+cuDF.  We apologize for this in advance.
+          </p>
+         </div>
+        </div>
+       </div>
+      </div>
+      <footer>
+       <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+        <a accesskey="n" class="btn btn-neutral float-right" href="dask-xgb-10min.html" rel="next" title="10 Minutes to Dask-XGBoost">
+         Next
+         <span class="fa fa-arrow-circle-right">
+         </span>
+        </a>
+        <a accesskey="p" class="btn btn-neutral float-left" href="10min.html" rel="prev" title="10 Minutes to cuDF and Dask-cuDF">
+         <span class="fa fa-arrow-circle-left">
+         </span>
+         Previous
+        </a>
+       </div>
+       <hr/>
+       <div role="contentinfo">
+        <p>
+         © Copyright 2018, NVIDIA
+        </p>
+       </div>
+       Built with
+       <a href="http://sphinx-doc.org/">
+        Sphinx
+       </a>
+       using a
+       <a href="https://github.com/rtfd/sphinx_rtd_theme">
+        theme
+       </a>
+       provided by
+       <a href="https://readthedocs.org">
+        Read the Docs
+       </a>
+       .
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script type="text/javascript">
+   jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+  <script defer id="rapids-selector-js" src="/assets/js/custom.js">
+  </script>
+ </body>
+</html>
