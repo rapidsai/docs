@@ -47,8 +47,8 @@ Release | Tue, Mar 31st | Tue, Mar 31st | 1 day
 |:------|:------|:----|:---------|
 | New Development | Thu, Nov 21st | Wed, Jan 15th | 36 days |
 | Burn Down | Thu, Jan 16th | Thu, Jan 23rd | 5 days |
-| Code Freeze/Testing | Fri, Jan 24th | Wed, Jan 29th | 4 days |
-| Release | Thu, Jan 30th | Thu, Jan 30th | 1 day |
+| Code Freeze/Testing | Fri, Jan 24th | Mon, Feb 3rd | 9 days |
+| Release | Tue, Feb 4th | Tue, Feb 4th | 1 day |
 
 ### Release v0.11 Schedule
 
