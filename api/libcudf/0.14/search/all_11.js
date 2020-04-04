@@ -6,7 +6,7 @@ var searchData=
   ['quantile_5fargs_1052',['quantile_args',['../structcudf_1_1groupby_1_1sort_1_1quantile__args.html',1,'cudf::groupby::sort']]],
   ['quantile_5fexact_1053',['quantile_exact',['../namespacecudf.html#a3aad879c6bbd17521333c06dab5db483',1,'cudf']]],
   ['quantile_5ffunctor_1054',['quantile_functor',['../structcudf_1_1experimental_1_1detail_1_1quantile__functor.html',1,'cudf::experimental::detail']]],
-  ['quantile_5findex_1055',['quantile_index',['../structcudf_1_1experimental_1_1detail_1_1quantile__index.html',1,'cudf::experimental::detail::quantile_index'],['../structcudf_1_1detail_1_1quantile__index.html',1,'cudf::detail::quantile_index']]],
+  ['quantile_5findex_1055',['quantile_index',['../structcudf_1_1detail_1_1quantile__index.html',1,'cudf::detail::quantile_index'],['../structcudf_1_1experimental_1_1detail_1_1quantile__index.html',1,'cudf::experimental::detail::quantile_index']]],
   ['quantiles_1056',['quantiles',['../namespacecudf_1_1experimental.html#ab7407ea137cc20a1343331efd180775b',1,'cudf::experimental']]],
   ['quote_5fall_1057',['QUOTE_ALL',['../structcudf_1_1csv__read__arg.html#ac38936d9c26a6ba6e5d488f36afa0a4eaf90080bae75ba35601c87900887ab75d',1,'cudf::csv_read_arg']]],
   ['quote_5fminimal_1058',['QUOTE_MINIMAL',['../structcudf_1_1csv__read__arg.html#ac38936d9c26a6ba6e5d488f36afa0a4eaaee7131988c0281123a37aef8f2f6b49',1,'cudf::csv_read_arg']]],
