@@ -197,7 +197,7 @@
           </a>
           <ul>
            <li class="toctree-l3">
-            <a class="reference internal" href="#connected-components">
+            <a class="reference internal" href="#module-cugraph.components.connectivity">
              Connected Components
             </a>
            </li>
@@ -231,7 +231,7 @@
           </a>
           <ul>
            <li class="toctree-l3">
-            <a class="reference internal" href="#pagerank">
+            <a class="reference internal" href="#module-cugraph.link_analysis.pagerank">
              Pagerank
             </a>
            </li>
@@ -243,12 +243,12 @@
           </a>
           <ul>
            <li class="toctree-l3">
-            <a class="reference internal" href="#jaccard-coefficient">
+            <a class="reference internal" href="#module-cugraph.link_prediction.jaccard">
              Jaccard Coefficient
             </a>
            </li>
            <li class="toctree-l3">
-            <a class="reference internal" href="#overlap-coefficient">
+            <a class="reference internal" href="#module-cugraph.link_prediction.overlap">
              Overlap Coefficient
             </a>
            </li>
@@ -260,12 +260,12 @@
           </a>
           <ul>
            <li class="toctree-l3">
-            <a class="reference internal" href="#breadth-first-search">
+            <a class="reference internal" href="#module-cugraph.traversal.bfs">
              Breadth-first-search
             </a>
            </li>
            <li class="toctree-l3">
-            <a class="reference internal" href="#single-source-shortest-path">
+            <a class="reference internal" href="#module-cugraph.traversal.sssp">
              Single-source-shortest-path
             </a>
            </li>
@@ -4173,13 +4173,197 @@ graph.
             ¶
            </a>
           </h2>
-          <div class="section" id="connected-components">
+          <div class="section" id="module-cugraph.components.connectivity">
+           <span id="connected-components">
+           </span>
            <h3>
             Connected Components
-            <a class="headerlink" href="#connected-components" title="Permalink to this headline">
+            <a class="headerlink" href="#module-cugraph.components.connectivity" title="Permalink to this headline">
              ¶
             </a>
            </h3>
+           <dl class="function">
+            <dt id="cugraph.components.connectivity.strongly_connected_components">
+             <code class="sig-prename descclassname">
+              cugraph.components.connectivity.
+             </code>
+             <code class="sig-name descname">
+              strongly_connected_components
+             </code>
+             <span class="sig-paren">
+              (
+             </span>
+             <em class="sig-param">
+              G
+             </em>
+             <span class="sig-paren">
+              )
+             </span>
+             <a class="headerlink" href="#cugraph.components.connectivity.strongly_connected_components" title="Permalink to this definition">
+              ¶
+             </a>
+            </dt>
+            <dd>
+             <p>
+              Generate the stronlgly connected components and attach a component label to
+each vertex.
+             </p>
+             <dl class="field-list simple">
+              <dt class="field-odd">
+               Parameters
+              </dt>
+              <dd class="field-odd">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  G
+                 </strong>
+                 <span class="classifier">
+                  cugraph.Graph
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  cuGraph graph descriptor, should contain the connectivity information as
+an edge list (edge weights are not used for this algorithm). The graph
+can be either directed or undirected where an undirected edge is
+represented by a directed edge in both directions.
+The adjacency list will be computed if not already present.
+The number of vertices should fit into a 32b int.
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+              <dt class="field-even">
+               Returns
+              </dt>
+              <dd class="field-even">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  df
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  df[‘labels’][i] gives the label id of the i’th vertex
+df[‘vertices’][i] gives the vertex id of the i’th vertex
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <p class="rubric">
+              Examples
+             </p>
+             <div class="doctest highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span><span class="n">destinations</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">strongly_connected_components</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre>
+              </div>
+             </div>
+            </dd>
+           </dl>
+           <dl class="function">
+            <dt id="cugraph.components.connectivity.weakly_connected_components">
+             <code class="sig-prename descclassname">
+              cugraph.components.connectivity.
+             </code>
+             <code class="sig-name descname">
+              weakly_connected_components
+             </code>
+             <span class="sig-paren">
+              (
+             </span>
+             <em class="sig-param">
+              G
+             </em>
+             <span class="sig-paren">
+              )
+             </span>
+             <a class="headerlink" href="#cugraph.components.connectivity.weakly_connected_components" title="Permalink to this definition">
+              ¶
+             </a>
+            </dt>
+            <dd>
+             <p>
+              Generate the weakly connected components and attach a component label to
+each vertex.
+             </p>
+             <dl class="field-list simple">
+              <dt class="field-odd">
+               Parameters
+              </dt>
+              <dd class="field-odd">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  G
+                 </strong>
+                 <span class="classifier">
+                  cugraph.Graph
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  cuGraph graph descriptor, should contain the connectivity information
+as an edge list (edge weights are not used for this algorithm).
+Currently, the graph should be undirected where an undirected edge is
+represented by a directed edge in both directions. The adjacency list
+will be computed if not already present. The number of vertices should
+fit into a 32b int.
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+              <dt class="field-even">
+               Returns
+              </dt>
+              <dd class="field-even">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  df
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  df[‘labels’][i] gives the label id of the i’th vertex
+df[‘vertices’][i] gives the vertex id of the i’th vertex
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <p class="rubric">
+              Examples
+             </p>
+             <div class="doctest highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">weakly_connected_components</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre>
+              </div>
+             </div>
+            </dd>
+           </dl>
           </div>
          </div>
          <div class="section" id="cores">
@@ -4493,13 +4677,253 @@ identifiers and the corresponding core number values.
             ¶
            </a>
           </h2>
-          <div class="section" id="pagerank">
+          <div class="section" id="module-cugraph.link_analysis.pagerank">
+           <span id="pagerank">
+           </span>
            <h3>
             Pagerank
-            <a class="headerlink" href="#pagerank" title="Permalink to this headline">
+            <a class="headerlink" href="#module-cugraph.link_analysis.pagerank" title="Permalink to this headline">
              ¶
             </a>
            </h3>
+           <dl class="function">
+            <dt id="cugraph.link_analysis.pagerank.pagerank">
+             <code class="sig-prename descclassname">
+              cugraph.link_analysis.pagerank.
+             </code>
+             <code class="sig-name descname">
+              pagerank
+             </code>
+             <span class="sig-paren">
+              (
+             </span>
+             <em class="sig-param">
+              G
+             </em>
+             ,
+             <em class="sig-param">
+              alpha=0.85
+             </em>
+             ,
+             <em class="sig-param">
+              personalization=None
+             </em>
+             ,
+             <em class="sig-param">
+              max_iter=100
+             </em>
+             ,
+             <em class="sig-param">
+              tol=1e-05
+             </em>
+             ,
+             <em class="sig-param">
+              nstart=None
+             </em>
+             <span class="sig-paren">
+              )
+             </span>
+             <a class="headerlink" href="#cugraph.link_analysis.pagerank.pagerank" title="Permalink to this definition">
+              ¶
+             </a>
+            </dt>
+            <dd>
+             <p>
+              Find the PageRank vertex values for a graph. cuGraph computes an
+approximation of the Pagerank eigenvector using the power method. The
+number of iterations depends on the properties of the network itself; it
+increases when the tolerance descreases and/or alpha increases toward the
+limiting value of 1. The user is free to use default values or to provide
+inputs for the initial guess, tolerance and maximum number of iterations.
+             </p>
+             <dl class="field-list">
+              <dt class="field-odd">
+               Parameters
+              </dt>
+              <dd class="field-odd">
+               <dl>
+                <dt>
+                 <strong>
+                  graph
+                 </strong>
+                 <span class="classifier">
+                  cugraph.Graph
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  cuGraph graph descriptor, should contain the connectivity information
+as an edge list (edge weights are not used for this algorithm).
+The transposed adjacency list will be computed if not already present.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  alpha
+                 </strong>
+                 <span class="classifier">
+                  float
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  The damping factor alpha represents the probability to follow an
+outgoing edge, standard value is 0.85.
+Thus, 1.0-alpha is the probability to “teleport” to a random vertex.
+Alpha should be greater than 0.0 and strictly lower than 1.0.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  personalization
+                 </strong>
+                 <span class="classifier">
+                  cudf.Dataframe
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  GPU Dataframe containing the personalizatoin information.
+                 </p>
+                 <dl class="simple">
+                  <dt>
+                   personalization[‘vertex’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    Subset of vertices of graph for personalization
+                   </p>
+                  </dd>
+                  <dt>
+                   personalization[‘values’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    Personalization values for vertices
+                   </p>
+                  </dd>
+                 </dl>
+                </dd>
+                <dt>
+                 <strong>
+                  max_iter
+                 </strong>
+                 <span class="classifier">
+                  int
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  The maximum number of iterations before an answer is returned. This can
+be used to limit the execution time and do an early exit before the
+solver reaches the convergence tolerance.
+If this value is lower or equal to 0 cuGraph will use the default
+value, which is 100.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  tolerance
+                 </strong>
+                 <span class="classifier">
+                  float
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  Set the tolerance the approximation, this parameter should be a small
+magnitude value.
+The lower the tolerance the better the approximation. If this value is
+0.0f, cuGraph will use the default value which is 1.0E-5.
+Setting too small a tolerance can lead to non-convergence due to
+numerical roundoff. Usually values between 0.01 and 0.00001 are
+acceptable.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  nstart
+                 </strong>
+                 <span class="classifier">
+                  cudf.Dataframe
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  GPU Dataframe containing the initial guess for pagerank.
+                 </p>
+                 <dl class="simple">
+                  <dt>
+                   nstart[‘vertex’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    Subset of vertices of graph for initial guess for pagerank values
+                   </p>
+                  </dd>
+                  <dt>
+                   nstart[‘values’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    Pagerank values for vertices
+                   </p>
+                  </dd>
+                 </dl>
+                </dd>
+               </dl>
+              </dd>
+              <dt class="field-even">
+               Returns
+              </dt>
+              <dd class="field-even">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  PageRank
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  GPU data frame containing two cudf.Series of size V: the vertex
+identifiers and the corresponding PageRank values.
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <p class="rubric">
+              Examples
+             </p>
+             <div class="doctest highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.85</span><span class="p">,</span> <span class="n">max_iter</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="mf">1.0e-05</span><span class="p">)</span>
+</pre>
+              </div>
+             </div>
+            </dd>
+           </dl>
           </div>
          </div>
          <div class="section" id="link-prediction">
@@ -4509,21 +4933,725 @@ identifiers and the corresponding core number values.
             ¶
            </a>
           </h2>
-          <div class="section" id="jaccard-coefficient">
+          <div class="section" id="module-cugraph.link_prediction.jaccard">
+           <span id="jaccard-coefficient">
+           </span>
            <h3>
             Jaccard Coefficient
-            <a class="headerlink" href="#jaccard-coefficient" title="Permalink to this headline">
+            <a class="headerlink" href="#module-cugraph.link_prediction.jaccard" title="Permalink to this headline">
              ¶
             </a>
            </h3>
+           <dl class="function">
+            <dt id="cugraph.link_prediction.jaccard.jaccard">
+             <code class="sig-prename descclassname">
+              cugraph.link_prediction.jaccard.
+             </code>
+             <code class="sig-name descname">
+              jaccard
+             </code>
+             <span class="sig-paren">
+              (
+             </span>
+             <em class="sig-param">
+              input_graph
+             </em>
+             ,
+             <em class="sig-param">
+              vertex_pair=None
+             </em>
+             <span class="sig-paren">
+              )
+             </span>
+             <a class="headerlink" href="#cugraph.link_prediction.jaccard.jaccard" title="Permalink to this definition">
+              ¶
+             </a>
+            </dt>
+            <dd>
+             <p>
+              Compute the Jaccard similarity between each pair of vertices connected by
+an edge, or between arbitrary pairs of vertices specified by the user.
+Jaccard similarity is defined between two sets as the ratio of the volume
+of their intersection divided by the volume of their union. In the context
+of graphs, the neighborhood of a vertex is seen as a set. The Jaccard
+similarity weight of each edge represents the strength of connection
+between vertices based on the relative similarity of their neighbors. If
+first is specified but second is not, or vice versa, an exception will be
+thrown.
+             </p>
+             <p>
+              NOTE: If the vertex_pair parameter is not specified then the behavior
+of cugraph.jaccard is different from the behavior of
+networkx.jaccard_coefficient.
+             </p>
+             <p>
+              cugraph.jaccard, in the absence of a specified vertex pair list, will
+use the edges of the graph to construct a vertex pair list and will
+return the jaccard coefficient for those vertex pairs.
+             </p>
+             <p>
+              networkx.jaccard_coefficient, in the absence of a specified vertex
+pair list, will return an upper triangular dense matrix, excluding
+the diagonal as well as vertex pairs that are directly connected
+by an edge in the graph, of jaccard coefficients.  Technically, networkx
+returns a lazy iterator across this upper triangular matrix where
+the actual jaccard coefficient is computed when the iterator is
+dereferenced.  Computing a dense matrix of results is not feasible
+if the number of vertices in the graph is large (100,000 vertices
+would result in 4.9 billion values in that iterator).
+             </p>
+             <p>
+              If your graph is small enough (or you have enough memory and patience)
+you can get the interesting (non-zero) values that are part of the networkx
+solution by doing the following:
+             </p>
+             <div class="doctest highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pairs</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">get_two_hop_neighbors</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">jaccard</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pairs</span><span class="p">)</span>
+</pre>
+              </div>
+             </div>
+             <p>
+              But please remember that cugraph will fill the dataframe with the entire
+solution you request, so you’ll need enough memory to store the 2-hop
+neighborhood dataframe.
+             </p>
+             <dl class="field-list">
+              <dt class="field-odd">
+               Parameters
+              </dt>
+              <dd class="field-odd">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  graph
+                 </strong>
+                 <span class="classifier">
+                  cugraph.Graph
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  cuGraph graph descriptor, should contain the connectivity information
+as an edge list (edge weights are not used for this algorithm). The
+graph should be undirected where an undirected edge is represented by a
+directed edge in both direction. The adjacency list will be computed if
+not already present.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  vertex_pair
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  A GPU dataframe consisting of two columns representing pairs of
+vertices. If provided, the jaccard coefficient is computed for the
+given vertex pairs.  If the vertex_pair is not provided then the
+current implementation computes the jaccard coefficient for all
+adjacent vertices in the graph.
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+              <dt class="field-even">
+               Returns
+              </dt>
+              <dd class="field-even">
+               <dl>
+                <dt>
+                 <strong>
+                  df
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  GPU data frame of size E (the default) or the size of the given pairs
+(first, second) containing the Jaccard weights. The ordering is
+relative to the adjacency list, or that given by the specified vertex
+pairs.
+                 </p>
+                 <dl class="simple">
+                  <dt>
+                   df[‘source’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    The source vertex ID (will be identical to first if specified)
+                   </p>
+                  </dd>
+                  <dt>
+                   df[‘destination’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    The destination vertex ID (will be identical to second if
+specified)
+                   </p>
+                  </dd>
+                  <dt>
+                   df[‘jaccard_coeff’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    The computed Jaccard coefficient between the source and destination
+vertices
+                   </p>
+                  </dd>
+                 </dl>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <p class="rubric">
+              Examples
+             </p>
+             <div class="doctest highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">jaccard</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre>
+              </div>
+             </div>
+            </dd>
+           </dl>
+           <span class="target" id="module-cugraph.link_prediction.wjaccard">
+           </span>
+           <dl class="function">
+            <dt id="cugraph.link_prediction.wjaccard.jaccard_w">
+             <code class="sig-prename descclassname">
+              cugraph.link_prediction.wjaccard.
+             </code>
+             <code class="sig-name descname">
+              jaccard_w
+             </code>
+             <span class="sig-paren">
+              (
+             </span>
+             <em class="sig-param">
+              input_graph
+             </em>
+             ,
+             <em class="sig-param">
+              weights
+             </em>
+             ,
+             <em class="sig-param">
+              vertex_pair=None
+             </em>
+             <span class="sig-paren">
+              )
+             </span>
+             <a class="headerlink" href="#cugraph.link_prediction.wjaccard.jaccard_w" title="Permalink to this definition">
+              ¶
+             </a>
+            </dt>
+            <dd>
+             <p>
+              Compute the weighted Jaccard similarity between each pair of vertices
+connected by an edge, or between arbitrary pairs of vertices specified by
+the user. Jaccard similarity is defined between two sets as the ratio of
+the volume of their intersection divided by the volume of their union. In
+the context of graphs, the neighborhood of a vertex is seen as a set. The
+Jaccard similarity weight of each edge represents the strength of
+connection between vertices based on the relative similarity of their
+neighbors. If first is specified but second is not, or vice versa, an
+exception will be thrown.
+             </p>
+             <dl class="field-list">
+              <dt class="field-odd">
+               Parameters
+              </dt>
+              <dd class="field-odd">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  graph
+                 </strong>
+                 <span class="classifier">
+                  cugraph.Graph
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  cuGraph graph descriptor, should contain the connectivity information
+as an edge list (edge weights are not used for this algorithm). The
+adjacency list will be computed if not already present.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  weights
+                 </strong>
+                 <span class="classifier">
+                  cudf.Series
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  Specifies the weights to be used for each vertex.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  vertex_pair
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  A GPU dataframe consisting of two columns representing pairs of
+vertices. If provided, the jaccard coefficient is computed for the
+given vertex pairs, else, it is computed for all vertex pairs.
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+              <dt class="field-even">
+               Returns
+              </dt>
+              <dd class="field-even">
+               <dl>
+                <dt>
+                 <strong>
+                  df
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  GPU data frame of size E (the default) or the size of the given pairs
+(first, second) containing the Jaccard weights. The ordering is
+relative to the adjacency list, or that given by the specified vertex
+pairs.
+                 </p>
+                 <dl class="simple">
+                  <dt>
+                   df[‘source’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    The source vertex ID
+                   </p>
+                  </dd>
+                  <dt>
+                   df[‘destination’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    The destination vertex ID
+                   </p>
+                  </dd>
+                  <dt>
+                   df[‘jaccard_coeff’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    The computed weighted Jaccard coefficient between the source and
+destination vertices.
+                   </p>
+                  </dd>
+                 </dl>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <p class="rubric">
+              Examples
+             </p>
+             <div class="doctest highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">max</span><span class="p">(</span><span class="n">sources</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">destinations</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">jaccard_w</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+</pre>
+              </div>
+             </div>
+            </dd>
+           </dl>
           </div>
-          <div class="section" id="overlap-coefficient">
+          <div class="section" id="module-cugraph.link_prediction.overlap">
+           <span id="overlap-coefficient">
+           </span>
            <h3>
             Overlap Coefficient
-            <a class="headerlink" href="#overlap-coefficient" title="Permalink to this headline">
+            <a class="headerlink" href="#module-cugraph.link_prediction.overlap" title="Permalink to this headline">
              ¶
             </a>
            </h3>
+           <dl class="function">
+            <dt id="cugraph.link_prediction.overlap.overlap">
+             <code class="sig-prename descclassname">
+              cugraph.link_prediction.overlap.
+             </code>
+             <code class="sig-name descname">
+              overlap
+             </code>
+             <span class="sig-paren">
+              (
+             </span>
+             <em class="sig-param">
+              input_graph
+             </em>
+             ,
+             <em class="sig-param">
+              vertex_pair=None
+             </em>
+             <span class="sig-paren">
+              )
+             </span>
+             <a class="headerlink" href="#cugraph.link_prediction.overlap.overlap" title="Permalink to this definition">
+              ¶
+             </a>
+            </dt>
+            <dd>
+             <p>
+              Compute the Overlap Coefficient between each pair of vertices connected by
+an edge, or between arbitrary pairs of vertices specified by the user.
+Overlap Coefficient is defined between two sets as the ratio of the volume
+of their intersection divided by the smaller of their two volumes. In the
+context of graphs, the neighborhood of a vertex is seen as a set. The
+Overlap Coefficient weight of each edge represents the strength of
+connection between vertices based on the relative similarity of their
+neighbors. If first is specified but second is not, or vice versa, an
+exception will be thrown.
+             </p>
+             <dl class="field-list">
+              <dt class="field-odd">
+               Parameters
+              </dt>
+              <dd class="field-odd">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  graph
+                 </strong>
+                 <span class="classifier">
+                  cugraph.Graph
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  cuGraph graph descriptor, should contain the connectivity information
+as an edge list (edge weights are not used for this algorithm). The
+adjacency list will be computed if not already present.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  vertex_pair
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  A GPU dataframe consisting of two columns representing pairs of
+vertices. If provided, the overlap coefficient is computed for the
+given vertex pairs, else, it is computed for all vertex pairs.
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+              <dt class="field-even">
+               Returns
+              </dt>
+              <dd class="field-even">
+               <dl>
+                <dt>
+                 <strong>
+                  df
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  GPU data frame of size E (the default) or the size of the given pairs
+(first, second) containing the Overlap coefficients. The ordering is
+relative to the adjacency list, or that given by the specified vertex
+pairs.
+                 </p>
+                 <dl class="simple">
+                  <dt>
+                   df[‘source’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    The source vertex ID (will be identical to first if specified).
+                   </p>
+                  </dd>
+                  <dt>
+                   df[‘destination’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    The destination vertex ID (will be identical to second if
+specified).
+                   </p>
+                  </dd>
+                  <dt>
+                   df[‘overlap_coeff’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    The computed Overlap coefficient between the source and destination
+vertices.
+                   </p>
+                  </dd>
+                 </dl>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <p class="rubric">
+              Examples
+             </p>
+             <div class="doctest highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre>
+              </div>
+             </div>
+            </dd>
+           </dl>
+           <span class="target" id="module-cugraph.link_prediction.woverlap">
+           </span>
+           <dl class="function">
+            <dt id="cugraph.link_prediction.woverlap.overlap_w">
+             <code class="sig-prename descclassname">
+              cugraph.link_prediction.woverlap.
+             </code>
+             <code class="sig-name descname">
+              overlap_w
+             </code>
+             <span class="sig-paren">
+              (
+             </span>
+             <em class="sig-param">
+              input_graph
+             </em>
+             ,
+             <em class="sig-param">
+              weights
+             </em>
+             ,
+             <em class="sig-param">
+              vertex_pair=None
+             </em>
+             <span class="sig-paren">
+              )
+             </span>
+             <a class="headerlink" href="#cugraph.link_prediction.woverlap.overlap_w" title="Permalink to this definition">
+              ¶
+             </a>
+            </dt>
+            <dd>
+             <p>
+              Compute the weighted Overlap Coefficient between each pair of vertices
+connected by an edge, or between arbitrary pairs of vertices specified by
+the user. Overlap Coefficient is defined between two sets as the ratio of
+the volume of their intersection divided by the smaller of their volumes.
+In the context of graphs, the neighborhood of a vertex is seen as a set.
+The Overlap Coefficient weight of each edge represents the strength of
+connection between vertices based on the relative similarity of their
+neighbors. If first is specified but second is not, or vice versa, an
+exception will be thrown.
+             </p>
+             <dl class="field-list">
+              <dt class="field-odd">
+               Parameters
+              </dt>
+              <dd class="field-odd">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  input_graph
+                 </strong>
+                 <span class="classifier">
+                  cugraph.Graph
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  cuGraph graph descriptor, should contain the connectivity information
+as an edge list (edge weights are not used for this algorithm). The
+adjacency list will be computed if not already present.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  weights
+                 </strong>
+                 <span class="classifier">
+                  cudf.Series
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  Specifies the weights to be used for each vertex.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  vertex_pair
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  A GPU dataframe consisting of two columns representing pairs of
+vertices. If provided, the overlap coefficient is computed for the
+given vertex pairs, else, it is computed for all vertex pairs.
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+              <dt class="field-even">
+               Returns
+              </dt>
+              <dd class="field-even">
+               <dl>
+                <dt>
+                 <strong>
+                  df
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  GPU data frame of size E (the default) or the size of the given pairs
+(first, second) containing the overlap coefficients. The ordering is
+relative to the adjacency list, or that given by the specified vertex
+pairs.
+                 </p>
+                 <dl class="simple">
+                  <dt>
+                   df[‘source’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    The source vertex ID
+                   </p>
+                  </dd>
+                  <dt>
+                   df[‘destination’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    The destination vertex ID
+                   </p>
+                  </dd>
+                  <dt>
+                   df[‘overlap_coeff’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    The computed weighted Overlap coefficient between the source and
+destination vertices.
+                   </p>
+                  </dd>
+                 </dl>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <p class="rubric">
+              Examples
+             </p>
+             <div class="doctest highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">max</span><span class="p">(</span><span class="n">sources</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">destinations</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">overlap_w</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+</pre>
+              </div>
+             </div>
+            </dd>
+           </dl>
           </div>
          </div>
          <div class="section" id="traversal">
@@ -4533,21 +5661,341 @@ identifiers and the corresponding core number values.
             ¶
            </a>
           </h2>
-          <div class="section" id="breadth-first-search">
+          <div class="section" id="module-cugraph.traversal.bfs">
+           <span id="breadth-first-search">
+           </span>
            <h3>
             Breadth-first-search
-            <a class="headerlink" href="#breadth-first-search" title="Permalink to this headline">
+            <a class="headerlink" href="#module-cugraph.traversal.bfs" title="Permalink to this headline">
              ¶
             </a>
            </h3>
+           <dl class="function">
+            <dt id="cugraph.traversal.bfs.bfs">
+             <code class="sig-prename descclassname">
+              cugraph.traversal.bfs.
+             </code>
+             <code class="sig-name descname">
+              bfs
+             </code>
+             <span class="sig-paren">
+              (
+             </span>
+             <em class="sig-param">
+              G
+             </em>
+             ,
+             <em class="sig-param">
+              start
+             </em>
+             ,
+             <em class="sig-param">
+              directed=True
+             </em>
+             <span class="sig-paren">
+              )
+             </span>
+             <a class="headerlink" href="#cugraph.traversal.bfs.bfs" title="Permalink to this definition">
+              ¶
+             </a>
+            </dt>
+            <dd>
+             <p>
+              Find the distances and predecessors for a breadth first traversal of a
+graph.
+             </p>
+             <dl class="field-list">
+              <dt class="field-odd">
+               Parameters
+              </dt>
+              <dd class="field-odd">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  G
+                 </strong>
+                 <span class="classifier">
+                  cugraph.graph
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  cuGraph graph descriptor, should contain the connectivity information
+as an adjacency list.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  start
+                 </strong>
+                 <span class="classifier">
+                  Integer
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  The index of the graph vertex from which the traversal begins
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  directed
+                 </strong>
+                 <span class="classifier">
+                  bool
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  Indicates whether the graph in question is a directed graph, or whether
+each edge has a corresponding reverse edge. (Allows optimizations if
+the graph is undirected)
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+              <dt class="field-even">
+               Returns
+              </dt>
+              <dd class="field-even">
+               <dl>
+                <dt>
+                 <strong>
+                  df
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  df[‘vertex’][i] gives the vertex id of the i’th vertex
+                 </p>
+                 <p>
+                  df[‘distance’][i] gives the path distance for the i’th vertex from the
+starting vertex
+                 </p>
+                 <p>
+                  df[‘predecessor’][i] gives for the i’th vertex the vertex it was
+reached from in the traversal
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <p class="rubric">
+              Examples
+             </p>
+             <div class="doctest highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">bfs</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre>
+              </div>
+             </div>
+            </dd>
+           </dl>
           </div>
-          <div class="section" id="single-source-shortest-path">
+          <div class="section" id="module-cugraph.traversal.sssp">
+           <span id="single-source-shortest-path">
+           </span>
            <h3>
             Single-source-shortest-path
-            <a class="headerlink" href="#single-source-shortest-path" title="Permalink to this headline">
+            <a class="headerlink" href="#module-cugraph.traversal.sssp" title="Permalink to this headline">
              ¶
             </a>
            </h3>
+           <dl class="function">
+            <dt id="cugraph.traversal.sssp.filter_unreachable">
+             <code class="sig-prename descclassname">
+              cugraph.traversal.sssp.
+             </code>
+             <code class="sig-name descname">
+              filter_unreachable
+             </code>
+             <span class="sig-paren">
+              (
+             </span>
+             <em class="sig-param">
+              df
+             </em>
+             <span class="sig-paren">
+              )
+             </span>
+             <a class="headerlink" href="#cugraph.traversal.sssp.filter_unreachable" title="Permalink to this definition">
+              ¶
+             </a>
+            </dt>
+            <dd>
+             <p>
+              Remove unreachable vertices from the result of SSSP or BFS
+             </p>
+             <dl class="field-list simple">
+              <dt class="field-odd">
+               Parameters
+              </dt>
+              <dd class="field-odd">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  df
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  cudf.DataFrame that is the output of SSSP or BFS
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+              <dt class="field-even">
+               Returns
+              </dt>
+              <dd class="field-even">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  df
+                 </strong>
+                 <span class="classifier">
+                  filtered cudf.DataFrame with only reachable vertices
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  df[‘vertex’][i] gives the vertex id of the i’th vertex.
+df[‘distance’][i] gives the path distance for the i’th vertex from the
+starting vertex.
+df[‘predecessor’][i] gives the vertex that was reached before the i’th
+vertex in the traversal.
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+           <dl class="function">
+            <dt id="cugraph.traversal.sssp.sssp">
+             <code class="sig-prename descclassname">
+              cugraph.traversal.sssp.
+             </code>
+             <code class="sig-name descname">
+              sssp
+             </code>
+             <span class="sig-paren">
+              (
+             </span>
+             <em class="sig-param">
+              G
+             </em>
+             ,
+             <em class="sig-param">
+              source
+             </em>
+             <span class="sig-paren">
+              )
+             </span>
+             <a class="headerlink" href="#cugraph.traversal.sssp.sssp" title="Permalink to this definition">
+              ¶
+             </a>
+            </dt>
+            <dd>
+             <p>
+              Compute the distance and predecessors for shortest paths from the specified
+source to all the vertices in the graph. The distances column will store
+the distance from the source to each vertex. The predecessors column will
+store each vertex’s predecessor in the shortest path. Vertices that are
+unreachable will have a distance of infinity denoted by the maximum value
+of the data type and the predecessor set as -1. The source vertex’s
+predecessor is also set to -1. Graphs with negative weight cycles are not
+supported.
+             </p>
+             <dl class="field-list simple">
+              <dt class="field-odd">
+               Parameters
+              </dt>
+              <dd class="field-odd">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  graph
+                 </strong>
+                 <span class="classifier">
+                  cuGraph.Graph
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  cuGraph graph descriptor with connectivity information. Edge weights,
+if present, should be single or double precision floating point values.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  source
+                 </strong>
+                 <span class="classifier">
+                  int
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  Index of the source vertex.
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+              <dt class="field-even">
+               Returns
+              </dt>
+              <dd class="field-even">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  df
+                 </strong>
+                 <span class="classifier">
+                  cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  df[‘vertex’][i] gives the vertex id of the i’th vertex.
+df[‘distance’][i] gives the path distance for the i’th vertex from the
+starting vertex.
+df[‘predecessor’][i] gives the vertex id of the vertex that was reached
+before the i’th vertex in the traversal.
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <p class="rubric">
+              Examples
+             </p>
+             <div class="doctest highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">distances</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">sssp</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre>
+              </div>
+             </div>
+            </dd>
+           </dl>
           </div>
          </div>
          <div class="section" id="utilities">

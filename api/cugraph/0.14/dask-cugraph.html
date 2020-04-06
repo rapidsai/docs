@@ -135,7 +135,7 @@
           </a>
           <ul>
            <li class="toctree-l3">
-            <a class="reference internal" href="#pagerank">
+            <a class="reference internal" href="#module-cugraph.dask.pagerank.pagerank">
              Pagerank
             </a>
            </li>
@@ -220,13 +220,147 @@
             ¶
            </a>
           </h2>
-          <div class="section" id="pagerank">
+          <div class="section" id="module-cugraph.dask.pagerank.pagerank">
+           <span id="pagerank">
+           </span>
            <h3>
             Pagerank
-            <a class="headerlink" href="#pagerank" title="Permalink to this headline">
+            <a class="headerlink" href="#module-cugraph.dask.pagerank.pagerank" title="Permalink to this headline">
              ¶
             </a>
            </h3>
+           <dl class="function">
+            <dt id="cugraph.dask.pagerank.pagerank.pagerank">
+             <code class="sig-prename descclassname">
+              cugraph.dask.pagerank.pagerank.
+             </code>
+             <code class="sig-name descname">
+              pagerank
+             </code>
+             <span class="sig-paren">
+              (
+             </span>
+             <em class="sig-param">
+              edge_list
+             </em>
+             ,
+             <em class="sig-param">
+              alpha=0.85
+             </em>
+             ,
+             <em class="sig-param">
+              max_iter=30
+             </em>
+             <span class="sig-paren">
+              )
+             </span>
+             <a class="headerlink" href="#cugraph.dask.pagerank.pagerank.pagerank" title="Permalink to this definition">
+              ¶
+             </a>
+            </dt>
+            <dd>
+             <p>
+              Find the PageRank values for each vertex in a graph using multiple GPUs.
+cuGraph computes an approximation of the Pagerank using the power method.
+The input edge list should be provided in dask-cudf dataframe
+with one partition per GPU.
+             </p>
+             <dl class="field-list simple">
+              <dt class="field-odd">
+               Parameters
+              </dt>
+              <dd class="field-odd">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  edge_list
+                 </strong>
+                 <span class="classifier">
+                  dask_cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  Contain the connectivity information as an edge list.
+Source ‘src’ and destination ‘dst’ columns must be of type ‘int32’.
+Edge weights are not used for this algorithm.
+Indices must be in the range [0, V-1], where V is the global number
+of vertices.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  alpha
+                 </strong>
+                 <span class="classifier">
+                  float
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  The damping factor alpha represents the probability to follow an
+outgoing edge, standard value is 0.85.
+Thus, 1.0-alpha is the probability to “teleport” to a random vertex.
+Alpha should be greater than 0.0 and strictly lower than 1.0.
+                 </p>
+                </dd>
+                <dt>
+                 <strong>
+                  max_iter
+                 </strong>
+                 <span class="classifier">
+                  int
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  The maximum number of iterations before an answer is returned.
+If this value is lower or equal to 0 cuGraph will use the default
+value, which is 30.
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+              <dt class="field-even">
+               Returns
+              </dt>
+              <dd class="field-even">
+               <dl class="simple">
+                <dt>
+                 <strong>
+                  PageRank
+                 </strong>
+                 <span class="classifier">
+                  dask_cudf.DataFrame
+                 </span>
+                </dt>
+                <dd>
+                 <p>
+                  Dask GPU DataFrame containing two columns of size V: the vertex
+identifiers and the corresponding PageRank values.
+                 </p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <p class="rubric">
+              Examples
+             </p>
+             <div class="doctest highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dask_cugraph.pagerank</span> <span class="k">as</span> <span class="nn">dcg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chunksize</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">get_chunksize</span><span class="p">(</span><span class="n">edge_list</span><span class="o">.</span><span class="n">csv</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ddf_edge_list</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">edge_list</span><span class="o">.</span><span class="n">csv</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                   <span class="n">chunksize</span> <span class="o">=</span> <span class="n">chunksize</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                   <span class="n">delimiter</span><span class="o">=</span><span class="s1">'  '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                   <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">'src'</span><span class="p">,</span> <span class="s1">'dst'</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>                                   <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span><span class="n">ddf_edge_list</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.85</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre>
+              </div>
+             </div>
+            </dd>
+           </dl>
           </div>
          </div>
         </div>
