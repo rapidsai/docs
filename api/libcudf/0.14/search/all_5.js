@@ -33,6 +33,5 @@ var searchData=
   ['extent_449',['extent',['../classcudf_1_1column__device__view.html#ab2b97b61f180c71d7157870a77058070',1,'cudf::column_device_view::extent()'],['../classcudf_1_1mutable__column__device__view.html#a6ea19dda6dde03495d02fd5480f4d57e',1,'cudf::mutable_column_device_view::extent()']]],
   ['extract_450',['extract',['../classcudf_1_1strings_1_1detail_1_1reprog__device.html#ae34e2e4bb10b7d8075a5ef443eb1ffcb',1,'cudf::strings::detail::reprog_device::extract()'],['../classNVStrings.html#a69f1eefde58d4bba9f020e16ed105e8a',1,'NVStrings::extract()'],['../namespacecudf_1_1strings.html#a8c5b1014dcd65e3ebbd00a57c26a5ce6',1,'cudf::strings::extract()']]],
   ['extract_5fcomponent_5foperator_451',['extract_component_operator',['../structcudf_1_1datetime_1_1detail_1_1extract__component__operator.html',1,'cudf::datetime::detail']]],
-  ['extract_5flast_5fday_5fof_5fmonth_452',['extract_last_day_of_month',['../structcudf_1_1datetime_1_1detail_1_1extract__last__day__of__month.html',1,'cudf::datetime::detail']]],
-  ['extract_5frecord_453',['extract_record',['../classNVStrings.html#a38ca4fa55925f7bd107b0c5c9011b034',1,'NVStrings']]]
+  ['extract_5frecord_452',['extract_record',['../classNVStrings.html#a38ca4fa55925f7bd107b0c5c9011b034',1,'NVStrings']]]
 ];

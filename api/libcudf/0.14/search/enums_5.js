@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['letter_5ftype_3019',['letter_type',['../classNVText.html#af974314b036ba255dd5f71b108d1ffde',1,'NVText']]]
+  ['letter_5ftype_3011',['letter_type',['../classNVText.html#af974314b036ba255dd5f71b108d1ffde',1,'NVText']]]
 ];

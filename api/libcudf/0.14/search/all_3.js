@@ -132,7 +132,7 @@ var searchData=
   ['cos_249',['COS',['../namespacecudf.html#ab15567f1034536ae6f7f14179334a19baf7c88ff3bee94b5c3c16c405706ef34a',1,'cudf']]],
   ['count_250',['count',['../structcudf_1_1meanvar.html#a7dfa9f740a05add289adf4ca77daf89d',1,'cudf::meanvar']]],
   ['count_5fall_251',['COUNT_ALL',['../classcudf_1_1experimental_1_1aggregation.html#a86a800d62c1b8a500f7920fd1ca0189da9fb39696abc5bae75525db71e5fd939c',1,'cudf::experimental::aggregation']]],
-  ['count_5fall_5ffrom_5fset_252',['count_all_from_set',['../namespacecudf_1_1experimental_1_1io.html#a1952fe02d8b71d4c2fee4427c139329e',1,'cudf::experimental::io::count_all_from_set(const rmm::device_buffer &amp;d_data, const std::vector&lt; char &gt; &amp;keys)'],['../namespacecudf_1_1experimental_1_1io.html#a912a038110b14cdf4a72132510f24ff0',1,'cudf::experimental::io::count_all_from_set(const char *h_data, size_t h_size, const std::vector&lt; char &gt; &amp;keys)']]],
+  ['count_5fall_5ffrom_5fset_252',['count_all_from_set',['../namespacecudf_1_1experimental_1_1io.html#a912a038110b14cdf4a72132510f24ff0',1,'cudf::experimental::io']]],
   ['count_5fbytes_253',['count_bytes',['../namespacecudf_1_1strings.html#a404c6362b7373210227c9c6e71eb2f8c',1,'cudf::strings']]],
   ['count_5fcharacters_254',['count_characters',['../namespacecudf_1_1strings.html#ad48a7f33405d2f44b678bf07e96feaa9',1,'cudf::strings']]],
   ['count_5fdescendants_255',['count_descendants',['../namespacecudf.html#aef675a9c75a848ab796ae9b2b51c4238',1,'cudf']]],

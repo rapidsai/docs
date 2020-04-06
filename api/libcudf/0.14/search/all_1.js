@@ -18,7 +18,7 @@ var searchData=
   ['aggregations_27',['aggregations',['../structcudf_1_1experimental_1_1groupby_1_1aggregation__request.html#a3fc574e393f6de5750b81a685c376320',1,'cudf::experimental::groupby::aggregation_request']]],
   ['all_28',['ALL',['../classcudf_1_1experimental_1_1aggregation.html#a86a800d62c1b8a500f7920fd1ca0189da9003f0a443f6b14a11bec60bbebab5ec',1,'cudf::experimental::aggregation::ALL()'],['../namespacecudf_1_1experimental_1_1io.html#ac67f859abc53aa9cac54d0a769da6fa1a5fb1f955b45e38e31789286a1790398d',1,'cudf::experimental::io::ALL()']]],
   ['all_5fbitmask_5fon_29',['all_bitmask_on',['../bitmask__ops_8hpp.html#a76bfc7bbfe0759559e9cfd7ac2931c8f',1,'bitmask_ops.cu']]],
-  ['all_5fcharacters_5fof_5ftype_30',['all_characters_of_type',['../namespacecudf_1_1strings.html#a58122989a4651f836b433ec79dba7282',1,'cudf::strings']]],
+  ['all_5fcharacters_5fof_5ftype_30',['all_characters_of_type',['../namespacecudf_1_1strings.html#a0d19ae3748b681626337e397ebf1341d',1,'cudf::strings']]],
   ['all_5fnull_31',['ALL_NULL',['../namespacecudf.html#a4daf20c000ab374d76f4d56f0ddb7b26ab8a690c8c67b400079b43eb5a2146753',1,'cudf']]],
   ['all_5fvalid_32',['ALL_VALID',['../namespacecudf.html#a4daf20c000ab374d76f4d56f0ddb7b26a00a0fd1f61b5bd5c53628de693967e08',1,'cudf']]],
   ['allocate_5fcolumn_33',['allocate_column',['../namespacecudf.html#a3fbb86eb24e5093dcddeb0a0640b768f',1,'cudf']]],

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['launch_753',['launch',['../classcudf_1_1jit_1_1launcher.html#aec3e1d28f4a208f8ed48a68175444de7',1,'cudf::jit::launcher']]],
-  ['launch_5ffunctor_754',['launch_functor',['../structcudf_1_1datetime_1_1detail_1_1launch__functor.html',1,'cudf::datetime::detail']]],
+  ['launch_5fextract_5fcomponent_754',['launch_extract_component',['../structcudf_1_1datetime_1_1detail_1_1launch__extract__component.html',1,'cudf::datetime::detail']]],
   ['launcher_755',['Launcher',['../structcudf_1_1unary_1_1Launcher.html',1,'cudf::unary::Launcher&lt; T, Tout, F &gt;'],['../structcudf_1_1experimental_1_1unary_1_1launcher.html',1,'cudf::experimental::unary::launcher&lt; T, Tout, F &gt;'],['../classcudf_1_1jit_1_1launcher.html',1,'cudf::jit::launcher'],['../classcudf_1_1jit_1_1launcher.html#ab91b9409c386363ab5e0a8eb2c8e2af0',1,'cudf::jit::launcher::launcher()']]],
   ['left_756',['left',['../classNVStrings.html#ae632539abce4f345d9c6995cc407281ea27a6f390cacbee032b9099765c3277dd',1,'NVStrings::left()'],['../namespacecudf_1_1strings.html#ace598ecf9030296eeebfef46251d7d52a684d325a7303f52e64011467ff5c5758',1,'cudf::strings::LEFT()']]],
   ['len_757',['len',['../classNVStrings.html#a3e22a977c3d75aa43923fee20c49a194',1,'NVStrings']]],
