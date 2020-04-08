@@ -27,7 +27,7 @@ var searchData=
   ['blocksumarray_98',['BlockSumArray',['../structBlockSumArray.html',1,'']]],
   ['blocksumpyramid_99',['BlockSumPyramid',['../classBlockSumPyramid.html',1,'']]],
   ['blue_100',['blue',['../structnvtx3_1_1rgb.html#a4d414829ab958dc19213ef176473d7be',1,'nvtx3::rgb']]],
-  ['bool8_101',['bool8',['../structcudf_1_1experimental_1_1bool8.html',1,'cudf::experimental::bool8'],['../namespacecudf.html#acd4cd7157c4379954b5772936f89c59ba9100ee556e5cf9b6dada6c7c506fa138',1,'cudf::BOOL8()']]],
+  ['bool8_101',['BOOL8',['../namespacecudf.html#acd4cd7157c4379954b5772936f89c59ba9100ee556e5cf9b6dada6c7c506fa138',1,'cudf']]],
   ['boolean_5fmask_5fscatter_102',['boolean_mask_scatter',['../namespacecudf_1_1experimental.html#a087fa19f9ee06f083f4f020385d1d5e5',1,'cudf::experimental::boolean_mask_scatter(table_view const  &amp;input, table_view const  &amp;target, column_view const  &amp;boolean_mask, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())'],['../namespacecudf_1_1experimental.html#a5f2e902ca8cc6a2dae6687b13a49182e',1,'cudf::experimental::boolean_mask_scatter(std::vector&lt; std::reference_wrapper&lt; scalar &gt;&gt; const  &amp;input, table_view const  &amp;target, column_view const  &amp;boolean_mask, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())']]],
   ['bools_5fto_5fmask_103',['bools_to_mask',['../namespacecudf_1_1experimental.html#acf23e8ea75238ff81d762d0d1e336a4c',1,'cudf::experimental']]],
   ['both_104',['both',['../classNVStrings.html#ae632539abce4f345d9c6995cc407281ea5b01f59b3412cfffe0dab5fc41d3e46f',1,'NVStrings::both()'],['../namespacecudf_1_1strings.html#ace598ecf9030296eeebfef46251d7d52a6328e5e3186c227a021ef2ff77e40197',1,'cudf::strings::BOTH()']]],

@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['quantile_2607',['quantile',['../namespacecudf_1_1experimental.html#a0c2180b87d264674eb8e577e7bedaa45',1,'cudf::experimental']]],
-  ['quantile_5fapprox_2608',['quantile_approx',['../namespacecudf.html#aaecb9e39d5b5475f53260497f3a8db0a',1,'cudf']]],
-  ['quantile_5fexact_2609',['quantile_exact',['../namespacecudf.html#a3aad879c6bbd17521333c06dab5db483',1,'cudf']]],
-  ['quantiles_2610',['quantiles',['../namespacecudf_1_1experimental.html#ab7407ea137cc20a1343331efd180775b',1,'cudf::experimental']]]
+  ['quantile_2598',['quantile',['../namespacecudf_1_1experimental.html#a0c2180b87d264674eb8e577e7bedaa45',1,'cudf::experimental']]],
+  ['quantile_5fapprox_2599',['quantile_approx',['../namespacecudf.html#aaecb9e39d5b5475f53260497f3a8db0a',1,'cudf']]],
+  ['quantile_5fexact_2600',['quantile_exact',['../namespacecudf.html#a3aad879c6bbd17521333c06dab5db483',1,'cudf']]],
+  ['quantiles_2601',['quantiles',['../namespacecudf_1_1experimental.html#ab7407ea137cc20a1343331efd180775b',1,'cudf::experimental']]]
 ];

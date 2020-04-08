@@ -171,7 +171,7 @@ var searchData=
   ['cudamessagereader_288',['CudaMessageReader',['../classCudaMessageReader.html',1,'']]],
   ['cudastream_5ft_289',['cudaStream_t',['../types_8hpp.html#a27a677c66bef483a40f3d65c02b09e0f',1,'types.hpp']]],
   ['cudf_290',['cudf',['../namespacecudf.html',1,'']]],
-  ['cudf_5ftype_5fmapping_291',['CUDF_TYPE_MAPPING',['../type__dispatcher_8hpp.html#a7dcb8f2b1a2a8f0e2c965251ea4bbae1',1,'CUDF_TYPE_MAPPING():&#160;type_dispatcher.hpp'],['../namespacecudf_1_1experimental.html#ad9f3553fd1261d377365d94c676fff9d',1,'cudf::experimental::CUDF_TYPE_MAPPING()']]],
+  ['cudf_5ftype_5fmapping_291',['CUDF_TYPE_MAPPING',['../type__dispatcher_8hpp.html#a7dcb8f2b1a2a8f0e2c965251ea4bbae1',1,'CUDF_TYPE_MAPPING():&#160;type_dispatcher.hpp'],['../namespacecudf_1_1experimental.html#a62e1dc3ae613181b2dd1d8616427bffa',1,'cudf::experimental::CUDF_TYPE_MAPPING()']]],
   ['cudfjitcache_292',['cudfJitCache',['../classcudf_1_1jit_1_1cudfJitCache.html',1,'cudf::jit']]],
   ['cur_293',['cur',['../structcudf_1_1io_1_1parquet_1_1gpu_1_1page__enc__state__s.html#aa1fc0269c573fcf5df1926d23372f7be',1,'cudf::io::parquet::gpu::page_enc_state_s']]],
   ['current_5fchunk_5foffset_294',['current_chunk_offset',['../structcudf_1_1experimental_1_1io_1_1detail_1_1orc_1_1orc__chunked__state.html#ab671922cc8162d0756a327ac5f496fe4',1,'cudf::experimental::io::detail::orc::orc_chunked_state::current_chunk_offset()'],['../structcudf_1_1experimental_1_1io_1_1detail_1_1parquet_1_1pq__chunked__state.html#a22c4cb76582e927b99889114c25cb948',1,'cudf::experimental::io::detail::parquet::pq_chunked_state::current_chunk_offset()']]],

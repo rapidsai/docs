@@ -992,7 +992,7 @@ $(function() {
      <td class="mdescLeft">
      </td>
      <td class="mdescRight">
-      Returns a new datetime column converting a string column into timestamps using the provided format string.
+      Returns a new timestamp column converting a strings column into timestamps using the provided format pattern.
       <a href="namespacecudf_1_1strings.html#a9c8dd7fe42bcd7e0f615e730dfe0593a">
        More...
       </a>
@@ -1026,7 +1026,7 @@ $(function() {
      <td class="mdescLeft">
      </td>
      <td class="mdescRight">
-      Returns a new strings column converting a datetime column into strings using the provided format string.
+      Returns a new strings column converting a timestamp column into strings using the provided format pattern.
       <a href="namespacecudf_1_1strings.html#af0b5b7984fdc62ee46929dbecdfa55aa">
        More...
       </a>
@@ -6224,19 +6224,133 @@ $(function() {
     </div>
     <div class="memdoc">
      <p>
-      Returns a new strings column converting a datetime column into strings using the provided format string.
+      Returns a new strings column converting a timestamp column into strings using the provided format pattern.
      </p>
      <p>
-      The format must include strftime format specifiers though only the following are supported: Y,y,m,d,H,I,p,M,S,f,z Reference:
-      <a href="http://man7.org/linux/man-pages/man3/strftime.3.html">
-       http://man7.org/linux/man-pages/man3/strftime.3.html
-      </a>
+      The format pattern can include the following specifiers: "%Y,%y,%m,%d,%H,%I,%p,%M,%S,%f,%z,%Z"
      </p>
+     <table class="markdownTable">
+      <tr class="markdownTableHead">
+       <th class="markdownTableHeadCenter">
+        Specifier
+       </th>
+       <th class="markdownTableHeadNone">
+        Description
+       </th>
+      </tr>
+      <tr class="markdownTableRowOdd">
+       <td class="markdownTableBodyCenter">
+        %d
+       </td>
+       <td class="markdownTableBodyNone">
+        Day of the month: 01-31
+       </td>
+      </tr>
+      <tr class="markdownTableRowEven">
+       <td class="markdownTableBodyCenter">
+        %m
+       </td>
+       <td class="markdownTableBodyNone">
+        Month of the year: 01-12
+       </td>
+      </tr>
+      <tr class="markdownTableRowOdd">
+       <td class="markdownTableBodyCenter">
+        %y
+       </td>
+       <td class="markdownTableBodyNone">
+        Year without century: 00-99
+       </td>
+      </tr>
+      <tr class="markdownTableRowEven">
+       <td class="markdownTableBodyCenter">
+        %Y
+       </td>
+       <td class="markdownTableBodyNone">
+        Year with century: 0001-9999
+       </td>
+      </tr>
+      <tr class="markdownTableRowOdd">
+       <td class="markdownTableBodyCenter">
+        %H
+       </td>
+       <td class="markdownTableBodyNone">
+        24-hour of the day: 00-23
+       </td>
+      </tr>
+      <tr class="markdownTableRowEven">
+       <td class="markdownTableBodyCenter">
+        %I
+       </td>
+       <td class="markdownTableBodyNone">
+        12-hour of the day: 01-12
+       </td>
+      </tr>
+      <tr class="markdownTableRowOdd">
+       <td class="markdownTableBodyCenter">
+        %M
+       </td>
+       <td class="markdownTableBodyNone">
+        Minute of the hour: 00-59
+       </td>
+      </tr>
+      <tr class="markdownTableRowEven">
+       <td class="markdownTableBodyCenter">
+        %S
+       </td>
+       <td class="markdownTableBodyNone">
+        Second of the minute: 00-59
+       </td>
+      </tr>
+      <tr class="markdownTableRowOdd">
+       <td class="markdownTableBodyCenter">
+        %f
+       </td>
+       <td class="markdownTableBodyNone">
+        6-digit microsecond: 000000-999999
+       </td>
+      </tr>
+      <tr class="markdownTableRowEven">
+       <td class="markdownTableBodyCenter">
+        %z
+       </td>
+       <td class="markdownTableBodyNone">
+        Always outputs "+0000"
+       </td>
+      </tr>
+      <tr class="markdownTableRowOdd">
+       <td class="markdownTableBodyCenter">
+        %Z
+       </td>
+       <td class="markdownTableBodyNone">
+        Always outputs "UTC"
+       </td>
+      </tr>
+      <tr class="markdownTableRowEven">
+       <td class="markdownTableBodyCenter">
+        %j
+       </td>
+       <td class="markdownTableBodyNone">
+        Day of the year: 001-366
+       </td>
+      </tr>
+      <tr class="markdownTableRowOdd">
+       <td class="markdownTableBodyCenter">
+        %p
+       </td>
+       <td class="markdownTableBodyNone">
+        Only 'AM' or 'PM'
+       </td>
+      </tr>
+     </table>
      <p>
-      No checking is done for invalid formats or invalid timestamp units. Negative timestamp values are not currently supported.
+      No checking is done for invalid formats or invalid timestamp values. Negative timestamp values are not currently supported. All timestamps values are formatted to UTC.
      </p>
      <p>
       Any null input entry will result in a corresponding null entry in the output column.
+     </p>
+     <p>
+      The time units of the input column influence the number of digits written by the "%f" specifier. For milliseconds, only 3 digits are written. For nanoseconds, 9 digits are written. All other time units write 6 digits to the output string.
      </p>
      <dl class="exception">
       <dt>
@@ -6251,7 +6365,11 @@ $(function() {
           </a>
          </td>
          <td>
-          if timestamps column parameter is not a timestamp type.
+          if
+          <code>
+           timestamps
+          </code>
+          column parameter is not a timestamp type.
          </td>
         </tr>
        </table>
@@ -6276,7 +6394,7 @@ $(function() {
           format
          </td>
          <td>
-          The String specifying output format. Default format is "%Y-%m-%dT%H:%M:%SZ".
+          The string specifying output format. Default format is "%Y-%m-%dT%H:%M:%SZ".
          </td>
         </tr>
         <tr>
@@ -11778,19 +11896,132 @@ $(function() {
     </div>
     <div class="memdoc">
      <p>
-      Returns a new datetime column converting a string column into timestamps using the provided format string.
+      Returns a new timestamp column converting a strings column into timestamps using the provided format pattern.
      </p>
      <p>
-      The format must include strptime format specifiers though only the following are supported: Y,y,m,d,H,I,p,M,S,f,z Reference:
-      <a href="http://man7.org/linux/man-pages/man3/strptime.3.html">
-       http://man7.org/linux/man-pages/man3/strptime.3.html
-      </a>
+      The format pattern can include the following specifiers: "%Y,%y,%m,%d,%H,%I,%p,%M,%S,%f,%z"
+     </p>
+     <table class="markdownTable">
+      <tr class="markdownTableHead">
+       <th class="markdownTableHeadCenter">
+        Specifier
+       </th>
+       <th class="markdownTableHeadNone">
+        Description
+       </th>
+      </tr>
+      <tr class="markdownTableRowOdd">
+       <td class="markdownTableBodyCenter">
+        %d
+       </td>
+       <td class="markdownTableBodyNone">
+        Day of the month: 01-31
+       </td>
+      </tr>
+      <tr class="markdownTableRowEven">
+       <td class="markdownTableBodyCenter">
+        %m
+       </td>
+       <td class="markdownTableBodyNone">
+        Month of the year: 01-12
+       </td>
+      </tr>
+      <tr class="markdownTableRowOdd">
+       <td class="markdownTableBodyCenter">
+        %y
+       </td>
+       <td class="markdownTableBodyNone">
+        Year without century: 00-99
+       </td>
+      </tr>
+      <tr class="markdownTableRowEven">
+       <td class="markdownTableBodyCenter">
+        %Y
+       </td>
+       <td class="markdownTableBodyNone">
+        Year with century: 0001-9999
+       </td>
+      </tr>
+      <tr class="markdownTableRowOdd">
+       <td class="markdownTableBodyCenter">
+        %H
+       </td>
+       <td class="markdownTableBodyNone">
+        24-hour of the day: 00-23
+       </td>
+      </tr>
+      <tr class="markdownTableRowEven">
+       <td class="markdownTableBodyCenter">
+        %I
+       </td>
+       <td class="markdownTableBodyNone">
+        12-hour of the day: 01-12
+       </td>
+      </tr>
+      <tr class="markdownTableRowOdd">
+       <td class="markdownTableBodyCenter">
+        %M
+       </td>
+       <td class="markdownTableBodyNone">
+        Minute of the hour: 00-59
+       </td>
+      </tr>
+      <tr class="markdownTableRowEven">
+       <td class="markdownTableBodyCenter">
+        %S
+       </td>
+       <td class="markdownTableBodyNone">
+        Second of the minute: 00-59
+       </td>
+      </tr>
+      <tr class="markdownTableRowOdd">
+       <td class="markdownTableBodyCenter">
+        %f
+       </td>
+       <td class="markdownTableBodyNone">
+        6-digit microsecond: 000000-999999
+       </td>
+      </tr>
+      <tr class="markdownTableRowEven">
+       <td class="markdownTableBodyCenter">
+        %z
+       </td>
+       <td class="markdownTableBodyNone">
+        UTC offset with format ±HHMM Example +0500
+       </td>
+      </tr>
+      <tr class="markdownTableRowOdd">
+       <td class="markdownTableBodyCenter">
+        %j
+       </td>
+       <td class="markdownTableBodyNone">
+        Day of the year: 001-366
+       </td>
+      </tr>
+      <tr class="markdownTableRowEven">
+       <td class="markdownTableBodyCenter">
+        %p
+       </td>
+       <td class="markdownTableBodyNone">
+        Only 'AM', 'PM' or 'am', 'pm' are recognized
+       </td>
+      </tr>
+     </table>
+     <p>
+      Other specifiers are not currently supported.
      </p>
      <p>
-      No checking is done for invalid formats. Negative timestamp are not currently supported. These would have dates before 1970-01-01.
+      Invalid formats are not checked. If the string contains unexpected or insufficient characters, that output row entry's timestamp value is undefined. Negative timestamp values are not currently supported. These would have dates formatted before 1970-01-01.
      </p>
      <p>
-      Any null string entry will result in a null entry in the output column.
+      Any null string entry will result in a corresponding null row in the output column.
+     </p>
+     <p>
+      The resulting time units are specified by the
+      <code>
+       timestamp_type
+      </code>
+      parameter. The time units influence the number of digits parsed by the "%f" specifier. For milliseconds, only 3 digits are read. For nanoseconds, 9 digits are read. All other time units expect 6 digits to be available for read.
      </p>
      <dl class="exception">
       <dt>
@@ -13015,7 +13246,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    find.cu:259
+    find.cu:258
    </div>
   </div>
   <div class="ttc" id="anamespacecudf_1_1strings_html_a452d1ce407f311d8b22d226db9a5b1b7">
