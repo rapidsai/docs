@@ -15,7 +15,7 @@ We strive to release an update to the RAPIDS data science framework about every 
 
 Download the latest version of the RAPIDS release deck.
 
-### v0.12 Release | Feb 2020
+### v0.13 Release | Mar 2020
 
 #### Download **[pdf](/overview/latest.pdf){: target="_blank"}** | **[pptx](/overview/latest.pptx){: target="_blank"}**
 {: .mb-10 .mt-0 }
@@ -26,6 +26,11 @@ Download the latest version of the RAPIDS release deck.
 
 Download current and previous versions of the RAPIDS release decks.
 {: .mt-0 }
+
+### v0.13 Release | Mar 2020
+
+#### Download **[pdf](/overview/RAPIDS 0.13 Release Deck.pdf){: target="_blank"}** | **[pptx](/overview/RAPIDS 0.13 Release Deck.pptx){: target="_blank"}** 
+{: .mb-7 .mt-0 }
 
 ### v0.12 Release | Feb 2020
 
