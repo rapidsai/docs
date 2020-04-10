@@ -2859,8 +2859,7 @@ Computational &amp; Mathematical Organization Theory (2001) 7: 275.
                 <dd>
                  <p>
                   cuGraph graph descriptor with connectivity information. The graph can
-contain either directed or undirected edges where undirected edges are
-represented as directed edges in both directions.
+contain either directed (DiGraph) or undirected edges (Graph).
                  </p>
                 </dd>
                 <dt>
@@ -3017,12 +3016,10 @@ identifiers and the corresponding katz centrality values.
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">kc</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">katz_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre>
               </div>
@@ -3082,7 +3079,7 @@ identifiers and the corresponding katz centrality values.
             </dt>
             <dd>
              <p>
-              Compute betweenness centrality for the nodes of the graph G. cuGraph
+              Compute the betweenness centrality for all nodes of the graph G. cuGraph
 does not currently support the ‘endpoints’ and ‘weight’ parameters
 as seen in the corresponding networkX call.
              </p>
@@ -3103,8 +3100,7 @@ as seen in the corresponding networkX call.
                 <dd>
                  <p>
                   cuGraph graph descriptor with connectivity information. The graph can
-contain either directed or undirected edges where undirected edges are
-represented as directed edges in both directions.
+be either directed (DiGraph) or undirected (Graph)
                  </p>
                 </dd>
                 <dt>
@@ -3117,7 +3113,8 @@ represented as directed edges in both directions.
                 </dt>
                 <dd>
                  <p>
-                  If k is not None, use k node samples to estimate betweenness.  Higher
+                  Default is None.
+If k is not None, use k node samples to estimate betweenness.  Higher
 values give better approximation
                  </p>
                 </dd>
@@ -3131,8 +3128,10 @@ values give better approximation
                 </dt>
                 <dd>
                  <p>
-                  Value defaults to true.  If true, the betweenness values are normalized
-by 2/((n-1)(n-2)) for graphs, and 1 / ((n-1)(n-2)) for directed graphs
+                  Default is True.
+If true, the betweenness values are normalized by
+2/((n-1)(n-2)) for Graphs (undirected), and
+1 / ((n-1)(n-2)) for DiGraphs (directed graphs)
 where n is the number of nodes in G.
                  </p>
                 </dd>
@@ -3231,10 +3230,8 @@ identifiers and the corresponding katz centrality values.
               <div class="highlight">
                <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre>
               </div>
@@ -3289,12 +3286,12 @@ identifiers and the corresponding katz centrality values.
               Compute the modularity optimizing partition of the input graph using the
 Louvain heuristic
              </p>
-             <dl class="field-list simple">
+             <dl class="field-list">
               <dt class="field-odd">
                Parameters
               </dt>
               <dd class="field-odd">
-               <dl class="simple">
+               <dl>
                 <dt>
                  <strong>
                   input_graph
@@ -3305,9 +3302,10 @@ Louvain heuristic
                 </dt>
                 <dd>
                  <p>
-                  cuGraph graph descriptor, should contain the connectivity information
-as an edge list.
-The adjacency list will be computed if not already present. The graph
+                  cuGraph graph descriptor of type Graph
+                 </p>
+                 <p>
+                  The adjacency list will be computed if not already present. The graph
 should be undirected where an undirected edge is represented by a
 directed edge in both direction.
                  </p>
@@ -3334,7 +3332,7 @@ algorithm terminates early in this manner.
                Returns
               </dt>
               <dd class="field-even">
-               <dl class="simple">
+               <dl>
                 <dt>
                  <strong>
                   parts
@@ -3348,6 +3346,30 @@ algorithm terminates early in this manner.
                   GPU data frame of size V containing two columns the vertex id and the
 partition id it is assigned to.
                  </p>
+                 <dl class="simple">
+                  <dt>
+                   df[‘vertex’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    Contains the vertex identifiers
+                   </p>
+                  </dd>
+                  <dt>
+                   df[‘partition’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    Contains the partition assigned to the vertices
+                   </p>
+                  </dd>
+                 </dl>
                 </dd>
                 <dt>
                  <strong>
@@ -3359,7 +3381,7 @@ partition id it is assigned to.
                 </dt>
                 <dd>
                  <p>
-                  a floating point number containing the modularity score of the
+                  a floating point number containing the global modularity score of the
 partitioning.
                  </p>
                 </dd>
@@ -3371,12 +3393,12 @@ partitioning.
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
+<span class="go">                      delimiter = ' ',</span>
+<span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
+<span class="go">                      header=None)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">parts</span><span class="p">,</span> <span class="n">modularity_score</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">louvain</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre>
               </div>
@@ -3424,18 +3446,20 @@ partitioning.
             </dt>
             <dd>
              <p>
-              Compute the ensemble clustering for graphs (ECG) partition of the input
-graph ECG runs truncated Louvain on an ensemble of permutations of the
+              Compute the Ensemble Clustering for Graphs (ECG) partition of the input
+graph. ECG runs truncated Louvain on an ensemble of permutations of the
 input graph, then uses the ensemble partitions to determine weights for
-the input graph.The final result is found by running full Louvain on
+the input graph. The final result is found by running full Louvain on
 the input graph using the determined weights.
-See
+             </p>
+             <p>
+              See
               <a class="reference external" href="https://arxiv.org/abs/1809.05578">
                https://arxiv.org/abs/1809.05578
               </a>
               for further information.
              </p>
-             <dl class="field-list simple">
+             <dl class="field-list">
               <dt class="field-odd">
                Parameters
               </dt>
@@ -3452,7 +3476,7 @@ See
                 <dd>
                  <p>
                   cuGraph graph descriptor, should contain the connectivity information
-and weights.The adjacency list will be computed if not already
+and weights. The adjacency list will be computed if not already
 present.
                  </p>
                 </dd>
@@ -3467,7 +3491,7 @@ present.
                 <dd>
                  <p>
                   The minimum value to assign as an edgeweight in the ECG algorithm.
-It should be a value in the range (0,1] usually left as the default
+It should be a value in the range [0,1] usually left as the default
 value of .05
                  </p>
                 </dd>
@@ -3492,7 +3516,7 @@ partitions for some graphs.
                Returns
               </dt>
               <dd class="field-even">
-               <dl class="simple">
+               <dl>
                 <dt>
                  <strong>
                   parts
@@ -3506,6 +3530,36 @@ partitions for some graphs.
                   GPU data frame of size V containing two columns, the vertex id and
 the partition id it is assigned to.
                  </p>
+                 <blockquote>
+                  <div>
+                   <dl class="simple">
+                    <dt>
+                     df[‘vertex’]
+                     <span class="classifier">
+                      cudf.Series
+                     </span>
+                    </dt>
+                    <dd>
+                     <p>
+                      Contains the vertex identifiers
+                     </p>
+                    </dd>
+                   </dl>
+                  </div>
+                 </blockquote>
+                 <dl class="simple">
+                  <dt>
+                   df[‘partition’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    Contains the partition assigned to the vertices
+                   </p>
+                  </dd>
+                 </dl>
                 </dd>
                </dl>
               </dd>
@@ -3519,11 +3573,8 @@ the partition id it is assigned to.
 <span class="go">                      delimiter = ' ',</span>
 <span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
 <span class="go">                      header=None)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'2'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="s1">'2'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">parts</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">ecg</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre>
               </div>
@@ -3646,12 +3697,12 @@ the partition id it is assigned to.
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
+<span class="go">                      delimiter = ' ',</span>
+<span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
+<span class="go">                      header=None)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">spectralBalancedCutClustering</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">score</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">analyzeClustering_edge_cut</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">'cluster'</span><span class="p">])</span>
 </pre>
@@ -3765,13 +3816,12 @@ the partition id it is assigned to.
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'2'</span><span class="p">])</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
+<span class="go">                      delimiter = ' ',</span>
+<span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
+<span class="go">                      header=None)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="s1">'2'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">spectralBalancedCutClustering</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">score</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">analyzeClustering_modularity</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">'cluster'</span><span class="p">])</span>
 </pre>
@@ -3885,13 +3935,12 @@ the partition id it is assigned to.
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'2'</span><span class="p">])</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
+<span class="go">                      delimiter = ' ',</span>
+<span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
+<span class="go">                      header=None)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="s1">'2'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">spectralBalancedCutClustering</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">score</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">analyzeClustering_ratio_cut</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">'cluster'</span><span class="p">])</span>
 </pre>
@@ -4003,6 +4052,7 @@ num_clusters.
                 <dd>
                  <p>
                   Specifies the tolerance to use in the eigensolver
+Default is 0.00001
                  </p>
                 </dd>
                 <dt>
@@ -4013,6 +4063,7 @@ num_clusters.
                 <dd>
                  <p>
                   Specifies the maximum number of iterations for the eigensolver
+Default is 100
                  </p>
                 </dd>
                 <dt>
@@ -4023,6 +4074,7 @@ num_clusters.
                 <dd>
                  <p>
                   Specifies the tolerance to use in the k-means solver
+Default is 0.00001
                  </p>
                 </dd>
                 <dt>
@@ -4033,6 +4085,7 @@ num_clusters.
                 <dd>
                  <p>
                   Specifies the maximum number of iterations for the k-means solver
+Default is 100
                  </p>
                 </dd>
                </dl>
@@ -4088,12 +4141,12 @@ identifiers and the corresponding cluster assignments.
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
+<span class="go">                      delimiter = ' ',</span>
+<span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
+<span class="go">                      header=None)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">spectralBalancedCutClustering</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 </pre>
               </div>
@@ -4204,6 +4257,7 @@ num_clusters
                 <dd>
                  <p>
                   Specifies the tolerance to use in the eigensolver
+Default is 0.00001
                  </p>
                 </dd>
                 <dt>
@@ -4214,6 +4268,7 @@ num_clusters
                 <dd>
                  <p>
                   Specifies the maximum number of iterations for the eigensolver
+Default is 100
                  </p>
                 </dd>
                 <dt>
@@ -4224,6 +4279,7 @@ num_clusters
                 <dd>
                  <p>
                   Specifies the tolerance to use in the k-means solver
+Default is 0.00001
                  </p>
                 </dd>
                 <dt>
@@ -4234,6 +4290,7 @@ num_clusters
                 <dd>
                  <p>
                   Specifies the maximum number of iterations for the k-means solver
+Default is 100
                  </p>
                 </dd>
                </dl>
@@ -4285,13 +4342,12 @@ num_clusters
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'2'</span><span class="p">])</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
+<span class="go">                      delimiter = ' ',</span>
+<span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
+<span class="go">                      header=None)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="s1">'2'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">spectralModularityMaximizationClustering</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 </pre>
               </div>
@@ -4400,12 +4456,12 @@ are incident on vertices that are both contained in the vertices list.
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
+<span class="go">                      delimiter = ' ',</span>
+<span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
+<span class="go">                      header=None)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">verts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">verts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">verts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
@@ -4502,12 +4558,12 @@ graph.
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
+<span class="go">                      delimiter = ' ',</span>
+<span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
+<span class="go">                      header=None)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">count</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">triangles</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre>
               </div>
@@ -4555,7 +4611,7 @@ graph.
             </dt>
             <dd>
              <p>
-              Generate the stronlgly connected components and attach a component label to
+              Generate the Stronlgly Connected Components and attach a component label to
 each vertex.
              </p>
              <dl class="field-list simple">
@@ -4611,12 +4667,12 @@ df[‘vertices’][i] gives the vertex id of the i’th vertex
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
+<span class="go">                      delimiter = ' ',</span>
+<span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
+<span class="go">                      header=None)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span><span class="n">destinations</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">strongly_connected_components</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre>
               </div>
@@ -4646,7 +4702,7 @@ df[‘vertices’][i] gives the vertex id of the i’th vertex
             </dt>
             <dd>
              <p>
-              Generate the weakly connected components and attach a component label to
+              Generate the Weakly Connected Components and attach a component label to
 each vertex.
              </p>
              <dl class="field-list simple">
@@ -4702,12 +4758,12 @@ df[‘vertices’][i] gives the vertex id of the i’th vertex
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
+<span class="go">                      delimiter = ' ',</span>
+<span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
+<span class="go">                      header=None)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">weakly_connected_components</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre>
               </div>
@@ -4872,12 +4928,10 @@ calculated internally.
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">KCoreGraph</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">k_core</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre>
               </div>
@@ -4998,12 +5052,10 @@ identifiers and the corresponding core number values.
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cn</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">core_number</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre>
               </div>
@@ -5079,7 +5131,7 @@ identifiers and the corresponding core number values.
             </dt>
             <dd>
              <p>
-              Find the PageRank vertex values for a graph. cuGraph computes an
+              Find the PageRank score for every vertex in a graph. cuGraph computes an
 approximation of the Pagerank eigenvector using the power method. The
 number of iterations depends on the properties of the network itself; it
 increases when the tolerance descreases and/or alpha increases toward the
@@ -5239,7 +5291,7 @@ acceptable.
                Returns
               </dt>
               <dd class="field-even">
-               <dl class="simple">
+               <dl>
                 <dt>
                  <strong>
                   PageRank
@@ -5253,6 +5305,30 @@ acceptable.
                   GPU data frame containing two cudf.Series of size V: the vertex
 identifiers and the corresponding PageRank values.
                  </p>
+                 <dl class="simple">
+                  <dt>
+                   df[‘vertex’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    Contains the vertex identifiers
+                   </p>
+                  </dd>
+                  <dt>
+                   df[‘pagerank’]
+                   <span class="classifier">
+                    cudf.Series
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    Contains the PageRank score
+                   </p>
+                  </dd>
+                 </dl>
                 </dd>
                </dl>
               </dd>
@@ -5262,12 +5338,10 @@ identifiers and the corresponding PageRank values.
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.85</span><span class="p">,</span> <span class="n">max_iter</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="mf">1.0e-05</span><span class="p">)</span>
 </pre>
               </div>
@@ -5357,13 +5431,11 @@ solution by doing the following:
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pairs</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">get_two_hop_neighbors</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pairs</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">get_two_hop_neighbors</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">jaccard</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pairs</span><span class="p">)</span>
 </pre>
               </div>
@@ -5481,12 +5553,10 @@ vertices
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">jaccard</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre>
               </div>
@@ -5654,13 +5724,9 @@ destination vertices.
               <div class="highlight">
                <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">max</span><span class="p">(</span><span class="n">sources</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">destinations</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">jaccard_w</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">jaccard_w</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">M</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 </pre>
               </div>
              </div>
@@ -5817,12 +5883,10 @@ vertices.
              </p>
              <div class="doctest highlight-default notranslate">
               <div class="highlight">
-               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+               <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre>
               </div>
@@ -5990,13 +6054,9 @@ destination vertices.
               <div class="highlight">
                <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">max</span><span class="p">(</span><span class="n">sources</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">destinations</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">overlap_w</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">overlap_w</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">M</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 </pre>
               </div>
              </div>
@@ -6121,10 +6181,8 @@ reached from in the traversal
               <div class="highlight">
                <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">bfs</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </pre>
               </div>
@@ -6317,10 +6375,8 @@ before the i’th vertex in the traversal.
               <div class="highlight">
                <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">distances</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">sssp</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </pre>
               </div>
