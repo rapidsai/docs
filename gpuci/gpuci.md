@@ -51,7 +51,7 @@ Any push to a branch triggers a gpuCI job that builds and tests the current code
 
 When a new PR is opened or an existing one has been updated, gpuCI will trigger a build and embed the results of the build into the status of the PR.
 
-> **NOTE:** gpuCI may request `Can one of the admins verify this patch?` in a comment on the PR. If this appears, one of the members of the RAPIDS team needs to respond to approve the PR. See the commands list below for available commands.
+> **NOTE:** gpuCI may request `Can one of the admins verify this patch?` in a comment on the PR. If this appears, one of the PICs for the RAPIDS library needs to respond to approve the PR. See the commands list [below](#admins---approving-pr-builds) for available commands.
 
 ### Comment on PR
 
