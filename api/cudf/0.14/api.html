@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>
-   API Reference — cudf 0.14.0a+2885.gc07e46ee9 documentation
+   API Reference — cudf 0.14.0a+2966.g8d22885ee documentation
   </title>
   <script src="_static/js/modernizr.min.js" type="text/javascript">
   </script>
@@ -13354,17 +13354,20 @@ cannot reference globals except for other simple scalar objects.
                    udf
                   </strong>
                   <span class="classifier">
-                   Either a callable python function or a python function already
+                   function
                   </span>
                  </dt>
                  <dd>
-                 </dd>
-                 <dt>
-                  <strong>
-                   decorated by ``numba.cuda.jit`` for call on the GPU as a device
-                  </strong>
-                 </dt>
-                 <dd>
+                  <p>
+                   Either a callable python function or a python function already
+decorated by
+                   <code class="docutils literal notranslate">
+                    <span class="pre">
+                     numba.cuda.jit
+                    </span>
+                   </code>
+                   for call on the GPU as a device
+                  </p>
                  </dd>
                  <dt>
                   <strong>
@@ -13485,7 +13488,92 @@ generates multiple PTX functions from them
                  </li>
                 </ul>
                </li>
+               <li>
+                <p>
+                 Series with string dtypes are not supported in
+                 <cite>
+                  applymap
+                 </cite>
+                 method.
+                </p>
+               </li>
+               <li>
+                <p>
+                 Global variables need to be re-defined explicitly inside
+the udf, as numba considers them to be compile-time constants
+and there is no known way to obtain value of the global variable.
+                </p>
+               </li>
               </ul>
+              <p class="rubric">
+               Examples
+              </p>
+              <p>
+               Returning a Series of booleans using only a literal pattern.
+&gt;&gt;&gt; import cudf
+&gt;&gt;&gt; s = cudf.Series([1, 10, -10, 200, 100])
+&gt;&gt;&gt; s.applymap(lambda x: x)
+0      1
+1     10
+2    -10
+3    200
+4    100
+dtype: int64
+&gt;&gt;&gt; s.applymap(lambda x: x in [1, 100, 59])
+0     True
+1    False
+2    False
+3    False
+4     True
+dtype: bool
+&gt;&gt;&gt; s.applymap(lambda x: x ** 2)
+0        1
+1      100
+2      100
+3    40000
+4    10000
+dtype: int64
+&gt;&gt;&gt; s.applymap(lambda x: (x ** 2) + (x / 2))
+0        1.5
+1      105.0
+2       95.0
+3    40100.0
+4    10050.0
+dtype: float64
+              </p>
+              <div class="doctest highlight-default notranslate">
+               <div class="highlight">
+                <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">cube_function</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">**</span> <span class="mi">3</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">cube_function</span><span class="p">)</span>
+<span class="go">0          1</span>
+<span class="go">1       1000</span>
+<span class="go">2      -1000</span>
+<span class="go">3    8000000</span>
+<span class="go">4    1000000</span>
+<span class="go">dtype: int64</span>
+</pre>
+               </div>
+              </div>
+              <div class="doctest highlight-default notranslate">
+               <div class="highlight">
+                <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">custom_udf</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="gp">... </span>    <span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">5</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">custom_udf</span><span class="p">)</span>
+<span class="go">0      6</span>
+<span class="go">1     15</span>
+<span class="go">2    -15</span>
+<span class="go">3    205</span>
+<span class="go">4    105</span>
+<span class="go">dtype: int64</span>
+</pre>
+               </div>
+              </div>
              </dd>
             </dl>
             <dl class="method">
