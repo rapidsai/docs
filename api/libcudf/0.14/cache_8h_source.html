@@ -1326,7 +1326,7 @@ $(function() {
      <span class="lineno">
       182
      </span>
-     boost::filesystem::path file_name = getCacheDir() / name;
+     boost::filesystem::path cache_dir = getCacheDir();
     </div>
     <div class="line">
      <a name="l00183">
@@ -1334,7 +1334,10 @@ $(function() {
      <span class="lineno">
       183
      </span>
-     cacheFile file{file_name.string()};
+     <span class="keywordflow">
+      if
+     </span>
+     (not cache_dir.empty()) {
     </div>
     <div class="line">
      <a name="l00184">
@@ -1342,7 +1345,7 @@ $(function() {
      <span class="lineno">
       184
      </span>
-     serialized = file.read();
+     boost::filesystem::path file_name = cache_dir / name;
     </div>
     <div class="line">
      <a name="l00185">
@@ -1350,7 +1353,7 @@ $(function() {
      <span class="lineno">
       185
      </span>
-     successful_read = file.is_read_successful();
+     cacheFile file{file_name.string()};
     </div>
     <div class="line">
      <a name="l00186">
@@ -1358,9 +1361,7 @@ $(function() {
      <span class="lineno">
       186
      </span>
-     <span class="preprocessor">
-      #endif
-     </span>
+     serialized = file.read();
     </div>
     <div class="line">
      <a name="l00187">
@@ -1368,10 +1369,7 @@ $(function() {
      <span class="lineno">
       187
      </span>
-     <span class="keywordflow">
-      if
-     </span>
-     (not successful_read) {
+     successful_read = file.is_read_successful();
     </div>
     <div class="line">
      <a name="l00188">
@@ -1379,9 +1377,7 @@ $(function() {
      <span class="lineno">
       188
      </span>
-     <span class="comment">
-      // JIT compile and write to file if possible
-     </span>
+     }
     </div>
     <div class="line">
      <a name="l00189">
@@ -1389,7 +1385,9 @@ $(function() {
      <span class="lineno">
       189
      </span>
-     serialized = func().serialize();
+     <span class="preprocessor">
+      #endif
+     </span>
     </div>
     <div class="line">
      <a name="l00190">
@@ -1397,9 +1395,10 @@ $(function() {
      <span class="lineno">
       190
      </span>
-     <span class="preprocessor">
-      #if defined(JITIFY_USE_CACHE)
+     <span class="keywordflow">
+      if
      </span>
+     (not successful_read) {
     </div>
     <div class="line">
      <a name="l00191">
@@ -1407,7 +1406,9 @@ $(function() {
      <span class="lineno">
       191
      </span>
-     file.write(serialized);
+     <span class="comment">
+      // JIT compile and write to file if possible
+     </span>
     </div>
     <div class="line">
      <a name="l00192">
@@ -1415,9 +1416,7 @@ $(function() {
      <span class="lineno">
       192
      </span>
-     <span class="preprocessor">
-      #endif
-     </span>
+     serialized = func().serialize();
     </div>
     <div class="line">
      <a name="l00193">
@@ -1425,7 +1424,9 @@ $(function() {
      <span class="lineno">
       193
      </span>
-     }
+     <span class="preprocessor">
+      #if defined(JITIFY_USE_CACHE)
+     </span>
     </div>
     <div class="line">
      <a name="l00194">
@@ -1433,9 +1434,10 @@ $(function() {
      <span class="lineno">
       194
      </span>
-     <span class="comment">
-      // Add deserialized T to cache and return
+     <span class="keywordflow">
+      if
      </span>
+     (not cache_dir.empty()) {
     </div>
     <div class="line">
      <a name="l00195">
@@ -1443,10 +1445,7 @@ $(function() {
      <span class="lineno">
       195
      </span>
-     <span class="keyword">
-      auto
-     </span>
-     program = std::make_shared&lt;T&gt;(T::deserialize(serialized));
+     boost::filesystem::path file_name = cache_dir / name;
     </div>
     <div class="line">
      <a name="l00196">
@@ -1454,7 +1453,7 @@ $(function() {
      <span class="lineno">
       196
      </span>
-     map[name] = program;
+     cacheFile file{file_name.string()};
     </div>
     <div class="line">
      <a name="l00197">
@@ -1462,10 +1461,7 @@ $(function() {
      <span class="lineno">
       197
      </span>
-     <span class="keywordflow">
-      return
-     </span>
-     std::make_pair(name, program);
+     file.write(serialized);
     </div>
     <div class="line">
      <a name="l00198">
@@ -1481,7 +1477,9 @@ $(function() {
      <span class="lineno">
       199
      </span>
-     }
+     <span class="preprocessor">
+      #endif
+     </span>
     </div>
     <div class="line">
      <a name="l00200">
@@ -1489,13 +1487,16 @@ $(function() {
      <span class="lineno">
       200
      </span>
-     };
+     }
     </div>
     <div class="line">
      <a name="l00201">
      </a>
      <span class="lineno">
       201
+     </span>
+     <span class="comment">
+      // Add deserialized T to cache and return
      </span>
     </div>
     <div class="line">
@@ -1504,10 +1505,10 @@ $(function() {
      <span class="lineno">
       202
      </span>
-     }
-     <span class="comment">
-      // namespace jit
+     <span class="keyword">
+      auto
      </span>
+     program = std::make_shared&lt;T&gt;(T::deserialize(serialized));
     </div>
     <div class="line">
      <a name="l00203">
@@ -1515,10 +1516,7 @@ $(function() {
      <span class="lineno">
       203
      </span>
-     }
-     <span class="comment">
-      // namespace cudf
-     </span>
+     map[name] = program;
     </div>
     <div class="line">
      <a name="l00204">
@@ -1526,6 +1524,10 @@ $(function() {
      <span class="lineno">
       204
      </span>
+     <span class="keywordflow">
+      return
+     </span>
+     std::make_pair(name, program);
     </div>
     <div class="line">
      <a name="l00205">
@@ -1533,12 +1535,72 @@ $(function() {
      <span class="lineno">
       205
      </span>
+     }
     </div>
     <div class="line">
      <a name="l00206">
      </a>
      <span class="lineno">
       206
+     </span>
+     }
+    </div>
+    <div class="line">
+     <a name="l00207">
+     </a>
+     <span class="lineno">
+      207
+     </span>
+     };
+    </div>
+    <div class="line">
+     <a name="l00208">
+     </a>
+     <span class="lineno">
+      208
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00209">
+     </a>
+     <span class="lineno">
+      209
+     </span>
+     }
+     <span class="comment">
+      // namespace jit
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00210">
+     </a>
+     <span class="lineno">
+      210
+     </span>
+     }
+     <span class="comment">
+      // namespace cudf
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00211">
+     </a>
+     <span class="lineno">
+      211
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00212">
+     </a>
+     <span class="lineno">
+      212
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00213">
+     </a>
+     <span class="lineno">
+      213
      </span>
      <span class="preprocessor">
       #endif // CUDF_JIT_CACHE_H_
@@ -1596,7 +1658,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    cache.cpp:70
+    cache.cpp:83
    </div>
   </div>
   <div class="ttc" id="anamespacecudf_html">
@@ -1631,7 +1693,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    cache.cpp:92
+    cache.cpp:105
    </div>
   </div>
   <!-- start footer part -->
