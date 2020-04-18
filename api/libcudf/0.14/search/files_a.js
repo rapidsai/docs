@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['chunked_5fstate_2ehpp_2189',['chunked_state.hpp',['../orc_2chunked__state_8hpp.html',1,'']]],
-  ['reader_5fimpl_2ecu_2190',['reader_impl.cu',['../orc_2reader__impl_8cu.html',1,'']]],
-  ['reader_5fimpl_2ehpp_2191',['reader_impl.hpp',['../orc_2reader__impl_8hpp.html',1,'']]],
-  ['writer_5fimpl_2ecu_2192',['writer_impl.cu',['../orc_2writer__impl_8cu.html',1,'']]],
-  ['writer_5fimpl_2ehpp_2193',['writer_impl.hpp',['../orc_2writer__impl_8hpp.html',1,'']]]
+  ['nvcategory_2eh_2259',['NVCategory.h',['../NVCategory_8h.html',1,'']]],
+  ['nvstrings_2eh_2260',['NVStrings.h',['../NVStrings_8h.html',1,'']]],
+  ['nvtext_2eh_2261',['NVText.h',['../NVText_8h.html',1,'']]],
+  ['nvtx3_2ehpp_2262',['nvtx3.hpp',['../nvtx3_8hpp.html',1,'']]]
 ];

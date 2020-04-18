@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['nvcategory_2eh_2185',['NVCategory.h',['../NVCategory_8h.html',1,'']]],
-  ['nvstrings_2eh_2186',['NVStrings.h',['../NVStrings_8h.html',1,'']]],
-  ['nvtext_2eh_2187',['NVText.h',['../NVText_8h.html',1,'']]],
-  ['nvtx3_2ehpp_2188',['nvtx3.hpp',['../nvtx3_8hpp.html',1,'']]]
+  ['parsing_5futils_2ecu_2257',['parsing_utils.cu',['../legacy_2parsing__utils_8cu.html',1,'']]],
+  ['parsing_5futils_2ecuh_2258',['parsing_utils.cuh',['../legacy_2parsing__utils_8cuh.html',1,'']]]
 ];

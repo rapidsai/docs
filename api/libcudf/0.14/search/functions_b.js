@@ -1,15 +1,6 @@
 var searchData=
 [
-  ['launch_2496',['launch',['../classcudf_1_1jit_1_1launcher.html#aec3e1d28f4a208f8ed48a68175444de7',1,'cudf::jit::launcher']]],
-  ['launcher_2497',['launcher',['../classcudf_1_1jit_1_1launcher.html#ab91b9409c386363ab5e0a8eb2c8e2af0',1,'cudf::jit::launcher']]],
-  ['left_5fshift_2498',['left_shift',['../namespacenumeric_1_1detail.html#a538c1267fb1740bd99b67e7da4e98db7',1,'numeric::detail']]],
-  ['len_2499',['len',['../classNVStrings.html#a3e22a977c3d75aa43923fee20c49a194',1,'NVStrings']]],
-  ['length_2500',['length',['../classBitMask.html#aa6df9c32a8d99bfbc647cf8fc187162a',1,'BitMask::length()'],['../classcudf_1_1string__view.html#a183cdfbfa799e8fa292382d060ea5b4d',1,'cudf::string_view::length()']]],
-  ['ljust_2501',['ljust',['../classNVStrings.html#a9bcbff99c3478dfb316619fecc22a7f5',1,'NVStrings']]],
-  ['long2timestamp_2502',['long2timestamp',['../classNVStrings.html#a7371eaa7ddca3e72843adeb6787cb427',1,'NVStrings']]],
-  ['lower_2503',['lower',['../classNVStrings.html#ab97f8a71d6c2709f02dc9c14ee645f20',1,'NVStrings']]],
-  ['lower_5fbound_2504',['lower_bound',['../namespacecudf.html#ae90960c52c1f1fe3ab2257bad89b18fc',1,'cudf::lower_bound()'],['../namespacecudf_1_1experimental.html#a9da07e36844255fd5bc535c5718a155a',1,'cudf::experimental::lower_bound()']]],
-  ['lowest_2505',['lowest',['../structstd_1_1numeric__limits_3_01cudf_1_1detail_1_1wrapper_3_01T_00_01type__id_01_4_01_4.html#aa07315cdd27fd0e0faf662a610887b31',1,'std::numeric_limits&lt; cudf::detail::wrapper&lt; T, type_id &gt; &gt;']]],
-  ['lstrip_2506',['lstrip',['../classNVStrings.html#a48723ac170508171145dc862c95c7bbb',1,'NVStrings']]],
-  ['ltos_2507',['ltos',['../classNVStrings.html#a7d56e410c4fcac467199c74a518b0191',1,'NVStrings']]]
+  ['key_5fsort_5forder_2590',['key_sort_order',['../structcudf_1_1groupby_1_1sort_1_1detail_1_1helper.html#a0ee0ec8e11a1ef3a8724504ee01cb010',1,'cudf::groupby::sort::detail::helper::key_sort_order()'],['../structcudf_1_1experimental_1_1groupby_1_1detail_1_1sort_1_1sort__groupby__helper.html#a43a1bb681cba8d70a0fb1dabe4ed53f5',1,'cudf::experimental::groupby::detail::sort::sort_groupby_helper::key_sort_order()']]],
+  ['keys_2591',['keys',['../classcudf_1_1dictionary__column__view.html#a98a9b37d5ef29cebe1d77f517c738c41',1,'cudf::dictionary_column_view']]],
+  ['keys_5fsize_2592',['keys_size',['../classcudf_1_1dictionary__column__view.html#aa415117f5a4ec327daa94888e5396c84',1,'cudf::dictionary_column_view::keys_size()'],['../classNVCategory.html#a4c81d657a48473b3cef617057bece2fa',1,'NVCategory::keys_size()']]]
 ];

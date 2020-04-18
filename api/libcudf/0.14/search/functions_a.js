@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['key_5fsort_5forder_2493',['key_sort_order',['../structcudf_1_1groupby_1_1sort_1_1detail_1_1helper.html#a0ee0ec8e11a1ef3a8724504ee01cb010',1,'cudf::groupby::sort::detail::helper::key_sort_order()'],['../structcudf_1_1experimental_1_1groupby_1_1detail_1_1sort_1_1sort__groupby__helper.html#a43a1bb681cba8d70a0fb1dabe4ed53f5',1,'cudf::experimental::groupby::detail::sort::sort_groupby_helper::key_sort_order()']]],
-  ['keys_2494',['keys',['../classcudf_1_1dictionary__column__view.html#a98a9b37d5ef29cebe1d77f517c738c41',1,'cudf::dictionary_column_view']]],
-  ['keys_5fsize_2495',['keys_size',['../classcudf_1_1dictionary__column__view.html#aa415117f5a4ec327daa94888e5396c84',1,'cudf::dictionary_column_view::keys_size()'],['../classNVCategory.html#a4c81d657a48473b3cef617057bece2fa',1,'NVCategory::keys_size()']]]
+  ['join_2586',['join',['../classNVStrings.html#acd55ca9dc9f0ebb381114423c9993961',1,'NVStrings']]],
+  ['join_5fcall_2587',['join_call',['../namespacecudf.html#a324e3af1901162a99c4e182255e63964',1,'cudf']]],
+  ['join_5fcall_5fcompute_5fdf_2588',['join_call_compute_df',['../namespacecudf.html#a7aa52645708c7f40b19e86fde0caa170',1,'cudf']]],
+  ['join_5fstrings_2589',['join_strings',['../namespacecudf_1_1strings.html#ab6a77478fadde8b86e5a165283db03d3',1,'cudf::strings']]]
 ];

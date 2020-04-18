@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['timestamp_5flimits_3224',['TIMESTAMP_LIMITS',['../timestamps_8hpp.html#af5a5f23181622d2643a09df16a78e482',1,'timestamps.hpp']]]
+  ['log2_5fbatch_5fcount_3363',['LOG2_BATCH_COUNT',['../gpuinflate_8cu.html#a0b4fe5f246a9686d592faa1a134974d9',1,'gpuinflate.cu']]]
 ];
