@@ -49,9 +49,11 @@ Any push to a branch triggers a gpuCI job that builds and tests the current code
 
 ### Open PR or Update PR
 
-When a new PR is opened or an existing one has been updated, gpuCI will trigger a build and embed the results of the build into the status of the PR.
+When a new PR is opened or an existing one has been updated, gpuCI will trigger a series of CI jobs to be run on the PR. The results of these jobs wil be embedded into the status of the PR.
 
-> **NOTE:** gpuCI may request `Can one of the admins verify this patch?` in a comment on the PR. If this appears, one of the PICs for the RAPIDS library needs to respond to approve the PR. See the commands list [below](#admins---approving-pr-builds) for available commands.
+> **IMPORTANT:** gpuCI will not run any builds until a valid changelog entry has been detected. If a changelog entry is missing, a comment will be posted on the PR instructing the author to add an entry. This is to ensure that no build resources are wasted on PRs that are expecting more commits.
+
+> **BE AWARE:** gpuCI may request `Can one of the admins verify this patch?` in a comment on the PR. If this appears, one of the PICs for the RAPIDS library needs to respond to approve the PR. See the commands list [below](#admins---approving-pr-builds) for available commands.
 
 ### Comment on PR
 
