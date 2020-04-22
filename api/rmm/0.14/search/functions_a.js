@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['operator_3c_157',['operator&lt;',['../structrmm_1_1mr_1_1detail_1_1block.html#a82a81a79e5354b7cc3b741f19dfe1540',1,'rmm::mr::detail::block']]]
+  ['memory_5fresource_170',['memory_resource',['../classrmm_1_1device__buffer.html#a66482dd6bb2c4a551c992c74b3a5b766',1,'rmm::device_buffer']]]
 ];
