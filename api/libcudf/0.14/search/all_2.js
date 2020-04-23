@@ -31,7 +31,7 @@ var searchData=
   ['block_5fsize_106',['block_size',['../structBlockSumArray.html#a1d278705f6112181ad427b162832b4e5',1,'BlockSumArray']]],
   ['blocksumarray_107',['BlockSumArray',['../structBlockSumArray.html',1,'']]],
   ['blocksumpyramid_108',['BlockSumPyramid',['../classBlockSumPyramid.html',1,'']]],
-  ['blue_109',['blue',['../structnvtx3_1_1rgb.html#a82711988293f9526af97accddffc6db7',1,'nvtx3::rgb']]],
+  ['blue_109',['blue',['../structnvtx3_1_1rgb.html#a4d414829ab958dc19213ef176473d7be',1,'nvtx3::rgb']]],
   ['bool8_110',['BOOL8',['../namespacecudf.html#acd4cd7157c4379954b5772936f89c59ba9100ee556e5cf9b6dada6c7c506fa138',1,'cudf']]],
   ['boolean_5fmask_5fscatter_111',['boolean_mask_scatter',['../namespacecudf_1_1experimental.html#a087fa19f9ee06f083f4f020385d1d5e5',1,'cudf::experimental::boolean_mask_scatter(table_view const  &amp;input, table_view const  &amp;target, column_view const  &amp;boolean_mask, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())'],['../namespacecudf_1_1experimental.html#a5f2e902ca8cc6a2dae6687b13a49182e',1,'cudf::experimental::boolean_mask_scatter(std::vector&lt; std::reference_wrapper&lt; scalar &gt;&gt; const  &amp;input, table_view const  &amp;target, column_view const  &amp;boolean_mask, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())']]],
   ['bools_5fto_5fmask_112',['bools_to_mask',['../namespacecudf_1_1experimental.html#acf23e8ea75238ff81d762d0d1e336a4c',1,'cudf::experimental']]],
