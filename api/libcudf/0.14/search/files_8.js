@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['reader_5fimpl_2ecu_2259',['reader_impl.cu',['../json_2reader__impl_8cu.html',1,'']]],
-  ['reader_5fimpl_2ehpp_2260',['reader_impl.hpp',['../json_2reader__impl_8hpp.html',1,'']]]
+  ['reader_5fimpl_2ecu_2267',['reader_impl.cu',['../json_2reader__impl_8cu.html',1,'']]],
+  ['reader_5fimpl_2ehpp_2268',['reader_impl.hpp',['../json_2reader__impl_8hpp.html',1,'']]]
 ];

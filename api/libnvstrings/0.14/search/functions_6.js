@@ -9,6 +9,6 @@ var searchData=
   ['get_5fnulls_223',['get_nulls',['../classNVStrings.html#adaaa1f3326fb1a25d3193d16d4fdb336',1,'NVStrings']]],
   ['get_5ftype_5fname_224',['get_type_name',['../classNVCategory.html#a058f0c5c8574e3cac43f5e65fdea072c',1,'NVCategory']]],
   ['get_5fvalue_225',['get_value',['../classNVCategory.html#ac2e3b3cbbf5d7035521791c9b316000f',1,'NVCategory::get_value(unsigned int index)'],['../classNVCategory.html#ab099c542f2f29cb62d4c9b9482efa753',1,'NVCategory::get_value(const char *str)']]],
-  ['get_5fvalue_5fbounds_226',['get_value_bounds',['../classNVCategory.html#aa5ab16da4cc3aebee92928ac98b2a750',1,'NVCategory']]],
+  ['get_5fvalue_5fbounds_226',['get_value_bounds',['../classNVCategory.html#a16d840bc43c2fb9de007e9f63e0558b4',1,'NVCategory']]],
   ['get_5fvalues_227',['get_values',['../classNVCategory.html#a32d662889cd4fa3eed2ce00171935265',1,'NVCategory']]]
 ];
