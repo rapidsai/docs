@@ -379,6 +379,9 @@ $(function() {
      <span class="lineno">
       29
      </span>
+     <span class="comment">
+      // Work around a bug in NVRTC that fails to compile assert() in constexpr
+     </span>
     </div>
     <div class="line">
      <a name="l00030">
@@ -387,7 +390,7 @@ $(function() {
       30
      </span>
      <span class="comment">
-      // Work around a bug in NVRTC that fails to compile assert() in constexpr
+      // functions (fixed after CUDA 11.0)
      </span>
     </div>
     <div class="line">
@@ -396,8 +399,8 @@ $(function() {
      <span class="lineno">
       31
      </span>
-     <span class="comment">
-      // functions (fixed after CUDA 11.0)
+     <span class="preprocessor">
+      #if defined __GNUC__
      </span>
     </div>
     <div class="line">
@@ -407,7 +410,7 @@ $(function() {
       32
      </span>
      <span class="preprocessor">
-      #if defined __GNUC__
+      #define LIKELY(EXPR) __builtin_expect(!!(EXPR), 1)
      </span>
     </div>
     <div class="line">
@@ -417,7 +420,7 @@ $(function() {
       33
      </span>
      <span class="preprocessor">
-      #define LIKELY(EXPR) __builtin_expect(!!(EXPR), 1)
+      #else
      </span>
     </div>
     <div class="line">
@@ -427,7 +430,7 @@ $(function() {
       34
      </span>
      <span class="preprocessor">
-      #else
+      #define LIKELY(EXPR) (!!(EXPR))
      </span>
     </div>
     <div class="line">
@@ -437,7 +440,7 @@ $(function() {
       35
      </span>
      <span class="preprocessor">
-      #define LIKELY(EXPR) (!!(EXPR))
+      #endif
      </span>
     </div>
     <div class="line">
@@ -446,15 +449,15 @@ $(function() {
      <span class="lineno">
       36
      </span>
-     <span class="preprocessor">
-      #endif
-     </span>
     </div>
     <div class="line">
      <a name="l00037">
      </a>
      <span class="lineno">
       37
+     </span>
+     <span class="preprocessor">
+      #ifdef NDEBUG
      </span>
     </div>
     <div class="line">
@@ -464,7 +467,7 @@ $(function() {
       38
      </span>
      <span class="preprocessor">
-      #ifdef NDEBUG
+      #define constexpr_assert(CHECK) static_cast&lt;void&gt;(0)
      </span>
     </div>
     <div class="line">
@@ -474,7 +477,7 @@ $(function() {
       39
      </span>
      <span class="preprocessor">
-      #define constexpr_assert(CHECK) static_cast&lt;void&gt;(0)
+      #else
      </span>
     </div>
     <div class="line">
@@ -484,7 +487,7 @@ $(function() {
       40
      </span>
      <span class="preprocessor">
-      #else
+      #define constexpr_assert(CHECK) (LIKELY(CHECK) ? void(0) : [] { assert(!#CHECK); }())
      </span>
     </div>
     <div class="line">
@@ -494,7 +497,7 @@ $(function() {
       41
      </span>
      <span class="preprocessor">
-      #define constexpr_assert(CHECK) (LIKELY(CHECK) ? void(0) : [] { assert(!#CHECK); }())
+      #endif
      </span>
     </div>
     <div class="line">
@@ -503,22 +506,12 @@ $(function() {
      <span class="lineno">
       42
      </span>
-     <span class="preprocessor">
-      #endif
-     </span>
     </div>
     <div class="line">
      <a name="l00043">
      </a>
      <span class="lineno">
       43
-     </span>
-    </div>
-    <div class="line">
-     <a name="l00044">
-     </a>
-     <span class="lineno">
-      44
      </span>
      <span class="keyword">
       template
@@ -530,12 +523,20 @@ $(function() {
      T&gt;
     </div>
     <div class="line">
+     <a name="l00044">
+     </a>
+     <span class="lineno">
+      44
+     </span>
+     constexpr CUDA_HOST_DEVICE_CALLABLE std::size_t size_in_bits()
+    </div>
+    <div class="line">
      <a name="l00045">
      </a>
      <span class="lineno">
       45
      </span>
-     constexpr CUDA_HOST_DEVICE_CALLABLE std::size_t size_in_bits() {
+     {
     </div>
     <div class="line">
      <a name="l00046">
@@ -601,7 +602,7 @@ $(function() {
      <a class="code" href="namespacecudf.html#a9fd7d3be7317e7621d5b073c7176a582">
       word_index
      </a>
-     (size_type bit_index) {
+     (size_type bit_index)
     </div>
     <div class="line">
      <a name="l00055">
@@ -609,10 +610,7 @@ $(function() {
      <span class="lineno">
       55
      </span>
-     <span class="keywordflow">
-      return
-     </span>
-     bit_index / detail::size_in_bits&lt;bitmask_type&gt;();
+     {
     </div>
     <div class="line">
      <a name="l00056">
@@ -620,7 +618,10 @@ $(function() {
      <span class="lineno">
       56
      </span>
-     }
+     <span class="keywordflow">
+      return
+     </span>
+     bit_index / detail::size_in_bits&lt;bitmask_type&gt;();
     </div>
     <div class="line">
      <a name="l00057">
@@ -628,31 +629,28 @@ $(function() {
      <span class="lineno">
       57
      </span>
+     }
     </div>
     <div class="line">
-     <a name="l00061">
+     <a name="l00058">
+     </a>
+     <span class="lineno">
+      58
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00062">
      </a>
      <span class="lineno">
       <a class="line" href="namespacecudf.html#a7ce276d67cc17e299f29de43a391af75">
-       61
+       62
       </a>
      </span>
      constexpr CUDA_HOST_DEVICE_CALLABLE size_type
      <a class="code" href="namespacecudf.html#a7ce276d67cc17e299f29de43a391af75">
       intra_word_index
      </a>
-     (size_type bit_index) {
-    </div>
-    <div class="line">
-     <a name="l00062">
-     </a>
-     <span class="lineno">
-      62
-     </span>
-     <span class="keywordflow">
-      return
-     </span>
-     bit_index % detail::size_in_bits&lt;bitmask_type&gt;();
+     (size_type bit_index)
     </div>
     <div class="line">
      <a name="l00063">
@@ -660,7 +658,7 @@ $(function() {
      <span class="lineno">
       63
      </span>
-     }
+     {
     </div>
     <div class="line">
      <a name="l00064">
@@ -668,13 +666,32 @@ $(function() {
      <span class="lineno">
       64
      </span>
+     <span class="keywordflow">
+      return
+     </span>
+     bit_index % detail::size_in_bits&lt;bitmask_type&gt;();
     </div>
     <div class="line">
-     <a name="l00074">
+     <a name="l00065">
+     </a>
+     <span class="lineno">
+      65
+     </span>
+     }
+    </div>
+    <div class="line">
+     <a name="l00066">
+     </a>
+     <span class="lineno">
+      66
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00076">
      </a>
      <span class="lineno">
       <a class="line" href="namespacecudf.html#a3c4063fafa03398865ddae121b3ca939">
-       74
+       76
       </a>
      </span>
      CUDA_HOST_DEVICE_CALLABLE
@@ -684,13 +701,21 @@ $(function() {
      <a class="code" href="namespacecudf.html#a3c4063fafa03398865ddae121b3ca939">
       set_bit_unsafe
      </a>
-     (bitmask_type* bitmask, size_type bit_index) {
+     (bitmask_type* bitmask, size_type bit_index)
     </div>
     <div class="line">
-     <a name="l00075">
+     <a name="l00077">
      </a>
      <span class="lineno">
-      75
+      77
+     </span>
+     {
+    </div>
+    <div class="line">
+     <a name="l00078">
+     </a>
+     <span class="lineno">
+      78
      </span>
      assert(
      <span class="keyword">
@@ -699,10 +724,10 @@ $(function() {
      != bitmask);
     </div>
     <div class="line">
-     <a name="l00076">
+     <a name="l00079">
      </a>
      <span class="lineno">
-      76
+      79
      </span>
      bitmask[
      <a class="code" href="namespacecudf.html#a9fd7d3be7317e7621d5b073c7176a582">
@@ -715,26 +740,26 @@ $(function() {
      (bit_index));
     </div>
     <div class="line">
-     <a name="l00077">
+     <a name="l00080">
      </a>
      <span class="lineno">
-      77
+      80
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00078">
+     <a name="l00081">
      </a>
      <span class="lineno">
-      78
+      81
      </span>
     </div>
     <div class="line">
-     <a name="l00088">
+     <a name="l00091">
      </a>
      <span class="lineno">
       <a class="line" href="namespacecudf.html#aaabda3ecfba220ffdfd76a7076259483">
-       88
+       91
       </a>
      </span>
      CUDA_HOST_DEVICE_CALLABLE
@@ -744,13 +769,21 @@ $(function() {
      <a class="code" href="namespacecudf.html#aaabda3ecfba220ffdfd76a7076259483">
       clear_bit_unsafe
      </a>
-     (bitmask_type* bitmask, size_type bit_index) {
+     (bitmask_type* bitmask, size_type bit_index)
     </div>
     <div class="line">
-     <a name="l00089">
+     <a name="l00092">
      </a>
      <span class="lineno">
-      89
+      92
+     </span>
+     {
+    </div>
+    <div class="line">
+     <a name="l00093">
+     </a>
+     <span class="lineno">
+      93
      </span>
      assert(
      <span class="keyword">
@@ -759,10 +792,10 @@ $(function() {
      != bitmask);
     </div>
     <div class="line">
-     <a name="l00090">
+     <a name="l00094">
      </a>
      <span class="lineno">
-      90
+      94
      </span>
      bitmask[
      <a class="code" href="namespacecudf.html#a9fd7d3be7317e7621d5b073c7176a582">
@@ -775,26 +808,26 @@ $(function() {
      (bit_index));
     </div>
     <div class="line">
-     <a name="l00091">
+     <a name="l00095">
      </a>
      <span class="lineno">
-      91
+      95
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00092">
+     <a name="l00096">
      </a>
      <span class="lineno">
-      92
+      96
      </span>
     </div>
     <div class="line">
-     <a name="l00100">
+     <a name="l00104">
      </a>
      <span class="lineno">
       <a class="line" href="namespacecudf.html#accd9af00974def8f416225ad650d33c9">
-       100
+       104
       </a>
      </span>
      CUDA_HOST_DEVICE_CALLABLE
@@ -808,13 +841,21 @@ $(function() {
      <span class="keyword">
       const
      </span>
-     * bitmask, size_type bit_index) {
+     * bitmask, size_type bit_index)
     </div>
     <div class="line">
-     <a name="l00101">
+     <a name="l00105">
      </a>
      <span class="lineno">
-      101
+      105
+     </span>
+     {
+    </div>
+    <div class="line">
+     <a name="l00106">
+     </a>
+     <span class="lineno">
+      106
      </span>
      assert(
      <span class="keyword">
@@ -823,10 +864,10 @@ $(function() {
      != bitmask);
     </div>
     <div class="line">
-     <a name="l00102">
+     <a name="l00107">
      </a>
      <span class="lineno">
-      102
+      107
      </span>
      <span class="keywordflow">
       return
@@ -842,39 +883,47 @@ $(function() {
      (bit_index));
     </div>
     <div class="line">
-     <a name="l00103">
+     <a name="l00108">
      </a>
      <span class="lineno">
-      103
+      108
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00104">
+     <a name="l00109">
      </a>
      <span class="lineno">
-      104
+      109
      </span>
     </div>
     <div class="line">
-     <a name="l00113">
+     <a name="l00118">
      </a>
      <span class="lineno">
       <a class="line" href="namespacecudf.html#a265021448d5a11e023232cb649865092">
-       113
+       118
       </a>
      </span>
      constexpr CUDA_HOST_DEVICE_CALLABLE bitmask_type
      <a class="code" href="namespacecudf.html#a265021448d5a11e023232cb649865092">
       set_least_significant_bits
      </a>
-     (size_type n) {
+     (size_type n)
     </div>
     <div class="line">
-     <a name="l00114">
+     <a name="l00119">
      </a>
      <span class="lineno">
-      114
+      119
+     </span>
+     {
+    </div>
+    <div class="line">
+     <a name="l00120">
+     </a>
+     <span class="lineno">
+      120
      </span>
      constexpr_assert(0 &lt;= n &amp;&amp; n &lt;
      <span class="keyword">
@@ -887,10 +936,10 @@ $(function() {
      (detail::size_in_bits&lt;bitmask_type&gt;()));
     </div>
     <div class="line">
-     <a name="l00115">
+     <a name="l00121">
      </a>
      <span class="lineno">
-      115
+      121
      </span>
      <span class="keywordflow">
       return
@@ -898,85 +947,33 @@ $(function() {
      ((bitmask_type{1} &lt;&lt; n) - 1);
     </div>
     <div class="line">
-     <a name="l00116">
+     <a name="l00122">
      </a>
      <span class="lineno">
-      116
+      122
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00117">
+     <a name="l00123">
      </a>
      <span class="lineno">
-      117
-     </span>
-    </div>
-    <div class="line">
-     <a name="l00126">
-     </a>
-     <span class="lineno">
-      <a class="line" href="namespacecudf.html#a1d621017e15820e37826a73484fe5376">
-       126
-      </a>
-     </span>
-     constexpr CUDA_HOST_DEVICE_CALLABLE bitmask_type
-     <a class="code" href="namespacecudf.html#a1d621017e15820e37826a73484fe5376">
-      set_most_significant_bits
-     </a>
-     (size_type n) {
-    </div>
-    <div class="line">
-     <a name="l00127">
-     </a>
-     <span class="lineno">
-      127
-     </span>
-     constexpr size_type word_size{detail::size_in_bits&lt;bitmask_type&gt;()};
-    </div>
-    <div class="line">
-     <a name="l00128">
-     </a>
-     <span class="lineno">
-      128
-     </span>
-     constexpr_assert(0 &lt;= n &amp;&amp; n &lt; word_size);
-    </div>
-    <div class="line">
-     <a name="l00129">
-     </a>
-     <span class="lineno">
-      129
-     </span>
-     <span class="keywordflow">
-      return
-     </span>
-     ~((bitmask_type{1} &lt;&lt; (word_size - n)) - 1);
-    </div>
-    <div class="line">
-     <a name="l00130">
-     </a>
-     <span class="lineno">
-      130
-     </span>
-     }
-    </div>
-    <div class="line">
-     <a name="l00131">
-     </a>
-     <span class="lineno">
-      131
+      123
      </span>
     </div>
     <div class="line">
      <a name="l00132">
      </a>
      <span class="lineno">
-      132
+      <a class="line" href="namespacecudf.html#a1d621017e15820e37826a73484fe5376">
+       132
+      </a>
      </span>
-     <span class="preprocessor">
-      #ifdef __CUDACC__
-     </span>
+     constexpr CUDA_HOST_DEVICE_CALLABLE bitmask_type
+     <a class="code" href="namespacecudf.html#a1d621017e15820e37826a73484fe5376">
+      set_most_significant_bits
+     </a>
+     (size_type n)
     </div>
     <div class="line">
      <a name="l00133">
@@ -984,12 +981,72 @@ $(function() {
      <span class="lineno">
       133
      </span>
+     {
     </div>
     <div class="line">
-     <a name="l00147">
+     <a name="l00134">
      </a>
      <span class="lineno">
-      147
+      134
+     </span>
+     constexpr size_type word_size{detail::size_in_bits&lt;bitmask_type&gt;()};
+    </div>
+    <div class="line">
+     <a name="l00135">
+     </a>
+     <span class="lineno">
+      135
+     </span>
+     constexpr_assert(0 &lt;= n &amp;&amp; n &lt; word_size);
+    </div>
+    <div class="line">
+     <a name="l00136">
+     </a>
+     <span class="lineno">
+      136
+     </span>
+     <span class="keywordflow">
+      return
+     </span>
+     ~((bitmask_type{1} &lt;&lt; (word_size - n)) - 1);
+    </div>
+    <div class="line">
+     <a name="l00137">
+     </a>
+     <span class="lineno">
+      137
+     </span>
+     }
+    </div>
+    <div class="line">
+     <a name="l00138">
+     </a>
+     <span class="lineno">
+      138
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00139">
+     </a>
+     <span class="lineno">
+      139
+     </span>
+     <span class="preprocessor">
+      #ifdef __CUDACC__
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00140">
+     </a>
+     <span class="lineno">
+      140
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00154">
+     </a>
+     <span class="lineno">
+      154
      </span>
      __device__
      <span class="keyword">
@@ -998,13 +1055,21 @@ $(function() {
      <span class="keywordtype">
       void
      </span>
-     set_bit(bitmask_type* bitmask, size_type bit_index) {
+     set_bit(bitmask_type* bitmask, size_type bit_index)
     </div>
     <div class="line">
-     <a name="l00148">
+     <a name="l00155">
      </a>
      <span class="lineno">
-      148
+      155
+     </span>
+     {
+    </div>
+    <div class="line">
+     <a name="l00156">
+     </a>
+     <span class="lineno">
+      156
      </span>
      assert(
      <span class="keyword">
@@ -1013,10 +1078,10 @@ $(function() {
      != bitmask);
     </div>
     <div class="line">
-     <a name="l00149">
+     <a name="l00157">
      </a>
      <span class="lineno">
-      149
+      157
      </span>
      <a class="code" href="src_2utilities_2legacy_2device__atomics_8cuh.html#a82b1ef76ea95088682c36d9515dc7268">
       atomicOr
@@ -1032,25 +1097,25 @@ $(function() {
      (bit_index)));
     </div>
     <div class="line">
-     <a name="l00150">
+     <a name="l00158">
      </a>
      <span class="lineno">
-      150
+      158
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00151">
+     <a name="l00159">
      </a>
      <span class="lineno">
-      151
+      159
      </span>
     </div>
     <div class="line">
-     <a name="l00164">
+     <a name="l00172">
      </a>
      <span class="lineno">
-      164
+      172
      </span>
      __device__
      <span class="keyword">
@@ -1059,13 +1124,21 @@ $(function() {
      <span class="keywordtype">
       void
      </span>
-     clear_bit(bitmask_type* bitmask, size_type bit_index) {
+     clear_bit(bitmask_type* bitmask, size_type bit_index)
     </div>
     <div class="line">
-     <a name="l00165">
+     <a name="l00173">
      </a>
      <span class="lineno">
-      165
+      173
+     </span>
+     {
+    </div>
+    <div class="line">
+     <a name="l00174">
+     </a>
+     <span class="lineno">
+      174
      </span>
      assert(
      <span class="keyword">
@@ -1074,10 +1147,10 @@ $(function() {
      != bitmask);
     </div>
     <div class="line">
-     <a name="l00166">
+     <a name="l00175">
      </a>
      <span class="lineno">
-      166
+      175
      </span>
      <a class="code" href="src_2utilities_2legacy_2device__atomics_8cuh.html#aa75a45ac643c6ef46bcadb77e26ecc27">
       atomicAnd
@@ -1093,28 +1166,28 @@ $(function() {
      (bit_index)));
     </div>
     <div class="line">
-     <a name="l00167">
+     <a name="l00176">
      </a>
      <span class="lineno">
-      167
+      176
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00168">
+     <a name="l00177">
      </a>
      <span class="lineno">
-      168
+      177
      </span>
      <span class="preprocessor">
       #endif
      </span>
     </div>
     <div class="line">
-     <a name="l00169">
+     <a name="l00178">
      </a>
      <span class="lineno">
-      169
+      178
      </span>
      }
      <span class="comment">
@@ -1138,7 +1211,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    bit.hpp:61
+    bit.hpp:62
    </div>
   </div>
   <div class="ttc" id="asrc_2utilities_2legacy_2device__atomics_8cuh_html_aa75a45ac643c6ef46bcadb77e26ecc27">
@@ -1157,7 +1230,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    src/utilities/legacy/device_atomics.cuh:565
+    src/utilities/legacy/device_atomics.cuh:593
    </div>
   </div>
   <div class="ttc" id="atypes_8hpp_html">
@@ -1186,7 +1259,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    bit.hpp:126
+    bit.hpp:132
    </div>
   </div>
   <div class="ttc" id="anamespacecudf_html_a3c4063fafa03398865ddae121b3ca939">
@@ -1205,7 +1278,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    bit.hpp:74
+    bit.hpp:76
    </div>
   </div>
   <div class="ttc" id="anamespacecudf_html_accd9af00974def8f416225ad650d33c9">
@@ -1224,7 +1297,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    bit.hpp:100
+    bit.hpp:104
    </div>
   </div>
   <div class="ttc" id="asrc_2utilities_2legacy_2device__atomics_8cuh_html_a82b1ef76ea95088682c36d9515dc7268">
@@ -1243,7 +1316,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    src/utilities/legacy/device_atomics.cuh:585
+    src/utilities/legacy/device_atomics.cuh:614
    </div>
   </div>
   <div class="ttc" id="anamespacecudf_html_a9fd7d3be7317e7621d5b073c7176a582">
@@ -1294,7 +1367,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    bit.hpp:88
+    bit.hpp:91
    </div>
   </div>
   <div class="ttc" id="anamespacecudf_html_a265021448d5a11e023232cb649865092">
@@ -1313,7 +1386,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    bit.hpp:113
+    bit.hpp:118
    </div>
   </div>
   <!-- start footer part -->

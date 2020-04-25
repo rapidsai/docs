@@ -436,7 +436,7 @@ $(function() {
      <span class="keyword">
       const
      </span>
-     &amp; input, cudf::size_type begin, cudf::size_type end) {
+     &amp; input, cudf::size_type begin, cudf::size_type end)
     </div>
     <div class="line">
      <a name="l00045">
@@ -444,7 +444,7 @@ $(function() {
      <span class="lineno">
       45
      </span>
-     static_assert(std::is_same&lt;ColumnView, cudf::column_view&gt;::value or
+     {
     </div>
     <div class="line">
      <a name="l00046">
@@ -452,7 +452,7 @@ $(function() {
      <span class="lineno">
       46
      </span>
-     std::is_same&lt;ColumnView, cudf::mutable_column_view&gt;::value,
+     static_assert(std::is_same&lt;ColumnView, cudf::column_view&gt;::value or
     </div>
     <div class="line">
      <a name="l00047">
@@ -460,10 +460,7 @@ $(function() {
      <span class="lineno">
       47
      </span>
-     <span class="stringliteral">
-      "slice can be performed only on column_view and mutable_column_view"
-     </span>
-     );
+     std::is_same&lt;ColumnView, cudf::mutable_column_view&gt;::value,
     </div>
     <div class="line">
      <a name="l00048">
@@ -471,9 +468,8 @@ $(function() {
      <span class="lineno">
       48
      </span>
-     CUDF_EXPECTS(begin &gt;= 0,
      <span class="stringliteral">
-      "Invalid beginning of range."
+      "slice can be performed only on column_view and mutable_column_view"
      </span>
      );
     </div>
@@ -483,9 +479,9 @@ $(function() {
      <span class="lineno">
       49
      </span>
-     CUDF_EXPECTS(end &gt;= begin,
+     CUDF_EXPECTS(begin &gt;= 0,
      <span class="stringliteral">
-      "Invalid end of range."
+      "Invalid beginning of range."
      </span>
      );
     </div>
@@ -495,9 +491,9 @@ $(function() {
      <span class="lineno">
       50
      </span>
-     CUDF_EXPECTS(end &lt;= input.size(),
+     CUDF_EXPECTS(end &gt;= begin,
      <span class="stringliteral">
-      "Slice range out of bounds."
+      "Invalid end of range."
      </span>
      );
     </div>
@@ -507,6 +503,11 @@ $(function() {
      <span class="lineno">
       51
      </span>
+     CUDF_EXPECTS(end &lt;= input.size(),
+     <span class="stringliteral">
+      "Slice range out of bounds."
+     </span>
+     );
     </div>
     <div class="line">
      <a name="l00052">
@@ -514,7 +515,6 @@ $(function() {
      <span class="lineno">
       52
      </span>
-     std::vector&lt;ColumnView&gt; children{};
     </div>
     <div class="line">
      <a name="l00053">
@@ -522,7 +522,7 @@ $(function() {
      <span class="lineno">
       53
      </span>
-     children.reserve(input.num_children());
+     std::vector&lt;ColumnView&gt; children{};
     </div>
     <div class="line">
      <a name="l00054">
@@ -530,10 +530,7 @@ $(function() {
      <span class="lineno">
       54
      </span>
-     <span class="keywordflow">
-      for
-     </span>
-     (size_type index = 0; index &lt; input.num_children(); index++) {
+     children.reserve(input.num_children());
     </div>
     <div class="line">
      <a name="l00055">
@@ -541,7 +538,10 @@ $(function() {
      <span class="lineno">
       55
      </span>
-     children.emplace_back(input.child(index));
+     <span class="keywordflow">
+      for
+     </span>
+     (size_type index = 0; index &lt; input.num_children(); index++) {
     </div>
     <div class="line">
      <a name="l00056">
@@ -549,7 +549,7 @@ $(function() {
      <span class="lineno">
       56
      </span>
-     }
+     children.emplace_back(input.child(index));
     </div>
     <div class="line">
      <a name="l00057">
@@ -557,6 +557,7 @@ $(function() {
      <span class="lineno">
       57
      </span>
+     }
     </div>
     <div class="line">
      <a name="l00058">
@@ -564,10 +565,6 @@ $(function() {
      <span class="lineno">
       58
      </span>
-     <span class="keywordflow">
-      return
-     </span>
-     ColumnView(input.type(),
     </div>
     <div class="line">
      <a name="l00059">
@@ -575,7 +572,10 @@ $(function() {
      <span class="lineno">
       59
      </span>
-     end - begin,
+     <span class="keywordflow">
+      return
+     </span>
+     ColumnView(input.type(),
     </div>
     <div class="line">
      <a name="l00060">
@@ -583,7 +583,7 @@ $(function() {
      <span class="lineno">
       60
      </span>
-     input.head(),
+     end - begin,
     </div>
     <div class="line">
      <a name="l00061">
@@ -591,7 +591,7 @@ $(function() {
      <span class="lineno">
       61
      </span>
-     input.null_mask(),
+     input.head(),
     </div>
     <div class="line">
      <a name="l00062">
@@ -599,7 +599,7 @@ $(function() {
      <span class="lineno">
       62
      </span>
-     cudf::UNKNOWN_NULL_COUNT,
+     input.null_mask(),
     </div>
     <div class="line">
      <a name="l00063">
@@ -607,7 +607,7 @@ $(function() {
      <span class="lineno">
       63
      </span>
-     input.offset() + begin,
+     cudf::UNKNOWN_NULL_COUNT,
     </div>
     <div class="line">
      <a name="l00064">
@@ -615,7 +615,7 @@ $(function() {
      <span class="lineno">
       64
      </span>
-     children);
+     input.offset() + begin,
     </div>
     <div class="line">
      <a name="l00065">
@@ -623,7 +623,7 @@ $(function() {
      <span class="lineno">
       65
      </span>
-     }
+     children);
     </div>
     <div class="line">
      <a name="l00066">
@@ -631,12 +631,20 @@ $(function() {
      <span class="lineno">
       66
      </span>
+     }
     </div>
     <div class="line">
-     <a name="l00072">
+     <a name="l00067">
      </a>
      <span class="lineno">
-      72
+      67
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00073">
+     </a>
+     <span class="lineno">
+      73
      </span>
      std::vector&lt;column_view&gt; slice(column_view
      <span class="keyword">
@@ -645,10 +653,10 @@ $(function() {
      &amp; input,
     </div>
     <div class="line">
-     <a name="l00073">
+     <a name="l00074">
      </a>
      <span class="lineno">
-      73
+      74
      </span>
      std::vector&lt;size_type&gt;
      <span class="keyword">
@@ -657,25 +665,25 @@ $(function() {
      &amp; indices,
     </div>
     <div class="line">
-     <a name="l00074">
-     </a>
-     <span class="lineno">
-      74
-     </span>
-     cudaStream_t stream = 0);
-    </div>
-    <div class="line">
      <a name="l00075">
      </a>
      <span class="lineno">
       75
      </span>
+     cudaStream_t stream = 0);
     </div>
     <div class="line">
-     <a name="l00081">
+     <a name="l00076">
      </a>
      <span class="lineno">
-      81
+      76
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00082">
+     </a>
+     <span class="lineno">
+      82
      </span>
      std::vector&lt;contiguous_split_result&gt;
      <a class="code" href="namespacecudf_1_1experimental.html#a5865ad6c683aa22832c7d74f36a52c1b">
@@ -684,10 +692,10 @@ $(function() {
      (
     </div>
     <div class="line">
-     <a name="l00082">
+     <a name="l00083">
      </a>
      <span class="lineno">
-      82
+      83
      </span>
      <a class="code" href="classcudf_1_1table__view.html">
       cudf::table_view
@@ -698,10 +706,10 @@ $(function() {
      &amp; input,
     </div>
     <div class="line">
-     <a name="l00083">
+     <a name="l00084">
      </a>
      <span class="lineno">
-      83
+      84
      </span>
      std::vector&lt;size_type&gt;
      <span class="keyword">
@@ -710,20 +718,12 @@ $(function() {
      &amp; splits,
     </div>
     <div class="line">
-     <a name="l00084">
-     </a>
-     <span class="lineno">
-      84
-     </span>
-     rmm::mr::device_memory_resource* mr = rmm::mr::get_default_resource(),
-    </div>
-    <div class="line">
      <a name="l00085">
      </a>
      <span class="lineno">
       85
      </span>
-     cudaStream_t stream                 = 0);
+     rmm::mr::device_memory_resource* mr = rmm::mr::get_default_resource(),
     </div>
     <div class="line">
      <a name="l00086">
@@ -731,12 +731,20 @@ $(function() {
      <span class="lineno">
       86
      </span>
+     cudaStream_t stream                 = 0);
     </div>
     <div class="line">
-     <a name="l00098">
+     <a name="l00087">
      </a>
      <span class="lineno">
-      98
+      87
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00100">
+     </a>
+     <span class="lineno">
+      100
      </span>
      std::unique_ptr&lt;column&gt;
      <a class="code" href="namespacecudf_1_1experimental.html#a20ce6302e4458066d832420207ea7a02">
@@ -745,10 +753,10 @@ $(function() {
      (
     </div>
     <div class="line">
-     <a name="l00099">
+     <a name="l00101">
      </a>
      <span class="lineno">
-      99
+      101
      </span>
      column_view
      <span class="keyword">
@@ -757,18 +765,18 @@ $(function() {
      &amp; input,
     </div>
     <div class="line">
-     <a name="l00100">
+     <a name="l00102">
      </a>
      <span class="lineno">
-      100
+      102
      </span>
      size_type size,
     </div>
     <div class="line">
-     <a name="l00101">
+     <a name="l00103">
      </a>
      <span class="lineno">
-      101
+      103
      </span>
      <a class="code" href="namespacecudf_1_1experimental.html#ad483c874f6010437111325063b87daef">
       mask_allocation_policy
@@ -780,51 +788,27 @@ $(function() {
      ,
     </div>
     <div class="line">
-     <a name="l00102">
-     </a>
-     <span class="lineno">
-      102
-     </span>
-     rmm::mr::device_memory_resource* mr = rmm::mr::get_default_resource(),
-    </div>
-    <div class="line">
-     <a name="l00103">
-     </a>
-     <span class="lineno">
-      103
-     </span>
-     cudaStream_t stream                 = 0);
-    </div>
-    <div class="line">
      <a name="l00104">
      </a>
      <span class="lineno">
       104
      </span>
+     rmm::mr::device_memory_resource* mr = rmm::mr::get_default_resource(),
     </div>
     <div class="line">
-     <a name="l00124">
+     <a name="l00105">
      </a>
      <span class="lineno">
-      124
+      105
      </span>
-     std::unique_ptr&lt;column&gt;
-     <a class="code" href="namespacecudf_1_1experimental.html#ad11643d0378285cf1d7b17826fbb35bb">
-      copy_if_else
-     </a>
-     (
+     cudaStream_t stream                 = 0);
     </div>
     <div class="line">
-     <a name="l00125">
+     <a name="l00106">
      </a>
      <span class="lineno">
-      125
+      106
      </span>
-     column_view
-     <span class="keyword">
-      const
-     </span>
-     &amp; lhs,
     </div>
     <div class="line">
      <a name="l00126">
@@ -832,11 +816,11 @@ $(function() {
      <span class="lineno">
       126
      </span>
-     column_view
-     <span class="keyword">
-      const
-     </span>
-     &amp; rhs,
+     std::unique_ptr&lt;column&gt;
+     <a class="code" href="namespacecudf_1_1experimental.html#ad11643d0378285cf1d7b17826fbb35bb">
+      copy_if_else
+     </a>
+     (
     </div>
     <div class="line">
      <a name="l00127">
@@ -848,7 +832,7 @@ $(function() {
      <span class="keyword">
       const
      </span>
-     &amp; boolean_mask,
+     &amp; lhs,
     </div>
     <div class="line">
      <a name="l00128">
@@ -856,53 +840,6 @@ $(function() {
      <span class="lineno">
       128
      </span>
-     rmm::mr::device_memory_resource* mr = rmm::mr::get_default_resource(),
-    </div>
-    <div class="line">
-     <a name="l00129">
-     </a>
-     <span class="lineno">
-      129
-     </span>
-     cudaStream_t stream                 = 0);
-    </div>
-    <div class="line">
-     <a name="l00130">
-     </a>
-     <span class="lineno">
-      130
-     </span>
-    </div>
-    <div class="line">
-     <a name="l00149">
-     </a>
-     <span class="lineno">
-      149
-     </span>
-     std::unique_ptr&lt;column&gt;
-     <a class="code" href="namespacecudf_1_1experimental.html#ad11643d0378285cf1d7b17826fbb35bb">
-      copy_if_else
-     </a>
-     (
-    </div>
-    <div class="line">
-     <a name="l00150">
-     </a>
-     <span class="lineno">
-      150
-     </span>
-     scalar
-     <span class="keyword">
-      const
-     </span>
-     &amp; lhs,
-    </div>
-    <div class="line">
-     <a name="l00151">
-     </a>
-     <span class="lineno">
-      151
-     </span>
      column_view
      <span class="keyword">
       const
@@ -910,10 +847,10 @@ $(function() {
      &amp; rhs,
     </div>
     <div class="line">
-     <a name="l00152">
+     <a name="l00129">
      </a>
      <span class="lineno">
-      152
+      129
      </span>
      column_view
      <span class="keyword">
@@ -922,33 +859,33 @@ $(function() {
      &amp; boolean_mask,
     </div>
     <div class="line">
-     <a name="l00153">
+     <a name="l00130">
      </a>
      <span class="lineno">
-      153
+      130
      </span>
      rmm::mr::device_memory_resource* mr = rmm::mr::get_default_resource(),
     </div>
     <div class="line">
-     <a name="l00154">
+     <a name="l00131">
      </a>
      <span class="lineno">
-      154
+      131
      </span>
      cudaStream_t stream                 = 0);
     </div>
     <div class="line">
-     <a name="l00155">
+     <a name="l00132">
      </a>
      <span class="lineno">
-      155
+      132
      </span>
     </div>
     <div class="line">
-     <a name="l00174">
+     <a name="l00151">
      </a>
      <span class="lineno">
-      174
+      151
      </span>
      std::unique_ptr&lt;column&gt;
      <a class="code" href="namespacecudf_1_1experimental.html#ad11643d0378285cf1d7b17826fbb35bb">
@@ -957,16 +894,63 @@ $(function() {
      (
     </div>
     <div class="line">
-     <a name="l00175">
+     <a name="l00152">
      </a>
      <span class="lineno">
-      175
+      152
+     </span>
+     scalar
+     <span class="keyword">
+      const
+     </span>
+     &amp; lhs,
+    </div>
+    <div class="line">
+     <a name="l00153">
+     </a>
+     <span class="lineno">
+      153
      </span>
      column_view
      <span class="keyword">
       const
      </span>
-     &amp; lhs,
+     &amp; rhs,
+    </div>
+    <div class="line">
+     <a name="l00154">
+     </a>
+     <span class="lineno">
+      154
+     </span>
+     column_view
+     <span class="keyword">
+      const
+     </span>
+     &amp; boolean_mask,
+    </div>
+    <div class="line">
+     <a name="l00155">
+     </a>
+     <span class="lineno">
+      155
+     </span>
+     rmm::mr::device_memory_resource* mr = rmm::mr::get_default_resource(),
+    </div>
+    <div class="line">
+     <a name="l00156">
+     </a>
+     <span class="lineno">
+      156
+     </span>
+     cudaStream_t stream                 = 0);
+    </div>
+    <div class="line">
+     <a name="l00157">
+     </a>
+     <span class="lineno">
+      157
+     </span>
     </div>
     <div class="line">
      <a name="l00176">
@@ -974,11 +958,11 @@ $(function() {
      <span class="lineno">
       176
      </span>
-     scalar
-     <span class="keyword">
-      const
-     </span>
-     &amp; rhs,
+     std::unique_ptr&lt;column&gt;
+     <a class="code" href="namespacecudf_1_1experimental.html#ad11643d0378285cf1d7b17826fbb35bb">
+      copy_if_else
+     </a>
+     (
     </div>
     <div class="line">
      <a name="l00177">
@@ -990,60 +974,13 @@ $(function() {
      <span class="keyword">
       const
      </span>
-     &amp; boolean_mask,
+     &amp; lhs,
     </div>
     <div class="line">
      <a name="l00178">
      </a>
      <span class="lineno">
       178
-     </span>
-     rmm::mr::device_memory_resource* mr = rmm::mr::get_default_resource(),
-    </div>
-    <div class="line">
-     <a name="l00179">
-     </a>
-     <span class="lineno">
-      179
-     </span>
-     cudaStream_t stream                 = 0);
-    </div>
-    <div class="line">
-     <a name="l00180">
-     </a>
-     <span class="lineno">
-      180
-     </span>
-    </div>
-    <div class="line">
-     <a name="l00197">
-     </a>
-     <span class="lineno">
-      197
-     </span>
-     std::unique_ptr&lt;column&gt;
-     <a class="code" href="namespacecudf_1_1experimental.html#ad11643d0378285cf1d7b17826fbb35bb">
-      copy_if_else
-     </a>
-     (
-    </div>
-    <div class="line">
-     <a name="l00198">
-     </a>
-     <span class="lineno">
-      198
-     </span>
-     scalar
-     <span class="keyword">
-      const
-     </span>
-     &amp; lhs,
-    </div>
-    <div class="line">
-     <a name="l00199">
-     </a>
-     <span class="lineno">
-      199
      </span>
      scalar
      <span class="keyword">
@@ -1052,10 +989,10 @@ $(function() {
      &amp; rhs,
     </div>
     <div class="line">
-     <a name="l00200">
+     <a name="l00179">
      </a>
      <span class="lineno">
-      200
+      179
      </span>
      column_view
      <span class="keyword">
@@ -1064,12 +1001,63 @@ $(function() {
      &amp; boolean_mask,
     </div>
     <div class="line">
+     <a name="l00180">
+     </a>
+     <span class="lineno">
+      180
+     </span>
+     rmm::mr::device_memory_resource* mr = rmm::mr::get_default_resource(),
+    </div>
+    <div class="line">
+     <a name="l00181">
+     </a>
+     <span class="lineno">
+      181
+     </span>
+     cudaStream_t stream                 = 0);
+    </div>
+    <div class="line">
+     <a name="l00182">
+     </a>
+     <span class="lineno">
+      182
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00199">
+     </a>
+     <span class="lineno">
+      199
+     </span>
+     std::unique_ptr&lt;column&gt;
+     <a class="code" href="namespacecudf_1_1experimental.html#ad11643d0378285cf1d7b17826fbb35bb">
+      copy_if_else
+     </a>
+     (
+    </div>
+    <div class="line">
+     <a name="l00200">
+     </a>
+     <span class="lineno">
+      200
+     </span>
+     scalar
+     <span class="keyword">
+      const
+     </span>
+     &amp; lhs,
+    </div>
+    <div class="line">
      <a name="l00201">
      </a>
      <span class="lineno">
       201
      </span>
-     rmm::mr::device_memory_resource* mr = rmm::mr::get_default_resource(),
+     scalar
+     <span class="keyword">
+      const
+     </span>
+     &amp; rhs,
     </div>
     <div class="line">
      <a name="l00202">
@@ -1077,7 +1065,11 @@ $(function() {
      <span class="lineno">
       202
      </span>
-     cudaStream_t stream                 = 0);
+     column_view
+     <span class="keyword">
+      const
+     </span>
+     &amp; boolean_mask,
     </div>
     <div class="line">
      <a name="l00203">
@@ -1085,6 +1077,7 @@ $(function() {
      <span class="lineno">
       203
      </span>
+     rmm::mr::device_memory_resource* mr = rmm::mr::get_default_resource(),
     </div>
     <div class="line">
      <a name="l00204">
@@ -1092,10 +1085,7 @@ $(function() {
      <span class="lineno">
       204
      </span>
-     }
-     <span class="comment">
-      // namespace detail
-     </span>
+     cudaStream_t stream                 = 0);
     </div>
     <div class="line">
      <a name="l00205">
@@ -1103,16 +1093,34 @@ $(function() {
      <span class="lineno">
       205
      </span>
-     }
-     <span class="comment">
-      // namespace experimental
-     </span>
     </div>
     <div class="line">
      <a name="l00206">
      </a>
      <span class="lineno">
       206
+     </span>
+     }
+     <span class="comment">
+      // namespace detail
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00207">
+     </a>
+     <span class="lineno">
+      207
+     </span>
+     }
+     <span class="comment">
+      // namespace experimental
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00208">
+     </a>
+     <span class="lineno">
+      208
      </span>
      }
      <span class="comment">
@@ -1139,7 +1147,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    contiguous_split.cu:476
+    contiguous_split.cu:484
    </div>
   </div>
   <div class="ttc" id="anamespacecudf_1_1experimental_html_ad483c874f6010437111325063b87daefa47e9136fa770199f6a8a9727b6173eb4">
@@ -1181,7 +1189,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    copy.cu:233
+    copy.cu:239
    </div>
   </div>
   <div class="ttc" id="aclasscudf_1_1table__view_html">
@@ -1213,7 +1221,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    copying.hpp:144
+    copying.hpp:143
    </div>
   </div>
   <div class="ttc" id="anamespacecudf_html">
@@ -1248,7 +1256,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    copy.cpp:91
+    copy.cpp:94
    </div>
   </div>
   <!-- start footer part -->

@@ -497,6 +497,10 @@ $(function() {
      <span class="lineno">
       40
      </span>
+     <span class="keyword">
+      using namespace
+     </span>
+     cudf::io::json;
     </div>
     <div class="line">
      <a name="l00041">
@@ -507,7 +511,7 @@ $(function() {
      <span class="keyword">
       using namespace
      </span>
-     cudf::io::json;
+     cudf::io;
     </div>
     <div class="line">
      <a name="l00042">
@@ -515,24 +519,13 @@ $(function() {
      <span class="lineno">
       42
      </span>
-     <span class="keyword">
-      using namespace
-     </span>
-     cudf::io;
     </div>
     <div class="line">
-     <a name="l00043">
-     </a>
-     <span class="lineno">
-      43
-     </span>
-    </div>
-    <div class="line">
-     <a name="l00048">
+     <a name="l00047">
      </a>
      <span class="lineno">
       <a class="line" href="classcudf_1_1experimental_1_1io_1_1detail_1_1json_1_1reader_1_1impl.html">
-       48
+       47
       </a>
      </span>
      <span class="keyword">
@@ -544,13 +537,24 @@ $(function() {
      {
     </div>
     <div class="line">
+     <a name="l00048">
+     </a>
+     <span class="lineno">
+      48
+     </span>
+     <span class="keyword">
+      public
+     </span>
+     :
+    </div>
+    <div class="line">
      <a name="l00049">
      </a>
      <span class="lineno">
       49
      </span>
      <span class="keyword">
-      public
+      private
      </span>
      :
     </div>
@@ -561,17 +565,6 @@ $(function() {
       50
      </span>
      <span class="keyword">
-      private
-     </span>
-     :
-    </div>
-    <div class="line">
-     <a name="l00051">
-     </a>
-     <span class="lineno">
-      51
-     </span>
-     <span class="keyword">
       const
      </span>
      <a class="code" href="structcudf_1_1experimental_1_1io_1_1detail_1_1json_1_1reader__options.html">
@@ -580,17 +573,17 @@ $(function() {
      args_{};
     </div>
     <div class="line">
+     <a name="l00051">
+     </a>
+     <span class="lineno">
+      51
+     </span>
+    </div>
+    <div class="line">
      <a name="l00052">
      </a>
      <span class="lineno">
       52
-     </span>
-    </div>
-    <div class="line">
-     <a name="l00053">
-     </a>
-     <span class="lineno">
-      53
      </span>
      rmm::mr::device_memory_resource *mr_ =
      <span class="keyword">
@@ -599,11 +592,19 @@ $(function() {
      ;
     </div>
     <div class="line">
+     <a name="l00053">
+     </a>
+     <span class="lineno">
+      53
+     </span>
+    </div>
+    <div class="line">
      <a name="l00054">
      </a>
      <span class="lineno">
       54
      </span>
+     std::unique_ptr&lt;datasource&gt; source_;
     </div>
     <div class="line">
      <a name="l00055">
@@ -611,7 +612,7 @@ $(function() {
      <span class="lineno">
       55
      </span>
-     std::unique_ptr&lt;datasource&gt; source_;
+     std::string filepath_;
     </div>
     <div class="line">
      <a name="l00056">
@@ -619,7 +620,7 @@ $(function() {
      <span class="lineno">
       56
      </span>
-     std::string filepath_;
+     std::shared_ptr&lt;arrow::Buffer&gt; buffer_;
     </div>
     <div class="line">
      <a name="l00057">
@@ -627,20 +628,12 @@ $(function() {
      <span class="lineno">
       57
      </span>
-     std::shared_ptr&lt;arrow::Buffer&gt; buffer_;
     </div>
     <div class="line">
      <a name="l00058">
      </a>
      <span class="lineno">
       58
-     </span>
-    </div>
-    <div class="line">
-     <a name="l00059">
-     </a>
-     <span class="lineno">
-      59
      </span>
      <span class="keyword">
       const
@@ -655,10 +648,10 @@ $(function() {
      ;
     </div>
     <div class="line">
-     <a name="l00060">
+     <a name="l00059">
      </a>
      <span class="lineno">
-      60
+      59
      </span>
      <span class="keywordtype">
       size_t
@@ -666,10 +659,20 @@ $(function() {
      uncomp_size_      = 0;
     </div>
     <div class="line">
+     <a name="l00060">
+     </a>
+     <span class="lineno">
+      60
+     </span>
+    </div>
+    <div class="line">
      <a name="l00061">
      </a>
      <span class="lineno">
       61
+     </span>
+     <span class="comment">
+      // Used when the input data is compressed, to ensure the allocated uncompressed data is freed
      </span>
     </div>
     <div class="line">
@@ -678,9 +681,7 @@ $(function() {
      <span class="lineno">
       62
      </span>
-     <span class="comment">
-      // Used when the input data is compressed, to ensure the allocated uncompressed data is freed
-     </span>
+     std::vector&lt;char&gt; uncomp_data_owner_;
     </div>
     <div class="line">
      <a name="l00063">
@@ -688,7 +689,7 @@ $(function() {
      <span class="lineno">
       63
      </span>
-     std::vector&lt;char&gt; uncomp_data_owner_;
+     rmm::device_buffer data_;
     </div>
     <div class="line">
      <a name="l00064">
@@ -696,7 +697,7 @@ $(function() {
      <span class="lineno">
       64
      </span>
-     rmm::device_buffer data_;
+     rmm::device_vector&lt;uint64_t&gt; rec_starts_;
     </div>
     <div class="line">
      <a name="l00065">
@@ -704,7 +705,6 @@ $(function() {
      <span class="lineno">
       65
      </span>
-     rmm::device_vector&lt;uint64_t&gt; rec_starts_;
     </div>
     <div class="line">
      <a name="l00066">
@@ -712,6 +712,10 @@ $(function() {
      <span class="lineno">
       66
      </span>
+     <span class="keywordtype">
+      size_t
+     </span>
+     byte_range_offset_ = 0;
     </div>
     <div class="line">
      <a name="l00067">
@@ -722,24 +726,13 @@ $(function() {
      <span class="keywordtype">
       size_t
      </span>
-     byte_range_offset_ = 0;
+     byte_range_size_   = 0;
     </div>
     <div class="line">
      <a name="l00068">
      </a>
      <span class="lineno">
       68
-     </span>
-     <span class="keywordtype">
-      size_t
-     </span>
-     byte_range_size_   = 0;
-    </div>
-    <div class="line">
-     <a name="l00069">
-     </a>
-     <span class="lineno">
-      69
      </span>
      <span class="keywordtype">
       bool
@@ -751,17 +744,17 @@ $(function() {
      ;
     </div>
     <div class="line">
+     <a name="l00069">
+     </a>
+     <span class="lineno">
+      69
+     </span>
+    </div>
+    <div class="line">
      <a name="l00070">
      </a>
      <span class="lineno">
       70
-     </span>
-    </div>
-    <div class="line">
-     <a name="l00071">
-     </a>
-     <span class="lineno">
-      71
      </span>
      <a class="code" href="structcudf_1_1experimental_1_1io_1_1table__metadata.html">
       table_metadata
@@ -769,21 +762,28 @@ $(function() {
      metadata;
     </div>
     <div class="line">
+     <a name="l00071">
+     </a>
+     <span class="lineno">
+      71
+     </span>
+     std::vector&lt;data_type&gt; dtypes_;
+    </div>
+    <div class="line">
      <a name="l00072">
      </a>
      <span class="lineno">
       72
      </span>
-     std::vector&lt;data_type&gt; dtypes_;
+     <span class="comment">
+      // std::vector&lt;gdf_dtype_extra_info&gt; dtypes_extra_info_;
+     </span>
     </div>
     <div class="line">
      <a name="l00073">
      </a>
      <span class="lineno">
       73
-     </span>
-     <span class="comment">
-      //std::vector&lt;gdf_dtype_extra_info&gt; dtypes_extra_info_;
      </span>
     </div>
     <div class="line">
@@ -792,22 +792,15 @@ $(function() {
      <span class="lineno">
       74
      </span>
+     <span class="comment">
+      // parsing options
+     </span>
     </div>
     <div class="line">
      <a name="l00075">
      </a>
      <span class="lineno">
       75
-     </span>
-     <span class="comment">
-      // parsing options
-     </span>
-    </div>
-    <div class="line">
-     <a name="l00076">
-     </a>
-     <span class="lineno">
-      76
      </span>
      <span class="keyword">
       const
@@ -822,10 +815,10 @@ $(function() {
      ;
     </div>
     <div class="line">
-     <a name="l00077">
+     <a name="l00076">
      </a>
      <span class="lineno">
-      77
+      76
      </span>
      <a class="code" href="structcudf_1_1experimental_1_1io_1_1ParseOptions.html">
       ParseOptions
@@ -849,12 +842,20 @@ $(function() {
      };
     </div>
     <div class="line">
+     <a name="l00077">
+     </a>
+     <span class="lineno">
+      77
+     </span>
+     rmm::device_vector&lt;SerialTrieNode&gt; d_true_trie_;
+    </div>
+    <div class="line">
      <a name="l00078">
      </a>
      <span class="lineno">
       78
      </span>
-     rmm::device_vector&lt;SerialTrieNode&gt; d_true_trie_;
+     rmm::device_vector&lt;SerialTrieNode&gt; d_false_trie_;
     </div>
     <div class="line">
      <a name="l00079">
@@ -862,7 +863,7 @@ $(function() {
      <span class="lineno">
       79
      </span>
-     rmm::device_vector&lt;SerialTrieNode&gt; d_false_trie_;
+     rmm::device_vector&lt;SerialTrieNode&gt; d_na_trie_;
     </div>
     <div class="line">
      <a name="l00080">
@@ -870,20 +871,12 @@ $(function() {
      <span class="lineno">
       80
      </span>
-     rmm::device_vector&lt;SerialTrieNode&gt; d_na_trie_;
     </div>
     <div class="line">
-     <a name="l00081">
+     <a name="l00091">
      </a>
      <span class="lineno">
-      81
-     </span>
-    </div>
-    <div class="line">
-     <a name="l00092">
-     </a>
-     <span class="lineno">
-      92
+      91
      </span>
      <span class="keywordtype">
       void
@@ -899,17 +892,17 @@ $(function() {
      range_size);
     </div>
     <div class="line">
-     <a name="l00093">
+     <a name="l00092">
      </a>
      <span class="lineno">
-      93
+      92
      </span>
     </div>
     <div class="line">
-     <a name="l00101">
+     <a name="l00100">
      </a>
      <span class="lineno">
-      101
+      100
      </span>
      <span class="keywordtype">
       void
@@ -917,17 +910,17 @@ $(function() {
      decompress_input();
     </div>
     <div class="line">
-     <a name="l00102">
+     <a name="l00101">
      </a>
      <span class="lineno">
-      102
+      101
      </span>
     </div>
     <div class="line">
-     <a name="l00112">
+     <a name="l00111">
      </a>
      <span class="lineno">
-      112
+      111
      </span>
      <span class="keywordtype">
       void
@@ -935,17 +928,17 @@ $(function() {
      set_record_starts(cudaStream_t stream);
     </div>
     <div class="line">
-     <a name="l00113">
+     <a name="l00112">
      </a>
      <span class="lineno">
-      113
+      112
      </span>
     </div>
     <div class="line">
-     <a name="l00123">
+     <a name="l00122">
      </a>
      <span class="lineno">
-      123
+      122
      </span>
      <span class="keywordtype">
       void
@@ -953,17 +946,17 @@ $(function() {
      upload_data_to_device();
     </div>
     <div class="line">
-     <a name="l00124">
+     <a name="l00123">
      </a>
      <span class="lineno">
-      124
+      123
      </span>
     </div>
     <div class="line">
-     <a name="l00134">
+     <a name="l00133">
      </a>
      <span class="lineno">
-      134
+      133
      </span>
      <span class="keywordtype">
       void
@@ -971,17 +964,17 @@ $(function() {
      set_column_names(cudaStream_t stream);
     </div>
     <div class="line">
-     <a name="l00135">
+     <a name="l00134">
      </a>
      <span class="lineno">
-      135
+      134
      </span>
     </div>
     <div class="line">
-     <a name="l00145">
+     <a name="l00144">
      </a>
      <span class="lineno">
-      145
+      144
      </span>
      <span class="keywordtype">
       void
@@ -989,17 +982,17 @@ $(function() {
      set_data_types(cudaStream_t stream);
     </div>
     <div class="line">
-     <a name="l00146">
+     <a name="l00145">
      </a>
      <span class="lineno">
-      146
+      145
      </span>
     </div>
     <div class="line">
-     <a name="l00154">
+     <a name="l00153">
      </a>
      <span class="lineno">
-      154
+      153
      </span>
      <a class="code" href="structcudf_1_1experimental_1_1io_1_1table__with__metadata.html">
       table_with_metadata
@@ -1007,17 +1000,17 @@ $(function() {
      convert_data_to_table(cudaStream_t stream);
     </div>
     <div class="line">
+     <a name="l00154">
+     </a>
+     <span class="lineno">
+      154
+     </span>
+    </div>
+    <div class="line">
      <a name="l00155">
      </a>
      <span class="lineno">
       155
-     </span>
-    </div>
-    <div class="line">
-     <a name="l00156">
-     </a>
-     <span class="lineno">
-      156
      </span>
      <span class="keyword">
       public
@@ -1025,10 +1018,10 @@ $(function() {
      :
     </div>
     <div class="line">
-     <a name="l00160">
+     <a name="l00159">
      </a>
      <span class="lineno">
-      160
+      159
      </span>
      <span class="keyword">
       explicit
@@ -1039,18 +1032,18 @@ $(function() {
      (std::unique_ptr&lt;datasource&gt; source,
     </div>
     <div class="line">
-     <a name="l00161">
+     <a name="l00160">
      </a>
      <span class="lineno">
-      161
+      160
      </span>
      std::string filepath,
     </div>
     <div class="line">
-     <a name="l00162">
+     <a name="l00161">
      </a>
      <span class="lineno">
-      162
+      161
      </span>
      <a class="code" href="structcudf_1_1experimental_1_1io_1_1detail_1_1json_1_1reader__options.html">
       reader_options
@@ -1061,25 +1054,25 @@ $(function() {
      &amp;args,
     </div>
     <div class="line">
+     <a name="l00162">
+     </a>
+     <span class="lineno">
+      162
+     </span>
+     rmm::mr::device_memory_resource *mr);
+    </div>
+    <div class="line">
      <a name="l00163">
      </a>
      <span class="lineno">
       163
      </span>
-     rmm::mr::device_memory_resource *mr);
     </div>
     <div class="line">
-     <a name="l00164">
+     <a name="l00173">
      </a>
      <span class="lineno">
-      164
-     </span>
-    </div>
-    <div class="line">
-     <a name="l00174">
-     </a>
-     <span class="lineno">
-      174
+      173
      </span>
      <a class="code" href="structcudf_1_1experimental_1_1io_1_1table__with__metadata.html">
       table_with_metadata
@@ -1095,18 +1088,29 @@ $(function() {
      range_size, cudaStream_t stream);
     </div>
     <div class="line">
+     <a name="l00174">
+     </a>
+     <span class="lineno">
+      174
+     </span>
+     };
+    </div>
+    <div class="line">
      <a name="l00175">
      </a>
      <span class="lineno">
       175
      </span>
-     };
     </div>
     <div class="line">
      <a name="l00176">
      </a>
      <span class="lineno">
       176
+     </span>
+     }
+     <span class="comment">
+      // namespace json
      </span>
     </div>
     <div class="line">
@@ -1117,7 +1121,7 @@ $(function() {
      </span>
      }
      <span class="comment">
-      // namespace json
+      // namespace detail
      </span>
     </div>
     <div class="line">
@@ -1128,7 +1132,7 @@ $(function() {
      </span>
      }
      <span class="comment">
-      // namespace detail
+      // namespace io
      </span>
     </div>
     <div class="line">
@@ -1139,7 +1143,7 @@ $(function() {
      </span>
      }
      <span class="comment">
-      // namespace io
+      // namespace experimental
      </span>
     </div>
     <div class="line">
@@ -1147,17 +1151,6 @@ $(function() {
      </a>
      <span class="lineno">
       180
-     </span>
-     }
-     <span class="comment">
-      // namespace experimental
-     </span>
-    </div>
-    <div class="line">
-     <a name="l00181">
-     </a>
-     <span class="lineno">
-      181
      </span>
      }
      <span class="comment">
@@ -1181,7 +1174,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    json/reader_impl.hpp:48
+    json/reader_impl.hpp:47
    </div>
   </div>
   <div class="ttc" id="acolumn__buffer_8hpp_html">
@@ -1207,7 +1200,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    readers.hpp:148
+    readers.hpp:146
    </div>
   </div>
   <div class="ttc" id="astructcudf_1_1experimental_1_1io_1_1table__with__metadata_html">
@@ -1223,7 +1216,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    io/types.hpp:135
+    io/types.hpp:136
    </div>
   </div>
   <div class="ttc" id="astructcudf_1_1experimental_1_1io_1_1table__metadata_html">
@@ -1239,7 +1232,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    io/types.hpp:110
+    io/types.hpp:109
    </div>
   </div>
   <div class="ttc" id="anamespacecudf_html">
@@ -1271,7 +1264,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    parsing_utils.cuh:30
+    parsing_utils.cuh:29
    </div>
   </div>
   <div class="ttc" id="areaders_8hpp_html">
