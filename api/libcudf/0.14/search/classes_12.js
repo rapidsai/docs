@@ -29,7 +29,7 @@ var searchData=
   ['sort_5fgroupby_5fhelper_2090',['sort_groupby_helper',['../structcudf_1_1experimental_1_1groupby_1_1detail_1_1sort_1_1sort__groupby__helper.html',1,'cudf::experimental::groupby::detail::sort']]],
   ['source_5finfo_2091',['source_info',['../structcudf_1_1experimental_1_1io_1_1source__info.html',1,'cudf::experimental::io::source_info'],['../structcudf_1_1source__info.html',1,'cudf::source_info']]],
   ['special_5fcase_5fmapping_2092',['special_case_mapping',['../structcudf_1_1strings_1_1detail_1_1special__case__mapping.html',1,'cudf::strings::detail']]],
-  ['standard_5fdeviation_2093',['standard_deviation',['../structcudf_1_1experimental_1_1reduction_1_1op_1_1standard__deviation.html',1,'cudf::experimental::reduction::op::standard_deviation'],['../structcudf_1_1reduction_1_1op_1_1standard__deviation.html',1,'cudf::reduction::op::standard_deviation']]],
+  ['standard_5fdeviation_2093',['standard_deviation',['../structcudf_1_1reduction_1_1op_1_1standard__deviation.html',1,'cudf::reduction::op::standard_deviation'],['../structcudf_1_1experimental_1_1reduction_1_1op_1_1standard__deviation.html',1,'cudf::experimental::reduction::op::standard_deviation']]],
   ['statistics_5fchunk_2094',['statistics_chunk',['../structcudf_1_1io_1_1statistics__chunk.html',1,'cudf::io']]],
   ['statistics_5fgroup_2095',['statistics_group',['../structcudf_1_1io_1_1statistics__group.html',1,'cudf::io']]],
   ['statistics_5fmerge_5fgroup_2096',['statistics_merge_group',['../structcudf_1_1io_1_1statistics__merge__group.html',1,'cudf::io']]],
@@ -58,6 +58,6 @@ var searchData=
   ['stripeinformation_2119',['StripeInformation',['../structcudf_1_1io_1_1orc_1_1StripeInformation.html',1,'cudf::io::orc']]],
   ['stripestatistics_2120',['StripeStatistics',['../structcudf_1_1io_1_1orc_1_1StripeStatistics.html',1,'cudf::io::orc']]],
   ['stripestream_2121',['StripeStream',['../structcudf_1_1io_1_1orc_1_1gpu_1_1StripeStream.html',1,'cudf::io::orc::gpu']]],
-  ['sum_2122',['sum',['../structcudf_1_1reduction_1_1op_1_1sum.html',1,'cudf::reduction::op::sum'],['../structcudf_1_1experimental_1_1reduction_1_1op_1_1sum.html',1,'cudf::experimental::reduction::op::sum']]],
+  ['sum_2122',['sum',['../structcudf_1_1experimental_1_1reduction_1_1op_1_1sum.html',1,'cudf::experimental::reduction::op::sum'],['../structcudf_1_1reduction_1_1op_1_1sum.html',1,'cudf::reduction::op::sum']]],
   ['sum_5fof_5fsquares_2123',['sum_of_squares',['../structcudf_1_1experimental_1_1reduction_1_1op_1_1sum__of__squares.html',1,'cudf::experimental::reduction::op::sum_of_squares'],['../structcudf_1_1reduction_1_1op_1_1sum__of__squares.html',1,'cudf::reduction::op::sum_of_squares']]]
 ];

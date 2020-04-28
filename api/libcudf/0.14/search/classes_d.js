@@ -19,7 +19,7 @@ var searchData=
   ['nunique_5faggregation_1979',['nunique_aggregation',['../structcudf_1_1experimental_1_1detail_1_1nunique__aggregation.html',1,'cudf::experimental::detail']]],
   ['nvcategory_1980',['NVCategory',['../classNVCategory.html',1,'']]],
   ['nvcategory_5fipc_5ftransfer_1981',['nvcategory_ipc_transfer',['../structnvcategory__ipc__transfer.html',1,'']]],
-  ['nvstrdesc_5fs_1982',['nvstrdesc_s',['../structcudf_1_1io_1_1avro_1_1gpu_1_1nvstrdesc__s.html',1,'cudf::io::avro::gpu::nvstrdesc_s'],['../structcudf_1_1io_1_1nvstrdesc__s.html',1,'cudf::io::nvstrdesc_s'],['../structcudf_1_1io_1_1orc_1_1gpu_1_1nvstrdesc__s.html',1,'cudf::io::orc::gpu::nvstrdesc_s'],['../structcudf_1_1io_1_1parquet_1_1gpu_1_1nvstrdesc__s.html',1,'cudf::io::parquet::gpu::nvstrdesc_s']]],
+  ['nvstrdesc_5fs_1982',['nvstrdesc_s',['../structcudf_1_1io_1_1nvstrdesc__s.html',1,'cudf::io::nvstrdesc_s'],['../structcudf_1_1io_1_1parquet_1_1gpu_1_1nvstrdesc__s.html',1,'cudf::io::parquet::gpu::nvstrdesc_s'],['../structcudf_1_1io_1_1avro_1_1gpu_1_1nvstrdesc__s.html',1,'cudf::io::avro::gpu::nvstrdesc_s'],['../structcudf_1_1io_1_1orc_1_1gpu_1_1nvstrdesc__s.html',1,'cudf::io::orc::gpu::nvstrdesc_s']]],
   ['nvstrings_1983',['NVStrings',['../classNVStrings.html',1,'']]],
   ['nvstrings_5fipc_5ftransfer_1984',['nvstrings_ipc_transfer',['../structnvstrings__ipc__transfer.html',1,'']]],
   ['nvtext_1985',['NVText',['../classNVText.html',1,'']]]

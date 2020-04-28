@@ -5,7 +5,7 @@ var searchData=
   ['pagefragment_2011',['PageFragment',['../structcudf_1_1io_1_1parquet_1_1gpu_1_1PageFragment.html',1,'cudf::io::parquet::gpu']]],
   ['pageheader_2012',['PageHeader',['../structcudf_1_1io_1_1parquet_1_1PageHeader.html',1,'cudf::io::parquet']]],
   ['pageinfo_2013',['PageInfo',['../structcudf_1_1io_1_1parquet_1_1gpu_1_1PageInfo.html',1,'cudf::io::parquet::gpu']]],
-  ['pair_5faccessor_2014',['pair_accessor',['../structcudf_1_1detail_1_1pair__accessor.html',1,'cudf::detail::pair_accessor&lt; T, has_nulls &gt;'],['../structcudf_1_1pair__accessor.html',1,'cudf::pair_accessor&lt; ElementType, ResultType, has_nulls &gt;']]],
+  ['pair_5faccessor_2014',['pair_accessor',['../structcudf_1_1pair__accessor.html',1,'cudf::pair_accessor&lt; ElementType, ResultType, has_nulls &gt;'],['../structcudf_1_1detail_1_1pair__accessor.html',1,'cudf::detail::pair_accessor&lt; T, has_nulls &gt;']]],
   ['pair_5faccessor_3c_20elementtype_2c_20resulttype_2c_20false_20_3e_2015',['pair_accessor&lt; ElementType, ResultType, false &gt;',['../structcudf_1_1pair__accessor_3_01ElementType_00_01ResultType_00_01false_01_4.html',1,'cudf']]],
   ['pair_5faccessor_3c_20elementtype_2c_20resulttype_2c_20true_20_3e_2016',['pair_accessor&lt; ElementType, ResultType, true &gt;',['../structcudf_1_1pair__accessor_3_01ElementType_00_01ResultType_00_01true_01_4.html',1,'cudf']]],
   ['parquet_5fcolumn_5fview_2017',['parquet_column_view',['../classcudf_1_1experimental_1_1io_1_1detail_1_1parquet_1_1parquet__column__view.html',1,'cudf::experimental::io::detail::parquet']]],

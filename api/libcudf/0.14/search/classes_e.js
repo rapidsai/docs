@@ -3,7 +3,7 @@ var searchData=
   ['operation_1986',['operation',['../structcudf_1_1groupby_1_1sort_1_1operation.html',1,'cudf::groupby::sort']]],
   ['operation_5fargs_1987',['operation_args',['../structcudf_1_1groupby_1_1sort_1_1operation__args.html',1,'cudf::groupby::sort']]],
   ['operator_1988',['Operator',['../classcudf_1_1binops_1_1jit_1_1Operator.html',1,'cudf::binops::jit']]],
-  ['options_1989',['Options',['../structcudf_1_1groupby_1_1hash_1_1Options.html',1,'cudf::groupby::hash::Options'],['../structcudf_1_1groupby_1_1sort_1_1Options.html',1,'cudf::groupby::sort::Options'],['../structcudf_1_1groupby_1_1Options.html',1,'cudf::groupby::Options']]],
+  ['options_1989',['Options',['../structcudf_1_1groupby_1_1Options.html',1,'cudf::groupby::Options'],['../structcudf_1_1groupby_1_1sort_1_1Options.html',1,'cudf::groupby::sort::Options'],['../structcudf_1_1groupby_1_1hash_1_1Options.html',1,'cudf::groupby::hash::Options']]],
   ['orc_5fbyterle_5fstate_5fs_1990',['orc_byterle_state_s',['../structcudf_1_1io_1_1orc_1_1gpu_1_1orc__byterle__state__s.html',1,'cudf::io::orc::gpu']]],
   ['orc_5fbytestream_5fs_1991',['orc_bytestream_s',['../structcudf_1_1io_1_1orc_1_1gpu_1_1orc__bytestream__s.html',1,'cudf::io::orc::gpu']]],
   ['orc_5fchunked_5fstate_1992',['orc_chunked_state',['../structcudf_1_1experimental_1_1io_1_1detail_1_1orc_1_1orc__chunked__state.html',1,'cudf::experimental::io::detail::orc']]],

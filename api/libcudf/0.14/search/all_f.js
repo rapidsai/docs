@@ -33,7 +33,7 @@ var searchData=
   ['operator_3e_1038',['operator&gt;',['../classcudf_1_1string__view.html#ad572225e619316f4aff1745bd567f401',1,'cudf::string_view']]],
   ['operator_3e_3d_1039',['operator&gt;=',['../classcudf_1_1string__view.html#a0052af8c56061158556c97ccf224cf30',1,'cudf::string_view']]],
   ['operator_5b_5d_1040',['operator[]',['../classcudf_1_1string__view.html#afdfa4795d43bdf0d584bc31f37a7176a',1,'cudf::string_view']]],
-  ['options_1041',['Options',['../structcudf_1_1groupby_1_1hash_1_1Options.html',1,'cudf::groupby::hash::Options'],['../structcudf_1_1groupby_1_1sort_1_1Options.html',1,'cudf::groupby::sort::Options'],['../structcudf_1_1groupby_1_1Options.html',1,'cudf::groupby::Options']]],
+  ['options_1041',['Options',['../structcudf_1_1groupby_1_1Options.html',1,'cudf::groupby::Options'],['../structcudf_1_1groupby_1_1sort_1_1Options.html',1,'cudf::groupby::sort::Options'],['../structcudf_1_1groupby_1_1hash_1_1Options.html',1,'cudf::groupby::hash::Options']]],
   ['orc_5fbyterle_5fstate_5fs_1042',['orc_byterle_state_s',['../structcudf_1_1io_1_1orc_1_1gpu_1_1orc__byterle__state__s.html',1,'cudf::io::orc::gpu']]],
   ['orc_5fbytestream_5fs_1043',['orc_bytestream_s',['../structcudf_1_1io_1_1orc_1_1gpu_1_1orc__bytestream__s.html',1,'cudf::io::orc::gpu']]],
   ['orc_5fchunked_5fstate_1044',['orc_chunked_state',['../structcudf_1_1experimental_1_1io_1_1detail_1_1orc_1_1orc__chunked__state.html',1,'cudf::experimental::io::detail::orc']]],
