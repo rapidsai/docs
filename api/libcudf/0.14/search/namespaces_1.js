@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['numeric_2246',['numeric',['../namespacenumeric.html',1,'']]]
+  ['numeric_2249',['numeric',['../namespacenumeric.html',1,'']]]
 ];
