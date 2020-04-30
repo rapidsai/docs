@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['quote_5fstyle_3220',['quote_style',['../structcudf_1_1csv__read__arg.html#ac38936d9c26a6ba6e5d488f36afa0a4e',1,'cudf::csv_read_arg::quote_style()'],['../namespacecudf_1_1experimental_1_1io.html#ac67f859abc53aa9cac54d0a769da6fa1',1,'cudf::experimental::io::quote_style()']]]
+  ['radix_2953',['Radix',['../namespacenumeric.html#a045400c0ebe33ec6b78a0d1294068fb2',1,'numeric']]],
+  ['rank_5fmethod_2954',['rank_method',['../namespacecudf.html#a1b10429fb5d86af4db72da1118f2ad5d',1,'cudf']]]
 ];

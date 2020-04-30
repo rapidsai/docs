@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['order_3217',['order',['../namespacecudf.html#a750f02016b046079f7062d334890b4fc',1,'cudf']]]
+  ['pad_5fside_2951',['pad_side',['../group__strings__modify.html#gace598ecf9030296eeebfef46251d7d52',1,'cudf::strings']]]
 ];

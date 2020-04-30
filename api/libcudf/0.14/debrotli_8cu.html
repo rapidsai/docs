@@ -774,29 +774,29 @@ $(function() {
      <td class="memSeparator" colspan="2">
      </td>
     </tr>
-    <tr class="memitem:ae5b7245f2c950d19da1ed310a0f03567">
+    <tr class="memitem:a8018c69d9f93dc70b59ff5d33b5a2b36">
      <td align="right" class="memItemLeft" valign="top">
       size_t __host__
      </td>
      <td class="memItemRight" valign="bottom">
-      <a class="el" href="debrotli_8cu.html#ae5b7245f2c950d19da1ed310a0f03567">
+      <a class="el" href="debrotli_8cu.html#a8018c69d9f93dc70b59ff5d33b5a2b36">
        cudf::io::get_gpu_debrotli_scratch_size
       </a>
-      (int max_num_inputs=0)
+      (int max_num_inputs)
      </td>
     </tr>
-    <tr class="memdesc:ae5b7245f2c950d19da1ed310a0f03567">
+    <tr class="memdesc:a8018c69d9f93dc70b59ff5d33b5a2b36">
      <td class="mdescLeft">
      </td>
      <td class="mdescRight">
       Computes the size of temporary memory for Brotli decompression.
-      <a href="debrotli_8cu.html#ae5b7245f2c950d19da1ed310a0f03567">
+      <a href="debrotli_8cu.html#a8018c69d9f93dc70b59ff5d33b5a2b36">
        More...
       </a>
       <br/>
      </td>
     </tr>
-    <tr class="separator:ae5b7245f2c950d19da1ed310a0f03567">
+    <tr class="separator:a8018c69d9f93dc70b59ff5d33b5a2b36">
      <td class="memSeparator" colspan="2">
      </td>
     </tr>
@@ -965,6 +965,12 @@ $(function() {
    <div class="textblock">
     <p>
      CUDA-based brotli decompression
+    </p>
+    <p>
+     Brotli Compressed Data Format
+     <a href="https://tools.ietf.org/html/rfc7932">
+      https://tools.ietf.org/html/rfc7932
+     </a>
     </p>
     <p>
      Portions of this file are derived from Google's Brotli project at
@@ -1147,11 +1153,11 @@ $(function() {
      </dl>
     </div>
    </div>
-   <a id="ae5b7245f2c950d19da1ed310a0f03567">
+   <a id="a8018c69d9f93dc70b59ff5d33b5a2b36">
    </a>
    <h2 class="memtitle">
     <span class="permalink">
-     <a href="#ae5b7245f2c950d19da1ed310a0f03567">
+     <a href="#a8018c69d9f93dc70b59ff5d33b5a2b36">
       ◆
      </a>
     </span>
@@ -1174,10 +1180,6 @@ $(function() {
         <em>
          max_num_inputs
         </em>
-        =
-        <code>
-         0
-        </code>
        </td>
        <td>
         )
@@ -1191,6 +1193,40 @@ $(function() {
      <p>
       Computes the size of temporary memory for Brotli decompression.
      </p>
+     <p>
+      In most case, a brotli metablock will require in the order of ~10KB to ~40KB of scratch space for various lookup tables (mainly context maps and Huffman lookup tables), as well as temporary scratch space to decode the header. However, because the syntax allows for a huge number of unique tables, the theoretical worst case is quite large at ~1.3MB per threadblock, which would scale with gpu occupancy.
+     </p>
+     <p>
+      This is solved by a custom memory allocator that first allocates from a local heap in shared mem (with the end of the heap being used as a stack for intermediate small allocations). Once this is exhausted, the 'external' heap is used, allocating from a single scratch surface shared between all the threadblocks, such that allocation can't fail, but may cause serialization between threadblocks should more than one threadblock ever allocate the worst case size.
+     </p>
+     <dl class="params">
+      <dt>
+       Parameters
+      </dt>
+      <dd>
+       <table class="params">
+        <tr>
+         <td class="paramdir">
+          [in]
+         </td>
+         <td class="paramname">
+          max_num_inputs
+         </td>
+         <td>
+          The maximum number of compressed input chunks
+         </td>
+        </tr>
+       </table>
+      </dd>
+     </dl>
+     <dl class="section return">
+      <dt>
+       Returns
+      </dt>
+      <dd>
+       The size in bytes of required temporary memory
+      </dd>
+     </dl>
      <dl class="params">
       <dt>
        Parameters

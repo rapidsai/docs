@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['pad_5fside_3218',['pad_side',['../namespacecudf_1_1strings.html#ace598ecf9030296eeebfef46251d7d52',1,'cudf::strings']]],
-  ['padside_3219',['padside',['../classNVStrings.html#ae632539abce4f345d9c6995cc407281e',1,'NVStrings']]]
+  ['quote_5fstyle_2952',['quote_style',['../structcudf_1_1csv__read__arg.html#ac38936d9c26a6ba6e5d488f36afa0a4e',1,'cudf::csv_read_arg::quote_style()'],['../namespacecudf_1_1experimental_1_1io.html#ac67f859abc53aa9cac54d0a769da6fa1',1,'cudf::experimental::io::quote_style()']]]
 ];

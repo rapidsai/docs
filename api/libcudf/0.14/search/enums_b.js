@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['radix_3221',['Radix',['../namespacenumeric.html#a045400c0ebe33ec6b78a0d1294068fb2',1,'numeric']]],
-  ['rank_5fmethod_3222',['rank_method',['../namespacecudf.html#a1b10429fb5d86af4db72da1118f2ad5d',1,'cudf']]]
+  ['sorted_2955',['sorted',['../namespacecudf.html#ab283c517931abd4152ffa62fec62425d',1,'cudf']]],
+  ['statistics_5ffreq_2956',['statistics_freq',['../namespacecudf_1_1experimental_1_1io.html#a3b49efcc68437e81c995a1b5851fc7fb',1,'cudf::experimental::io']]],
+  ['string_5fcharacter_5ftypes_2957',['string_character_types',['../namespacecudf_1_1strings.html#acdc71043841f369de3cc8dd827a0eea1',1,'cudf::strings']]],
+  ['strip_5ftype_2958',['strip_type',['../group__strings__modify.html#ga78f0999f58b7b8d02fd3a10fffca446e',1,'cudf::strings']]]
 ];

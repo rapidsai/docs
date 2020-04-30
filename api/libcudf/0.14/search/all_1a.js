@@ -1,10 +1,7 @@
 var searchData=
 [
-  ['zfill_1632',['zfill',['../classNVStrings.html#a7b3c6bba409f5ed42911c9c45fd1a491',1,'NVStrings::zfill()'],['../namespacecudf_1_1strings.html#a4d265b414cf6c921ff7ceabc99aeef57',1,'cudf::strings::zfill()']]],
-  ['zip_1633',['ZIP',['../namespacecudf_1_1experimental_1_1io.html#a748faef899f436d65047ac2241261457a4348f938bbddd8475e967ccb47ecb234',1,'cudf::experimental::io']]],
-  ['zip64_5feocdl_1634',['zip64_eocdl',['../structcudf_1_1io_1_1zip64__eocdl.html',1,'cudf::io']]],
-  ['zip_5farchive_5fs_1635',['zip_archive_s',['../structcudf_1_1io_1_1zip__archive__s.html',1,'cudf::io']]],
-  ['zip_5fcdfh_5fs_1636',['zip_cdfh_s',['../structcudf_1_1io_1_1zip__cdfh__s.html',1,'cudf::io']]],
-  ['zip_5feocd_5fs_1637',['zip_eocd_s',['../structcudf_1_1io_1_1zip__eocd__s.html',1,'cudf::io']]],
-  ['zip_5flfh_5fs_1638',['zip_lfh_s',['../structcudf_1_1io_1_1zip__lfh__s.html',1,'cudf::io']]]
+  ['_7edata_5fsink_1517',['~data_sink',['../classcudf_1_1io_1_1data__sink.html#a778f6bad53ffc49dc6285dd8a9879f73',1,'cudf::io::data_sink']]],
+  ['_7edatasource_1518',['~datasource',['../classcudf_1_1io_1_1datasource.html#aa4486e8cfc15e495a15030f70d362437',1,'cudf::io::datasource']]],
+  ['_7ereader_1519',['~reader',['../classcudf_1_1experimental_1_1io_1_1detail_1_1avro_1_1reader.html#a3bacc7d4cb8ac61ca042c549814cc5cb',1,'cudf::experimental::io::detail::avro::reader::~reader()'],['../classcudf_1_1experimental_1_1io_1_1detail_1_1json_1_1reader.html#a4a2c0d2cf1587d09722a8c8dc0adbd6b',1,'cudf::experimental::io::detail::json::reader::~reader()'],['../classcudf_1_1experimental_1_1io_1_1detail_1_1csv_1_1reader.html#aaf0157ee1690419c84aa446edafe759b',1,'cudf::experimental::io::detail::csv::reader::~reader()'],['../classcudf_1_1experimental_1_1io_1_1detail_1_1orc_1_1reader.html#a3a5f54da628ecbaadb1de2d4844d3487',1,'cudf::experimental::io::detail::orc::reader::~reader()'],['../classcudf_1_1experimental_1_1io_1_1detail_1_1parquet_1_1reader.html#af8759ec0742133f5583b48fbc7defc26',1,'cudf::experimental::io::detail::parquet::reader::~reader()']]],
+  ['_7ewriter_1520',['~writer',['../classcudf_1_1experimental_1_1io_1_1detail_1_1orc_1_1writer.html#a5faf59fd6e00874015d93d8b39921ab7',1,'cudf::experimental::io::detail::orc::writer::~writer()'],['../classcudf_1_1experimental_1_1io_1_1detail_1_1parquet_1_1writer.html#aa410a57071e224fc628001bb26d84d61',1,'cudf::experimental::io::detail::parquet::writer::~writer()']]]
 ];

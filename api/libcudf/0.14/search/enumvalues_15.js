@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['years_3374',['years',['../classNVStrings.html#ac845d8278c06a59a3dd9b7c05d81b049a8667ec773f6dbfafbbfe0d0b9deecd14',1,'NVStrings']]]
+  ['zip_3100',['ZIP',['../namespacecudf_1_1experimental_1_1io.html#a748faef899f436d65047ac2241261457a4348f938bbddd8475e967ccb47ecb234',1,'cudf::experimental::io']]]
 ];

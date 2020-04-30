@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['process_5frange_3195',['process_range',['../nvtx3_8hpp.html#a871f1092efc96daa974cc4d4a6287a31',1,'nvtx3']]]
+  ['scalar_5ftype_5ft_2932',['scalar_type_t',['../namespacecudf_1_1experimental.html#ab3198f71aa690ddfcd12b70245838c78',1,'cudf::experimental']]]
 ];
