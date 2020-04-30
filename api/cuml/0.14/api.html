@@ -71,6 +71,9 @@
          <a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">
           libcudf
          </a>
+         <a class="rapids-selector__menu-item" href="/api/libcuml/nightly">
+          libcuml
+         </a>
          <a class="rapids-selector__menu-item" href="/api/libnvstrings/stable/annotated.html">
           libnvstrings
          </a>
@@ -3606,6 +3609,18 @@ dask dataframe output. Default will be array in the future.
                  None
                 </span>
                </em>
+               ,
+               <em class="sig-param">
+                <span class="n">
+                 dtype
+                </span>
+                <span class="o">
+                 =
+                </span>
+                <span class="default_value">
+                 'float32'
+                </span>
+               </em>
                <span class="sig-paren">
                 )
                </span>
@@ -3709,6 +3724,16 @@ for reproducible output across multiple function calls.
                   <dd>
                    <p>
                     The number of parts of work.
+                   </p>
+                  </dd>
+                  <dt>
+                   <strong>
+                    dtype: str, optional (default=’float32’)
+                   </strong>
+                  </dt>
+                  <dd>
+                   <p>
+                    dtype of generated data
                    </p>
                   </dd>
                  </dl>
@@ -3900,6 +3925,54 @@ for reproducible output across multiple function calls.
                 </span>
                 <span class="default_value">
                  None
+                </span>
+               </em>
+               ,
+               <em class="sig-param">
+                <span class="n">
+                 order
+                </span>
+                <span class="o">
+                 =
+                </span>
+                <span class="default_value">
+                 'F'
+                </span>
+               </em>
+               ,
+               <em class="sig-param">
+                <span class="n">
+                 dtype
+                </span>
+                <span class="o">
+                 =
+                </span>
+                <span class="default_value">
+                 'float32'
+                </span>
+               </em>
+               ,
+               <em class="sig-param">
+                <span class="n">
+                 client
+                </span>
+                <span class="o">
+                 =
+                </span>
+                <span class="default_value">
+                 None
+                </span>
+               </em>
+               ,
+               <em class="sig-param">
+                <span class="n">
+                 use_full_low_rank
+                </span>
+                <span class="o">
+                 =
+                </span>
+                <span class="default_value">
+                 True
                 </span>
                </em>
                <span class="sig-paren">
@@ -4113,6 +4186,45 @@ for reproducible output across multiple function calls.
                     The number of parts of work.
                    </p>
                   </dd>
+                  <dt>
+                   <strong>
+                    order
+                   </strong>
+                   <span class="classifier">
+                    str, optional (default=’F’)
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    Row-major or Col-major
+                   </p>
+                  </dd>
+                  <dt>
+                   <strong>
+                    dtype: str, optional (default=’float32’)
+                   </strong>
+                  </dt>
+                  <dd>
+                   <p>
+                    dtype of generated data
+                   </p>
+                  </dd>
+                  <dt>
+                   <strong>
+                    use_full_low_rank
+                   </strong>
+                   <span class="classifier">
+                    boolean (default=True)
+                   </span>
+                  </dt>
+                  <dd>
+                   <p>
+                    Whether to use the entire dataset to generate the low rank matrix.
+If False, it creates a low rank covariance and uses the
+corresponding covariance to generate a multivariate normal
+distribution on the remaining chunks
+                   </p>
+                  </dd>
                  </dl>
                 </dd>
                 <dt class="field-even">
@@ -4165,6 +4277,94 @@ for reproducible output across multiple function calls.
                    <p>
                     The coefficient of the underlying linear model. It is returned only if
 coef is True.
+                   </p>
+                  </dd>
+                  <dt>
+                   Known Performance Limitations:
+                  </dt>
+                  <dd>
+                   <ol class="arabic simple">
+                    <li>
+                     <p>
+                      When
+                      <cite>
+                       effective_rank
+                      </cite>
+                      is set and
+                      <cite>
+                       use_full_low_rank
+                      </cite>
+                      is True,
+we cannot generate order
+                      <cite>
+                       F
+                      </cite>
+                      by construction, and an explicit
+transpose is performed on each part. This may cause memory to spike
+(other parameters make order
+                      <cite>
+                       F
+                      </cite>
+                      by construction)
+                     </p>
+                    </li>
+                    <li>
+                     <p>
+                      When
+                      <cite>
+                       n_targets &gt; 1
+                      </cite>
+                      and
+                      <cite>
+                       order = ‘F’
+                      </cite>
+                      as above, we have to
+explicity transpose the
+                      <cite>
+                       y
+                      </cite>
+                      array. If
+                      <cite>
+                       coef = True
+                      </cite>
+                      , then we also
+explicity transpose the
+                      <cite>
+                       ground_truth
+                      </cite>
+                      array
+                     </p>
+                    </li>
+                    <li>
+                     <p>
+                      When
+                      <cite>
+                       shuffle = True
+                      </cite>
+                      and
+                      <cite>
+                       order = F
+                      </cite>
+                      , there are memory spikes to
+shuffle the
+                      <cite>
+                       F
+                      </cite>
+                      order arrays
+                     </p>
+                    </li>
+                   </ol>
+                  </dd>
+                  <dt>
+                   NOTE: If out-of-memory errors are encountered in any of the above
+                  </dt>
+                  <dd>
+                   <p>
+                    configurations, try increasing the
+                    <cite>
+                     n_parts
+                    </cite>
+                    parameter.
                    </p>
                   </dd>
                  </dl>
@@ -27037,8 +27237,7 @@ Numba device ndarray, cuda array interface compliant array like CuPy.
                 </dt>
                 <dd>
                  <p>
-                  Whether to include a constant trend mu in the model
-Leave to None for automatic selection based on the model order
+                  Whether to include a constant trend mu in the model (default: True)
                  </p>
                 </dd>
                 <dt>
