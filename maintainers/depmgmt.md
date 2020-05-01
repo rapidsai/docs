@@ -22,31 +22,9 @@ Project Leads
 Operations
 {: .label .label-purple}
 
-## Testing a Dependency
-
-The build scripts located in the `ci/gpu` folder of the project can be easily modified to test a dependency. For example, the build script for cuDF may contain these lines to install packages required to build from source and test notebooks:
-
-
-```
-conda install "rmm=$MINOR_VERSION.*" "rapids-build-env=$MINOR_VERSION.*" \
-              "rapids-notebook-env=$MINOR_VERSION.*"
-```
-
-`rapids-build-env` and `rapids-notebook-env` are meta-packages that are used to keep dependencies across the projects consistent. These packages have various packages with specific versions listed as its dependencies. To change these dependencies as a test on a PR, the meta-package should be removed. Removing it allows the installation of different versions of dependencies without causing conda conflicts. Here is what to add to the script to allow this:
-
-```
-conda install "rmm=$MINOR_VERSION.*" "rapids-build-env=$MINOR_VERSION.*" \
-              "rapids-notebook-env=$MINOR_VERSION.*"
-
-conda remove -f rapids-build-env rapids-notebook-env
-conda install "your-pkg=1.0.0"
-```
-
-With this method, dependencies changes can be tested inside a PR. However, this should only be used as a temporary test, and not a permanent change. Once it is confirmed that the change works, the new dependency should be updated or added to the `integration` repository.
-
 ## Adding a Dependency
 
-The (RAPIDS Integration repository)[https://github.com/rapidsai/integration] contains all the information needed for adding a dependency to the RAPIDS projects. The `meta.yaml` you change should be based on the purpose of the package you are installing. The purpose of each meta-package is listed below:
+The [RAPIDS Integration repository](https://github.com/rapidsai/integration) contains all the information needed for adding a dependency to the RAPIDS projects. The `meta.yaml` you change should be based on the purpose of the package you are installing. The purpose of each meta-package is listed below:
 
 Package Name | Purpose
 --- | ---
@@ -138,3 +116,24 @@ There are two versions files that are in `conda/recipes`:
 
 Once done, submit a PR to the `integration` repository. The changes will be built and tested on a development docker image to confirm that it doesn't conflict with other RAPIDS libraries.
 
+## Testing a Dependency
+
+The build scripts located in the `ci/gpu` folder of the project can be easily modified to test a dependency. For example, the [build script for cuDF](https://github.com/rapidsai/cudf/blob/branch-0.14/ci/gpu/build.sh) may contain these lines to install packages required to build from source and test notebooks. If you want to test a a new dependency before adding/updating the integration repo, follow these steps:
+
+
+```
+conda install "rmm=$MINOR_VERSION.*" "rapids-build-env=$MINOR_VERSION.*" \
+              "rapids-notebook-env=$MINOR_VERSION.*"
+```
+
+`rapids-build-env` and `rapids-notebook-env` are meta-packages that are used to keep dependencies across the projects consistent. These packages have various packages with specific versions listed as its dependencies. To change these dependencies as a test on a PR, the meta-package should be removed. Removing it allows the installation of different versions of dependencies without causing conda conflicts. Here is what to add to the script to allow this:
+
+```
+conda install "rmm=$MINOR_VERSION.*" "rapids-build-env=$MINOR_VERSION.*" \
+              "rapids-notebook-env=$MINOR_VERSION.*"
+
+conda remove -f rapids-build-env rapids-notebook-env
+conda install "your-pkg=1.0.0"
+```
+
+With this method, dependency changes can be tested inside a PR. However, this should only be used as a temporary test, and not a permanent change. Once it is confirmed that the change works, the new dependency should be updated or added to the `integration` repository.
