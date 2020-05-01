@@ -2531,7 +2531,7 @@ $(function() {
      <span class="lineno">
       258
      </span>
-     faiss::gpu::bruteForceKnn(
+     faiss::gpu::GpuDistanceParams args;
     </div>
     <div class="line">
      <a name="l00259">
@@ -2539,15 +2539,7 @@ $(function() {
      <span class="lineno">
       259
      </span>
-     &amp;gpu_res, faiss::METRIC_L2, input[
-     <a class="code" href="namespaceML_1_1TSNE.html#a795c41c3f064d2e2b9a449d805cd4161">
-      i
-     </a>
-     ], rowMajorIndex, sizes[
-     <a class="code" href="namespaceML_1_1TSNE.html#a795c41c3f064d2e2b9a449d805cd4161">
-      i
-     </a>
-     ],
+     args.metric = faiss::METRIC_L2;
     </div>
     <div class="line">
      <a name="l00260">
@@ -2555,31 +2547,11 @@ $(function() {
      <span class="lineno">
       260
      </span>
-     search_items, rowMajorQuery,
-     <a class="code" href="namespaceML_1_1TSNE.html#a1cd86a623f64db84ca537da23b68223c">
-      n
-     </a>
-     , D,
+     args.k =
      <a class="code" href="namespaceML_1_1TSNE.html#afb851e919e0cd78a7c66faf65d407452">
       k
      </a>
-     , all_D.
-     <a class="code" href="classMLCommon_1_1buffer__base.html#a6cfb419e0cdf871abec33416711ae8ec">
-      data
-     </a>
-     () + (
-     <a class="code" href="namespaceML_1_1TSNE.html#a795c41c3f064d2e2b9a449d805cd4161">
-      i
-     </a>
-     *
-     <a class="code" href="namespaceML_1_1TSNE.html#afb851e919e0cd78a7c66faf65d407452">
-      k
-     </a>
-     *
-     <a class="code" href="namespaceML_1_1TSNE.html#a1cd86a623f64db84ca537da23b68223c">
-      n
-     </a>
-     ),
+     ;
     </div>
     <div class="line">
      <a name="l00261">
@@ -2587,7 +2559,75 @@ $(function() {
      <span class="lineno">
       261
      </span>
-     all_I.
+     args.dims = D;
+    </div>
+    <div class="line">
+     <a name="l00262">
+     </a>
+     <span class="lineno">
+      262
+     </span>
+     args.vectors = input[
+     <a class="code" href="namespaceML_1_1TSNE.html#a795c41c3f064d2e2b9a449d805cd4161">
+      i
+     </a>
+     ];
+    </div>
+    <div class="line">
+     <a name="l00263">
+     </a>
+     <span class="lineno">
+      263
+     </span>
+     args.vectorsRowMajor = rowMajorIndex;
+    </div>
+    <div class="line">
+     <a name="l00264">
+     </a>
+     <span class="lineno">
+      264
+     </span>
+     args.numVectors = sizes[
+     <a class="code" href="namespaceML_1_1TSNE.html#a795c41c3f064d2e2b9a449d805cd4161">
+      i
+     </a>
+     ];
+    </div>
+    <div class="line">
+     <a name="l00265">
+     </a>
+     <span class="lineno">
+      265
+     </span>
+     args.queries = search_items;
+    </div>
+    <div class="line">
+     <a name="l00266">
+     </a>
+     <span class="lineno">
+      266
+     </span>
+     args.queriesRowMajor = rowMajorQuery;
+    </div>
+    <div class="line">
+     <a name="l00267">
+     </a>
+     <span class="lineno">
+      267
+     </span>
+     args.numQueries =
+     <a class="code" href="namespaceML_1_1TSNE.html#a1cd86a623f64db84ca537da23b68223c">
+      n
+     </a>
+     ;
+    </div>
+    <div class="line">
+     <a name="l00268">
+     </a>
+     <span class="lineno">
+      268
+     </span>
+     args.outDistances = all_D.
      <a class="code" href="classMLCommon_1_1buffer__base.html#a6cfb419e0cdf871abec33416711ae8ec">
       data
      </a>
@@ -2603,20 +2643,59 @@ $(function() {
      <a class="code" href="namespaceML_1_1TSNE.html#a1cd86a623f64db84ca537da23b68223c">
       n
      </a>
-     ));
+     );
     </div>
     <div class="line">
-     <a name="l00262">
+     <a name="l00269">
      </a>
      <span class="lineno">
-      262
+      269
+     </span>
+     args.outIndices = all_I.
+     <a class="code" href="classMLCommon_1_1buffer__base.html#a6cfb419e0cdf871abec33416711ae8ec">
+      data
+     </a>
+     () + (
+     <a class="code" href="namespaceML_1_1TSNE.html#a795c41c3f064d2e2b9a449d805cd4161">
+      i
+     </a>
+     *
+     <a class="code" href="namespaceML_1_1TSNE.html#afb851e919e0cd78a7c66faf65d407452">
+      k
+     </a>
+     *
+     <a class="code" href="namespaceML_1_1TSNE.html#a1cd86a623f64db84ca537da23b68223c">
+      n
+     </a>
+     );
+    </div>
+    <div class="line">
+     <a name="l00270">
+     </a>
+     <span class="lineno">
+      270
      </span>
     </div>
     <div class="line">
-     <a name="l00263">
+     <a name="l00271">
      </a>
      <span class="lineno">
-      263
+      271
+     </span>
+     bfKnn(&amp;gpu_res, args);
+    </div>
+    <div class="line">
+     <a name="l00272">
+     </a>
+     <span class="lineno">
+      272
+     </span>
+    </div>
+    <div class="line">
+     <a name="l00273">
+     </a>
+     <span class="lineno">
+      273
      </span>
      <a class="code" href="utils_8hpp.html#aeaf2b8792be9f99ad11147059ef5079d">
       CUDA_CHECK
@@ -2624,55 +2703,55 @@ $(function() {
      (cudaPeekAtLastError());
     </div>
     <div class="line">
-     <a name="l00264">
+     <a name="l00274">
      </a>
      <span class="lineno">
-      264
+      274
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00265">
+     <a name="l00275">
      </a>
      <span class="lineno">
-      265
+      275
      </span>
     </div>
     <div class="line">
-     <a name="l00266">
+     <a name="l00276">
      </a>
      <span class="lineno">
-      266
+      276
      </span>
      <span class="comment">
       // Sync internal streams if used. We don't need to
      </span>
     </div>
     <div class="line">
-     <a name="l00267">
+     <a name="l00277">
      </a>
      <span class="lineno">
-      267
+      277
      </span>
      <span class="comment">
       // sync the user stream because we'll already have
      </span>
     </div>
     <div class="line">
-     <a name="l00268">
+     <a name="l00278">
      </a>
      <span class="lineno">
-      268
+      278
      </span>
      <span class="comment">
       // fully serial execution.
      </span>
     </div>
     <div class="line">
-     <a name="l00269">
+     <a name="l00279">
      </a>
      <span class="lineno">
-      269
+      279
      </span>
      <span class="keywordflow">
       for
@@ -2695,10 +2774,10 @@ $(function() {
      ++) {
     </div>
     <div class="line">
-     <a name="l00270">
+     <a name="l00280">
      </a>
      <span class="lineno">
-      270
+      280
      </span>
      <a class="code" href="utils_8hpp.html#aeaf2b8792be9f99ad11147059ef5079d">
       CUDA_CHECK
@@ -2710,25 +2789,25 @@ $(function() {
      ]));
     </div>
     <div class="line">
-     <a name="l00271">
+     <a name="l00281">
      </a>
      <span class="lineno">
-      271
+      281
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00272">
+     <a name="l00282">
      </a>
      <span class="lineno">
-      272
+      282
      </span>
     </div>
     <div class="line">
-     <a name="l00273">
+     <a name="l00283">
      </a>
      <span class="lineno">
-      273
+      283
      </span>
      <a class="code" href="namespaceMLCommon_1_1Selection.html#ae4d8da838ceef95291b1c66fe3e087d1">
       knn_merge_parts
@@ -2752,10 +2831,10 @@ $(function() {
      ,
     </div>
     <div class="line">
-     <a name="l00274">
+     <a name="l00284">
      </a>
      <span class="lineno">
-      274
+      284
      </span>
      userStream, trans.
      <a class="code" href="classMLCommon_1_1buffer__base.html#a6cfb419e0cdf871abec33416711ae8ec">
@@ -2764,25 +2843,25 @@ $(function() {
      ());
     </div>
     <div class="line">
-     <a name="l00275">
+     <a name="l00285">
      </a>
      <span class="lineno">
-      275
+      285
      </span>
     </div>
     <div class="line">
-     <a name="l00276">
+     <a name="l00286">
      </a>
      <span class="lineno">
-      276
+      286
      </span>
      MLCommon::LinAlg::unaryOp&lt;float&gt;(
     </div>
     <div class="line">
-     <a name="l00277">
+     <a name="l00287">
      </a>
      <span class="lineno">
-      277
+      287
      </span>
      res_D, res_D,
      <a class="code" href="namespaceML_1_1TSNE.html#a1cd86a623f64db84ca537da23b68223c">
@@ -2806,25 +2885,25 @@ $(function() {
      (input); },
     </div>
     <div class="line">
-     <a name="l00278">
+     <a name="l00288">
      </a>
      <span class="lineno">
-      278
+      288
      </span>
      userStream);
     </div>
     <div class="line">
-     <a name="l00279">
+     <a name="l00289">
      </a>
      <span class="lineno">
-      279
+      289
      </span>
     </div>
     <div class="line">
-     <a name="l00280">
+     <a name="l00290">
      </a>
      <span class="lineno">
-      280
+      290
      </span>
      <span class="keywordflow">
       if
@@ -2840,25 +2919,25 @@ $(function() {
      id_ranges;
     </div>
     <div class="line">
-     <a name="l00281">
+     <a name="l00291">
      </a>
      <span class="lineno">
-      281
+      291
      </span>
      };
     </div>
     <div class="line">
-     <a name="l00282">
+     <a name="l00292">
      </a>
      <span class="lineno">
-      282
+      292
      </span>
     </div>
     <div class="line">
-     <a name="l00283">
+     <a name="l00293">
      </a>
      <span class="lineno">
-      283
+      293
      </span>
      <span class="keyword">
       template
@@ -2870,10 +2949,10 @@ $(function() {
      IntType = int,
     </div>
     <div class="line">
-     <a name="l00284">
+     <a name="l00294">
      </a>
      <span class="lineno">
-      284
+      294
      </span>
      <a class="code" href="namespaceMLCommon_1_1Distance.html#ae9a111cce0fc81571693cbf3ccd2b1f0">
       Distance::DistanceType
@@ -2888,11 +2967,11 @@ $(function() {
      &gt;
     </div>
     <div class="line">
-     <a name="l00285">
+     <a name="l00295">
      </a>
      <span class="lineno">
       <a class="line" href="namespaceMLCommon_1_1Selection.html#ada1b613e7d8e35645f1d59989125b04b">
-       285
+       295
       </a>
      </span>
      <span class="keywordtype">
@@ -2916,10 +2995,10 @@ $(function() {
      n_params, IntType D,
     </div>
     <div class="line">
-     <a name="l00286">
+     <a name="l00296">
      </a>
      <span class="lineno">
-      286
+      296
      </span>
      <span class="keywordtype">
       float
@@ -2931,10 +3010,10 @@ $(function() {
      , int64_t *res_I,
     </div>
     <div class="line">
-     <a name="l00287">
+     <a name="l00297">
      </a>
      <span class="lineno">
-      287
+      297
      </span>
      <span class="keywordtype">
       float
@@ -2946,26 +3025,26 @@ $(function() {
      ,
     </div>
     <div class="line">
-     <a name="l00288">
+     <a name="l00298">
      </a>
      <span class="lineno">
-      288
+      298
      </span>
      std::shared_ptr&lt;deviceAllocator&gt; allocator,
     </div>
     <div class="line">
-     <a name="l00289">
+     <a name="l00299">
      </a>
      <span class="lineno">
-      289
+      299
      </span>
      cudaStream_t userStream,
     </div>
     <div class="line">
-     <a name="l00290">
+     <a name="l00300">
      </a>
      <span class="lineno">
-      290
+      300
      </span>
      cudaStream_t *internalStreams =
      <span class="keyword">
@@ -2974,10 +3053,10 @@ $(function() {
      ,
     </div>
     <div class="line">
-     <a name="l00291">
+     <a name="l00301">
      </a>
      <span class="lineno">
-      291
+      301
      </span>
      <span class="keywordtype">
       int
@@ -2993,10 +3072,10 @@ $(function() {
      ,
     </div>
     <div class="line">
-     <a name="l00292">
+     <a name="l00302">
      </a>
      <span class="lineno">
-      292
+      302
      </span>
      <span class="keywordtype">
       bool
@@ -3008,10 +3087,10 @@ $(function() {
      ,
     </div>
     <div class="line">
-     <a name="l00293">
+     <a name="l00303">
      </a>
      <span class="lineno">
-      293
+      303
      </span>
      std::vector&lt;int64_t&gt; *translations =
      <span class="keyword">
@@ -3020,33 +3099,33 @@ $(function() {
      ) {
     </div>
     <div class="line">
-     <a name="l00294">
+     <a name="l00304">
      </a>
      <span class="lineno">
-      294
+      304
      </span>
      std::vector&lt;float *&gt; input_vec(n_params);
     </div>
     <div class="line">
-     <a name="l00295">
+     <a name="l00305">
      </a>
      <span class="lineno">
-      295
+      305
      </span>
      std::vector&lt;int&gt; sizes_vec(n_params);
     </div>
     <div class="line">
-     <a name="l00296">
+     <a name="l00306">
      </a>
      <span class="lineno">
-      296
+      306
      </span>
     </div>
     <div class="line">
-     <a name="l00297">
+     <a name="l00307">
      </a>
      <span class="lineno">
-      297
+      307
      </span>
      <span class="keywordflow">
       for
@@ -3069,10 +3148,10 @@ $(function() {
      ++) {
     </div>
     <div class="line">
-     <a name="l00298">
+     <a name="l00308">
      </a>
      <span class="lineno">
-      298
+      308
      </span>
      input_vec.push_back(input[
      <a class="code" href="namespaceML_1_1TSNE.html#a795c41c3f064d2e2b9a449d805cd4161">
@@ -3081,10 +3160,10 @@ $(function() {
      ]);
     </div>
     <div class="line">
-     <a name="l00299">
+     <a name="l00309">
      </a>
      <span class="lineno">
-      299
+      309
      </span>
      sizes_vec.push_back(sizes[
      <a class="code" href="namespaceML_1_1TSNE.html#a795c41c3f064d2e2b9a449d805cd4161">
@@ -3093,33 +3172,33 @@ $(function() {
      ]);
     </div>
     <div class="line">
-     <a name="l00300">
+     <a name="l00310">
      </a>
      <span class="lineno">
-      300
+      310
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00301">
+     <a name="l00311">
      </a>
      <span class="lineno">
-      301
+      311
      </span>
     </div>
     <div class="line">
-     <a name="l00302">
+     <a name="l00312">
      </a>
      <span class="lineno">
-      302
+      312
      </span>
      brute_force_knn&lt;IntType, DistanceType&gt;(
     </div>
     <div class="line">
-     <a name="l00303">
+     <a name="l00313">
      </a>
      <span class="lineno">
-      303
+      313
      </span>
      input_vec, sizes_vec, D, search_items,
      <a class="code" href="namespaceML_1_1TSNE.html#a1cd86a623f64db84ca537da23b68223c">
@@ -3132,41 +3211,41 @@ $(function() {
      , allocator,
     </div>
     <div class="line">
-     <a name="l00304">
+     <a name="l00314">
      </a>
      <span class="lineno">
-      304
+      314
      </span>
      userStream, internalStreams, n_int_streams, rowMajorIndex, rowMajorQuery,
     </div>
     <div class="line">
-     <a name="l00305">
+     <a name="l00315">
      </a>
      <span class="lineno">
-      305
+      315
      </span>
      translations);
     </div>
     <div class="line">
-     <a name="l00306">
+     <a name="l00316">
      </a>
      <span class="lineno">
-      306
+      316
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00307">
+     <a name="l00317">
      </a>
      <span class="lineno">
-      307
+      317
      </span>
     </div>
     <div class="line">
-     <a name="l00308">
+     <a name="l00318">
      </a>
      <span class="lineno">
-      308
+      318
      </span>
      <span class="keyword">
       template
@@ -3182,11 +3261,11 @@ $(function() {
      &gt;
     </div>
     <div class="line">
-     <a name="l00309">
+     <a name="l00319">
      </a>
      <span class="lineno">
       <a class="line" href="namespaceMLCommon_1_1Selection.html#af40adb82099c6b308d133a142b2b8a62">
-       309
+       319
       </a>
      </span>
      __global__
@@ -3203,10 +3282,10 @@ $(function() {
      int64_t *knn_indices,
     </div>
     <div class="line">
-     <a name="l00310">
+     <a name="l00320">
      </a>
      <span class="lineno">
-      310
+      320
      </span>
      <span class="keyword">
       const
@@ -3221,10 +3300,10 @@ $(function() {
      n_uniq_labels,
     </div>
     <div class="line">
-     <a name="l00311">
+     <a name="l00321">
      </a>
      <span class="lineno">
-      311
+      321
      </span>
      <span class="keywordtype">
       size_t
@@ -3236,10 +3315,10 @@ $(function() {
      n_samples,
     </div>
     <div class="line">
-     <a name="l00312">
+     <a name="l00322">
      </a>
      <span class="lineno">
-      312
+      322
      </span>
      <span class="keywordtype">
       int
@@ -3247,10 +3326,10 @@ $(function() {
      n_neighbors) {
     </div>
     <div class="line">
-     <a name="l00313">
+     <a name="l00323">
      </a>
      <span class="lineno">
-      313
+      323
      </span>
      <span class="keywordtype">
       int
@@ -3258,10 +3337,10 @@ $(function() {
      row = (blockIdx.x * blockDim.x) + threadIdx.x;
     </div>
     <div class="line">
-     <a name="l00314">
+     <a name="l00324">
      </a>
      <span class="lineno">
-      314
+      324
      </span>
      <span class="keywordtype">
       int
@@ -3272,17 +3351,17 @@ $(function() {
      = row * n_neighbors;
     </div>
     <div class="line">
-     <a name="l00315">
+     <a name="l00325">
      </a>
      <span class="lineno">
-      315
+      325
      </span>
     </div>
     <div class="line">
-     <a name="l00316">
+     <a name="l00326">
      </a>
      <span class="lineno">
-      316
+      326
      </span>
      <span class="keywordtype">
       float
@@ -3290,17 +3369,17 @@ $(function() {
      n_neigh_inv = 1.0f / n_neighbors;
     </div>
     <div class="line">
-     <a name="l00317">
+     <a name="l00327">
      </a>
      <span class="lineno">
-      317
+      327
      </span>
     </div>
     <div class="line">
-     <a name="l00318">
+     <a name="l00328">
      </a>
      <span class="lineno">
-      318
+      328
      </span>
      <a class="code" href="namespaceML_1_1TSNE.html#a5e6127c8e89f25aba2fc545044afcb4a">
       if
@@ -3312,17 +3391,17 @@ $(function() {
      ;
     </div>
     <div class="line">
-     <a name="l00319">
+     <a name="l00329">
      </a>
      <span class="lineno">
-      319
+      329
      </span>
     </div>
     <div class="line">
-     <a name="l00320">
+     <a name="l00330">
      </a>
      <span class="lineno">
-      320
+      330
      </span>
      <span class="keywordflow">
       for
@@ -3345,10 +3424,10 @@ $(function() {
      ++) {
     </div>
     <div class="line">
-     <a name="l00321">
+     <a name="l00331">
      </a>
      <span class="lineno">
-      321
+      331
      </span>
      int64_t neighbor_idx = knn_indices[
      <a class="code" href="namespaceML_1_1TSNE.html#a795c41c3f064d2e2b9a449d805cd4161">
@@ -3361,10 +3440,10 @@ $(function() {
      ];
     </div>
     <div class="line">
-     <a name="l00322">
+     <a name="l00332">
      </a>
      <span class="lineno">
-      322
+      332
      </span>
      <span class="keywordtype">
       int
@@ -3372,10 +3451,10 @@ $(function() {
      out_label = labels[neighbor_idx];
     </div>
     <div class="line">
-     <a name="l00323">
+     <a name="l00333">
      </a>
      <span class="lineno">
-      323
+      333
      </span>
      <span class="keywordtype">
       int
@@ -3383,41 +3462,41 @@ $(function() {
      out_idx = row * n_uniq_labels + out_label;
     </div>
     <div class="line">
-     <a name="l00324">
+     <a name="l00334">
      </a>
      <span class="lineno">
-      324
+      334
      </span>
      out[out_idx] += n_neigh_inv;
     </div>
     <div class="line">
-     <a name="l00325">
+     <a name="l00335">
      </a>
      <span class="lineno">
-      325
+      335
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00326">
+     <a name="l00336">
      </a>
      <span class="lineno">
-      326
+      336
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00327">
+     <a name="l00337">
      </a>
      <span class="lineno">
-      327
+      337
      </span>
     </div>
     <div class="line">
-     <a name="l00328">
+     <a name="l00338">
      </a>
      <span class="lineno">
-      328
+      338
      </span>
      <span class="keyword">
       template
@@ -3433,11 +3512,11 @@ $(function() {
      &gt;
     </div>
     <div class="line">
-     <a name="l00329">
+     <a name="l00339">
      </a>
      <span class="lineno">
       <a class="line" href="namespaceMLCommon_1_1Selection.html#ab6894a94e8fdf282b24ae3043cdb87fc">
-       329
+       339
       </a>
      </span>
      __global__
@@ -3457,10 +3536,10 @@ $(function() {
      *class_proba,
     </div>
     <div class="line">
-     <a name="l00330">
+     <a name="l00340">
      </a>
      <span class="lineno">
-      330
+      340
      </span>
      <span class="keywordtype">
       int
@@ -3472,10 +3551,10 @@ $(function() {
      n_uniq_labels,
     </div>
     <div class="line">
-     <a name="l00331">
+     <a name="l00341">
      </a>
      <span class="lineno">
-      331
+      341
      </span>
      <span class="keywordtype">
       size_t
@@ -3487,10 +3566,10 @@ $(function() {
      n_samples,
     </div>
     <div class="line">
-     <a name="l00332">
+     <a name="l00342">
      </a>
      <span class="lineno">
-      332
+      342
      </span>
      <span class="keywordtype">
       int
@@ -3502,10 +3581,10 @@ $(function() {
      output_offset) {
     </div>
     <div class="line">
-     <a name="l00333">
+     <a name="l00343">
      </a>
      <span class="lineno">
-      333
+      343
      </span>
      <span class="keywordtype">
       int
@@ -3513,10 +3592,10 @@ $(function() {
      row = (blockIdx.x * blockDim.x) + threadIdx.x;
     </div>
     <div class="line">
-     <a name="l00334">
+     <a name="l00344">
      </a>
      <span class="lineno">
-      334
+      344
      </span>
      <span class="keywordtype">
       int
@@ -3527,17 +3606,17 @@ $(function() {
      = row * n_uniq_labels;
     </div>
     <div class="line">
-     <a name="l00335">
+     <a name="l00345">
      </a>
      <span class="lineno">
-      335
+      345
      </span>
     </div>
     <div class="line">
-     <a name="l00336">
+     <a name="l00346">
      </a>
      <span class="lineno">
-      336
+      346
      </span>
      <span class="keyword">
       extern
@@ -3549,10 +3628,10 @@ $(function() {
      label_cache[];
     </div>
     <div class="line">
-     <a name="l00337">
+     <a name="l00347">
      </a>
      <span class="lineno">
-      337
+      347
      </span>
      <a class="code" href="namespaceML_1_1TSNE.html#ade251d9108c2e6c34695f53f591907a2">
       for
@@ -3575,10 +3654,10 @@ $(function() {
      += blockDim.x) {
     </div>
     <div class="line">
-     <a name="l00338">
+     <a name="l00348">
      </a>
      <span class="lineno">
-      338
+      348
      </span>
      label_cache[
      <a class="code" href="namespaceML_1_1TSNE.html#aa7af7a282a727812d02249e36b56d7cb">
@@ -3591,25 +3670,25 @@ $(function() {
      ];
     </div>
     <div class="line">
-     <a name="l00339">
+     <a name="l00349">
      </a>
      <span class="lineno">
-      339
+      349
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00340">
+     <a name="l00350">
      </a>
      <span class="lineno">
-      340
+      350
      </span>
     </div>
     <div class="line">
-     <a name="l00341">
+     <a name="l00351">
      </a>
      <span class="lineno">
-      341
+      351
      </span>
      <a class="code" href="namespaceML_1_1TSNE.html#a98168b1bb13bc28991297eef583f11fe">
       __syncthreads
@@ -3617,17 +3696,17 @@ $(function() {
      ();
     </div>
     <div class="line">
-     <a name="l00342">
+     <a name="l00352">
      </a>
      <span class="lineno">
-      342
+      352
      </span>
     </div>
     <div class="line">
-     <a name="l00343">
+     <a name="l00353">
      </a>
      <span class="lineno">
-      343
+      353
      </span>
      <span class="keywordflow">
       if
@@ -3639,10 +3718,10 @@ $(function() {
      ;
     </div>
     <div class="line">
-     <a name="l00344">
+     <a name="l00354">
      </a>
      <span class="lineno">
-      344
+      354
      </span>
      <span class="keywordtype">
       float
@@ -3650,10 +3729,10 @@ $(function() {
      cur_max = -1.0;
     </div>
     <div class="line">
-     <a name="l00345">
+     <a name="l00355">
      </a>
      <span class="lineno">
-      345
+      355
      </span>
      <span class="keywordtype">
       int
@@ -3661,10 +3740,10 @@ $(function() {
      cur_label = -1;
     </div>
     <div class="line">
-     <a name="l00346">
+     <a name="l00356">
      </a>
      <span class="lineno">
-      346
+      356
      </span>
      <span class="keywordflow">
       for
@@ -3687,10 +3766,10 @@ $(function() {
      ++) {
     </div>
     <div class="line">
-     <a name="l00347">
+     <a name="l00357">
      </a>
      <span class="lineno">
-      347
+      357
      </span>
      <span class="keywordtype">
       float
@@ -3706,10 +3785,10 @@ $(function() {
      ];
     </div>
     <div class="line">
-     <a name="l00348">
+     <a name="l00358">
      </a>
      <span class="lineno">
-      348
+      358
      </span>
      <span class="keywordflow">
       if
@@ -3717,18 +3796,18 @@ $(function() {
      (cur_proba &gt; cur_max) {
     </div>
     <div class="line">
-     <a name="l00349">
+     <a name="l00359">
      </a>
      <span class="lineno">
-      349
+      359
      </span>
      cur_max = cur_proba;
     </div>
     <div class="line">
-     <a name="l00350">
+     <a name="l00360">
      </a>
      <span class="lineno">
-      350
+      360
      </span>
      cur_label =
      <a class="code" href="namespaceML_1_1TSNE.html#aa7af7a282a727812d02249e36b56d7cb">
@@ -3737,49 +3816,49 @@ $(function() {
      ;
     </div>
     <div class="line">
-     <a name="l00351">
+     <a name="l00361">
      </a>
      <span class="lineno">
-      351
+      361
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00352">
+     <a name="l00362">
      </a>
      <span class="lineno">
-      352
+      362
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00353">
+     <a name="l00363">
      </a>
      <span class="lineno">
-      353
+      363
      </span>
      out[row * n_outputs + output_offset] = label_cache[cur_label];
     </div>
     <div class="line">
-     <a name="l00354">
+     <a name="l00364">
      </a>
      <span class="lineno">
-      354
+      364
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00355">
+     <a name="l00365">
      </a>
      <span class="lineno">
-      355
+      365
      </span>
     </div>
     <div class="line">
-     <a name="l00356">
+     <a name="l00366">
      </a>
      <span class="lineno">
-      356
+      366
      </span>
      <span class="keyword">
       template
@@ -3791,11 +3870,11 @@ $(function() {
      LabelType&gt;
     </div>
     <div class="line">
-     <a name="l00357">
+     <a name="l00367">
      </a>
      <span class="lineno">
       <a class="line" href="namespaceMLCommon_1_1Selection.html#ab89e335330b561198b85eeb28390da82">
-       357
+       367
       </a>
      </span>
      __global__
@@ -3812,10 +3891,10 @@ $(function() {
      int64_t *knn_indices,
     </div>
     <div class="line">
-     <a name="l00358">
+     <a name="l00368">
      </a>
      <span class="lineno">
-      358
+      368
      </span>
      <span class="keyword">
       const
@@ -3827,10 +3906,10 @@ $(function() {
      n_labels,
     </div>
     <div class="line">
-     <a name="l00359">
+     <a name="l00369">
      </a>
      <span class="lineno">
-      359
+      369
      </span>
      <span class="keywordtype">
       size_t
@@ -3842,10 +3921,10 @@ $(function() {
      n_neighbors,
     </div>
     <div class="line">
-     <a name="l00360">
+     <a name="l00370">
      </a>
      <span class="lineno">
-      360
+      370
      </span>
      <span class="keywordtype">
       int
@@ -3857,10 +3936,10 @@ $(function() {
      output_offset) {
     </div>
     <div class="line">
-     <a name="l00361">
+     <a name="l00371">
      </a>
      <span class="lineno">
-      361
+      371
      </span>
      <span class="keywordtype">
       int
@@ -3868,10 +3947,10 @@ $(function() {
      row = (blockIdx.x * blockDim.x) + threadIdx.x;
     </div>
     <div class="line">
-     <a name="l00362">
+     <a name="l00372">
      </a>
      <span class="lineno">
-      362
+      372
      </span>
      <span class="keywordtype">
       int
@@ -3882,17 +3961,17 @@ $(function() {
      = row * n_neighbors;
     </div>
     <div class="line">
-     <a name="l00363">
+     <a name="l00373">
      </a>
      <span class="lineno">
-      363
+      373
      </span>
     </div>
     <div class="line">
-     <a name="l00364">
+     <a name="l00374">
      </a>
      <span class="lineno">
-      364
+      374
      </span>
      <a class="code" href="namespaceML_1_1TSNE.html#a5e6127c8e89f25aba2fc545044afcb4a">
       if
@@ -3904,35 +3983,35 @@ $(function() {
      ;
     </div>
     <div class="line">
-     <a name="l00365">
+     <a name="l00375">
      </a>
      <span class="lineno">
-      365
+      375
      </span>
     </div>
     <div class="line">
-     <a name="l00366">
+     <a name="l00376">
      </a>
      <span class="lineno">
-      366
+      376
      </span>
      <span class="comment">
       // should work for moderately small number of classes
      </span>
     </div>
     <div class="line">
-     <a name="l00367">
+     <a name="l00377">
      </a>
      <span class="lineno">
-      367
+      377
      </span>
      LabelType pred = 0;
     </div>
     <div class="line">
-     <a name="l00368">
+     <a name="l00378">
      </a>
      <span class="lineno">
-      368
+      378
      </span>
      <span class="keywordflow">
       for
@@ -3955,10 +4034,10 @@ $(function() {
      ++) {
     </div>
     <div class="line">
-     <a name="l00369">
+     <a name="l00379">
      </a>
      <span class="lineno">
-      369
+      379
      </span>
      int64_t neighbor_idx = knn_indices[
      <a class="code" href="namespaceML_1_1TSNE.html#a795c41c3f064d2e2b9a449d805cd4161">
@@ -3971,56 +4050,56 @@ $(function() {
      ];
     </div>
     <div class="line">
-     <a name="l00370">
+     <a name="l00380">
      </a>
      <span class="lineno">
-      370
+      380
      </span>
      pred += labels[neighbor_idx];
     </div>
     <div class="line">
-     <a name="l00371">
+     <a name="l00381">
      </a>
      <span class="lineno">
-      371
+      381
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00372">
+     <a name="l00382">
      </a>
      <span class="lineno">
-      372
+      382
      </span>
     </div>
     <div class="line">
-     <a name="l00373">
+     <a name="l00383">
      </a>
      <span class="lineno">
-      373
+      383
      </span>
      out[row * n_outputs + output_offset] = pred / (LabelType)n_neighbors;
     </div>
     <div class="line">
-     <a name="l00374">
+     <a name="l00384">
      </a>
      <span class="lineno">
-      374
+      384
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00375">
+     <a name="l00385">
      </a>
      <span class="lineno">
-      375
+      385
      </span>
     </div>
     <div class="line">
-     <a name="l00398">
+     <a name="l00408">
      </a>
      <span class="lineno">
-      398
+      408
      </span>
      <span class="keyword">
       template
@@ -4032,11 +4111,11 @@ $(function() {
      TPB_X = 32&gt;
     </div>
     <div class="line">
-     <a name="l00399">
+     <a name="l00409">
      </a>
      <span class="lineno">
       <a class="line" href="namespaceMLCommon_1_1Selection.html#a2f179aa8abf2fd17ff6420adae89aaa1">
-       399
+       409
       </a>
      </span>
      <span class="keywordtype">
@@ -4052,10 +4131,10 @@ $(function() {
      int64_t *knn_indices,
     </div>
     <div class="line">
-     <a name="l00400">
+     <a name="l00410">
      </a>
      <span class="lineno">
-      400
+      410
      </span>
      std::vector&lt;int *&gt; &amp;
      <a class="code" href="namespaceML_1_1TSNE.html#adb4b8ca36469774be6ffb11068071cbc">
@@ -4079,26 +4158,26 @@ $(function() {
      ,
     </div>
     <div class="line">
-     <a name="l00401">
+     <a name="l00411">
      </a>
      <span class="lineno">
-      401
+      411
      </span>
      std::vector&lt;int *&gt; &amp;uniq_labels, std::vector&lt;int&gt; &amp;n_unique,
     </div>
     <div class="line">
-     <a name="l00402">
+     <a name="l00412">
      </a>
      <span class="lineno">
-      402
+      412
      </span>
      std::shared_ptr&lt;deviceAllocator&gt; allocator,
     </div>
     <div class="line">
-     <a name="l00403">
+     <a name="l00413">
      </a>
      <span class="lineno">
-      403
+      413
      </span>
      cudaStream_t user_stream, cudaStream_t *int_streams =
      <span class="keyword">
@@ -4107,10 +4186,10 @@ $(function() {
      ,
     </div>
     <div class="line">
-     <a name="l00404">
+     <a name="l00414">
      </a>
      <span class="lineno">
-      404
+      414
      </span>
      <span class="keywordtype">
       int
@@ -4118,10 +4197,10 @@ $(function() {
      n_int_streams = 0) {
     </div>
     <div class="line">
-     <a name="l00405">
+     <a name="l00415">
      </a>
      <span class="lineno">
-      405
+      415
      </span>
      <span class="keywordflow">
       for
@@ -4148,18 +4227,18 @@ $(function() {
      ++) {
     </div>
     <div class="line">
-     <a name="l00406">
+     <a name="l00416">
      </a>
      <span class="lineno">
-      406
+      416
      </span>
      cudaStream_t stream =
     </div>
     <div class="line">
-     <a name="l00407">
+     <a name="l00417">
      </a>
      <span class="lineno">
-      407
+      417
      </span>
      <a class="code" href="namespaceMLCommon_1_1Selection.html#adfe785a9dafed22edfde89eb169fdd5c">
       select_stream
@@ -4171,17 +4250,17 @@ $(function() {
      );
     </div>
     <div class="line">
-     <a name="l00408">
+     <a name="l00418">
      </a>
      <span class="lineno">
-      408
+      418
      </span>
     </div>
     <div class="line">
-     <a name="l00409">
+     <a name="l00419">
      </a>
      <span class="lineno">
-      409
+      419
      </span>
      <span class="keywordtype">
       int
@@ -4193,10 +4272,10 @@ $(function() {
      ];
     </div>
     <div class="line">
-     <a name="l00410">
+     <a name="l00420">
      </a>
      <span class="lineno">
-      410
+      420
      </span>
      <span class="keywordtype">
       int
@@ -4204,17 +4283,17 @@ $(function() {
      cur_size = n_rows * n_unique_labels;
     </div>
     <div class="line">
-     <a name="l00411">
+     <a name="l00421">
      </a>
      <span class="lineno">
-      411
+      421
      </span>
     </div>
     <div class="line">
-     <a name="l00412">
+     <a name="l00422">
      </a>
      <span class="lineno">
-      412
+      422
      </span>
      <a class="code" href="utils_8hpp.html#aeaf2b8792be9f99ad11147059ef5079d">
       CUDA_CHECK
@@ -4234,17 +4313,17 @@ $(function() {
      ), stream));
     </div>
     <div class="line">
-     <a name="l00413">
+     <a name="l00423">
      </a>
      <span class="lineno">
-      413
+      423
      </span>
     </div>
     <div class="line">
-     <a name="l00414">
+     <a name="l00424">
      </a>
      <span class="lineno">
-      414
+      424
      </span>
      dim3 grid(
      <a class="code" href="namespaceMLCommon.html#a8a6b8df87019518b41b3621d6ac2f643">
@@ -4261,10 +4340,10 @@ $(function() {
      ), 1, 1);
     </div>
     <div class="line">
-     <a name="l00415">
+     <a name="l00425">
      </a>
      <span class="lineno">
-      415
+      425
      </span>
      dim3 blk(
      <a class="code" href="utils_8hxx.html#ac3c67491ac13bda2a8b0cc38616d26d4">
@@ -4273,17 +4352,17 @@ $(function() {
      , 1, 1);
     </div>
     <div class="line">
-     <a name="l00416">
+     <a name="l00426">
      </a>
      <span class="lineno">
-      416
+      426
      </span>
     </div>
     <div class="line">
-     <a name="l00421">
+     <a name="l00431">
      </a>
      <span class="lineno">
-      421
+      431
      </span>
      <a class="code" href="classMLCommon_1_1buffer__base.html">
       device_buffer&lt;int&gt;
@@ -4291,10 +4370,10 @@ $(function() {
      y_normalized(allocator, stream, n_labels);
     </div>
     <div class="line">
-     <a name="l00422">
+     <a name="l00432">
      </a>
      <span class="lineno">
-      422
+      432
      </span>
      <a class="code" href="namespaceMLCommon_1_1Label.html#a71a00a5161bd34894fec0553e70d11f8">
       MLCommon::Label::make_monotonic
@@ -4314,26 +4393,26 @@ $(function() {
      ], n_labels,
     </div>
     <div class="line">
-     <a name="l00423">
+     <a name="l00433">
      </a>
      <span class="lineno">
-      423
+      433
      </span>
      stream);
     </div>
     <div class="line">
-     <a name="l00424">
+     <a name="l00434">
      </a>
      <span class="lineno">
-      424
+      434
      </span>
      MLCommon::LinAlg::unaryOp&lt;int&gt;(
     </div>
     <div class="line">
-     <a name="l00425">
+     <a name="l00435">
      </a>
      <span class="lineno">
-      425
+      435
      </span>
      y_normalized.
      <a class="code" href="classMLCommon_1_1buffer__base.html#a6cfb419e0cdf871abec33416711ae8ec">
@@ -4346,10 +4425,10 @@ $(function() {
      (), n_labels,
     </div>
     <div class="line">
-     <a name="l00426">
+     <a name="l00436">
      </a>
      <span class="lineno">
-      426
+      436
      </span>
      [] __device__(
      <span class="keywordtype">
@@ -4362,18 +4441,18 @@ $(function() {
      input - 1; }, stream);
     </div>
     <div class="line">
-     <a name="l00427">
+     <a name="l00437">
      </a>
      <span class="lineno">
-      427
+      437
      </span>
      class_probs_kernel&lt;&lt;&lt;grid, blk, 0, stream&gt;&gt;&gt;(
     </div>
     <div class="line">
-     <a name="l00428">
+     <a name="l00438">
      </a>
      <span class="lineno">
-      428
+      438
      </span>
      out[
      <a class="code" href="namespaceML_1_1TSNE.html#a795c41c3f064d2e2b9a449d805cd4161">
@@ -4386,10 +4465,10 @@ $(function() {
      (), n_unique_labels, n_labels,
     </div>
     <div class="line">
-     <a name="l00429">
+     <a name="l00439">
      </a>
      <span class="lineno">
-      429
+      439
      </span>
      n_rows,
      <a class="code" href="namespaceML_1_1TSNE.html#afb851e919e0cd78a7c66faf65d407452">
@@ -4398,10 +4477,10 @@ $(function() {
      );
     </div>
     <div class="line">
-     <a name="l00430">
+     <a name="l00440">
      </a>
      <span class="lineno">
-      430
+      440
      </span>
      <a class="code" href="utils_8hpp.html#aeaf2b8792be9f99ad11147059ef5079d">
       CUDA_CHECK
@@ -4409,33 +4488,33 @@ $(function() {
      (cudaPeekAtLastError());
     </div>
     <div class="line">
-     <a name="l00431">
+     <a name="l00441">
      </a>
      <span class="lineno">
-      431
+      441
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00432">
+     <a name="l00442">
      </a>
      <span class="lineno">
-      432
+      442
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00433">
+     <a name="l00443">
      </a>
      <span class="lineno">
-      433
+      443
      </span>
     </div>
     <div class="line">
-     <a name="l00456">
+     <a name="l00466">
      </a>
      <span class="lineno">
-      456
+      466
      </span>
      <span class="keyword">
       template
@@ -4447,11 +4526,11 @@ $(function() {
      TPB_X = 32&gt;
     </div>
     <div class="line">
-     <a name="l00457">
+     <a name="l00467">
      </a>
      <span class="lineno">
       <a class="line" href="namespaceMLCommon_1_1Selection.html#a0ace4d25e236621e1e5e27da2a832a8b">
-       457
+       467
       </a>
      </span>
      <span class="keywordtype">
@@ -4475,10 +4554,10 @@ $(function() {
      ,
     </div>
     <div class="line">
-     <a name="l00458">
+     <a name="l00468">
      </a>
      <span class="lineno">
-      458
+      468
      </span>
      <span class="keywordtype">
       size_t
@@ -4497,26 +4576,26 @@ $(function() {
      ,
     </div>
     <div class="line">
-     <a name="l00459">
+     <a name="l00469">
      </a>
      <span class="lineno">
-      459
+      469
      </span>
      std::vector&lt;int *&gt; &amp;uniq_labels, std::vector&lt;int&gt; &amp;n_unique,
     </div>
     <div class="line">
-     <a name="l00460">
+     <a name="l00470">
      </a>
      <span class="lineno">
-      460
+      470
      </span>
      std::shared_ptr&lt;deviceAllocator&gt; &amp;allocator,
     </div>
     <div class="line">
-     <a name="l00461">
+     <a name="l00471">
      </a>
      <span class="lineno">
-      461
+      471
      </span>
      cudaStream_t user_stream, cudaStream_t *int_streams =
      <span class="keyword">
@@ -4525,10 +4604,10 @@ $(function() {
      ,
     </div>
     <div class="line">
-     <a name="l00462">
+     <a name="l00472">
      </a>
      <span class="lineno">
-      462
+      472
      </span>
      <span class="keywordtype">
       int
@@ -4536,43 +4615,43 @@ $(function() {
      n_int_streams = 0) {
     </div>
     <div class="line">
-     <a name="l00463">
+     <a name="l00473">
      </a>
      <span class="lineno">
-      463
+      473
      </span>
      std::vector&lt;float *&gt; probs;
     </div>
     <div class="line">
-     <a name="l00464">
+     <a name="l00474">
      </a>
      <span class="lineno">
-      464
+      474
      </span>
      std::vector&lt;device_buffer&lt;float&gt; *&gt; tmp_probs;
     </div>
     <div class="line">
-     <a name="l00465">
+     <a name="l00475">
      </a>
      <span class="lineno">
-      465
+      475
      </span>
     </div>
     <div class="line">
-     <a name="l00466">
+     <a name="l00476">
      </a>
      <span class="lineno">
-      466
+      476
      </span>
      <span class="comment">
       // allocate temporary memory
      </span>
     </div>
     <div class="line">
-     <a name="l00467">
+     <a name="l00477">
      </a>
      <span class="lineno">
-      467
+      477
      </span>
      <span class="keywordflow">
       for
@@ -4595,10 +4674,10 @@ $(function() {
      ++) {
     </div>
     <div class="line">
-     <a name="l00468">
+     <a name="l00478">
      </a>
      <span class="lineno">
-      468
+      478
      </span>
      <span class="keywordtype">
       int
@@ -4610,25 +4689,25 @@ $(function() {
      ];
     </div>
     <div class="line">
-     <a name="l00469">
+     <a name="l00479">
      </a>
      <span class="lineno">
-      469
+      479
      </span>
     </div>
     <div class="line">
-     <a name="l00470">
+     <a name="l00480">
      </a>
      <span class="lineno">
-      470
+      480
      </span>
      cudaStream_t stream =
     </div>
     <div class="line">
-     <a name="l00471">
+     <a name="l00481">
      </a>
      <span class="lineno">
-      471
+      481
      </span>
      <a class="code" href="namespaceMLCommon_1_1Selection.html#adfe785a9dafed22edfde89eb169fdd5c">
       select_stream
@@ -4640,17 +4719,17 @@ $(function() {
      );
     </div>
     <div class="line">
-     <a name="l00472">
+     <a name="l00482">
      </a>
      <span class="lineno">
-      472
+      482
      </span>
     </div>
     <div class="line">
-     <a name="l00473">
+     <a name="l00483">
      </a>
      <span class="lineno">
-      473
+      483
      </span>
      <a class="code" href="classMLCommon_1_1buffer__base.html">
       device_buffer&lt;float&gt;
@@ -4658,10 +4737,10 @@ $(function() {
      *probs_buff =
     </div>
     <div class="line">
-     <a name="l00474">
+     <a name="l00484">
      </a>
      <span class="lineno">
-      474
+      484
      </span>
      <span class="keyword">
       new
@@ -4672,25 +4751,25 @@ $(function() {
      (allocator, stream, n_rows * size);
     </div>
     <div class="line">
-     <a name="l00475">
+     <a name="l00485">
      </a>
      <span class="lineno">
-      475
+      485
      </span>
     </div>
     <div class="line">
-     <a name="l00476">
+     <a name="l00486">
      </a>
      <span class="lineno">
-      476
+      486
      </span>
      tmp_probs.push_back(probs_buff);
     </div>
     <div class="line">
-     <a name="l00477">
+     <a name="l00487">
      </a>
      <span class="lineno">
-      477
+      487
      </span>
      probs.push_back(probs_buff-&gt;
      <a class="code" href="classMLCommon_1_1buffer__base.html#a6cfb419e0cdf871abec33416711ae8ec">
@@ -4699,25 +4778,25 @@ $(function() {
      ());
     </div>
     <div class="line">
-     <a name="l00478">
+     <a name="l00488">
      </a>
      <span class="lineno">
-      478
+      488
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00479">
+     <a name="l00489">
      </a>
      <span class="lineno">
-      479
+      489
      </span>
     </div>
     <div class="line">
-     <a name="l00487">
+     <a name="l00497">
      </a>
      <span class="lineno">
-      487
+      497
      </span>
      <a class="code" href="namespaceMLCommon_1_1Selection.html#a2f179aa8abf2fd17ff6420adae89aaa1">
       class_probs
@@ -4733,25 +4812,25 @@ $(function() {
      , uniq_labels, n_unique,
     </div>
     <div class="line">
-     <a name="l00488">
+     <a name="l00498">
      </a>
      <span class="lineno">
-      488
+      498
      </span>
      allocator, user_stream, int_streams, n_int_streams);
     </div>
     <div class="line">
-     <a name="l00489">
+     <a name="l00499">
      </a>
      <span class="lineno">
-      489
+      499
      </span>
     </div>
     <div class="line">
-     <a name="l00490">
+     <a name="l00500">
      </a>
      <span class="lineno">
-      490
+      500
      </span>
      dim3 grid(
      <a class="code" href="namespaceMLCommon.html#a8a6b8df87019518b41b3621d6ac2f643">
@@ -4768,10 +4847,10 @@ $(function() {
      ), 1, 1);
     </div>
     <div class="line">
-     <a name="l00491">
+     <a name="l00501">
      </a>
      <span class="lineno">
-      491
+      501
      </span>
      dim3 blk(
      <a class="code" href="utils_8hxx.html#ac3c67491ac13bda2a8b0cc38616d26d4">
@@ -4780,17 +4859,17 @@ $(function() {
      , 1, 1);
     </div>
     <div class="line">
-     <a name="l00492">
+     <a name="l00502">
      </a>
      <span class="lineno">
-      492
+      502
      </span>
     </div>
     <div class="line">
-     <a name="l00493">
+     <a name="l00503">
      </a>
      <span class="lineno">
-      493
+      503
      </span>
      <span class="keywordflow">
       for
@@ -4817,18 +4896,18 @@ $(function() {
      ++) {
     </div>
     <div class="line">
-     <a name="l00494">
+     <a name="l00504">
      </a>
      <span class="lineno">
-      494
+      504
      </span>
      cudaStream_t stream =
     </div>
     <div class="line">
-     <a name="l00495">
+     <a name="l00505">
      </a>
      <span class="lineno">
-      495
+      505
      </span>
      <a class="code" href="namespaceMLCommon_1_1Selection.html#adfe785a9dafed22edfde89eb169fdd5c">
       select_stream
@@ -4840,17 +4919,17 @@ $(function() {
      );
     </div>
     <div class="line">
-     <a name="l00496">
+     <a name="l00506">
      </a>
      <span class="lineno">
-      496
+      506
      </span>
     </div>
     <div class="line">
-     <a name="l00497">
+     <a name="l00507">
      </a>
      <span class="lineno">
-      497
+      507
      </span>
      <span class="keywordtype">
       int
@@ -4862,17 +4941,17 @@ $(function() {
      ];
     </div>
     <div class="line">
-     <a name="l00498">
+     <a name="l00508">
      </a>
      <span class="lineno">
-      498
+      508
      </span>
     </div>
     <div class="line">
-     <a name="l00502">
+     <a name="l00512">
      </a>
      <span class="lineno">
-      502
+      512
      </span>
      <span class="keywordtype">
       int
@@ -4884,18 +4963,18 @@ $(function() {
      (int) * n_labels;
     </div>
     <div class="line">
-     <a name="l00503">
+     <a name="l00513">
      </a>
      <span class="lineno">
-      503
+      513
      </span>
      class_vote_kernel&lt;&lt;&lt;grid, blk, smem, stream&gt;&gt;&gt;(
     </div>
     <div class="line">
-     <a name="l00504">
+     <a name="l00514">
      </a>
      <span class="lineno">
-      504
+      514
      </span>
      out, probs[
      <a class="code" href="namespaceML_1_1TSNE.html#a795c41c3f064d2e2b9a449d805cd4161">
@@ -4908,10 +4987,10 @@ $(function() {
      ], n_unique_labels, n_labels, n_rows,
     </div>
     <div class="line">
-     <a name="l00505">
+     <a name="l00515">
      </a>
      <span class="lineno">
-      505
+      515
      </span>
      <a class="code" href="namespaceML_1_1TSNE.html#adb4b8ca36469774be6ffb11068071cbc">
       y
@@ -4923,10 +5002,10 @@ $(function() {
      );
     </div>
     <div class="line">
-     <a name="l00506">
+     <a name="l00516">
      </a>
      <span class="lineno">
-      506
+      516
      </span>
      <a class="code" href="utils_8hpp.html#aeaf2b8792be9f99ad11147059ef5079d">
       CUDA_CHECK
@@ -4934,17 +5013,17 @@ $(function() {
      (cudaPeekAtLastError());
     </div>
     <div class="line">
-     <a name="l00507">
+     <a name="l00517">
      </a>
      <span class="lineno">
-      507
+      517
      </span>
     </div>
     <div class="line">
-     <a name="l00508">
+     <a name="l00518">
      </a>
      <span class="lineno">
-      508
+      518
      </span>
      <span class="keyword">
       delete
@@ -4956,33 +5035,33 @@ $(function() {
      ];
     </div>
     <div class="line">
-     <a name="l00509">
+     <a name="l00519">
      </a>
      <span class="lineno">
-      509
+      519
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00510">
+     <a name="l00520">
      </a>
      <span class="lineno">
-      510
+      520
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00511">
+     <a name="l00521">
      </a>
      <span class="lineno">
-      511
+      521
      </span>
     </div>
     <div class="line">
-     <a name="l00531">
+     <a name="l00541">
      </a>
      <span class="lineno">
-      531
+      541
      </span>
      <span class="keyword">
       template
@@ -4998,11 +5077,11 @@ $(function() {
      TPB_X = 32&gt;
     </div>
     <div class="line">
-     <a name="l00532">
+     <a name="l00542">
      </a>
      <span class="lineno">
       <a class="line" href="namespaceMLCommon_1_1Selection.html#a22c3426be2efeb26bd8ad9178cbde776">
-       532
+       542
       </a>
      </span>
      <span class="keywordtype">
@@ -5018,10 +5097,10 @@ $(function() {
      int64_t *knn_indices,
     </div>
     <div class="line">
-     <a name="l00533">
+     <a name="l00543">
      </a>
      <span class="lineno">
-      533
+      543
      </span>
      <span class="keyword">
       const
@@ -5037,10 +5116,10 @@ $(function() {
      n_labels,
     </div>
     <div class="line">
-     <a name="l00534">
+     <a name="l00544">
      </a>
      <span class="lineno">
-      534
+      544
      </span>
      <span class="keywordtype">
       size_t
@@ -5055,10 +5134,10 @@ $(function() {
      , cudaStream_t user_stream,
     </div>
     <div class="line">
-     <a name="l00535">
+     <a name="l00545">
      </a>
      <span class="lineno">
-      535
+      545
      </span>
      cudaStream_t *int_streams =
      <span class="keyword">
@@ -5071,10 +5150,10 @@ $(function() {
      n_int_streams = 0) {
     </div>
     <div class="line">
-     <a name="l00536">
+     <a name="l00546">
      </a>
      <span class="lineno">
-      536
+      546
      </span>
      dim3 grid(
      <a class="code" href="namespaceMLCommon.html#a8a6b8df87019518b41b3621d6ac2f643">
@@ -5091,10 +5170,10 @@ $(function() {
      ), 1, 1);
     </div>
     <div class="line">
-     <a name="l00537">
+     <a name="l00547">
      </a>
      <span class="lineno">
-      537
+      547
      </span>
      dim3 blk(
      <a class="code" href="utils_8hxx.html#ac3c67491ac13bda2a8b0cc38616d26d4">
@@ -5103,17 +5182,17 @@ $(function() {
      , 1, 1);
     </div>
     <div class="line">
-     <a name="l00538">
+     <a name="l00548">
      </a>
      <span class="lineno">
-      538
+      548
      </span>
     </div>
     <div class="line">
-     <a name="l00542">
+     <a name="l00552">
      </a>
      <span class="lineno">
-      542
+      552
      </span>
      <span class="keywordflow">
       for
@@ -5140,18 +5219,18 @@ $(function() {
      ++) {
     </div>
     <div class="line">
-     <a name="l00543">
+     <a name="l00553">
      </a>
      <span class="lineno">
-      543
+      553
      </span>
      cudaStream_t stream =
     </div>
     <div class="line">
-     <a name="l00544">
+     <a name="l00554">
      </a>
      <span class="lineno">
-      544
+      554
      </span>
      <a class="code" href="namespaceMLCommon_1_1Selection.html#adfe785a9dafed22edfde89eb169fdd5c">
       select_stream
@@ -5163,18 +5242,18 @@ $(function() {
      );
     </div>
     <div class="line">
-     <a name="l00545">
+     <a name="l00555">
      </a>
      <span class="lineno">
-      545
+      555
      </span>
      regress_avg_kernel&lt;&lt;&lt;grid, blk, 0, stream&gt;&gt;&gt;(
     </div>
     <div class="line">
-     <a name="l00546">
+     <a name="l00556">
      </a>
      <span class="lineno">
-      546
+      556
      </span>
      out, knn_indices,
      <a class="code" href="namespaceML_1_1TSNE.html#adb4b8ca36469774be6ffb11068071cbc">
@@ -5199,10 +5278,10 @@ $(function() {
      );
     </div>
     <div class="line">
-     <a name="l00547">
+     <a name="l00557">
      </a>
      <span class="lineno">
-      547
+      557
      </span>
      <a class="code" href="utils_8hpp.html#aeaf2b8792be9f99ad11147059ef5079d">
       CUDA_CHECK
@@ -5210,33 +5289,33 @@ $(function() {
      (cudaPeekAtLastError());
     </div>
     <div class="line">
-     <a name="l00548">
+     <a name="l00558">
      </a>
      <span class="lineno">
-      548
+      558
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00549">
+     <a name="l00559">
      </a>
      <span class="lineno">
-      549
+      559
      </span>
      }
     </div>
     <div class="line">
-     <a name="l00550">
+     <a name="l00560">
      </a>
      <span class="lineno">
-      550
+      560
      </span>
     </div>
     <div class="line">
-     <a name="l00551">
+     <a name="l00561">
      </a>
      <span class="lineno">
-      551
+      561
      </span>
      };
      <span class="comment">
@@ -5244,10 +5323,10 @@ $(function() {
      </span>
     </div>
     <div class="line">
-     <a name="l00552">
+     <a name="l00562">
      </a>
      <span class="lineno">
-      552
+      562
      </span>
      };
      <span class="comment">
@@ -5526,7 +5605,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    knn.h:399
+    knn.h:409
    </div>
   </div>
   <div class="ttc" id="anamespaceML_1_1TSNE_html_ade251d9108c2e6c34695f53f591907a2">
@@ -5574,7 +5653,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    knn.h:532
+    knn.h:542
    </div>
   </div>
   <div class="ttc" id="anamespaceML_1_1TSNE_html_afb851e919e0cd78a7c66faf65d407452">
@@ -5606,7 +5685,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    knn.h:329
+    knn.h:339
    </div>
   </div>
   <div class="ttc" id="anamespaceMLCommon_1_1Selection_html_af40adb82099c6b308d133a142b2b8a62">
@@ -5622,7 +5701,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    knn.h:309
+    knn.h:319
    </div>
   </div>
   <div class="ttc" id="anamespaceMLCommon_html_a8a6b8df87019518b41b3621d6ac2f643">
@@ -5657,7 +5736,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    knn.h:357
+    knn.h:367
    </div>
   </div>
   <div class="ttc" id="anamespaceML_1_1TSNE_html_aa7af7a282a727812d02249e36b56d7cb">
@@ -5735,7 +5814,7 @@ $(function() {
     <b>
      Definition:
     </b>
-    knn.h:457
+    knn.h:467
    </div>
   </div>
   <div class="ttc" id="autils_8hxx_html_ac3c67491ac13bda2a8b0cc38616d26d4">
