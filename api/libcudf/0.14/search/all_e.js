@@ -55,7 +55,7 @@ var searchData=
   ['numerictraits_3c_20cudf_3a_3atimestamp_20_3e_917',['NumericTraits&lt; cudf::timestamp &gt;',['../structcub_1_1NumericTraits_3_01cudf_1_1timestamp_01_4.html',1,'cub']]],
   ['nunique_918',['NUNIQUE',['../classcudf_1_1experimental_1_1aggregation.html#a86a800d62c1b8a500f7920fd1ca0189da30e4bbcd5f0815b201f17acb039af8d0',1,'cudf::experimental::aggregation']]],
   ['nunique_5faggregation_919',['nunique_aggregation',['../structcudf_1_1experimental_1_1detail_1_1nunique__aggregation.html',1,'cudf::experimental::detail']]],
-  ['nvstrdesc_5fs_920',['nvstrdesc_s',['../structcudf_1_1io_1_1parquet_1_1gpu_1_1nvstrdesc__s.html',1,'cudf::io::parquet::gpu::nvstrdesc_s'],['../structcudf_1_1io_1_1nvstrdesc__s.html',1,'cudf::io::nvstrdesc_s'],['../structcudf_1_1io_1_1avro_1_1gpu_1_1nvstrdesc__s.html',1,'cudf::io::avro::gpu::nvstrdesc_s'],['../structcudf_1_1io_1_1orc_1_1gpu_1_1nvstrdesc__s.html',1,'cudf::io::orc::gpu::nvstrdesc_s']]],
+  ['nvstrdesc_5fs_920',['nvstrdesc_s',['../structcudf_1_1io_1_1nvstrdesc__s.html',1,'cudf::io::nvstrdesc_s'],['../structcudf_1_1io_1_1avro_1_1gpu_1_1nvstrdesc__s.html',1,'cudf::io::avro::gpu::nvstrdesc_s'],['../structcudf_1_1io_1_1parquet_1_1gpu_1_1nvstrdesc__s.html',1,'cudf::io::parquet::gpu::nvstrdesc_s'],['../structcudf_1_1io_1_1orc_1_1gpu_1_1nvstrdesc__s.html',1,'cudf::io::orc::gpu::nvstrdesc_s']]],
   ['nvtext_921',['nvtext',['../namespacenvtext.html',1,'']]],
   ['nvtext_20apis_922',['NVText APIs',['../group__nvtext__apis.html',1,'']]],
   ['ngrams_923',['NGrams',['../group__nvtext__ngrams.html',1,'']]],

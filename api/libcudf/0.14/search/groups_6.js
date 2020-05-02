@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['tokenize_3123',['Tokenize',['../group__nvtext__tokenize.html',1,'']]]
+  ['tokenize_3122',['Tokenize',['../group__nvtext__tokenize.html',1,'']]]
 ];

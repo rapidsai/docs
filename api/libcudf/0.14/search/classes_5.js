@@ -11,5 +11,6 @@ var searchData=
   ['fixed_5fpoint_1718',['fixed_point',['../classnumeric_1_1fixed__point.html',1,'numeric']]],
   ['fixed_5fwidth_5fscalar_1719',['fixed_width_scalar',['../classcudf_1_1detail_1_1fixed__width__scalar.html',1,'cudf::detail']]],
   ['fixed_5fwidth_5fscalar_5fdevice_5fview_1720',['fixed_width_scalar_device_view',['../classcudf_1_1detail_1_1fixed__width__scalar__device__view.html',1,'cudf::detail']]],
-  ['frag_5finit_5fstate_5fs_1721',['frag_init_state_s',['../structcudf_1_1io_1_1parquet_1_1gpu_1_1frag__init__state__s.html',1,'cudf::io::parquet::gpu']]]
+  ['following_5fwindow_5fwrapper_1721',['following_window_wrapper',['../structcudf_1_1detail_1_1following__window__wrapper.html',1,'cudf::detail']]],
+  ['frag_5finit_5fstate_5fs_1722',['frag_init_state_s',['../structcudf_1_1io_1_1parquet_1_1gpu_1_1frag__init__state__s.html',1,'cudf::io::parquet::gpu']]]
 ];
