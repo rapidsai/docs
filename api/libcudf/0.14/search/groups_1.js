@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['find_3145',['Find',['../group__strings__find.html',1,'']]]
+  ['find_3153',['Find',['../group__strings__find.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['value_5ftype_2963',['value_type',['../structcudf_1_1detail_1_1wrapper.html#a8acf68753d62cd6210b6c4b69fdaebef',1,'cudf::detail::wrapper']]]
+  ['value_5ftype_2969',['value_type',['../structcudf_1_1detail_1_1wrapper.html#a8acf68753d62cd6210b6c4b69fdaebef',1,'cudf::detail::wrapper']]]
 ];
