@@ -281,6 +281,18 @@ $(function() {
     <p>
      Implementation for CSV reader.
     </p>
+    <p>
+     The CSV reader is implemented in 4 stages: Stage 1: read and optionally decompress the input data in host memory (may be a memory-mapped view of the data on disk)
+    </p>
+    <p>
+     Stage 2: gather the offset of each data row within the csv data. Since the number of rows in a given character block may depend on the initial parser state (like whether the block starts in a middle of a quote or not), a separate row count and output parser state is computed for every possible input parser state per 16KB character block. The result is then used to infer the parser state and starting row at the beginning of every character block. A second pass can then output the location of every row (which is needed for the subsequent parallel conversion of every row from csv text to cudf binary form)
+    </p>
+    <p>
+     Stage 3: Optional stage to infer the data type of each CSV column.
+    </p>
+    <p>
+     Stage 4: Convert every row from csv text form to cudf binary form.
+    </p>
    </div>
    <h2 class="groupheader">
     Constructor &amp; Destructor Documentation

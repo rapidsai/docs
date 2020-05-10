@@ -102,7 +102,7 @@ var searchData=
   ['diff_414',['Diff',['../structDiff.html',1,'']]],
   ['diff_3c_20index_5ftype_2c_20jointype_3a_3ainner_5fjoin_20_3e_415',['Diff&lt; index_type, JoinType::INNER_JOIN &gt;',['../structDiff_3_01index__type_00_01JoinType_1_1INNER__JOIN_01_4.html',1,'']]],
   ['digit_416',['DIGIT',['../namespacecudf_1_1strings.html#acdc71043841f369de3cc8dd827a0eea1a7a47f8fc78db6c43192cf7b90828c431',1,'cudf::strings']]],
-  ['disabled_417',['disabled',['../namespacecudf_1_1io_1_1csv_1_1column__parse.html#a19fbcb16ae3b789ee4c842c828f44b2bae0c54112da856c7515c85a415be5ce3b',1,'cudf::io::csv::column_parse']]],
+  ['disabled_417',['disabled',['../namespacecudf_1_1io_1_1csv_1_1column__parse.html#a62a7ce0f4695ebb52107f8cdcc33b57aae0c54112da856c7515c85a415be5ce3b',1,'cudf::io::csv::column_parse']]],
   ['dispatch_5faggregation_418',['dispatch_aggregation',['../structcudf_1_1experimental_1_1detail_1_1dispatch__aggregation.html',1,'cudf::experimental::detail']]],
   ['dispatch_5fclamp_419',['dispatch_clamp',['../structcudf_1_1experimental_1_1detail_1_1dispatch__clamp.html',1,'cudf::experimental::detail']]],
   ['dispatch_5fmap_5ftype_420',['dispatch_map_type',['../structcudf_1_1experimental_1_1detail_1_1dispatch__map__type.html',1,'cudf::experimental::detail::dispatch_map_type'],['../structcudf_1_1detail_1_1dispatch__map__type.html',1,'cudf::detail::dispatch_map_type']]],

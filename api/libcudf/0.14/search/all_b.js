@@ -8,6 +8,6 @@ var searchData=
   ['keys_760',['keys',['../classcudf_1_1dictionary__column__view.html#a98a9b37d5ef29cebe1d77f517c738c41',1,'cudf::dictionary_column_view']]],
   ['keys_5fsize_761',['keys_size',['../classcudf_1_1dictionary__column__view.html#aa415117f5a4ec327daa94888e5396c84',1,'cudf::dictionary_column_view']]],
   ['keyvalue_762',['KeyValue',['../structcudf_1_1io_1_1parquet_1_1KeyValue.html',1,'cudf::io::parquet']]],
-  ['kind_763',['kind',['../classcudf_1_1experimental_1_1aggregation.html#a77e0fadbae7a6074f7be38c2f38ed600',1,'cudf::experimental::aggregation::kind()'],['../classcudf_1_1experimental_1_1aggregation.html#a86a800d62c1b8a500f7920fd1ca0189d',1,'cudf::experimental::aggregation::Kind()']]],
+  ['kind_763',['Kind',['../classcudf_1_1experimental_1_1aggregation.html#a86a800d62c1b8a500f7920fd1ca0189d',1,'cudf::experimental::aggregation::Kind()'],['../classcudf_1_1experimental_1_1aggregation.html#a77e0fadbae7a6074f7be38c2f38ed600',1,'cudf::experimental::aggregation::kind()']]],
   ['kind_5fto_5ftype_5fimpl_764',['kind_to_type_impl',['../structcudf_1_1experimental_1_1detail_1_1kind__to__type__impl.html',1,'cudf::experimental::detail']]]
 ];
