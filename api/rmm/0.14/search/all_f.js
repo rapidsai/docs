@@ -1,7 +1,7 @@
 var searchData=
 [
   ['set_5fstream_77',['set_stream',['../classrmm_1_1device__buffer.html#a81d02e30426e5cd0779478f82e967503',1,'rmm::device_buffer']]],
-  ['set_5fvalue_78',['set_value',['../classrmm_1_1device__scalar.html#ae4b8e5b4bc61d59c55ea3a2a2577abf9',1,'rmm::device_scalar']]],
+  ['set_5fvalue_78',['set_value',['../classrmm_1_1device__scalar.html#a61d585565e03bbf889ab2bee9b921dfd',1,'rmm::device_scalar::set_value(T host_value, cudaStream_t stream=0) -&gt; std::enable_if_t&lt; std::is_fundamental&lt; T &gt;::value, Dummy &gt;'],['../classrmm_1_1device__scalar.html#ae2ec1d287bf24fdfa9dc0b4cbf65a210',1,'rmm::device_scalar::set_value(T host_value, cudaStream_t stream=0) -&gt; std::enable_if_t&lt; not std::is_fundamental&lt; T &gt;::value, Dummy &gt;']]],
   ['setpointer_79',['setPointer',['../classrmm_1_1LogIt.html#a6bee1f58cdd54d2f4651863c8999d4ca',1,'rmm::LogIt']]],
   ['shrink_5fto_5ffit_80',['shrink_to_fit',['../classrmm_1_1device__buffer.html#a7a1d4d83387c8103c2c60fae62fc3591',1,'rmm::device_buffer']]],
   ['size_81',['size',['../structcnmemDevice__t__.html#aa2b1f9393452d7548dd1d801a6915546',1,'cnmemDevice_t_::size()'],['../structrmm_1_1mr_1_1detail_1_1block.html#a808d028c1a15861f91df829d199c3614',1,'rmm::mr::detail::block::size()'],['../classrmm_1_1device__buffer.html#ab6c9cb10ec73d49b75fba12d32e4faa5',1,'rmm::device_buffer::size()'],['../structrmm_1_1mr_1_1detail_1_1free__list.html#ae44aa124aacd1e3bb38f399e8df1585d',1,'rmm::mr::detail::free_list::size()']]],
