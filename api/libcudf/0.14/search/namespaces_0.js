@@ -1,19 +1,9 @@
 var searchData=
 [
-  ['avro_2122',['avro',['../namespacecudf_1_1experimental_1_1io_1_1detail_1_1avro.html',1,'cudf::experimental::io::detail']]],
-  ['column_5fparse_2123',['column_parse',['../namespacecudf_1_1io_1_1csv_1_1column__parse.html',1,'cudf::io::csv']]],
-  ['csv_2124',['csv',['../namespacecudf_1_1experimental_1_1io_1_1detail_1_1csv.html',1,'cudf::experimental::io::detail']]],
-  ['cudf_2125',['cudf',['../namespacecudf.html',1,'']]],
-  ['datetime_2126',['datetime',['../namespacecudf_1_1datetime.html',1,'cudf']]],
-  ['detail_2127',['detail',['../namespacecudf_1_1experimental_1_1io_1_1detail.html',1,'cudf::experimental::io']]],
-  ['dictionary_2128',['dictionary',['../namespacecudf_1_1dictionary.html',1,'cudf']]],
-  ['experimental_2129',['experimental',['../namespacecudf_1_1experimental.html',1,'cudf']]],
-  ['groupby_2130',['groupby',['../namespacecudf_1_1experimental_1_1groupby.html',1,'cudf::experimental']]],
-  ['io_2131',['io',['../namespacecudf_1_1experimental_1_1io.html',1,'cudf::experimental']]],
-  ['jit_2132',['jit',['../namespacecudf_1_1transformation_1_1jit.html',1,'cudf::transformation']]],
-  ['json_2133',['json',['../namespacecudf_1_1experimental_1_1io_1_1detail_1_1json.html',1,'cudf::experimental::io::detail']]],
-  ['orc_2134',['orc',['../namespacecudf_1_1experimental_1_1io_1_1detail_1_1orc.html',1,'cudf::experimental::io::detail']]],
-  ['parquet_2135',['parquet',['../namespacecudf_1_1experimental_1_1io_1_1detail_1_1parquet.html',1,'cudf::experimental::io::detail']]],
-  ['strings_2136',['strings',['../namespacecudf_1_1strings.html',1,'cudf']]],
-  ['util_2137',['util',['../namespacecudf_1_1util.html',1,'cudf']]]
+  ['cudf_986',['cudf',['../namespacecudf.html',1,'']]],
+  ['dictionary_987',['dictionary',['../namespacecudf_1_1dictionary.html',1,'cudf']]],
+  ['experimental_988',['experimental',['../namespacecudf_1_1experimental.html',1,'cudf']]],
+  ['groupby_989',['groupby',['../namespacecudf_1_1experimental_1_1groupby.html',1,'cudf::experimental']]],
+  ['io_990',['io',['../namespacecudf_1_1experimental_1_1io.html',1,'cudf::experimental::io'],['../namespacecudf_1_1io.html',1,'cudf::io']]],
+  ['strings_991',['strings',['../namespacecudf_1_1strings.html',1,'cudf']]]
 ];

@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['has_5fdictionary_2827',['has_dictionary',['../structcudf_1_1io_1_1parquet_1_1gpu_1_1EncColumnChunk.html#aac13e2b0a2e58ac9831a381e7d49c257',1,'cudf::io::parquet::gpu::EncColumnChunk']]],
-  ['has_5fminmax_2828',['has_minmax',['../structcudf_1_1io_1_1statistics__chunk.html#aaa71f54eb574ad6c4b128b030e92f135',1,'cudf::io::statistics_chunk']]],
-  ['has_5fsum_2829',['has_sum',['../structcudf_1_1io_1_1statistics__chunk.html#a3d8163f1a4743f3e77bf839f80904027',1,'cudf::io::statistics_chunk']]],
-  ['hash_5fmap_2830',['hash_map',['../structcudf_1_1io_1_1snap__state__s.html#accc92203ad65188afb86910754e5bb30',1,'cudf::io::snap_state_s']]],
-  ['hdr_5fsize_2831',['hdr_size',['../structcudf_1_1io_1_1parquet_1_1gpu_1_1EncPage.html#acd8071495a9ba3e3c684195c67673e14',1,'cudf::io::parquet::gpu::EncPage']]],
-  ['header_2832',['header',['../structcudf_1_1experimental_1_1io_1_1read__csv__args.html#ac260d576d9bd167b514cee15691e5921',1,'cudf::experimental::io::read_csv_args::header()'],['../structcudf_1_1experimental_1_1io_1_1detail_1_1csv_1_1reader__options.html#a71b5582c7aa1cc340aff06b065816922',1,'cudf::experimental::io::detail::csv::reader_options::header()'],['../structcudf_1_1io_1_1csv_1_1reader__options.html#ab50fe63eb2061f0bdbc537fc7a15ea24',1,'cudf::io::csv::reader_options::header()'],['../structcudf_1_1csv__read__arg.html#adde980eae4ca7900eb987f53dab8d239',1,'cudf::csv_read_arg::header()']]]
+  ['ignore_5fnull_5fkeys_1445',['ignore_null_keys',['../structcudf_1_1groupby_1_1Options.html#aa60c2d776459dcbfcd5c7384b2becc86',1,'cudf::groupby::Options']]],
+  ['infer_5fdate_5findexes_1446',['infer_date_indexes',['../structcudf_1_1experimental_1_1io_1_1read__csv__args.html#a326d27db91d03cdad6b16f47ab38d962',1,'cudf::experimental::io::read_csv_args::infer_date_indexes()'],['../structcudf_1_1experimental_1_1io_1_1detail_1_1csv_1_1reader__options.html#a7f7f3db8269bf1aae43f21d3ab91b18f',1,'cudf::experimental::io::detail::csv::reader_options::infer_date_indexes()'],['../structcudf_1_1io_1_1csv_1_1reader__options.html#a39717efb9f59ef1c6da0e022729d29c9',1,'cudf::io::csv::reader_options::infer_date_indexes()']]],
+  ['infer_5fdate_5fnames_1447',['infer_date_names',['../structcudf_1_1experimental_1_1io_1_1read__csv__args.html#aa5e1c9c7faca37737d867e74236ac045',1,'cudf::experimental::io::read_csv_args::infer_date_names()'],['../structcudf_1_1experimental_1_1io_1_1detail_1_1csv_1_1reader__options.html#af918d2fff3cc18c2c4ab1c06757eb36f',1,'cudf::experimental::io::detail::csv::reader_options::infer_date_names()'],['../structcudf_1_1io_1_1csv_1_1reader__options.html#a68dca3c15533f982f833e71b1e497c61',1,'cudf::io::csv::reader_options::infer_date_names()']]],
+  ['input_5fsorted_1448',['input_sorted',['../structcudf_1_1groupby_1_1sort_1_1Options.html#ae7675c404c27005482d9d9129581d436',1,'cudf::groupby::sort::Options']]],
+  ['is_5fvalid_1449',['is_valid',['../structgdf__scalar.html#aafe37fb37e1582995c98d0cf91a18f2e',1,'gdf_scalar']]]
 ];

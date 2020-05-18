@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['case_3159',['Case',['../group__strings__case.html',1,'']]],
-  ['combine_3160',['Combine',['../group__strings__combine.html',1,'']]],
-  ['contains_3161',['Contains',['../group__strings__contains.html',1,'']]],
-  ['converters_3162',['Converters',['../group__strings__convert.html',1,'']]]
+  ['aggregation_20factories_1694',['Aggregation Factories',['../group__aggregation__factories.html',1,'']]],
+  ['aggregation_1695',['Aggregation',['../group__column__aggregation.html',1,'']]]
 ];

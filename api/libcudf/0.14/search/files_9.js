@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['parsing_5futils_2ecu_2161',['parsing_utils.cu',['../legacy_2parsing__utils_8cu.html',1,'']]],
-  ['parsing_5futils_2ecuh_2162',['parsing_utils.cuh',['../legacy_2parsing__utils_8cuh.html',1,'']]]
+  ['wrapper_5ftypes_2ehpp_1009',['wrapper_types.hpp',['../wrapper__types_8hpp.html',1,'']]]
 ];

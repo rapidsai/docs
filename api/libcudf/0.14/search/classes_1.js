@@ -1,17 +1,17 @@
 var searchData=
 [
-  ['binaryop_1556',['BinaryOp',['../structcudf_1_1binops_1_1compiled_1_1BinaryOp.html',1,'cudf::binops::compiled']]],
-  ['bitmask_1557',['BitMask',['../classBitMask.html',1,'']]],
-  ['bitwise_5fpartitioner_1558',['bitwise_partitioner',['../structbitwise__partitioner.html',1,'']]],
-  ['bitwiseop_1559',['BitwiseOp',['../structcudf_1_1binops_1_1compiled_1_1BitwiseOp.html',1,'cudf::binops::compiled']]],
-  ['bitwiseopdispatcher_1560',['BitwiseOpDispatcher',['../structcudf_1_1detail_1_1BitwiseOpDispatcher.html',1,'cudf::detail::BitwiseOpDispatcher&lt; F &gt;'],['../structcudf_1_1experimental_1_1detail_1_1BitwiseOpDispatcher.html',1,'cudf::experimental::detail::BitwiseOpDispatcher&lt; F &gt;']]],
-  ['block_5fdesc_5fs_1561',['block_desc_s',['../structcudf_1_1io_1_1avro_1_1block__desc__s.html',1,'cudf::io::avro']]],
-  ['blocksumarray_1562',['BlockSumArray',['../structBlockSumArray.html',1,'']]],
-  ['blocksumpyramid_1563',['BlockSumPyramid',['../classBlockSumPyramid.html',1,'']]],
-  ['bounds_5fchecker_1564',['bounds_checker',['../structcudf_1_1experimental_1_1detail_1_1bounds__checker.html',1,'cudf::experimental::detail::bounds_checker&lt; map_type &gt;'],['../structcudf_1_1detail_1_1bounds__checker.html',1,'cudf::detail::bounds_checker&lt; map_type &gt;']]],
-  ['brotli_5fdictionary_5fs_1565',['brotli_dictionary_s',['../structcudf_1_1io_1_1brotli__dictionary__s.html',1,'cudf::io']]],
-  ['build_5fstate_5fs_1566',['build_state_s',['../structcudf_1_1io_1_1orc_1_1gpu_1_1build__state__s.html',1,'cudf::io::orc::gpu']]],
-  ['byte_5fstream_5fs_1567',['byte_stream_s',['../structcudf_1_1io_1_1parquet_1_1gpu_1_1byte__stream__s.html',1,'cudf::io::parquet::gpu']]],
-  ['byterle_5fenc_5fstate_5fs_1568',['byterle_enc_state_s',['../structcudf_1_1io_1_1orc_1_1gpu_1_1byterle__enc__state__s.html',1,'cudf::io::orc::gpu']]],
-  ['bz2_5ffile_5fheader_5fs_1569',['bz2_file_header_s',['../structcudf_1_1io_1_1bz2__file__header__s.html',1,'cudf::io']]]
+  ['column_866',['column',['../classcudf_1_1column.html',1,'cudf']]],
+  ['column_5fdevice_5fview_867',['column_device_view',['../classcudf_1_1column__device__view.html',1,'cudf']]],
+  ['column_5fdevice_5fview_5fbase_868',['column_device_view_base',['../classcudf_1_1detail_1_1column__device__view__base.html',1,'cudf::detail']]],
+  ['column_5fview_869',['column_view',['../classcudf_1_1column__view.html',1,'cudf']]],
+  ['column_5fview_5fbase_870',['column_view_base',['../classcudf_1_1detail_1_1column__view__base.html',1,'cudf::detail']]],
+  ['const_5fiterator_871',['const_iterator',['../classcudf_1_1string__view_1_1const__iterator.html',1,'cudf::string_view']]],
+  ['contents_872',['contents',['../structcudf_1_1column_1_1contents.html',1,'cudf::column']]],
+  ['contiguous_5fsplit_5frecord_5fresult_873',['contiguous_split_record_result',['../structcudf_1_1strings_1_1contiguous__split__record__result.html',1,'cudf::strings']]],
+  ['contiguous_5fsplit_5fresult_874',['contiguous_split_result',['../structcudf_1_1experimental_1_1contiguous__split__result.html',1,'cudf::experimental']]],
+  ['csr_5fgdf_5f_875',['csr_gdf_',['../structcsr__gdf__.html',1,'']]],
+  ['csv_5fread_5farg_876',['csv_read_arg',['../structcudf_1_1csv__read__arg.html',1,'cudf']]],
+  ['csv_5fwrite_5farg_877',['csv_write_arg',['../structcsv__write__arg.html',1,'']]],
+  ['cuda_5ferror_878',['cuda_error',['../structcudf_1_1cuda__error.html',1,'cudf']]],
+  ['cudamessagereader_879',['CudaMessageReader',['../classCudaMessageReader.html',1,'']]]
 ];

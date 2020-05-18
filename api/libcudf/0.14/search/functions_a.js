@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['join_5fcall_2429',['join_call',['../namespacecudf.html#a324e3af1901162a99c4e182255e63964',1,'cudf']]],
-  ['join_5fcall_5fcompute_5fdf_2430',['join_call_compute_df',['../namespacecudf.html#a7aa52645708c7f40b19e86fde0caa170',1,'cudf']]],
-  ['join_5fstrings_2431',['join_strings',['../group__strings__combine.html#gab6a77478fadde8b86e5a165283db03d3',1,'cudf::strings']]]
+  ['keys_1167',['keys',['../classcudf_1_1dictionary__column__view.html#a98a9b37d5ef29cebe1d77f517c738c41',1,'cudf::dictionary_column_view']]],
+  ['keys_5fsize_1168',['keys_size',['../classcudf_1_1dictionary__column__view.html#aa415117f5a4ec327daa94888e5396c84',1,'cudf::dictionary_column_view']]]
 ];

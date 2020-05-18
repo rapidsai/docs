@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['nvtext_20apis_3165',['NVText APIs',['../group__nvtext__apis.html',1,'']]],
-  ['ngrams_3166',['NGrams',['../group__nvtext__ngrams.html',1,'']]],
-  ['normalize_3167',['Normalize',['../group__nvtext__normalize.html',1,'']]]
+  ['datetime_1709',['DateTime',['../group__datetime__apis.html',1,'']]],
+  ['dictionary_1710',['Dictionary',['../group__dictionary__apis.html',1,'']]],
+  ['dictionary_1711',['Dictionary',['../group__dictionary__classes.html',1,'']]],
+  ['dlpack_1712',['DLPack',['../group__interop__dlpack.html',1,'']]]
 ];

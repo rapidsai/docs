@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['launch_5ffunctor_1836',['launch_functor',['../structcudf_1_1datetime_1_1detail_1_1launch__functor.html',1,'cudf::datetime::detail']]],
-  ['launcher_1837',['Launcher',['../structcudf_1_1unary_1_1Launcher.html',1,'cudf::unary::Launcher&lt; T, Tout, F &gt;'],['../structcudf_1_1experimental_1_1unary_1_1launcher.html',1,'cudf::experimental::unary::launcher&lt; T, Tout, F &gt;'],['../classcudf_1_1jit_1_1launcher.html',1,'cudf::jit::launcher']]],
-  ['localtime_5ftype_5frecord_5fs_1838',['localtime_type_record_s',['../structcudf_1_1io_1_1localtime__type__record__s.html',1,'cudf::io']]],
-  ['logic_5ferror_1839',['logic_error',['../structcudf_1_1logic__error.html',1,'cudf']]],
-  ['logicalop_1840',['LogicalOp',['../structcudf_1_1binops_1_1compiled_1_1LogicalOp.html',1,'cudf::binops::compiled']]],
-  ['logicalopdispatcher_1841',['LogicalOpDispatcher',['../structcudf_1_1experimental_1_1detail_1_1LogicalOpDispatcher.html',1,'cudf::experimental::detail::LogicalOpDispatcher&lt; F &gt;'],['../structcudf_1_1detail_1_1LogicalOpDispatcher.html',1,'cudf::detail::LogicalOpDispatcher&lt; F &gt;']]],
-  ['lut_5farr_1842',['lut_arr',['../structcudf_1_1io_1_1lut__arr.html',1,'cudf::io']]]
+  ['operation_925',['operation',['../structcudf_1_1groupby_1_1sort_1_1operation.html',1,'cudf::groupby::sort']]],
+  ['operation_5fargs_926',['operation_args',['../structcudf_1_1groupby_1_1sort_1_1operation__args.html',1,'cudf::groupby::sort']]],
+  ['options_927',['Options',['../structcudf_1_1groupby_1_1sort_1_1Options.html',1,'cudf::groupby::sort::Options'],['../structcudf_1_1groupby_1_1Options.html',1,'cudf::groupby::Options'],['../structcudf_1_1groupby_1_1hash_1_1Options.html',1,'cudf::groupby::hash::Options']]],
+  ['orc_5fread_5farg_928',['orc_read_arg',['../structcudf_1_1orc__read__arg.html',1,'cudf']]],
+  ['orc_5fwrite_5farg_929',['orc_write_arg',['../structcudf_1_1orc__write__arg.html',1,'cudf']]],
+  ['order_5finfo_930',['order_info',['../structcudf_1_1order__info.html',1,'cudf']]]
 ];
