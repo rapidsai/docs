@@ -268,7 +268,7 @@ def main():
     soup.head.append(style_tab)
 
     with open(filepath, "w") as fp:
-        fp.write(soup.prettify())
+        fp.write(str(soup))
 
 
 if __name__ == "__main__":
