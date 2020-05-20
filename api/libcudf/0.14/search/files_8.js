@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['table_5fview_2ehpp_1005',['table_view.hpp',['../table__view_8hpp.html',1,'']]],
-  ['timestamps_2ehpp_1006',['timestamps.hpp',['../timestamps_8hpp.html',1,'']]],
-  ['type_5fdispatcher_2ehpp_1007',['type_dispatcher.hpp',['../type__dispatcher_8hpp.html',1,'']]],
-  ['types_2ehpp_1008',['types.hpp',['../types_8hpp.html',1,'']]]
+  ['string_5fview_2ecuh_1018',['string_view.cuh',['../string__view_8cuh.html',1,'']]],
+  ['strings_5fcolumn_5fview_2ehpp_1019',['strings_column_view.hpp',['../strings__column__view_8hpp.html',1,'']]]
 ];
