@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['quotechar_1483',['quotechar',['../structcudf_1_1experimental_1_1io_1_1read__csv__args.html#ab03a4e0f38391f551fee821d3d6bd43e',1,'cudf::experimental::io::read_csv_args::quotechar()'],['../structcudf_1_1experimental_1_1io_1_1detail_1_1csv_1_1reader__options.html#a5168fe8df17e0448c64f89b66d57284c',1,'cudf::experimental::io::detail::csv::reader_options::quotechar()'],['../structcudf_1_1io_1_1csv_1_1reader__options.html#afe9a6b6021443128f0472b206f201d4a',1,'cudf::io::csv::reader_options::quotechar()'],['../structcudf_1_1csv__read__arg.html#a58f8dcaaa06038f116b800851b59d205',1,'cudf::csv_read_arg::quotechar()']]],
-  ['quoting_1484',['quoting',['../structcudf_1_1experimental_1_1io_1_1read__csv__args.html#a5cdbe6b35e36940deded73d12face2f6',1,'cudf::experimental::io::read_csv_args::quoting()'],['../structcudf_1_1experimental_1_1io_1_1detail_1_1csv_1_1reader__options.html#a85b5d60ad7bb97a983f0d5a80bd5b0f4',1,'cudf::experimental::io::detail::csv::reader_options::quoting()'],['../structcudf_1_1io_1_1csv_1_1reader__options.html#aed97da3c4e2b2064ac67abf3ab3db551',1,'cudf::io::csv::reader_options::quoting()'],['../structcudf_1_1csv__read__arg.html#a262059e03235b1572cd2562ccd6fd152',1,'cudf::csv_read_arg::quoting()']]]
+  ['results_1298',['results',['../structcudf_1_1groupby_1_1aggregation__result.html#a1d0e11864ac37b44b2b19051fca616fe',1,'cudf::groupby::aggregation_result']]],
+  ['return_5ffilemetadata_1299',['return_filemetadata',['../structcudf_1_1io_1_1write__parquet__args.html#a099a0425cba70e965636d56a2e546352',1,'cudf::io::write_parquet_args']]],
+  ['row_5fgroup_1300',['row_group',['../structcudf_1_1io_1_1read__parquet__args.html#abe9b828fb59e859bc8e29806dfc7c8eb',1,'cudf::io::read_parquet_args']]],
+  ['row_5fgroup_5fcount_1301',['row_group_count',['../structcudf_1_1io_1_1read__parquet__args.html#a7fcd0d5b1f128437df30abed7de82983',1,'cudf::io::read_parquet_args']]],
+  ['row_5fgroup_5flist_1302',['row_group_list',['../structcudf_1_1io_1_1read__parquet__args.html#a9cccd8808016fd513acbb9f736bd1226',1,'cudf::io::read_parquet_args']]]
 ];

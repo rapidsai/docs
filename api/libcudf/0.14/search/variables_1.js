@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['aggregations_1424',['aggregations',['../structcudf_1_1experimental_1_1groupby_1_1aggregation__request.html#a3fc574e393f6de5750b81a685c376320',1,'cudf::experimental::groupby::aggregation_request']]]
+  ['aggregations_1260',['aggregations',['../structcudf_1_1groupby_1_1aggregation__request.html#a30d51cab6fd7619edb1514f91fc3c0b9',1,'cudf::groupby::aggregation_request']]]
 ];

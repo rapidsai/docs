@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['out_5ftime_5funit_1481',['out_time_unit',['../structcudf_1_1io_1_1csv_1_1reader__options.html#ae53fb55e43e3c324af8608468e4b7b77',1,'cudf::io::csv::reader_options::out_time_unit()'],['../structcudf_1_1csv__read__arg.html#a6c3619d91ca37b1e5a3c847ac70c6e1b',1,'cudf::csv_read_arg::out_time_unit()']]]
+  ['prefix_1295',['prefix',['../structcudf_1_1io_1_1read__csv__args.html#a2ed055dc61e99f7815c5bceb8efac86e',1,'cudf::io::read_csv_args::prefix()'],['../structcudf_1_1io_1_1detail_1_1csv_1_1reader__options.html#aadac8f3abfe65e8705c27120d3a9bb60',1,'cudf::io::detail::csv::reader_options::prefix()']]]
 ];

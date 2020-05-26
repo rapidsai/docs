@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['zfill_866',['zfill',['../group__strings__modify.html#ga727702fd9e450f03bc19d8887ff312b1',1,'cudf::strings']]],
-  ['zip_867',['ZIP',['../namespacecudf_1_1experimental_1_1io.html#a748faef899f436d65047ac2241261457a4348f938bbddd8475e967ccb47ecb234',1,'cudf::experimental::io']]]
+  ['zfill_761',['zfill',['../group__strings__modify.html#ga727702fd9e450f03bc19d8887ff312b1',1,'cudf::strings']]],
+  ['zip_762',['ZIP',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8a4348f938bbddd8475e967ccb47ecb234',1,'cudf::io']]]
 ];

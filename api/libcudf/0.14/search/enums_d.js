@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unary_5fop_1559',['unary_op',['../namespacecudf.html#ab15567f1034536ae6f7f14179334a19b',1,'cudf']]]
+  ['weak_5fordering_1360',['weak_ordering',['../namespacecudf.html#a6e67b41d81d4d1b414070405496a90bd',1,'cudf']]]
 ];

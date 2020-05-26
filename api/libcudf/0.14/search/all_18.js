@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xz_865',['XZ',['../namespacecudf_1_1experimental_1_1io.html#a748faef899f436d65047ac2241261457a27db3b98d01e664c17a6620b222c6469',1,'cudf::experimental::io']]]
+  ['xz_760',['XZ',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8a27db3b98d01e664c17a6620b222c6469',1,'cudf::io']]]
 ];

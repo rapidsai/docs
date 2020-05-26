@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['compression_5ftype_1538',['compression_type',['../namespacecudf_1_1experimental_1_1io.html#a748faef899f436d65047ac2241261457',1,'cudf::experimental::io']]]
+  ['compression_5ftype_1339',['compression_type',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8',1,'cudf::io']]]
 ];
