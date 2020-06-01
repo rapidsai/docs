@@ -4,10 +4,16 @@ The documentation below describes how the scripts work to customize the generate
 
 ## Table of Contents
 
+- [Dependencies](#dependencies)
 - [Update Symlinks](#symlinks)
 - [Generate Library Map](#generate-library-map)
 - [Customize HTML File](#customize-html)
 - [TL;DR](#TL;DR)
+
+### Dependencies
+
+- [jq](https://github.com/stedolan/jq)
+- [BeautifulSoup4](https://github.com/waylan/beautifulsoup)
 
 ### Symlinks
 
