@@ -1,12 +1,14 @@
 var searchData=
 [
-  ['scalar_827',['scalar',['../classcudf_1_1scalar.html',1,'cudf']]],
-  ['scalar_5fdevice_5fview_5fbase_828',['scalar_device_view_base',['../classcudf_1_1detail_1_1scalar__device__view__base.html',1,'cudf::detail']]],
-  ['scaled_5finteger_829',['scaled_integer',['../structnumeric_1_1scaled__integer.html',1,'numeric']]],
-  ['sink_5finfo_830',['sink_info',['../structcudf_1_1io_1_1sink__info.html',1,'cudf::io']]],
-  ['source_5finfo_831',['source_info',['../structcudf_1_1io_1_1source__info.html',1,'cudf::io']]],
-  ['string_5fscalar_832',['string_scalar',['../classcudf_1_1string__scalar.html',1,'cudf']]],
-  ['string_5fscalar_5fdevice_5fview_833',['string_scalar_device_view',['../classcudf_1_1string__scalar__device__view.html',1,'cudf']]],
-  ['string_5fview_834',['string_view',['../classcudf_1_1string__view.html',1,'cudf']]],
-  ['strings_5fcolumn_5fview_835',['strings_column_view',['../classcudf_1_1strings__column__view.html',1,'cudf']]]
+  ['read_5favro_5fargs_825',['read_avro_args',['../structcudf_1_1io_1_1read__avro__args.html',1,'cudf::io']]],
+  ['read_5fcsv_5fargs_826',['read_csv_args',['../structcudf_1_1io_1_1read__csv__args.html',1,'cudf::io']]],
+  ['read_5fjson_5fargs_827',['read_json_args',['../structcudf_1_1io_1_1read__json__args.html',1,'cudf::io']]],
+  ['read_5forc_5fargs_828',['read_orc_args',['../structcudf_1_1io_1_1read__orc__args.html',1,'cudf::io']]],
+  ['read_5fparquet_5fargs_829',['read_parquet_args',['../structcudf_1_1io_1_1read__parquet__args.html',1,'cudf::io']]],
+  ['reader_830',['reader',['../classcudf_1_1io_1_1detail_1_1avro_1_1reader.html',1,'cudf::io::detail::avro::reader'],['../classcudf_1_1io_1_1detail_1_1json_1_1reader.html',1,'cudf::io::detail::json::reader'],['../classcudf_1_1io_1_1detail_1_1csv_1_1reader.html',1,'cudf::io::detail::csv::reader'],['../classcudf_1_1io_1_1detail_1_1orc_1_1reader.html',1,'cudf::io::detail::orc::reader'],['../classcudf_1_1io_1_1detail_1_1parquet_1_1reader.html',1,'cudf::io::detail::parquet::reader']]],
+  ['reader_5foptions_831',['reader_options',['../structcudf_1_1io_1_1detail_1_1avro_1_1reader__options.html',1,'cudf::io::detail::avro::reader_options'],['../structcudf_1_1io_1_1detail_1_1json_1_1reader__options.html',1,'cudf::io::detail::json::reader_options'],['../structcudf_1_1io_1_1detail_1_1csv_1_1reader__options.html',1,'cudf::io::detail::csv::reader_options'],['../structcudf_1_1io_1_1detail_1_1orc_1_1reader__options.html',1,'cudf::io::detail::orc::reader_options'],['../structcudf_1_1io_1_1detail_1_1parquet_1_1reader__options.html',1,'cudf::io::detail::parquet::reader_options']]],
+  ['row_5fequality_5fcomparator_832',['row_equality_comparator',['../classcudf_1_1row__equality__comparator.html',1,'cudf']]],
+  ['row_5fhasher_833',['row_hasher',['../classcudf_1_1row__hasher.html',1,'cudf']]],
+  ['row_5fhasher_5finitial_5fvalues_834',['row_hasher_initial_values',['../classcudf_1_1row__hasher__initial__values.html',1,'cudf']]],
+  ['row_5flexicographic_5fcomparator_835',['row_lexicographic_comparator',['../classcudf_1_1row__lexicographic__comparator.html',1,'cudf']]]
 ];

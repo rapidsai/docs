@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['operator_2a_1488',['operator*',['../classnumeric_1_1fixed__point.html#a1b5d3f90cd54448e15540f4577684ef4',1,'numeric::fixed_point']]],
-  ['operator_2b_1489',['operator+',['../classnumeric_1_1fixed__point.html#a001e18d8561007bc42e2442f07dd2a76',1,'numeric::fixed_point']]],
-  ['operator_2d_1490',['operator-',['../classnumeric_1_1fixed__point.html#a63231138807e0559dc9a38b433544a70',1,'numeric::fixed_point']]],
-  ['operator_2f_1491',['operator/',['../classnumeric_1_1fixed__point.html#ae132ad12a8c7c26b3c0e0937ed06278f',1,'numeric::fixed_point']]],
-  ['operator_3d_3d_1492',['operator==',['../classnumeric_1_1fixed__point.html#a771708b2e6776b3654d116900fc6e8e4',1,'numeric::fixed_point']]]
+  ['operator_2a_1502',['operator*',['../classnumeric_1_1fixed__point.html#a1b5d3f90cd54448e15540f4577684ef4',1,'numeric::fixed_point']]],
+  ['operator_2b_1503',['operator+',['../classnumeric_1_1fixed__point.html#a001e18d8561007bc42e2442f07dd2a76',1,'numeric::fixed_point']]],
+  ['operator_2d_1504',['operator-',['../classnumeric_1_1fixed__point.html#a63231138807e0559dc9a38b433544a70',1,'numeric::fixed_point']]],
+  ['operator_2f_1505',['operator/',['../classnumeric_1_1fixed__point.html#ae132ad12a8c7c26b3c0e0937ed06278f',1,'numeric::fixed_point']]],
+  ['operator_3d_3d_1506',['operator==',['../classnumeric_1_1fixed__point.html#a771708b2e6776b3654d116900fc6e8e4',1,'numeric::fixed_point']]]
 ];

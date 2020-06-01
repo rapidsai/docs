@@ -16,13 +16,14 @@ var searchData=
   ['bools_5fto_5fmask_53',['bools_to_mask',['../group__transformation__transform.html#ga72812eac0b41d00ad001b57dca04ea2c',1,'cudf']]],
   ['both_54',['BOTH',['../group__strings__modify.html#ggace598ecf9030296eeebfef46251d7d52a6328e5e3186c227a021ef2ff77e40197',1,'cudf::strings']]],
   ['brotli_55',['BROTLI',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8a150797e42d14e363b670e19365319205',1,'cudf::io']]],
-  ['byte_5foffset_56',['byte_offset',['../classcudf_1_1string__view.html#abfe2225bd482487ee631400929b961d4',1,'cudf::string_view']]],
-  ['byte_5frange_5foffset_57',['byte_range_offset',['../structcudf_1_1io_1_1read__json__args.html#a66ad33a823b5dfb68832ab4e87fce8ae',1,'cudf::io::read_json_args::byte_range_offset()'],['../structcudf_1_1io_1_1read__csv__args.html#aeb8b2dded7fa65bb84e5bd140ccdfaf7',1,'cudf::io::read_csv_args::byte_range_offset()']]],
-  ['byte_5frange_5fsize_58',['byte_range_size',['../structcudf_1_1io_1_1read__csv__args.html#a91b9f7a9a3c28c8422498d01ef34e570',1,'cudf::io::read_csv_args']]],
-  ['bytes_5fin_5fchar_5futf8_59',['bytes_in_char_utf8',['../string__view_8cuh.html#a9190b43b5e0e942734209283f9eedc19',1,'cudf::strings::detail']]],
-  ['bytes_5fwritten_60',['bytes_written',['../classcudf_1_1io_1_1data__sink.html#a8b43b4b466aa55d96366e4fd934dd971',1,'cudf::io::data_sink']]],
-  ['bzip2_61',['BZIP2',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8a800edd55a1e18b397e3d5d826f85ce34',1,'cudf::io']]],
-  ['bitmask_20operations_62',['Bitmask Operations',['../group__column__nullmask.html',1,'']]],
-  ['binary_20operations_63',['Binary Operations',['../group__transformation__binaryops.html',1,'']]],
-  ['bitmask_64',['Bitmask',['../group__utility__bitmask.html',1,'']]]
+  ['buffer_56',['buffer',['../classcudf_1_1io_1_1datasource_1_1buffer.html',1,'cudf::io::datasource']]],
+  ['byte_5foffset_57',['byte_offset',['../classcudf_1_1string__view.html#abfe2225bd482487ee631400929b961d4',1,'cudf::string_view']]],
+  ['byte_5frange_5foffset_58',['byte_range_offset',['../structcudf_1_1io_1_1read__json__args.html#a66ad33a823b5dfb68832ab4e87fce8ae',1,'cudf::io::read_json_args::byte_range_offset()'],['../structcudf_1_1io_1_1read__csv__args.html#aeb8b2dded7fa65bb84e5bd140ccdfaf7',1,'cudf::io::read_csv_args::byte_range_offset()']]],
+  ['byte_5frange_5fsize_59',['byte_range_size',['../structcudf_1_1io_1_1read__csv__args.html#a91b9f7a9a3c28c8422498d01ef34e570',1,'cudf::io::read_csv_args']]],
+  ['bytes_5fin_5fchar_5futf8_60',['bytes_in_char_utf8',['../string__view_8cuh.html#a9190b43b5e0e942734209283f9eedc19',1,'cudf::strings::detail']]],
+  ['bytes_5fwritten_61',['bytes_written',['../classcudf_1_1io_1_1data__sink.html#a8b43b4b466aa55d96366e4fd934dd971',1,'cudf::io::data_sink']]],
+  ['bzip2_62',['BZIP2',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8a800edd55a1e18b397e3d5d826f85ce34',1,'cudf::io']]],
+  ['bitmask_20operations_63',['Bitmask Operations',['../group__column__nullmask.html',1,'']]],
+  ['binary_20operations_64',['Binary Operations',['../group__transformation__binaryops.html',1,'']]],
+  ['bitmask_65',['Bitmask',['../group__utility__bitmask.html',1,'']]]
 ];
