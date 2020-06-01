@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['pmod_1662',['PMOD',['../group__transformation__binaryops.html#gga5ef856eb8739fb07889aa601d3a3f9b4aaf5a744d55583fdb1af0f280f12c9ab1',1,'cudf::experimental']]],
-  ['pow_1663',['POW',['../group__transformation__binaryops.html#gga5ef856eb8739fb07889aa601d3a3f9b4a17faf4e999b8cee4c36915c1f54ccffe',1,'cudf::experimental']]],
-  ['product_1664',['PRODUCT',['../classcudf_1_1experimental_1_1aggregation.html#a86a800d62c1b8a500f7920fd1ca0189da24c551e3f0715d9b0d041f3cf803ab7e',1,'cudf::experimental::aggregation']]],
-  ['ptx_1665',['PTX',['../classcudf_1_1experimental_1_1aggregation.html#a86a800d62c1b8a500f7920fd1ca0189daad2990a77e3673a91a831b5b42fa0b4d',1,'cudf::experimental::aggregation']]],
-  ['pymod_1666',['PYMOD',['../group__transformation__binaryops.html#gga5ef856eb8739fb07889aa601d3a3f9b4a36aaf571a1008bd43f47509344cd13ad',1,'cudf::experimental']]]
+  ['pmod_1465',['PMOD',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcaaf5a744d55583fdb1af0f280f12c9ab1',1,'cudf']]],
+  ['pow_1466',['POW',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca17faf4e999b8cee4c36915c1f54ccffe',1,'cudf']]],
+  ['product_1467',['PRODUCT',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca00d1a600db4e6ad4b605d1ea55d32e4e',1,'cudf::aggregation']]],
+  ['ptx_1468',['PTX',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca41e9f3ddf699f79662c7304406431856',1,'cudf::aggregation']]],
+  ['pymod_1469',['PYMOD',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca36aaf571a1008bd43f47509344cd13ad',1,'cudf']]]
 ];

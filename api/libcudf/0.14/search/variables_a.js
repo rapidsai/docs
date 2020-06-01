@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['lines_1469',['lines',['../structcudf_1_1experimental_1_1io_1_1read__json__args.html#ae372aa448ca88ab317d04e20667cb4ad',1,'cudf::experimental::io::read_json_args::lines()'],['../structcudf_1_1json__read__arg.html#a831d8ece8ee34ea3ef40260470f450c9',1,'cudf::json_read_arg::lines()']]],
-  ['lineterminator_1470',['lineterminator',['../structcudf_1_1experimental_1_1io_1_1read__csv__args.html#a2c96ac79750366a312661aa1dcaf1dd4',1,'cudf::experimental::io::read_csv_args::lineterminator()'],['../structcudf_1_1experimental_1_1io_1_1detail_1_1csv_1_1reader__options.html#a6030b375e02c04bcda1f54b98a9c1194',1,'cudf::experimental::io::detail::csv::reader_options::lineterminator()'],['../structcudf_1_1io_1_1csv_1_1reader__options.html#a7619717c61dc824bd5554b4fbd8a58ed',1,'cudf::io::csv::reader_options::lineterminator()'],['../structcudf_1_1csv__read__arg.html#ae94de1f1956861ebfda70ba81d9ed893',1,'cudf::csv_read_arg::lineterminator()']]]
+  ['lines_1299',['lines',['../structcudf_1_1io_1_1read__json__args.html#ab9b0d9ef6941ce61cdea73ec2f4209d9',1,'cudf::io::read_json_args']]],
+  ['lineterminator_1300',['lineterminator',['../structcudf_1_1io_1_1read__csv__args.html#a829adab29d042fdc08155bccf57a1be3',1,'cudf::io::read_csv_args::lineterminator()'],['../structcudf_1_1io_1_1detail_1_1csv_1_1reader__options.html#afe89b170595f111fb1fb156c80c76b41',1,'cudf::io::detail::csv::reader_options::lineterminator()']]]
 ];

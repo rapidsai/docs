@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['zip_1705',['ZIP',['../namespacecudf_1_1experimental_1_1io.html#a748faef899f436d65047ac2241261457a4348f938bbddd8475e967ccb47ecb234',1,'cudf::experimental::io']]]
+  ['zip_1501',['ZIP',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8a4348f938bbddd8475e967ccb47ecb234',1,'cudf::io']]]
 ];

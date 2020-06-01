@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['numeric_1006',['numeric',['../namespacenumeric.html',1,'']]],
-  ['nvtext_1007',['nvtext',['../namespacenvtext.html',1,'']]]
+  ['numeric_879',['numeric',['../namespacenumeric.html',1,'']]],
+  ['nvtext_880',['nvtext',['../namespacenvtext.html',1,'']]]
 ];

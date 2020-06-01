@@ -1,12 +1,11 @@
 var searchData=
 [
-  ['add_5fkeys_1025',['add_keys',['../group__dictionary__update.html#gac465f9126b50dba4b70584c411b344cb',1,'cudf::dictionary']]],
-  ['addition_5foverflow_1026',['addition_overflow',['../group__fixed__point__classes.html#ga533d3b3c86c18996a2a3aa6d0066aaff',1,'numeric']]],
-  ['aggregate_1027',['aggregate',['../classcudf_1_1experimental_1_1groupby_1_1groupby.html#a8590bf2656885368e8d5e5f0345dcbef',1,'cudf::experimental::groupby::groupby']]],
-  ['all_5fcharacters_5fof_5ftype_1028',['all_characters_of_type',['../group__strings__types.html#ga47b3fc7469d503cb9bf8557c0ac980ca',1,'cudf::strings']]],
-  ['all_5ffloat_1029',['all_float',['../group__strings__types.html#ga5ccff3fca54ad2cbfb2a149b156bac70',1,'cudf::strings']]],
-  ['all_5finteger_1030',['all_integer',['../group__strings__types.html#gaa180c5c1c33b97ba8c2587203dd4db84',1,'cudf::strings']]],
-  ['allocate_5fcolumn_1031',['allocate_column',['../namespacecudf.html#a3fbb86eb24e5093dcddeb0a0640b768f',1,'cudf']]],
-  ['allocate_5flike_1032',['allocate_like',['../group__column__copy.html#gab0ec16a767e2a330228960020fd1025f',1,'cudf::experimental::allocate_like(column_view const &amp;input, mask_allocation_policy mask_alloc=mask_allocation_policy::RETAIN, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())'],['../group__column__copy.html#ga79299fc60f982295c3ff1a6309bbd1ea',1,'cudf::experimental::allocate_like(column_view const &amp;input, size_type size, mask_allocation_policy mask_alloc=mask_allocation_policy::RETAIN, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())'],['../namespacecudf.html#aab66adf91a1625090dff2a0c9dfcaf5c',1,'cudf::allocate_like(gdf_column const &amp;input, mask_allocation_policy mask_alloc=RETAIN, cudaStream_t stream=0)'],['../namespacecudf.html#a1bf0ffc262f1f5887ce2d5f9fa488d88',1,'cudf::allocate_like(gdf_column const &amp;input, cudf::size_type size, mask_allocation_policy mask_alloc=RETAIN, cudaStream_t stream=0)'],['../namespacecudf.html#a5dc70ccd539530eb99331f9ca7767b70',1,'cudf::allocate_like(table const &amp;t, mask_allocation_policy mask_alloc=RETAIN, cudaStream_t stream=0)'],['../namespacecudf.html#a2a0d9b2b6aa8896ac24f66097df77b6f',1,'cudf::allocate_like(table const &amp;t, cudf::size_type size, mask_allocation_policy mask_alloc=RETAIN, cudaStream_t stream=0)']]],
-  ['apply_5fboolean_5fmask_1033',['apply_boolean_mask',['../namespacecudf.html#ad888a160fd5439ce10ed29232debc200',1,'cudf::apply_boolean_mask()'],['../group__reorder__compact.html#gac0effd1c4b21528eb598f2b5e86a06f3',1,'cudf::experimental::apply_boolean_mask()']]]
+  ['add_5fkeys_896',['add_keys',['../group__dictionary__update.html#gac465f9126b50dba4b70584c411b344cb',1,'cudf::dictionary']]],
+  ['addition_5foverflow_897',['addition_overflow',['../group__fixed__point__classes.html#ga533d3b3c86c18996a2a3aa6d0066aaff',1,'numeric']]],
+  ['aggregate_898',['aggregate',['../classcudf_1_1groupby_1_1groupby.html#a14163f1d6b66dd0e363e7ba9f07e514c',1,'cudf::groupby::groupby']]],
+  ['all_5fcharacters_5fof_5ftype_899',['all_characters_of_type',['../group__strings__types.html#ga47b3fc7469d503cb9bf8557c0ac980ca',1,'cudf::strings']]],
+  ['all_5ffloat_900',['all_float',['../group__strings__types.html#ga72f5b0e5ff08bd11db378ae1035f0946',1,'cudf::strings']]],
+  ['all_5finteger_901',['all_integer',['../group__strings__types.html#ga843c413a670860d0f22280c4b1113c8c',1,'cudf::strings']]],
+  ['allocate_5flike_902',['allocate_like',['../group__column__copy.html#gad8e0b98f728362a67048cdac0a5105c7',1,'cudf::allocate_like(column_view const &amp;input, mask_allocation_policy mask_alloc=mask_allocation_policy::RETAIN, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())'],['../group__column__copy.html#ga3404b1e634d5f35ba9573d5d82a0adff',1,'cudf::allocate_like(column_view const &amp;input, size_type size, mask_allocation_policy mask_alloc=mask_allocation_policy::RETAIN, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())']]],
+  ['apply_5fboolean_5fmask_903',['apply_boolean_mask',['../group__reorder__compact.html#ga8f77b99cf9ab2696d16c49625c8ef50c',1,'cudf']]]
 ];

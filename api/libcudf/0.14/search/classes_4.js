@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['fixed_5fpoint_897',['fixed_point',['../classnumeric_1_1fixed__point.html',1,'numeric']]],
-  ['fixed_5fwidth_5fscalar_898',['fixed_width_scalar',['../classcudf_1_1detail_1_1fixed__width__scalar.html',1,'cudf::detail']]],
-  ['fixed_5fwidth_5fscalar_5fdevice_5fview_899',['fixed_width_scalar_device_view',['../classcudf_1_1detail_1_1fixed__width__scalar__device__view.html',1,'cudf::detail']]]
+  ['element_5fequality_5fcomparator_793',['element_equality_comparator',['../classcudf_1_1element__equality__comparator.html',1,'cudf']]],
+  ['element_5fhasher_794',['element_hasher',['../classcudf_1_1element__hasher.html',1,'cudf']]],
+  ['element_5frelational_5fcomparator_795',['element_relational_comparator',['../classcudf_1_1element__relational__comparator.html',1,'cudf']]]
 ];
