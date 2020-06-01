@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['jacobi_4309',['jacobi',['../classMLCommon_1_1Random_1_1MultiVarGaussian.html#a602e73bde954aab4c98980e7c9d5687ea927f92933d9a8f2bf42a19eca9698c4b',1,'MLCommon::Random::MultiVarGaussian']]]
+  ['kmeansplusplus_2443',['KMeansPlusPlus',['../structML_1_1kmeans_1_1KMeansParams.html#a8ad93f8c860bc5af658750119dcccf39a369a68e4709a4af806bfc0d94d354129',1,'ML::kmeans::KMeansParams']]]
 ];

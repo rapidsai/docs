@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['logging_20levels_20used_20in_20cuml_4470',['Logging levels used in cuML',['../group__CumlLogLevels.html',1,'']]],
-  ['lambda_20operations_20in_20reduction_20kernels_4471',['Lambda operations in reduction kernels',['../group__LambdaOps.html',1,'']]]
+  ['utils_20for_20debug_20device_20code_2552',['utils for debug device code',['../group__Debug.html',1,'']]]
 ];

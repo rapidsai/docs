@@ -1,8 +1,13 @@
 var searchData=
 [
-  ['k_3882',['k',['../structML_1_1ARIMAOrder.html#adcd85fb946354a948c89846e0b12ab5f',1,'ML::ARIMAOrder::k()'],['../structMLCommon_1_1Distance_1_1DistanceEpilogueFunctor_1_1Params.html#a212f2cb5413b85d280efdc7e21674794',1,'MLCommon::Distance::DistanceEpilogueFunctor::Params::k()'],['../namespaceML_1_1TSNE.html#afb851e919e0cd78a7c66faf65d407452',1,'ML::TSNE::k()'],['../namespaceMLCommon_1_1Distance.html#a1391463ccdc455901dd289af5d2baaac',1,'MLCommon::Distance::k()']]],
-  ['kernel_3883',['kernel',['../structMLCommon_1_1Matrix_1_1KernelParams.html#ae02e3ba30d736bb1464ce20b242f361d',1,'MLCommon::Matrix::KernelParams']]],
-  ['kernel_5fparams_3884',['kernel_params',['../classML_1_1SVM_1_1SVC.html#aea5fa79f70579ee5df87840b68de5d77',1,'ML::SVM::SVC']]],
-  ['key_3885',['key',['../structMLCommon_1_1Selection_1_1KVPair.html#a4958e70ca9eb95defa837062b49cf0b1',1,'MLCommon::Selection::KVPair']]],
-  ['kstrideh_3886',['kStrideH',['../structMLCommon_1_1Distance_1_1DistanceGlobalTileAATraits.html#a7ed521b0cee9acecbeb3116558649ad5',1,'MLCommon::Distance::DistanceGlobalTileAATraits::kStrideH()'],['../structMLCommon_1_1Distance_1_1DistanceGlobalTileBBTraits.html#a8f2be0042fe8d7dd734a2c9426ded526',1,'MLCommon::Distance::DistanceGlobalTileBBTraits::kStrideH()']]]
+  ['leaf_5fcounter_2177',['leaf_counter',['../structML_1_1DecisionTree_1_1TreeMetaDataNode.html#ab91ab529cebe1e155da4c454dd043dde',1,'ML::DecisionTree::TreeMetaDataNode::leaf_counter()'],['../classML_1_1DecisionTree_1_1DecisionTreeBase.html#a8420b1187e0f8dfc6c7472c8c668050a',1,'ML::DecisionTree::DecisionTreeBase::leaf_counter()']]],
+  ['leaf_5fpayload_5ftype_2178',['leaf_payload_type',['../structML_1_1fil_1_1forest__params__t.html#ac82ca26d9d57bceb8e18527d91a831f2',1,'ML::fil::forest_params_t']]],
+  ['learning_5frate_2179',['learning_rate',['../classML_1_1UMAPParams.html#ae89843c3917d9570f43bc9a0a0dffb52',1,'ML::UMAPParams']]],
+  ['left_5fchild_5fid_2180',['left_child_id',['../structSparseTreeNode.html#aef31993b98290f9d810ead057d6d82e5',1,'SparseTreeNode']]],
+  ['left_5fidx_2181',['left_idx',['../structML_1_1fil_1_1sparse__node__extra__data.html#a8ca202034cfdb410b91c0e837db993f0',1,'ML::fil::sparse_node_extra_data']]],
+  ['linesearch_5fc_2182',['linesearch_c',['../structML_1_1OptimParams.html#a17969108a833feaf3d1c9478714f7cea',1,'ML::OptimParams']]],
+  ['linesearch_5fiter_5flimit_2183',['linesearch_iter_limit',['../structML_1_1OptimParams.html#abb7741e6a6fb455b8004300b2b0b7976',1,'ML::OptimParams']]],
+  ['linesearch_5fstep_5fsize_2184',['linesearch_step_size',['../structML_1_1OptimParams.html#ab7e3f0710564d1c6cb6c7b2d874c36a2',1,'ML::OptimParams']]],
+  ['linesearch_5ftau_2185',['linesearch_tau',['../structML_1_1OptimParams.html#ac3ae2e49ae1946f6e397a4e3a98e5dea',1,'ML::OptimParams']]],
+  ['local_5fconnectivity_2186',['local_connectivity',['../classML_1_1UMAPParams.html#a30af52b6f35a4b1ffeb930767f3547a2',1,'ML::UMAPParams']]]
 ];

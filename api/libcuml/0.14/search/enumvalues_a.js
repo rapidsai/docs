@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['kmeansplusplus_4310',['KMeansPlusPlus',['../structML_1_1kmeans_1_1KMeansParams.html#a8ad93f8c860bc5af658750119dcccf39a369a68e4709a4af806bfc0d94d354129',1,'ML::kmeans::KMeansParams']]],
-  ['kscalarsperldgacc_4311',['kScalarsPerLdgAcc',['../structMLCommon_1_1LinAlg_1_1CustomGemmConfig.html#a1504b30742f5367fedfa28cdd9499a88ad2b3cb6c4fcd59c351e0336cbd9710e1',1,'MLCommon::LinAlg::CustomGemmConfig']]],
-  ['kscalarsperldsacc_4312',['kScalarsPerLdsAcc',['../structMLCommon_1_1LinAlg_1_1CustomGemmConfig.html#ae7b475b5114ef4209a3b041b4f8b70eda2d54e49db4db24eab91be5931e42397b',1,'MLCommon::LinAlg::CustomGemmConfig']]],
-  ['kscalarsperstsacc_4313',['kScalarsPerStsAcc',['../structMLCommon_1_1LinAlg_1_1CustomGemmConfig.html#ae21a5bb7d19acdb967623ce28720bd56a9570475e26a7a06e548eb8a09cb1b65e',1,'MLCommon::LinAlg::CustomGemmConfig']]]
+  ['l0_2444',['L0',['../namespaceML.html#a1529da2b94c67018bb14f404f6e9aeaca6527e252610c64b85fdc9fc357c979cc',1,'ML']]],
+  ['l1_2445',['L1',['../group__pcaSolver.html#gga899c5f26e201a81a2c12bb7eed9b015da1fb22843d62f821b692757ad5541f072',1,'ML']]],
+  ['l2_2446',['L2',['../group__pcaSolver.html#gga899c5f26e201a81a2c12bb7eed9b015da4b6f8af39a7cbeb4aa24ef995e5b6e0e',1,'ML']]],
+  ['linear_2447',['LINEAR',['../namespaceMLCommon_1_1Matrix.html#a77ca4104554a91afb08885d275724ed4ad548428e9e9a74c31eb0552c860b4f7e',1,'MLCommon::Matrix::LINEAR()'],['../svm__api_8h.html#abcfb30112724acc92ab466a03d8961d7adc101ebf31c49c2d4b80b7c6f59f22cb',1,'LINEAR():&#160;svm_api.h']]],
+  ['linf_2448',['LINF',['../namespaceML.html#a1529da2b94c67018bb14f404f6e9aeaca83820f75ef6d53c49873c4269fdcdc26',1,'ML']]],
+  ['log_2449',['LOG',['../group__pcaSolver.html#gga67da49ce109878bcdbb29a8777d28de1ad24128f8a7b16f59075a28323f13803d',1,'ML']]]
 ];

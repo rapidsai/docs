@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['metrictype_4226',['MetricType',['../classML_1_1UMAPParams.html#ace5a6381bcdee73fddf908d8520351b3',1,'ML::UMAPParams']]]
+  ['rf_5ftype_2390',['RF_type',['../namespaceML.html#a4d83b99fe769e2e9bf3596bb1604ab4f',1,'ML']]]
 ];

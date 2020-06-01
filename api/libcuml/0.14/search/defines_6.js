@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['get_5ftid_4386',['GET_TID',['../hw__utils_8h.html#aaf9da4e7ac271746ce343a7e9443d6eb',1,'hw_utils.h']]],
-  ['gold_4387',['GOLD',['../hw__utils_8h.html#af468028083c9e52aa2c94ef3b9940450',1,'hw_utils.h']]]
+  ['throw_2502',['THROW',['../utils_8hpp.html#a62b75f8c0cf9544e0c7152d88a41812f',1,'utils.hpp']]],
+  ['treelite_5fcheck_2503',['TREELITE_CHECK',['../decisiontree__impl_8h.html#afc6609b893003cbf60511fdd8c5a4a8d',1,'decisiontree_impl.h']]]
 ];

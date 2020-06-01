@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['eigvecmemusage_4216',['EigVecMemUsage',['../group__eig.html#ga1e3f7d2e5caea60c2f1974a1e649fe17',1,'MLCommon::LinAlg']]]
+  ['initmethod_2379',['InitMethod',['../structML_1_1kmeans_1_1KMeansParams.html#a8ad93f8c860bc5af658750119dcccf39',1,'ML::kmeans::KMeansParams']]]
 ];

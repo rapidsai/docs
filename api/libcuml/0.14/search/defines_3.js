@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['di_4377',['DI',['../cuda__utils_8h.html#acabe1ee3d11be6214c678bf4dabda3c9',1,'cuda_utils.h']]]
+  ['mpi_5fcheck_2497',['MPI_CHECK',['../cuML__comms__mpi__impl_8cpp.html#a5ad47aba000abdd9a3d7874f5d83ec1d',1,'cuML_comms_mpi_impl.cpp']]],
+  ['mpi_5fcheck_5fno_5fthrow_2498',['MPI_CHECK_NO_THROW',['../cuML__comms__mpi__impl_8cpp.html#a185a267d8973fb064bc85fbd48e94130',1,'cuML_comms_mpi_impl.cpp']]]
 ];

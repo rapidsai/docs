@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['helper_20macros_20for_20dealing_20with_20logging_4468',['Helper macros for dealing with logging',['../group__LoggerMacros.html',1,'']]]
+  ['scikit_2dlearn_2desq_20make_5fblobs_2546',['scikit-learn-esq make_blobs',['../group__MakeBlobs.html',1,'']]]
 ];

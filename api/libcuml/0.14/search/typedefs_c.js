@@ -1,9 +1,11 @@
 var searchData=
 [
-  ['randomforestclassifierd_4169',['RandomForestClassifierD',['../namespaceML.html#acbf0352d6a255f990fcdf949b898d6af',1,'ML']]],
-  ['randomforestclassifierf_4170',['RandomForestClassifierF',['../namespaceML.html#a36df48edc11fcd68dd8b6f4a76526e7b',1,'ML']]],
-  ['randomforestregressord_4171',['RandomForestRegressorD',['../namespaceML.html#a64f2117024176a6fab67a1a6b8925243',1,'ML']]],
-  ['randomforestregressorf_4172',['RandomForestRegressorF',['../namespaceML.html#a79048a796facf156e926834d97bec78f',1,'ML']]],
-  ['reference_4173',['reference',['../classML_1_1stdAllocatorAdapter.html#a45804b810b5ad9e3e9a9878d810b26c9',1,'ML::stdAllocatorAdapter::reference()'],['../classMLCommon_1_1buffer__base.html#a39c195e5576ce1e198a47f81a21b7c61',1,'MLCommon::buffer_base::reference()'],['../classMLCommon_1_1host__buffer.html#a8f1aa043bf95b05f3d2a435850851737',1,'MLCommon::host_buffer::reference()']]],
-  ['request_5ft_4174',['request_t',['../classMLCommon_1_1cumlCommunicator__iface.html#aa0831180f4c041447f1eaa7bf855c205',1,'MLCommon::cumlCommunicator_iface::request_t()'],['../classMLCommon_1_1cumlCommunicator.html#a50a6486c4f311d58a2bd8706a69a8625',1,'MLCommon::cumlCommunicator::request_t()']]]
+  ['t_2363',['T',['../structML_1_1fil_1_1leaf__output__t_3_01leaf__value__t_1_1FLOAT__SCALAR_01_4.html#adf1f0e5c94d0cde1ab2685dc4c5b5c6e',1,'ML::fil::leaf_output_t&lt; leaf_value_t::FLOAT_SCALAR &gt;::T()'],['../structML_1_1fil_1_1leaf__output__t_3_01leaf__value__t_1_1INT__CLASS__LABEL_01_4.html#af183d396ec9e3b897327436c23ba1017',1,'ML::fil::leaf_output_t&lt; leaf_value_t::INT_CLASS_LABEL &gt;::T()']]],
+  ['threads_2364',['Threads',['../structMLCommon_1_1Distance_1_1DistanceGlobalTileAATraits.html#a1c6c52d86fcc9c1f45cb6523ba99cb3e',1,'MLCommon::Distance::DistanceGlobalTileAATraits::Threads()'],['../structMLCommon_1_1Distance_1_1DistanceGlobalTileBBTraits.html#a6a408457881251d74d49f5d32a06ce7a',1,'MLCommon::Distance::DistanceGlobalTileBBTraits::Threads()']]],
+  ['threadsdelta_2365',['ThreadsDelta',['../structMLCommon_1_1Distance_1_1DistanceGlobalTileAATraits.html#ad2840b5a44225117660c055a50e1bb80',1,'MLCommon::Distance::DistanceGlobalTileAATraits::ThreadsDelta()'],['../structMLCommon_1_1Distance_1_1DistanceGlobalTileBBTraits.html#a33f293c0ceca0c1a3fbd1ff67561a8bb',1,'MLCommon::Distance::DistanceGlobalTileBBTraits::ThreadsDelta()']]],
+  ['threadsperwarp_2366',['ThreadsPerWarp',['../structMLCommon_1_1LinAlg_1_1ThreadDiffSquaredAdd.html#a11840b326f2ac8319f8efac2a5914429',1,'MLCommon::LinAlg::ThreadDiffSquaredAdd::ThreadsPerWarp()'],['../structMLCommon_1_1LinAlg_1_1ThreadL1NormAdd.html#a2dd59ba9c62ebf7f687d27a6e461fbdf',1,'MLCommon::LinAlg::ThreadL1NormAdd::ThreadsPerWarp()']]],
+  ['treeclassifierd_2367',['TreeClassifierD',['../namespaceML_1_1DecisionTree.html#a1ac0ff3e12f3cbb52d294fee78027b51',1,'ML::DecisionTree']]],
+  ['treeclassifierf_2368',['TreeClassifierF',['../namespaceML_1_1DecisionTree.html#a428aa9ffa6efb6a74a89622783719160',1,'ML::DecisionTree']]],
+  ['treeregressord_2369',['TreeRegressorD',['../namespaceML_1_1DecisionTree.html#a73cc2dd066e0fa813de346d60b25cc79',1,'ML::DecisionTree']]],
+  ['treeregressorf_2370',['TreeRegressorF',['../namespaceML_1_1DecisionTree.html#a2215ac7294e3f1de00ccd8662886cdaa',1,'ML::DecisionTree']]]
 ];

@@ -1,32 +1,4 @@
 var searchData=
 [
-  ['identity_3216',['Identity',['../classMLCommon_1_1LinAlg_1_1Batched_1_1Matrix.html#ab3b4267c5f02efd0d6cdbc4c7c3ec2c1',1,'MLCommon::LinAlg::Batched::Matrix']]],
-  ['identity_5fmatrix_5fkernel_3217',['identity_matrix_kernel',['../namespaceMLCommon_1_1LinAlg_1_1Batched.html#a64c202bf9c116c020e4ee6752a359bbb',1,'MLCommon::LinAlg::Batched']]],
-  ['if_3218',['if',['../namespaceML_1_1TSNE.html#a5e6127c8e89f25aba2fc545044afcb4a',1,'ML::TSNE::if(i==0)'],['../namespaceML_1_1TSNE.html#a50ec2fb1e650657e8ae1a62783f8a889',1,'ML::TSNE::if(k&lt; FOUR_N) k+'],['../namespaceML_1_1TSNE.html#a36475708a50853d9e12fd3b069e79ae4',1,'ML::TSNE::if(localmaxdepth &gt; 32) localmaxdepth'],['../namespaceML_1_1TSNE.html#aacca21b9d560a6dd012212943f92f8f5',1,'ML::TSNE::if(threadIdx.x==0)']]],
-  ['incrementbin_3219',['incrementBin',['../namespaceMLCommon_1_1Stats.html#a062279483193effb4a12bd19aa0cd3b4',1,'MLCommon::Stats']]],
-  ['incrementbin_3c_201_20_3e_3220',['incrementBin&lt; 1 &gt;',['../namespaceMLCommon_1_1Stats.html#abd9a9cf970bb674e619d9ba0e68da514',1,'MLCommon::Stats']]],
-  ['information_5fcriterion_3221',['information_criterion',['../namespaceML.html#adbda523803274a0af10ca60a511ffbe8',1,'ML::information_criterion()'],['../namespaceMLCommon_1_1Metrics_1_1Batched.html#aef9ec91713dc3314a5376d700f981fb5',1,'MLCommon::Metrics::Batched::information_criterion()']]],
-  ['init_3222',['init',['../structMLCommon_1_1Distance_1_1MinAndDistanceReduceOp.html#a1bd59bc017571e679d5998aa43ace843',1,'MLCommon::Distance::MinAndDistanceReduceOp::init()'],['../structMLCommon_1_1Distance_1_1MinReduceOp.html#a972ae8840fb50206b877e786137cc4d2',1,'MLCommon::Distance::MinReduceOp::init()'],['../classMLCommon_1_1Random_1_1MultiVarGaussian.html#ad2a366efe1a13899d76f745b61a805df',1,'MLCommon::Random::MultiVarGaussian::init()']]],
-  ['init_5farrays_3223',['init_arrays',['../classMLCommon_1_1Sparse_1_1COO.html#ab6c2a0ff8f8391d09288a91cdfb66e58',1,'MLCommon::Sparse::COO::init_arrays()'],['../classMLCommon_1_1Sparse_1_1CSR.html#a394d6e61ee5f1266a3da1e19e5153264',1,'MLCommon::Sparse::CSR::init_arrays()']]],
-  ['init_5fdense_3224',['init_dense',['../namespaceML_1_1fil.html#a0f5fde8a886718f11aa478331fbb7f27',1,'ML::fil']]],
-  ['init_5fsparse_3225',['init_sparse',['../namespaceML_1_1fil.html#a5b0871f037947fcbe756ba5650d18d72',1,'ML::fil']]],
-  ['init_5ftransform_3226',['init_transform',['../namespaceUMAPAlgo.html#aa87cd5851543bb081cb5a3f9c60fd22a',1,'UMAPAlgo']]],
-  ['initializationkernel_3227',['InitializationKernel',['../namespaceML_1_1TSNE.html#a019429a6bfc09e7fbab8fe40e179bf9c',1,'ML::TSNE']]],
-  ['initialize_3228',['initialize',['../structMLCommon_1_1Distance_1_1DistanceEpilogueFunctor_1_1Params.html#ab84f369ae0196fd690cf9436a347524c',1,'MLCommon::Distance::DistanceEpilogueFunctor::Params::initialize()'],['../classMLCommon_1_1LinAlg_1_1Batched_1_1Matrix.html#a3ade2fb038790850c9a19ae7c4a25f2e',1,'MLCommon::LinAlg::Batched::Matrix::initialize()'],['../structMLCommon_1_1LinAlg_1_1CustomGemm_1_1Params.html#a7bd9b42577f797ee9c3a7dea3d7b2457',1,'MLCommon::LinAlg::CustomGemm::Params::initialize()']]],
-  ['initialize_5fmpi_5fcomms_3229',['initialize_mpi_comms',['../namespaceML.html#af1a8aaa312a62f236a4238b4abdbbd49',1,'ML']]],
-  ['initializediagonalmatrix_3230',['initializeDiagonalMatrix',['../namespaceMLCommon_1_1Matrix.html#a33c62901ad9da0a0c4df8a49418195d1',1,'MLCommon::Matrix']]],
-  ['initializeextra_3231',['initializeExtra',['../structMLCommon_1_1Distance_1_1DistanceEpilogueFunctor_1_1Params.html#ab481ca7fc50107d66ea81f8d3bb71bd0',1,'MLCommon::Distance::DistanceEpilogueFunctor::Params']]],
-  ['initkernel_3232',['initKernel',['../namespaceMLCommon_1_1Distance.html#ab6b9fbe72159927bc0e2baefc3573e8b',1,'MLCommon::Distance']]],
-  ['initshuffle_3233',['initShuffle',['../namespaceML_1_1Solver.html#ad335b3f21f9fcffddb7499c1aa3c2a54',1,'ML::Solver']]],
-  ['inject_5fcomms_3234',['inject_comms',['../namespaceML.html#a3b5faa4ceb0e330450d1b210b3bd86c4',1,'ML']]],
-  ['inject_5fcomms_5fpy_3235',['inject_comms_py',['../namespaceML.html#a6df300b3bb64878210f979639702e618',1,'ML']]],
-  ['inject_5fcomms_5fpy_5fcoll_3236',['inject_comms_py_coll',['../namespaceML.html#a7c91b8b040db35e8c514caf92ef9faa9',1,'ML']]],
-  ['inv_3237',['inv',['../classMLCommon_1_1LinAlg_1_1Batched_1_1Matrix.html#abf26a21f1f2741436187952902044ea7',1,'MLCommon::LinAlg::Batched::Matrix']]],
-  ['invscaling_3238',['invScaling',['../namespaceML_1_1Solver.html#a36be1daaf984e77d13f6b94e7f9e9661',1,'ML::Solver']]],
-  ['invtransform_3239',['invtransform',['../namespaceMLCommon_1_1TimeSeries.html#add2d4eb52c1fa1aff146087755e6f21a',1,'MLCommon::TimeSeries']]],
-  ['irecv_3240',['irecv',['../classML_1_1cumlMPICommunicator__impl.html#a972f0958c240b776f8c5e5527c1bc10a',1,'ML::cumlMPICommunicator_impl::irecv()'],['../classML_1_1cumlStdCommunicator__impl.html#a81637b2171f4c9990531a0fa902822ef',1,'ML::cumlStdCommunicator_impl::irecv()'],['../classMLCommon_1_1cumlCommunicator__iface.html#a90b92c2ab69191045654fffce4b3d67d',1,'MLCommon::cumlCommunicator_iface::irecv()'],['../classMLCommon_1_1cumlCommunicator.html#abf5af939b0b48838df83d5cb62eb7165',1,'MLCommon::cumlCommunicator::irecv(void *buf, int size, int source, int tag, request_t *request) const'],['../classMLCommon_1_1cumlCommunicator.html#ae736a74ce093c3c1304774240e269384',1,'MLCommon::cumlCommunicator::irecv(T *buf, int n, int source, int tag, request_t *request) const']]],
-  ['is_5faligned_3241',['is_aligned',['../namespaceMLCommon.html#a3fd711aaf35c8d997c07a4a1d2c91a06',1,'MLCommon']]],
-  ['is_5fdev_5fptr_3242',['is_dev_ptr',['../namespaceML.html#a9597fa4e87eb201ef8bbe7e8b1c5dcab',1,'ML']]],
-  ['isend_3243',['isend',['../classML_1_1cumlMPICommunicator__impl.html#ad6b0a7365d2694549b599945a4ecfcbf',1,'ML::cumlMPICommunicator_impl::isend()'],['../classML_1_1cumlStdCommunicator__impl.html#aa69c9a2e13e0542595365247cf1cbf96',1,'ML::cumlStdCommunicator_impl::isend()'],['../classMLCommon_1_1cumlCommunicator__iface.html#aa88b609a1a94df78f54082fcc65fcef5',1,'MLCommon::cumlCommunicator_iface::isend()'],['../classMLCommon_1_1cumlCommunicator.html#ab5051b58208abb6c8bf21c3d31dc9def',1,'MLCommon::cumlCommunicator::isend(const void *buf, int size, int dest, int tag, request_t *request) const'],['../classMLCommon_1_1cumlCommunicator.html#a631f0d5f877df5982ba4a454b167c9f3',1,'MLCommon::cumlCommunicator::isend(const T *buf, int n, int dest, int tag, request_t *request) const']]],
-  ['ispo2_3244',['isPo2',['../namespaceMLCommon.html#a3beb015a326c5c731d9f11416b0b77ab',1,'MLCommon']]]
+  ['johnson_5flindenstrauss_5fmin_5fdim_1868',['johnson_lindenstrauss_min_dim',['../group__paramsRPROJ.html#gacb2b3ebad5d3f97745d7d8d8e57d8345',1,'ML']]]
 ];
