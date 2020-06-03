@@ -17,9 +17,9 @@ The documentation below describes how the scripts work to customize the generate
 
 ### Symlinks
 
-For the doc customization to work correctly, all of the symlinks need to be up to date. The symlinks ultimately enable us to generate paths like `/cudf/en/stable/` that point to the latest RAPIDS release version folder (i.e. `/cudf/en/0.13.0/`).
+For the doc customization to work correctly, all of the symlinks need to be up to date. The symlinks ultimately enable us to generate paths like `/cudf/stable/` that point to the latest RAPIDS release version folder (i.e. `/cudf/0.13/`).
 
-[update_symlinks.sh](/update_symlinks.sh) is a shell script that accepts the current RAPIDS nightly version (i.e. `13`) as a positional parameter and updates each project's symlinks accordingly. It looks for the legacy, stable, and nightly version folders (i.e. `0.11.0`, `0.12.0`, etc.) and creates the corresponding symlinks if those folders exist.
+[update_symlinks.sh](/update_symlinks.sh) is a shell script that accepts the current RAPIDS nightly version (i.e. `13`) as a positional parameter and updates each project's symlinks accordingly. It looks for the legacy, stable, and nightly version folders (i.e. `0.11`, `0.12`, etc.) and creates the corresponding symlinks if those folders exist.
 
 **Usage:**
 
