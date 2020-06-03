@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['table_1214',['table',['../classcudf_1_1table.html#a7bd0ad09f593649786b3b5f14201ff4a',1,'cudf::table::table(table const &amp;other)'],['../classcudf_1_1table.html#a600665bc46f51c541b5b29f4a205b790',1,'cudf::table::table(std::vector&lt; std::unique_ptr&lt; column &gt;&gt; &amp;&amp;columns)'],['../classcudf_1_1table.html#a5fb841a2c5ece83562fc905b2e8fead0',1,'cudf::table::table(table_view view, cudaStream_t stream=0, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())']]],
+  ['table_5fview_1215',['table_view',['../classcudf_1_1table__view.html#a88b7a6c346964a0e45515995374fb70c',1,'cudf::table_view']]],
+  ['table_5fview_5fbase_1216',['table_view_base',['../classcudf_1_1detail_1_1table__view__base.html#a1efbcc85f85d8e30b06e29633df0ca38',1,'cudf::detail::table_view_base']]],
+  ['ticks_5fsince_5fepoch_1217',['ticks_since_epoch',['../classcudf_1_1timestamp__scalar.html#a87d69b929d85dfdd315b48036d2d9305',1,'cudf::timestamp_scalar']]],
+  ['tile_1218',['tile',['../group__column__reshape.html#ga2ad6631b54f344dbc00d20f3d2100276',1,'cudf']]],
+  ['timestamp_1219',['timestamp',['../structcudf_1_1detail_1_1timestamp.html#a87fe889ed0c60cfdf1958cda2e89ce39',1,'cudf::detail::timestamp']]],
+  ['timestamp_5fscalar_1220',['timestamp_scalar',['../classcudf_1_1timestamp__scalar.html#a9db1fa92400f73e2ffe584f8c27465e3',1,'cudf::timestamp_scalar::timestamp_scalar(T value, bool is_valid=true, cudaStream_t stream=0, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())'],['../classcudf_1_1timestamp__scalar.html#abdff2961c089bac99b8ba01d3530cfd4',1,'cudf::timestamp_scalar::timestamp_scalar(typename T::duration::rep value, bool is_valid, cudaStream_t stream=0, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())'],['../classcudf_1_1timestamp__scalar.html#ae21593b34e7f03e0d18c1b1edc25c50e',1,'cudf::timestamp_scalar::timestamp_scalar(rmm::device_scalar&lt; T &gt; &amp;&amp;data, bool is_valid=true, cudaStream_t stream=0, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())']]],
+  ['title_1221',['title',['../group__strings__case.html#ga7e0e2fbc850b6f6a2fe95c1d1d48d3a1',1,'cudf::strings']]],
+  ['to_5fbooleans_1222',['to_booleans',['../group__strings__convert.html#ga780054e3de99aba59c645a360969a002',1,'cudf::strings']]],
+  ['to_5fchar_5futf8_1223',['to_char_utf8',['../string__view_8cuh.html#a17d1937dbb68818c5e09b62149b7dcf7',1,'cudf::strings::detail']]],
+  ['to_5fdlpack_1224',['to_dlpack',['../group__interop__dlpack.html#ga00383dc5f8b2e594ca5ef164c172ca5c',1,'cudf']]],
+  ['to_5ffloats_1225',['to_floats',['../group__strings__convert.html#gae1731dd19deaac60ebd1cd9749dc1ab4',1,'cudf::strings']]],
+  ['to_5fintegers_1226',['to_integers',['../group__strings__convert.html#gaef603c9444667d7254ab70ab8950b603',1,'cudf::strings']]],
+  ['to_5flower_1227',['to_lower',['../group__strings__case.html#gaec51c2123138c05b0ceadb1e85af3487',1,'cudf::strings']]],
+  ['to_5fstring_1228',['to_string',['../classcudf_1_1string__scalar.html#a50a6e54a81384dc15729004b319475d2',1,'cudf::string_scalar']]],
+  ['to_5ftimestamps_1229',['to_timestamps',['../group__strings__convert.html#gacaf50d3b6d14ece094b9fc16b3d35c76',1,'cudf::strings']]],
+  ['to_5fupper_1230',['to_upper',['../group__strings__case.html#ga38dcbcaba74ee9076f4fd1bca99ca034',1,'cudf::strings']]],
+  ['tokenize_1231',['tokenize',['../group__nvtext__tokenize.html#ga5a6377b3226915576a277c291c9abf77',1,'nvtext::tokenize(cudf::strings_column_view const &amp;strings, cudf::string_scalar const &amp;delimiter=cudf::string_scalar{&quot;&quot;}, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())'],['../group__nvtext__tokenize.html#ga86420ed6ea932602cfd195385b153959',1,'nvtext::tokenize(cudf::strings_column_view const &amp;strings, cudf::strings_column_view const &amp;delimiters, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())']]],
+  ['transform_1232',['transform',['../group__transformation__transform.html#ga1ff3f82cbcc058b994a60573c75cf756',1,'cudf']]],
+  ['translate_1233',['translate',['../group__strings__modify.html#ga5c08de60b12b1a821e31d4f39139441f',1,'cudf::strings']]],
+  ['transpose_1234',['transpose',['../group__reshape__transpose.html#ga41239357542795ce8bb2d77e019fc570',1,'cudf']]],
+  ['type_1235',['type',['../classcudf_1_1column.html#a138187ebd94b3a69aaec0700898ac464',1,'cudf::column::type()'],['../classcudf_1_1detail_1_1column__device__view__base.html#a18049291d87fb72a96209ed2df518876',1,'cudf::detail::column_device_view_base::type()'],['../classcudf_1_1detail_1_1column__view__base.html#a16452c9fb08f36de42cd13884f0933e1',1,'cudf::detail::column_view_base::type()'],['../classcudf_1_1scalar.html#ac8d5454d018a4e79722b0fb465e1abe0',1,'cudf::scalar::type()'],['../classcudf_1_1detail_1_1scalar__device__view__base.html#a627a4ed70a2aaca979a97712cfac25fe',1,'cudf::detail::scalar_device_view_base::type()']]],
+  ['type_5fdispatcher_1236',['type_dispatcher',['../group__utility__dispatcher.html#ga2f44d6f3521f3f3bc585055cd38d588c',1,'cudf']]],
+  ['type_5fto_5fid_1237',['type_to_id',['../group__utility__dispatcher.html#ga9ba5eea729f54e486b228ab4d4fbb8bc',1,'cudf']]]
+];
