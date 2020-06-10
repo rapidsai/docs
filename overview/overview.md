@@ -17,7 +17,7 @@ Download the latest version of the RAPIDS release deck.
 
 ### v0.14 Release | Jun 2020
 
-#### Download **[pdf](/overview/RAPIDS 0.14 Release Deck.pdf){: target="_blank"}** | **[pptx](/overview/RAPIDS 0.14 Release Deck.pptx){: target="_blank"}**
+#### Download **[pdf](/overview/latest.pdf){: target="_blank"}** | **[pptx](/overview/latest.pptx){: target="_blank"}**
 {: .mb-10 .mt-0 }
 
 
