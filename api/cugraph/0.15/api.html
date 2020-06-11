@@ -172,7 +172,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#cugraph.structure.graph.Graph.nodes" title="cugraph.structure.graph.Graph.nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes</span></code></a>(self)</p></td>
 <td><p>Returns all the nodes in the graph as a cudf.Series</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#cugraph.structure.graph.Graph.number_of_edges" title="cugraph.structure.graph.Graph.number_of_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_edges</span></code></a>(self)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#cugraph.structure.graph.Graph.number_of_edges" title="cugraph.structure.graph.Graph.number_of_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_edges</span></code></a>(self[, directed_edges])</p></td>
 <td><p>Get the number of edges in the graph.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#cugraph.structure.graph.Graph.number_of_nodes" title="cugraph.structure.graph.Graph.number_of_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_nodes</span></code></a>(self)</p></td>
@@ -542,7 +542,7 @@ specified).</p>
 </dd></dl>
 <dl class="py method">
 <dt id="cugraph.structure.graph.Graph.number_of_edges">
-<code class="sig-name descname">number_of_edges</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.structure.graph.Graph.number_of_edges" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">number_of_edges</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">directed_edges</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.structure.graph.Graph.number_of_edges" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the number of edges in the graph.</p>
 </dd></dl>
 <dl class="py method">
@@ -978,8 +978,8 @@ If true, the betweenness values are normalized by
 2 / ((n - 1) * (n - 2)) for Graphs (undirected), and
 1 / ((n - 1) * (n - 2)) for DiGraphs (directed graphs)
 where n is the number of nodes in G.
-Normalization will ensure that the values in [0, 1],
-this normalization scales fo the highest possible value where one
+Normalization will ensure that values are in [0, 1],
+this normalization scales for the highest possible value where one
 node is crossed by every single shortest path.</p>
 </dd>
 <dt><strong>weight</strong><span class="classifier">cudf.DataFrame, optional, default=None</span></dt><dd><p>Specifies the weights to be used for each edge.
@@ -1022,6 +1022,86 @@ in ascending order.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+<dl class="py function">
+<dt id="cugraph.centrality.betweenness_centrality.edge_betweenness_centrality">
+<code class="sig-prename descclassname">cugraph.centrality.betweenness_centrality.</code><code class="sig-name descname">edge_betweenness_centrality</code><span class="sig-paren">(</span><em class="sig-param">G</em>, <em class="sig-param">k=None</em>, <em class="sig-param">normalized=True</em>, <em class="sig-param">weight=None</em>, <em class="sig-param">seed=None</em>, <em class="sig-param">result_dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.centrality.betweenness_centrality.edge_betweenness_centrality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the edge betweenness centrality for all edges of the graph G from a
+sample of ‘k’ sources.
+CuGraph does not currently support the ‘weight’ parameter
+as seen in the corresponding networkX call.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>G</strong><span class="classifier">cuGraph.Graph</span></dt><dd><p>cuGraph graph descriptor with connectivity information. The graph can
+be either directed (DiGraph) or undirected (Graph).
+Weights in the graph are ignored, the current implementation uses
+BFS traversals. Use weight parameter if weights need to be considered
+(currently not supported)</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int or list or None, optional, default=None</span></dt><dd><p>If k is not None, use k node samples to estimate betweenness.  Higher
+values give better approximation
+If k is a list, use the content of the list for estimation: the list
+should contain vertices identifiers.
+Vertices obtained through sampling or defined as a list will be used as
+sources for traversals inside the algorithm.</p>
+</dd>
+<dt><strong>normalized</strong><span class="classifier">bool, optional</span></dt><dd><p>Default is True.
+If true, the betweenness values are normalized by
+2 / (n * (n - 1)) for Graphs (undirected), and
+1 / (n * (n - 1)) for DiGraphs (directed graphs)
+where n is the number of nodes in G.
+Normalization will ensure that values are in [0, 1],
+this normalization scales for the highest possible value where one
+edge is crossed by every single shortest path.</p>
+</dd>
+<dt><strong>weight</strong><span class="classifier">cudf.DataFrame, optional, default=None</span></dt><dd><p>Specifies the weights to be used for each edge.
+Should contain a mapping between
+edges and weights.
+(Not Supported)</p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">optional</span></dt><dd><p>if k is specified and k is an integer, use seed to initialize the
+random number generator.
+Using None as seed relies on random.seed() behavior: using current
+system time
+If k is either None or list: seed parameter is ignored</p>
+</dd>
+<dt><strong>result_dtype</strong><span class="classifier">np.float32 or np.float64, optional, default=np.float64</span></dt><dd><p>Indicate the data type of the betweenness centrality scores
+Using double automatically switch implementation to “default”</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>GPU data frame containing three cudf.Series of size <a href="#id1"><span class="problematic" id="id2">|E|</span></a>: the vertex
+identifiers of the sources, the vertex identifies of the destinations
+and the corresponding betweenness centrality values.
+Please note that the resulting the ‘src’, ‘dst’ column might not be
+in ascending order.</p>
+<dl class="simple">
+<dt>df[‘src’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers of the source of each edge</p>
+</dd>
+<dt>df[‘dst’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers of the destination of each edge</p>
+</dd>
+<dt>df[‘edge_betweenness_centrality’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the betweenness centrality of edges</p>
+</dd>
+</dl>
+<p>When using undirected graphs, ‘src’ and ‘dst’ only contains elements
+such that ‘src’ &lt; ‘dst’, which might differ from networkx and user’s
+input. Namely edge (1 -&gt; 0) is transformed into (0 -&gt; 1) but
+contains the betweenness centrality of edge (1 -&gt; 0).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ebc</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">edge_betweenness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1800,11 +1880,11 @@ the internal state of positions while they are being trained.
 Example of callback usage:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>from cugraph.layout import GraphBasedDimRedCallback</dt><dd><dl class="simple">
+<dt>from cugraph.internals import GraphBasedDimRedCallback</dt><dd><dl class="simple">
 <dt>class CustomCallback(GraphBasedDimRedCallback):</dt><dd><dl class="simple">
 <dt>def on_preprocess_end(self, positions):</dt><dd><p>print(positions.copy_to_host())</p>
 </dd>
-<dt>def on_train_end(self, positions):</dt><dd><p>print(positions.copy_to_host())</p>
+<dt>def on_epoch_end(self, positions):</dt><dd><p>print(positions.copy_to_host())</p>
 </dd>
 <dt>def on_train_end(self, positions):</dt><dd><p>print(positions.copy_to_host())</p>
 </dd>
