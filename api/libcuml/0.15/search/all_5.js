@@ -2,11 +2,11 @@ var searchData=
 [
   ['expand_20a_20c_2dstyle_20format_20string_414',['Expand a C-style format string',['../group__CStringFormat.html',1,'']]],
   ['eig_2ecuh_415',['eig.cuh',['../eig_8cuh.html',1,'']]],
-  ['elasticnet_416',['ELASTICNET',['../group__pcaSolver.html#gga899c5f26e201a81a2c12bb7eed9b015da80cad9123fc734ada9ef3a33ac30e627',1,'ML']]],
+  ['elasticnet_416',['ELASTICNET',['../namespaceML.html#a899c5f26e201a81a2c12bb7eed9b015da80cad9123fc734ada9ef3a33ac30e627',1,'ML']]],
   ['eltwise_2ecuh_417',['eltwise.cuh',['../eltwise_8cuh.html',1,'']]],
   ['eltwise2d_2ecuh_418',['eltwise2d.cuh',['../eltwise2d_8cuh.html',1,'']]],
   ['end_419',['end',['../classML_1_1Tensor.html#a93f49c33010054ce2d544ac279558d12',1,'ML::Tensor::end()'],['../classML_1_1Tensor.html#a4bb10048829edcaa043a5fa060820946',1,'ML::Tensor::end() const'],['../classMLCommon_1_1buffer__base.html#a37bb3c8e6b43b88dd1f1e2cd00b1dd33',1,'MLCommon::buffer_base::end()'],['../classMLCommon_1_1buffer__base.html#a1205f06c50c756a64ceb3c5e7d9d06d4',1,'MLCommon::buffer_base::end() const']]],
-  ['entropy_420',['ENTROPY',['../namespaceML.html#a823912afaa51f58a997564eadb6d9405ab55a4e6aef097bd8f786f4ddfd1de161',1,'ML::ENTROPY()'],['../namespaceML_1_1Metrics.html#a1baed95d9b602c84c0de141503f2b255',1,'ML::Metrics::entropy()']]],
+  ['entropy_420',['entropy',['../namespaceML_1_1Metrics.html#a1baed95d9b602c84c0de141503f2b255',1,'ML::Metrics::entropy()'],['../namespaceML.html#a823912afaa51f58a997564eadb6d9405ab55a4e6aef097bd8f786f4ddfd1de161',1,'ML::ENTROPY()']]],
   ['entropy_2ecuh_421',['entropy.cuh',['../entropy_8cuh.html',1,'']]],
   ['eps_422',['eps',['../group__paramsRPROJ.html#ga461753748a1c7492db77eddeedaaca21',1,'ML::paramsRPROJ::eps()'],['../structML_1_1OptimParams.html#a298dbbca9eaa11fded3e59ebaf089226',1,'ML::OptimParams::eps()'],['../structDbscan_1_1VertexDeg_1_1Pack.html#a362c2a1ccfa06c9ca9073a2adf394b7e',1,'Dbscan::VertexDeg::Pack::eps()']]],
   ['epsilon_423',['epsilon',['../structML_1_1SVM_1_1svmParameter.html#a0a24c4bd265d16dab3bfec57fb196e9c',1,'ML::SVM::svmParameter']]],

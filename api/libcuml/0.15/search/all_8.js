@@ -21,7 +21,7 @@ var searchData=
   ['h_5fsplit_5fbinidx_554',['h_split_binidx',['../structTemporaryMemory.html#a3a7e4a09cdadd479cc4a5af6912eac3e',1,'TemporaryMemory']]],
   ['h_5fsplit_5fcolidx_555',['h_split_colidx',['../structTemporaryMemory.html#ae5c9ef6ca82dcc596c7cd3021d8b18ca',1,'TemporaryMemory']]],
   ['handlemap_556',['HandleMap',['../classML_1_1HandleMap.html',1,'ML::HandleMap'],['../namespaceML.html#a7181e4d6d170b0aa91dc7a368abf3d1c',1,'ML::handleMap()']]],
-  ['hinge_557',['HINGE',['../group__pcaSolver.html#gga67da49ce109878bcdbb29a8777d28de1a007e4d0f43a45d8d9be3dde194ea410a',1,'ML']]],
+  ['hinge_557',['HINGE',['../namespaceML.html#a67da49ce109878bcdbb29a8777d28de1a007e4d0f43a45d8d9be3dde194ea410a',1,'ML']]],
   ['hinge_2ecuh_558',['hinge.cuh',['../hinge_8cuh.html',1,'']]],
   ['hist_559',['HIST',['../namespaceML.html#afe9899e0c7ff1cf722a35bcf35283953a5ce779f6c1df4e4ec40cd9cee88837e2',1,'ML']]],
   ['histogram_2ecuh_560',['histogram.cuh',['../histogram_8cuh.html',1,'']]],

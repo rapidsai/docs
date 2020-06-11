@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['q_2255',['Q',['../structML_1_1ARIMAOrder.html#aa5fb5918b495472de57b631957dfc76a',1,'ML::ARIMAOrder::Q()'],['../structML_1_1ARIMAOrder.html#a943d8c1b02c091fc739810d6eb09c110',1,'ML::ARIMAOrder::q()']]],
-  ['quantile_5fper_5ftree_2256',['quantile_per_tree',['../structML_1_1DecisionTree_1_1DecisionTreeParams.html#afd5f8ed62e2a907af2d12bd79b5838d7',1,'ML::DecisionTree::DecisionTreeParams']]],
-  ['quesval_2257',['quesval',['../structSparseTreeNode.html#a164cb3e52fa6b5c0d85d251646499fe4',1,'SparseTreeNode']]]
+  ['q_2259',['Q',['../structML_1_1ARIMAOrder.html#aa5fb5918b495472de57b631957dfc76a',1,'ML::ARIMAOrder::Q()'],['../structML_1_1ARIMAOrder.html#a943d8c1b02c091fc739810d6eb09c110',1,'ML::ARIMAOrder::q()']]],
+  ['quantile_5fper_5ftree_2260',['quantile_per_tree',['../structML_1_1DecisionTree_1_1DecisionTreeParams.html#afd5f8ed62e2a907af2d12bd79b5838d7',1,'ML::DecisionTree::DecisionTreeParams']]],
+  ['quesval_2261',['quesval',['../structSparseTreeNode.html#a164cb3e52fa6b5c0d85d251646499fe4',1,'SparseTreeNode']]]
 ];

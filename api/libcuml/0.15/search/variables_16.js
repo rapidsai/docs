@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['whiten_2306',['whiten',['../group__pcaSolver.html#gaabcea34e9413606dd1b296fdf77f5310',1,'ML::paramsPCA']]]
+  ['whiten_2310',['whiten',['../group__pcaSolver.html#ga848a7b6c0e5d35723f8aa129d12e5ba1',1,'ML::paramsPCATemplate']]]
 ];
