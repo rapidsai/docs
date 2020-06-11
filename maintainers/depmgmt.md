@@ -24,7 +24,7 @@ Operations
 
 ## Adding a Dependency
 
-The [RAPIDS Integration repository](https://github.com/rapidsai/integration) contains all the information needed for adding a dependency to the RAPIDS projects. The `meta.yaml` you change should be based on the purpose of the package you are installing. The purpose of each meta-package is listed below:
+The [RAPIDS Integration repository](https://github.com/rapidsai/integration) contains all the information needed for adding a dependency to the RAPIDS projects. Which `meta.yaml` changed is based on the purpose of the package being installed. The purpose of each meta-package is listed below:
 
 Package Name | Purpose
 --- | ---
@@ -39,8 +39,8 @@ added.
 
 #### Modifying Recipes
 
-To add a package with versioning to the recipe we need the `PACKAGE_NAME` and
-the `VERSIONING_NAME` added to the file.
+To add a package with versioning to the recipe a `PACKAGE_NAME` and
+the `VERSIONING_NAME` must be added to the file.
 
 - `PACKAGE_NAME` - is the conda package name
 - `VERSIONING_NAME` - is the conda package name with `-` replaced with `_` and a suffix of `_version` added
@@ -48,7 +48,7 @@ the `VERSIONING_NAME` added to the file.
     - `cupy` would become `cupy_version`
     - `scikit-learn` would become `scikit_learn_version`
 
-Once the `PACKAGE_NAME` and `VERSIONING_NAME` are ready, we can add them to
+Once the `PACKAGE_NAME` and `VERSIONING_NAME` are ready, add them to
 the `meta.yml` as follows:
 
 ```
@@ -57,8 +57,7 @@ PACKAGE_NAME {{ VERSIONING_NAME }}
 
 - **NOTE:** The `VERSIONING_NAME` must be surrounded by the `{{ }}` for the substitution to work.
 
-Using our examples of `cupy` and `scikit-learn` we would have these entries in
-the `meta.yaml`:
+Using the examples of `cupy` and `scikit-learn` the entries in the `meta.yaml` would be:
 
 ```
 cupy {{ cupy_version }}
@@ -76,7 +75,7 @@ There are two versions files that are in `conda/recipes`:
 Both of these files will need a config added to specify the version for the
 newly created `VERSIONING_NAME`.
 
-For each `VERSIONING_NAME` we need a `VERSION_SPEC`. This can be any of the
+For each `VERSIONING_NAME` there must be a `VERSION_SPEC`. This can be any of the
 standard `conda` version specifiers:
 ```
 >=1.8.0
@@ -92,8 +91,7 @@ VERSIONING_NAME:
   - 'VERSION_SPEC'
 ```
 
-Using our examples of `cupy` and `scikit-learn` we would have these entries in
-the `meta.yaml`:
+Using the examples of `cupy` and `scikit-learn` the entries in the `*-versions.yaml` would be:
 
 ```
 cupy_version:
@@ -118,7 +116,7 @@ Once done, submit a PR to the `integration` repository. The changes will be buil
 
 ## Testing a Dependency
 
-The build scripts located in the `ci/gpu` folder of the project can be easily modified to test a dependency. For example, the [build script for cuDF](https://github.com/rapidsai/cudf/blob/branch-0.14/ci/gpu/build.sh) may contain these lines to install packages required to build from source and test notebooks. If you want to test a a new dependency before adding/updating the integration repo, follow these steps:
+The build scripts located in the `ci/gpu` folder of the project can be easily modified to test a dependency. For example, the [build script for cuDF](https://github.com/rapidsai/cudf/blob/branch-0.14/ci/gpu/build.sh) may contain these lines to install packages required to build from source and test notebooks. To test a new dependency before adding to or updating the integration repo, follow these steps:
 
 
 ```
