@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['timestamp_5flimits_1516',['TIMESTAMP_LIMITS',['../timestamps_8hpp.html#af5a5f23181622d2643a09df16a78e482',1,'timestamps.hpp']]]
+  ['duration_5flimits_1576',['DURATION_LIMITS',['../durations_8hpp.html#aaf959bf7d1e5faeec4a6e8a926c9d931',1,'durations.hpp']]]
 ];
