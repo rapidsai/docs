@@ -1,27 +1,28 @@
-from bs4 import BeautifulSoup
+"""
+Script to customize doxygen/sphinx generated HTML for RAPIDS
+"""
 import re
 import sys
 import json
 import os
+from bs4 import BeautifulSoup
 
-filepath = sys.argv[1]
-nightly_version = int(sys.argv[2])
+FILEPATH = sys.argv[1]
+NIGHTLY_VERSION = int(sys.argv[2])
 
-lib_map_path = os.path.join(os.path.dirname(__file__), "lib_map.json")
-rapids_css_path = os.path.join(os.path.dirname(__file__), "rapids.css")
-rapids_js_path = os.path.join(os.path.dirname(__file__), "rapids.js")
+LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
 
-versions_dict = {
-    "nightly": nightly_version,
-    "stable": nightly_version - 1,
-    "legacy": nightly_version - 2,
+VERSIONS_DICT = {
+    "nightly": NIGHTLY_VERSION,
+    "stable": NIGHTLY_VERSION - 1,
+    "legacy": NIGHTLY_VERSION - 2,
 }
-with open(lib_map_path) as fp:
-    lib_path_dict = json.load(fp)
+with open(LIB_MAP_PATH) as fp:
+    LIB_PATH_DICT = json.load(fp)
 
-script_tag_id = "rapids-selector-js"
-style_tag_id = "rapids-selector-css"
-fa_tag_id = "rapids-fa-tag"
+SCRIPT_TAG_ID = "rapids-selector-js"
+STYLE_TAG_ID = "rapids-selector-css"
+FA_TAG_ID = "rapids-fa-tag"
 
 
 def get_version_from_fp():
@@ -29,12 +30,12 @@ def get_version_from_fp():
     Determines if the current HTML document is for legacy, stable, or nightly versions
     based on the file path
     """
-    match = re.search(r"0.\d{1,3}", filepath)
+    match = re.search(r"0.\d{1,3}", FILEPATH)
     version_number = int(match[0].split(".")[1])
     version_name = "legacy"
-    if version_number == versions_dict["nightly"]:
+    if version_number == VERSIONS_DICT["nightly"]:
         version_name = "nightly"
-    if version_number == versions_dict["stable"]:
+    if version_number == VERSIONS_DICT["stable"]:
         version_name = "stable"
     return {"name": version_name, "number": version_number}
 
@@ -44,10 +45,10 @@ def get_lib_from_fp():
     Determines the current RAPIDS library based on the file path
     """
 
-    for lib in lib_path_dict.keys():
-        if re.search(f"(^{lib}/|/{lib}/)", filepath):
+    for lib in LIB_PATH_DICT.keys():
+        if re.search(f"(^{lib}/|/{lib}/)", FILEPATH):
             return lib
-    raise Exception("Couldn't find valid library name in filepath.")
+    raise Exception(f"Couldn't find valid library name in {FILEPATH}.")
 
 
 def create_home_container(soup):
@@ -71,7 +72,7 @@ def add_font_awesome(soup):
         attrs={
             "href": "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
             "rel": "stylesheet",
-            "id": fa_tag_id,
+            "id": FA_TAG_ID,
         },
     )
     soup.head.append(fa_tag)
@@ -86,15 +87,15 @@ def create_version_options():
     doc_lib = get_lib_from_fp()
     doc_is_extra_legacy = (  # extra legacy means the doc version is older then current legacy
         doc_version["name"] == "legacy"
-        and versions_dict["legacy"] != doc_version["number"]
+        and VERSIONS_DICT["legacy"] != doc_version["number"]
     )
     for version_name, version_path in [
-        (_, path) for _, path in lib_path_dict[doc_lib].items() if path is not None
+        (_, path) for _, path in LIB_PATH_DICT[doc_lib].items() if path is not None
     ]:
         if doc_is_extra_legacy and version_name == "legacy":
             version_number = doc_version["number"]
         else:
-            version_number = versions_dict[version_name]
+            version_number = VERSIONS_DICT[version_name]
         is_selected = False
         option_href = version_path
         version_text = f"{version_name} (0.{str(version_number)})"
@@ -115,7 +116,7 @@ def create_library_options():
     doc_lib = get_lib_from_fp()
     options = []
 
-    for lib, lib_versions in lib_path_dict.items():
+    for lib, lib_versions in LIB_PATH_DICT.items():
         if lib_versions["stable"]:
             option_href = lib_versions["stable"]
         elif lib_versions["nightly"]:
@@ -165,7 +166,7 @@ def create_script_tag(soup):
     Creates and returns a script tag that points to custom.js
     """
     script_tag = soup.new_tag(
-        "script", defer=None, id=script_tag_id, src="/assets/js/custom.js"
+        "script", defer=None, id=SCRIPT_TAG_ID, src="/assets/js/custom.js"
     )
     return script_tag
 
@@ -175,7 +176,7 @@ def create_css_link_tag(soup):
     Creates and returns a link tag that points to custom.css
     """
     script_tag = soup.new_tag(
-        "link", id=style_tag_id, rel="stylesheet", href="/assets/css/custom.css"
+        "link", id=STYLE_TAG_ID, rel="stylesheet", href="/assets/css/custom.css"
     )
     return script_tag
 
@@ -206,9 +207,9 @@ def delete_existing_elements(soup):
         sphinx_doc_version,
         sphinx_home_btn,
         doxygen_title_area,
-        f"#{script_tag_id}",
-        f"#{style_tag_id}",
-        f"#{fa_tag_id}",
+        f"#{SCRIPT_TAG_ID}",
+        f"#{STYLE_TAG_ID}",
+        f"#{FA_TAG_ID}",
     ]:
         delete_element(soup, element)
 
@@ -228,7 +229,7 @@ def is_sphinx_or_doxygen(soup):
     if soup.select(doxygen_identifier):
         return "doxygen", soup.select(doxygen_identifier)[0]
 
-    raise Exception(f"Couldn't identify {filepath} as either Doxygen or Sphinx")
+    raise Exception(f"Couldn't identify {FILEPATH} as either Doxygen or Sphinx")
 
 
 def main():
@@ -236,8 +237,8 @@ def main():
     Given the path to a documentation HTML file, this function will
     parse the file and add library/version selectors and a Home button
     """
-    print(f"--- {filepath} ---")
-    with open(filepath) as fp:
+    print(f"--- {FILEPATH} ---")
+    with open(FILEPATH) as fp:
         soup = BeautifulSoup(fp, "html.parser")
 
     doc_type, reference_el = is_sphinx_or_doxygen(soup)
@@ -267,7 +268,7 @@ def main():
     soup.body.append(script_tag)
     soup.head.append(style_tab)
 
-    with open(filepath, "w") as fp:
+    with open(FILEPATH, "w") as fp:
         fp.write(str(soup))
 
 
