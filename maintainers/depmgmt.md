@@ -52,18 +52,18 @@ Once the `PACKAGE_NAME` and `VERSIONING_NAME` are ready, add them to
 the `meta.yml` as follows:
 
 ```
-PACKAGE_NAME {{ VERSIONING_NAME }}
+PACKAGE_NAME {% raw  %}{{ VERSIONING_NAME }}{% endraw  %}
 ```
 
-- **NOTE:** The `VERSIONING_NAME` must be surrounded by the `{{ }}` for the substitution to work.
+- **NOTE:** The `VERSIONING_NAME` must be surrounded by the `{% raw  %}{{ }}{% endraw  %}` for the substitution to work.
 
 Using the examples of `cupy` and `scikit-learn` the entries in the `meta.yaml` would be:
 
 ```
-cupy {{ cupy_version }}
+cupy {% raw  %}{{ cupy_version }}{% endraw  %}
 ```
 ```
-scikit-learn {{ scikit_learn_version }}
+scikit-learn {% raw  %}{{ scikit_learn_version }}{% endraw  %}
 ```
 
 #### Modifying Versions Files
