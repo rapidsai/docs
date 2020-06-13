@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['nvtext_1614',['NVText',['../group__nvtext__apis.html',1,'']]],
-  ['ngrams_1615',['NGrams',['../group__nvtext__ngrams.html',1,'']]],
-  ['normalizing_1616',['Normalizing',['../group__nvtext__normalize.html',1,'']]]
+  ['merging_1614',['Merging',['../group__column__merge.html',1,'']]],
+  ['modifying_1615',['Modifying',['../group__strings__modify.html',1,'']]]
 ];

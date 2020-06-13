@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['writers_1651',['Writers',['../group__io__writers.html',1,'']]]
+  ['updating_20keys_1650',['Updating Keys',['../group__dictionary__update.html',1,'']]],
+  ['unary_20operations_1651',['Unary Operations',['../group__transformation__unaryops.html',1,'']]],
+  ['utilities_1652',['Utilities',['../group__utility__apis.html',1,'']]]
 ];
