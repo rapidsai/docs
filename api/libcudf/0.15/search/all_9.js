@@ -53,7 +53,9 @@ var searchData=
   ['is_5fsorted_335',['is_sorted',['../group__column__sort.html#ga77f7f552aca16f21830817ccd088670e',1,'cudf']]],
   ['is_5ftimestamp_336',['is_timestamp',['../group__utility__types.html#ga90ebb90931abfed637396889b7829173',1,'cudf::is_timestamp()'],['../group__utility__types.html#ga96f7b448c30ecbce54e8c1243ccc8c4d',1,'cudf::is_timestamp(data_type type)']]],
   ['is_5ftimestamp_5fimpl_337',['is_timestamp_impl',['../structcudf_1_1is__timestamp__impl.html',1,'cudf']]],
-  ['is_5fvalid_338',['is_valid',['../classcudf_1_1detail_1_1column__device__view__base.html#a0332c96b1665a297b5479915522da863',1,'cudf::detail::column_device_view_base::is_valid()'],['../classcudf_1_1scalar.html#a46999dab108e346408946d0935ab0a84',1,'cudf::scalar::is_valid()'],['../classcudf_1_1detail_1_1scalar__device__view__base.html#ae345627751a84ec566394ba6a2dc26e2',1,'cudf::detail::scalar_device_view_base::is_valid()'],['../group__transformation__unaryops.html#ga3a1d49732ee41324cf779b6e1b2f8b0d',1,'cudf::is_valid()']]],
-  ['is_5fvalid_5fnocheck_339',['is_valid_nocheck',['../classcudf_1_1detail_1_1column__device__view__base.html#a6b55f7e1f8dd365eb939eab4d7f52aad',1,'cudf::detail::column_device_view_base']]],
-  ['types_2ehpp_340',['types.hpp',['../io_2types_8hpp.html',1,'']]]
+  ['is_5funsigned_338',['is_unsigned',['../group__utility__types.html#gaf186010866f2f5eb497467963eaf3d54',1,'cudf::is_unsigned()'],['../group__utility__types.html#gaa3b01989f258e0f5a65b023ee9afa0a4',1,'cudf::is_unsigned(data_type type)']]],
+  ['is_5funsigned_5fimpl_339',['is_unsigned_impl',['../structcudf_1_1is__unsigned__impl.html',1,'cudf']]],
+  ['is_5fvalid_340',['is_valid',['../classcudf_1_1detail_1_1column__device__view__base.html#a0332c96b1665a297b5479915522da863',1,'cudf::detail::column_device_view_base::is_valid()'],['../classcudf_1_1scalar.html#a46999dab108e346408946d0935ab0a84',1,'cudf::scalar::is_valid()'],['../classcudf_1_1detail_1_1scalar__device__view__base.html#ae345627751a84ec566394ba6a2dc26e2',1,'cudf::detail::scalar_device_view_base::is_valid()'],['../group__transformation__unaryops.html#ga3a1d49732ee41324cf779b6e1b2f8b0d',1,'cudf::is_valid()']]],
+  ['is_5fvalid_5fnocheck_341',['is_valid_nocheck',['../classcudf_1_1detail_1_1column__device__view__base.html#a6b55f7e1f8dd365eb939eab4d7f52aad',1,'cudf::detail::column_device_view_base']]],
+  ['types_2ehpp_342',['types.hpp',['../io_2types_8hpp.html',1,'']]]
 ];
