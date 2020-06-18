@@ -71,7 +71,8 @@ readDataset(rapidsDatasetRootDir + "/golden_data/web-BerkStan.pagerank_val_0.85.
 ## Datasets for benchmarks
 
 Developers and end users alike may need to run benchmarks to evaluate the performance of RAPIDS libraries. Benchmarks currently vary from RAPIDS repo to repo in how they're written, how they need to be run, and if and how they use datasets. At the moment, only the `cugraph` library has standardized on a convention for benchmark datasets, as described below:
-- Datasets for both tests and benchmarks are located in \<repo root\>/datasets. This allows benchmark developers to use the same dataset locating APIs (`get_rapids_dataset_root_dir()`, etc.) with the same settings described above for running tests.
+- Datasets for both tests and benchmarks are located in `<repo root>/datasets`. This allows benchmark developers to use the same dataset locating APIs (`get_rapids_dataset_root_dir()`, etc.) with the same settings described above for running tests.
+- Some datasets are small enough that they can be included in the repository with the source code. This is convenient for certain cases where a very small dataset is acceptable, but larger datasets must not be committed due to limitations of the source repository. Instead, larger datasets (approximately 2MB or larger) should be hosted separately and made available to download and install via the script described below.
 - A script is provided for downloading and installing different datasets for different use cases. The `-h` option to the script will describe the options available. For cugraph benchmarks, run the script with the `--benchmark` option from the `datasets` dir:
 ```
 cd <repo root>/datasets
