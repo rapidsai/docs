@@ -1,13 +1,13 @@
 var searchData=
 [
-  ['column_20and_20table_1591',['Column and Table',['../group__column__apis.html',1,'']]],
-  ['column_1592',['Column',['../group__column__classes.html',1,'']]],
-  ['copying_1593',['Copying',['../group__column__copy.html',1,'']]],
-  ['concatenating_1594',['Concatenating',['../group__copy__concatenate.html',1,'']]],
-  ['classes_1595',['Classes',['../group__cudf__classes.html',1,'']]],
-  ['compute_20day_1596',['Compute Day',['../group__datetime__compute.html',1,'']]],
-  ['case_1597',['Case',['../group__strings__case.html',1,'']]],
-  ['combining_1598',['Combining',['../group__strings__combine.html',1,'']]],
-  ['converting_1599',['Converting',['../group__strings__convert.html',1,'']]],
-  ['character_20types_1600',['Character Types',['../group__strings__types.html',1,'']]]
+  ['column_20and_20table_1595',['Column and Table',['../group__column__apis.html',1,'']]],
+  ['column_1596',['Column',['../group__column__classes.html',1,'']]],
+  ['copying_1597',['Copying',['../group__column__copy.html',1,'']]],
+  ['concatenating_1598',['Concatenating',['../group__copy__concatenate.html',1,'']]],
+  ['classes_1599',['Classes',['../group__cudf__classes.html',1,'']]],
+  ['compute_20day_1600',['Compute Day',['../group__datetime__compute.html',1,'']]],
+  ['case_1601',['Case',['../group__strings__case.html',1,'']]],
+  ['combining_1602',['Combining',['../group__strings__combine.html',1,'']]],
+  ['converting_1603',['Converting',['../group__strings__convert.html',1,'']]],
+  ['character_20types_1604',['Character Types',['../group__strings__types.html',1,'']]]
 ];
