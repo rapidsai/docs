@@ -130,7 +130,7 @@ conda install "rmm=$MINOR_VERSION.*" "rapids-build-env=$MINOR_VERSION.*" \
 conda install "rmm=$MINOR_VERSION.*" "rapids-build-env=$MINOR_VERSION.*" \
               "rapids-notebook-env=$MINOR_VERSION.*"
 
-conda remove -f rapids-build-env rapids-notebook-env
+conda remove --force rapids-build-env rapids-notebook-env
 conda install "your-pkg=1.0.0"
 ```
 
