@@ -1,17 +1,10 @@
 {% for lib in include.data %}
 {% assign api = lib[1] %}
-{% assign ver = api.versions %}
+{% comment %} HACK: below operation returns an array of stable/nightly/legacy values only if they're enabled in docs.yml  {% endcomment %}
+{% assign versions = api.versions | sort | where_exp: "item", "item[1] == 1" | join: "" | split: "1" | reverse %}
 ### {{ api.name }}
 {{ api.desc }}
-{% if ver.legacy == 0 and ver.stable == 0 and ver.nightly == 1 %}
-#### DOCS **[nightly ({{ site.data.releases.nightly-version }})](/api/{{ api.path }}/nightly)**
-{% elsif ver.legacy == 0 and ver.stable == 1 and ver.nightly == 0 %}
-#### DOCS **[stable ({{ site.data.releases.stable-version }})](/api/{{ api.path }}/stable)**
-{% elsif ver.legacy == 0 and ver.stable == 1 and ver.nightly == 1 %}
-#### DOCS **[stable ({{ site.data.releases.stable-version }})](/api/{{ api.path }}/stable) | [nightly ({{ site.data.releases.nightly-version }})](/api/{{ api.path }}/nightly)**
-{% elsif ver.legacy == 1 and ver.stable == 1 and ver.nightly == 1 %}
-#### DOCS **[stable ({{ site.data.releases.stable-version }})](/api/{{ api.path }}/stable) | [nightly ({{ site.data.releases.nightly-version }})](/api/{{ api.path }}/nightly) | [legacy ({{ site.data.releases.legacy-version }})](/api/{{ api.path }}/legacy)**
-{% endif %}
+#### DOCS {% for version_name in versions %} **[{{ version_name }} ({{ site.data.releases[version_name].version }})](/api/{{ api.path }}/{{ version }})** {% unless forloop.last %}|{% endunless %} {% endfor %}
 #### LINKS **[changelog]({{ api.cllink }}){:target="_blank"} | [github]({{ api.ghlink }}){:target="_blank"}**
 {: .mb-7 }
 {% endfor %}
