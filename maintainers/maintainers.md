@@ -23,7 +23,7 @@ Project Leads
 Operations
 {: .label .label-purple}
 
-## Release v{{ site.data.releases.nightly-version }} Schedule
+## Release v{{ site.data.releases.nightly.version }} Schedule
 
 **NOTE:** *Dates are subject to change at anytime. Completed release schedules are posted [here]({% link releases/schedule.md %}).*
 
