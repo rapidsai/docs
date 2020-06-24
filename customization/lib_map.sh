@@ -25,12 +25,12 @@ for FOLDER in api/*/ ; do
   DEFAULT_PATH=${LIB}
   cd ${FOLDER}
 
-  FOLDER_MAP=$(echo ${FOLDER_MAP} | jq ". + {${LIB}: {}}") # initialize empty JSON object for lib
+  FOLDER_MAP=$(echo ${FOLDER_MAP} | jq ". + {\"${LIB}\": {}}") # initialize empty JSON object for lib
 
   LIB_ROOT="api/${DEFAULT_PATH}"
   for VERSION in "nightly" "stable" "legacy"; do
     DEFAULT_PATH=${LIB_ROOT}
-    FOLDER_MAP=$(echo ${FOLDER_MAP} | jq ".${LIB}.${VERSION} = null")
+    FOLDER_MAP=$(echo ${FOLDER_MAP} | jq ".\"${LIB}\".${VERSION} = null")
 
     if [ -d "${VERSION}" ]; then
       DEFAULT_PATH+="/${VERSION}"
@@ -45,7 +45,7 @@ for FOLDER in api/*/ ; do
         DEFAULT_PATH+="/api.html"
       fi
 
-      FOLDER_MAP=$(echo ${FOLDER_MAP} | jq ".${LIB}.${VERSION} = \"/${DEFAULT_PATH}\"") # Add version entry to lib object
+      FOLDER_MAP=$(echo ${FOLDER_MAP} | jq ".\"${LIB}\".${VERSION} = \"/${DEFAULT_PATH}\"") # Add version entry to lib object
     fi
   done
 
