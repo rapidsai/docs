@@ -17,21 +17,21 @@ Get started with our preconfigured RAPIDS demo container, featuring several demo
 
 ### Current Version
 
-#### RAPIDS {{ site.data.releases.stable-version }} - {{ site.data.releases.stable-date }}
+#### RAPIDS {{ site.data.releases.stable.version }} - {{ site.data.releases.stable.date }}
 
-Versions of libraries included in the `{{ site.data.releases.stable-version }}` images:
-- `cuDF` [v{{ site.data.releases.stable-version }}](https://github.com/rapidsai/cudf/tree/v{{ site.data.releases.stable-version }}.0), `cuML` [v{{ site.data.releases.stable-version }}](https://github.com/rapidsai/cuml/tree/v{{ site.data.releases.stable-version }}.0), `cuGraph` [v{{ site.data.releases.stable-version }}](https://github.com/rapidsai/cugraph/tree/v{{ site.data.releases.stable-version }}.0), `RMM` [v{{ site.data.releases.stable-version }}](https://github.com/rapidsai/RMM/tree/v{{ site.data.releases.stable-version }}.0), `cuSpatial` [v{{ site.data.releases.stable-version }}](https://github.com/rapidsai/cuspatial/tree/v{{ site.data.releases.stable-version }}.0), `cuxfilter` [v{{ site.data.releases.stable-version }}](https://github.com/rapidsai/cuxfilter/tree/branch-{{ site.data.releases.stable-version }}), `cuSignal` [v{{ site.data.releases.stable-version }}](https://github.com/rapidsai/cusignal/tree/branch-{{ site.data.releases.stable-version }})
+Versions of libraries included in the `{{ site.data.releases.stable.version }}` images:
+- `cuDF` [v{{ site.data.releases.stable.version }}](https://github.com/rapidsai/cudf/tree/v{{ site.data.releases.stable.version }}.0), `cuML` [v{{ site.data.releases.stable.version }}](https://github.com/rapidsai/cuml/tree/v{{ site.data.releases.stable.version }}.0), `cuGraph` [v{{ site.data.releases.stable.version }}](https://github.com/rapidsai/cugraph/tree/v{{ site.data.releases.stable.version }}.0), `RMM` [v{{ site.data.releases.stable.version }}](https://github.com/rapidsai/RMM/tree/v{{ site.data.releases.stable.version }}.0), `cuSpatial` [v{{ site.data.releases.stable.version }}](https://github.com/rapidsai/cuspatial/tree/v{{ site.data.releases.stable.version }}.0), `cuxfilter` [v{{ site.data.releases.stable.version }}](https://github.com/rapidsai/cuxfilter/tree/branch-{{ site.data.releases.stable.version }}), `cuSignal` [v{{ site.data.releases.stable.version }}](https://github.com/rapidsai/cusignal/tree/branch-{{ site.data.releases.stable.version }})
   - **NOTE:** `cuxfilter` is only available in `runtime` containers
-- `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-{{ site.data.releases.stable-version }}-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-{{ site.data.releases.stable-version }})
+- `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-{{ site.data.releases.stable.version }}-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-{{ site.data.releases.stable.version }})
 
 ### Former Version
 
-#### RAPIDS {{ site.data.releases.legacy-version }} - {{ site.data.releases.legacy-date }}
+#### RAPIDS {{ site.data.releases.legacy.version }} - {{ site.data.releases.legacy.date }}
 
-Versions of libraries included in the `{{ site.data.releases.legacy-version }}` images:
-- `cuDF` [v{{ site.data.releases.legacy-version }}](https://github.com/rapidsai/cudf/tree/v{{ site.data.releases.legacy-version }}.0), `cuML` [v{{ site.data.releases.legacy-version }}](https://github.com/rapidsai/cuml/tree/v{{ site.data.releases.legacy-version }}.0), `cuGraph` [v{{ site.data.releases.legacy-version }}](https://github.com/rapidsai/cugraph/tree/v{{ site.data.releases.legacy-version }}.0), `RMM` [v{{ site.data.releases.legacy-version }}](https://github.com/rapidsai/RMM/tree/v{{ site.data.releases.legacy-version }}.0), `cuSpatial` [v{{ site.data.releases.legacy-version }}](https://github.com/rapidsai/cuspatial/tree/v{{ site.data.releases.legacy-version }}.0), `cuxfilter` [v{{ site.data.releases.legacy-version }}](https://github.com/rapidsai/cuxfilter/tree/branch-{{ site.data.releases.legacy-version }}), `cuSignal` [v{{ site.data.releases.legacy-version }}](https://github.com/rapidsai/cusignal/tree/branch-{{ site.data.releases.legacy-version }})
+Versions of libraries included in the `{{ site.data.releases.legacy.version }}` images:
+- `cuDF` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/cudf/tree/v{{ site.data.releases.legacy.version }}.0), `cuML` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/cuml/tree/v{{ site.data.releases.legacy.version }}.0), `cuGraph` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/cugraph/tree/v{{ site.data.releases.legacy.version }}.0), `RMM` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/RMM/tree/v{{ site.data.releases.legacy.version }}.0), `cuSpatial` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/cuspatial/tree/v{{ site.data.releases.legacy.version }}.0), `cuxfilter` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/cuxfilter/tree/branch-{{ site.data.releases.legacy.version }}), `cuSignal` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/cusignal/tree/branch-{{ site.data.releases.legacy.version }})
   - **NOTE:** `cuxfilter` is only available in `runtime` containers
-- `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-{{ site.data.releases.legacy-version }}-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-{{ site.data.releases.legacy-version }})
+- `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-{{ site.data.releases.legacy.version }}-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-{{ site.data.releases.legacy.version }})
 
 ### Image Types
 
@@ -54,7 +54,7 @@ The [rapidsai/rapidsai-dev](https://hub.docker.com/r/rapidsai/rapidsai-dev/tags)
 
 The tag naming scheme for RAPIDS images incorporates key platform details into the tag as shown below:
 ```
-{{ site.data.releases.stable-version }}-cuda10.1-runtime-ubuntu18.04-py3.7
+{{ site.data.releases.stable.version }}-cuda10.1-runtime-ubuntu18.04-py3.7
  ^       ^    ^        ^         ^
  |       |    type     |         python version
  |       |             |
@@ -100,7 +100,7 @@ $ docker run --runtime=nvidia --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
 
 ### Use JupyterLab to Explore the Notebooks
 
-Notebooks can be found in the following directories within the {{ site.data.releases.stable-version }} container:
+Notebooks can be found in the following directories within the {{ site.data.releases.stable.version }} container:
 
 * `/rapids/notebooks/clx` - CLX demo notebooks
 * `/rapids/notebooks/cugraph` - cuGraph demo notebooks
@@ -109,7 +109,7 @@ Notebooks can be found in the following directories within the {{ site.data.rele
 * `/rapids/notebooks/cuxfilter` - cuXfilter demo notebooks
 * `/rapids/notebooks/xgboost` - XGBoost demo notebooks
 
-For a full description of each notebook, see the [README](https://github.com/rapidsai/notebooks/blob/branch-{{ site.data.releases.stable-version }}/README.md) in the notebooks repository.
+For a full description of each notebook, see the [README](https://github.com/rapidsai/notebooks/blob/branch-{{ site.data.releases.stable.version }}/README.md) in the notebooks repository.
 
 ### Custom Data and Advanced Usage
 
