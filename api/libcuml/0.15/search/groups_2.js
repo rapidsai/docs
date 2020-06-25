@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['fit_20functions_2545',['Fit functions',['../group__DecisionTreeClassifierFit.html',1,'']]],
-  ['fit_20functions_2546',['Fit functions',['../group__DecisionTreeRegressorFit.html',1,'']]],
-  ['forecast_20methods_2547',['Forecast methods',['../group__HoltWinterForecast.html',1,'']]],
-  ['fit_20an_20ordinary_20least_20squares_20model_2548',['fit an ordinary least squares model',['../group__olsFit.html',1,'']]],
-  ['fit_20a_20ridge_20regression_20model_20_28l2_20regularized_20least_20squares_29_2549',['fit a ridge regression model (l2 regularized least squares)',['../group__ridgeFit.html',1,'']]]
+  ['fit_20functions_2571',['Fit functions',['../group__DecisionTreeClassifierFit.html',1,'']]],
+  ['fit_20functions_2572',['Fit functions',['../group__DecisionTreeRegressorFit.html',1,'']]],
+  ['forecast_20methods_2573',['Forecast methods',['../group__HoltWinterForecast.html',1,'']]],
+  ['fit_20an_20ordinary_20least_20squares_20model_2574',['fit an ordinary least squares model',['../group__olsFit.html',1,'']]],
+  ['fit_20a_20ridge_20regression_20model_20_28l2_20regularized_20least_20squares_29_2575',['fit a ridge regression model (l2 regularized least squares)',['../group__ridgeFit.html',1,'']]]
 ];
