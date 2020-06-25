@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['thread_5fsafe_5fresource_5fadaptor_131',['thread_safe_resource_adaptor',['../classrmm_1_1mr_1_1thread__safe__resource__adaptor.html',1,'rmm::mr']]],
-  ['thrust_5fallocator_132',['thrust_allocator',['../classrmm_1_1mr_1_1thrust__allocator.html',1,'rmm::mr']]]
+  ['thread_5fsafe_5fresource_5fadaptor_114',['thread_safe_resource_adaptor',['../classrmm_1_1mr_1_1thread__safe__resource__adaptor.html',1,'rmm::mr']]],
+  ['thrust_5fallocator_115',['thrust_allocator',['../classrmm_1_1mr_1_1thrust__allocator.html',1,'rmm::mr']]]
 ];

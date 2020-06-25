@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['is_5fhead_209',['is_head',['../structrmm_1_1mr_1_1detail_1_1block.html#a76479bc4069d39991400ca1074d80523',1,'rmm::mr::detail::block']]]
+  ['numstreams_183',['numStreams',['../structcnmemDevice__t__.html#a8808c3f31ad0f3b35d0421cd8ed87c9f',1,'cnmemDevice_t_']]]
 ];
