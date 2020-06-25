@@ -86,6 +86,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#fftpack-helper">FFTPack Helper</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#io">IO</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-cusignal.io.reader">Reader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cusignal.io.writer">Writer</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -4473,6 +4478,42 @@ Science, vol 4485. Springer, Berlin, Heidelberg</p>
 <div class="section" id="module-cusignal.utils.arraytools">
 <span id="array-tools"></span><h3>Array Tools<a class="headerlink" href="#module-cusignal.utils.arraytools" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
+<dt id="cusignal.utils.arraytools.get_pinned_array">
+<code class="sig-prename descclassname">cusignal.utils.arraytools.</code><code class="sig-name descname">get_pinned_array</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cusignal.utils.arraytools.get_pinned_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return populated pinned memory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">cupy.ndarray or numpy.ndarray</span></dt><dd><p>The array to be copied to shared buffer</p>
+</dd>
+<dt><strong>strides: int or None</strong></dt><dd></dd>
+<dt><strong>order: char</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt id="cusignal.utils.arraytools.get_pinned_mem">
+<code class="sig-prename descclassname">cusignal.utils.arraytools.</code><code class="sig-name descname">get_pinned_mem</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span></em>, <em class="sig-param"><span class="n">dtype</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cusignal.utils.arraytools.get_pinned_mem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a pinned memory allocation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>size</strong><span class="classifier">int or tuple of ints</span></dt><dd><p>Output shape.</p>
+</dd>
+<dt><strong>dtype</strong><span class="classifier">data-type</span></dt><dd><p>Output data type.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>Pinned memory numpy array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
 <dt id="cusignal.utils.arraytools.get_shared_array">
 <code class="sig-prename descclassname">cusignal.utils.arraytools.</code><code class="sig-name descname">get_shared_array</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">strides</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">'C'</span></em>, <em class="sig-param"><span class="n">stream</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">portable</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">wc</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cusignal.utils.arraytools.get_shared_array" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return populated shared memory between GPU and CPU.</p>
@@ -4561,6 +4602,165 @@ compute, 1.7 times as long as the 5-smooth size:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">fftpack</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">16384</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd></dl>
+</div>
+</div>
+<div class="section" id="io">
+<h2>IO<a class="headerlink" href="#io" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cusignal.io.reader">
+<span id="reader"></span><h3>Reader<a class="headerlink" href="#module-cusignal.io.reader" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="cusignal.io.reader.read_bin">
+<code class="sig-prename descclassname">cusignal.io.reader.</code><code class="sig-name descname">read_bin</code><span class="sig-paren">(</span><em class="sig-param">file</em>, <em class="sig-param">buffer=None</em>, <em class="sig-param">dtype=&lt;class 'numpy.uint8'&gt;</em>, <em class="sig-param">num_samples=None</em>, <em class="sig-param">offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#cusignal.io.reader.read_bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads binary file into GPU memory.
+Can be used as a building blocks for custom unpack/pack
+data readers/writers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>file</strong><span class="classifier">str</span></dt><dd><p>A string of filename to be read to GPU.</p>
+</dd>
+<dt><strong>buffer</strong><span class="classifier">ndarray, optional</span></dt><dd><p>Pinned memory buffer to use when copying data from GPU.</p>
+</dd>
+<dt><strong>dtype</strong><span class="classifier">data-type, optional</span></dt><dd><p>Any object that can be interpreted as a numpy data type.</p>
+</dd>
+<dt><strong>num_samples</strong><span class="classifier">int, optional</span></dt><dd><p>Number of samples to be loaded to GPU. If set to 0,
+read in all samples.</p>
+</dd>
+<dt><strong>offset</strong><span class="classifier">int, optional</span></dt><dd><p>In the file, array data starts at this offset.
+Since offset is measured in bytes, it should normally
+be a multiple of the byte-size of dtype.</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>An 1-dimensional array containing binary data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt id="cusignal.io.reader.read_sigmf">
+<code class="sig-prename descclassname">cusignal.io.reader.</code><code class="sig-name descname">read_sigmf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_file</span></em>, <em class="sig-param"><span class="n">meta_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">buffer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_samples</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cusignal.io.reader.read_sigmf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and unpack binary file, with SigMF spec, to GPU memory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data_file</strong><span class="classifier">str</span></dt><dd><p>File contain sigmf data.</p>
+</dd>
+<dt><strong>meta_file</strong><span class="classifier">str, optional</span></dt><dd><p>File contain sigmf meta.</p>
+</dd>
+<dt><strong>buffer</strong><span class="classifier">ndarray, optional</span></dt><dd><p>Pinned memory buffer to use when copying data from GPU.</p>
+</dd>
+<dt><strong>num_samples</strong><span class="classifier">int, optional</span></dt><dd><p>Number of samples to be loaded to GPU. If set to 0,
+read in all samples.</p>
+</dd>
+<dt><strong>offset</strong><span class="classifier">int, optional</span></dt><dd><p>May be specified as a non-negative integer offset.
+It is the number of samples before loading ‘num_samples’.
+‘offset’ must be a multiple of ALLOCATIONGRANULARITY which
+is equal to PAGESIZE on Unix systems.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>An 1-dimensional array containing unpacked binary data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt id="cusignal.io.reader.unpack_bin">
+<code class="sig-prename descclassname">cusignal.io.reader.</code><code class="sig-name descname">unpack_bin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">binary</span></em>, <em class="sig-param"><span class="n">dtype</span></em>, <em class="sig-param"><span class="n">endianness</span><span class="o">=</span><span class="default_value">'L'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cusignal.io.reader.unpack_bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unpack binary file.
+If endianness is big-endian, it my be converted
+to little endian for NVIDIA GPU compatibility.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>binary</strong><span class="classifier">ndarray</span></dt><dd><p>The binary array to be unpack.</p>
+</dd>
+<dt><strong>dtype</strong><span class="classifier">data-type, optional</span></dt><dd><p>Any object that can be interpreted as a numpy data type.</p>
+</dd>
+<dt><strong>endianness</strong><span class="classifier">{‘L’, ‘B’}, optional</span></dt><dd><p>Data set byte order</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>An 1-dimensional array containing unpacked binary data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+</div>
+<div class="section" id="module-cusignal.io.writer">
+<span id="writer"></span><h3>Writer<a class="headerlink" href="#module-cusignal.io.writer" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="cusignal.io.writer.pack_bin">
+<code class="sig-prename descclassname">cusignal.io.writer.</code><code class="sig-name descname">pack_bin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cusignal.io.writer.pack_bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pack binary arrary.
+Data will be packed with little endian for NVIDIA GPU compatibility.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>in1</strong><span class="classifier">ndarray</span></dt><dd><p>The ndarray to be pack at binary.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>An 1-dimensional array containing packed binary data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt id="cusignal.io.writer.write_bin">
+<code class="sig-prename descclassname">cusignal.io.writer.</code><code class="sig-name descname">write_bin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span></em>, <em class="sig-param"><span class="n">binary</span></em>, <em class="sig-param"><span class="n">buffer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">append</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cusignal.io.writer.write_bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes binary array to file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>file</strong><span class="classifier">str</span></dt><dd><p>A string of filename to store output.</p>
+</dd>
+<dt><strong>binary</strong><span class="classifier">ndarray</span></dt><dd><p>Binary array to be written to file.</p>
+</dd>
+<dt><strong>buffer</strong><span class="classifier">ndarray, optional</span></dt><dd><p>Pinned memory buffer to use when copying data from GPU.</p>
+</dd>
+<dt><strong>append</strong><span class="classifier">bool, optional</span></dt><dd><p>Append to file if created.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray</span></dt><dd><p>An 1-dimensional array containing binary data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
+<dt id="cusignal.io.writer.write_sigmf">
+<code class="sig-prename descclassname">cusignal.io.writer.</code><code class="sig-name descname">write_sigmf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_file</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">buffer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">append</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cusignal.io.writer.write_sigmf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pack and write binary array to file, with SigMF spec.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>file</strong><span class="classifier">str</span></dt><dd><p>A string of filename to be read/unpacked to GPU.</p>
+</dd>
+<dt><strong>binary</strong><span class="classifier">ndarray</span></dt><dd><p>Binary array to be written to file.</p>
+</dd>
+<dt><strong>buffer</strong><span class="classifier">ndarray, optional</span></dt><dd><p>Pinned memory buffer to use when copying data from GPU.</p>
+</dd>
+<dt><strong>append</strong><span class="classifier">bool, optional</span></dt><dd><p>Append to file if created.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 </div>
 </div>
