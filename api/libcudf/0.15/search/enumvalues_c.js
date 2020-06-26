@@ -11,7 +11,7 @@ var searchData=
   ['null_5fequals_1533',['NULL_EQUALS',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcacb8d87e20fe7c6f3786fb063814420e5',1,'cudf']]],
   ['null_5fmax_1534',['NULL_MAX',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcaf96f1246ae59f3f396dd304c4e3efb2f',1,'cudf']]],
   ['null_5fmin_1535',['NULL_MIN',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcadb8b769d7a9c9d41242eb4b721228c50',1,'cudf']]],
-  ['num_5ftype_5fids_1536',['NUM_TYPE_IDS',['../group__utility__types.html#ggacd4cd7157c4379954b5772936f89c59ba0f6b1e874ab643a0f237082cb35acad5',1,'cudf']]],
+  ['num_5ftype_5fids_1536',['NUM_TYPE_IDS',['../group__utility__types.html#ggadf077607da617d1dadcc5417e2783539a44b418588ffa2779aaf862dc7aa81f8a',1,'cudf']]],
   ['numeric_1537',['NUMERIC',['../group__strings__types.html#ggacdc71043841f369de3cc8dd827a0eea1ae2a7c72103209f6dbc87d7d807adbc69',1,'cudf::strings']]],
   ['nunique_1538',['NUNIQUE',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca575437b89e591628c1e9c33169831045',1,'cudf::aggregation']]]
 ];

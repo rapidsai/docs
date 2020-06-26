@@ -11,7 +11,7 @@ var searchData=
   ['bitwise_5fand_48',['BITWISE_AND',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcaaa5f2eafabf8fa18cbb708c657f37245',1,'cudf']]],
   ['bitwise_5for_49',['BITWISE_OR',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca0d89cfe1f2f7f0c2deb3d35455783ab9',1,'cudf']]],
   ['bitwise_5fxor_50',['BITWISE_XOR',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca6d7cca7c0f0f278c56131a25e77c4a5c',1,'cudf']]],
-  ['bool8_51',['BOOL8',['../group__utility__types.html#ggacd4cd7157c4379954b5772936f89c59ba9100ee556e5cf9b6dada6c7c506fa138',1,'cudf']]],
+  ['bool8_51',['BOOL8',['../group__utility__types.html#ggadf077607da617d1dadcc5417e2783539a05afd9eb8887a406d47474cd3809a5dd',1,'cudf']]],
   ['boolean_5fmask_5fscatter_52',['boolean_mask_scatter',['../group__copy__scatter.html#gace0d68e0434379f57500660e098b9a0f',1,'cudf::boolean_mask_scatter(table_view const &amp;input, table_view const &amp;target, column_view const &amp;boolean_mask, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())'],['../group__copy__scatter.html#gac5cf4af705514048936c73914335b998',1,'cudf::boolean_mask_scatter(std::vector&lt; std::reference_wrapper&lt; scalar &gt;&gt; const &amp;input, table_view const &amp;target, column_view const &amp;boolean_mask, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())']]],
   ['bools_5fto_5fmask_53',['bools_to_mask',['../group__transformation__transform.html#ga72812eac0b41d00ad001b57dca04ea2c',1,'cudf']]],
   ['both_54',['BOTH',['../group__strings__modify.html#ggace598ecf9030296eeebfef46251d7d52a6328e5e3186c227a021ef2ff77e40197',1,'cudf::strings']]],

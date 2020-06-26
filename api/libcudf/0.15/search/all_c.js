@@ -12,7 +12,7 @@ var searchData=
   ['linear_365',['LINEAR',['../group__utility__types.html#gga9cd17c1cdf028ead9a4783f605276ab3aaac544aacc3615aada24897a215f5046',1,'cudf']]],
   ['lines_366',['lines',['../structcudf_1_1io_1_1read__json__args.html#ab9b0d9ef6941ce61cdea73ec2f4209d9',1,'cudf::io::read_json_args']]],
   ['lineterminator_367',['lineterminator',['../structcudf_1_1io_1_1read__csv__args.html#a829adab29d042fdc08155bccf57a1be3',1,'cudf::io::read_csv_args::lineterminator()'],['../structcudf_1_1io_1_1detail_1_1csv_1_1reader__options.html#afe89b170595f111fb1fb156c80c76b41',1,'cudf::io::detail::csv::reader_options::lineterminator()']]],
-  ['list_368',['LIST',['../group__utility__types.html#ggacd4cd7157c4379954b5772936f89c59bae483076112011f632916ad85a059d6c3',1,'cudf']]],
+  ['list_368',['LIST',['../group__utility__types.html#ggadf077607da617d1dadcc5417e2783539a298cb25408234de02baf2085803a464a',1,'cudf']]],
   ['list_5fview_369',['list_view',['../classcudf_1_1list__view.html',1,'cudf']]],
   ['list_5fview_2ecuh_370',['list_view.cuh',['../list__view_8cuh.html',1,'']]],
   ['lists_371',['Lists',['../group__lists__classes.html',1,'']]],
