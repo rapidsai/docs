@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['dangling_5ffunctor_19',['dangling_functor',['../structcugraph_1_1detail_1_1dangling__functor.html',1,'cugraph::detail::dangling_functor&lt; T &gt;'],['../structnvlouvain_1_1dangling__functor.html',1,'nvlouvain::dangling_functor&lt; T &gt;']]],
+  ['dangling_5ffunctor_19',['dangling_functor',['../structnvlouvain_1_1dangling__functor.html',1,'nvlouvain::dangling_functor&lt; T &gt;'],['../structcugraph_1_1detail_1_1dangling__functor.html',1,'cugraph::detail::dangling_functor&lt; T &gt;']]],
   ['db_5fcolumn_5findex_20',['db_column_index',['../classcugraph_1_1db_1_1db__column__index.html',1,'cugraph::db']]],
   ['db_5fobject_21',['db_object',['../classcugraph_1_1db_1_1db__object.html',1,'cugraph::db']]],
   ['db_5fpattern_22',['db_pattern',['../classcugraph_1_1db_1_1db__pattern.html',1,'cugraph::db']]],

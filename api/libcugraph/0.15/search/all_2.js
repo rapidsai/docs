@@ -6,10 +6,10 @@ var searchData=
   ['copy_20methods_10',['Copy methods',['../group__Copy.html',1,'']]],
   ['core_5fnumber_11',['core_number',['../namespacecugraph.html#a8586a22ab60adaa041bc492e5e98beeb',1,'cugraph']]],
   ['cstablechecker_12',['CStableChecker',['../structCStableChecker.html',1,'']]],
-  ['cuda_5ferror_13',['cuda_error',['../structcugraph_1_1cuda__error.html',1,'cugraph']]],
-  ['cugraph_14',['cugraph',['../namespacecugraph.html',1,'']]],
-  ['cugraph_5fcc_5ft_15',['cugraph_cc_t',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27',1,'cugraph']]],
-  ['cugraph_5fstrong_16',['CUGRAPH_STRONG',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27a5882369885616cc6ba190202b140ee02',1,'cugraph']]],
-  ['cusparse_17',['Cusparse',['../classcugraph_1_1detail_1_1Cusparse.html',1,'cugraph::detail']]],
-  ['cusparsecsrmv_18',['CusparseCsrMV',['../classcugraph_1_1detail_1_1CusparseCsrMV.html',1,'cugraph::detail']]]
+  ['cugraph_13',['cugraph',['../namespacecugraph.html',1,'']]],
+  ['cugraph_5fcc_5ft_14',['cugraph_cc_t',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27',1,'cugraph']]],
+  ['cugraph_5fstrong_15',['CUGRAPH_STRONG',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27a5882369885616cc6ba190202b140ee02',1,'cugraph']]],
+  ['cusparse_16',['Cusparse',['../classcugraph_1_1detail_1_1Cusparse.html',1,'cugraph::detail']]],
+  ['cusparsecsrmv_17',['CusparseCsrMV',['../classcugraph_1_1detail_1_1CusparseCsrMV.html',1,'cugraph::detail']]],
+  ['cusparsecsrmv_3c_20wt_20_3e_18',['CusparseCsrMV&lt; WT &gt;',['../classcugraph_1_1detail_1_1CusparseCsrMV.html',1,'cugraph::detail']]]
 ];

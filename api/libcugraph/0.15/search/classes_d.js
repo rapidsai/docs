@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['trianglescount_149',['TrianglesCount',['../classnvgraph_1_1TrianglesCount.html',1,'nvgraph']]],
-  ['type_5futils_150',['type_utils',['../structnvgraph_1_1type__utils.html',1,'nvgraph']]],
-  ['type_5futils_3c_20int_20_3e_151',['type_utils&lt; int &gt;',['../structnvgraph_1_1type__utils_3_01int_01_4.html',1,'nvgraph']]],
-  ['type_5futils_3c_20int64_5ft_20_3e_152',['type_utils&lt; int64_t &gt;',['../structnvgraph_1_1type__utils_3_01int64__t_01_4.html',1,'nvgraph']]]
+  ['scc_5fdata_145',['SCC_Data',['../structSCC__Data.html',1,'']]],
+  ['self_5floop_5fflagger_146',['self_loop_flagger',['../structself__loop__flagger.html',1,'']]],
+  ['spmat_5ft_147',['spmat_t',['../structnvgraph_1_1spmat__t.html',1,'nvgraph']]],
+  ['spmat_5ft_3c_20indextype_20_3e_148',['spmat_t&lt; IndexType &gt;',['../structnvgraph_1_1spmat__t.html',1,'nvgraph']]],
+  ['square_149',['square',['../structcugraph_1_1detail_1_1square.html',1,'cugraph::detail::square&lt; T &gt;'],['../structnvlouvain_1_1square.html',1,'nvlouvain::square&lt; T &gt;']]],
+  ['sssp_150',['SSSP',['../classcugraph_1_1detail_1_1SSSP.html',1,'cugraph::detail']]]
 ];
