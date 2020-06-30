@@ -38,5 +38,8 @@ var searchData=
   ['assert_45',['ASSERT',['../utils_8hpp.html#a210a06563e52304b8df6f984e9d32d49',1,'utils.hpp']]],
   ['assert_5fdevice_5fmem_46',['ASSERT_DEVICE_MEM',['../group__Copy.html#gae06a5b6e576402adcabd0cb54ee7fe07',1,'MLCommon']]],
   ['auto_47',['AUTO',['../namespaceML_1_1fil.html#a2260584f7152bb5497b528729b6bd216ad40151a3cca4ebf5b51bd41adba66f7f',1,'ML::fil']]],
-  ['avg_48',['AVG',['../namespaceML_1_1fil.html#a47faec5c2359b42a308e0d55c195aca9aa3ec82271336802c47a80e6cb8801d83',1,'ML::fil']]]
+  ['auto_5farima_2ecu_48',['auto_arima.cu',['../auto__arima_8cu.html',1,'']]],
+  ['auto_5farima_2ecuh_49',['auto_arima.cuh',['../auto__arima_8cuh.html',1,'']]],
+  ['auto_5farima_2eh_50',['auto_arima.h',['../auto__arima_8h.html',1,'']]],
+  ['avg_51',['AVG',['../namespaceML_1_1fil.html#a47faec5c2359b42a308e0d55c195aca9aa3ec82271336802c47a80e6cb8801d83',1,'ML::fil']]]
 ];

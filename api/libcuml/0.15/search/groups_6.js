@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['scikit_2dlearn_2desq_20make_5fblobs_2580',['scikit-learn-esq make_blobs',['../group__MakeBlobs.html',1,'']]]
+  ['scikit_2dlearn_2desq_20make_5fblobs_2612',['scikit-learn-esq make_blobs',['../group__MakeBlobs.html',1,'']]]
 ];
