@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['pinned_5fmemory_5fresource_111',['pinned_memory_resource',['../classrmm_1_1mr_1_1pinned__memory__resource.html',1,'rmm::mr']]],
-  ['pool_5fmemory_5fresource_112',['pool_memory_resource',['../classrmm_1_1mr_1_1pool__memory__resource.html',1,'rmm::mr']]]
+  ['out_5fof_5frange_118',['out_of_range',['../classrmm_1_1out__of__range.html',1,'rmm']]]
 ];

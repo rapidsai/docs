@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['value_82',['value',['../classrmm_1_1device__scalar.html#acbf90e1782a29e486c9305753cf4b859',1,'rmm::device_scalar']]]
+  ['value_89',['value',['../classrmm_1_1device__scalar.html#acbf90e1782a29e486c9305753cf4b859',1,'rmm::device_scalar']]]
 ];

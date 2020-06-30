@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['rebind_113',['rebind',['../structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html',1,'rmm::mr::thrust_allocator']]]
+  ['pinned_5fmemory_5fresource_119',['pinned_memory_resource',['../classrmm_1_1mr_1_1pinned__memory__resource.html',1,'rmm::mr']]],
+  ['pool_5fmemory_5fresource_120',['pool_memory_resource',['../classrmm_1_1mr_1_1pool__memory__resource.html',1,'rmm::mr']]]
 ];
