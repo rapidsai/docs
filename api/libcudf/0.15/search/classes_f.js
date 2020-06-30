@@ -1,24 +1,12 @@
 var searchData=
 [
-  ['table_893',['table',['../classcudf_1_1table.html',1,'cudf']]],
-  ['table_5fdevice_5fview_894',['table_device_view',['../classcudf_1_1table__device__view.html',1,'cudf']]],
-  ['table_5fdevice_5fview_5fbase_895',['table_device_view_base',['../classcudf_1_1detail_1_1table__device__view__base.html',1,'cudf::detail']]],
-  ['table_5fdevice_5fview_5fbase_3c_20column_5fdevice_5fview_2c_20table_5fview_20_3e_896',['table_device_view_base&lt; column_device_view, table_view &gt;',['../classcudf_1_1detail_1_1table__device__view__base.html',1,'cudf::detail']]],
-  ['table_5fdevice_5fview_5fbase_3c_20mutable_5fcolumn_5fdevice_5fview_2c_20mutable_5ftable_5fview_20_3e_897',['table_device_view_base&lt; mutable_column_device_view, mutable_table_view &gt;',['../classcudf_1_1detail_1_1table__device__view__base.html',1,'cudf::detail']]],
-  ['table_5fmetadata_898',['table_metadata',['../structcudf_1_1io_1_1table__metadata.html',1,'cudf::io']]],
-  ['table_5fmetadata_5fwith_5fnullability_899',['table_metadata_with_nullability',['../structcudf_1_1io_1_1table__metadata__with__nullability.html',1,'cudf::io']]],
-  ['table_5fview_900',['table_view',['../classcudf_1_1table__view.html',1,'cudf']]],
-  ['table_5fview_5fbase_901',['table_view_base',['../classcudf_1_1detail_1_1table__view__base.html',1,'cudf::detail']]],
-  ['table_5fview_5fbase_3c_20column_5fview_20_3e_902',['table_view_base&lt; column_view &gt;',['../classcudf_1_1detail_1_1table__view__base.html',1,'cudf::detail']]],
-  ['table_5fview_5fbase_3c_20mutable_5fcolumn_5fview_20_3e_903',['table_view_base&lt; mutable_column_view &gt;',['../classcudf_1_1detail_1_1table__view__base.html',1,'cudf::detail']]],
-  ['table_5fwith_5fmetadata_904',['table_with_metadata',['../structcudf_1_1io_1_1table__with__metadata.html',1,'cudf::io']]],
-  ['timestamp_905',['timestamp',['../structcudf_1_1detail_1_1timestamp.html',1,'cudf::detail']]],
-  ['timestamp_5fscalar_906',['timestamp_scalar',['../structcudf_1_1timestamp__scalar.html',1,'cudf']]],
-  ['timestamp_5fscalar_5fdevice_5fview_907',['timestamp_scalar_device_view',['../classcudf_1_1timestamp__scalar__device__view.html',1,'cudf']]],
-  ['type_5fto_5fname_908',['type_to_name',['../structcudf_1_1type__to__name.html',1,'cudf']]],
-  ['type_5fto_5fscalar_5ftype_5fimpl_909',['type_to_scalar_type_impl',['../structcudf_1_1type__to__scalar__type__impl.html',1,'cudf']]],
-  ['type_5fto_5fscalar_5ftype_5fimpl_3c_20cudf_3a_3adictionary32_20_3e_910',['type_to_scalar_type_impl&lt; cudf::dictionary32 &gt;',['../structcudf_1_1type__to__scalar__type__impl_3_01cudf_1_1dictionary32_01_4.html',1,'cudf']]],
-  ['type_5fto_5fscalar_5ftype_5fimpl_3c_20cudf_3a_3alist_5fview_20_3e_911',['type_to_scalar_type_impl&lt; cudf::list_view &gt;',['../structcudf_1_1type__to__scalar__type__impl_3_01cudf_1_1list__view_01_4.html',1,'cudf']]],
-  ['type_5fto_5fscalar_5ftype_5fimpl_3c_20cudf_3a_3astring_5fview_20_3e_912',['type_to_scalar_type_impl&lt; cudf::string_view &gt;',['../structcudf_1_1type__to__scalar__type__impl_3_01cudf_1_1string__view_01_4.html',1,'cudf']]],
-  ['type_5fto_5fscalar_5ftype_5fimpl_3c_20std_3a_3astring_20_3e_913',['type_to_scalar_type_impl&lt; std::string &gt;',['../structcudf_1_1type__to__scalar__type__impl_3_01std_1_1string_01_4.html',1,'cudf']]]
+  ['scalar_889',['scalar',['../classcudf_1_1scalar.html',1,'cudf']]],
+  ['scalar_5fdevice_5fview_5fbase_890',['scalar_device_view_base',['../classcudf_1_1detail_1_1scalar__device__view__base.html',1,'cudf::detail']]],
+  ['scaled_5finteger_891',['scaled_integer',['../structnumeric_1_1scaled__integer.html',1,'numeric']]],
+  ['sink_5finfo_892',['sink_info',['../structcudf_1_1io_1_1sink__info.html',1,'cudf::io']]],
+  ['source_5finfo_893',['source_info',['../structcudf_1_1io_1_1source__info.html',1,'cudf::io']]],
+  ['string_5fscalar_894',['string_scalar',['../classcudf_1_1string__scalar.html',1,'cudf']]],
+  ['string_5fscalar_5fdevice_5fview_895',['string_scalar_device_view',['../classcudf_1_1string__scalar__device__view.html',1,'cudf']]],
+  ['string_5fview_896',['string_view',['../classcudf_1_1string__view.html',1,'cudf']]],
+  ['strings_5fcolumn_5fview_897',['strings_column_view',['../classcudf_1_1strings__column__view.html',1,'cudf']]]
 ];
