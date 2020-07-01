@@ -8,7 +8,7 @@ var searchData=
   ['db_5fresult_24',['db_result',['../classcugraph_1_1db_1_1db__result.html',1,'cugraph::db']]],
   ['db_5ftable_25',['db_table',['../classcugraph_1_1db_1_1db__table.html',1,'cugraph::db']]],
   ['degree_26',['degree',['../classcugraph_1_1experimental_1_1GraphCOOView.html#a695ac23d78de44f6c29dd3157b8c7e5b',1,'cugraph::experimental::GraphCOOView::degree()'],['../classcugraph_1_1experimental_1_1GraphCompressedSparseBaseView.html#a07a7c518f0b27facfd04e53ada253fab',1,'cugraph::experimental::GraphCompressedSparseBaseView::degree()']]],
-  ['degree_5fiterator_27',['degree_iterator',['../structdegree__iterator.html',1,'degree_iterator&lt; edge_t &gt;'],['../structcugraph_1_1db_1_1degree__iterator.html',1,'cugraph::db::degree_iterator&lt; IndexType &gt;']]],
+  ['degree_5fiterator_27',['degree_iterator',['../structcugraph_1_1db_1_1degree__iterator.html',1,'cugraph::db::degree_iterator&lt; IndexType &gt;'],['../structdegree__iterator.html',1,'degree_iterator&lt; edge_t &gt;']]],
   ['deref_5ffunctor_28',['deref_functor',['../structderef__functor.html',1,'deref_functor&lt; It, edge_t &gt;'],['../structcugraph_1_1db_1_1deref__functor.html',1,'cugraph::db::deref_functor&lt; It, IndexType &gt;']]],
   ['dst_5findices_29',['dst_indices',['../classcugraph_1_1experimental_1_1GraphCOOView.html#a2b1ef432d5acff24868766495d6d13ec',1,'cugraph::experimental::GraphCOOView']]]
 ];
