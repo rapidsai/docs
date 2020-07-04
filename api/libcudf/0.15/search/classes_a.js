@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['mutable_5fcolumn_5fdevice_5fview_868',['mutable_column_device_view',['../classcudf_1_1mutable__column__device__view.html',1,'cudf']]],
-  ['mutable_5fcolumn_5fview_869',['mutable_column_view',['../classcudf_1_1mutable__column__view.html',1,'cudf']]],
-  ['mutable_5fcolumn_5fview_5fbase_870',['mutable_column_view_base',['../classcudf_1_1detail_1_1mutable__column__view__base.html',1,'cudf::detail']]],
-  ['mutable_5ftable_5fdevice_5fview_871',['mutable_table_device_view',['../classcudf_1_1mutable__table__device__view.html',1,'cudf']]],
-  ['mutable_5ftable_5fview_872',['mutable_table_view',['../classcudf_1_1mutable__table__view.html',1,'cudf']]],
-  ['mutable_5fvalue_5faccessor_873',['mutable_value_accessor',['../structcudf_1_1detail_1_1mutable__value__accessor.html',1,'cudf::detail']]]
+  ['list_5fview_863',['list_view',['../classcudf_1_1list__view.html',1,'cudf']]],
+  ['lists_5fcolumn_5fview_864',['lists_column_view',['../classcudf_1_1lists__column__view.html',1,'cudf']]],
+  ['logic_5ferror_865',['logic_error',['../structcudf_1_1logic__error.html',1,'cudf']]]
 ];

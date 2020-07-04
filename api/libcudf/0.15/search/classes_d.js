@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pair_5faccessor_878',['pair_accessor',['../structcudf_1_1detail_1_1pair__accessor.html',1,'cudf::detail']]]
+  ['order_5finfo_875',['order_info',['../structcudf_1_1order__info.html',1,'cudf']]]
 ];
