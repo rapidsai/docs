@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['libcugraph_69',['libcugraph',['../index.html',1,'']]],
-  ['logic_5ferror_70',['logic_error',['../structcugraph_1_1logic__error.html',1,'cugraph']]],
-  ['louvain_71',['louvain',['../namespacecugraph.html#ab5f3bcab8ac059258061c8b2dc5380d2',1,'cugraph']]]
+  ['libcugraph_72',['libcugraph',['../index.html',1,'']]],
+  ['logic_5ferror_73',['logic_error',['../structcugraph_1_1logic__error.html',1,'cugraph']]],
+  ['louvain_74',['louvain',['../namespacecugraph.html#ad6e6ce5956268ce5f1133930a3cee5bb',1,'cugraph']]]
 ];

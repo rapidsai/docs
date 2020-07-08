@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['num_5fconnectivity_5ftypes_226',['NUM_CONNECTIVITY_TYPES',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27a436bdad1238dd6b8309bdbd0150c0e65',1,'cugraph']]]
+  ['degree_5fdirection_5fcount_231',['DEGREE_DIRECTION_COUNT',['../namespacecugraph.html#a31902d040f48ca34b65c041847c3cd98afa48476d9be3504d991897f564b32427',1,'cugraph']]]
 ];

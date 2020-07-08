@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['k_5fcore_204',['k_core',['../namespacecugraph.html#a8f4653d80a07bc3703194a2ede066a97',1,'cugraph']]],
-  ['k_5ftruss_5fsubgraph_205',['k_truss_subgraph',['../namespacecugraph.html#ac1b153abaf4d37f58c9ba2c4c406047a',1,'cugraph']]],
-  ['katz_5fcentrality_206',['katz_centrality',['../namespacecugraph.html#a4a5cc4561f8d4351c342736c6231c560',1,'cugraph']]]
+  ['k_5fcore_208',['k_core',['../namespacecugraph.html#aa88abf7c5302925a86b6e6bca58c6440',1,'cugraph']]],
+  ['k_5ftruss_5fsubgraph_209',['k_truss_subgraph',['../namespacecugraph.html#ad4c86461ff6b2a96eac097eeece0a694',1,'cugraph']]],
+  ['katz_5fcentrality_210',['katz_centrality',['../namespacecugraph.html#aaba8880b35e0a04f7e216a43ea180fa9',1,'cugraph']]]
 ];

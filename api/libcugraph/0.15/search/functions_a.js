@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pagerank_210',['pagerank',['../namespacecugraph.html#a349b63a57a5799eaa785dc2b2441724f',1,'cugraph']]]
+  ['pagerank_214',['pagerank',['../namespacecugraph.html#a8e07829e671204ff42aa226f40ff92d5',1,'cugraph']]]
 ];
