@@ -65,12 +65,12 @@ Also consider the timing of when the next release is scheduled. If the freeze or
 Developers
 {: .label .label-green}
 1. Hotfix issues will be assigned to you
-2. Create your branch from `master` NOT the `M.B` branch
+2. Create your branch from `main` NOT the `M.B` branch
 3. Implement the fix succinctly
   1. Change the minimal amount of code required
   2. Update related documentation and unit tests
   3. It is acceptable to implement a quick fix and open a new issue for a more in depth solution
-4. Once complete, create a [pull request]({% link contributing/prs.md %}) targeting `master`
+4. Once complete, create a [pull request]({% link contributing/prs.md %}) targeting `main`
 5. Notify the project lead
 
 Project Leads

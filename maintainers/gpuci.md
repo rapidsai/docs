@@ -61,7 +61,7 @@ All jobs which use Docker run inside of the `gpuci/rapidsai-base` images.
 
 #### Conda environment
 
-The images contain a common conda environment with basic tools such as `python`, `cmake`, `make`, `cython`, and `flake8`. See the full list [here](https://github.com/rapidsai/gpuci-build-environment/blob/master/Dockerfile#L66)
+The images contain a common conda environment with basic tools such as `python`, `cmake`, `make`, `cython`, and `flake8`. See the full list [here](https://github.com/rapidsai/gpuci-build-environment/blob/main/Dockerfile#L66)
 
 The conda environment can be used in the scripts with `source activate gdf`
 
@@ -200,7 +200,7 @@ This script actually builds the code inside of a container. For most RAPIDS proj
 Additionally, this script should upload packages to Anaconda if necessary. The `GIT_BRANCH` variable can be used to determine what type of build:
 - `COMMIT_HASH` for PRs
 - `branch-x.y` for development branch builds
-- `master` for release builds
+- `main` for release builds
 
 ### ci/gpu/prebuild.sh
 
@@ -223,10 +223,10 @@ If the tests output in in XML format in `test-results/*.xml` or a file named `ju
 ### ci/releases/update-version.sh
 
 - Required: Only if auto-releasing is enabled
-- Job type: Master Branch only
+- Job type: Main Branch only
 - Docker: No
 
-This script is run with a parameter of `major`, `minor`, or `patch` to indicate what to release. gpuCI determines this based on where the commit is coming from. Merge commits from `branch-*` are minor releases whereas commits directly to master are patch releases. Major releases must be manually triggered.
+This script is run with a parameter of `major`, `minor`, or `patch` to indicate what to release. gpuCI determines this based on where the commit is coming from. Merge commits from `branch-*` are minor releases whereas commits directly to main are patch releases. Major releases must be manually triggered.
 
 The script should calculate the next version and update the source code, build scripts, and documentation with the new version.
 
