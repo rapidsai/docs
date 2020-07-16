@@ -31,7 +31,7 @@ RAPIDS uses a custom git branching model, adapted from git-flow to leverage the 
 
 ### Migrating projects
 
-For RAPIDS projects that are using another branching/development model, continue to develop with that approach until the next **minor** release. Given the version `M.A.0` (where `M` is the major version and `A` is the minor version), create a development branch `branch-M.B` where `B=A+1` from the `master` branch that has the latest minor release.
+For RAPIDS projects that are using another branching/development model, continue to develop with that approach until the next **minor** release. Given the version `M.A.0` (where `M` is the major version and `A` is the minor version), create a development branch `branch-M.B` where `B=A+1` from the `main` branch that has the latest minor release.
 
 From this point forward you can follow the git branching & release model used by the RAPIDS team.
 
@@ -105,7 +105,7 @@ Operations
 {: .label .label-purple}
 
 1. Beginning of the `release date` announce the release of `branch-M.B`
-2. Create release PR from `branch-M.B` that targets `master`
+2. Create release PR from `branch-M.B` that targets `main`
 3. Begin testing of conda, containers, and notebooks for correctness and functionality
 4. Work with development team to close outstanding PRs
 5. Review documentation to ensure version numbers and instructions are correct
