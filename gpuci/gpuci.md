@@ -1,6 +1,6 @@
 ---
 layout: default
-title: gpuCI
+title: gpuCI Usage Docs
 nav_order: 7
 has_children: false
 has_toc: true
