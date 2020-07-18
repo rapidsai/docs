@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>10 Minutes to Dask-XGBoost — cudf 0+untagged.1.g51ffc30 documentation</title>
+<title>10 Minutes to distributed GPU accelerated XGBoost using dmlc/xgboost’s Dask API — cudf 0+untagged.1.ga0695f0 documentation</title>
 <link href="_static/css/theme.css" rel="stylesheet" type="text/css"/>
 <link href="_static/pygments.css" rel="stylesheet" type="text/css"/>
 <link href="_static/copybutton.css" rel="stylesheet" type="text/css"/>
@@ -50,16 +50,18 @@
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="10min.html">10 Minutes to cuDF and Dask-cuDF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dask-cudf.html">Multi-GPU with Dask-cuDF</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">10 Minutes to Dask-XGBoost</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">10 Minutes to distributed GPU accelerated XGBoost using dmlc/xgboost’s Dask API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#Disable-NCCL-P2P.-Only-necessary-for-versions-of-NCCL-&lt;-2.4">Disable NCCL P2P. Only necessary for versions of NCCL &lt; 2.4</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Import-necessary-modules-and-initialize-the-Dask-cuDF-Cluster">Import necessary modules and initialize the Dask-cuDF Cluster</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Initialize-a-Random-Dataset">Initialize a Random Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Use-Dask-API-for-XGBoost">Use Dask API for XGBoost</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Define-Parameters-and-Train-with-XGBoost">Define Parameters and Train with XGBoost</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Inputs-for-dask_xgboost.train">Inputs for <code class="docutils literal notranslate"><span class="pre">dask_xgboost.train</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Inputs-for-xgb.dask.train">Inputs for <code class="docutils literal notranslate"><span class="pre">xgb.dask.train</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#Compute-Predictions-and-the-RMSE-Metric-for-the-Model">Compute Predictions and the RMSE Metric for the Model</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#How-to-run-prediction-via-dask_xgboost.predict">How to run prediction via <code class="docutils literal notranslate"><span class="pre">dask_xgboost.predict</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#How-to-run-prediction-via-xgb.dask.predict">How to run prediction via <code class="docutils literal notranslate"><span class="pre">xgb.dask.predict</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#How-to-run-prediction-via-booster.predict">How to run prediction via <code class="docutils literal notranslate"><span class="pre">booster.predict</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -80,7 +82,7 @@
 <div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a class="icon icon-home" href="index.html"></a> »</li>
-<li>10 Minutes to Dask-XGBoost</li>
+<li>10 Minutes to distributed GPU accelerated XGBoost using dmlc/xgboost’s Dask API</li>
 <li class="wy-breadcrumbs-aside">
 <a href="_sources/dask-xgb-10min.ipynb.txt" rel="nofollow"> View page source</a>
 </li>
@@ -343,10 +345,10 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="10-Minutes-to-Dask-XGBoost">
-<h1>10 Minutes to Dask-XGBoost<a class="headerlink" href="#10-Minutes-to-Dask-XGBoost" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference external" href="https://github.com/rapidsai/dask-xgboost/">RAPIDS Fork of Dask-XGBoost</a> enables XGBoost with the distributed CUDA DataFrame via Dask-cuDF. A user may pass Dask-XGBoost a reference to a distributed cuDF object, and start a training session over an entire cluster from Python. <a class="reference external" href="https://github.com/rapidsai/xgboost">The RAPIDS Fork of XGBoost</a> enables XGBoost with the CUDA DataFrame, and we are actively working to unify all of this functionality into a single API consumable from <a class="reference external" href="https://github.com/dmlc/xgboost">DMLC
-XGBoost</a></p>
+<div class="section" id="10-Minutes-to-distributed-GPU-accelerated-XGBoost-using-dmlc/xgboost's-Dask-API">
+<h1>10 Minutes to distributed GPU accelerated XGBoost using dmlc/xgboost’s Dask API<a class="headerlink" href="#10-Minutes-to-distributed-GPU-accelerated-XGBoost-using-dmlc/xgboost's-Dask-API" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/tutorials/dask.html">Dask API of DMLC XGBoost</a> enables distributed GPU accelerated XGBoost via distributed CUDA DataFrame, Dask-cuDF. A user may pass a reference to a distributed cuDF object, and start a training session over an entire cluster from Python. For a better understanding of this Dask API, please refer to <a class="reference external" href="https://medium.com/rapids-ai/a-new-official-dask-api-for-xgboost-e8b10f3d1eb7">this article</a></p>
+<p>Let’s get started..</p>
 <div class="section" id="Disable-NCCL-P2P.-Only-necessary-for-versions-of-NCCL-&lt;-2.4">
 <h2>Disable NCCL P2P. Only necessary for versions of NCCL &lt; 2.4<a class="headerlink" href="#Disable-NCCL-P2P.-Only-necessary-for-versions-of-NCCL-&lt;-2.4" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
@@ -372,16 +374,16 @@ env: NCCL_P2P_DISABLE=1
 <p>Using <code class="docutils literal notranslate"><span class="pre">LocalCUDACluster</span></code> from Dask-CUDA to instantiate the single-node cluster.</p>
 <p>A user may instantiate a Dask-cuDF cluster like this:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="kn">import</span> <span class="nn">cupy</span>
 <span class="kn">import</span> <span class="nn">dask</span>
 <span class="kn">import</span> <span class="nn">dask_cudf</span>
-<span class="kn">import</span> <span class="nn">dask_xgboost</span>
+<span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">wait</span>
 <span class="kn">from</span> <span class="nn">dask_cuda</span> <span class="kn">import</span> <span class="n">LocalCUDACluster</span>
@@ -400,7 +402,7 @@ env: NCCL_P2P_DISABLE=1
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -409,16 +411,16 @@ env: NCCL_P2P_DISABLE=1
 <td style="vertical-align: top; border: 0px solid white">
 <h3 style="text-align: left;">Client</h3>
 <ul style="text-align: left; list-style: none; margin: 0; padding: 0;">
-<li><b>Scheduler: </b>tcp://172.17.0.7:46608</li>
-<li><b>Dashboard: </b><a href="http://172.17.0.7:8787/status" target="_blank">http://172.17.0.7:8787/status</a></li>
+<li><b>Scheduler: </b>tcp://10.33.227.157:36099</li>
+<li><b>Dashboard: </b><a href="http://10.33.227.157:8787/status" target="_blank">http://10.33.227.157:8787/status</a></li>
 </ul>
 </td>
 <td style="vertical-align: top; border: 0px solid white">
 <h3 style="text-align: left;">Cluster</h3>
 <ul style="text-align: left; list-style:none; margin: 0; padding: 0;">
-<li><b>Workers: </b>1</li>
-<li><b>Cores: </b>1</li>
-<li><b>Memory: </b>270.37 GB</li>
+<li><b>Workers: </b>7</li>
+<li><b>Cores: </b>7</li>
+<li><b>Memory: </b>540.94 GB</li>
 </ul>
 </td>
 </tr>
@@ -430,78 +432,89 @@ env: NCCL_P2P_DISABLE=1
 <h2>Initialize a Random Dataset<a class="headerlink" href="#Initialize-a-Random-Dataset" title="Permalink to this headline">¶</a></h2>
 <p>Use <code class="docutils literal notranslate"><span class="pre">dask_cudf.DataFrame.query</span></code> to split the dataset into train-and-test sets</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">size</span> <span class="o">=</span> <span class="mi">1000000</span>
 <span class="n">npartitions</span> <span class="o">=</span> <span class="mi">8</span>
 
-<span class="n">pdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'x'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npartitions</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">),</span> <span class="s1">'y'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)})</span>
-<span class="n">pdf</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="n">npartitions</span><span class="o">=</span><span class="n">npartitions</span><span class="p">)</span>
+<span class="n">cdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'x'</span><span class="p">:</span> <span class="n">cupy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">npartitions</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">),</span> <span class="s1">'y'</span><span class="p">:</span> <span class="n">cupy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)})</span>
+<span class="n">ddf</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">from_cudf</span><span class="p">(</span><span class="n">cdf</span><span class="p">,</span><span class="n">npartitions</span><span class="o">=</span><span class="n">npartitions</span><span class="p">)</span>
 
-<span class="n">ddf</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">from_dask_dataframe</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">ddf</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">'y &lt; 0.5'</span><span class="p">)</span>
+<span class="n">Y_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[[</span><span class="s1">'x'</span><span class="p">]]</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="n">X_train</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">difference</span><span class="p">([</span><span class="s1">'x'</span><span class="p">])]</span>
 
-<span class="n">x_train</span> <span class="o">=</span> <span class="n">ddf</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">'y &lt; 0.5'</span><span class="p">)</span>
-<span class="n">y_train</span> <span class="o">=</span> <span class="n">x_train</span><span class="p">[[</span><span class="s1">'x'</span><span class="p">]]</span>
-<span class="n">x_train</span> <span class="o">=</span> <span class="n">x_train</span><span class="p">[</span><span class="n">x_train</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">difference</span><span class="p">([</span><span class="s1">'x'</span><span class="p">])]</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">ddf</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">'y &gt; 0.5'</span><span class="p">)</span>
+<span class="n">Y_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[[</span><span class="s1">'x'</span><span class="p">]]</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="n">X_test</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">difference</span><span class="p">([</span><span class="s1">'x'</span><span class="p">])]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Use-Dask-API-for-XGBoost">
+<h2>Use Dask API for XGBoost<a class="headerlink" href="#Use-Dask-API-for-XGBoost" title="Permalink to this headline">¶</a></h2>
+<p>Create a DaskDMatrix object from our training input and target data using <code class="docutils literal notranslate"><span class="pre">xgb.dask.DaskMatrix</span></code></p>
+<p>The DaskDMatrix constructor forces all lazy computation to materialize. To isolate the computation in DaskDMatrix from other lazy computations, one can use wait. Please note: this is optional. For more details, <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/tutorials/dask.html#why-is-the-initialization-of-daskdmatrix-so-slow-and-throws-weird-errors">refer here</a></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Here is the XGBoost version used in this example</span>
+<span class="n">xgb</span><span class="o">.</span><span class="n">__version__</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+'1.1.1'
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">## Optional: this wont return until all data is in GPU memory</span>
+<span class="n">done</span> <span class="o">=</span> <span class="n">wait</span><span class="p">([</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">])</span>
 
-<span class="n">x_test</span> <span class="o">=</span> <span class="n">ddf</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">'y &gt; 0.5'</span><span class="p">)</span>
-<span class="n">y_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[[</span><span class="s1">'x'</span><span class="p">]]</span>
-<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">x_test</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">difference</span><span class="p">([</span><span class="s1">'x'</span><span class="p">])]</span>
+
+<span class="n">dtrain</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">dask</span><span class="o">.</span><span class="n">DaskDMatrix</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="Define-Parameters-and-Train-with-XGBoost">
 <h2>Define Parameters and Train with XGBoost<a class="headerlink" href="#Define-Parameters-and-Train-with-XGBoost" title="Permalink to this headline">¶</a></h2>
+<p>The wall time output below indicates how long it took your GPU cluster to train an XGBoost model over the training set.</p>
 <p>Use <code class="docutils literal notranslate"><span class="pre">dask_cudf.DataFrame.persist()</span></code> to ensure each GPU worker has ownership of data before training for optimal load-balance. Please note: this is optional.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+<span></span><span class="o">%%time</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s1">'num_rounds'</span><span class="p">:</span>   <span class="mi">100</span><span class="p">,</span>
   <span class="s1">'max_depth'</span><span class="p">:</span>    <span class="mi">8</span><span class="p">,</span>
   <span class="s1">'max_leaves'</span><span class="p">:</span>   <span class="mi">2</span><span class="o">**</span><span class="mi">8</span><span class="p">,</span>
-  <span class="s1">'n_gpus'</span><span class="p">:</span>       <span class="mi">1</span><span class="p">,</span>
   <span class="s1">'tree_method'</span><span class="p">:</span>  <span class="s1">'gpu_hist'</span><span class="p">,</span>
   <span class="s1">'objective'</span><span class="p">:</span>    <span class="s1">'reg:squarederror'</span><span class="p">,</span>
   <span class="s1">'grow_policy'</span><span class="p">:</span>  <span class="s1">'lossguide'</span>
 <span class="p">}</span>
 
 <span class="c1">## Optional: persist training data into memory</span>
-<span class="c1"># x_train = x_train.persist()</span>
-<span class="c1"># y_train = y_train.persist()</span>
+<span class="c1"># X_train = X_train.persist()</span>
+<span class="c1"># Y_train = Y_train.persist()</span>
 
-<span class="n">bst</span> <span class="o">=</span> <span class="n">dask_xgboost</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">num_boost_round</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s1">'num_rounds'</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="Inputs-for-dask_xgboost.train">
-<h3>Inputs for <code class="docutils literal notranslate"><span class="pre">dask_xgboost.train</span></code><a class="headerlink" href="#Inputs-for-dask_xgboost.train" title="Permalink to this headline">¶</a></h3>
-<ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">client</span></code>: the <code class="docutils literal notranslate"><span class="pre">dask.distributed.Client</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">params</span></code>: the training parameters for XGBoost. Note that it is a requirement to set <code class="docutils literal notranslate"><span class="pre">'n_gpus':</span> <span class="pre">1</span></code>, as it tells Dask-cuDF that each worker will have a single GPU to perform coordinated computation</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">x_train</span></code>: an instance of <code class="docutils literal notranslate"><span class="pre">dask_cudf.DataFrame</span></code> containing the data to be trained</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">y_train</span></code>: an instance of <code class="docutils literal notranslate"><span class="pre">dask_cudf.Series</span></code> containing the labels for the training data</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">num_boost_round=params['num_rounds']</span></code>: a specification on the number of boosting rounds for the training session</p></li>
-</ol>
-</div>
-</div>
-<div class="section" id="Compute-Predictions-and-the-RMSE-Metric-for-the-Model">
-<h2>Compute Predictions and the RMSE Metric for the Model<a class="headerlink" href="#Compute-Predictions-and-the-RMSE-Metric-for-the-Model" title="Permalink to this headline">¶</a></h2>
-<p>Use <code class="docutils literal notranslate"><span class="pre">dask.dataframe.multi.concat</span></code> to build a <code class="docutils literal notranslate"><span class="pre">dask_cudf.DataFrame</span></code> from <code class="docutils literal notranslate"><span class="pre">[dask_cudf.Series]</span></code> to leverage a cleaner API for computing RMSE</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">pred</span> <span class="o">=</span> <span class="n">dask_xgboost</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">bst</span><span class="p">,</span> <span class="n">x_test</span><span class="p">)</span>
-<span class="n">test</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">multi</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pred</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="n">test</span><span class="p">[</span><span class="s1">'squared_error'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_test</span><span class="p">[</span><span class="s1">'x'</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">trained_model</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">dask</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">client</span><span class="p">,</span><span class="n">params</span><span class="p">,</span> <span class="n">dtrain</span><span class="p">,</span> <span class="n">num_boost_round</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s1">'num_rounds'</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -510,30 +523,108 @@ env: NCCL_P2P_DISABLE=1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[08:50:14] WARNING: /rapids/xgboost/include/xgboost/generic_parameters.h:35:
-n_gpus:
-        Deprecated. Single process multi-GPU training is no longer supported.
-        Please switch to distributed training with one process per GPU.
-        This can be done using Dask or Spark.  See documentation for details.
+CPU times: user 190 ms, sys: 23.2 ms, total: 213 ms
+Wall time: 2.4 s
 </pre></div></div>
 </div>
-<div class="section" id="How-to-run-prediction-via-dask_xgboost.predict">
-<h3>How to run prediction via <code class="docutils literal notranslate"><span class="pre">dask_xgboost.predict</span></code><a class="headerlink" href="#How-to-run-prediction-via-dask_xgboost.predict" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Inputs-for-xgb.dask.train">
+<h3>Inputs for <code class="docutils literal notranslate"><span class="pre">xgb.dask.train</span></code><a class="headerlink" href="#Inputs-for-xgb.dask.train" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">client</span></code>: the <code class="docutils literal notranslate"><span class="pre">dask.distributed.Client</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bst</span></code>: the Booster produced by the XGBoost training session</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">x_test</span></code>: an instance of <code class="docutils literal notranslate"><span class="pre">dask_cudf.DataFrame</span></code> containing the data to be inferenced (acquire predictions)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">params</span></code>: the training parameters for XGBoost.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtrain</span></code>: an instance of <code class="docutils literal notranslate"><span class="pre">xgboost.dask.DaskDMatrix</span></code> containing our training input and target data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_boost_round=params['num_rounds']</span></code>: a specification on the number of boosting rounds for the training session</p></li>
 </ol>
-<p><code class="docutils literal notranslate"><span class="pre">pred</span></code> will be an instance of <code class="docutils literal notranslate"><span class="pre">dask_cudf.Series</span></code></p>
-<p>We can use <code class="docutils literal notranslate"><span class="pre">dask.dataframe.multi.concat</span></code> to construct a <code class="docutils literal notranslate"><span class="pre">dask_cudf.DataFrame</span></code> by concatenating the list of <code class="docutils literal notranslate"><span class="pre">dask_cudf.Series</span></code> instances (<code class="docutils literal notranslate"><span class="pre">[pred]</span></code>)</p>
-<p><code class="docutils literal notranslate"><span class="pre">test</span></code> is a <code class="docutils literal notranslate"><span class="pre">dask_cudf.DataFrame</span></code> object with a single column named <code class="docutils literal notranslate"><span class="pre">0</span></code> (e.g.) <code class="docutils literal notranslate"><span class="pre">test[0]</span></code> returns <code class="docutils literal notranslate"><span class="pre">pred</span></code>. Additionally, the root-mean-squared-error (RMSE) can be computed by constructing a new column and assigning to it the value of the difference between predicted and labeled values squared. This is encoded in the assignment <code class="docutils literal notranslate"><span class="pre">test['squared_error']</span> <span class="pre">=</span> <span class="pre">(test[0]</span> <span class="pre">-</span> <span class="pre">y_test['x'])**2</span></code>.</p>
-<p>Finally, the mean can be computed by using an aggregator from the <code class="docutils literal notranslate"><span class="pre">dask_cudf</span></code> API. The entire computation is initiated via <code class="docutils literal notranslate"><span class="pre">.compute()</span></code>. We take the square-root of the result, leaving us with <code class="docutils literal notranslate"><span class="pre">rmse</span> <span class="pre">=</span> <span class="pre">np.sqrt(test.squared_error.mean().compute())</span></code>. Note: <code class="docutils literal notranslate"><span class="pre">.squared_error</span></code> is an accessor for <code class="docutils literal notranslate"><span class="pre">test[squared_error]</span></code>… Like so:</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</div>
+</div>
+<div class="section" id="Compute-Predictions-and-the-RMSE-Metric-for-the-Model">
+<h2>Compute Predictions and the RMSE Metric for the Model<a class="headerlink" href="#Compute-Predictions-and-the-RMSE-Metric-for-the-Model" title="Permalink to this headline">¶</a></h2>
+<p>This distributed <code class="docutils literal notranslate"><span class="pre">xgb.dask.train</span></code> method returns a dictionary containing the resulting booster and evaluation history obtained from evaluation metrics.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">squared_error</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">())</span>
+<span></span><span class="n">booster</span> <span class="o">=</span> <span class="n">trained_model</span><span class="p">[</span><span class="s2">"booster"</span><span class="p">]</span> <span class="c1"># "Booster" is the trained model</span>
+<span class="n">history</span> <span class="o">=</span> <span class="n">trained_model</span><span class="p">[</span><span class="s1">'history'</span><span class="p">]</span> <span class="c1"># "History" is a dictionary containing evaluation results</span>
+
+<span class="n">booster</span><span class="o">.</span><span class="n">set_param</span><span class="p">({</span><span class="s1">'predictor'</span><span class="p">:</span> <span class="s1">'gpu_predictor'</span><span class="p">})</span> <span class="c1">#Setting this parameter to run predictions on GPU</span>
+</pre></div>
+</div>
+</div>
+<p>Below there are two different methods shown to get the predictions. Using <code class="docutils literal notranslate"><span class="pre">booster.inplace_predict()</span></code> and <code class="docutils literal notranslate"><span class="pre">xgb.dask.predict</span></code>. The inplace_predict can be faster if the prediction is run on the same workers that were used for training. Here are the details from the <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/python/python_api.html#xgboost.Booster.inplace_predict">doc</a>:</p>
+<p>Unlike predict method, inplace prediction does not cache the prediction result. Calling only inplace_predict in multiple threads is safe and lock free. But the safety does not hold when used in conjunction with other methods. E.g. you can’t train the booster in one thread and perform prediction in the other.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="o">%%time</span>
+<span class="c1">#Method 1: Using predict</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">dask</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">client</span><span class="p">,</span><span class="n">booster</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
+<span class="n">true</span> <span class="o">=</span> <span class="n">Y_test</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">map_partitions</span><span class="p">(</span><span class="k">lambda</span> <span class="n">part</span><span class="p">:</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">part</span><span class="p">))</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">true</span> <span class="o">=</span> <span class="n">true</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="n">squared_error</span> <span class="o">=</span> <span class="p">((</span><span class="n">pred</span> <span class="o">-</span> <span class="n">true</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">rmse</span> <span class="o">=</span> <span class="n">cupy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">squared_error</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'rmse value:'</span><span class="p">,</span> <span class="n">rmse</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/nfs/rabhojwani/anaconda3/envs/rapids-env2/lib/python3.7/site-packages/distributed/worker.py:3378: UserWarning: Large object of size 16.23 MB detected in task graph:
+  [&lt;function predict.&lt;locals&gt;.mapped_predict at 0x7f ... titions&gt;, True]
+Consider scattering large objects ahead of time
+with client.scatter to reduce scheduler burden and
+keep data on workers
+
+    future = client.submit(func, big_data)    # bad
+
+    big_future = client.scatter(big_data)     # good
+    future = client.submit(func, big_future)  # good
+  % (format_bytes(len(b)), s)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+rmse value: 2.2921026956790693
+CPU times: user 277 ms, sys: 265 ms, total: 542 ms
+Wall time: 873 ms
+</pre></div></div>
+</div>
+<p>NOTE: We mapped each partition of the result from <code class="docutils literal notranslate"><span class="pre">xgb.dask.predict</span></code> into <code class="docutils literal notranslate"><span class="pre">cudf.Series</span></code> to be able to substract it from <code class="docutils literal notranslate"><span class="pre">true</span></code> data. This is now taken care off inside <code class="docutils literal notranslate"><span class="pre">xgb.dask.predict</span></code> itself <a class="reference external" href="https://github.com/dmlc/xgboost/pull/5710">[ref]</a> and will be available in the next stable version.</p>
+<div class="section" id="How-to-run-prediction-via-xgb.dask.predict">
+<h3>How to run prediction via <code class="docutils literal notranslate"><span class="pre">xgb.dask.predict</span></code><a class="headerlink" href="#How-to-run-prediction-via-xgb.dask.predict" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">client</span></code>: the <code class="docutils literal notranslate"><span class="pre">dask.distributed.Client</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">booster</span></code>: the Booster produced by the XGBoost training session</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">X_test</span></code>: an instance of <code class="docutils literal notranslate"><span class="pre">dask_cudf.core.DataFrame</span></code> containing the data to be inferenced (acquire predictions)</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">pred</span></code> and <code class="docutils literal notranslate"><span class="pre">true</span></code> are instances of <code class="docutils literal notranslate"><span class="pre">dask_cudf.core.Series</span></code> object. We align the index of both the Series by resetting it through <code class="docutils literal notranslate"><span class="pre">reset_index</span></code>. To compute the root mean squared error(RMSE) we first compute difference squared between the <code class="docutils literal notranslate"><span class="pre">pred</span></code> and <code class="docutils literal notranslate"><span class="pre">true</span></code> series through the operation <code class="docutils literal notranslate"><span class="pre">squared_error</span> <span class="pre">=</span> <span class="pre">((pred</span> <span class="pre">-</span> <span class="pre">true)**2)</span></code></p>
+<p>Finally, the mean is computed by using an aggregator from the <code class="docutils literal notranslate"><span class="pre">dask_cudf</span></code> API. The entire computation is initiated via <code class="docutils literal notranslate"><span class="pre">.compute()</span></code>. We take the square-root of the result, leaving us with <code class="docutils literal notranslate"><span class="pre">rmse</span> <span class="pre">=</span> <span class="pre">cupy.sqrt(squared_error.mean().compute())</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="o">%%time</span>
+<span class="c1">#Method 2: Using inplace_predict</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">booster</span><span class="o">.</span><span class="n">inplace_predict</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_test</span><span class="o">.</span><span class="n">compute</span><span class="p">())</span>
+<span class="n">true</span> <span class="o">=</span> <span class="n">Y_test</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span>
+<span class="n">true</span> <span class="o">=</span> <span class="n">true</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+
+<span class="n">squared_error</span> <span class="o">=</span> <span class="p">((</span><span class="n">pred</span> <span class="o">-</span> <span class="n">true</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">rmse</span> <span class="o">=</span> <span class="n">cupy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">squared_error</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'rmse value:'</span><span class="p">,</span> <span class="n">rmse</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -543,18 +634,19 @@ n_gpus:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-rmse value: 2.292440356854876
+rmse value: 2.2899321386939073
+CPU times: user 204 ms, sys: 117 ms, total: 321 ms
+Wall time: 490 ms
 </pre></div></div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
+<div class="section" id="How-to-run-prediction-via-booster.predict">
+<h3>How to run prediction via <code class="docutils literal notranslate"><span class="pre">booster.predict</span></code><a class="headerlink" href="#How-to-run-prediction-via-booster.predict" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: This parameter takes these foloowing datatypes: numpy.ndarray/scipy.sparse.csr_matrix/cupy.ndarray/cudf.DataFrame/pd.DataFrame.</p></li>
+</ol>
+<p>We run <code class="docutils literal notranslate"><span class="pre">X_test.compute()</span></code> to convert <code class="docutils literal notranslate"><span class="pre">dask_cudf.Dataframe</span></code> into <code class="docutils literal notranslate"><span class="pre">cudf.DataFrame</span></code></p>
+<p>Above we can see that <code class="docutils literal notranslate"><span class="pre">inplace_predict</span></code> takes <code class="docutils literal notranslate"><span class="pre">490</span> <span class="pre">ms</span></code> while <code class="docutils literal notranslate"><span class="pre">predict</span></code> takes <code class="docutils literal notranslate"><span class="pre">873</span> <span class="pre">ms</span></code></p>
 </div>
 </div>
 </div>
