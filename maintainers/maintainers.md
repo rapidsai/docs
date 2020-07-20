@@ -30,7 +30,7 @@ Operations
 Phase | Start | End | Duration
 -- | -- | -- | --
 Development | Tue, May 19th | Wed, Aug 5th | 55 days
-Burn Down | Tue, Aug 6th | Wed, Aug 12th | 5 days
+Burn Down | Thu, Aug 6th | Wed, Aug 12th | 5 days
 Code Freeze/Testing | Thu, Aug 13th | Tue, Aug 18th | 4 days
 Release | Wed, Aug 19th | Wed, Aug 19th | 1 day
 
