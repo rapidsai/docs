@@ -3,6 +3,8 @@ layout: default
 title: API Docs
 nav_order: 3
 permalink: api
+has_toc: false
+has_children: false
 ---
 
 # API Docs
