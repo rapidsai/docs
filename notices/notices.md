@@ -2,7 +2,6 @@
 layout: notice-index
 title: RAPIDS Notices
 nav_order: 7
-has_toc: false
 has_children: true
 permalink: notices
 has_notice_pin_index: true # shows pinned notices at end

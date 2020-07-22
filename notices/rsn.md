@@ -4,9 +4,9 @@ notice_type: rsn
 title: RAPIDS Support Notices
 nav_order: 3
 has_children: true
-has_toc: true
 permalink: notices/rsn
 parent: RAPIDS Notices
+has_notice_index: true # shows list of notices for this 'notice_type'
 ---
 
 # RAPIDS Support Notices

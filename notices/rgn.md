@@ -6,6 +6,7 @@ nav_order: 2
 has_children: true
 permalink: notices/rgn
 parent: RAPIDS Notices
+has_notice_index: true # shows list of notices for this 'notice_type'
 ---
 
 # RAPIDS General Notices
