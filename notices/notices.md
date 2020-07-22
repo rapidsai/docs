@@ -17,6 +17,6 @@ Notices are our means to communicate and document changes in the project to cont
 
 Type | Code | Intended Audience | Purpose
 --- | --- | --- | ---
-[RAPIDS Developer Notice](rdn) | **RDN** | Contributors & Core Developers | Communicate updates to development processes
-[RAPIDS General Notice](rgn) | **RGN** | Everyone | Project wide announcements and updates, including breaking changes
-[RAPIDS Support Notice](rsn) | **RSN** | Everyone | Updates on RAPIDS support for specific versions of CUDA, Python, OS, platforms, and compliers
+[RAPIDS Developer Notice]({% link notices/rdn.md %}) | **RDN** | Contributors & Core Developers | Communicate updates to development processes
+[RAPIDS General Notice]({% link notices/rgn.md %}) | **RGN** | Everyone | Project wide announcements and updates, including breaking changes
+[RAPIDS Support Notice]({% link notices/rsn.md %}) | **RSN** | Everyone | Updates on RAPIDS support for specific versions of CUDA, Python, OS, platforms, and compliers
