@@ -14,7 +14,7 @@ This site serves as a collection of all the documentation for RAPIDS. Whether yo
 {: .fs-6 .fw-300 }
 
 
-[<i class="far fa-file-code"></i> Documentation]({% link api.md %}){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-2 } [<i class="fas fa-bolt"></i> Get Started]({% link start/start.md %}){: .btn .fs-4 .mb-4 .mb-md-0 .mr-2 } [<i class="fab fa-github"></i> RAPIDS on GitHub](https://github.com/rapidsai){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 } [<i class="fas fa-bullhorn"></i> RAPIDS Notices]({% link notices/notices.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
+[<i class="far fa-file-code"></i> Documentation]({% link api.md %}){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-2 } [<i class="fas fa-bullhorn"></i> RAPIDS Notices]({% link notices/notices.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 } [<i class="fas fa-bolt"></i> Get Started]({% link start/start.md %}){: .btn .fs-4 .mb-4 .mb-md-0 .mr-2 } [<i class="fab fa-github"></i> RAPIDS on GitHub](https://github.com/rapidsai){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
 
 ---
 
