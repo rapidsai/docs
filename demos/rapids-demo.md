@@ -1,10 +1,10 @@
 ---
 layout: default
 nav_order: 1
-parent: Containers
-grand_parent: Demos
+parent: Demos
 title: RAPIDS Demo Container
-permalink: containers/rapids-demo
+permalink: rapids-demo
+redirect_from: "containers/rapids-demo" # redirect from old page to ensure existing links still work
 ---
 
 # RAPIDS Demo Container
