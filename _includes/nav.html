@@ -1,8 +1,9 @@
 <nav role="navigation" aria-label="Main navigation">
   <ul class="navigation-list">
     {% assign pages_list = site.html_pages | sort:"nav_order" %}
+    {% assign prev_page = "" %}
     {% for node in pages_list %}
-      {% unless node.nav_exclude %}
+      {% unless node.nav_exclude and prev_page != node.title %}
         {% if node.parent == nil %}
           <li class="navigation-list-item{% if page.url == node.url or page.parent == node.title or page.grand_parent == node.title %} active{% endif %}">
             {% if page.parent == node.title or page.grand_parent == node.title %}
@@ -23,11 +24,13 @@
                         {% assign grand_children_list = site.html_pages | sort:"nav_order" %}
                         <ul class="navigation-list-child-list">
                           {% for grand_child in grand_children_list %}
-                            {% if grand_child.parent == child.title %}
-                              <li class="navigation-list-item {% if page.url == grand_child.url %} active{% endif %}">
-                                <a href="{{ grand_child.url | relative_url }}" class="navigation-list-link{% if page.url == grand_child.url %} active{% endif %}">{{ grand_child.title }}</a>
-                              </li>
-                            {% endif %}
+                            {% unless grand_child.layout == "notice" %}
+                              {% if grand_child.parent == child.title %}
+                                <li class="navigation-list-item {% if page.url == grand_child.url %} active{% endif %}">
+                                  <a href="{{ grand_child.url | absolute_url }}" class="navigation-list-link{% if page.url == grand_child.url %} active{% endif %}">{{ grand_child.title }}</a>
+                                </li>
+                              {% endif %}
+                            {% endunless %}
                           {% endfor %}
                         </ul>
                       {% endif %}
@@ -39,6 +42,7 @@
           </li>
         {% endif %}
       {% endunless %}
+      {% assign prev_page = node.title %}
     {% endfor %}
   </ul>
 </nav>
