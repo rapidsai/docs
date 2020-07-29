@@ -8,8 +8,5 @@ var searchData=
   ['cstablechecker_17',['CStableChecker',['../structCStableChecker.html',1,'']]],
   ['cugraph_18',['cugraph',['../namespacecugraph.html',1,'']]],
   ['cugraph_5fcc_5ft_19',['cugraph_cc_t',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27',1,'cugraph']]],
-  ['cugraph_5fstrong_20',['CUGRAPH_STRONG',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27a5882369885616cc6ba190202b140ee02',1,'cugraph']]],
-  ['cusparse_21',['Cusparse',['../classcugraph_1_1detail_1_1Cusparse.html',1,'cugraph::detail']]],
-  ['cusparsecsrmv_22',['CusparseCsrMV',['../classcugraph_1_1detail_1_1CusparseCsrMV.html',1,'cugraph::detail']]],
-  ['cusparsecsrmv_3c_20wt_20_3e_23',['CusparseCsrMV&lt; WT &gt;',['../classcugraph_1_1detail_1_1CusparseCsrMV.html',1,'cugraph::detail']]]
+  ['cugraph_5fstrong_20',['CUGRAPH_STRONG',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27a5882369885616cc6ba190202b140ee02',1,'cugraph']]]
 ];

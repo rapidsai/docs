@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['pagerank_91',['Pagerank',['../classcugraph_1_1opg_1_1Pagerank.html',1,'cugraph::opg::Pagerank&lt; VT, ET, WT &gt;'],['../namespacecugraph.html#a8e07829e671204ff42aa226f40ff92d5',1,'cugraph::pagerank()']]],
-  ['permutation_5ffunctor_92',['permutation_functor',['../structcugraph_1_1detail_1_1permutation__functor.html',1,'cugraph::detail']]],
-  ['prg_93',['prg',['../structcugraph_1_1detail_1_1prg.html',1,'cugraph::detail']]]
+  ['offsets_84',['offsets',['../classcugraph_1_1GraphCompressedSparseBaseView.html#a671653dacaaf8aa60e9b8b4c20f6835e',1,'cugraph::GraphCompressedSparseBaseView']]],
+  ['out_85',['OUT',['../namespacecugraph.html#a31902d040f48ca34b65c041847c3cd98aef373774188a51f80463f37b6bd9e83a',1,'cugraph']]],
+  ['overlap_86',['overlap',['../namespacecugraph.html#aeaa48eeaac66fa304ce189d280c93579',1,'cugraph']]],
+  ['overlap_5flist_87',['overlap_list',['../namespacecugraph.html#a08982e910178f088d24bd943769131d1',1,'cugraph']]]
 ];

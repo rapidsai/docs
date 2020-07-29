@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['rebuildindices_94',['rebuildIndices',['../classcugraph_1_1db_1_1db__table.html#a73b87e9e83c17d35b3852154d2637266',1,'cugraph::db::db_table']]],
-  ['remove_5fvisited_95',['remove_visited',['../structcugraph_1_1opg_1_1detail_1_1remove__visited.html',1,'cugraph::opg::detail']]],
-  ['renumber_5fvertices_96',['renumber_vertices',['../namespacecugraph.html#a3eba88220e47be34a4351a4378116545',1,'cugraph']]]
+  ['pagerank_88',['Pagerank',['../classcugraph_1_1mg_1_1Pagerank.html',1,'cugraph::mg::Pagerank&lt; VT, ET, WT &gt;'],['../namespacecugraph.html#a8e07829e671204ff42aa226f40ff92d5',1,'cugraph::pagerank()']]],
+  ['permutation_5ffunctor_89',['permutation_functor',['../structcugraph_1_1detail_1_1permutation__functor.html',1,'cugraph::detail']]],
+  ['prg_90',['prg',['../structcugraph_1_1detail_1_1prg.html',1,'cugraph::detail']]]
 ];

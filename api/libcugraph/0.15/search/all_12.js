@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['utils_20for_20debug_20device_20code_103',['utils for debug device code',['../group__Debug.html',1,'']]],
-  ['updatedevice_104',['updateDevice',['../group__Copy.html#ga18a265a5eb16da13a51f486fe5e3acb7',1,'MLCommon']]],
-  ['updatehost_105',['updateHost',['../group__Copy.html#ga9c1498ebc5825f9e63a9de94ced042d5',1,'MLCommon']]]
+  ['tostring_99',['toString',['../classcugraph_1_1db_1_1db__column__index.html#a7475d92318eaa6e18eac9f25185a9f76',1,'cugraph::db::db_column_index::toString()'],['../classcugraph_1_1db_1_1db__result.html#a9bb64d9e8318b0edabee5c31e6970a99',1,'cugraph::db::db_result::toString()'],['../classcugraph_1_1db_1_1db__table.html#aeb34ae9e4d6a988a2e0ac138f3b1647c',1,'cugraph::db::db_table::toString()']]]
 ];

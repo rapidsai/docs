@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['scc_5fdata_97',['SCC_Data',['../structSCC__Data.html',1,'']]],
-  ['self_5floop_5fflagger_98',['self_loop_flagger',['../structself__loop__flagger.html',1,'']]],
-  ['square_99',['square',['../structcugraph_1_1detail_1_1square.html',1,'cugraph::detail']]],
-  ['src_5findices_100',['src_indices',['../classcugraph_1_1GraphCOOView.html#a24ae11a895e2856552bbd2a2b3a66f0e',1,'cugraph::GraphCOOView']]],
-  ['sssp_101',['SSSP',['../classcugraph_1_1detail_1_1SSSP.html',1,'cugraph::detail::SSSP&lt; IndexType, DistType &gt;'],['../namespacecugraph.html#afbcb939cffaf811289ba6a5edc7f6b04',1,'cugraph::sssp()']]]
+  ['rebuildindices_91',['rebuildIndices',['../classcugraph_1_1db_1_1db__table.html#a73b87e9e83c17d35b3852154d2637266',1,'cugraph::db::db_table']]],
+  ['remove_5fvisited_92',['remove_visited',['../structcugraph_1_1mg_1_1detail_1_1remove__visited.html',1,'cugraph::mg::detail']]],
+  ['renumber_5fvertices_93',['renumber_vertices',['../namespacecugraph.html#a3eba88220e47be34a4351a4378116545',1,'cugraph']]]
 ];

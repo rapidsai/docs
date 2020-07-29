@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['opgcsrmv_173',['OPGcsrmv',['../classcugraph_1_1opg_1_1OPGcsrmv.html',1,'cugraph::opg']]]
+  ['notnegativeone_167',['notNegativeOne',['../structcugraph_1_1db_1_1notNegativeOne.html',1,'cugraph::db']]]
 ];
