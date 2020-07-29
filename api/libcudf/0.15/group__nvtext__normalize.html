@@ -60,9 +60,70 @@ Functions</h2></td></tr>
 <tr class="memitem:gae783a4168cb9687c5f22e30f2e4c84ad"><td align="right" class="memItemLeft" valign="top">std::unique_ptr&lt; <a class="el" href="classcudf_1_1column.html">cudf::column</a> &gt; </td><td class="memItemRight" valign="bottom"><a class="el" href="group__nvtext__normalize.html#gae783a4168cb9687c5f22e30f2e4c84ad">nvtext::normalize_spaces</a> (<a class="el" href="classcudf_1_1strings__column__view.html">cudf::strings_column_view</a> const &amp;strings, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())</td></tr>
 <tr class="memdesc:gae783a4168cb9687c5f22e30f2e4c84ad"><td class="mdescLeft"> </td><td class="mdescRight">Returns a new strings column by normalizing the whitespace in each string in the input column.  <a href="group__nvtext__normalize.html#gae783a4168cb9687c5f22e30f2e4c84ad">More...</a><br/></td></tr>
 <tr class="separator:gae783a4168cb9687c5f22e30f2e4c84ad"><td class="memSeparator" colspan="2"> </td></tr>
+<tr class="memitem:ga22a3651cd4f5a571d5992547ed607557"><td align="right" class="memItemLeft" valign="top">std::unique_ptr&lt; <a class="el" href="classcudf_1_1column.html">cudf::column</a> &gt; </td><td class="memItemRight" valign="bottom"><a class="el" href="group__nvtext__normalize.html#ga22a3651cd4f5a571d5992547ed607557">nvtext::normalize_characters</a> (<a class="el" href="classcudf_1_1strings__column__view.html">cudf::strings_column_view</a> const &amp;strings, bool do_lower_case, rmm::mr::device_memory_resource *mr=rmm::mr::get_default_resource())</td></tr>
+<tr class="memdesc:ga22a3651cd4f5a571d5992547ed607557"><td class="mdescLeft"> </td><td class="mdescRight">Normalizes strings characters for tokenizing.  <a href="group__nvtext__normalize.html#ga22a3651cd4f5a571d5992547ed607557">More...</a><br/></td></tr>
+<tr class="separator:ga22a3651cd4f5a571d5992547ed607557"><td class="memSeparator" colspan="2"> </td></tr>
 </table>
 <a id="details" name="details"></a><h2 class="groupheader">Detailed Description</h2>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ga22a3651cd4f5a571d5992547ed607557"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga22a3651cd4f5a571d5992547ed607557">◆ </a></span>normalize_characters()</h2>
+<div class="memitem">
+<div class="memproto">
+<table class="memname">
+<tr>
+<td class="memname">std::unique_ptr&lt;<a class="el" href="classcudf_1_1column.html">cudf::column</a>&gt; nvtext::normalize_characters </td>
+<td>(</td>
+<td class="paramtype"><a class="el" href="classcudf_1_1strings__column__view.html">cudf::strings_column_view</a> const &amp; </td>
+<td class="paramname"><em>strings</em>, </td>
+</tr>
+<tr>
+<td class="paramkey"></td>
+<td></td>
+<td class="paramtype">bool </td>
+<td class="paramname"><em>do_lower_case</em>, </td>
+</tr>
+<tr>
+<td class="paramkey"></td>
+<td></td>
+<td class="paramtype">rmm::mr::device_memory_resource * </td>
+<td class="paramname"><em>mr</em> = <code>rmm::mr::get_default_resource()</code> </td>
+</tr>
+<tr>
+<td></td>
+<td>)</td>
+<td></td><td></td>
+</tr>
+</table>
+</div><div class="memdoc">
+<p>Normalizes strings characters for tokenizing. </p>
+<p>This uses the normalizer that is built into the <a class="el" href="group__nvtext__tokenize.html#gad725d85bccf2869740328e42a3db6ed2" title="Creates a tokenizer that cleans the text, splits it into tokens and returns token-ids from an input v...">nvtext::subword_tokenize</a> function which includes:</p>
+<ul>
+<li>adding padding around punctuation (unicode category starts with "P") as well as certain ASCII symbols like "^" and "$"</li>
+<li>adding padding around the <a href="https://en.wikipedia.org/wiki/CJK_Unified_Ideographs_(Unicode_block)">CJK Unicode block characters</a></li>
+<li>changing whitespace (e.g. <code>"\t", "\n", "\r"</code>) to just space <code>" "</code></li>
+<li>removing control characters (unicode categories "Cc" and "Cf")</li>
+</ul>
+<p>The padding process here adds a single space before and after the character. Details on <em>unicode category</em> can be found here: <a href="https://unicodebook.readthedocs.io/unicode.html#categories">https://unicodebook.readthedocs.io/unicode.html#categories</a></p>
+<p>If <code>do_lower_case = true</code>, lower-casing also removes the accents. The accents cannot be removed from upper-case characters without lower-casing and lower-casing cannot be performed without also removing accents. However, if the accented character is already lower-case, then only the accent is removed.</p>
+<div class="fragment"><div class="line">s = ["éâîô\teaio", "ĂĆĖÑÜ", "ACENU", "$24.08", "[a,bb]"]</div>
+<div class="line">s1 = normalize_characters(s,true)</div>
+<div class="line">s1 is now ["eaio eaio", "acenu", "acenu", " $ 24 . 08", " [ a , bb ] "]</div>
+<div class="line">s2 = normalize_characters(s,false)</div>
+<div class="line">s2 is now ["éâîô eaio", "ĂĆĖÑÜ", "ACENU", " $ 24 . 08", " [ a , bb ] "]</div>
+</div><!-- fragment --><p>A null input element at row <code>i</code> produces a corresponding null entry for row <code>i</code> in the output column.</p>
+<p>This function requires 8x the number of bytes in the input strings column as working memory.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+<table class="params">
+<tr><td class="paramname">strings</td><td>The input strings to normalize. </td></tr>
+<tr><td class="paramname">do_lower_case</td><td>If true, upper-case characters are converted to lower-case and accents are stripped from those characters. If false, accented and upper-case characters are not transformed. </td></tr>
+<tr><td class="paramname">mr</td><td>Memory resource to allocate any returned objects. </td></tr>
+</table>
+</dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Normalized strings column </dd></dl>
+</div>
+</div>
 <a id="gae783a4168cb9687c5f22e30f2e4c84ad"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gae783a4168cb9687c5f22e30f2e4c84ad">◆ </a></span>normalize_spaces()</h2>
 <div class="memitem">

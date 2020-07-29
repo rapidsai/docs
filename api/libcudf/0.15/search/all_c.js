@@ -17,7 +17,7 @@ var searchData=
   ['list_5fview_2ecuh_376',['list_view.cuh',['../list__view_8cuh.html',1,'']]],
   ['lists_377',['Lists',['../group__lists__classes.html',1,'']]],
   ['lists_5fcolumn_5fview_378',['lists_column_view',['../classcudf_1_1lists__column__view.html',1,'cudf']]],
-  ['load_5fvocabulary_5ffile_379',['load_vocabulary_file',['../namespacenvtext.html#a8603f724aa881a6608d26225a227e795',1,'nvtext']]],
+  ['load_5fvocabulary_5ffile_379',['load_vocabulary_file',['../group__nvtext__tokenize.html#ga8603f724aa881a6608d26225a227e795',1,'nvtext']]],
   ['log_5fbase_380',['LOG_BASE',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca21fb6e241507492d75c488a9c65d12fe',1,'cudf']]],
   ['logic_5ferror_381',['logic_error',['../structcudf_1_1logic__error.html',1,'cudf']]],
   ['logical_5fand_382',['LOGICAL_AND',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcaa770916377f618641eccd6783b13503a',1,'cudf']]],

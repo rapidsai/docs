@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['hashed_5fvocabulary_860',['hashed_vocabulary',['../structnvtext_1_1hashed__vocabulary.html',1,'nvtext']]],
-  ['host_5fbuffer_861',['host_buffer',['../structcudf_1_1io_1_1host__buffer.html',1,'cudf::io']]]
+  ['hashed_5fvocabulary_861',['hashed_vocabulary',['../structnvtext_1_1hashed__vocabulary.html',1,'nvtext']]],
+  ['host_5fbuffer_862',['host_buffer',['../structcudf_1_1io_1_1host__buffer.html',1,'cudf::io']]]
 ];
