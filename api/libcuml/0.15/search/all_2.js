@@ -28,7 +28,7 @@ var searchData=
   ['boolepiloguetraitshelper_77',['BoolEpilogueTraitsHelper',['../structMLCommon_1_1Distance_1_1BoolEpilogueTraitsHelper.html',1,'MLCommon::Distance']]],
   ['bootstrap_78',['bootstrap',['../structML_1_1RF__params.html#a94db7ee106d94600c65268940e49da18',1,'ML::RF_params']]],
   ['bootstrap_5ffeatures_79',['bootstrap_features',['../structML_1_1DecisionTree_1_1DecisionTreeParams.html#aa9bab6cc4e65f12bfab7c59822971a0c',1,'ML::DecisionTree::DecisionTreeParams']]],
-  ['brute_5fforce_5fknn_80',['brute_force_knn',['../namespaceML.html#a398a682ed8fe6c94b92c16ea8d976dbd',1,'ML']]],
+  ['brute_5fforce_5fknn_80',['brute_force_knn',['../namespaceML.html#a398a682ed8fe6c94b92c16ea8d976dbd',1,'ML::brute_force_knn()'],['../namespaceML_1_1KNN_1_1opg.html#a30d9704510dc777598fe8250c4b9de97',1,'ML::KNN::opg::brute_force_knn()']]],
   ['buffer_5fbase_81',['buffer_base',['../classMLCommon_1_1buffer__base.html',1,'MLCommon::buffer_base&lt; T, Allocator &gt;'],['../classMLCommon_1_1buffer__base.html#a12ddc98f540696fa02bc89dc65e8bd57',1,'MLCommon::buffer_base::buffer_base()=delete'],['../classMLCommon_1_1buffer__base.html#a4671536e3580a46a0a1cff16bca7abb6',1,'MLCommon::buffer_base::buffer_base(const buffer_base &amp;other)=delete'],['../classMLCommon_1_1buffer__base.html#aff831d61d776782ddc718c6431fabc1d',1,'MLCommon::buffer_base::buffer_base(std::shared_ptr&lt; Allocator &gt; allocator, cudaStream_t stream, size_type n=0)']]],
   ['buffer_5fbase_2ehpp_82',['buffer_base.hpp',['../buffer__base_8hpp.html',1,'']]],
   ['buffer_5fbase_3c_20char_20_3e_83',['buffer_base&lt; char &gt;',['../classMLCommon_1_1buffer__base.html',1,'MLCommon']]],
