@@ -26,7 +26,7 @@ var searchData=
   ['apply_5fboolean_5fmask_31',['apply_boolean_mask',['../group__reorder__compact.html#ga8f77b99cf9ab2696d16c49625c8ef50c',1,'cudf']]],
   ['argmax_32',['ARGMAX',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24cae12429186d2ddd5cb76543df6aaa34d4',1,'cudf::aggregation']]],
   ['argmin_33',['ARGMIN',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca6583738472adeb8cfc0cfbc43faafbe9',1,'cudf::aggregation']]],
-  ['arrow_5frandom_5faccess_5ffile_34',['ARROW_RANDOM_ACCESS_FILE',['../namespacecudf_1_1io.html#a4a5909c7c1b3aef5e86d1f92e1b1d69dadfee12be43217b49b865fee0e4f4894c',1,'cudf::io']]],
+  ['arrow_5fio_5fsource_34',['arrow_io_source',['../classcudf_1_1io_1_1arrow__io__source.html',1,'cudf::io::arrow_io_source'],['../classcudf_1_1io_1_1arrow__io__source.html#ad85587d91df08750f004397b815fae8c',1,'cudf::io::arrow_io_source::arrow_io_source()']]],
   ['ascending_35',['ASCENDING',['../group__utility__types.html#gga750f02016b046079f7062d334890b4fca83ec681a20197326c163ea3b39ef7c32',1,'cudf']]],
   ['atan2_36',['ATAN2',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcaf8d5f387d3ac8f7084ae44566b32acb2',1,'cudf']]],
   ['auto_37',['AUTO',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8ae1f2d5134ed2543d38a0de9751cf75d9',1,'cudf::io']]],
