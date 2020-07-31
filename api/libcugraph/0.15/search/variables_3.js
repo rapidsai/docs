@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['offsets_228',['offsets',['../classcugraph_1_1GraphCompressedSparseBaseView.html#a671653dacaaf8aa60e9b8b4c20f6835e',1,'cugraph::GraphCompressedSparseBaseView']]]
+  ['offsets_234',['offsets',['../classcugraph_1_1GraphCompressedSparseBaseView.html#a34a3acd9a26347660b64ca6f2fa195be',1,'cugraph::GraphCompressedSparseBaseView']]]
 ];

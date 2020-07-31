@@ -7,11 +7,11 @@ var searchData=
   ['db_5fpattern_5fentry_25',['db_pattern_entry',['../classcugraph_1_1db_1_1db__pattern__entry.html',1,'cugraph::db']]],
   ['db_5fresult_26',['db_result',['../classcugraph_1_1db_1_1db__result.html',1,'cugraph::db']]],
   ['db_5ftable_27',['db_table',['../classcugraph_1_1db_1_1db__table.html',1,'cugraph::db']]],
-  ['degree_28',['degree',['../classcugraph_1_1GraphCOOView.html#a02f429a4e4529b5720c29dc95a6b863a',1,'cugraph::GraphCOOView::degree()'],['../classcugraph_1_1GraphCompressedSparseBaseView.html#a96fef49b287d16c5b54314e638fb0a2f',1,'cugraph::GraphCompressedSparseBaseView::degree()']]],
+  ['degree_28',['degree',['../classcugraph_1_1GraphCOOView.html#a6f67fe7766f395bb573a21d34023ffe5',1,'cugraph::GraphCOOView::degree()'],['../classcugraph_1_1GraphCompressedSparseBaseView.html#a2f28ad94f7b827c10f8370eda8c61723',1,'cugraph::GraphCompressedSparseBaseView::degree()']]],
   ['degree_5fdirection_5fcount_29',['DEGREE_DIRECTION_COUNT',['../namespacecugraph.html#a31902d040f48ca34b65c041847c3cd98afa48476d9be3504d991897f564b32427',1,'cugraph']]],
   ['degree_5fiterator_30',['degree_iterator',['../structcugraph_1_1db_1_1degree__iterator.html',1,'cugraph::db::degree_iterator&lt; IndexType &gt;'],['../structdegree__iterator.html',1,'degree_iterator&lt; edge_t &gt;']]],
   ['degreebucket_31',['DegreeBucket',['../structcugraph_1_1mg_1_1detail_1_1DegreeBucket.html',1,'cugraph::mg::detail']]],
   ['degreedirection_32',['DegreeDirection',['../namespacecugraph.html#a31902d040f48ca34b65c041847c3cd98',1,'cugraph']]],
   ['deref_5ffunctor_33',['deref_functor',['../structderef__functor.html',1,'deref_functor&lt; It, edge_t &gt;'],['../structcugraph_1_1db_1_1deref__functor.html',1,'cugraph::db::deref_functor&lt; It, IndexType &gt;']]],
-  ['dst_5findices_34',['dst_indices',['../classcugraph_1_1GraphCOOView.html#a422ff989ab46af02f91e87e9cbd9f9ac',1,'cugraph::GraphCOOView']]]
+  ['dst_5findices_34',['dst_indices',['../classcugraph_1_1GraphCOOView.html#a8d5affe64fb19e94d26fa95ac38f08a8',1,'cugraph::GraphCOOView']]]
 ];
