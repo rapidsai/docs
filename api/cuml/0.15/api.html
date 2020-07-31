@@ -110,6 +110,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#id26">Truncated SVD</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#manifold">Manifold</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#linear-models">Linear Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#naive-bayes">Naive Bayes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#solvers">Solvers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dask-base-classes-and-mixins">Dask Base Classes and Mixins</a></li>
 </ul>
@@ -11447,6 +11448,139 @@ eagerly executed one.</p>
 <dd class="field-even"><dl class="simple">
 <dt><strong>y</strong><span class="classifier">Dask cuDF DataFrame or CuPy backed Dask Array</span></dt><dd><p>Dense matrix (floats or doubles) of shape (n_samples, n_features).</p>
 </dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</div>
+<div class="section" id="naive-bayes">
+<h3>Naive Bayes<a class="headerlink" href="#naive-bayes" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="cuml.dask.naive_bayes.MultinomialNB">
+<em class="property">class </em><code class="sig-prename descclassname">cuml.dask.naive_bayes.</code><code class="sig-name descname">MultinomialNB</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">client</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuml.dask.naive_bayes.MultinomialNB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distributed Naive Bayes classifier for multinomial models</p>
+<p class="rubric">Examples</p>
+<p>Load the 20 newsgroups dataset from Scikit-learn and train a
+Naive Bayes classifier.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_20newsgroups</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
+
+<span class="kn">from</span> <span class="nn">dask_cuda</span> <span class="kn">import</span> <span class="n">LocalCUDACluster</span>
+<span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="kn">from</span> <span class="nn">cuml.dask.common</span> <span class="kn">import</span> <span class="n">to_sparse_dask_array</span>
+
+<span class="kn">from</span> <span class="nn">cuml.dask.naive_bayes</span> <span class="kn">import</span> <span class="n">MultinomialNB</span>
+
+<span class="c1"># Create a local CUDA cluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCUDACluster</span><span class="p">()</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+
+<span class="c1"># Load corpus</span>
+
+<span class="n">twenty_train</span> <span class="o">=</span> <span class="n">fetch_20newsgroups</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s1">'train'</span><span class="p">,</span>
+                          <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">cv</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">()</span>
+<span class="n">xformed</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">twenty_train</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">to_sparse_dask_array</span><span class="p">(</span><span class="n">xformed</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">twenty_train</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">asarray</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                      <span class="n">fancy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+<span class="c1"># Train model</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">MultinomialNB</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Compute accuracy on training set</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mf">0.9244298934936523</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cuml.dask.naive_bayes.MultinomialNB.fit" title="cuml.dask.naive_bayes.MultinomialNB.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a>(X, y[, classes])</p></td>
+<td><p>Fit distributed Naive Bayes classifier model</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cuml.dask.naive_bayes.MultinomialNB.predict" title="cuml.dask.naive_bayes.MultinomialNB.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(X)</p></td>
+<td><p>Use distributed Naive Bayes model to predict the classes for a given set of data samples.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cuml.dask.naive_bayes.MultinomialNB.score" title="cuml.dask.naive_bayes.MultinomialNB.score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score</span></code></a>(X, y)</p></td>
+<td><p>Compute accuracy score</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="cuml.dask.naive_bayes.MultinomialNB.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">classes</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuml.dask.naive_bayes.MultinomialNB.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit distributed Naive Bayes classifier model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">dask.Array with blocks containing dense or sparse cupy arrays</span></dt><dd></dd>
+<dt><strong>y</strong><span class="classifier">dask.Array with blocks containing cupy.ndarray</span></dt><dd></dd>
+<dt><strong>classes</strong><span class="classifier">array-like containing unique class labels</span></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>cuml.dask.naive_bayes.MultinomialNB current model instance</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt id="cuml.dask.naive_bayes.MultinomialNB.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuml.dask.naive_bayes.MultinomialNB.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use distributed Naive Bayes model to predict the classes for a
+given set of data samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">dask.Array with blocks containing dense or sparse cupy arrays</span></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>dask.Array containing predicted classes</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt id="cuml.dask.naive_bayes.MultinomialNB.score">
+<code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuml.dask.naive_bayes.MultinomialNB.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute accuracy score</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">Dask.Array</span></dt><dd><p>Features to predict. Note- it is assumed that chunk sizes and
+shape of X are known. This can be done for a fully delayed
+Array by calling X.compute_chunks_sizes()</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">Dask.Array</span></dt><dd><p>Labels to use for computing accuracy. Note- it is assumed that
+chunk sizes and shape of X are known. This can be done for a fully
+delayed Array by calling X.compute_chunks_sizes()</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float the resulting accuracy score</span></dt><dd></dd>
 </dl>
 </dd>
 </dl>
