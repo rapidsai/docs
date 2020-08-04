@@ -107,3 +107,17 @@ DOC Update conda install process
 - This corrects bug #47 that prevents users from installing X because of Y...
 - Also fixed spelling mistakes and an incorrect version number
 ```
+
+## Large files and git
+
+Any file larger than 5MB must be stored using either [Git LFS](https://git-lfs.github.com/) or S3.
+
+| Size | Required | Not Required |
+| ---- | -------- | ------------ |
+| <5MB | Git | Git |
+| >5MB | Git LFS | S3 |
+| >2GB | Avoid | S3 |
+
+A required file is a file that the average developer requires in order to build and/or test the project. This may include small datasets for running unit tests or large source files.
+
+If you need data uploaded to S3, simply file an Ops issue.
