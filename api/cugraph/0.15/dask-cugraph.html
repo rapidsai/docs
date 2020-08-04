@@ -42,11 +42,12 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api.html">cuGraph API Reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Multi-GPU with cuGraph</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#consolidation">Consolidation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#distributed-graph-analytics">Distributed graph analytics</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#distributed-graph-analytics-support">Distributed Graph Analytics Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cugraph.dask.link_analysis.pagerank">Distributed Graph Algorithms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cugraph.comms.comms">Helper functions</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#consolidation">Consolidation</a></li>
 </ul>
 </li>
 </ul>
@@ -74,21 +75,184 @@
 <div itemprop="articleBody">
 <div class="section" id="multi-gpu-with-cugraph">
 <h1>Multi-GPU with cuGraph<a class="headerlink" href="#multi-gpu-with-cugraph" title="Permalink to this headline">¶</a></h1>
-<p>cuGraph supports multi-GPU leveraging <a class="reference external" href="https://dask.org">Dask</a>. Dask is a flexible library for parallel computing in Python which makes scaling out your workflow smooth and simple. cuGraph also uses other Dask-based RAPIDS projects such as <a class="reference external" href="https://github.com/rapidsai/dask-cuda">dask-cuda</a>.</p>
+<p>cuGraph supports multi-GPU leveraging <a class="reference external" href="https://dask.org">Dask</a>. Dask is a flexible library for parallel computing in Python which makes scaling out your workflow smooth and simple. cuGraph also uses other Dask-based RAPIDS projects such as <a class="reference external" href="https://github.com/rapidsai/dask-cuda">dask-cuda</a>. The maximum graph size is currently limited to 2 Billion vertices (to be waived in the next versions).</p>
+<div class="section" id="distributed-graph-analytics">
+<h2>Distributed graph analytics<a class="headerlink" href="#distributed-graph-analytics" title="Permalink to this headline">¶</a></h2>
+<p>The current solution is able to scale across multiple GPUs on multiple machines. Distributing the graph and computation lets you analyze datasets far larger than a single GPU’s memory.</p>
+<p>With cuGraph and Dask, whether you’re using a single NVIDIA GPU or multiple nodes, your RAPIDS workflow will run smoothly, intelligently distributing the workload across the available resources.</p>
+<p>If your graph comfortably fits in memory on a single GPU, you would want to use the single-GPU version of cuGraph. If you want to distribute your workflow across multiple GPUs and have more data than you can fit in memory on a single GPU, you would want to use cuGraph’s multi-GPU features.</p>
+<div class="section" id="module-cugraph.dask.link_analysis.pagerank">
+<span id="distributed-graph-algorithms"></span><h3>Distributed Graph Algorithms<a class="headerlink" href="#module-cugraph.dask.link_analysis.pagerank" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="cugraph.dask.link_analysis.pagerank.pagerank">
+<code class="sig-prename descclassname">cugraph.dask.link_analysis.pagerank.</code><code class="sig-name descname">pagerank</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_graph</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.85</span></em>, <em class="sig-param"><span class="n">personalization</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_iter</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">tol</span><span class="o">=</span><span class="default_value">1e-05</span></em>, <em class="sig-param"><span class="n">nstart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">load_balance</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.dask.link_analysis.pagerank.pagerank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the PageRank values for each vertex in a graph using multiple GPUs.
+cuGraph computes an approximation of the Pagerank using the power method.
+The input graph must contain edge list as  dask-cudf dataframe with
+one partition per GPU.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier">cugraph.DiGraph</span></dt><dd><p>cuGraph graph descriptor, should contain the connectivity information
+as dask cudf edge list dataframe(edge weights are not used for this
+algorithm). Undirected Graph not currently supported.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>The damping factor alpha represents the probability to follow an
+outgoing edge, standard value is 0.85.
+Thus, 1.0-alpha is the probability to “teleport” to a random vertex.
+Alpha should be greater than 0.0 and strictly lower than 1.0.</p>
+</dd>
+<dt><strong>personalization</strong><span class="classifier">cudf.Dataframe</span></dt><dd><p>GPU Dataframe containing the personalization information.</p>
+<dl class="simple">
+<dt>personalization[‘vertex’]<span class="classifier">cudf.Series</span></dt><dd><p>Subset of vertices of graph for personalization</p>
+</dd>
+<dt>personalization[‘values’]<span class="classifier">cudf.Series</span></dt><dd><p>Personalization values for vertices</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>max_iter</strong><span class="classifier">int</span></dt><dd><p>The maximum number of iterations before an answer is returned.
+If this value is lower or equal to 0 cuGraph will use the default
+value, which is 30.</p>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float</span></dt><dd><p>Set the tolerance the approximation, this parameter should be a small
+magnitude value.
+The lower the tolerance the better the approximation. If this value is
+0.0f, cuGraph will use the default value which is 1.0E-5.
+Setting too small a tolerance can lead to non-convergence due to
+numerical roundoff. Usually values between 0.01 and 0.00001 are
+acceptable.</p>
+</dd>
+<dt><strong>nstart</strong><span class="classifier">not supported</span></dt><dd><p>initial guess for pagerank</p>
+</dd>
+<dt><strong>load_balance</strong><span class="classifier">bool</span></dt><dd><p>Set as True to perform load_balancing after global sorting of
+dask-cudf DataFrame. This ensures that the data is uniformly
+distributed among multiple GPUs to avoid over-loading.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>PageRank</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>GPU data frame containing two cudf.Series of size V: the vertex
+identifiers and the corresponding PageRank values.</p>
+<dl class="simple">
+<dt>df[‘vertex’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers</p>
+</dd>
+<dt>df[‘pagerank’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the PageRank score</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cugraph.dask</span> <span class="k">as</span> <span class="nn">dcg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Comms</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chunksize</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">get_chunksize</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ddf</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
+<span class="go">                             delimiter=' ',</span>
+<span class="go">                             names=['src', 'dst', 'value'],</span>
+<span class="go">                             dtype=['int32', 'int32', 'float32'])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dg</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dg</span><span class="o">.</span><span class="n">from_dask_cudf_edgelist</span><span class="p">(</span><span class="n">ddf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'src'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'dst'</span><span class="p">,</span>
+<span class="go">                               edge_attr='value')</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span><span class="n">dg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Comms</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+<span class="target" id="module-cugraph.dask.traversal.bfs"></span><dl class="py function">
+<dt id="cugraph.dask.traversal.bfs.bfs">
+<code class="sig-prename descclassname">cugraph.dask.traversal.bfs.</code><code class="sig-name descname">bfs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">graph</span></em>, <em class="sig-param"><span class="n">start</span></em>, <em class="sig-param"><span class="n">return_distances</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.dask.traversal.bfs.bfs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the distances and predecessors for a breadth first traversal of a
+graph.
+The input graph must contain edge list as  dask-cudf dataframe with
+one partition per GPU.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">cugraph.DiGraph</span></dt><dd><p>cuGraph graph descriptor, should contain the connectivity information
+as dask cudf edge list dataframe(edge weights are not used for this
+algorithm). Undirected Graph not currently supported.</p>
+</dd>
+<dt><strong>start</strong><span class="classifier">Integer</span></dt><dd><p>Specify starting vertex for breadth-first search; this function
+iterates over edges in the component reachable from this node.</p>
+</dd>
+<dt><strong>return_distances</strong><span class="classifier">bool, optional, default=False</span></dt><dd><p>Indicates if distances should be returned</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>df[‘vertex’][i] gives the vertex id of the i’th vertex</p>
+<p>df[‘distance’][i] gives the path distance for the i’th vertex from the
+starting vertex (Only if return_distances is True)</p>
+<p>df[‘predecessor’][i] gives for the i’th vertex the vertex it was
+reached from in the traversal</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cugraph.dask</span> <span class="k">as</span> <span class="nn">dcg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Comms</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chunksize</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">get_chunksize</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ddf</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
+<span class="go">                             delimiter=' ',</span>
+<span class="go">                             names=['src', 'dst', 'value'],</span>
+<span class="go">                             dtype=['int32', 'int32', 'float32'])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dg</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dg</span><span class="o">.</span><span class="n">from_dask_cudf_edgelist</span><span class="p">(</span><span class="n">ddf</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">bfs</span><span class="p">(</span><span class="n">dg</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Comms</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+</div>
+<div class="section" id="module-cugraph.comms.comms">
+<span id="helper-functions"></span><h3>Helper functions<a class="headerlink" href="#module-cugraph.comms.comms" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="cugraph.comms.comms.initialize">
+<code class="sig-prename descclassname">cugraph.comms.comms.</code><code class="sig-name descname">initialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">comms</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p2p</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.comms.comms.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a communicator for multi-node/multi-gpu communications.
+It is expected to be called right after client initialization for running
+multi-GPU algorithms. It wraps raft comms that manages underlying NCCL and
+UCX comms handles across the workers of a Dask cluster.
+It is recommended to also call <cite>destroy()</cite> when the comms are no longer
+needed so the underlying resources can be cleaned up.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>comms</strong><span class="classifier">raft Comms</span></dt><dd><p>A pre-initialized raft communicator. If provided, this is used for mnmg
+communications.</p>
+</dd>
+<dt><strong>p2p</strong><span class="classifier">bool</span></dt><dd><p>Initialize UCX endpoints</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+<span class="target" id="module-0"></span><dl class="py function">
+<dt id="cugraph.comms.comms.destroy">
+<code class="sig-prename descclassname">cugraph.comms.comms.</code><code class="sig-name descname">destroy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.comms.comms.destroy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shuts down initialized comms and cleans up resources.</p>
+</dd></dl>
+<span class="target" id="module-cugraph.dask.common.read_utils"></span><dl class="py function">
+<dt id="cugraph.dask.common.read_utils.get_chunksize">
+<code class="sig-prename descclassname">cugraph.dask.common.read_utils.</code><code class="sig-name descname">get_chunksize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.dask.common.read_utils.get_chunksize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the appropriate chunksize for dask_cudf.read_csv
+to get a number of partitions equal to the number of GPUs.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dask_cugraph.pagerank</span> <span class="k">as</span> <span class="nn">dcg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chunksize</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">get_chunksize</span><span class="p">(</span><span class="n">edge_list</span><span class="o">.</span><span class="n">csv</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</div>
+</div>
 <div class="section" id="consolidation">
 <h2>Consolidation<a class="headerlink" href="#consolidation" title="Permalink to this headline">¶</a></h2>
 <p>cuGraph can transparently interpret the Dask cuDF Dataframe as a regular Dataframe when loading the edge list. This is particularly helpful for workflows extracting a single GPU sized edge list from a distributed dataset. From there any existing single GPU feature will just work on this input.</p>
 <p>For instance, consolidation allows leveraging Dask cuDF CSV reader to load file(s) on multiple GPUs and consolidate this input to a single GPU graph. Reading is often the time and memory bottleneck, with this feature users can call the Multi-GPU version of the reader without changing anything else.</p>
-</div>
-<div class="section" id="distributed-graph-analytics">
-<h2>Distributed graph analytics<a class="headerlink" href="#distributed-graph-analytics" title="Permalink to this headline">¶</a></h2>
-<p>The current solution is able to scale across multiple GPUs on multiple machines. Distributing the graph and computation lets you analyze datasets far larger than a single GPU’s memory.</p>
-<p>With cuGraph and Dask, whether you’re using a single NVIDIA GPU or using all 16 NVIDIA V100 GPUs on a DGX-2, your RAPIDS workflow will run smoothly, intelligently distributing the workload across the available resources.</p>
-<p>If your graph comfortably fits in memory on a single GPU, you would want to use the single-GPU version of cuGraph. If you want to distribute your workflow across multiple GPUs and have more data than you can fit in memory on a single GPU, you would want to use cuGraph’s multi-GPU features.</p>
-<div class="section" id="distributed-graph-analytics-support">
-<h3>Distributed Graph Analytics Support<a class="headerlink" href="#distributed-graph-analytics-support" title="Permalink to this headline">¶</a></h3>
-<p>Pagerank</p>
-</div>
 </div>
 </div>
 </div>
