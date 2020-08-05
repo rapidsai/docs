@@ -118,6 +118,10 @@ Any file larger than 5MB must be stored using either [Git LFS](https://git-lfs.g
 | >5MB | Git LFS | S3 |
 | >2GB | Avoid | S3 |
 
-A required file is a file that the average developer requires in order to build and/or test the project. This may include small datasets for running unit tests or large source files.
+A `required` file is a file that the average developer requires in order to build and/or test the project. This may include small datasets for running unit tests or large source files.
+
+Files that are `not required` should be stored in S3 so the limited number of developers who need it can "opt-in" to downloading these larger files. This helps keep the repository smaller for the majority of users.
+
+It is important to choose the appropriate storage mechanism from the beginning because transitioning from git to git LFS or S3 requires rewriting git history.
 
 If you need data uploaded to S3, simply file an Ops issue.
