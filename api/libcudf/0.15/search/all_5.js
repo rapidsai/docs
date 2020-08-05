@@ -22,10 +22,12 @@ var searchData=
   ['extract_5fcomponent_223',['extract_component',['../datetime_8hpp.html#aaf8b343a499fd5c2bac00c8025cd2cb4',1,'cudf::datetime::detail']]],
   ['extract_5fday_224',['extract_day',['../group__datetime__extract.html#ga71e9203a3b4dccbe41b4cf4ad2ca6d21',1,'cudf::datetime']]],
   ['extract_5fhour_225',['extract_hour',['../group__datetime__extract.html#ga9c7f9cbfe1dd6f125e6f44c5b4c9c0f3',1,'cudf::datetime']]],
-  ['extract_5fminute_226',['extract_minute',['../group__datetime__extract.html#ga693106fa57b782510f54ab7c402d4a3d',1,'cudf::datetime']]],
-  ['extract_5fmonth_227',['extract_month',['../group__datetime__extract.html#gae8efc224b8984b9a63987cc565bff349',1,'cudf::datetime']]],
-  ['extract_5fsecond_228',['extract_second',['../group__datetime__extract.html#ga2f4bd77baa80b259667aaed4c80b856d',1,'cudf::datetime']]],
-  ['extract_5fweekday_229',['extract_weekday',['../group__datetime__extract.html#ga0c3b959227b11ae538e90a1e1ef99e7b',1,'cudf::datetime']]],
-  ['extract_5fyear_230',['extract_year',['../group__datetime__extract.html#ga8db7696c65b0f7b356f2bc5c3ab3be92',1,'cudf::datetime']]],
-  ['exception_231',['Exception',['../group__utility__error.html',1,'']]]
+  ['extract_5flist_5felement_226',['extract_list_element',['../group__lists__extract.html#ga1574c44c60b9f9a4dbe8c294574e3a4b',1,'cudf::lists']]],
+  ['extract_5fminute_227',['extract_minute',['../group__datetime__extract.html#ga693106fa57b782510f54ab7c402d4a3d',1,'cudf::datetime']]],
+  ['extract_5fmonth_228',['extract_month',['../group__datetime__extract.html#gae8efc224b8984b9a63987cc565bff349',1,'cudf::datetime']]],
+  ['extract_5fsecond_229',['extract_second',['../group__datetime__extract.html#ga2f4bd77baa80b259667aaed4c80b856d',1,'cudf::datetime']]],
+  ['extract_5fweekday_230',['extract_weekday',['../group__datetime__extract.html#ga0c3b959227b11ae538e90a1e1ef99e7b',1,'cudf::datetime']]],
+  ['extract_5fyear_231',['extract_year',['../group__datetime__extract.html#ga8db7696c65b0f7b356f2bc5c3ab3be92',1,'cudf::datetime']]],
+  ['extracting_232',['Extracting',['../group__lists__extract.html',1,'']]],
+  ['exception_233',['Exception',['../group__utility__error.html',1,'']]]
 ];
