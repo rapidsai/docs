@@ -10,6 +10,8 @@ var searchData=
   ['cnmemdevice_5ft_5f_13',['cnmemDevice_t_',['../structcnmemDevice__t__.html',1,'']]],
   ['compare_5fblocks_14',['compare_blocks',['../structrmm_1_1mr_1_1detail_1_1compare__blocks.html',1,'rmm::mr::detail']]],
   ['cuda_15',['CUDA',['../classrmm_1_1mr_1_1cnmem__memory__resource.html#a53423dac6d804f073c50ee7cbe2f1b08aa33b7755e5f9b504d2d038eaca4ff28d',1,'rmm::mr::cnmem_memory_resource']]],
-  ['cuda_5ferror_16',['cuda_error',['../structrmm_1_1cuda__error.html',1,'rmm']]],
-  ['cuda_5fmemory_5fresource_17',['cuda_memory_resource',['../classrmm_1_1mr_1_1cuda__memory__resource.html',1,'rmm::mr']]]
+  ['cuda_5fdevice_5fid_16',['cuda_device_id',['../structrmm_1_1cuda__device__id.html',1,'rmm::cuda_device_id'],['../structrmm_1_1cuda__device__id.html#a35360d244654fbaa0f8458635436195d',1,'rmm::cuda_device_id::cuda_device_id()']]],
+  ['cuda_5ferror_17',['cuda_error',['../structrmm_1_1cuda__error.html',1,'rmm']]],
+  ['cuda_5fmemory_5fresource_18',['cuda_memory_resource',['../classrmm_1_1mr_1_1cuda__memory__resource.html',1,'rmm::mr']]],
+  ['current_5fdevice_19',['current_device',['../per__device__resource_8hpp.html#a79ef20080ffcff8be3df76160aa4f87e',1,'rmm::mr::detail']]]
 ];
