@@ -27,7 +27,7 @@ Operations
 
 **NOTE:** *Dates are subject to change at anytime. Completed release schedules are posted [here]({% link releases/schedule.md %}).*
 
-> See [RGN 3](/notices/rgn0003) for update on `v0.15` release
+**NOTICE:** See [RGN 3](/notices/rgn0003) for update on `v0.15` release extension
 
 Phase | Start | End | Duration
 -- | -- | -- | --
