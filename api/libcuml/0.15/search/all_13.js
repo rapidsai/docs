@@ -108,7 +108,7 @@ var searchData=
   ['svc_2ecu_1162',['svc.cu',['../svc_8cu.html',1,'']]],
   ['svc_2ehpp_1163',['svc.hpp',['../svc_8hpp.html',1,'']]],
   ['svc_5fimpl_2ecuh_1164',['svc_impl.cuh',['../svc__impl_8cuh.html',1,'']]],
-  ['svcfit_1165',['svcFit',['../namespaceML_1_1SVM.html#a88523f1a45ca13ac36f6d12b42f9d7e5',1,'ML::SVM']]],
+  ['svcfit_1165',['svcFit',['../namespaceML_1_1SVM.html#ae2b63cb5ff5baad351b92a85982c5564',1,'ML::SVM']]],
   ['svcpredict_1166',['svcPredict',['../namespaceML_1_1SVM.html#a38058f85133c6b642b34bb713e22d664',1,'ML::SVM']]],
   ['svd_2ecuh_1167',['svd.cuh',['../svd_8cuh.html',1,'']]],
   ['svm_5fapi_2ecpp_1168',['svm_api.cpp',['../svm__api_8cpp.html',1,'']]],
@@ -122,7 +122,7 @@ var searchData=
   ['svr_2ecu_1176',['svr.cu',['../svr_8cu.html',1,'']]],
   ['svr_2ehpp_1177',['svr.hpp',['../svr_8hpp.html',1,'']]],
   ['svr_5fimpl_2ecuh_1178',['svr_impl.cuh',['../svr__impl_8cuh.html',1,'']]],
-  ['svrfit_1179',['svrFit',['../namespaceML_1_1SVM.html#aa8166af2b882fc8963d89d25557157d0',1,'ML::SVM']]],
+  ['svrfit_1179',['svrFit',['../namespaceML_1_1SVM.html#a0d01be67b88e133fe54b6d0d5901478a',1,'ML::SVM']]],
   ['swap_5fdepth_1180',['swap_depth',['../structTemporaryMemory.html#a01d4a8cce77913ae4a215530a8f4a1b9',1,'TemporaryMemory']]],
   ['syncstream_1181',['syncStream',['../classML_1_1cumlMPICommunicator__impl.html#a340702af87cc9b03468f9cb0ca84cb0d',1,'ML::cumlMPICommunicator_impl::syncStream()'],['../classML_1_1cumlStdCommunicator__impl.html#a281873c27bb3ee30fc7e571bcc622174',1,'ML::cumlStdCommunicator_impl::syncStream()'],['../classMLCommon_1_1cumlCommunicator__iface.html#a0772b1e1a5a32ca9e40eb25d9a7ead54',1,'MLCommon::cumlCommunicator_iface::syncStream()'],['../classMLCommon_1_1cumlCommunicator.html#a46eaf46adee1ccae136bbc6f1d9c6911',1,'MLCommon::cumlCommunicator::syncStream()']]]
 ];
