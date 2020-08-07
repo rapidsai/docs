@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['size_218',['size',['../structcnmemDevice__t__.html#aa2b1f9393452d7548dd1d801a6915546',1,'cnmemDevice_t_']]],
-  ['streams_219',['streams',['../structcnmemDevice__t__.html#a2c6fb71f221ba9d4af844f7cd929caab',1,'cnmemDevice_t_']]],
-  ['streamsizes_220',['streamSizes',['../structcnmemDevice__t__.html#a735d6a6e1406e1048bbb2e956114639b',1,'cnmemDevice_t_']]]
+  ['numstreams_282',['numStreams',['../structcnmemDevice__t__.html#a8808c3f31ad0f3b35d0421cd8ed87c9f',1,'cnmemDevice_t_']]]
 ];
