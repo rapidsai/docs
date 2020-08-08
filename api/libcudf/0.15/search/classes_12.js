@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['value_5faccessor_973',['value_accessor',['../structcudf_1_1detail_1_1value__accessor.html',1,'cudf::detail']]]
+  ['value_5faccessor_976',['value_accessor',['../structcudf_1_1detail_1_1value__accessor.html',1,'cudf::detail']]]
 ];
