@@ -31,8 +31,8 @@ Operations
 
 Phase | Start | End | Duration
 -- | -- | -- | --
-Development | Tue, May 19th | Wed, Aug 5th | 55 days
-Burn Down | Thu, Aug 6th | Wed, Aug 12th | 10 days
+Development | Tue, May 19th | Wed, Aug 5th | 56 days
+Burn Down | Thu, Aug 6th | Wed, Aug 19th | 10 days
 Code Freeze/Testing | Thu, Aug 20th | Tue, Aug 25th | 4 days
 Release | Wed, Aug 26th | Wed, Aug 26th | 1 day
 
@@ -40,7 +40,7 @@ Release | Wed, Aug 26th | Wed, Aug 26th | 1 day
 
 Phase | Start | End | Duration
 -- | -- | -- | --
-Development | Thu, Aug 6th | Wed, Sept 23rd | 34 days
-Burn Down | Thu, Sept 24th | Wed, Sept 30th | 5 days
-Code Freeze/Testing | Thu, Oct 1st | Tue, Oct 6th | 4 days
-Release | Wed, Oct 7th | Wed, Oct 7th | 1 day
+Development | Thu, Aug 6th | Wed, Sept 30th | 39 days
+Burn Down | Thu, Oct 1st | Wed, Oct 7th | 5 days
+Code Freeze/Testing | Thu, Oct 8th | Tue, Oct 13th | 4 days
+Release | Wed, Oct 14th | Wed, Oct 14th | 1 day
