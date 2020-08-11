@@ -31,5 +31,6 @@ var searchData=
   ['atan2_36',['ATAN2',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcaf8d5f387d3ac8f7084ae44566b32acb2',1,'cudf']]],
   ['auto_37',['AUTO',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8ae1f2d5134ed2543d38a0de9751cf75d9',1,'cudf::io']]],
   ['average_38',['AVERAGE',['../group__column__sort.html#gga1b10429fb5d86af4db72da1118f2ad5da16de38737a9f8366e9b2042b4e9b6290',1,'cudf']]],
-  ['aggregation_39',['Aggregation',['../group__column__aggregation.html',1,'']]]
+  ['aggregation_39',['Aggregation',['../group__column__aggregation.html',1,'']]],
+  ['arrow_40',['Arrow',['../group__interop__arrow.html',1,'']]]
 ];
