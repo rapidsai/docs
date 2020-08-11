@@ -2,7 +2,7 @@ var searchData=
 [
   ['information_5fcriterion_1977',['information_criterion',['../namespaceML.html#a8934ab3758daa7a6dcef38d2ed8eb7c0',1,'ML']]],
   ['init_5fdense_1978',['init_dense',['../namespaceML_1_1fil.html#a0f5fde8a886718f11aa478331fbb7f27',1,'ML::fil']]],
-  ['init_5fsparse_1979',['init_sparse',['../namespaceML_1_1fil.html#a5b0871f037947fcbe756ba5650d18d72',1,'ML::fil']]],
+  ['init_5fsparse_1979',['init_sparse',['../namespaceML_1_1fil.html#ae60e1855cde31b49b076ad3724b3b9e4',1,'ML::fil::init_sparse(const cumlHandle &amp;h, forest_t *pf, const int *trees, const sparse_node16_t *nodes, const forest_params_t *params)'],['../namespaceML_1_1fil.html#a41acb75ad7a46f73d72c777393a2951f',1,'ML::fil::init_sparse(const cumlHandle &amp;h, forest_t *pf, const int *trees, const sparse_node8_t *nodes, const forest_params_t *params)']]],
   ['initialize_5fmpi_5fcomms_1980',['initialize_mpi_comms',['../namespaceML.html#af1a8aaa312a62f236a4238b4abdbbd49',1,'ML']]],
   ['initshuffle_1981',['initShuffle',['../namespaceML_1_1Solver.html#ad335b3f21f9fcffddb7499c1aa3c2a54',1,'ML::Solver']]],
   ['inject_5fcomms_1982',['inject_comms',['../namespaceML.html#a3b5faa4ceb0e330450d1b210b3bd86c4',1,'ML']]],

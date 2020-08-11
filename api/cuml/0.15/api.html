@@ -1339,7 +1339,7 @@ Typically the delimiting character between words is a good choice.</p>
 <td><p>Build the vocabulary and return document-term matrix.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#cuml.feature_extraction.text.CountVectorizer.get_feature_names" title="cuml.feature_extraction.text.CountVectorizer.get_feature_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_feature_names</span></code></a>()</p></td>
-<td><p>Array mapping from feature integer indices to feature name.</p></td>
+<td><p>Array mapping from feature integer indices to feature name. Returns ——- feature_names : Series     A list of feature names.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#cuml.feature_extraction.text.CountVectorizer.inverse_transform" title="cuml.feature_extraction.text.CountVectorizer.inverse_transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inverse_transform</span></code></a>(X)</p></td>
 <td><p>Return terms per document with nonzero entries in X.</p></td>
@@ -5443,7 +5443,7 @@ currently fully guarantee the exact same results.</p>
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#cuml.ensemble.RandomForestRegressor.convert_to_fil_model" title="cuml.ensemble.RandomForestRegressor.convert_to_fil_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_to_fil_model</span></code></a>(self[, output_class, …])</p></td>
-<td><p>Create a Forest Inference (FIL) model from the trained cuML Random Forest model.</p></td>
+<td><p>Create a Forest Inference (FIL) model from the trained cuML Random Forest model. Parameters ———- output_class : boolean (default = False)     This is optional and required only while performing the     predict operation on the GPU. If true, return a 1 or 0 depending on whether the raw     prediction exceeds the threshold. If False, just return     the raw prediction. algo : string (default = ‘auto’)     This is optional and required only while performing the     predict operation on the GPU. ‘naive’ - simple inference using shared memory     ‘tree_reorg’ - similar to naive but trees rearranged to be more     coalescing-friendly     ‘batch_tree_reorg’ - similar to tree_reorg but predicting     multiple rows per thread block     <cite>auto</cite> - choose the algorithm automatically. Currently     ‘batch_tree_reorg’ is used for dense storage     and ‘naive’ for sparse storage fil_sparse_format : boolean or string (default = ‘auto’)     This variable is used to choose the type of forest that will be     created in the Forest Inference Library. It is not required     while using predict_model=’CPU’. ‘auto’ - choose the storage type automatically     (currently True is chosen by auto)     False - create a dense forest     True - create a sparse forest, requires algo=’naive’     or algo=’auto’ Returns ———- fil_model :     A Forest Inference model which can be used to perform     inferencing on the random forest model.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#cuml.ensemble.RandomForestRegressor.convert_to_treelite_model" title="cuml.ensemble.RandomForestRegressor.convert_to_treelite_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_to_treelite_model</span></code></a>(self)</p></td>
 <td><p>Converts the cuML RF model to a Treelite model</p></td>
@@ -5914,14 +5914,19 @@ True - create a sparse forest;</p>
 <blockquote>
 <div><p>requires algo=’NAIVE’ or algo=’AUTO’</p>
 </div></blockquote>
+<dl class="simple">
+<dt>‘sparse8’ - (experimental) create a sparse forest</dt><dd><p>with 8-byte nodes; requires algo=’NAIVE’ or algo=’AUTO’;
+can fail if 8-byte nodes are not enough
+to store the forest, e.g. if there are
+too many nodes in a tree or too many features</p>
 </dd>
 </dl>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>fil_model :</dt><dd><p>A Forest Inference model which can be used to perform
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>———-</strong></dt><dd></dd>
+<dt><strong>fil_model :</strong></dt><dd><p>A Forest Inference model which can be used to perform
 inferencing on the random forest/ XGBoost model.</p>
 </dd>
 </dl>
@@ -7955,7 +7960,7 @@ recommendation systems and data compression.</p>
 <td><p>Transform X back to its original space.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#cuml.TruncatedSVD.transform" title="cuml.TruncatedSVD.transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code></a>(self, X[, convert_dtype])</p></td>
-<td><p>Perform dimensionality reduction on X.</p></td>
+<td><p>Perform dimensionality reduction on X. Parameters ———- X : array-like (device or host) shape = (n_samples, n_features)     Dense matrix (floats or doubles) of shape (n_samples, n_features). Acceptable formats: cuDF DataFrame, NumPy ndarray, Numba device     ndarray, cuda array interface compliant array like CuPy convert_dtype : bool, optional (default = False)     When set to True, the transform method will automatically     convert the input to the data type which was used to train the     model.</p></td>
 </tr>
 </tbody>
 </table>
@@ -9356,7 +9361,7 @@ Series.</p>
 <h3>ARIMA<a class="headerlink" href="#arima" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="cuml.tsa.ARIMA">
-<em class="property">class </em><code class="sig-prename descclassname">cuml.tsa.</code><code class="sig-name descname">ARIMA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">endog</span></em>, <em class="sig-param"><span class="n">order</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">1, 1, 1</span></em>, <em class="sig-param"><span class="n">seasonal_order</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0, 0, 0, 0</span></em>, <em class="sig-param"><span class="n">fit_intercept</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">handle</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">output_type</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuml.tsa.ARIMA" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">cuml.tsa.</code><code class="sig-name descname">ARIMA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">endog</span></em>, <em class="sig-param"><span class="n">order</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">1, 1, 1</span></em>, <em class="sig-param"><span class="n">seasonal_order</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0, 0, 0, 0</span></em>, <em class="sig-param"><span class="n">fit_intercept</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">simple_differencing</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">handle</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">output_type</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuml.tsa.ARIMA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements a batched ARIMA model for in- and out-of-sample
 time-series prediction, with support for seasonality (SARIMA)</p>
 <p>ARIMA stands for Auto-Regressive Integrated Moving Average.
@@ -9376,7 +9381,16 @@ Numba device ndarray, cuda array interface compliant array like CuPy.</p>
 </dd>
 <dt><strong>seasonal_order: Tuple[int, int, int, int]</strong></dt><dd><p>The seasonal ARIMA order (P, D, Q, s) of the model</p>
 </dd>
-<dt><strong>fit_intercept</strong><span class="classifier">bool or int</span></dt><dd><p>Whether to include a constant trend mu in the model (default: True)</p>
+<dt><strong>fit_intercept</strong><span class="classifier">bool or int (default = True)</span></dt><dd><p>Whether to include a constant trend mu in the model</p>
+</dd>
+<dt><strong>simple_differencing: bool or int (default = True)</strong></dt><dd><p>If True, the data is differenced before being passed to the Kalman
+filter. If False, differencing is part of the state-space model.
+In some cases this setting can be ignored: computing forecasts with
+confidence intervals will force it to False ; fitting with the CSS
+method will force it to True.
+Note that forecasts are always for the original series, whereas
+statsmodels computes forecasts for the differenced series when
+simple_differencing is True.</p>
 </dd>
 <dt><strong>handle</strong><span class="classifier">cuml.Handle</span></dt><dd><p>If it is None, a new one is created just for this instance</p>
 </dd>
@@ -9465,7 +9479,7 @@ for each time series.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#cuml.tsa.ARIMA.fit" title="cuml.tsa.ARIMA.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a>(self, start_params, object]] = None, …)</p></td>
 <td><p>Fit the ARIMA model to each time series.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#cuml.tsa.ARIMA.forecast" title="cuml.tsa.ARIMA.forecast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forecast</span></code></a>(self, nsteps)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#cuml.tsa.ARIMA.forecast" title="cuml.tsa.ARIMA.forecast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forecast</span></code></a>(self, nsteps[, level])</p></td>
 <td><p>Forecast the given model <cite>nsteps</cite> into the future.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#cuml.tsa.ARIMA.get_params" title="cuml.tsa.ARIMA.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>(self)</p></td>
@@ -9474,7 +9488,7 @@ for each time series.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#cuml.tsa.ARIMA.pack" title="cuml.tsa.ARIMA.pack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pack</span></code></a>(self)</p></td>
 <td><p>Pack parameters of the model into a linearized vector <cite>x</cite></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#cuml.tsa.ARIMA.predict" title="cuml.tsa.ARIMA.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(self[, start, end])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cuml.tsa.ARIMA.predict" title="cuml.tsa.ARIMA.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(self[, start, end, level])</p></td>
 <td><p>Compute in-sample and/or out-of-sample prediction for each series</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#cuml.tsa.ARIMA.set_params" title="cuml.tsa.ARIMA.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(self, params, object])</p></td>
@@ -9528,14 +9542,14 @@ Pass None for automatic estimation (recommended)</p>
 </dd>
 </dl>
 </dd>
-<dt><strong>h</strong><span class="classifier">float</span></dt><dd><p>Finite-differencing step size. The gradient is computed
-using second-order differencing:</p>
+<dt><strong>h</strong><span class="classifier">float</span></dt><dd><p>Finite-differencing step size. The gradient is computed using
+forward finite differencing:</p>
 <blockquote>
 <div><blockquote>
-<div><p>f(x+h) - f(x - h)</p>
+<div><p>f(x+h) - f(x)</p>
 </div></blockquote>
 <dl class="simple">
-<dt>g = —————– + O(h^2)</dt><dd><p>2 * h</p>
+<dt>g = ————- + O(h)</dt><dd><p>h</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -9556,10 +9570,13 @@ observations</p>
 </dd></dl>
 <dl class="py method">
 <dt id="cuml.tsa.ARIMA.forecast">
-<code class="sig-name descname">forecast</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">nsteps</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuml.tsa.ARIMA.forecast" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forecast</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">nsteps</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuml.tsa.ARIMA.forecast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Forecast the given model <cite>nsteps</cite> into the future.</p>
 <dl class="simple">
 <dt>nsteps<span class="classifier">int</span></dt><dd><p>The number of steps to forecast beyond end of the given series</p>
+</dd>
+<dt>level: float or None (default = None)</dt><dd><p>Confidence level for prediction intervals, or None to return only
+the point forecasts. 0 &lt; level &lt; 1</p>
 </dd>
 </dl>
 </dd></dl>
@@ -9580,7 +9597,7 @@ observations</p>
 </dd></dl>
 <dl class="py method">
 <dt id="cuml.tsa.ARIMA.predict">
-<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">end</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuml.tsa.ARIMA.predict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">end</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuml.tsa.ARIMA.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute in-sample and/or out-of-sample prediction for each series</p>
 </dd></dl>
 <dl class="py method">
