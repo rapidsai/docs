@@ -94,13 +94,13 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img alt="" border="0" src="per__device__resource_8hpp__dep__incl.png" usemap="#aper__device__resource_8hppdep"/></div>
 <map id="aper__device__resource_8hppdep" name="per__device__resource_8hppdep">
-<area alt="" coords="132,5,299,32" shape="rect" title="Management of per-device device_memory_resources."/>
-<area alt="" coords="117,80,314,107" href="default__memory__resource_8hpp_source.html" shape="rect" title=" "/>
-<area alt="" coords="103,155,229,181" href="device__buffer_8hpp.html" shape="rect" title="RAII construct for device memory allocation."/>
+<area alt="" coords="168,5,335,32" shape="rect" title="Management of per-device device_memory_resources."/>
 <area alt="" coords="5,229,132,256" href="device__scalar_8hpp_source.html" shape="rect" title=" "/>
-<area alt="" coords="159,229,293,256" href="device__uvector_8hpp_source.html" shape="rect" title=" "/>
-<area alt="" coords="303,155,490,181" href="thrust__allocator__adaptor_8hpp_source.html" shape="rect" title=" "/>
-<area alt="" coords="319,229,474,256" href="thrust__rmm__allocator_8h_source.html" shape="rect" title=" "/>
+<area alt="" coords="201,229,336,256" href="device__uvector_8hpp_source.html" shape="rect" title=" "/>
+<area alt="" coords="85,80,282,107" href="default__memory__resource_8hpp_source.html" shape="rect" title=" "/>
+<area alt="" coords="357,155,543,181" href="thrust__allocator__adaptor_8hpp_source.html" shape="rect" title=" "/>
+<area alt="" coords="106,155,231,181" href="device__buffer_8hpp.html" shape="rect" title="RAII construct for device memory allocation."/>
+<area alt="" coords="373,229,527,256" href="thrust__rmm__allocator_8h_source.html" shape="rect" title=" "/>
 </map>
 </div>
 </div>
@@ -148,9 +148,18 @@ auto &amp; </td><td class="memItemRight" valign="bottom"><b>rmm::mr::detail::ge
 <div class="textblock"><p>Management of per-device <code>device_memory_resource</code>s. </p>
 <p>One might wish to construct a <code>device_memory_resource</code> and use it for (de)allocation without explicit dependency injection, i.e., passing a reference to that object to all places it is to be used. Instead, one might want to set their resource as a "default" and have it be used in all places where another resource has not been explicitly specified. In applications with multiple GPUs in the same process, it may also be necessary to maintain independent default resources for each device. To this end, the <code>set_per_device_resource</code> and <code>get_per_device_resource</code> functions enable mapping a CUDA device id to a <code>device_memory_resource</code> pointer.</p>
 <p>For example, given a pointer, <code>mr</code>, to a <code>device_memory_resource</code> object, calling <code>set_per_device_resource(cuda_device_id{0}, mr)</code> will establish a mapping between CUDA device 0 and <code>mr</code> such that all future calls to <code>get_per_device_resource(cuda_device_id{0})</code> will return the same pointer, <code>mr</code>. In this way, all places that use the resource returned from <code>get_per_device_resource</code> for (de)allocation will use the user provided resource, <code>mr</code>.</p>
+<dl class="section note"><dt>Note</dt><dd><code>device_memory_resource</code>s make CUDA API calls without setting the current CUDA device. Therefore a memory resource should only be used with the current CUDA device set to the device that was active when the memory resource was created. Calling <code>set_per_device_resource(id, mr)</code> is only valid if <code>id</code> refers to the CUDA device that was active when <code>mr</code> was created.</dd></dl>
 <p>If no resource was explicitly set for a given device specified by <code>id</code>, then <code>get_per_device_resource(id)</code> will return a pointer to a <code>cuda_memory_resource</code>.</p>
-<p>To fetch and modify the resource for the current CUDA device, <code><a class="el" href="per__device__resource_8hpp.html#a95bf69637b8f3d29b13b33562370fc8f" title="Get the memory resource for the current device.">get_current_device_resource()</a></code> and <code><a class="el" href="per__device__resource_8hpp.html#a3d74a9fb18c09c8f6409ac222b559d44" title="Set the memory resource for the current device.">set_current_device_resource()</a></code> will automatically use the current CUDA device id from <code>cudaGetDevice()</code>. </p>
-</div><h2 class="groupheader">Function Documentation</h2>
+<p>To fetch and modify the resource for the current CUDA device, <code><a class="el" href="per__device__resource_8hpp.html#a95bf69637b8f3d29b13b33562370fc8f" title="Get the memory resource for the current device.">get_current_device_resource()</a></code> and <code><a class="el" href="per__device__resource_8hpp.html#a3d74a9fb18c09c8f6409ac222b559d44" title="Set the memory resource for the current device.">set_current_device_resource()</a></code> will automatically use the current CUDA device id from <code>cudaGetDevice()</code>.</p>
+<p>Creating a device_memory_resource for each device requires care to set the current device before creating each resource, and to maintain the lifetime of the resources as long as they are set as per-device resources. Here is an example loop that creates <code>unique_ptr</code>s to pool_memory_resource objects for each device and sets them as the per-device resource for that device.</p>
+<div class="fragment"><div class="line"> {c++}</div>
+<div class="line">std::vector&lt;unique_ptr&lt;pool_memory_resource&gt;&gt; per_device_pools;</div>
+<div class="line"><span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; N; ++i) {</div>
+<div class="line">  cudaSetDevice(i);</div>
+<div class="line">  per_device_pools.push_back(std::make_unique&lt;pool_memory_resource&gt;());</div>
+<div class="line"> <a class="code" href="per__device__resource_8hpp.html#a6d38bff906b6001948fd275265ebbcc0">set_per_device_resource</a>(cuda_device_id{i}, &amp;per_device_pools.back());</div>
+<div class="line">}</div>
+</div><!-- fragment --> </div><h2 class="groupheader">Function Documentation</h2>
 <a id="a79ef20080ffcff8be3df76160aa4f87e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a79ef20080ffcff8be3df76160aa4f87e">◆ </a></span>current_device()</h2>
 <div class="memitem">
@@ -202,6 +211,7 @@ auto &amp; </td><td class="memItemRight" valign="bottom"><b>rmm::mr::detail::ge
 <p>Returns a pointer to the resource set for the current device. The initial resource is a <code>cuda_memory_resource</code>.</p>
 <p>The "current device" is the device returned by <code>cudaGetDevice</code>.</p>
 <p>This function is thread-safe with respect to concurrent calls to <code>set_per_device_resource</code>, <code>get_per_device_resource</code>, <code>get_current_device_resource</code>, and <code>set_current_device_resource</code>. Concurrent calls to any of these functions will result in a valid state, but the order of execution is undefined.</p>
+<dl class="section note"><dt>Note</dt><dd>The returned <code>device_memory_resource</code> should only be used with the current CUDA device. Changing the current device (e.g. using <code>cudaSetDevice()</code>) and then using the returned resource can result in undefined behavior. The behavior of a device_memory_resource is undefined if used while the active CUDA device is a different device from the one that was active when the device_memory_resource was created.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to the resource for the current device </dd></dl>
 </div>
 </div>
@@ -231,6 +241,7 @@ auto &amp; </td><td class="memItemRight" valign="bottom"><b>rmm::mr::detail::ge
 <p>Returns a pointer to the <code>device_memory_resource</code> for the specified device. The initial resource is a <code>cuda_memory_resource</code>.</p>
 <p><code>id.value()</code> must be in the range <code>[0, cudaGetDeviceCount())</code>, otherwise behavior is undefined.</p>
 <p>This function is thread-safe with respect to concurrent calls to <code>set_per_device_resource</code>, <code>get_per_device_resource</code>, <code>get_current_device_resource</code>, and <code>set_current_device_resource</code>. Concurrent calls to any of these functions will result in a valid state, but the order of execution is undefined.</p>
+<dl class="section note"><dt>Note</dt><dd>The returned <code>device_memory_resource</code> should only be used when CUDA device <code>id</code> is the current device (e.g. set using <code>cudaSetDevice()</code>). The behavior of a device_memory_resource is undefined if used while the active CUDA device is a different device from the one that was active when the device_memory_resource was created.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
 <table class="params">
 <tr><td class="paramname">id</td><td>The id of the target device </td></tr>
@@ -293,6 +304,7 @@ auto &amp; </td><td class="memItemRight" valign="bottom"><b>rmm::mr::detail::ge
 <p>The "current device" is the device returned by <code>cudaGetDevice</code>.</p>
 <p>The object pointed to by <code>new_mr</code> must outlive the last use of the resource, otherwise behavior is undefined. It is the caller's responsibility to maintain the lifetime of the resource object.</p>
 <p>This function is thread-safe with respect to concurrent calls to <code>set_per_device_resource</code>, <code>get_per_device_resource</code>, <code>get_current_device_resource</code>, and <code>set_current_device_resource</code>. Concurrent calls to any of these functions will result in a valid state, but the order of execution is undefined.</p>
+<dl class="section note"><dt>Note</dt><dd>The resource passed in <code>new_mr</code> must have been created for the current CUDA device. The behavior of a device_memory_resource is undefined if used while the active CUDA device is a different device from the one that was active when the device_memory_resource was created.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
 <table class="params">
 <tr><td class="paramname">new_mr</td><td>If not <code>nullptr</code>, pointer to new resource to use for the current device </td></tr>
@@ -339,6 +351,7 @@ auto &amp; </td><td class="memItemRight" valign="bottom"><b>rmm::mr::detail::ge
 <p><code>id.value()</code> must be in the range <code>[0, cudaGetDeviceCount())</code>, otherwise behavior is undefined.</p>
 <p>The object pointed to by <code>new_mr</code> must outlive the last use of the resource, otherwise behavior is undefined. It is the caller's responsibility to maintain the lifetime of the resource object.</p>
 <p>This function is thread-safe with respect to concurrent calls to <code>set_per_device_resource</code>, <code>get_per_device_resource</code>, <code>get_current_device_resource</code>, and <code>set_current_device_resource</code>. Concurrent calls to any of these functions will result in a valid state, but the order of execution is undefined.</p>
+<dl class="section note"><dt>Note</dt><dd>The resource passed in <code>new_mr</code> must have been created when device <code>id</code> was the current CUDA device (e.g. set using <code>cudaSetDevice()</code>). The behavior of a device_memory_resource is undefined if used while the active CUDA device is a different device from the one that was active when the device_memory_resource was created.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
 <table class="params">
 <tr><td class="paramname">id</td><td>The id of the target device </td></tr>
@@ -350,6 +363,7 @@ auto &amp; </td><td class="memItemRight" valign="bottom"><b>rmm::mr::detail::ge
 </div>
 </div>
 </div><!-- contents -->
+<div class="ttc" id="aper__device__resource_8hpp_html_a6d38bff906b6001948fd275265ebbcc0"><div class="ttname"><a href="per__device__resource_8hpp.html#a6d38bff906b6001948fd275265ebbcc0">rmm::mr::set_per_device_resource</a></div><div class="ttdeci">device_memory_resource * set_per_device_resource(cuda_device_id id, device_memory_resource *new_mr)</div><div class="ttdoc">Set the device_memory_resource for the specified device.</div><div class="ttdef"><b>Definition:</b> per_device_resource.hpp:196</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by <a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"/></a> 1.8.19
