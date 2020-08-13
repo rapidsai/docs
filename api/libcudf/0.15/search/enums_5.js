@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['letter_5ftype_1526',['letter_type',['../group__nvtext__stemmer.html#gaf1eda0cbe6388c24e342142e665bfd65',1,'nvtext']]]
+  ['kind_1534',['Kind',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24c',1,'cudf::aggregation']]]
 ];

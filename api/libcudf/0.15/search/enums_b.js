@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['radix_1536',['Radix',['../namespacenumeric.html#a045400c0ebe33ec6b78a0d1294068fb2',1,'numeric']]],
-  ['rank_5fmethod_1537',['rank_method',['../group__column__sort.html#ga1b10429fb5d86af4db72da1118f2ad5d',1,'cudf']]]
+  ['quote_5fstyle_1544',['quote_style',['../namespacecudf_1_1io.html#a9b3038122e7e69390b062270cf403007',1,'cudf::io']]]
 ];
