@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['remove_5fvisited_177',['remove_visited',['../structcugraph_1_1mg_1_1detail_1_1remove__visited.html',1,'cugraph::mg::detail']]]
+  ['remove_5fvisited_178',['remove_visited',['../structcugraph_1_1mg_1_1detail_1_1remove__visited.html',1,'cugraph::mg::detail']]]
 ];

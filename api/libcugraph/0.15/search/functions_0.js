@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['betweenness_5fcentrality_192',['betweenness_centrality',['../namespacecugraph.html#afaef38548e54a9fd308d696ca91876e5',1,'cugraph']]],
-  ['bfs_193',['bfs',['../namespacecugraph.html#acf830c3b6111a45eaa2900714d77e0ae',1,'cugraph']]]
+  ['betweenness_5fcentrality_193',['betweenness_centrality',['../namespacecugraph.html#afa8eadf92af49adf18fe1403b7c5d62e',1,'cugraph']]],
+  ['bfs_194',['bfs',['../namespacecugraph.html#a007a963984961523802b2b66a6dd33db',1,'cugraph']]]
 ];
