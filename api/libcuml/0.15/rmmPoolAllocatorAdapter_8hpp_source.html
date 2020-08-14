@@ -80,39 +80,57 @@ $(function() {
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>  </div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span> <span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>  </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span> <span class="preprocessor">#include &lt;<a class="code" href="logger_8hpp.html">cuml/common/logger.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span> <span class="preprocessor">#include &lt;<a class="code" href="utils_8hpp.html">cuml/common/utils.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span> <span class="preprocessor">#include &lt;<a class="code" href="cuml_8hpp.html">cuml/cuml.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span> <span class="preprocessor">#include &lt;rmm/mr/device/cnmem_memory_resource.hpp&gt;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span> <span class="preprocessor">#include "<a class="code" href="rmmAllocatorAdapter_8hpp.html">rmmAllocatorAdapter.hpp</a>"</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span> <span class="preprocessor">#include "<a class="code" href="rmmAllocatorAdapter_8hpp.html">rmmAllocatorAdapter.hpp</a>"</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>  </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span> <span class="preprocessor">#include &lt;<a class="code" href="logger_8hpp.html">cuml/common/logger.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span> <span class="preprocessor">#include &lt;<a class="code" href="utils_8hpp.html">cuml/common/utils.hpp</a>&gt;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span> <span class="preprocessor">#include &lt;<a class="code" href="cuml_8hpp.html">cuml/cuml.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>  </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span> <span class="keyword">namespace </span><a class="code" href="namespaceML.html">ML</a> {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>  </div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classML_1_1rmmPoolAllocatorAdapter.html">   33</a></span> <span class="keyword">class </span><a class="code" href="classML_1_1rmmPoolAllocatorAdapter.html">rmmPoolAllocatorAdapter</a> : <span class="keyword">public</span> <a class="code" href="classML_1_1rmmAllocatorAdapter.html">rmmAllocatorAdapter</a> {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classML_1_1rmmPoolAllocatorAdapter.html#afaf078c3664bd98f97f7df699ed20fcd">   35</a></span>   <a class="code" href="classML_1_1rmmPoolAllocatorAdapter.html#afaf078c3664bd98f97f7df699ed20fcd">rmmPoolAllocatorAdapter</a>() : cnmem_mr_() {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>     prev_mr_ = rmm::mr::set_default_resource(&amp;cnmem_mr_);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>   }</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span> <span class="preprocessor">#include &lt;rmm/mr/device/cuda_memory_resource.hpp&gt;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span> <span class="preprocessor">#include &lt;rmm/mr/device/owning_wrapper.hpp&gt;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span> <span class="preprocessor">#include &lt;rmm/mr/device/pool_memory_resource.hpp&gt;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>  </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span> <span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>  </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span> <span class="keyword">namespace </span><a class="code" href="namespaceML.html">ML</a> {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>  </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span> <span class="keyword">namespace </span>{</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span> <span class="comment">// simple helpers for creating RMM MRs</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span> <span class="keyword">inline</span> <span class="keyword">auto</span> make_cuda() {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>   <span class="keywordflow">return</span> std::make_shared&lt;rmm::mr::cuda_memory_resource&gt;();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span> }</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>  </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classML_1_1rmmPoolAllocatorAdapter.html#a185c3fd723894738d1850d5820fe4dc9">   39</a></span>   <a class="code" href="classML_1_1rmmPoolAllocatorAdapter.html#a185c3fd723894738d1850d5820fe4dc9">~rmmPoolAllocatorAdapter</a>() {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>     <span class="comment">// restore the previous memory resource when this object goes out-of-scope</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>     rmm::mr::set_default_resource(prev_mr_);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>   }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>  </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>   rmm::mr::cnmem_memory_resource cnmem_mr_;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>   rmm::mr::device_memory_resource* prev_mr_;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span> };</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>  </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span> }  <span class="comment">// end namespace ML</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span> <span class="keyword">inline</span> <span class="keyword">auto</span> make_pool() {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>   <span class="keywordflow">return</span> rmm::mr::make_owning_wrapper&lt;rmm::mr::pool_memory_resource&gt;(</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>     make_cuda());</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span> }</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span> }  <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>  </div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classML_1_1rmmPoolAllocatorAdapter.html">   51</a></span> <span class="keyword">class </span><a class="code" href="classML_1_1rmmPoolAllocatorAdapter.html">rmmPoolAllocatorAdapter</a> : <span class="keyword">public</span> <a class="code" href="classML_1_1rmmAllocatorAdapter.html">rmmAllocatorAdapter</a> {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classML_1_1rmmPoolAllocatorAdapter.html#afaf078c3664bd98f97f7df699ed20fcd">   53</a></span>   <a class="code" href="classML_1_1rmmPoolAllocatorAdapter.html#afaf078c3664bd98f97f7df699ed20fcd">rmmPoolAllocatorAdapter</a>() : mr_(make_pool()) {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>     prev_mr_ = rmm::mr::set_current_device_resource(mr_.get());</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>   }</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>  </div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classML_1_1rmmPoolAllocatorAdapter.html#a185c3fd723894738d1850d5820fe4dc9">   57</a></span>   <a class="code" href="classML_1_1rmmPoolAllocatorAdapter.html#a185c3fd723894738d1850d5820fe4dc9">~rmmPoolAllocatorAdapter</a>() {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>     <span class="comment">// restore the previous memory resource when this object goes out-of-scope</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>     rmm::mr::set_current_device_resource(prev_mr_);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>   }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>  </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>   std::shared_ptr&lt;rmm::mr::device_memory_resource&gt; mr_;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>   rmm::mr::device_memory_resource* prev_mr_;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span> };</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>  </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span> }  <span class="comment">// end namespace ML</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="acuml_8hpp_html"><div class="ttname"><a href="cuml_8hpp.html">cuml.hpp</a></div></div>
 <div class="ttc" id="autils_8hpp_html"><div class="ttname"><a href="utils_8hpp.html">utils.hpp</a></div></div>
-<div class="ttc" id="aclassML_1_1rmmPoolAllocatorAdapter_html"><div class="ttname"><a href="classML_1_1rmmPoolAllocatorAdapter.html">ML::rmmPoolAllocatorAdapter</a></div><div class="ttdoc">Implemententation of ML::deviceAllocator using the RMM pool.</div><div class="ttdef"><b>Definition:</b> rmmPoolAllocatorAdapter.hpp:33</div></div>
+<div class="ttc" id="aclassML_1_1rmmPoolAllocatorAdapter_html"><div class="ttname"><a href="classML_1_1rmmPoolAllocatorAdapter.html">ML::rmmPoolAllocatorAdapter</a></div><div class="ttdoc">Implemententation of ML::deviceAllocator using the RMM pool.</div><div class="ttdef"><b>Definition:</b> rmmPoolAllocatorAdapter.hpp:51</div></div>
 <div class="ttc" id="aclassML_1_1rmmAllocatorAdapter_html"><div class="ttname"><a href="classML_1_1rmmAllocatorAdapter.html">ML::rmmAllocatorAdapter</a></div><div class="ttdoc">Implemententation of ML::deviceAllocator using the RAPIDS Memory Manager (RMM) for allocations.</div><div class="ttdef"><b>Definition:</b> rmmAllocatorAdapter.hpp:33</div></div>
 <div class="ttc" id="armmAllocatorAdapter_8hpp_html"><div class="ttname"><a href="rmmAllocatorAdapter_8hpp.html">rmmAllocatorAdapter.hpp</a></div></div>
-<div class="ttc" id="aclassML_1_1rmmPoolAllocatorAdapter_html_afaf078c3664bd98f97f7df699ed20fcd"><div class="ttname"><a href="classML_1_1rmmPoolAllocatorAdapter.html#afaf078c3664bd98f97f7df699ed20fcd">ML::rmmPoolAllocatorAdapter::rmmPoolAllocatorAdapter</a></div><div class="ttdeci">rmmPoolAllocatorAdapter()</div><div class="ttdef"><b>Definition:</b> rmmPoolAllocatorAdapter.hpp:35</div></div>
-<div class="ttc" id="aclassML_1_1rmmPoolAllocatorAdapter_html_a185c3fd723894738d1850d5820fe4dc9"><div class="ttname"><a href="classML_1_1rmmPoolAllocatorAdapter.html#a185c3fd723894738d1850d5820fe4dc9">ML::rmmPoolAllocatorAdapter::~rmmPoolAllocatorAdapter</a></div><div class="ttdeci">~rmmPoolAllocatorAdapter()</div><div class="ttdef"><b>Definition:</b> rmmPoolAllocatorAdapter.hpp:39</div></div>
+<div class="ttc" id="aclassML_1_1rmmPoolAllocatorAdapter_html_afaf078c3664bd98f97f7df699ed20fcd"><div class="ttname"><a href="classML_1_1rmmPoolAllocatorAdapter.html#afaf078c3664bd98f97f7df699ed20fcd">ML::rmmPoolAllocatorAdapter::rmmPoolAllocatorAdapter</a></div><div class="ttdeci">rmmPoolAllocatorAdapter()</div><div class="ttdef"><b>Definition:</b> rmmPoolAllocatorAdapter.hpp:53</div></div>
+<div class="ttc" id="aclassML_1_1rmmPoolAllocatorAdapter_html_a185c3fd723894738d1850d5820fe4dc9"><div class="ttname"><a href="classML_1_1rmmPoolAllocatorAdapter.html#a185c3fd723894738d1850d5820fe4dc9">ML::rmmPoolAllocatorAdapter::~rmmPoolAllocatorAdapter</a></div><div class="ttdeci">~rmmPoolAllocatorAdapter()</div><div class="ttdef"><b>Definition:</b> rmmPoolAllocatorAdapter.hpp:57</div></div>
 <div class="ttc" id="alogger_8hpp_html"><div class="ttname"><a href="logger_8hpp.html">logger.hpp</a></div></div>
 <div class="ttc" id="anamespaceML_html"><div class="ttname"><a href="namespaceML.html">ML</a></div><div class="ttdef"><b>Definition:</b> cuML_comms.hpp:22</div></div>
 <!-- start footer part -->

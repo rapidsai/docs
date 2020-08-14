@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['p_2378',['p',['../structML_1_1ARIMAOrder.html#a1294c0c2729a50b5f44b21f1b2b63a02',1,'ML::ARIMAOrder::p()'],['../structML_1_1ARIMAOrder.html#a201baecf93423c247300bd2729c22fd2',1,'ML::ARIMAOrder::P()']]],
+  ['p_2378',['P',['../structML_1_1ARIMAOrder.html#a201baecf93423c247300bd2729c22fd2',1,'ML::ARIMAOrder::P()'],['../structML_1_1ARIMAOrder.html#a1294c0c2729a50b5f44b21f1b2b63a02',1,'ML::ARIMAOrder::p()']]],
   ['param_2379',['param',['../classML_1_1SVM_1_1SVC.html#a0ca37d0f9183dccc566fce48be147d47',1,'ML::SVM::SVC']]],
   ['parentsz_2380',['parentsz',['../structTemporaryMemory.html#abb11e62b2100e5fcd658e4ea03d8cce6',1,'TemporaryMemory']]],
   ['prediction_2381',['prediction',['../structSparseTreeNode.html#aa968989dd3654fe973e5a3ed577a8ed4',1,'SparseTreeNode']]],
