@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['hashfunctionobjectint_62',['HashFunctionObjectInt',['../classcugraph_1_1detail_1_1HashFunctionObjectInt.html',1,'cugraph::detail']]],
-  ['highrestimer_63',['HighResTimer',['../classHighResTimer.html',1,'']]]
+  ['hashfunctionobjectint_56',['HashFunctionObjectInt',['../classcugraph_1_1detail_1_1HashFunctionObjectInt.html',1,'cugraph::detail']]],
+  ['highrestimer_57',['HighResTimer',['../classHighResTimer.html',1,'']]]
 ];
