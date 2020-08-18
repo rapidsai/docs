@@ -46,6 +46,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#indexing">Indexing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#interpolation">Interpolation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#spatial-querying">Spatial Querying</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spatial-joining">Spatial Joining</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#trajectory">Trajectory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#io">IO</a></li>
 </ul>
@@ -612,6 +613,149 @@ coordinates.</p>
 <li><p>Swaps <code class="docutils literal notranslate"><span class="pre">min_x</span></code> and <code class="docutils literal notranslate"><span class="pre">max_x</span></code> if <code class="docutils literal notranslate"><span class="pre">min_x</span> <span class="pre">&gt;</span> <span class="pre">max_x</span></code></p></li>
 <li><p>Swaps <code class="docutils literal notranslate"><span class="pre">min_y</span></code> and <code class="docutils literal notranslate"><span class="pre">max_y</span></code> if <code class="docutils literal notranslate"><span class="pre">min_y</span> <span class="pre">&gt;</span> <span class="pre">max_y</span></code></p></li>
 </ul>
+</dd></dl>
+</div>
+<div class="section" id="spatial-joining">
+<h2>Spatial Joining<a class="headerlink" href="#spatial-joining" title="Permalink to this headline">¶</a></h2>
+<dl class="py method">
+<dt id="cuspatial.core.spatial_join.quad_bbox_join">
+<code class="sig-prename descclassname">spatial_join.</code><code class="sig-name descname">quad_bbox_join</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">poly_bounding_boxes</span></em>, <em class="sig-param"><span class="n">x_min</span></em>, <em class="sig-param"><span class="n">x_max</span></em>, <em class="sig-param"><span class="n">y_min</span></em>, <em class="sig-param"><span class="n">y_max</span></em>, <em class="sig-param"><span class="n">scale</span></em>, <em class="sig-param"><span class="n">max_depth</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.core.spatial_join.quad_bbox_join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search a quadtree for polygon or polyline bounding box intersections.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>quadtree</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>A complete quadtree for a given area-of-interest bounding box.</p>
+</dd>
+<dt><strong>poly_bounding_boxes</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Minimum bounding boxes for a set of polygons or polylines</p>
+</dd>
+<dt><strong>x_min</strong></dt><dd><p>The lower-left x-coordinate of the area of interest bounding box</p>
+</dd>
+<dt><strong>x_max</strong></dt><dd><p>The upper-right x-coordinate of the area of interest bounding box</p>
+</dd>
+<dt><strong>min_y</strong></dt><dd><p>The lower-left y-coordinate of the area of interest bounding box</p>
+</dd>
+<dt><strong>max_y</strong></dt><dd><p>The upper-right y-coordinate of the area of interest bounding box</p>
+</dd>
+<dt><strong>scale</strong></dt><dd><p>Scale to apply to each point’s distance from <code class="docutils literal notranslate"><span class="pre">(x_min,</span> <span class="pre">y_min)</span></code></p>
+</dd>
+<dt><strong>max_depth</strong></dt><dd><p>Maximum quadtree depth at which to stop testing for intersections</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Indices for each intersecting bounding box and leaf quadrant.</p>
+<dl class="simple">
+<dt>poly_offset<span class="classifier">cudf.Series</span></dt><dd><p>Indices for each poly bbox that intersects with the quadtree.</p>
+</dd>
+<dt>quad_offset<span class="classifier">cudf.Series</span></dt><dd><p>Indices for each leaf quadrant intersecting with a poly bbox.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Swaps <code class="docutils literal notranslate"><span class="pre">min_x</span></code> and <code class="docutils literal notranslate"><span class="pre">max_x</span></code> if <code class="docutils literal notranslate"><span class="pre">min_x</span> <span class="pre">&gt;</span> <span class="pre">max_x</span></code></p></li>
+<li><p>Swaps <code class="docutils literal notranslate"><span class="pre">min_y</span></code> and <code class="docutils literal notranslate"><span class="pre">max_y</span></code> if <code class="docutils literal notranslate"><span class="pre">min_y</span> <span class="pre">&gt;</span> <span class="pre">max_y</span></code></p></li>
+</ul>
+</dd></dl>
+<dl class="py method">
+<dt id="cuspatial.core.spatial_join.quadtree_point_in_polygon">
+<code class="sig-prename descclassname">spatial_join.</code><code class="sig-name descname">quadtree_point_in_polygon</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">quadtree</span></em>, <em class="sig-param"><span class="n">point_indices</span></em>, <em class="sig-param"><span class="n">points_x</span></em>, <em class="sig-param"><span class="n">points_y</span></em>, <em class="sig-param"><span class="n">poly_offsets</span></em>, <em class="sig-param"><span class="n">ring_offsets</span></em>, <em class="sig-param"><span class="n">poly_points_x</span></em>, <em class="sig-param"><span class="n">poly_points_y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.core.spatial_join.quadtree_point_in_polygon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether the specified points are inside any of the specified
+polygons.</p>
+<p>Uses the table of (polygon, quadrant) pairs returned by
+<code class="docutils literal notranslate"><span class="pre">cuspatial.quad_bbox_join</span></code> to ensure only the points in the same
+quadrant as each polygon are tested for intersection.</p>
+<p>This pre-filtering can dramatically reduce number of points tested per
+polygon, enabling faster intersection-testing at the expense of extra
+memory allocated to store the quadtree and sorted point_indices.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>poly_quad_pairs: cudf.DataFrame</strong></dt><dd><p>Table of (polygon, quadrant) index pairs returned by
+<code class="docutils literal notranslate"><span class="pre">cuspatial.quad_bbox_join</span></code>.</p>
+</dd>
+<dt><strong>quadtree</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>A complete quadtree for a given area-of-interest bounding box.</p>
+</dd>
+<dt><strong>point_indices</strong><span class="classifier">cudf.Series</span></dt><dd><p>Sorted point indices returned by <code class="docutils literal notranslate"><span class="pre">cuspatial.quadtree_on_points</span></code></p>
+</dd>
+<dt><strong>points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>x-coordinates of points used to construct the quadtree.</p>
+</dd>
+<dt><strong>points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>y-coordinates of points used to construct the quadtree.</p>
+</dd>
+<dt><strong>poly_offsets</strong><span class="classifier">cudf.Series</span></dt><dd><p>Begin index of the first ring in each polygon.</p>
+</dd>
+<dt><strong>ring_offsets</strong><span class="classifier">cudf.Series</span></dt><dd><p>Begin index of the first point in each ring.</p>
+</dd>
+<dt><strong>poly_points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>Polygon point x-coodinates.</p>
+</dd>
+<dt><strong>poly_points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>Polygon point y-coodinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Indices for each intersecting point and polygon pair.</p>
+<dl class="simple">
+<dt>point_offset<span class="classifier">cudf.Series</span></dt><dd><p>Indices of each point that intersects with a polygon.</p>
+</dd>
+<dt>polygon_offset<span class="classifier">cudf.Series</span></dt><dd><p>Indices of each polygon with which a point intersected.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt id="cuspatial.core.spatial_join.quadtree_point_to_nearest_polyline">
+<code class="sig-prename descclassname">spatial_join.</code><code class="sig-name descname">quadtree_point_to_nearest_polyline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">quadtree</span></em>, <em class="sig-param"><span class="n">point_indices</span></em>, <em class="sig-param"><span class="n">points_x</span></em>, <em class="sig-param"><span class="n">points_y</span></em>, <em class="sig-param"><span class="n">poly_offsets</span></em>, <em class="sig-param"><span class="n">poly_points_x</span></em>, <em class="sig-param"><span class="n">poly_points_y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.core.spatial_join.quadtree_point_to_nearest_polyline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the nearest polyline to each point in a quadrant, and computes
+the distances between each point and polyline.</p>
+<p>Uses the table of (polyline, quadrant) pairs returned by
+<code class="docutils literal notranslate"><span class="pre">cuspatial.quad_bbox_join</span></code> to ensure distances are computed only for
+the points in the same quadrant as each polyline.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>poly_quad_pairs: cudf.DataFrame</strong></dt><dd><p>Table of (polyline, quadrant) index pairs returned by
+<code class="docutils literal notranslate"><span class="pre">cuspatial.quad_bbox_join</span></code>.</p>
+</dd>
+<dt><strong>quadtree</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>A complete quadtree for a given area-of-interest bounding box.</p>
+</dd>
+<dt><strong>point_indices</strong><span class="classifier">cudf.Series</span></dt><dd><p>Sorted point indices returned by <code class="docutils literal notranslate"><span class="pre">cuspatial.quadtree_on_points</span></code></p>
+</dd>
+<dt><strong>points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>x-coordinates of points used to construct the quadtree.</p>
+</dd>
+<dt><strong>points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>y-coordinates of points used to construct the quadtree.</p>
+</dd>
+<dt><strong>poly_offsets</strong><span class="classifier">cudf.Series</span></dt><dd><p>Begin index of the first point in each polyline.</p>
+</dd>
+<dt><strong>poly_points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>Polyline point x-coodinates.</p>
+</dd>
+<dt><strong>poly_points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>Polyline point y-coodinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Indices for each point and its nearest polyline, and the distance
+between the two.</p>
+<dl class="simple">
+<dt>point_offset<span class="classifier">cudf.Series</span></dt><dd><p>Indices of each point that intersects with a polyline.</p>
+</dd>
+<dt>polyline_offset<span class="classifier">cudf.Series</span></dt><dd><p>Indices of each polyline with which a point intersected.</p>
+</dd>
+<dt>distance<span class="classifier">cudf.Series</span></dt><dd><p>Distances between each point and its nearest polyline.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 </div>
 <div class="section" id="trajectory">
