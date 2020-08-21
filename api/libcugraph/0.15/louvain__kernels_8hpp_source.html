@@ -87,32 +87,75 @@ $(function() {
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>                     cudaStream_t stream = 0);</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>  </div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t, <span class="keyword">typename</span> edge_t, <span class="keyword">typename</span> weight_t&gt;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span> <span class="keywordtype">void</span> compute_delta_modularity(weight_t total_edge_weight,</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>                               weight_t resolution,</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>                               GraphCSRView&lt;vertex_t, edge_t, weight_t&gt; <span class="keyword">const</span> &amp;graph,</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>                               rmm::device_vector&lt;vertex_t&gt; <span class="keyword">const</span> &amp;src_indices_v,</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>                               rmm::device_vector&lt;weight_t&gt; <span class="keyword">const</span> &amp;vertex_weights_v,</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>                               rmm::device_vector&lt;weight_t&gt; <span class="keyword">const</span> &amp;cluster_weights_v,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>                               rmm::device_vector&lt;vertex_t&gt; <span class="keyword">const</span> &amp;cluster_v,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>                               rmm::device_vector&lt;vertex_t&gt; &amp;cluster_hash_v,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>                               rmm::device_vector&lt;weight_t&gt; &amp;delta_Q_v,</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>                               rmm::device_vector&lt;weight_t&gt; &amp;tmp_size_V_v,</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>                               cudaStream_t stream = 0);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>  </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t, <span class="keyword">typename</span> edge_t, <span class="keyword">typename</span> weight_t&gt;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span> <span class="keywordtype">void</span> <a class="code" href="namespacecugraph.html#abaf7d59f72c36f359b30f201fe78583f">louvain</a>(GraphCSRView&lt;vertex_t, edge_t, weight_t&gt; <span class="keyword">const</span> &amp;graph,</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>              weight_t *final_modularity,</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>              <span class="keywordtype">int</span> *num_level,</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>              vertex_t *cluster_vec,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>              <span class="keywordtype">int</span> max_level,</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>              weight_t resolution,</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>              cudaStream_t stream = 0);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>  </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span> }  <span class="comment">// namespace detail</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span> }  <span class="comment">// namespace cugraph</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span> <span class="keywordtype">void</span> generate_superverticies_graph(<a class="code" href="classcugraph_1_1GraphCSRView.html">cugraph::GraphCSRView&lt;vertex_t, edge_t, weight_t&gt;</a> &amp;current_graph,</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>                                    rmm::device_vector&lt;vertex_t&gt; &amp;src_indices_v,</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>                                    vertex_t new_number_of_vertices,</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>                                    rmm::device_vector&lt;vertex_t&gt; &amp;cluster_v,</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>                                    cudaStream_t stream);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>  </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t, <span class="keyword">typename</span> edge_t, <span class="keyword">typename</span> weight_t&gt;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span> <span class="keywordtype">void</span> compute_vertex_sums(GraphCSRView&lt;vertex_t, edge_t, weight_t&gt; <span class="keyword">const</span> &amp;graph,</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>                          rmm::device_vector&lt;weight_t&gt; &amp;sums,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>                          cudaStream_t stream);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>  </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t&gt;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span> vertex_t renumber_clusters(vertex_t graph_num_vertices,</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>                            rmm::device_vector&lt;vertex_t&gt; &amp;cluster,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>                            rmm::device_vector&lt;vertex_t&gt; &amp;temp_array,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>                            rmm::device_vector&lt;vertex_t&gt; &amp;cluster_inverse,</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>                            vertex_t *cluster_vec,</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>                            cudaStream_t stream);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>  </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t, <span class="keyword">typename</span> edge_t, <span class="keyword">typename</span> weight_t&gt;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span> <span class="keywordtype">void</span> compute_delta_modularity(weight_t total_edge_weight,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>                               weight_t resolution,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>                               GraphCSRView&lt;vertex_t, edge_t, weight_t&gt; <span class="keyword">const</span> &amp;graph,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>                               rmm::device_vector&lt;vertex_t&gt; <span class="keyword">const</span> &amp;src_indices_v,</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>                               rmm::device_vector&lt;weight_t&gt; <span class="keyword">const</span> &amp;vertex_weights_v,</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>                               rmm::device_vector&lt;weight_t&gt; <span class="keyword">const</span> &amp;cluster_weights_v,</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>                               rmm::device_vector&lt;vertex_t&gt; <span class="keyword">const</span> &amp;cluster_v,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>                               rmm::device_vector&lt;vertex_t&gt; &amp;cluster_hash_v,</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>                               rmm::device_vector&lt;weight_t&gt; &amp;delta_Q_v,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>                               rmm::device_vector&lt;weight_t&gt; &amp;tmp_size_V_v,</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>                               cudaStream_t stream = 0);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>  </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t, <span class="keyword">typename</span> edge_t, <span class="keyword">typename</span> weight_t&gt;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span> <span class="keywordtype">void</span> assign_nodes(GraphCSRView&lt;vertex_t, edge_t, weight_t&gt; <span class="keyword">const</span> &amp;graph,</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>                   rmm::device_vector&lt;weight_t&gt; &amp;delta_Q,</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>                   rmm::device_vector&lt;vertex_t&gt; &amp;cluster_hash,</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>                   rmm::device_vector&lt;vertex_t&gt; <span class="keyword">const</span> &amp;src_indices,</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>                   rmm::device_vector&lt;vertex_t&gt; &amp;next_cluster,</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>                   rmm::device_vector&lt;weight_t&gt; <span class="keyword">const</span> &amp;vertex_weights,</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>                   rmm::device_vector&lt;weight_t&gt; &amp;cluster_weights,</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>                   <span class="keywordtype">bool</span> up_down,</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>                   cudaStream_t stream);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>  </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t, <span class="keyword">typename</span> edge_t, <span class="keyword">typename</span> weight_t&gt;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span> weight_t update_clustering_by_delta_modularity(</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>   weight_t total_edge_weight,</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>   weight_t resolution,</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>   GraphCSRView&lt;vertex_t, edge_t, weight_t&gt; <span class="keyword">const</span> &amp;graph,</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>   rmm::device_vector&lt;vertex_t&gt; <span class="keyword">const</span> &amp;src_indices,</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>   rmm::device_vector&lt;weight_t&gt; <span class="keyword">const</span> &amp;vertex_weights,</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>   rmm::device_vector&lt;weight_t&gt; &amp;cluster_weights,</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>   rmm::device_vector&lt;vertex_t&gt; &amp;cluster,</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>   cudaStream_t stream);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>  </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t, <span class="keyword">typename</span> edge_t, <span class="keyword">typename</span> weight_t&gt;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span> <span class="keywordtype">void</span> <a class="code" href="namespacecugraph.html#abaf7d59f72c36f359b30f201fe78583f">louvain</a>(GraphCSRView&lt;vertex_t, edge_t, weight_t&gt; <span class="keyword">const</span> &amp;graph,</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>              weight_t *final_modularity,</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>              <span class="keywordtype">int</span> *num_level,</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>              vertex_t *cluster_vec,</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>              <span class="keywordtype">int</span> max_level,</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>              weight_t resolution,</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>              cudaStream_t stream = 0);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>  </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span> }  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span> }  <span class="comment">// namespace cugraph</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacecugraph_html"><div class="ttname"><a href="namespacecugraph.html">cugraph</a></div><div class="ttdoc">Katz Centrality implementation.</div><div class="ttdef"><b>Definition:</b> betweenness_centrality.cu:32</div></div>
 <div class="ttc" id="anamespacecugraph_html_abaf7d59f72c36f359b30f201fe78583f"><div class="ttname"><a href="namespacecugraph.html#abaf7d59f72c36f359b30f201fe78583f">cugraph::louvain</a></div><div class="ttdeci">void louvain(GraphCSRView&lt; vertex_t, edge_t, weight_t &gt; const &amp;graph, weight_t *final_modularity, int *num_level, vertex_t *louvain_parts, int max_level, weight_t resolution)</div><div class="ttdoc">Louvain implementation.</div><div class="ttdef"><b>Definition:</b> louvain.cpp:31</div></div>
+<div class="ttc" id="aclasscugraph_1_1GraphCSRView_html"><div class="ttname"><a href="classcugraph_1_1GraphCSRView.html">cugraph::GraphCSRView</a></div><div class="ttdoc">A graph stored in CSR (Compressed Sparse Row) format.</div><div class="ttdef"><b>Definition:</b> graph.hpp:243</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by <a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"/></a> 1.8.19

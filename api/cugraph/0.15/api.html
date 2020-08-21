@@ -55,6 +55,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#community">Community</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-cugraph.community.leiden">Leiden</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.community.louvain">Louvain</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.community.ktruss_subgraph">K-Truss</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.community.ecg">ECG</a></li>
@@ -1132,6 +1133,8 @@ BFS traversals. Use weight parameter if weights need to be considered
 values give better approximation
 If k is a list, use the content of the list for estimation: the list
 should contain vertices identifiers.
+If k is None (the default), all the vertices are used to estimate
+betweenness.
 Vertices obtained through sampling or defined as a list will be used as
 sources for traversals inside the algorithm.</p>
 </dd>
@@ -1352,20 +1355,80 @@ identifiers and the corresponding katz centrality values.</p>
 </div>
 <div class="section" id="community">
 <h2>Community<a class="headerlink" href="#community" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cugraph.community.leiden">
+<span id="leiden"></span><h3>Leiden<a class="headerlink" href="#module-cugraph.community.leiden" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="cugraph.community.leiden.leiden">
+<code class="sig-prename descclassname">cugraph.community.leiden.</code><code class="sig-name descname">leiden</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_graph</span></em>, <em class="sig-param"><span class="n">max_iter</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">resolution</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.community.leiden.leiden" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the modularity optimizing partition of the input graph using the
+Leiden algorithm</p>
+<p>It uses the Louvain method described in:</p>
+<p>Traag, V. A., Waltman, L., &amp; van Eck, N. J. (2019). From Louvain to Leiden:
+guaranteeing well-connected communities. Scientific reports, 9(1), 5233.
+doi: 10.1038/s41598-019-41695-z</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>input_graph</strong><span class="classifier">cugraph.Graph</span></dt><dd><p>cuGraph graph descriptor of type Graph</p>
+<p>The adjacency list will be computed if not already present.</p>
+</dd>
+<dt><strong>max_iter</strong><span class="classifier">integer</span></dt><dd><p>This controls the maximum number of levels/iterations of the Leiden
+algorithm. When specified the algorithm will terminate after no more
+than the specified number of iterations. No error occurs when the
+algorithm terminates early in this manner.</p>
+</dd>
+<dt><strong>resolution: float/double, optional</strong></dt><dd><p>Called gamma in the modularity formula, this changes the size
+of the communities.  Higher resolutions lead to more smaller
+communities, lower resolutions lead to fewer larger communities.
+Defaults to 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>parts</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>GPU data frame of size V containing two columns the vertex id and the
+partition id it is assigned to.</p>
+<dl class="simple">
+<dt>df[‘vertex’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers</p>
+</dd>
+<dt>df[‘partition’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the partition assigned to the vertices</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>modularity_score</strong><span class="classifier">float</span></dt><dd><p>a floating point number containing the global modularity score of the
+partitioning.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
+<span class="go">                      delimiter = ' ',</span>
+<span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
+<span class="go">                      header=None)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parts</span><span class="p">,</span> <span class="n">modularity_score</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">leiden</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</div>
 <div class="section" id="module-cugraph.community.louvain">
 <span id="louvain"></span><h3>Louvain<a class="headerlink" href="#module-cugraph.community.louvain" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
 <dt id="cugraph.community.louvain.louvain">
 <code class="sig-prename descclassname">cugraph.community.louvain.</code><code class="sig-name descname">louvain</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_graph</span></em>, <em class="sig-param"><span class="n">max_iter</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">resolution</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.community.louvain.louvain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the modularity optimizing partition of the input graph using the
-Louvain heuristic</p>
+Louvain method</p>
+<p>It uses the Louvain method described in:</p>
+<p>VD Blondel, J-L Guillaume, R Lambiotte and E Lefebvre: Fast unfolding of
+community hierarchies in large networks, J Stat Mech P10008 (2008),
+<a class="reference external" href="http://arxiv.org/abs/0803.0476">http://arxiv.org/abs/0803.0476</a></p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
 <dt><strong>input_graph</strong><span class="classifier">cugraph.Graph</span></dt><dd><p>cuGraph graph descriptor of type Graph</p>
-<p>The adjacency list will be computed if not already present. The graph
-should be undirected where an undirected edge is represented by a
-directed edge in both direction.</p>
+<p>The adjacency list will be computed if not already present.</p>
 </dd>
 <dt><strong>max_iter</strong><span class="classifier">integer</span></dt><dd><p>This controls the maximum number of levels/iterations of the Louvain
 algorithm. When specified the algorithm will terminate after no more
@@ -1373,7 +1436,9 @@ than the specified number of iterations. No error occurs when the
 algorithm terminates early in this manner.</p>
 </dd>
 <dt><strong>resolution: float/double, optional</strong></dt><dd><p>Called gamma in the modularity formula, this changes the size
-of the communities.  Defaults to 1.</p>
+of the communities.  Higher resolutions lead to more smaller
+communities, lower resolutions lead to fewer larger communities.
+Defaults to 1.</p>
 </dd>
 </dl>
 </dd>
