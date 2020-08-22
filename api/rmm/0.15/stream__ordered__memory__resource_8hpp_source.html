@@ -182,148 +182,140 @@ $(function() {
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>     bytes             = rmm::detail::align_up(bytes, allocation_alignment);</div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>     <span class="keyword">auto</span> <span class="keyword">const</span> b      = this-&gt;underlying().free_block(p, bytes);</div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>  </div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>     <span class="comment">// TODO: cudaEventRecord has significant overhead on deallocations, however it could mean less</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>     <span class="comment">// synchronization. So we need to test in real non-PTDS applications that have multiple streams</span></div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>     <span class="comment">// whether or not the overhead is worth it</span></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span> <span class="preprocessor">#ifdef CUDA_API_PER_THREAD_DEFAULT_STREAM</span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>     RMM_ASSERT_CUDA_SUCCESS(cudaEventRecord(stream_event.event, stream));</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span> <span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>  </div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>     stream_free_blocks_[stream_event].insert(b);</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>   }</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>  </div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span> <span class="preprocessor">#ifdef CUDA_API_PER_THREAD_DEFAULT_STREAM</span></div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>  </div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>   <span class="keyword">struct </span>event_wrapper {</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>     event_wrapper()</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>     {</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>       RMM_ASSERT_CUDA_SUCCESS(cudaEventCreateWithFlags(&amp;event, cudaEventDisableTiming));</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>     }</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>     ~event_wrapper() { RMM_ASSERT_CUDA_SUCCESS(cudaEventDestroy(event)); }</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>     cudaEvent_t <span class="keyword">event</span>{};</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>   };</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>  </div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span> <span class="comment">// using default_stream_event_type =</span></div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span> <span class="comment">//  default_stream_event&lt;stream_ordered_suballocator_memory_resource&lt;FreeListType&gt;&gt;;</span></div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span> <span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>  </div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>   stream_event_pair get_event(cudaStream_t stream)</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>   {</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span> <span class="preprocessor">#ifdef CUDA_API_PER_THREAD_DEFAULT_STREAM</span></div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>     <span class="keywordflow">if</span> (cudaStreamDefault == stream || cudaStreamPerThread == stream) {</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>       <span class="comment">// Create a thread-local shared event wrapper. Shared pointers in the thread and in each MR</span></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>       <span class="comment">// instance ensures it is destroyed cleaned up only after all are finished with it.</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>       thread_local <span class="keyword">auto</span> event_tls = std::make_shared&lt;event_wrapper&gt;();</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>       default_stream_events.insert(event_tls);</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>       <span class="keywordflow">return</span> stream_event_pair{stream, event_tls.get()-&gt;event};</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>     }</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span> <span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>     <span class="comment">// We use cudaStreamLegacy as the event map key for the default stream for consistency between</span></div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>     <span class="comment">// PTDS and non-PTDS mode. In PTDS mode, the cudaStreamLegacy map key will only exist if the</span></div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>     <span class="comment">// user explicitly passes it, so it is used as the default location for the free list</span></div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>     <span class="comment">// at construction. For consistency, the same key is used for null stream free lists in non-PTDS</span></div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>     <span class="comment">// mode.</span></div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>     <span class="keywordflow">if</span> (cudaStreamDefault == stream) { stream = cudaStreamLegacy; }</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span> <span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>  </div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>     <span class="keyword">auto</span> iter = stream_events_.find(stream);</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>     <span class="keywordflow">return</span> (iter != stream_events_.end()) ? iter-&gt;second : [&amp;]() {</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>       stream_event_pair stream_event{stream};</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>       RMM_ASSERT_CUDA_SUCCESS(</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>         cudaEventCreateWithFlags(&amp;stream_event.event, cudaEventDisableTiming));</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>       stream_events_[stream] = stream_event;</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>       <span class="keywordflow">return</span> stream_event;</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>     }();</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>   }</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>  </div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>   block_type get_block(<span class="keywordtype">size_t</span> size, stream_event_pair stream_event)</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>   {</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>     <span class="comment">// Try to find a satisfactory block in free list for the same stream (no sync required)</span></div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>     <span class="keyword">auto</span> iter = stream_free_blocks_.find(stream_event);</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>     <span class="keywordflow">if</span> (iter != stream_free_blocks_.end()) {</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>       block_type b = iter-&gt;second.get_block(size);</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>       <span class="keywordflow">if</span> (b.is_valid()) <span class="keywordflow">return</span> b;</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>     }</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>  </div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>     <span class="comment">// Otherwise try to find a block associated with another stream</span></div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>     block_type b = get_block_from_other_stream(size, stream_event);</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>     <span class="keywordflow">if</span> (b.is_valid()) <span class="keywordflow">return</span> b;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>     <span class="comment">// TODO: cudaEventRecord has significant overhead on deallocations. For the non-PTDS case</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>     <span class="comment">// we may be able to delay recording the event in some situations. But using events rather than</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>     <span class="comment">// streams allows stealing from deleted streams.</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>     RMM_ASSERT_CUDA_SUCCESS(cudaEventRecord(stream_event.event, stream));</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>  </div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>     stream_free_blocks_[stream_event].insert(b);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>   }</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>  </div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span> <span class="preprocessor">#ifdef CUDA_API_PER_THREAD_DEFAULT_STREAM</span></div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>  </div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>   <span class="keyword">struct </span>event_wrapper {</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>     event_wrapper()</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>     {</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>       RMM_ASSERT_CUDA_SUCCESS(cudaEventCreateWithFlags(&amp;event, cudaEventDisableTiming));</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>     }</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>     ~event_wrapper() { RMM_ASSERT_CUDA_SUCCESS(cudaEventDestroy(event)); }</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>     cudaEvent_t <span class="keyword">event</span>{};</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>   };</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>  </div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span> <span class="comment">// using default_stream_event_type =</span></div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span> <span class="comment">//  default_stream_event&lt;stream_ordered_suballocator_memory_resource&lt;FreeListType&gt;&gt;;</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span> <span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>  </div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>   stream_event_pair get_event(cudaStream_t stream)</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>   {</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span> <span class="preprocessor">#ifdef CUDA_API_PER_THREAD_DEFAULT_STREAM</span></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>     <span class="keywordflow">if</span> (cudaStreamDefault == stream || cudaStreamPerThread == stream) {</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>       <span class="comment">// Create a thread-local shared event wrapper. Shared pointers in the thread and in each MR</span></div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>       <span class="comment">// instance ensures it is destroyed cleaned up only after all are finished with it.</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>       thread_local <span class="keyword">auto</span> event_tls = std::make_shared&lt;event_wrapper&gt;();</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>       default_stream_events.insert(event_tls);</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>       <span class="keywordflow">return</span> stream_event_pair{stream, event_tls.get()-&gt;event};</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>     }</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span> <span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>     <span class="comment">// We use cudaStreamLegacy as the event map key for the default stream for consistency between</span></div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>     <span class="comment">// PTDS and non-PTDS mode. In PTDS mode, the cudaStreamLegacy map key will only exist if the</span></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>     <span class="comment">// user explicitly passes it, so it is used as the default location for the free list</span></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>     <span class="comment">// at construction. For consistency, the same key is used for null stream free lists in non-PTDS</span></div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>     <span class="comment">// mode.</span></div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>     <span class="keywordflow">if</span> (cudaStreamDefault == stream) { stream = cudaStreamLegacy; }</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span> <span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>  </div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>     <span class="keyword">auto</span> iter = stream_events_.find(stream);</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>     <span class="keywordflow">return</span> (iter != stream_events_.end()) ? iter-&gt;second : [&amp;]() {</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>       stream_event_pair stream_event{stream};</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>       RMM_ASSERT_CUDA_SUCCESS(</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>         cudaEventCreateWithFlags(&amp;stream_event.event, cudaEventDisableTiming));</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>       stream_events_[stream] = stream_event;</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>       <span class="keywordflow">return</span> stream_event;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>     }();</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>   }</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>  </div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>   block_type get_block(<span class="keywordtype">size_t</span> size, stream_event_pair stream_event)</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>   {</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>     <span class="comment">// Try to find a satisfactory block in free list for the same stream (no sync required)</span></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>     <span class="keyword">auto</span> iter = stream_free_blocks_.find(stream_event);</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>     <span class="keywordflow">if</span> (iter != stream_free_blocks_.end()) {</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>       block_type b = iter-&gt;second.get_block(size);</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>       <span class="keywordflow">if</span> (b.is_valid()) <span class="keywordflow">return</span> b;</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>     }</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>  </div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>     <span class="comment">// Otherwise try to find a block associated with another stream</span></div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>     block_type b = get_block_from_other_stream(size, stream_event);</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>     <span class="keywordflow">if</span> (b.is_valid()) <span class="keywordflow">return</span> b;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>  </div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>     <span class="comment">// no larger blocks available on other streams, so grow the pool and create a block</span></div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>  </div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>     <span class="comment">// no larger blocks available on other streams, so grow the pool and create a block</span></div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>  </div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>     <span class="comment">// avoid searching for this stream's list again</span></div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>     free_list&amp; blocks =</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>       (iter != stream_free_blocks_.end()) ? iter-&gt;second : stream_free_blocks_[stream_event];</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>  </div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>     <span class="keywordflow">return</span> this-&gt;underlying().expand_pool(size, blocks, stream_event.stream);</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>   }</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>  </div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>   block_type get_block_from_other_stream(<span class="keywordtype">size_t</span> size, stream_event_pair stream_event)</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>   {</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>     <span class="comment">// nothing in this stream's free list, look for one on another stream</span></div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>     <span class="keywordflow">for</span> (<span class="keyword">auto</span> s = stream_free_blocks_.begin(); s != stream_free_blocks_.end(); ++s) {</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>       <span class="keyword">auto</span> blocks_event = s-&gt;first;</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>       <span class="keywordflow">if</span> (blocks_event.event != stream_event.event) {</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>         <span class="keyword">auto</span> blocks = s-&gt;second;</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>     <span class="comment">// avoid searching for this stream's list again</span></div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>     free_list&amp; blocks =</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>       (iter != stream_free_blocks_.end()) ? iter-&gt;second : stream_free_blocks_[stream_event];</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>  </div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>     <span class="keywordflow">return</span> this-&gt;underlying().expand_pool(size, blocks, stream_event.stream);</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>   }</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>  </div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>   block_type get_block_from_other_stream(<span class="keywordtype">size_t</span> size, stream_event_pair stream_event)</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>   {</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>     <span class="comment">// nothing in this stream's free list, look for one on another stream</span></div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>     <span class="keywordflow">for</span> (<span class="keyword">auto</span> s = stream_free_blocks_.begin(); s != stream_free_blocks_.end(); ++s) {</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>       <span class="keyword">auto</span> blocks_event = s-&gt;first;</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>       <span class="keywordflow">if</span> (blocks_event.event != stream_event.event) {</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>         <span class="keyword">auto</span> blocks = s-&gt;second;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>  </div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>         block_type <span class="keyword">const</span> b = blocks.get_block(size);  <span class="comment">// get the best fit block</span></div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>  </div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>         block_type <span class="keyword">const</span> b = blocks.get_block(size);  <span class="comment">// get the best fit block</span></div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>  </div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>         <span class="keywordflow">if</span> (b.is_valid()) {</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>           <span class="comment">// Since we found a block associated with a different stream, we have to insert a wait</span></div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>           <span class="comment">// on the stream's associated event into the allocating stream.</span></div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>           <span class="comment">// TODO: could eliminate this ifdef and have the same behavior for PTDS and non-PTDS</span></div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>           <span class="comment">// But the cudaEventRecord() on every free_block reduces performance significantly</span></div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span> <span class="preprocessor">#ifdef CUDA_API_PER_THREAD_DEFAULT_STREAM</span></div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>           RMM_CUDA_TRY(cudaStreamWaitEvent(stream_event.stream, blocks_event.event, 0));</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>  </div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span> <span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>           RMM_CUDA_TRY(cudaStreamSynchronize(blocks_event.stream));</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span> <span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>           <span class="comment">// Move all the blocks to the requesting stream, since it has waited on them</span></div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>           stream_free_blocks_[stream_event].insert(std::move(blocks));</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>           stream_free_blocks_.erase(s);</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>  </div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>           <span class="keywordflow">return</span> b;</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>         }</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>       }</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>     }</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>     <span class="keywordflow">return</span> block_type{};</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>   }</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>  </div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>   <span class="keywordtype">void</span> release()</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>   {</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>     lock_guard lock(mtx_);</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>  </div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>     <span class="keywordflow">for</span> (<span class="keyword">auto</span> s_e : stream_events_) {</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>       RMM_ASSERT_CUDA_SUCCESS(cudaEventSynchronize(s_e.second.event));</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>       RMM_ASSERT_CUDA_SUCCESS(cudaEventDestroy(s_e.second.event));</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>     }</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>  </div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>     stream_events_.clear();</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>     stream_free_blocks_.clear();</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>   }</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>         <span class="keywordflow">if</span> (b.is_valid()) {</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>           <span class="comment">// Since we found a block associated with a different stream, we have to insert a wait</span></div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>           <span class="comment">// on the stream's associated event into the allocating stream.</span></div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>           RMM_CUDA_TRY(cudaStreamWaitEvent(stream_event.stream, blocks_event.event, 0));</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>  </div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>           <span class="comment">// Move all the blocks to the requesting stream, since it has waited on them</span></div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>           stream_free_blocks_[stream_event].insert(std::move(blocks));</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>           stream_free_blocks_.erase(s);</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>  </div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>           <span class="keywordflow">return</span> b;</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>         }</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>       }</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>     }</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>     <span class="keywordflow">return</span> block_type{};</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>   }</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>  </div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>   <span class="keywordtype">void</span> release()</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>   {</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>     lock_guard lock(mtx_);</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>  </div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>     <span class="keywordflow">for</span> (<span class="keyword">auto</span> s_e : stream_events_) {</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>       RMM_ASSERT_CUDA_SUCCESS(cudaEventSynchronize(s_e.second.event));</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>       RMM_ASSERT_CUDA_SUCCESS(cudaEventDestroy(s_e.second.event));</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>     }</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>  </div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>     stream_events_.clear();</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>     stream_free_blocks_.clear();</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>   }</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>  </div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>   <span class="comment">// map of stream_event_pair --&gt; free_list</span></div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>   <span class="comment">// Event (or associated stream) must be synced before allocating from associated free_list to a</span></div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>   <span class="comment">// different stream</span></div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>   std::map&lt;stream_event_pair, free_list&gt; stream_free_blocks_;</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>  </div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>   <span class="comment">// bidirectional mapping between non-default streams and events</span></div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>   std::unordered_map&lt;cudaStream_t, stream_event_pair&gt; stream_events_;</div>
 <div class="line"><a name="l00395"></a><span class="lineno">  395</span>  </div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>   <span class="comment">// map of stream_event_pair --&gt; free_list</span></div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>   <span class="comment">// Event (or associated stream) must be synced before allocating from associated free_list to a</span></div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>   <span class="comment">// different stream</span></div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>   std::map&lt;stream_event_pair, free_list&gt; stream_free_blocks_;</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>  </div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>   <span class="comment">// bidirectional mapping between non-default streams and events</span></div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>   std::unordered_map&lt;cudaStream_t, stream_event_pair&gt; stream_events_;</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>  </div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span> <span class="preprocessor">#ifdef CUDA_API_PER_THREAD_DEFAULT_STREAM</span></div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>   <span class="comment">// shared pointers to events keeps the events alive as long as either the thread that created them</span></div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>   <span class="comment">// or the MR that is using them exists.</span></div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>   std::set&lt;std::shared_ptr&lt;event_wrapper&gt;&gt; default_stream_events;</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span> <span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>  </div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>   std::mutex mtx_;  <span class="comment">// mutex for thread-safe access</span></div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span> };                  <span class="comment">// namespace detail</span></div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>  </div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span> }  <span class="comment">// namespace detail</span></div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span> }  <span class="comment">// namespace mr</span></div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span> }  <span class="comment">// namespace rmm</span></div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span> <span class="preprocessor">#ifdef CUDA_API_PER_THREAD_DEFAULT_STREAM</span></div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>   <span class="comment">// shared pointers to events keeps the events alive as long as either the thread that created them</span></div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>   <span class="comment">// or the MR that is using them exists.</span></div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>   std::set&lt;std::shared_ptr&lt;event_wrapper&gt;&gt; default_stream_events;</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span> <span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>  </div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>   std::mutex mtx_;  <span class="comment">// mutex for thread-safe access</span></div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span> };                  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>  </div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span> }  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span> }  <span class="comment">// namespace mr</span></div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span> }  <span class="comment">// namespace rmm</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_html_ae15202045e27ad1277f923f7011a7d44"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#ae15202045e27ad1277f923f7011a7d44">rmm::mr::detail::stream_ordered_memory_resource::insert_block</a></div><div class="ttdeci">void insert_block(block_type const &amp;b, cudaStream_t stream)</div><div class="ttdoc">Split block b if necessary to return a pointer to memory of size bytes.</div><div class="ttdef"><b>Definition:</b> stream_ordered_memory_resource.hpp:156</div></div>
 <div class="ttc" id="astructrmm_1_1mr_1_1detail_1_1crtp_html"><div class="ttname"><a href="structrmm_1_1mr_1_1detail_1_1crtp.html">rmm::mr::detail::crtp</a></div><div class="ttdoc">A CRTP helper function.</div><div class="ttdef"><b>Definition:</b> stream_ordered_memory_resource.hpp:46</div></div>
@@ -337,7 +329,7 @@ $(function() {
 <div class="ttc" id="anamespacermm_html"><div class="ttname"><a href="namespacermm.html">rmm</a></div><div class="ttdef"><b>Definition:</b> aligned.hpp:25</div></div>
 <div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_html"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html">rmm::mr::detail::stream_ordered_memory_resource</a></div><div class="ttdoc">Base class for a stream-ordered memory resource.</div><div class="ttdef"><b>Definition:</b> stream_ordered_memory_resource.hpp:73</div></div>
 <div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_html_a115882e92e73a7e76cf51537dbceab9b"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#a115882e92e73a7e76cf51537dbceab9b">rmm::mr::detail::stream_ordered_memory_resource::get_mutex</a></div><div class="ttdeci">std::mutex &amp; get_mutex()</div><div class="ttdoc">Get the mutex object.</div><div class="ttdef"><b>Definition:</b> stream_ordered_memory_resource.hpp:182</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1device__memory__resource_html"><div class="ttname"><a href="classrmm_1_1mr_1_1device__memory__resource.html">rmm::mr::device_memory_resource</a></div><div class="ttdoc">Base class for all libcudf device memory allocation.</div><div class="ttdef"><b>Definition:</b> device_memory_resource.hpp:61</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1device__memory__resource_html"><div class="ttname"><a href="classrmm_1_1mr_1_1device__memory__resource.html">rmm::mr::device_memory_resource</a></div><div class="ttdoc">Base class for all libcudf device memory allocation.</div><div class="ttdef"><b>Definition:</b> device_memory_resource.hpp:84</div></div>
 <div class="ttc" id="astructrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1stream__event__pair_html"><div class="ttname"><a href="structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1stream__event__pair.html">rmm::mr::detail::stream_ordered_memory_resource::stream_event_pair</a></div><div class="ttdef"><b>Definition:</b> stream_ordered_memory_resource.hpp:184</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
