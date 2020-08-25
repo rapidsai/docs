@@ -27,20 +27,18 @@ Operations
 
 **NOTE:** *Dates are subject to change at anytime. Completed release schedules are posted [here]({% link releases/schedule.md %}).*
 
-**NOTICE:** See [RGN 3](/notices/rgn0003) for update on `v0.15` release extension
-
-Phase | Start | End | Duration
--- | -- | -- | --
-Development | Tue, May 19th | Wed, Aug 5th | 56 days
-Burn Down | Thu, Aug 6th | Wed, Aug 19th | 10 days
-Code Freeze/Testing | Thu, Aug 20th | Tue, Aug 25th | 4 days
-Release | Wed, Aug 26th | Wed, Aug 26th | 1 day
-
-## _PROPOSED_ - Release v0.16 Schedule
-
 Phase | Start | End | Duration
 -- | -- | -- | --
 Development | Thu, Aug 6th | Wed, Sept 30th | 39 days
 Burn Down | Thu, Oct 1st | Wed, Oct 7th | 5 days
 Code Freeze/Testing | Thu, Oct 8th | Tue, Oct 13th | 4 days
 Release | Wed, Oct 14th | Wed, Oct 14th | 1 day
+
+## _PROPOSED_ - Release v0.17 Schedule
+
+Phase | Start | End | Duration
+-- | -- | -- | --
+Development | Thu, Oct 1st | Mon, Nov 23rd | 38 days
+Burn Down | Tue, Nov 24th | Wed, Dec 2nd | 5 days
+Code Freeze/Testing | Thu, Dec 3rd | Tue, Dec 8th | 4 days
+Release | Wed, Dec 9th | Wed, Dec 9th | 1 day
