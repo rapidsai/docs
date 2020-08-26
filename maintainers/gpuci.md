@@ -63,7 +63,7 @@ All jobs which use Docker run inside of the `gpuci/rapidsai-base` images.
 
 The images contain a common conda environment with basic tools such as `python`, `cmake`, `make`, `cython`, and `flake8`. See the full list [here](https://github.com/rapidsai/gpuci-build-environment/blob/main/Dockerfile#L66)
 
-The conda environment can be used in the scripts with `source activate gdf`
+The conda environment can be used in the scripts with `source activate rapids`
 
 ## Jobs
 
@@ -84,14 +84,14 @@ Uses the `ci/checks/style.sh` script to determine success or failure
 #### CPU builds
 
 Each PR is built in a container with a matrix of parameters:
-- CUDA 10.0, 10.1 & 10.2
-- Python 3.6 & 3.7
+- CUDA 10.1, 10.2 & 11.0
+- Python 3.7 & 3.8
 
 This allows for testing compilation against multiple CUDA and Python versions.
 
 #### GPU build
 
-Each PR is built in a container using CUDA 10.0 and Python 3.6. the purpose of this job is primarily for testing with a GPU present.
+Each PR is built in a container using CUDA {{ site.data.versions.CUDA_VER }} and Python {{ site.data.versions.PYTHON_VER }}. the purpose of this job is primarily for testing with a GPU present.
 
 Due to limited GPU resources and high volume of pull requests, it's not currently practical to matrix test GPUs. In the future, artifacts produced in the CPU steps will be reused in a matrix of GPU tests so GPU resources are used only to test instead of compiling and testing.
 
@@ -102,14 +102,14 @@ Branch builds occur when a PR is merged and once per day. Currently, which branc
 #### CPU builds
 
 Each branch is built in a container with a matrix of parameters:
-- CUDA 10.0, 10.1 & 10.2
-- Python 3.6 & 3.7
+- CUDA 10.1, 10.2 & 11.0
+- Python 3.7 & 3.8
 
 These builds can publish nightly conda packages.
 
 #### GPU build
 
-Each branch is built in a container using CUDA 10.0 and Python 3.6. the purpose of this job is primarily for testing with a GPU present.
+Each branch is built in a container using CUDA {{ site.data.versions.CUDA_VER }} and Python {{ site.data.versions.PYTHON_VER }}. the purpose of this job is primarily for testing with a GPU present.
 
 #### Auto-mergers
 
@@ -119,21 +119,21 @@ During the release process, the branch for the next release is created and set a
 
 It is important to note that the auto-merge jobs will sometimes fail due to merge conflicts, and will request a manual merge to be done. *Never* use the GitHub Web UI to fix the merge conflicts as it will cause changes in the default branch to be merged into the release branch. Please use the following steps to fix the merge conflicts manually:
 
-Using the example of `branch-0.7` release branch and a new default `branch-0.8`.
+Using the example of `branch-{{ site.data.releases.stable.version }}` release branch and a new default `branch-{{ site.data.releases.nightly.version }}`.
 
 ```
-git checkout branch-0.7
+git checkout branch-{{ site.data.releases.stable.version }}
 git pull <rapidsai remote>
-git checkout branch-0.8
+git checkout branch-{{ site.data.releases.nightly.version }}
 git pull <rapidsai remote>
-git checkout -b branch-0.8-merge-0.7
-git merge branch-0.7
+git checkout -b branch-{{ site.data.releases.nightly.version }}-merge-{{ site.data.releases.stable.version }}
+git merge branch-{{ site.data.releases.stable.version }}
 # Fix any merge conflicts caused by this merge
-git commit -am "Merge branch-0.7 into branch-0.8"
-git push <personal fork> branch-0.8-merge-0.7
+git commit -am "Merge branch-{{ site.data.releases.stable.version }} into branch-{{ site.data.releases.nightly.version }}"
+git push <personal fork> branch-{{ site.data.releases.nightly.version }}-merge-{{ site.data.releases.stable.version }}
 ```
 
-Once this is done, open a PR that targets the new default branch (`branch-0.8` in this example) with your changes. Once this PR is approved and merged, the auto-merger PR should automatically be merged since it will contain the same commit hashes.
+Once this is done, open a PR that targets the new default branch (`branch-{{ site.data.releases.nightly.version }}` in this example) with your changes. Once this PR is approved and merged, the auto-merger PR should automatically be merged since it will contain the same commit hashes.
 
 ## Scripts
 
