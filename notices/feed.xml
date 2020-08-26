@@ -7,19 +7,19 @@ layout:
   <channel>
     <title>{{ site.title | xml_escape }} - Notices</title>
     <description>Notices are our means to communicate and document changes in the project to contributors, core developers, users, and the community.</description>
-    <link>{{ site.url }}{{ site.baseurl }}notices</link>
-    <atom:link href="{{ "notices/feed.xml" | prepend: site.baseurl | prepend: site.url }}" rel="self" type="application/rss+xml"/>
+    <link>{% link notices/notices.md %}</link>
+    <atom:link href="{% link notices/feed.xml %}" rel="self" type="application/rss+xml"/>
     <pubDate>{{ site.time | date_to_rfc822 }}</pubDate>
     <lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
     <generator>Jekyll v{{ jekyll.version }}</generator>
-    {% assign notices = site.notices | sort: 'notice_created' | reverse %}
+    {% assign notices = site.notices | sort: 'notice_updated' | reverse %}
     {% for post in notices %}
       <item>
         <title>{{ post.title | xml_escape }}</title>
         <description>{{ post.content | xml_escape }}</description>
-        <pubDate>{{ post.notice_created | date_to_rfc822 }}</pubDate>
-        <link>{{ post.url | prepend: site.baseurl | prepend: site.url }}</link>
-        <guid isPermaLink="true">{{ post.url | prepend: site.baseurl | prepend: site.url }}</guid>
+        <pubDate>{% if post.notice_updated == null or post.notice_created == post.notice_updated %}{{ post.notice_created | date_to_rfc822 }}{% else %}{{ post.notice_updated | date_to_rfc822 }}{% endif %}</pubDate>
+        <link>{{ post.url | absolute_url }}</link>
+        <guid isPermaLink="true">{{ post.url | absolute_url }}</guid>
         {% for tag in post.tags %}
         <category>{{ tag | xml_escape }}</category>
         {% endfor %}
