@@ -73,7 +73,7 @@ Many users do not need a specific platform combination but would like to ensure 
 ## Prerequisites
 
 * NVIDIA Pascal™ GPU architecture or better
-* CUDA [10](https://developer.nvidia.com/cuda-downloads) compatible NVIDIA driver
+* CUDA [10.1/10.2/11.0](https://developer.nvidia.com/cuda-downloads) with a compatible NVIDIA driver
 * Ubuntu 16.04/18.04 or CentOS 7
 * Docker CE v18+
 * [nvidia-docker](https://github.com/nvidia/nvidia-docker/wiki/Installation-(version-2.0)) v2+
