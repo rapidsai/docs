@@ -23,20 +23,9 @@ Project Leads
 Operations
 {: .label .label-purple}
 
-## Release v{{ site.data.releases.nightly.version }} Schedule
+## _PROPOSED_ Release v{{ site.data.releases.nightly.version }} Schedule
 
 **NOTE:** *Dates are subject to change at anytime. Completed release schedules are posted [here]({% link releases/schedule.md %}).*
-
-**NOTICE:** See [RGN 3](/notices/rgn0003) for update on `v0.15` release extension
-
-Phase | Start | End | Duration
--- | -- | -- | --
-Development | Tue, May 19th | Wed, Aug 5th | 56 days
-Burn Down | Thu, Aug 6th | Wed, Aug 19th | 10 days
-Code Freeze/Testing | Thu, Aug 20th | Tue, Aug 25th | 4 days
-Release | Wed, Aug 26th | Wed, Aug 26th | 1 day
-
-## _PROPOSED_ - Release v0.16 Schedule
 
 Phase | Start | End | Duration
 -- | -- | -- | --
