@@ -9,7 +9,7 @@ var indexSectionsWithContent =
   6: "cdist",
   7: "bcdhiklmnopqrstw",
   8: "abcdefghiklmnpqrstuvxz",
-  9: "o",
+  9: "lo",
   10: "dt",
   11: "abcdefghijlmnpqrstuw",
   12: "lru"
