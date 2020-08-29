@@ -6178,7 +6178,7 @@ params : dict of new params</p>
 </dd></dl>
 <dl class="py class">
 <dt id="cuml.ensemble.RandomForestRegressor">
-<em class="property">class </em><code class="sig-prename descclassname">cuml.ensemble.</code><code class="sig-name descname">RandomForestRegressor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">split_criterion</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">accuracy_metric</span><span class="o">=</span><span class="default_value">'mse'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuml.ensemble.RandomForestRegressor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">cuml.ensemble.</code><code class="sig-name descname">RandomForestRegressor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">split_criterion</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">accuracy_metric</span><span class="o">=</span><span class="default_value">'r2'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuml.ensemble.RandomForestRegressor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements a Random Forest regressor model which fits multiple decision
 trees in an ensemble.</p>
 <div class="admonition note">
@@ -6252,7 +6252,10 @@ If float the min_rows_per_sample*n_rows</p>
 </dd>
 <dt><strong>min_impurity_decrease</strong><span class="classifier">float (default = 0.0)</span></dt><dd><p>The minimum decrease in impurity required for node to be split</p>
 </dd>
-<dt><strong>accuracy_metric</strong><span class="classifier">string (default = ‘mse’)</span></dt><dd><p>Decides the metric used to evaluate the performance of the model.
+<dt><strong>accuracy_metric</strong><span class="classifier">string (default = ‘r2’)</span></dt><dd><p>Decides the metric used to evaluate the performance of the model.
+In the 0.16 release, the default scoring metric was changed
+from mean squared error to r-squared.
+for r-squared : ‘r2’
 for median of abs error : ‘median_ae’
 for mean of abs error : ‘mean_ae’
 for mean square error’ : ‘mse’</p>
@@ -6279,7 +6282,7 @@ currently fully guarantee the exact same results.</p>
 <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 <span class="n">cuml_model</span> <span class="o">=</span> <span class="n">curfc</span><span class="p">(</span><span class="n">max_features</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
                     <span class="n">split_algo</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">min_rows_per_node</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">accuracy_metric</span><span class="o">=</span><span class="s1">'mse'</span><span class="p">)</span>
+                    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">accuracy_metric</span><span class="o">=</span><span class="s1">'r2'</span><span class="p">)</span>
 <span class="n">cuml_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
 <span class="n">cuml_score</span> <span class="o">=</span> <span class="n">cuml_model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"MSE score of cuml : "</span><span class="p">,</span> <span class="n">cuml_score</span><span class="p">)</span>
@@ -6486,7 +6489,9 @@ train and test the Random Forest model</p>
 <dt id="cuml.ensemble.RandomForestRegressor.score">
 <code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">algo</span><span class="o">=</span><span class="default_value">'auto'</span></em>, <em class="sig-param"><span class="n">convert_dtype</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fil_sparse_format</span><span class="o">=</span><span class="default_value">'auto'</span></em>, <em class="sig-param"><span class="n">predict_model</span><span class="o">=</span><span class="default_value">'GPU'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuml.ensemble.RandomForestRegressor.score" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>Calculates the accuracy metric score of the model for X.</p>
+<div><p>Calculates the accuracy metric score of the model for X.
+In the 0.16 release, the default scoring metric was changed
+from mean squared error to r-squared.</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -12453,7 +12458,10 @@ If None, then max_features=n_features which is 1.0.</p>
 If int then number of sample rows
 If float the min_rows_per_sample*n_rows</p>
 </dd>
-<dt><strong>accuracy_metric</strong><span class="classifier">string (default = ‘mse’)</span></dt><dd><p>Decides the metric used to evaluate the performance of the model.
+<dt><strong>accuracy_metric</strong><span class="classifier">string (default = ‘r2’)</span></dt><dd><p>Decides the metric used to evaluate the performance of the model.
+In the 0.16 release, the default scoring metric was changed
+from mean squared error to r-squared.
+for r-squared : ‘r2’
 for median of abs error : ‘median_ae’
 for mean of abs error : ‘mean_ae’
 for mean square error’ : ‘mse’</p>
