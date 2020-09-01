@@ -8,15 +8,9 @@ import os
 from bs4 import BeautifulSoup
 
 FILEPATH = sys.argv[1]
-NIGHTLY_VERSION = int(sys.argv[2])
 
 LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
 
-VERSIONS_DICT = {
-    "nightly": NIGHTLY_VERSION,
-    "stable": NIGHTLY_VERSION - 1,
-    "legacy": NIGHTLY_VERSION - 2,
-}
 with open(LIB_MAP_PATH) as fp:
     LIB_PATH_DICT = json.load(fp)
 
@@ -27,17 +21,14 @@ FA_TAG_ID = "rapids-fa-tag"
 
 def get_version_from_fp():
     """
-    Determines if the current HTML document is for legacy, stable, or nightly versions
-    based on the file path
+    Gets the current RAPIDS version from the filepath
     """
     match = re.search(r"0.\d{1,3}", FILEPATH)
-    version_number = int(match[0].split(".")[1])
-    version_name = "legacy"
-    if version_number == VERSIONS_DICT["nightly"]:
-        version_name = "nightly"
-    if version_number == VERSIONS_DICT["stable"]:
-        version_name = "stable"
-    return {"name": version_name, "number": version_number}
+
+    if match:
+        return match[0]
+
+    raise Exception(f"Couldn't find valid RAPIDS version in {FILEPATH}.")
 
 
 def get_lib_from_fp():
@@ -83,30 +74,23 @@ def create_version_options():
     Creates options for legacy/stable/nightly selector
     """
     options = []
-    doc_version = get_version_from_fp()
     doc_lib = get_lib_from_fp()
-    doc_is_extra_legacy = (  # extra legacy means the doc version is older then current legacy
-        doc_version["name"] == "legacy"
-        and VERSIONS_DICT["legacy"] != doc_version["number"]
-    )
+
+    # Creates a template string to be interpolated by Jekyll
+    version_template_str = lambda x: "{{" + f" '{x}' | version_selector " + "}}"
+
+    # Iterate over non-None keys library keys from LIB_PATH_DICT
     for version_name, version_path in [
         (_, path) for _, path in LIB_PATH_DICT[doc_lib].items() if path is not None
     ]:
-        if doc_is_extra_legacy and version_name == "legacy":
-            version_number = doc_version["number"]
-        else:
-            version_number = VERSIONS_DICT[version_name]
-        is_selected = False
+        option_text = version_template_str(version_name)
         option_href = version_path
-        version_text = f"{version_name} (0.{str(version_number)})"
-        if version_name == doc_version["name"]:
-            print(f"default version: {version_name}")
-            is_selected = True
+        extra_classes = ["{{ " + f"'{version_name}' | add_active_class" + " }}"]
         options.append(
-            {"selected": is_selected, "href": option_href, "text": version_text}
+            {"href": option_href, "text": option_text, "extra_classes": extra_classes}
         )
 
-    return options
+    return {"selected": version_template_str("doc"), "options": options}
 
 
 def create_library_options():
@@ -117,6 +101,7 @@ def create_library_options():
     options = []
 
     for lib, lib_versions in LIB_PATH_DICT.items():
+        extra_classes = []
         if lib_versions["stable"]:
             option_href = lib_versions["stable"]
         elif lib_versions["nightly"]:
@@ -125,16 +110,16 @@ def create_library_options():
             option_href = lib_versions["legacy"]
         else:
             continue
-        is_selected = False
         if lib == doc_lib:
-            print(f"default lib: {lib}")
-            is_selected = True
-        options.append({"selected": is_selected, "href": option_href, "text": lib})
+            extra_classes.append("rapids-selector__menu-item--selected")
+        options.append(
+            {"href": option_href, "text": lib, "extra_classes": extra_classes}
+        )
 
-    return options
+    return {"selected": doc_lib, "options": options}
 
 
-def create_selector(soup, options):
+def create_selector(soup, menu):
     """
     Creates a dropdown selector
     """
@@ -143,14 +128,14 @@ def create_selector(soup, options):
         attrs={"class": ["rapids-selector__container", "rapids-selector--hidden"]},
     )
     selected = soup.new_tag("div", attrs={"class": "rapids-selector__selected"})
-    selected.string = next(option["text"] for option in options if option["selected"])
+    selected.string = menu["selected"]
     container.append(selected)
     drop_down_menu = soup.new_tag("div", attrs={"class": ["rapids-selector__menu"]})
+    options = menu["options"]
 
     for option in options:
         option_classes = ["rapids-selector__menu-item"]
-        if option["selected"]:
-            option_classes.append("rapids-selector__menu-item--selected")
+        option_classes.extend(option["extra_classes"])
         option_el = soup.new_tag(
             "a", href=option["href"], attrs={"class": option_classes}
         )
@@ -229,7 +214,9 @@ def is_sphinx_or_doxygen(soup):
     if soup.select(doxygen_identifier):
         return "doxygen", soup.select(doxygen_identifier)[0]
 
-    raise Exception(f"Couldn't identify {FILEPATH} as either Doxygen or Sphinx")
+    raise Exception(
+        f"Couldn't identify {FILEPATH} as either Doxygen or Sphinx document"
+    )
 
 
 def main():
@@ -237,9 +224,16 @@ def main():
     Given the path to a documentation HTML file, this function will
     parse the file and add library/version selectors and a Home button
     """
-    print(f"--- {FILEPATH} ---")
-    with open(FILEPATH) as fp:
-        soup = BeautifulSoup(fp, "html.parser")
+    frontmatter = (
+        "---\n"
+        "permalink: /:path/:basename\n"
+        "doc_version: '" + get_version_from_fp() + "'\n"
+        "---\n"
+    )
+    print(f"Processing {FILEPATH}...")
+    with open(FILEPATH) as html_str:
+        html = html_str.read().replace(frontmatter, "")
+        soup = BeautifulSoup(html, "html.parser")
 
     doc_type, reference_el = is_sphinx_or_doxygen(soup)
 
@@ -268,8 +262,8 @@ def main():
     soup.body.append(script_tag)
     soup.head.append(style_tab)
 
-    with open(FILEPATH, "w") as fp:
-        fp.write(str(soup))
+    with open(FILEPATH, "w") as output_file:
+        output_file.write(frontmatter + str(soup))
 
 
 if __name__ == "__main__":

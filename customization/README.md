@@ -48,17 +48,17 @@ An excerpt of the generated JSON file is shown below:
 ```json
 {
   "clx": {
-    "nightly": "/clx/en/nightly/api.html",
-    "stable": "/clx/en/stable/api.html",
+    "nightly": "/clx/nightly/api.html",
+    "stable": "/clx/stable/api.html",
     "legacy": null
   },
   "cuml": {
-    "nightly": "/cuml/en/nightly/api.html",
-    "stable": "/cuml/en/stable/api.html",
-    "legacy": "/cuml/en/legacy/api.html"
+    "nightly": "/cuml/nightly/api.html",
+    "stable": "/cuml/stable/api.html",
+    "legacy": "/cuml/legacy/api.html"
   },
   "cuxfilter": {
-    "nightly": "/cuxfilter/en/nightly",
+    "nightly": "/cuxfilter/nightly",
     "stable": null,
     "legacy": null
   },
@@ -88,7 +88,7 @@ An excerpt of the generated JSON file is shown below:
 > Before running the script, it is important that [update_symlinks.sh](/update_symlinks.sh) and [lib_map.sh](lib_map.sh) have been run.
 
 ```sh
-python customization/customize_docs.py ${ABS_PATH_TO_HTML_FILE} ${CURRENT_RAPIDS_VERSION}
+python customization/customize_docs.py ${ABS_PATH_TO_HTML_FILE}
 ```
 
 #### Helper Script
@@ -100,13 +100,12 @@ python customization/customize_docs.py ${ABS_PATH_TO_HTML_FILE} ${CURRENT_RAPIDS
 > **Note:** This script is intended to be run from the project's root.
 
 ```sh
-NIGHTLY_VERSION=13
 
-customization/customize_docs_in_folder.sh api/ ${NIGHTLY_VERSION}
+customization/customize_docs_in_folder.sh api/
 
 # or
 
-customization/customize_docs_in_folder.sh api/rmm ${NIGHTLY_VERSION}
+customization/customize_docs_in_folder.sh api/rmm
 ```
 
 ### TL;DR
@@ -120,6 +119,6 @@ update_symlinks.sh ${NIGHTLY_VERSION} # ensures symlink accuracy
 
 customization/lib_map.sh # generates a JSON file needed by customize_docs.py
 
-customization/customize_docs_in_folder.sh api/rmm ${NIGHTLY_VERSION}
+customization/customize_docs_in_folder.sh api/rmm
 
 ```
