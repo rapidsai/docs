@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['joining_392',['Joining',['../group__column__join.html',1,'']]],
-  ['join_5fstrings_393',['join_strings',['../group__strings__combine.html#ga9a647897ccef203cb0aeb4c90b799a7b',1,'cudf::strings']]]
+  ['joining_393',['Joining',['../group__column__join.html',1,'']]],
+  ['join_5fstrings_394',['join_strings',['../group__strings__combine.html#ga9a647897ccef203cb0aeb4c90b799a7b',1,'cudf::strings']]]
 ];
