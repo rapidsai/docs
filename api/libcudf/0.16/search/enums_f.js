@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['weak_5fordering_1582',['weak_ordering',['../namespacecudf.html#a6e67b41d81d4d1b414070405496a90bd',1,'cudf']]]
+  ['type_5fid_1585',['type_id',['../group__utility__types.html#gadf077607da617d1dadcc5417e2783539',1,'cudf']]]
 ];

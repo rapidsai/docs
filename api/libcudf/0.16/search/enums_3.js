@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hash_5fid_1560',['hash_id',['../group__utility__types.html#gaced8b9d129825edd13d76e912e4413c3',1,'cudf']]]
+  ['filter_5ftype_1563',['filter_type',['../group__strings__modify.html#ga9641be68cf161f3e42888a73be40f264',1,'cudf::strings']]]
 ];

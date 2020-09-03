@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['regex_20features_1824',['Regex Features',['../md_regex.html',1,'']]]
+  ['regex_20features_1828',['Regex Features',['../md_regex.html',1,'']]]
 ];
