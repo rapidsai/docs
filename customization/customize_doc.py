@@ -17,6 +17,8 @@ with open(LIB_MAP_PATH) as fp:
 SCRIPT_TAG_ID = "rapids-selector-js"
 STYLE_TAG_ID = "rapids-selector-css"
 FA_TAG_ID = "rapids-fa-tag"
+RAW_TAG_OPEN = "{% raw %}"
+RAW_TAG_CLOSE = "{% endraw %}"
 
 
 def get_version_from_fp():
@@ -219,21 +221,44 @@ def is_sphinx_or_doxygen(soup):
     )
 
 
+def get_frontmatter():
+    """
+    Returns the frontmatter used in documentation files.
+    """
+    return (
+        "---\n"
+        "permalink: /:path/:basename\n"
+        "nav_exclude: true\n"
+        "doc_version: '" + get_version_from_fp() + "'\n"
+        "---\n"
+    )
+
+
+def sanitize_html(html_str):
+    """
+    Removes any existing Jekyll/Liquid templating strings from the
+    HTML file.
+    """
+    html_start_index = html_str.index("<!DOCTYPE html")
+
+    # remove frontmatter
+    html_str = html_str[html_start_index:]
+
+    # remove raw tags
+    html_str = html_str.replace(RAW_TAG_OPEN, "").replace(RAW_TAG_CLOSE, "")
+
+    return html_str
+
+
 def main():
     """
     Given the path to a documentation HTML file, this function will
     parse the file and add library/version selectors and a Home button
     """
-    frontmatter = (
-        "---\n"
-        "permalink: /:path/:basename\n"
-        "doc_version: '" + get_version_from_fp() + "'\n"
-        "---\n"
-    )
     print(f"Processing {FILEPATH}...")
     with open(FILEPATH) as html_str:
-        html = html_str.read().replace(frontmatter, "")
-        soup = BeautifulSoup(html, "html.parser")
+        html = sanitize_html(html_str.read())
+    soup = BeautifulSoup(html, "html.parser")
 
     doc_type, reference_el = is_sphinx_or_doxygen(soup)
 
@@ -257,13 +282,16 @@ def main():
     container.append(library_selector)
     container.append(version_selector)
 
+    # Add raw tag so no proceeding content is parsed by Jekyll
+    container.append(RAW_TAG_OPEN)
+
     # Insert new elements
     reference_el.insert(0, container)
     soup.body.append(script_tag)
     soup.head.append(style_tab)
 
     with open(FILEPATH, "w") as output_file:
-        output_file.write(frontmatter + str(soup))
+        output_file.write(get_frontmatter() + str(soup) + RAW_TAG_CLOSE)
 
 
 if __name__ == "__main__":
