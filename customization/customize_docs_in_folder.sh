@@ -33,7 +33,7 @@ for FILE in $(grep "${SPHINX_SEARCH_TERM}\|${DOXYGEN_SEARCH_TERM}" -rl \
   --exclude-dir=latest \
   --exclude-dir=legacy \
   ${FOLDER_TO_CUSTOMIZE} ); do
-  python ${SCRIPT_SRC_FOLDER}/customize_doc.py $(realpath ${FILE})
+  python3 ${SCRIPT_SRC_FOLDER}/customize_doc.py $(realpath ${FILE})
   echo "" # line break for readability
 done
 IFS="$OIFS"
