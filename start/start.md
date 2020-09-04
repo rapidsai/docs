@@ -27,11 +27,6 @@ Handy PDF reference guide for handling GPU Data Frames (GDF) with cuDF.
 Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is geared mainly for new users.
 {: .mb-7 }
 
-### 10 Minutes to Dask-XGBoost
-#### **[Dask-XGBoost Post](/api/cudf/stable/dask-xgb-10min.html){: target="_blank"}**
-A short introduction to XGBoost with a distributed CUDA DataFrame via Dask-cuDF.
-{: .mb-7 }
-
 ### Using RAPIDS + XGBoost4J-Spark
 #### **[Github Repo](https://github.com/rapidsai/spark-examples){: target="_blank"}**
 Getting started guide and source code for XGBoost4J-Spark, along with notebooks and examples.
