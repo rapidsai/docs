@@ -8,5 +8,6 @@ var searchData=
   ['free_5flist_54',['free_list',['../classrmm_1_1mr_1_1detail_1_1free__list.html',1,'rmm::mr::detail']]],
   ['free_5flist_3c_20block_20_3e_55',['free_list&lt; block &gt;',['../classrmm_1_1mr_1_1detail_1_1free__list.html',1,'rmm::mr::detail']]],
   ['free_5flist_3c_20block_5fbase_20_3e_56',['free_list&lt; block_base &gt;',['../classrmm_1_1mr_1_1detail_1_1free__list.html',1,'rmm::mr::detail']]],
-  ['front_5felement_57',['front_element',['../classrmm_1_1device__uvector.html#a43f186589b4bb5893441339d050f85a5',1,'rmm::device_uvector']]]
+  ['free_5flist_5fsummary_57',['free_list_summary',['../classrmm_1_1mr_1_1fixed__size__memory__resource.html#a03ae72bfe093dcdb6e24df2ef6c58632',1,'rmm::mr::fixed_size_memory_resource::free_list_summary()'],['../classrmm_1_1mr_1_1pool__memory__resource.html#a5b75713a57836096f79d00c1544d314e',1,'rmm::mr::pool_memory_resource::free_list_summary()']]],
+  ['front_5felement_58',['front_element',['../classrmm_1_1device__uvector.html#a43f186589b4bb5893441339d050f85a5',1,'rmm::device_uvector']]]
 ];
