@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['join_5fstrings_1226',['join_strings',['../group__strings__combine.html#ga9a647897ccef203cb0aeb4c90b799a7b',1,'cudf::strings']]]
+  ['join_5fstrings_1226',['join_strings',['../group__strings__combine.html#ga309131bd11fed901719adb7860baaef4',1,'cudf::strings']]]
 ];

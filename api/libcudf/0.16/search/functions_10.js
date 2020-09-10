@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['quantile_1333',['quantile',['../group__column__quantiles.html#ga5cff6f0cff4afc949c8f6e28e66b0875',1,'cudf']]],
-  ['quantiles_1334',['quantiles',['../group__column__quantiles.html#ga063519ac0f88f4a9f7c19fa5fd7555fa',1,'cudf']]]
+  ['quantile_1333',['quantile',['../group__column__quantiles.html#gad309219ccf18eaee72cb7a72b1cf2778',1,'cudf']]],
+  ['quantiles_1334',['quantiles',['../group__column__quantiles.html#ga3da34be52bf8791d27731bd9c330be11',1,'cudf']]]
 ];

@@ -1,14 +1,14 @@
 var searchData=
 [
-  ['pad_566',['pad',['../group__strings__modify.html#gad08930928f38742cc084b3a76b289c7c',1,'cudf::strings']]],
+  ['pad_566',['pad',['../group__strings__modify.html#ga561cf57a6d1a5e7df4582e0e12a88aa6',1,'cudf::strings']]],
   ['pad_5fside_567',['pad_side',['../group__strings__modify.html#gace598ecf9030296eeebfef46251d7d52',1,'cudf::strings']]],
   ['pair_5faccessor_568',['pair_accessor',['../structcudf_1_1detail_1_1pair__accessor.html',1,'cudf::detail::pair_accessor&lt; T, has_nulls &gt;'],['../structcudf_1_1detail_1_1pair__accessor.html#ad1986e9e117f350509fc30966fda20aa',1,'cudf::detail::pair_accessor::pair_accessor()']]],
   ['pair_5fbegin_569',['pair_begin',['../classcudf_1_1column__device__view.html#af3fd9ccba5bc53a980951ce9cd5c3328',1,'cudf::column_device_view']]],
   ['pair_5fend_570',['pair_end',['../classcudf_1_1column__device__view.html#a112c7d3b054081f9dfb41577e43bb623',1,'cudf::column_device_view']]],
   ['parent_571',['parent',['../classcudf_1_1dictionary__column__view.html#ae8383dccb5ba34c5df104747f51be0d3',1,'cudf::dictionary_column_view::parent()'],['../classcudf_1_1lists__column__view.html#afd2779f3ec3da3cc168d50e835bd6ad9',1,'cudf::lists_column_view::parent()'],['../classcudf_1_1strings__column__view.html#a83d863ae8ed406ce1c21e0697a7e69a3',1,'cudf::strings_column_view::parent()']]],
-  ['partition_572',['partition',['../group__reorder__partition.html#ga0d0247ea3dd8c90195d727415af88a78',1,'cudf::partition()'],['../group__strings__split.html#gaa02c115dc86f991abbc744842557816b',1,'cudf::strings::partition()']]],
+  ['partition_572',['partition',['../group__reorder__partition.html#gaaaf67a199330b1a1feeecc9b6cf20e42',1,'cudf::partition()'],['../group__strings__split.html#ga1d4f4e8ab36149b574349f5367251a1b',1,'cudf::strings::partition()']]],
   ['pmod_573',['PMOD',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcaaf5a744d55583fdb1af0f280f12c9ab1',1,'cudf']]],
-  ['porter_5fstemmer_5fmeasure_574',['porter_stemmer_measure',['../group__nvtext__stemmer.html#ga12d49e14027f4a629fdeb4255a90eabc',1,'nvtext']]],
+  ['porter_5fstemmer_5fmeasure_574',['porter_stemmer_measure',['../group__nvtext__stemmer.html#gaf32ce8a4c490cce9a4b94d0a28f8e882',1,'nvtext']]],
   ['pow_575',['POW',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca17faf4e999b8cee4c36915c1f54ccffe',1,'cudf']]],
   ['prefix_576',['prefix',['../structcudf_1_1io_1_1read__csv__args.html#a2ed055dc61e99f7815c5bceb8efac86e',1,'cudf::io::read_csv_args::prefix()'],['../structcudf_1_1io_1_1detail_1_1csv_1_1reader__options.html#aadac8f3abfe65e8705c27120d3a9bb60',1,'cudf::io::detail::csv::reader_options::prefix()']]],
   ['print_577',['print',['../namespacecudf_1_1strings.html#a93a3f2add961e59ba6ac0b4dd9b38b4e',1,'cudf::strings']]],
