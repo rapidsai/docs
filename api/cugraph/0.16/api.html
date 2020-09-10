@@ -44,7 +44,6 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">cuGraph API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#graph">Graph</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#renumbering">Renumbering</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.structure.symmetrize">Symmetrize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.structure.convert_matrix">Conversion from Other Formats</a></li>
 </ul>
@@ -55,10 +54,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#community">Community</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-cugraph.community.ecg">Ensemble clustering for graphs (ECG)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cugraph.community.ktruss_subgraph">K-Truss</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.community.leiden">Leiden</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.community.louvain">Louvain</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-cugraph.community.ktruss_subgraph">K-Truss</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-cugraph.community.ecg">ECG</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.community.spectral_clustering">Spectral Clustering</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.community.subgraph_extraction">Subgraph Extraction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.community.triangle_count">Triangle Counting</a></li>
@@ -69,8 +68,8 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#cores">Cores</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-cugraph.cores.k_core">K-Core</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.cores.core_number">Core Number</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cugraph.cores.k_core">K-Core</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#layout">Layout</a><ul>
@@ -78,6 +77,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#link-analysis">Link Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-cugraph.link_analysis.hits">HITS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.link_analysis.pagerank">Pagerank</a></li>
 </ul>
 </li>
@@ -91,13 +91,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.traversal.sssp">Single-source-shortest-path</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#r-mat-graph-generation">R-mat Graph Generation</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dask-cugraph.html">Multi-GPU with cuGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cugraph_intro.html">cuGraph Intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cugraph_blogs.html">cuGraph BLOGS and Presentations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cugraph_ref.html">References</a></li>
 </ul>
 </div>
 </div>
@@ -153,7 +153,7 @@
 <td><p>Compute a renumbered edge list</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#cugraph.structure.graph.Graph.degree" title="cugraph.structure.graph.Graph.degree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degree</span></code></a>([vertex_subset])</p></td>
-<td><p>Compute vertex degree.</p></td>
+<td><p>Compute vertex degree, which is the total number of edges incident to a vertex (both in and out edges).</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#cugraph.structure.graph.Graph.degrees" title="cugraph.structure.graph.Graph.degrees"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degrees</span></code></a>([vertex_subset])</p></td>
 <td><p>Compute vertex in-degree and out-degree.</p></td>
@@ -379,14 +379,15 @@ a CSR-like structure.  Defaults to False.</p>
 <dl class="py method">
 <dt id="cugraph.structure.graph.Graph.degree">
 <code class="sig-name descname">degree</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vertex_subset</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.structure.graph.Graph.degree" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute vertex degree. By default, this method computes vertex
+<dd><p>Compute vertex degree, which is the total number of edges incident
+to a vertex (both in and out edges). By default, this method computes
 degrees for the entire set of vertices. If vertex_subset is provided,
-this method optionally filters out all but those listed in
+then this method optionally filters out all but those listed in
 vertex_subset.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>vertex_subset</strong><span class="classifier">cudf.Series or iterable container, optional</span></dt><dd><p>A container of vertices for displaying corresponding degree. If not
+<dt><strong>vertex_subset</strong><span class="classifier">cudf.Series or iterable container, optional</span></dt><dd><p>a container of vertices for displaying corresponding degree. If not
 set, degrees are computed for the entire set of vertices.</p>
 </dd>
 </dl>
@@ -396,13 +397,11 @@ set, degrees are computed for the entire set of vertices.</p>
 <dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>GPU DataFrame of size N (the default) or the size of the given
 vertices (vertex_subset) containing the degree. The ordering is
 relative to the adjacency list, or that given by the specified
-vertex_subset.
-df[‘vertex’] : cudf.Series</p>
-<blockquote>
-<div><p>The vertex IDs (will be identical to vertex_subset if
-specified).</p>
-</div></blockquote>
+vertex_subset.</p>
 <dl class="simple">
+<dt>df[‘vertex’]<span class="classifier">cudf.Series</span></dt><dd><p>The vertex IDs (will be identical to vertex_subset if
+specified).</p>
+</dd>
 <dt>df[‘degree’]<span class="classifier">cudf.Series</span></dt><dd><p>The computed degree of the corresponding vertex.</p>
 </dd>
 </dl>
@@ -415,7 +414,8 @@ specified).</p>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="s1">'0'</span><span class="p">,</span> <span class="s1">'1'</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">degree</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">12</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_df</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">degree</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subset_df</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">degree</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">12</span><span class="p">])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -621,19 +621,11 @@ sorted before returning.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><dl class="simple">
-<dt>df[‘first’]<span class="classifier">cudf.Series</span></dt><dd><p>the first vertex id of a pair, if an external vertex id
+<dt>df[first]<span class="classifier">cudf.Series</span></dt><dd><p>the first vertex id of a pair, if an external vertex id
 is defined by only one column</p>
 </dd>
-<dt>df[‘second’]<span class="classifier">cudf.Series</span></dt><dd><p>the second vertex id of a pair, if an external vertex id
+<dt>df[second]<span class="classifier">cudf.Series</span></dt><dd><p>the second vertex id of a pair, if an external vertex id
 is defined by only one column</p>
-</dd>
-<dt>df[‘<a href="#id1"><span class="problematic" id="id2">*</span></a>_first’]<span class="classifier">cudf.Series</span></dt><dd><p>the first vertex id of a pair, column 0 of the external
-vertex id will be represented as ‘0_first’, column 1 as
-‘1_first’, etc.</p>
-</dd>
-<dt>df[‘<a href="#id3"><span class="problematic" id="id4">*</span></a>_second’]<span class="classifier">cudf.Series</span></dt><dd><p>the second vertex id of a pair, column 0 of the external
-vertex id will be represented as ‘0_first’, column 1 as
-‘1_first’, etc.</p>
 </dd>
 </dl>
 </dd>
@@ -672,14 +664,12 @@ If not set, degrees are computed for the entire set of vertices.</p>
 <dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>GPU DataFrame of size N (the default) or the size of the given
 vertices (vertex_subset) containing the in_degree. The ordering is
 relative to the adjacency list, or that given by the specified
-vertex_subset.
-df[‘vertex’] : cudf.Series</p>
-<blockquote>
-<div><p>The vertex IDs (will be identical to vertex_subset if
-specified).</p>
-</div></blockquote>
+vertex_subset.</p>
 <dl class="simple">
-<dt>df[‘degree’]<span class="classifier">cudf.Series</span></dt><dd><p>The computed in-degree of the corresponding vertex.</p>
+<dt>df[vertex]<span class="classifier">cudf.Series</span></dt><dd><p>The vertex IDs (will be identical to vertex_subset if
+specified).</p>
+</dd>
+<dt>df[degree]<span class="classifier">cudf.Series</span></dt><dd><p>The computed in-degree of the corresponding vertex.</p>
 </dd>
 </dl>
 </dd>
@@ -785,14 +775,12 @@ If not set, degrees are computed for the entire set of vertices.</p>
 <dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>GPU DataFrame of size N (the default) or the size of the given
 vertices (vertex_subset) containing the out_degree. The ordering is
 relative to the adjacency list, or that given by the specified
-vertex_subset.
-df[‘vertex’] : cudf.Series</p>
-<blockquote>
-<div><p>The vertex IDs (will be identical to vertex_subset if
-specified).</p>
-</div></blockquote>
+vertex_subset.</p>
 <dl class="simple">
-<dt>df[‘degree’]<span class="classifier">cudf.Series</span></dt><dd><p>The computed out-degree of the corresponding vertex.</p>
+<dt>df[vertex]<span class="classifier">cudf.Series</span></dt><dd><p>The vertex IDs (will be identical to vertex_subset if
+specified).</p>
+</dd>
+<dt>df[degree]<span class="classifier">cudf.Series</span></dt><dd><p>The computed out-degree of the corresponding vertex.</p>
 </dd>
 </dl>
 </dd>
@@ -995,9 +983,6 @@ number.</p>
 </dl>
 </dd></dl>
 </dd></dl>
-</div>
-<div class="section" id="renumbering">
-<h3>Renumbering<a class="headerlink" href="#renumbering" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="module-cugraph.structure.symmetrize">
 <span id="symmetrize"></span><h3>Symmetrize<a class="headerlink" href="#module-cugraph.structure.symmetrize" title="Permalink to this headline">¶</a></h3>
@@ -1365,6 +1350,119 @@ identifiers and the corresponding katz centrality values.</p>
 </div>
 <div class="section" id="community">
 <h2>Community<a class="headerlink" href="#community" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cugraph.community.ecg">
+<span id="ensemble-clustering-for-graphs-ecg"></span><h3>Ensemble clustering for graphs (ECG)<a class="headerlink" href="#module-cugraph.community.ecg" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="cugraph.community.ecg.ecg">
+<code class="sig-prename descclassname">cugraph.community.ecg.</code><code class="sig-name descname">ecg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_graph</span></em>, <em class="sig-param"><span class="n">min_weight</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">ensemble_size</span><span class="o">=</span><span class="default_value">16</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.community.ecg.ecg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Ensemble Clustering for Graphs (ECG) partition of the input
+graph. ECG runs truncated Louvain on an ensemble of permutations of the
+input graph, then uses the ensemble partitions to determine weights for
+the input graph. The final result is found by running full Louvain on
+the input graph using the determined weights.</p>
+<p>See <a class="reference external" href="https://arxiv.org/abs/1809.05578">https://arxiv.org/abs/1809.05578</a> for further information.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>input_graph</strong><span class="classifier">cugraph.Graph</span></dt><dd><p>cuGraph graph descriptor, should contain the connectivity information
+and weights. The adjacency list will be computed if not already
+present.</p>
+</dd>
+<dt><strong>min_weight</strong><span class="classifier">floating point</span></dt><dd><p>The minimum value to assign as an edgeweight in the ECG algorithm.
+It should be a value in the range [0,1] usually left as the default
+value of .05</p>
+</dd>
+<dt><strong>ensemble_size</strong><span class="classifier">integer</span></dt><dd><p>The number of graph permutations to use for the ensemble.
+The default value is 16, larger values may produce higher quality
+partitions for some graphs.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>parts</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>GPU data frame of size V containing two columns, the vertex id and
+the partition id it is assigned to.</p>
+<dl class="simple">
+<dt>df[vertex]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers</p>
+</dd>
+<dt>df[partition]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the partition assigned to the vertices</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">' '</span><span class="p">,</span>
+<span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
+<span class="go">                      header=None)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="s1">'2'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parts</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">ecg</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</div>
+<div class="section" id="module-cugraph.community.ktruss_subgraph">
+<span id="k-truss"></span><h3>K-Truss<a class="headerlink" href="#module-cugraph.community.ktruss_subgraph" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="cugraph.community.ktruss_subgraph.ktruss_subgraph">
+<code class="sig-prename descclassname">cugraph.community.ktruss_subgraph.</code><code class="sig-name descname">ktruss_subgraph</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">k</span></em>, <em class="sig-param"><span class="n">use_weights</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.community.ktruss_subgraph.ktruss_subgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the K-Truss subgraph of a graph for a specific k.</p>
+<p>The k-truss of a graph is a subgraph where each edge is part of at least
+(k−2) triangles. K-trusses are used for finding tighlty knit groups of
+vertices in a graph. A k-truss is a relaxation of a k-clique in the graph
+and was define in [1]. Finding cliques is computationally demanding and
+finding the maximal k-clique is known to be NP-Hard.</p>
+<p>In contrast, finding a k-truss is computationally tractable as its
+key building block, namely triangle counting counting, can be executed
+in polnymomial time.Typically, it takes many iterations of triangle
+counting to find the k-truss of a graph. Yet these iterations operate
+on a weakly monotonically shrinking graph.
+Therefore, finding the k-truss of a graph can be done in a fairly
+reasonable amount of time. The solution in cuGraph is based on a
+GPU algorithm first shown in [2] and uses the triangle counting algorithm
+from [3].</p>
+<p>[1] Cohen, J.,
+“Trusses: Cohesive subgraphs for social network analysis”
+National security agency technical report, 2008</p>
+<p>[2] O. Green, J. Fox, E. Kim, F. Busato, et al.
+“Quickly Finding a Truss in a Haystack”
+IEEE High Performance Extreme Computing Conference (HPEC), 2017
+<a class="reference external" href="https://doi.org/10.1109/HPEC.2017.8091038">https://doi.org/10.1109/HPEC.2017.8091038</a></p>
+<p>[3] O. Green, P. Yalamanchili, L.M. Munguia,
+“Fast Triangle Counting on GPU”
+Irregular Applications: Architectures and Algorithms (IA3), 2014</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>G</strong><span class="classifier">cuGraph.Graph</span></dt><dd><p>cuGraph graph descriptor with connectivity information. k-Trusses are
+defined for only undirected graphs as they are defined for
+undirected triangle in a graph.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int</span></dt><dd><p>The desired k to be used for extracting the k-truss subgraph.</p>
+</dd>
+<dt><strong>use_weights</strong><span class="classifier">Bool</span></dt><dd><p>whether the output should contain the edge weights if G has them</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>G_truss</strong><span class="classifier">cuGraph.Graph</span></dt><dd><p>A cugraph graph descriptor with the k-truss subgraph for the given k.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k_subgraph</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">ktruss_subgraph</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</div>
 <div class="section" id="module-cugraph.community.leiden">
 <span id="leiden"></span><h3>Leiden<a class="headerlink" href="#module-cugraph.community.leiden" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
@@ -1477,124 +1575,6 @@ partitioning.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">parts</span><span class="p">,</span> <span class="n">modularity_score</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">louvain</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-</div>
-<div class="section" id="module-cugraph.community.ktruss_subgraph">
-<span id="k-truss"></span><h3>K-Truss<a class="headerlink" href="#module-cugraph.community.ktruss_subgraph" title="Permalink to this headline">¶</a></h3>
-<dl class="py function">
-<dt id="cugraph.community.ktruss_subgraph.ktruss_subgraph">
-<code class="sig-prename descclassname">cugraph.community.ktruss_subgraph.</code><code class="sig-name descname">ktruss_subgraph</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">k</span></em>, <em class="sig-param"><span class="n">use_weights</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.community.ktruss_subgraph.ktruss_subgraph" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the K-Truss subgraph of a graph for a specific k.</p>
-<p>The k-truss of a graph is a subgraph where each edge is part of at least
-(k−2) triangles. K-trusses are used for finding tighlty knit groups of
-vertices in a graph. A k-truss is a relaxation of a k-clique in the graph
-and was define in [1]. Finding cliques is computationally demanding and
-finding the maximal k-clique is known to be NP-Hard.</p>
-<p>In contrast, finding a k-truss is computationally tractable as its
-key building block, namely triangle counting counting, can be executed
-in polnymomial time.Typically, it takes many iterations of triangle
-counting to find the k-truss of a graph. Yet these iterations operate
-on a weakly monotonically shrinking graph.
-Therefore, finding the k-truss of a graph can be done in a fairly
-reasonable amount of time. The solution in cuGraph is based on a
-GPU algorithm first shown in [2] and uses the triangle counting algorithm
-from [3].</p>
-<p>[1] Cohen, J.,
-“Trusses: Cohesive subgraphs for social network analysis”
-National security agency technical report, 2008</p>
-<p>[2] O. Green, J. Fox, E. Kim, F. Busato, et al.
-“Quickly Finding a Truss in a Haystack”
-IEEE High Performance Extreme Computing Conference (HPEC), 2017
-<a class="reference external" href="https://doi.org/10.1109/HPEC.2017.8091038">https://doi.org/10.1109/HPEC.2017.8091038</a></p>
-<p>[3] O. Green, P. Yalamanchili, L.M. Munguia,
-“Fast Triangle Counting on GPU”
-Irregular Applications: Architectures and Algorithms (IA3), 2014</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>G</strong><span class="classifier">cuGraph.Graph</span></dt><dd><p>cuGraph graph descriptor with connectivity information. k-Trusses are
-defined for only undirected graphs as they are defined for
-undirected triangle in a graph.</p>
-</dd>
-<dt><strong>k</strong><span class="classifier">int</span></dt><dd><p>The desired k to be used for extracting the k-truss subgraph.</p>
-</dd>
-<dt><strong>use_weights</strong><span class="classifier">Bool</span></dt><dd><p>whether the output should contain the edge weights if G has them</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>G_truss</strong><span class="classifier">cuGraph.Graph</span></dt><dd><p>A cugraph graph descriptor with the k-truss subgraph for the given k.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">k_subgraph</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">ktruss_subgraph</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-</div>
-<div class="section" id="module-cugraph.community.ecg">
-<span id="ecg"></span><h3>ECG<a class="headerlink" href="#module-cugraph.community.ecg" title="Permalink to this headline">¶</a></h3>
-<dl class="py function">
-<dt id="cugraph.community.ecg.ecg">
-<code class="sig-prename descclassname">cugraph.community.ecg.</code><code class="sig-name descname">ecg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_graph</span></em>, <em class="sig-param"><span class="n">min_weight</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">ensemble_size</span><span class="o">=</span><span class="default_value">16</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.community.ecg.ecg" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the Ensemble Clustering for Graphs (ECG) partition of the input
-graph. ECG runs truncated Louvain on an ensemble of permutations of the
-input graph, then uses the ensemble partitions to determine weights for
-the input graph. The final result is found by running full Louvain on
-the input graph using the determined weights.</p>
-<p>See <a class="reference external" href="https://arxiv.org/abs/1809.05578">https://arxiv.org/abs/1809.05578</a> for further information.</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>input_graph</strong><span class="classifier">cugraph.Graph</span></dt><dd><p>cuGraph graph descriptor, should contain the connectivity information
-and weights. The adjacency list will be computed if not already
-present.</p>
-</dd>
-<dt><strong>min_weight</strong><span class="classifier">floating point</span></dt><dd><p>The minimum value to assign as an edgeweight in the ECG algorithm.
-It should be a value in the range [0,1] usually left as the default
-value of .05</p>
-</dd>
-<dt><strong>ensemble_size</strong><span class="classifier">integer</span></dt><dd><p>The number of graph permutations to use for the ensemble.
-The default value is 16, larger values may produce higher quality
-partitions for some graphs.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl>
-<dt><strong>parts</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>GPU data frame of size V containing two columns, the vertex id and
-the partition id it is assigned to.</p>
-<blockquote>
-<div><dl class="simple">
-<dt>df[‘vertex’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers</p>
-</dd>
-</dl>
-</div></blockquote>
-<dl class="simple">
-<dt>df[‘partition’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the partition assigned to the vertices</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
-<span class="go">                      delimiter = ' ',</span>
-<span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
-<span class="go">                      header=None)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="s1">'2'</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">parts</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">ecg</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1989,6 +1969,50 @@ df[‘vertices’][i] gives the vertex id of the i’th vertex</p>
 </div>
 <div class="section" id="cores">
 <h2>Cores<a class="headerlink" href="#cores" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cugraph.cores.core_number">
+<span id="core-number"></span><h3>Core Number<a class="headerlink" href="#module-cugraph.cores.core_number" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="cugraph.cores.core_number.core_number">
+<code class="sig-prename descclassname">cugraph.cores.core_number.</code><code class="sig-name descname">core_number</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.cores.core_number.core_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the core numbers for the nodes of the graph G. A k-core of a graph
+is a maximal subgraph that contains nodes of degree k or more.
+A node has a core number of k if it belongs a k-core but not to k+1-core.
+This call does not support a graph with self-loops and parallel
+edges.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">cuGraph.Graph</span></dt><dd><p>cuGraph graph descriptor with connectivity information. The graph
+should contain undirected edges where undirected edges are represented
+as directed edges in both directions. While this graph can contain edge
+weights, they don’t participate in the calculation of the core numbers.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>GPU data frame containing two cudf.Series of size V: the vertex
+identifiers and the corresponding core number values.</p>
+<dl class="simple">
+<dt>df[‘vertex’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers</p>
+</dd>
+<dt>df[‘core_number’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the core number of vertices</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cn</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">core_number</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</div>
 <div class="section" id="module-cugraph.cores.k_core">
 <span id="k-core"></span><h3>K-Core<a class="headerlink" href="#module-cugraph.cores.k_core" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
@@ -2035,50 +2059,6 @@ calculated internally.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">KCoreGraph</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">k_core</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-</div>
-<div class="section" id="module-cugraph.cores.core_number">
-<span id="core-number"></span><h3>Core Number<a class="headerlink" href="#module-cugraph.cores.core_number" title="Permalink to this headline">¶</a></h3>
-<dl class="py function">
-<dt id="cugraph.cores.core_number.core_number">
-<code class="sig-prename descclassname">cugraph.cores.core_number.</code><code class="sig-name descname">core_number</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.cores.core_number.core_number" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the core numbers for the nodes of the graph G. A k-core of a graph
-is a maximal subgraph that contains nodes of degree k or more.
-A node has a core number of k if it belongs a k-core but not to k+1-core.
-This call does not support a graph with self-loops and parallel
-edges.</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>graph</strong><span class="classifier">cuGraph.Graph</span></dt><dd><p>cuGraph graph descriptor with connectivity information. The graph
-should contain undirected edges where undirected edges are represented
-as directed edges in both directions. While this graph can contain edge
-weights, they don’t participate in the calculation of the core numbers.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl>
-<dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>GPU data frame containing two cudf.Series of size V: the vertex
-identifiers and the corresponding core number values.</p>
-<dl class="simple">
-<dt>df[‘vertex’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers</p>
-</dd>
-<dt>df[‘core_number’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the core number of vertices</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cn</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">core_number</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2137,10 +2117,9 @@ of the scaling parameter.</p>
 <dt><strong>verbose: bool</strong></dt><dd><p>Output convergence info at each interation.</p>
 </dd>
 <dt><strong>callback: GraphBasedDimRedCallback</strong></dt><dd><p>An instance of GraphBasedDimRedCallback class to intercept
-the internal state of positions while they are being trained.
-Example of callback usage:</p>
-<blockquote>
-<div><dl class="simple">
+the internal state of positions while they are being trained.</p>
+<dl class="simple">
+<dt>Example of callback usage:</dt><dd><dl class="simple">
 <dt>from cugraph.internals import GraphBasedDimRedCallback</dt><dd><dl class="simple">
 <dt>class CustomCallback(GraphBasedDimRedCallback):</dt><dd><dl class="simple">
 <dt>def on_preprocess_end(self, positions):</dt><dd><p>print(positions.copy_to_host())</p>
@@ -2154,7 +2133,8 @@ Example of callback usage:</p>
 </dl>
 </dd>
 </dl>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd>
@@ -2171,6 +2151,68 @@ the vertex identifiers and the x and y positions.</p>
 </div>
 <div class="section" id="link-analysis">
 <h2>Link Analysis<a class="headerlink" href="#link-analysis" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cugraph.link_analysis.hits">
+<span id="hits"></span><h3>HITS<a class="headerlink" href="#module-cugraph.link_analysis.hits" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="cugraph.link_analysis.hits.hits">
+<code class="sig-prename descclassname">cugraph.link_analysis.hits.</code><code class="sig-name descname">hits</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">max_iter</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">tol</span><span class="o">=</span><span class="default_value">1e-05</span></em>, <em class="sig-param"><span class="n">nstart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">normalized</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.link_analysis.hits.hits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute HITS hubs and authorities values for each vertex</p>
+<p>The HITS algorithm computes two numbers for a node.  Authorities
+estimates the node value based on the incoming links.  Hubs estimates
+the node value based on outgoing links.</p>
+<p>The cuGraph implementation of HITS is a wrapper around the gunrock
+implementation of HITS.</p>
+<p>Note that the gunrock implementation uses a 2-norm, while networkx
+uses a 1-norm.  The raw scores will be different, but the rank ordering
+should be comparable with networkx.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">cugraph.Graph</span></dt><dd><p>cuGraph graph descriptor, should contain the connectivity information
+as an edge list (edge weights are not used for this algorithm).
+The adjacency list will be computed if not already present.</p>
+</dd>
+<dt><strong>max_iter</strong><span class="classifier">int</span></dt><dd><p>The maximum number of iterations before an answer is returned.
+The gunrock implementation does not currently support tolerance,
+so this will in fact be the number of iterations the HITS algorithm
+executes.</p>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float</span></dt><dd><p>Set the tolerance the approximation, this parameter should be a small
+magnitude value.  This parameter is not currently supported.</p>
+</dd>
+<dt><strong>nstart</strong><span class="classifier">cudf.Dataframe</span></dt><dd><p>Not currently supported</p>
+</dd>
+<dt><strong>normalized</strong><span class="classifier">bool</span></dt><dd><p>Not currently supported, always used as True</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>HubsAndAuthorities</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>GPU data frame containing three cudf.Series of size V: the vertex
+identifiers and the corresponding hubs values and the corresponding
+authorities values.</p>
+<dl class="simple">
+<dt>df[‘vertex’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers</p>
+</dd>
+<dt>df[‘hubs’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the hubs score</p>
+</dd>
+<dt>df[‘authorities’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the authorities score</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hits</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">hits</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">max_iter</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</div>
 <div class="section" id="module-cugraph.link_analysis.pagerank">
 <span id="pagerank"></span><h3>Pagerank<a class="headerlink" href="#module-cugraph.link_analysis.pagerank" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
@@ -2625,9 +2667,6 @@ before the i’th vertex in the traversal.</p>
 </div>
 <div class="section" id="utilities">
 <h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="r-mat-graph-generation">
-<h3>R-mat Graph Generation<a class="headerlink" href="#r-mat-graph-generation" title="Permalink to this headline">¶</a></h3>
-</div>
 </div>
 </div>
 </div>
