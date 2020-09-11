@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['ecg_33',['ecg',['../namespacecugraph.html#aab3d4d7478f19a4c41471b87cd71a5d5',1,'cugraph']]],
+  ['ecg_33',['ecg',['../namespacecugraph.html#afb3648213e150cbe1c0e7a3a9fd40915',1,'cugraph']]],
   ['edge_5fbetweenness_5fcentrality_34',['edge_betweenness_centrality',['../namespacecugraph.html#a74ceda7a5e01d0d2b31ebc128fd4dfa0',1,'cugraph']]],
   ['edge_5fdata_35',['edge_data',['../classcugraph_1_1GraphViewBase.html#abde533c19935925fbcb6262533c09c68',1,'cugraph::GraphViewBase']]],
   ['edgelist_5ft_36',['edgelist_t',['../structcugraph_1_1experimental_1_1edgelist__t.html',1,'cugraph::experimental']]],

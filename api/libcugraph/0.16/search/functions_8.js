@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['leiden_230',['leiden',['../namespacecugraph.html#a136f188d034e537b9129594f3d53a61c',1,'cugraph']]],
-  ['louvain_231',['louvain',['../namespacecugraph.html#abaf7d59f72c36f359b30f201fe78583f',1,'cugraph']]]
+  ['leiden_232',['leiden',['../namespacecugraph.html#af87fd2140039558d0764aecbf58ccfc5',1,'cugraph']]],
+  ['louvain_233',['louvain',['../namespacecugraph.html#a0e15d7ca7200bf52c60a1552ff089366',1,'cugraph']]]
 ];
