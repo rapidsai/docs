@@ -1,6 +1,9 @@
 var searchData=
 [
-  ['non_5fowning_5fbuffer_961',['non_owning_buffer',['../classcudf_1_1io_1_1datasource_1_1non__owning__buffer.html',1,'cudf::io::datasource']]],
-  ['numeric_5fscalar_962',['numeric_scalar',['../classcudf_1_1numeric__scalar.html',1,'cudf']]],
-  ['numeric_5fscalar_5fdevice_5fview_963',['numeric_scalar_device_view',['../classcudf_1_1numeric__scalar__device__view.html',1,'cudf']]]
+  ['mutable_5fcolumn_5fdevice_5fview_1012',['mutable_column_device_view',['../classcudf_1_1mutable__column__device__view.html',1,'cudf']]],
+  ['mutable_5fcolumn_5fview_1013',['mutable_column_view',['../classcudf_1_1mutable__column__view.html',1,'cudf']]],
+  ['mutable_5fcolumn_5fview_5fbase_1014',['mutable_column_view_base',['../classcudf_1_1detail_1_1mutable__column__view__base.html',1,'cudf::detail']]],
+  ['mutable_5ftable_5fdevice_5fview_1015',['mutable_table_device_view',['../classcudf_1_1mutable__table__device__view.html',1,'cudf']]],
+  ['mutable_5ftable_5fview_1016',['mutable_table_view',['../classcudf_1_1mutable__table__view.html',1,'cudf']]],
+  ['mutable_5fvalue_5faccessor_1017',['mutable_value_accessor',['../structcudf_1_1detail_1_1mutable__value__accessor.html',1,'cudf::detail']]]
 ];
