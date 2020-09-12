@@ -16,7 +16,7 @@ var searchData=
   ['get_5fdtypes_309',['get_dtypes',['../classcudf_1_1io_1_1json__reader__options.html#abfd7235226cde0d93440cf5c8bd701fc',1,'cudf::io::json_reader_options']]],
   ['get_5felement_310',['get_element',['../group__column__copy.html#gafdb8ce94112a0353af61119497c1b6ee',1,'cudf']]],
   ['get_5fgroups_311',['get_groups',['../classcudf_1_1groupby_1_1groupby.html#a6a066cd4dcb8ee089f5147c4db8b39a9',1,'cudf::groupby::groupby']]],
-  ['get_5findex_312',['get_index',['../group__dictionary__search.html#gaa327f39608e60067ba2dbf33f75503f5',1,'cudf::dictionary']]],
+  ['get_5findex_312',['get_index',['../group__dictionary__search.html#gaa270ed3b2bd87150b908636939f3f8f0',1,'cudf::dictionary']]],
   ['get_5findices_5fannotated_313',['get_indices_annotated',['../classcudf_1_1dictionary__column__view.html#ae4ff77c89a7ca6568f96d6544a4f62d4',1,'cudf::dictionary_column_view']]],
   ['get_5fmask_5fword_314',['get_mask_word',['../classcudf_1_1detail_1_1column__device__view__base.html#a2feaa65b3e42abca5e45135b701166cf',1,'cudf::detail::column_device_view_base']]],
   ['get_5fmetadata_315',['get_metadata',['../classcudf_1_1io_1_1parquet__writer__options.html#af8b988e6f5cdda69b804b87de5fefa03',1,'cudf::io::parquet_writer_options']]],
