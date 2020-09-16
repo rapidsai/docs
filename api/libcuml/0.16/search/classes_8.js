@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['kernelparams_1369',['KernelParams',['../structMLCommon_1_1Matrix_1_1KernelParams.html',1,'MLCommon::Matrix']]],
-  ['kmeansparams_1370',['KMeansParams',['../structML_1_1kmeans_1_1KMeansParams.html',1,'ML::kmeans']]]
+  ['leaf_5foutput_5ft_1110',['leaf_output_t',['../structML_1_1fil_1_1leaf__output__t.html',1,'ML::fil']]],
+  ['leaf_5foutput_5ft_3c_20leaf_5fvalue_5ft_3a_3afloat_5fscalar_20_3e_1111',['leaf_output_t&lt; leaf_value_t::FLOAT_SCALAR &gt;',['../structML_1_1fil_1_1leaf__output__t_3_01leaf__value__t_1_1FLOAT__SCALAR_01_4.html',1,'ML::fil']]],
+  ['leaf_5foutput_5ft_3c_20leaf_5fvalue_5ft_3a_3aint_5fclass_5flabel_20_3e_1112',['leaf_output_t&lt; leaf_value_t::INT_CLASS_LABEL &gt;',['../structML_1_1fil_1_1leaf__output__t_3_01leaf__value__t_1_1INT__CLASS__LABEL_01_4.html',1,'ML::fil']]],
+  ['logger_1113',['Logger',['../classML_1_1Logger.html',1,'ML']]]
 ];

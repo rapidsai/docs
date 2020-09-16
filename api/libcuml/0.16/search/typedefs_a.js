@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['randomforestclassifierd_2458',['RandomForestClassifierD',['../namespaceML.html#acbf0352d6a255f990fcdf949b898d6af',1,'ML']]],
-  ['randomforestclassifierf_2459',['RandomForestClassifierF',['../namespaceML.html#a36df48edc11fcd68dd8b6f4a76526e7b',1,'ML']]],
-  ['randomforestregressord_2460',['RandomForestRegressorD',['../namespaceML.html#a64f2117024176a6fab67a1a6b8925243',1,'ML']]],
-  ['randomforestregressorf_2461',['RandomForestRegressorF',['../namespaceML.html#a79048a796facf156e926834d97bec78f',1,'ML']]],
-  ['reference_2462',['reference',['../classML_1_1stdAllocatorAdapter.html#a45804b810b5ad9e3e9a9878d810b26c9',1,'ML::stdAllocatorAdapter::reference()'],['../classMLCommon_1_1buffer__base.html#a39c195e5576ce1e198a47f81a21b7c61',1,'MLCommon::buffer_base::reference()'],['../classMLCommon_1_1host__buffer.html#a8f1aa043bf95b05f3d2a435850851737',1,'MLCommon::host_buffer::reference()']]],
-  ['request_5ft_2463',['request_t',['../classMLCommon_1_1cumlCommunicator__iface.html#aa0831180f4c041447f1eaa7bf855c205',1,'MLCommon::cumlCommunicator_iface::request_t()'],['../classMLCommon_1_1cumlCommunicator.html#a50a6486c4f311d58a2bd8706a69a8625',1,'MLCommon::cumlCommunicator::request_t()']]]
+  ['paramspca_2031',['paramsPCA',['../group__pcaSolver.html#ga239d146c5a5545dd84e3d0b6e305f631',1,'ML']]],
+  ['paramspcamg_2032',['paramsPCAMG',['../namespaceML.html#a9ff6828291243eca3956818d2f309339',1,'ML']]],
+  ['paramstsvd_2033',['paramsTSVD',['../group__pcaSolver.html#gab2bffedf6f8d520e216a6542ebf6a0f1',1,'ML']]],
+  ['paramstsvdmg_2034',['paramsTSVDMG',['../namespaceML.html#ae3b799705dfc8991beaf24c9a906bc76',1,'ML']]],
+  ['pointer_2035',['pointer',['../classML_1_1stdAllocatorAdapter.html#abb25e4357a000afa6c08631789825a7f',1,'ML::stdAllocatorAdapter']]]
 ];
