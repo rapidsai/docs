@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['treelite_5fcheck_2174',['TREELITE_CHECK',['../decisiontree__impl_8h.html#afc6609b893003cbf60511fdd8c5a4a8d',1,'decisiontree_impl.h']]]
+  ['treelite_5fcheck_2211',['TREELITE_CHECK',['../decisiontree__impl_8h.html#afc6609b893003cbf60511fdd8c5a4a8d',1,'decisiontree_impl.h']]]
 ];
