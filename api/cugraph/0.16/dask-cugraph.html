@@ -278,9 +278,13 @@ In order to use Batch Analytics you need to set up a Dask Cluster and Client in 
 <dl class="py function">
 <dt>
 <code class="sig-prename descclassname">cugraph.centrality.</code><code class="sig-name descname">betweenness_centrality</code><span class="sig-paren">(</span><em class="sig-param">G</em>, <em class="sig-param">k=None</em>, <em class="sig-param">normalized=True</em>, <em class="sig-param">weight=None</em>, <em class="sig-param">endpoints=False</em>, <em class="sig-param">seed=None</em>, <em class="sig-param">result_dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span></dt>
-<dd><p>Compute the betweenness centrality for all nodes of the graph G from a
-sample of ‘k’ sources.
-CuGraph does not currently support the ‘endpoints’ and ‘weight’ parameters
+<dd><p>Compute the betweenness centrality for all vertices of the graph G.
+Betweenness centrality is a measure of the number of shortest paths that
+pass through a vertex.  A vertex with a high betweenness centrality score
+has more paths passing through it and is therefore believed to be more
+important. Rather than doing an all-pair shortest path, a sample of k
+starting vertices can be used.</p>
+<p>CuGraph does not currently support the ‘endpoints’ and ‘weight’ parameters
 as seen in the corresponding networkX call.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -344,10 +348,10 @@ in ascending order.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -355,9 +359,13 @@ in ascending order.</p>
 <dl class="py function">
 <dt>
 <code class="sig-prename descclassname">cugraph.centrality.</code><code class="sig-name descname">edge_betweenness_centrality</code><span class="sig-paren">(</span><em class="sig-param">G</em>, <em class="sig-param">k=None</em>, <em class="sig-param">normalized=True</em>, <em class="sig-param">weight=None</em>, <em class="sig-param">seed=None</em>, <em class="sig-param">result_dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span></dt>
-<dd><p>Compute the edge betweenness centrality for all edges of the graph G from a
-sample of ‘k’ sources.
-CuGraph does not currently support the ‘weight’ parameter
+<dd><p>Compute the edge betweenness centrality for all edges of the graph G.
+Betweenness centrality is a measure of the number of shortest paths
+that pass over an edge.  An edge with a high betweenness centrality
+score has more paths passing over it and is therefore believed to be
+more important. Rather than doing an all-pair shortest path, a sample
+of k starting vertices can be used.</p>
+<p>CuGraph does not currently support the ‘weight’ parameter
 as seen in the corresponding networkX call.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -424,10 +432,10 @@ contains the betweenness centrality of edge (1 -&gt; 0).</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ebc</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">edge_betweenness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre></div>
 </div>

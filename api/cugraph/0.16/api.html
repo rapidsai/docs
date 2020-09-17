@@ -426,7 +426,7 @@ specified).</p>
 computes vertex degrees for the entire set of vertices. If
 vertex_subset is provided, this method optionally filters out all but
 those listed in vertex_subset.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>vertex_subset</strong><span class="classifier">cudf.Series or iterable container, optional</span></dt><dd><p>A container of vertices for displaying corresponding degree. If not
@@ -435,8 +435,12 @@ set, degrees are computed for the entire set of vertices.</p>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><dl class="simple">
+<dd class="field-even"><dl>
+<dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>GPU DataFrame of size N (the default) or the size of the given
+vertices (vertex_subset) containing the degrees. The ordering is
+relative to the adjacency list, or that given by the specified
+vertex_subset.</p>
+<dl class="simple">
 <dt>df[‘vertex’]<span class="classifier">cudf.Series</span></dt><dd><p>The vertex IDs (will be identical to vertex_subset if
 specified).</p>
 </dd>
@@ -517,9 +521,9 @@ number.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">M</span><span class="p">[</span><span class="s1">'2'</span><span class="p">],(</span><span class="n">M</span><span class="p">[</span><span class="s1">'0'</span><span class="p">],</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">offsets</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">indptr</span><span class="p">)</span>
@@ -574,11 +578,11 @@ is number of vertices, renumber argument should be True.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="s1">'2'</span><span class="p">,</span>
-<span class="go">                         renumber=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">,</span>
+<span class="go">                         edge_attr='2', renumber=False)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1075,7 +1079,8 @@ edges.</p>
 <code class="sig-prename descclassname">cugraph.structure.convert_matrix.</code><code class="sig-name descname">from_cudf_edgelist</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">source='source'</em>, <em class="sig-param">destination='destination'</em>, <em class="sig-param">edge_attr=None</em>, <em class="sig-param">create_using=&lt;class 'cugraph.structure.graph.Graph'&gt;</em>, <em class="sig-param">renumber=True</em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.structure.convert_matrix.from_cudf_edgelist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a new graph created from the edge list representaion. This function
 is added for NetworkX compatibility (this function is a RAPIDS version of
-NetworkX’s from_pandas_edge_list()).</p>
+NetworkX’s from_pandas_edge_list()).  This function does not support
+multiple source or destination columns.  But does support renumbering</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -1085,11 +1090,16 @@ destination (or target following NetworkX’s terminology) vertices, and
 </dd>
 <dt><strong>source</strong><span class="classifier">string or integer</span></dt><dd><p>This is used to index the source column.</p>
 </dd>
-<dt><strong>target</strong><span class="classifier">string or integer</span></dt><dd><p>This is used to index the destination (or target following NetworkX’s
+<dt><strong>destination</strong><span class="classifier">string or integer</span></dt><dd><p>This is used to index the destination (or target following NetworkX’s
 terminology) column.</p>
 </dd>
-<dt><strong>weight</strong><span class="classifier">string or integer, optional</span></dt><dd><p>This pointer can be <code class="docutils literal notranslate"><span class="pre">None</span></code>. If not, this is used to index the weight
+<dt><strong>edge_attr</strong><span class="classifier">string or integer, optional</span></dt><dd><p>This pointer can be <code class="docutils literal notranslate"><span class="pre">None</span></code>. If not, this is used to index the weight
 column.</p>
+</dd>
+<dt><strong>create_using</strong><span class="classifier">cuGraph.Graph</span></dt><dd><p>Specify the type of Graph to create.  Default is cugraph.Graph</p>
+</dd>
+<dt><strong>renumber</strong><span class="classifier">bool</span></dt><dd><p>If source and destination indices are not in range 0 to V where V
+is number of vertices, renumber argument should be True.</p>
 </dd>
 </dl>
 </dd>
@@ -1111,9 +1121,13 @@ column.</p>
 <dl class="py function">
 <dt id="cugraph.centrality.betweenness_centrality.betweenness_centrality">
 <code class="sig-prename descclassname">cugraph.centrality.betweenness_centrality.</code><code class="sig-name descname">betweenness_centrality</code><span class="sig-paren">(</span><em class="sig-param">G</em>, <em class="sig-param">k=None</em>, <em class="sig-param">normalized=True</em>, <em class="sig-param">weight=None</em>, <em class="sig-param">endpoints=False</em>, <em class="sig-param">seed=None</em>, <em class="sig-param">result_dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.centrality.betweenness_centrality.betweenness_centrality" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the betweenness centrality for all nodes of the graph G from a
-sample of ‘k’ sources.
-CuGraph does not currently support the ‘endpoints’ and ‘weight’ parameters
+<dd><p>Compute the betweenness centrality for all vertices of the graph G.
+Betweenness centrality is a measure of the number of shortest paths that
+pass through a vertex.  A vertex with a high betweenness centrality score
+has more paths passing through it and is therefore believed to be more
+important. Rather than doing an all-pair shortest path, a sample of k
+starting vertices can be used.</p>
+<p>CuGraph does not currently support the ‘endpoints’ and ‘weight’ parameters
 as seen in the corresponding networkX call.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -1177,10 +1191,10 @@ in ascending order.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1188,9 +1202,13 @@ in ascending order.</p>
 <dl class="py function">
 <dt id="cugraph.centrality.betweenness_centrality.edge_betweenness_centrality">
 <code class="sig-prename descclassname">cugraph.centrality.betweenness_centrality.</code><code class="sig-name descname">edge_betweenness_centrality</code><span class="sig-paren">(</span><em class="sig-param">G</em>, <em class="sig-param">k=None</em>, <em class="sig-param">normalized=True</em>, <em class="sig-param">weight=None</em>, <em class="sig-param">seed=None</em>, <em class="sig-param">result_dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.centrality.betweenness_centrality.edge_betweenness_centrality" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the edge betweenness centrality for all edges of the graph G from a
-sample of ‘k’ sources.
-CuGraph does not currently support the ‘weight’ parameter
+<dd><p>Compute the edge betweenness centrality for all edges of the graph G.
+Betweenness centrality is a measure of the number of shortest paths
+that pass over an edge.  An edge with a high betweenness centrality
+score has more paths passing over it and is therefore believed to be
+more important. Rather than doing an all-pair shortest path, a sample
+of k starting vertices can be used.</p>
+<p>CuGraph does not currently support the ‘weight’ parameter
 as seen in the corresponding networkX call.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -1257,10 +1275,10 @@ contains the betweenness centrality of edge (1 -&gt; 0).</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ebc</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">edge_betweenness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1454,10 +1472,10 @@ undirected triangle in a graph.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">k_subgraph</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">ktruss_subgraph</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1837,12 +1855,12 @@ are incident on vertices that are both contained in the vertices list.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
 <span class="go">                      delimiter = ' ',</span>
 <span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
 <span class="go">                      header=None)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">verts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">verts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">verts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
@@ -1858,7 +1876,7 @@ are incident on vertices that are both contained in the vertices list.</p>
 <dl class="py function">
 <dt id="cugraph.community.triangle_count.triangles">
 <code class="sig-prename descclassname">cugraph.community.triangle_count.</code><code class="sig-name descname">triangles</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.community.triangle_count.triangles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the triangle (number of cycles of length three) count of the
+<dd><p>Compute the number of triangles (cycles of length three) in the
 input graph.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1877,12 +1895,12 @@ graph.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span>
 <span class="go">                      delimiter = ' ',</span>
 <span class="go">                      dtype=['int32', 'int32', 'float32'],</span>
 <span class="go">                      header=None)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">count</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">triangles</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -2381,6 +2399,56 @@ vertices</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">jaccard</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+<dl class="py function">
+<dt id="cugraph.link_prediction.jaccard.jaccard_coefficient">
+<code class="sig-prename descclassname">cugraph.link_prediction.jaccard.</code><code class="sig-name descname">jaccard_coefficient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">ebunch</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.link_prediction.jaccard.jaccard_coefficient" title="Permalink to this definition">¶</a></dt>
+<dd><p>For NetworkX Compatability.  See <cite>jaccard</cite></p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">cugraph.Graph</span></dt><dd><p>cuGraph graph descriptor, should contain the connectivity information
+as an edge list (edge weights are not used for this algorithm). The
+graph should be undirected where an undirected edge is represented by a
+directed edge in both direction. The adjacency list will be computed if
+not already present.</p>
+</dd>
+<dt><strong>ebunch</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>A GPU dataframe consisting of two columns representing pairs of
+vertices. If provided, the jaccard coefficient is computed for the
+given vertex pairs.  If the vertex_pair is not provided then the
+current implementation computes the jaccard coefficient for all
+adjacent vertices in the graph.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>GPU data frame of size E (the default) or the size of the given pairs
+(first, second) containing the Jaccard weights. The ordering is
+relative to the adjacency list, or that given by the specified vertex
+pairs.</p>
+<dl class="simple">
+<dt>df[‘source’]<span class="classifier">cudf.Series</span></dt><dd><p>The source vertex ID (will be identical to first if specified)</p>
+</dd>
+<dt>df[‘destination’]<span class="classifier">cudf.Series</span></dt><dd><p>The destination vertex ID (will be identical to second if
+specified)</p>
+</dd>
+<dt>df[‘jaccard_coeff’]<span class="classifier">cudf.Series</span></dt><dd><p>The computed Jaccard coefficient between the source and destination
+vertices</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">jaccard_coefficient</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

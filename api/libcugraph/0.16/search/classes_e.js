@@ -1,11 +1,9 @@
 var searchData=
 [
-  ['vec_5ft_194',['vec_t',['../structcugraph_1_1detail_1_1traversal_1_1vec__t.html',1,'cugraph::detail::traversal']]],
-  ['vec_5ft_3c_20double_20_3e_195',['vec_t&lt; double &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01double_01_4.html',1,'cugraph::detail::traversal']]],
-  ['vec_5ft_3c_20float_20_3e_196',['vec_t&lt; float &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01float_01_4.html',1,'cugraph::detail::traversal']]],
-  ['vec_5ft_3c_20int_20_3e_197',['vec_t&lt; int &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01int_01_4.html',1,'cugraph::detail::traversal']]],
-  ['vec_5ft_3c_20long_20_3e_198',['vec_t&lt; long &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01long_01_4.html',1,'cugraph::detail::traversal']]],
-  ['vec_5ft_3c_20long_20long_20int_20_3e_199',['vec_t&lt; long long int &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01long_01long_01int_01_4.html',1,'cugraph::detail::traversal']]],
-  ['vec_5ft_3c_20unsigned_20_3e_200',['vec_t&lt; unsigned &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01unsigned_01_4.html',1,'cugraph::detail::traversal']]],
-  ['vertexbinner_201',['VertexBinner',['../classcugraph_1_1mg_1_1detail_1_1VertexBinner.html',1,'cugraph::mg::detail']]]
+  ['scc_5fdata_192',['SCC_Data',['../structSCC__Data.html',1,'']]],
+  ['self_5floop_5fflagger_193',['self_loop_flagger',['../structself__loop__flagger.html',1,'']]],
+  ['set_5fnth_5fbit_194',['set_nth_bit',['../structcugraph_1_1mg_1_1detail_1_1set__nth__bit.html',1,'cugraph::mg::detail']]],
+  ['square_195',['square',['../structcugraph_1_1detail_1_1square.html',1,'cugraph::detail']]],
+  ['sssp_196',['SSSP',['../classcugraph_1_1detail_1_1SSSP.html',1,'cugraph::detail']]],
+  ['subcomm_5ffactory_5ft_197',['subcomm_factory_t',['../classcugraph_1_1partition__2d_1_1subcomm__factory__t.html',1,'cugraph::partition_2d']]]
 ];

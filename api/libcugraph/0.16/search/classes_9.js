@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['leiden_179',['Leiden',['../classcugraph_1_1Leiden.html',1,'cugraph']]],
-  ['logdistribution_180',['LogDistribution',['../classcugraph_1_1mg_1_1detail_1_1LogDistribution.html',1,'cugraph::mg::detail']]],
-  ['logic_5ferror_181',['logic_error',['../structcugraph_1_1logic__error.html',1,'cugraph']]],
-  ['louvain_182',['Louvain',['../classcugraph_1_1Louvain.html',1,'cugraph']]]
+  ['key_5fnaming_5ft_181',['key_naming_t',['../structcugraph_1_1partition__2d_1_1key__naming__t.html',1,'cugraph::partition_2d']]]
 ];
