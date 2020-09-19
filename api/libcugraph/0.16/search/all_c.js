@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mgcsrmv_90',['MGcsrmv',['../classcugraph_1_1mg_1_1MGcsrmv.html',1,'cugraph::mg']]]
+  ['mgcsrmv_110',['MGcsrmv',['../classcugraph_1_1mg_1_1MGcsrmv.html',1,'cugraph::mg']]]
 ];

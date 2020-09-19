@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['scc_5fdata_103',['SCC_Data',['../structSCC__Data.html',1,'']]],
-  ['self_5floop_5fflagger_104',['self_loop_flagger',['../structself__loop__flagger.html',1,'']]],
-  ['set_5fnth_5fbit_105',['set_nth_bit',['../structcugraph_1_1mg_1_1detail_1_1set__nth__bit.html',1,'cugraph::mg::detail']]],
-  ['square_106',['square',['../structcugraph_1_1detail_1_1square.html',1,'cugraph::detail']]],
-  ['src_5findices_107',['src_indices',['../classcugraph_1_1GraphCOOView.html#a8234a3b9f41c1494aebd1b9b0dfc52c3',1,'cugraph::GraphCOOView']]],
-  ['sssp_108',['SSSP',['../classcugraph_1_1detail_1_1SSSP.html',1,'cugraph::detail::SSSP&lt; IndexType, DistType &gt;'],['../namespacecugraph.html#afbcb939cffaf811289ba6a5edc7f6b04',1,'cugraph::sssp()']]],
-  ['subcomm_5ffactory_5ft_109',['subcomm_factory_t',['../classcugraph_1_1partition__2d_1_1subcomm__factory__t.html',1,'cugraph::partition_2d']]]
+  ['scc_5fdata_123',['SCC_Data',['../structSCC__Data.html',1,'']]],
+  ['self_5floop_5fflagger_124',['self_loop_flagger',['../structself__loop__flagger.html',1,'']]],
+  ['set_5fnth_5fbit_125',['set_nth_bit',['../structcugraph_1_1mg_1_1detail_1_1set__nth__bit.html',1,'cugraph::mg::detail']]],
+  ['square_126',['square',['../structcugraph_1_1detail_1_1square.html',1,'cugraph::detail']]],
+  ['src_5findices_127',['src_indices',['../classcugraph_1_1GraphCOOView.html#a8234a3b9f41c1494aebd1b9b0dfc52c3',1,'cugraph::GraphCOOView']]],
+  ['sssp_128',['SSSP',['../classcugraph_1_1detail_1_1SSSP.html',1,'cugraph::detail::SSSP&lt; IndexType, DistType &gt;'],['../namespacecugraph.html#afbcb939cffaf811289ba6a5edc7f6b04',1,'cugraph::sssp()']]],
+  ['subcomm_5ffactory_5ft_129',['subcomm_factory_t',['../classcugraph_1_1partition__2d_1_1subcomm__factory__t.html',1,'cugraph::partition_2d']]]
 ];
