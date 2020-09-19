@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['byte_5frange_5foffset_1606',['byte_range_offset',['../structcudf_1_1io_1_1read__csv__args.html#aeb8b2dded7fa65bb84e5bd140ccdfaf7',1,'cudf::io::read_csv_args']]],
-  ['byte_5frange_5fsize_1607',['byte_range_size',['../structcudf_1_1io_1_1read__csv__args.html#a91b9f7a9a3c28c8422498d01ef34e570',1,'cudf::io::read_csv_args']]]
+  ['col_1810',['col',['../structcudf_1_1detail_1_1value__accessor.html#a450c4636a79cd53295e83707ae09033e',1,'cudf::detail::value_accessor::col()'],['../structcudf_1_1detail_1_1pair__accessor.html#a5c93941a91871e3e4116b7f848b87c7d',1,'cudf::detail::pair_accessor::col()'],['../structcudf_1_1detail_1_1mutable__value__accessor.html#ac035a5ce8f9e378a5d56e3e7305a49db',1,'cudf::detail::mutable_value_accessor::col()']]],
+  ['column_5fnames_1811',['column_names',['../structcudf_1_1io_1_1table__metadata.html#a5003a7438f310eae6125c55ce7b0160c',1,'cudf::io::table_metadata']]],
+  ['column_5fnullable_1812',['column_nullable',['../structcudf_1_1io_1_1table__metadata__with__nullability.html#a1fce1252a6bae87d023a59bc2a1f7de8',1,'cudf::io::table_metadata_with_nullability']]]
 ];

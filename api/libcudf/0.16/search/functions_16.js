@@ -1,20 +1,15 @@
 var searchData=
 [
-  ['word_5findex_1574',['word_index',['../group__utility__bitmask.html#ga9fd7d3be7317e7621d5b073c7176a582',1,'cudf']]],
-  ['wrap_1575',['wrap',['../group__strings__modify.html#ga9bc8a6c6e90ee587a110a8f49ffcf5f7',1,'cudf::strings']]],
-  ['write_5fall_1576',['write_all',['../classcudf_1_1io_1_1detail_1_1orc_1_1writer.html#a782fc9153b0e02b4f81621c87d7b1ec3',1,'cudf::io::detail::orc::writer::write_all()'],['../classcudf_1_1io_1_1detail_1_1csv_1_1writer.html#ae76f5a91c99b76bd235376f542afd50c',1,'cudf::io::detail::csv::writer::write_all()']]],
-  ['write_5fchunked_1577',['write_chunked',['../classcudf_1_1io_1_1detail_1_1orc_1_1writer.html#a105bd04419f89f54d6b9efc7aafcd854',1,'cudf::io::detail::orc::writer']]],
-  ['write_5fchunked_5fbegin_1578',['write_chunked_begin',['../classcudf_1_1io_1_1detail_1_1orc_1_1writer.html#abef509852ba09e96e81f4b59fc47dc6c',1,'cudf::io::detail::orc::writer']]],
-  ['write_5fchunked_5fend_1579',['write_chunked_end',['../classcudf_1_1io_1_1detail_1_1orc_1_1writer.html#afcb3508506e22684344fc1c9b9855df5',1,'cudf::io::detail::orc::writer']]],
-  ['write_5fcsv_1580',['write_csv',['../namespacecudf_1_1io.html#a8a1ff8603fd2f5dc66dc9d091a4f5871',1,'cudf::io']]],
-  ['write_5forc_1581',['write_orc',['../group__io__writers.html#ga1e736fa60d5e3b7cb331db9d56df2bb1',1,'cudf::io']]],
-  ['write_5forc_5fchunked_1582',['write_orc_chunked',['../group__io__writers.html#ga908c9333f9b3ec598c4bce057cfb2040',1,'cudf::io']]],
-  ['write_5forc_5fchunked_5fbegin_1583',['write_orc_chunked_begin',['../group__io__writers.html#ga8c66c077bdb5095347855b9c55a54bb8',1,'cudf::io']]],
-  ['write_5forc_5fchunked_5fend_1584',['write_orc_chunked_end',['../group__io__writers.html#ga20bc00c06405e3e558ea53c6714bc372',1,'cudf::io']]],
-  ['write_5fparquet_1585',['write_parquet',['../group__io__writers.html#ga805478c098ca280355a904ba98bc3cdf',1,'cudf::io']]],
-  ['write_5fparquet_5fchunked_1586',['write_parquet_chunked',['../group__io__writers.html#gaba7ce9775c22276a36b0954a83fbe87c',1,'cudf::io']]],
-  ['write_5fparquet_5fchunked_5fbegin_1587',['write_parquet_chunked_begin',['../group__io__writers.html#gadb736f838237f72a6b538f095ec00bdc',1,'cudf::io']]],
-  ['write_5fparquet_5fchunked_5fend_1588',['write_parquet_chunked_end',['../group__io__writers.html#gadffe43558174763ec86ab11a0639f3fe',1,'cudf::io']]],
-  ['writer_1589',['writer',['../classcudf_1_1io_1_1detail_1_1orc_1_1writer.html#a7612934126dcb631e30654bfcd532655',1,'cudf::io::detail::orc::writer::writer()'],['../classcudf_1_1io_1_1detail_1_1csv_1_1writer.html#a349671550cd1f81f5e0bbbefa964ad75',1,'cudf::io::detail::csv::writer::writer()']]],
-  ['writer_5foptions_1590',['writer_options',['../structcudf_1_1io_1_1detail_1_1orc_1_1writer__options.html#a5536138a109812eeb17ab221a843c2a2',1,'cudf::io::detail::orc::writer_options::writer_options()'],['../structcudf_1_1io_1_1detail_1_1csv_1_1writer__options.html#aa41fcaaa9f1c7b3f5ef08e35d69ff621',1,'cudf::io::detail::csv::writer_options::writer_options()']]]
+  ['windowslinetermination_1785',['windowslinetermination',['../classcudf_1_1io_1_1csv__reader__options__builder.html#a6de34034f9eced3be35137fb0c94f22c',1,'cudf::io::csv_reader_options_builder']]],
+  ['word_5findex_1786',['word_index',['../group__utility__bitmask.html#ga9fd7d3be7317e7621d5b073c7176a582',1,'cudf']]],
+  ['wrap_1787',['wrap',['../group__strings__modify.html#ga9bc8a6c6e90ee587a110a8f49ffcf5f7',1,'cudf::strings']]],
+  ['write_5fcsv_1788',['write_csv',['../namespacecudf_1_1io.html#a55f2477c2b822612d0c8168b9c8859fb',1,'cudf::io']]],
+  ['write_5forc_1789',['write_orc',['../group__io__writers.html#ga47050c9fd5f25909eee80415303df39f',1,'cudf::io']]],
+  ['write_5forc_5fchunked_1790',['write_orc_chunked',['../group__io__writers.html#ga0646daf06c9fdb0c801c04133a99399d',1,'cudf::io']]],
+  ['write_5forc_5fchunked_5fbegin_1791',['write_orc_chunked_begin',['../group__io__writers.html#gab5db29f92f7e2a3c37d035a8068ee535',1,'cudf::io']]],
+  ['write_5forc_5fchunked_5fend_1792',['write_orc_chunked_end',['../group__io__writers.html#gae1ae2796f42349ec6c8abfdc21ec0440',1,'cudf::io']]],
+  ['write_5fparquet_1793',['write_parquet',['../group__io__writers.html#ga77943313655672a216850bcab1db96dd',1,'cudf::io']]],
+  ['write_5fparquet_5fchunked_1794',['write_parquet_chunked',['../group__io__writers.html#gaba7ce9775c22276a36b0954a83fbe87c',1,'cudf::io']]],
+  ['write_5fparquet_5fchunked_5fbegin_1795',['write_parquet_chunked_begin',['../group__io__writers.html#gabcf169608b5bd43cc56c35bc3c2b6713',1,'cudf::io']]],
+  ['write_5fparquet_5fchunked_5fend_1796',['write_parquet_chunked_end',['../group__io__writers.html#gadffe43558174763ec86ab11a0639f3fe',1,'cudf::io']]]
 ];

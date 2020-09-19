@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['infer_5fdate_5findexes_1626',['infer_date_indexes',['../structcudf_1_1io_1_1read__csv__args.html#a3e89f0624d8e9bbc9960cb0856749c9b',1,'cudf::io::read_csv_args::infer_date_indexes()'],['../structcudf_1_1io_1_1detail_1_1csv_1_1reader__options.html#acebf8c98183a2d40e15dfbdb5cf84c03',1,'cudf::io::detail::csv::reader_options::infer_date_indexes()']]],
-  ['infer_5fdate_5fnames_1627',['infer_date_names',['../structcudf_1_1io_1_1read__csv__args.html#a8231b73df31d1430077c313a89e292ed',1,'cudf::io::read_csv_args::infer_date_names()'],['../structcudf_1_1io_1_1detail_1_1csv_1_1reader__options.html#aa28782982385db17a47f8b9687f4c816',1,'cudf::io::detail::csv::reader_options::infer_date_names()']]]
+  ['tensor_5fattention_5fmask_1818',['tensor_attention_mask',['../structnvtext_1_1tokenizer__result.html#ac055b2cf5b74a76c4b0e7cfd875d9da3',1,'nvtext::tokenizer_result']]],
+  ['tensor_5fmetadata_1819',['tensor_metadata',['../structnvtext_1_1tokenizer__result.html#aaae9539ffa571f2adf5130af8421b760',1,'nvtext::tokenizer_result']]],
+  ['tensor_5ftoken_5fids_1820',['tensor_token_ids',['../structnvtext_1_1tokenizer__result.html#a23c1491bbabce7cdb8ed76d8e26e06a2',1,'nvtext::tokenizer_result']]]
 ];
