@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['sequence_5flength_1817',['sequence_length',['../structnvtext_1_1tokenizer__result.html#a09a5e713c18852fde26b0eeec2632c78',1,'nvtext::tokenizer_result']]]
+  ['nrows_5ftensor_2268',['nrows_tensor',['../structnvtext_1_1tokenizer__result.html#a133ae69969b03d70f715c1ad793355a5',1,'nvtext::tokenizer_result']]]
 ];

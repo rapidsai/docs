@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['scalar_5ftype_5ft_1832',['scalar_type_t',['../group__utility__dispatcher.html#ga9446c2558fd01c19f5fb5fa33927586f',1,'cudf']]]
+  ['flatten_2290',['Flatten',['../type__list__utilities_8hpp.html#a23b5fefff9e6e57359200d51c939371b',1,'cudf::test']]]
 ];

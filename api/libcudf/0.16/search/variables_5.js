@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['nrows_5ftensor_1815',['nrows_tensor',['../structnvtext_1_1tokenizer__result.html#a133ae69969b03d70f715c1ad793355a5',1,'nvtext::tokenizer_result']]]
+  ['getsize_2266',['GetSize',['../type__list__utilities_8hpp.html#adcf00b77d5c4a3eb2d8f30048faa95c9',1,'cudf::test']]]
 ];

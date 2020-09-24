@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kind_1814',['kind',['../classcudf_1_1aggregation.html#af30ac280d80bf088cc1d8e6b98514764',1,'cudf::aggregation']]]
+  ['exists_2265',['Exists',['../type__list__utilities_8hpp.html#a4048cba7ba523b5b0330fb68e6f5ff0b',1,'cudf::test']]]
 ];

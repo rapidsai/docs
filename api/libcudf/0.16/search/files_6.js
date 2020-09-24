@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['list_5fview_2ecuh_1175',['list_view.cuh',['../list__view_8cuh.html',1,'']]]
+  ['generate_5fngrams_2ehpp_1560',['generate_ngrams.hpp',['../generate__ngrams_8hpp.html',1,'']]],
+  ['groupby_2ehpp_1561',['groupby.hpp',['../groupby_8hpp.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['user_5fdata_1821',['user_data',['../structcudf_1_1io_1_1table__metadata.html#aeb297cb3944fe8f8ca1950d985fe3f53',1,'cudf::io::table_metadata']]]
+  ['sequence_5flength_2270',['sequence_length',['../structnvtext_1_1tokenizer__result.html#a09a5e713c18852fde26b0eeec2632c78',1,'nvtext::tokenizer_result']]]
 ];

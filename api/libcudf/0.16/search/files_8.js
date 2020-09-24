@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['string_5fview_2ecuh_1177',['string_view.cuh',['../string__view_8cuh.html',1,'']]],
-  ['strings_5fcolumn_5fview_2ehpp_1178',['strings_column_view.hpp',['../strings__column__view_8hpp.html',1,'']]]
+  ['interop_2ehpp_1563',['interop.hpp',['../interop_8hpp.html',1,'']]],
+  ['types_2ehpp_1564',['types.hpp',['../io_2types_8hpp.html',1,'']]]
 ];
