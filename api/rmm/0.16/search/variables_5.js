@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['size_282',['size',['../structcnmemDevice__t__.html#aa2b1f9393452d7548dd1d801a6915546',1,'cnmemDevice_t_']]],
-  ['streams_283',['streams',['../structcnmemDevice__t__.html#a2c6fb71f221ba9d4af844f7cd929caab',1,'cnmemDevice_t_']]],
-  ['streamsizes_284',['streamSizes',['../structcnmemDevice__t__.html#a735d6a6e1406e1048bbb2e956114639b',1,'cnmemDevice_t_']]]
+  ['size_294',['size',['../structrmm_1_1mr_1_1detail_1_1arena_1_1block.html#ac2130a600ea11e5c5c73e515057c2a86',1,'rmm::mr::detail::arena::block']]]
 ];

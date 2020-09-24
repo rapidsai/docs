@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['fixed_5fsize_5ffree_5flist_158',['fixed_size_free_list',['../structrmm_1_1mr_1_1detail_1_1fixed__size__free__list.html',1,'rmm::mr::detail']]],
-  ['fixed_5fsize_5fmemory_5fresource_159',['fixed_size_memory_resource',['../classrmm_1_1mr_1_1fixed__size__memory__resource.html',1,'rmm::mr']]],
-  ['free_5flist_160',['free_list',['../classrmm_1_1mr_1_1detail_1_1free__list.html',1,'rmm::mr::detail']]],
-  ['free_5flist_3c_20block_20_3e_161',['free_list&lt; block &gt;',['../classrmm_1_1mr_1_1detail_1_1free__list.html',1,'rmm::mr::detail']]],
-  ['free_5flist_3c_20block_5fbase_20_3e_162',['free_list&lt; block_base &gt;',['../classrmm_1_1mr_1_1detail_1_1free__list.html',1,'rmm::mr::detail']]]
+  ['device_5fbuffer_155',['device_buffer',['../classrmm_1_1device__buffer.html',1,'rmm']]],
+  ['device_5fmemory_5fresource_156',['device_memory_resource',['../classrmm_1_1mr_1_1device__memory__resource.html',1,'rmm::mr']]],
+  ['device_5fscalar_157',['device_scalar',['../classrmm_1_1device__scalar.html',1,'rmm']]],
+  ['device_5fuvector_158',['device_uvector',['../classrmm_1_1device__uvector.html',1,'rmm']]]
 ];

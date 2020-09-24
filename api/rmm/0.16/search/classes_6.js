@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['managed_5fmemory_5fresource_167',['managed_memory_resource',['../classrmm_1_1mr_1_1managed__memory__resource.html',1,'rmm::mr']]]
+  ['host_5fmemory_5fresource_165',['host_memory_resource',['../classrmm_1_1mr_1_1host__memory__resource.html',1,'rmm::mr']]]
 ];
