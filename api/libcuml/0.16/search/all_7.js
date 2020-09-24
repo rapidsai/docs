@@ -43,7 +43,7 @@ var searchData=
   ['globalstoretiletraits_387',['GlobalStoreTileTraits',['../structMLCommon_1_1Distance_1_1BoolEpilogueTraitsHelper.html#ac5f024894ce40fb39808f41fc54f1a3d',1,'MLCommon::Distance::BoolEpilogueTraitsHelper']]],
   ['globaltransformerc_388',['GlobalTransformerC',['../structMLCommon_1_1Distance_1_1BoolEpilogueTraitsHelper.html#a5a7f1d736e830c167c90870c854df4f9',1,'MLCommon::Distance::BoolEpilogueTraitsHelper']]],
   ['globaltransformerd_389',['GlobalTransformerD',['../structMLCommon_1_1Distance_1_1BoolEpilogueTraitsHelper.html#a8328c440c0ecfc2da0e4d6227a54e57e',1,'MLCommon::Distance::BoolEpilogueTraitsHelper']]],
-  ['gpu_5fid_390',['gpu_id',['../group__pcaSolver.html#ga05cb72c607b73ea5ef7afafd0d997487',1,'ML::params']]],
+  ['gpu_5fid_390',['gpu_id',['../classML_1_1params.html#a05cb72c607b73ea5ef7afafd0d997487',1,'ML::params']]],
   ['grammatrix_2ecuh_391',['grammatrix.cuh',['../grammatrix_8cuh.html',1,'']]],
   ['graphbaseddimredcallback_392',['GraphBasedDimRedCallback',['../classML_1_1Internals_1_1GraphBasedDimRedCallback.html',1,'ML::Internals']]],
   ['grid_5fsync_2ecuh_393',['grid_sync.cuh',['../grid__sync_8cuh.html',1,'']]],

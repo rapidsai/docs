@@ -21,7 +21,7 @@ var searchData=
   ['algo_5fauto_27',['ALGO_AUTO',['../namespaceML_1_1fil.html#a10afe245e8ff5792ae2d3ea8e51bd57aa12abc1a13d0da382668382cf90b0e43f',1,'ML::fil']]],
   ['algo_5fhelper_2eh_28',['algo_helper.h',['../algo__helper_8h.html',1,'']]],
   ['algo_5ft_29',['algo_t',['../namespaceML_1_1fil.html#a10afe245e8ff5792ae2d3ea8e51bd57a',1,'ML::fil']]],
-  ['algorithm_30',['algorithm',['../group__pcaSolver.html#ga569719d37920c411a6b95a98833ba74e',1,'ML::paramsTSVDTemplate']]],
+  ['algorithm_30',['algorithm',['../classML_1_1paramsTSVDTemplate.html#a569719d37920c411a6b95a98833ba74e',1,'ML::paramsTSVDTemplate']]],
   ['allocate_31',['allocate',['../classML_1_1cachingDeviceAllocator.html#a4e7acda841d528e17b6a31cf36839f43',1,'ML::cachingDeviceAllocator::allocate()'],['../structML_1_1ARIMAParams.html#a62462dc429d819e0f99c79a584230649',1,'ML::ARIMAParams::allocate()'],['../classML_1_1stdAllocatorAdapter.html#ae8525d10d75d2f6b3dedf8f501dae528',1,'ML::stdAllocatorAdapter::allocate()'],['../classML_1_1thrustAllocatorAdapter.html#a79c63e8eda95c93407d9bad16e9f0e33',1,'ML::thrustAllocatorAdapter::allocate()'],['../namespaceMLCommon.html#a4be137c9194897551483393cebf1c98e',1,'MLCommon::allocate()']]],
   ['allocatoradapter_2ehpp_32',['allocatorAdapter.hpp',['../allocatorAdapter_8hpp.html',1,'']]],
   ['alloclengthformatrix_33',['allocLengthForMatrix',['../namespaceMLCommon.html#ad848c0845698b5d458479f8a32a0600d',1,'MLCommon']]],
