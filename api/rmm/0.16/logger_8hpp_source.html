@@ -107,38 +107,40 @@ $(function() {
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>   {</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>     logger_.set_pattern(<span class="stringliteral">"[%6t][%H:%M:%S:%f][%-6l] %v"</span>);</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>     logger_.flush_on(spdlog::level::warn);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span> <span class="preprocessor">#ifdef CUDA_API_PER_THREAD_DEFAULT_STREAM</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>     logger_.info(<span class="stringliteral">"----- RMM LOG BEGIN [PTDS ENABLED] -----"</span>);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span> <span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>     logger_.info(<span class="stringliteral">"----- RMM LOG BEGIN [PTDS DISABLED] -----"</span>);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span> <span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>     logger_.flush();</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>   }</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span> };</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>  </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span> }  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span> <span class="preprocessor">#if SPDLOG_ACTIVE_LEVEL &lt;= SPDLOG_LEVEL_INFO</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span> <span class="preprocessor">#ifdef CUDA_API_PER_THREAD_DEFAULT_STREAM</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>     logger_.info(<span class="stringliteral">"----- RMM LOG BEGIN [PTDS ENABLED] -----"</span>);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span> <span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>     logger_.info(<span class="stringliteral">"----- RMM LOG BEGIN [PTDS DISABLED] -----"</span>);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span> <span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>     logger_.flush();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span> <span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>   }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span> };</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>  </div>
-<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="namespacermm.html#a9156c3a94e1e9836f70818362ecfc739">   79</a></span> <span class="keyword">inline</span> spdlog::logger&amp; <a class="code" href="namespacermm.html#a9156c3a94e1e9836f70818362ecfc739">logger</a>()</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span> {</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>   <span class="keyword">static</span> <a class="code" href="structrmm_1_1detail_1_1logger__wrapper.html">detail::logger_wrapper</a> w{};</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>   <span class="keywordflow">return</span> w.logger_;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span> }</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>  </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span> <span class="comment">// The default is INFO, but it should be used sparingly, so that by default a log file is only</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span> <span class="comment">// output if there is important information, warnings, errors, and critical failures</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span> <span class="comment">// Log messages that require computation should only be used at level TRACE and DEBUG</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span> <span class="preprocessor">#define RMM_LOG_TRACE(...) SPDLOG_LOGGER_TRACE(&amp;rmm::logger(), __VA_ARGS__)</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span> <span class="preprocessor">#define RMM_LOG_DEBUG(...) SPDLOG_LOGGER_DEBUG(&amp;rmm::logger(), __VA_ARGS__)</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span> <span class="preprocessor">#define RMM_LOG_INFO(...) SPDLOG_LOGGER_INFO(&amp;rmm::logger(), __VA_ARGS__)</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span> <span class="preprocessor">#define RMM_LOG_WARN(...) SPDLOG_LOGGER_WARN(&amp;rmm::logger(), __VA_ARGS__)</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span> <span class="preprocessor">#define RMM_LOG_ERROR(...) SPDLOG_LOGGER_ERROR(&amp;rmm::logger(), __VA_ARGS__)</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span> <span class="preprocessor">#define RMM_LOG_CRITICAL(...) SPDLOG_LOGGER_CRITICAL(&amp;rmm::logger(), __VA_ARGS__)</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>  </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span> }  <span class="comment">// namespace rmm</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span> }  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>  </div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="namespacermm.html#a9156c3a94e1e9836f70818362ecfc739">   81</a></span> <span class="keyword">inline</span> spdlog::logger&amp; <a class="code" href="namespacermm.html#a9156c3a94e1e9836f70818362ecfc739">logger</a>()</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span> {</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>   <span class="keyword">static</span> <a class="code" href="structrmm_1_1detail_1_1logger__wrapper.html">detail::logger_wrapper</a> w{};</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>   <span class="keywordflow">return</span> w.logger_;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span> }</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>  </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span> <span class="comment">// The default is INFO, but it should be used sparingly, so that by default a log file is only</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span> <span class="comment">// output if there is important information, warnings, errors, and critical failures</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span> <span class="comment">// Log messages that require computation should only be used at level TRACE and DEBUG</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span> <span class="preprocessor">#define RMM_LOG_TRACE(...) SPDLOG_LOGGER_TRACE(&amp;rmm::logger(), __VA_ARGS__)</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span> <span class="preprocessor">#define RMM_LOG_DEBUG(...) SPDLOG_LOGGER_DEBUG(&amp;rmm::logger(), __VA_ARGS__)</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span> <span class="preprocessor">#define RMM_LOG_INFO(...) SPDLOG_LOGGER_INFO(&amp;rmm::logger(), __VA_ARGS__)</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span> <span class="preprocessor">#define RMM_LOG_WARN(...) SPDLOG_LOGGER_WARN(&amp;rmm::logger(), __VA_ARGS__)</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span> <span class="preprocessor">#define RMM_LOG_ERROR(...) SPDLOG_LOGGER_ERROR(&amp;rmm::logger(), __VA_ARGS__)</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span> <span class="preprocessor">#define RMM_LOG_CRITICAL(...) SPDLOG_LOGGER_CRITICAL(&amp;rmm::logger(), __VA_ARGS__)</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>  </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span> }  <span class="comment">// namespace rmm</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacermm_html"><div class="ttname"><a href="namespacermm.html">rmm</a></div><div class="ttdef"><b>Definition:</b> aligned.hpp:25</div></div>
 <div class="ttc" id="astructrmm_1_1detail_1_1logger__wrapper_html"><div class="ttname"><a href="structrmm_1_1detail_1_1logger__wrapper.html">rmm::detail::logger_wrapper</a></div><div class="ttdef"><b>Definition:</b> logger.hpp:50</div></div>
-<div class="ttc" id="anamespacermm_html_a9156c3a94e1e9836f70818362ecfc739"><div class="ttname"><a href="namespacermm.html#a9156c3a94e1e9836f70818362ecfc739">rmm::logger</a></div><div class="ttdeci">spdlog::logger &amp; logger()</div><div class="ttdoc">Returns the global RMM logger.</div><div class="ttdef"><b>Definition:</b> logger.hpp:79</div></div>
+<div class="ttc" id="anamespacermm_html_a9156c3a94e1e9836f70818362ecfc739"><div class="ttname"><a href="namespacermm.html#a9156c3a94e1e9836f70818362ecfc739">rmm::logger</a></div><div class="ttdeci">spdlog::logger &amp; logger()</div><div class="ttdoc">Returns the global RMM logger.</div><div class="ttdef"><b>Definition:</b> logger.hpp:81</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by <a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"/></a> 1.8.20
