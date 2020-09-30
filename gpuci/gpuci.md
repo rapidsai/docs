@@ -61,6 +61,12 @@ Comments with the text `rerun tests` are used in a PR to manually trigger a rete
 
 This is helpful when trying to troubleshoot issues with the build process and/or to see if the encountered error is persistent. Use gpuCI to examine the _Console Output_ to find more detail.
 
+### PR Benchmarking
+
+Repositories that are hosting benchmarks, and have a supporting build script in `ci/benchmark/`, can obtain benchmark regression information on PRs.
+
+Comment `run bench` in a PR that may have noticeable performance impacts to trigger the build. Once completed, status checks will have a link to build output and a dashboard comparing benchmark runs on this PR to the latest stable and latest nightly results.
+
 ## Commands
 
 ### Admins - Approving PR builds
@@ -79,6 +85,8 @@ This is helpful when trying to troubleshoot issues with the build process and/or
   * **NOTE:** The changelog check will still run.
 * To skip the changelog check (e.g. for manual auto-merger resolution) add the following to the title of the PR:
   * `[skip ci changelog]`
+* For repositories that contain a benchmark build script in `ci/benchmark/`, trigger a benchmark build by commenting:
+ * `run bench`
 
 ## Help
 
