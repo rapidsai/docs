@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['bitmask_20operations_2500',['Bitmask Operations',['../group__column__nullmask.html',1,'']]],
-  ['binary_20operations_2501',['Binary Operations',['../group__transformation__binaryops.html',1,'']]],
-  ['bitmask_2502',['Bitmask',['../group__utility__bitmask.html',1,'']]]
+  ['bitmask_20operations_2502',['Bitmask Operations',['../group__column__nullmask.html',1,'']]],
+  ['binary_20operations_2503',['Binary Operations',['../group__transformation__binaryops.html',1,'']]],
+  ['bitmask_2504',['Bitmask',['../group__utility__bitmask.html',1,'']]]
 ];

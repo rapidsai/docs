@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['radix_2328',['Radix',['../namespacenumeric.html#a045400c0ebe33ec6b78a0d1294068fb2',1,'numeric']]],
-  ['rank_5fmethod_2329',['rank_method',['../group__column__sort.html#ga1b10429fb5d86af4db72da1118f2ad5d',1,'cudf']]]
+  ['radix_2330',['Radix',['../namespacenumeric.html#a045400c0ebe33ec6b78a0d1294068fb2',1,'numeric']]],
+  ['rank_5fmethod_2331',['rank_method',['../group__column__sort.html#ga1b10429fb5d86af4db72da1118f2ad5d',1,'cudf']]]
 ];
