@@ -50,6 +50,12 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#centrality">Centrality</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.centrality.betweenness_centrality">Betweenness Centrality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cugraph.centrality.edge_betweenness_centrality">Edge Betweenness Centrality</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#returns">Returns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cugraph.centrality.katz_centrality">Katz Centrality</a></li>
 </ul>
 </li>
@@ -993,25 +999,27 @@ number.</p>
 <dl class="py function">
 <dt id="cugraph.structure.symmetrize.symmetrize">
 <code class="sig-prename descclassname">cugraph.structure.symmetrize.</code><code class="sig-name descname">symmetrize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source_col</span></em>, <em class="sig-param"><span class="n">dest_col</span></em>, <em class="sig-param"><span class="n">value_col</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.structure.symmetrize.symmetrize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Take a COO set of source destination pairs along with associated values and
+<dd><p>Take a COO set of source destination pairs along with associated values
+stored in a single GPU or distributed
 create a new COO set of source destination pairs along with values where
 all edges exist in both directions.</p>
-<p>Return from this call will be a COO stored as two cudf Series - the
-symmetrized source column and the symmetrized dest column, along with
+<p>Return from this call will be a COO stored as two cudf Series or
+dask_cudf.Series -the symmetrized source column and the symmetrized dest
+column, along with
 an optional cudf Series containing the associated values (only if the
 values are passed in).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>source_col</strong><span class="classifier">cudf.Series</span></dt><dd><p>This cudf.Series wraps a gdf_column of size E (E: number of edges).
+<dt><strong>source_col</strong><span class="classifier">cudf.Series or dask_cudf.Series</span></dt><dd><p>This cudf.Series wraps a gdf_column of size E (E: number of edges).
 The gdf column contains the source index for each edge.
 Source indices must be an integer type.</p>
 </dd>
-<dt><strong>dest_col</strong><span class="classifier">cudf.Series</span></dt><dd><p>This cudf.Series wraps a gdf_column of size E (E: number of edges).
+<dt><strong>dest_col</strong><span class="classifier">cudf.Series or dask_cudf.Series</span></dt><dd><p>This cudf.Series wraps a gdf_column of size E (E: number of edges).
 The gdf column contains the destination index for each edge.
 Destination indices must be an integer type.</p>
 </dd>
-<dt><strong>value_col</strong><span class="classifier">cudf.Series (optional)</span></dt><dd><p>This cudf.Series wraps a gdf_column of size E (E: number of edges).
+<dt><strong>value_col</strong><span class="classifier">cudf.Series or dask_cudf.Series (optional)</span></dt><dd><p>This cudf.Series wraps a gdf_column of size E (E: number of edges).
 The gdf column contains values associated with this edge.
 For this function the values can be any type, they are not
 examined, just copied.</p>
@@ -1026,15 +1034,13 @@ examined, just copied.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">destinations</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'1'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">'2'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">val</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">symmetrize</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">destinations</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 <dl class="py function">
-<dt id="cugraph.structure.symmetrize.symmetrize_df">
-<code class="sig-prename descclassname">cugraph.structure.symmetrize.</code><code class="sig-name descname">symmetrize_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">src_name</span></em>, <em class="sig-param"><span class="n">dst_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.structure.symmetrize.symmetrize_df" title="Permalink to this definition">¶</a></dt>
-<dd><p>Take a COO stored in a DataFrame, along with the column names of
+<dt id="cugraph.structure.symmetrize.symmetrize_ddf">
+<code class="sig-prename descclassname">cugraph.structure.symmetrize.</code><code class="sig-name descname">symmetrize_ddf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">src_name</span></em>, <em class="sig-param"><span class="n">dst_name</span></em>, <em class="sig-param"><span class="n">weight_name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.structure.symmetrize.symmetrize_ddf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take a COO stored in a distributed DataFrame, and the column names of
 the source and destination columns and create a new data frame
 using the same column names that symmetrize the graph so that all
 edges appear in both directions.</p>
@@ -1051,7 +1057,7 @@ should correct the data prior to calling symmetrize.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Input data frame containing COO.  Columns should contain source
+<dt><strong>df</strong><span class="classifier">dask_cudf.DataFrame</span></dt><dd><p>Input data frame containing COO.  Columns should contain source
 ids, destination ids and any properties associated with the
 edges.</p>
 </dd>
@@ -1066,8 +1072,49 @@ edges.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sym_df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">symmetrize</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="s1">'0'</span><span class="p">,</span> <span class="s1">'1'</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge_list</span><span class="p">(</span><span class="n">sym_df</span><span class="p">[</span><span class="s1">'0]'</span><span class="p">,</span> <span class="n">sym_df</span><span class="p">[</span><span class="s1">'1'</span><span class="p">],</span> <span class="n">sym_df</span><span class="p">[</span><span class="s1">'2'</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+<dl class="py function">
+<dt id="cugraph.structure.symmetrize.symmetrize_df">
+<code class="sig-prename descclassname">cugraph.structure.symmetrize.</code><code class="sig-name descname">symmetrize_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">src_name</span></em>, <em class="sig-param"><span class="n">dst_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.structure.symmetrize.symmetrize_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take a COO stored in a DataFrame, along with the column names of
+the source and destination columns and create a new data frame
+using the same column names that symmetrize the graph so that all
+edges appear in both directions.
+Note that if other columns exist in the data frame (e.g. edge weights)
+the other columns will also be replicated.  That is, if (u,v,data)
+represents the source value (u), destination value (v) and some
+set of other columns (data) in the input data, then the output
+data will contain both (u,v,data) and (v,u,data) with matching
+data.
+If (u,v,data1) and (v,u,data2) exist in the input data where data1
+!= data2 then this code will arbitrarily pick the smaller data
+element to keep, if this is not desired then the caller should
+should correct the data prior to calling symmetrize.
+Parameters
+———-
+df : cudf.DataFrame</p>
+<blockquote>
+<div><p>Input data frame containing COO.  Columns should contain source
+ids, destination ids and any properties associated with the
+edges.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>src_name<span class="classifier">string</span></dt><dd><p>Name of the column in the data frame containing the source ids</p>
+</dd>
+<dt>dst_name<span class="classifier">string</span></dt><dd><p>Name of the column in the data frame containing the destination ids</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cugraph.dask</span> <span class="k">as</span> <span class="nn">dcg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Comms</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chunksize</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">get_chunksize</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ddf</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
+<span class="go">                             delimiter=' ',</span>
+<span class="go">                             names=['src', 'dst', 'weight'],</span>
+<span class="go">                             dtype=['int32', 'int32', 'float32'])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sym_ddf</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">symmetrize_ddf</span><span class="p">(</span><span class="n">ddf</span><span class="p">,</span> <span class="s2">"src"</span><span class="p">,</span> <span class="s2">"dst"</span><span class="p">,</span> <span class="s2">"weight"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Comms</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1282,11 +1329,95 @@ contains the betweenness centrality of edge (1 -&gt; 0).</p>
 </div>
 </dd></dl>
 </div>
+<div class="section" id="module-cugraph.centrality.edge_betweenness_centrality">
+<span id="edge-betweenness-centrality"></span><h3>Edge Betweenness Centrality<a class="headerlink" href="#module-cugraph.centrality.edge_betweenness_centrality" title="Permalink to this headline">¶</a></h3>
+<p>Compute the edge betweenness centrality for all edges of the graph G.
+Betweenness centrality is a measure of the number of shortest paths
+that pass over an edge.  An edge with a high betweenness centrality
+score has more paths passing over it and is therefore believed to be
+more important. Rather than doing an all-pair shortest path, a sample
+of k starting vertices can be used.</p>
+<p>CuGraph does not currently support the ‘weight’ parameter
+as seen in the corresponding networkX call.</p>
+<div class="section" id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h4>
+<dl class="simple">
+<dt>G<span class="classifier">cuGraph.Graph or networkx.Graph</span></dt><dd><p>The graph can be either directed (DiGraph) or undirected (Graph).
+Weights in the graph are ignored, the current implementation uses
+BFS traversals. Use weight parameter if weights need to be considered
+(currently not supported)</p>
+</dd>
+<dt>k<span class="classifier">int or list or None, optional, default=None</span></dt><dd><p>If k is not None, use k node samples to estimate betweenness.  Higher
+values give better approximation
+If k is a list, use the content of the list for estimation: the list
+should contain vertices identifiers.
+Vertices obtained through sampling or defined as a list will be used as
+sources for traversals inside the algorithm.</p>
+</dd>
+<dt>normalized<span class="classifier">bool, optional</span></dt><dd><p>Default is True.
+If true, the betweenness values are normalized by
+2 / (n * (n - 1)) for Graphs (undirected), and
+1 / (n * (n - 1)) for DiGraphs (directed graphs)
+where n is the number of nodes in G.
+Normalization will ensure that values are in [0, 1],
+this normalization scales for the highest possible value where one
+edge is crossed by every single shortest path.</p>
+</dd>
+<dt>weight<span class="classifier">cudf.DataFrame, optional, default=None</span></dt><dd><p>Specifies the weights to be used for each edge.
+Should contain a mapping between
+edges and weights.
+(Not Supported)</p>
+</dd>
+<dt>seed<span class="classifier">optional</span></dt><dd><p>if k is specified and k is an integer, use seed to initialize the
+random number generator.
+Using None as seed relies on random.seed() behavior: using current
+system time
+If k is either None or list: seed parameter is ignored</p>
+</dd>
+<dt>result_dtype<span class="classifier">np.float32 or np.float64, optional, default=np.float64</span></dt><dd><p>Indicate the data type of the betweenness centrality scores
+Using double automatically switch implementation to “default”</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt>df<span class="classifier">cudf.DataFrame or Dictionary if using NetworkX</span></dt><dd><p>GPU data frame containing three cudf.Series of size E: the vertex
+identifiers of the sources, the vertex identifies of the destinations
+and the corresponding betweenness centrality values.
+Please note that the resulting the ‘src’, ‘dst’ column might not be
+in ascending order.</p>
+<dl class="simple">
+<dt>df[‘src’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers of the source of each edge</p>
+</dd>
+<dt>df[‘dst’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers of the destination of each edge</p>
+</dd>
+<dt>df[‘edge_betweenness_centrality’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the betweenness centrality of edges</p>
+</dd>
+</dl>
+<p>When using undirected graphs, ‘src’ and ‘dst’ only contains elements
+such that ‘src’ &lt; ‘dst’, which might differ from networkx and user’s
+input. Namely edge (1 -&gt; 0) is transformed into (0 -&gt; 1) but
+contains the betweenness centrality of edge (1 -&gt; 0).</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="examples">
+<h4>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h4>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ebc</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">edge_betweenness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="module-cugraph.centrality.katz_centrality">
 <span id="katz-centrality"></span><h3>Katz Centrality<a class="headerlink" href="#module-cugraph.centrality.katz_centrality" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
 <dt id="cugraph.centrality.katz_centrality.katz_centrality">
-<code class="sig-prename descclassname">cugraph.centrality.katz_centrality.</code><code class="sig-name descname">katz_centrality</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_iter</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">tol</span><span class="o">=</span><span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">nstart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">normalized</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.centrality.katz_centrality.katz_centrality" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">cugraph.centrality.katz_centrality.</code><code class="sig-name descname">katz_centrality</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_iter</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">tol</span><span class="o">=</span><span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">nstart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">normalized</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.centrality.katz_centrality.katz_centrality" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the Katz centrality for the nodes of the graph G. cuGraph does not
 currently support the ‘beta’ and ‘weight’ parameters as seen in the
 corresponding networkX call. This implementation is based on a relaxed
@@ -1312,6 +1443,8 @@ graph, alpha_max will always be greater than or equal to
 (1/degree_max). Therefore, setting alpha to (1/degree_max) will
 guarantee that it will never exceed alpha_max thus in turn fulfilling
 the requirement for convergence.</p>
+</dd>
+<dt><strong>beta</strong><span class="classifier">None</span></dt><dd><p>A weight scalar - currently Not Supported</p>
 </dd>
 <dt><strong>max_iter</strong><span class="classifier">int</span></dt><dd><p>The maximum number of iterations before an answer is returned. This can
 be used to limit the execution time and do an early exit before the
@@ -2721,6 +2854,52 @@ path leading to it during traversal (Only if retrun_sp_counter is True)</p>
 </pre></div>
 </div>
 </dd></dl>
+<dl class="py function">
+<dt id="cugraph.traversal.bfs.bfs_edges">
+<code class="sig-prename descclassname">cugraph.traversal.bfs.</code><code class="sig-name descname">bfs_edges</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">source</span></em>, <em class="sig-param"><span class="n">reverse</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">depth_limit</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sort_neighbors</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">return_sp_counter</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.traversal.bfs.bfs_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the distances and predecessors for a breadth first traversal of a
+graph.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>G</strong><span class="classifier">cugraph.graph or NetworkX.Graph</span></dt><dd><p>graph descriptor that contains connectivity information</p>
+</dd>
+<dt><strong>source</strong><span class="classifier">Integer</span></dt><dd><p>The starting vertex index</p>
+</dd>
+<dt><strong>reverse</strong><span class="classifier">boolean</span></dt><dd><p>If a directed graph, then process edges in a reverse direction
+Currently not implemented</p>
+</dd>
+<dt><strong>depth_limit</strong><span class="classifier">Int or None</span></dt><dd><p>Limit the depth of the search
+Currently not implemented</p>
+</dd>
+<dt><strong>sort_neighbors</strong><span class="classifier">None or Function</span></dt><dd><p>Currently not implemented</p>
+</dd>
+<dt><strong>return_sp_counter</strong><span class="classifier">bool, optional, default=False</span></dt><dd><p>Indicates if shortest path counters should be returned</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>df</strong><span class="classifier">cudf.DataFrame or Pandas.DataFrame</span></dt><dd><p>df[‘vertex’][i] gives the vertex id of the i’th vertex</p>
+<p>df[‘distance’][i] gives the path distance for the i’th vertex from the
+starting vertex</p>
+<p>df[‘predecessor’][i] gives for the i’th vertex the vertex it was
+reached from in the traversal</p>
+<p>df[‘sp_counter’][i] gives for the i’th vertex the number of shortest
+path leading to it during traversal (Only if retrun_sp_counter is True)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">bfs_edges</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
 </div>
 <div class="section" id="module-cugraph.traversal.sssp">
 <span id="single-source-shortest-path"></span><h3>Single-source-shortest-path<a class="headerlink" href="#module-cugraph.traversal.sssp" title="Permalink to this headline">¶</a></h3>
@@ -2748,6 +2927,50 @@ vertex in the traversal.</p>
 </dl>
 </dd></dl>
 <dl class="py function">
+<dt id="cugraph.traversal.sssp.shortest_path">
+<code class="sig-prename descclassname">cugraph.traversal.sssp.</code><code class="sig-name descname">shortest_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">source</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.traversal.sssp.shortest_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the distance and predecessors for shortest paths from the specified
+source to all the vertices in the graph. The distances column will store
+the distance from the source to each vertex. The predecessors column will
+store each vertex’s predecessor in the shortest path. Vertices that are
+unreachable will have a distance of infinity denoted by the maximum value
+of the data type and the predecessor set as -1. The source vertex’s
+predecessor is also set to -1. Graphs with negative weight cycles are not
+supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">cuGraph.Graph or NetworkX.Graph</span></dt><dd><p>cuGraph graph descriptor with connectivity information. Edge weights,
+if present, should be single or double precision floating point values.</p>
+</dd>
+<dt><strong>source</strong><span class="classifier">int</span></dt><dd><p>Index of the source vertex.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>df</strong><span class="classifier">cudf.DataFrame or pandas.DataFrame</span></dt><dd><dl class="simple">
+<dt>df[‘vertex’]</dt><dd><p>vertex id</p>
+</dd>
+<dt>df[‘distance’]</dt><dd><p>gives the path distance from the starting vertex</p>
+</dd>
+<dt>df[‘predecessor’]</dt><dd><p>the vertex it was reached from</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">distances</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">shortest_path</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+<dl class="py function">
 <dt id="cugraph.traversal.sssp.sssp">
 <code class="sig-prename descclassname">cugraph.traversal.sssp.</code><code class="sig-name descname">sssp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">source</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.traversal.sssp.sssp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the distance and predecessors for shortest paths from the specified
@@ -2770,11 +2993,14 @@ if present, should be single or double precision floating point values.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>df[‘vertex’][i] gives the vertex id of the i’th vertex.
-df[‘distance’][i] gives the path distance for the i’th vertex from the
-starting vertex.
-df[‘predecessor’][i] gives the vertex id of the vertex that was reached
-before the i’th vertex in the traversal.</p>
+<dt><strong>df</strong><span class="classifier">cudf.DataFrame</span></dt><dd><dl class="simple">
+<dt>df[‘vertex’]</dt><dd><p>vertex id</p>
+</dd>
+<dt>df[‘distance’]</dt><dd><p>gives the path distance from the starting vertex</p>
+</dd>
+<dt>df[‘predecessor’]</dt><dd><p>the vertex it was reached from</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd>
