@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['notnegativeone_134',['notNegativeOne',['../structcugraph_1_1db_1_1notNegativeOne.html',1,'cugraph::db']]],
-  ['num_5fconnectivity_5ftypes_135',['NUM_CONNECTIVITY_TYPES',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27a436bdad1238dd6b8309bdbd0150c0e65',1,'cugraph']]]
+  ['notnegativeone_135',['notNegativeOne',['../structcugraph_1_1db_1_1notNegativeOne.html',1,'cugraph::db']]],
+  ['num_5fconnectivity_5ftypes_136',['NUM_CONNECTIVITY_TYPES',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27a436bdad1238dd6b8309bdbd0150c0e65',1,'cugraph']]]
 ];
