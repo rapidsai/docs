@@ -47,5 +47,8 @@ var searchData=
   ['grammatrix_2ecuh_391',['grammatrix.cuh',['../grammatrix_8cuh.html',1,'']]],
   ['graphbaseddimredcallback_392',['GraphBasedDimRedCallback',['../classML_1_1Internals_1_1GraphBasedDimRedCallback.html',1,'ML::Internals']]],
   ['grid_5fsync_2ecuh_393',['grid_sync.cuh',['../grid__sync_8cuh.html',1,'']]],
-  ['grow_5fdeep_5ftree_394',['grow_deep_tree',['../classML_1_1DecisionTree_1_1DecisionTreeBase.html#a9e5ac43c46530176e26cbffc8731de26',1,'ML::DecisionTree::DecisionTreeBase']]]
+  ['grove_5fper_5fclass_394',['GROVE_PER_CLASS',['../namespaceML_1_1fil.html#ac1d4835a10b52131204607c9ec472110a80df43c3f77fcddbb4c7fa42d280a1d0',1,'ML::fil']]],
+  ['grove_5fper_5fclass_5ffew_5fclasses_395',['GROVE_PER_CLASS_FEW_CLASSES',['../namespaceML_1_1fil.html#ac1d4835a10b52131204607c9ec472110a009d1c7b2c0ec78da194b46099e2fdca',1,'ML::fil']]],
+  ['grove_5fper_5fclass_5fmany_5fclasses_396',['GROVE_PER_CLASS_MANY_CLASSES',['../namespaceML_1_1fil.html#ac1d4835a10b52131204607c9ec472110affdfa5b8869a4320fd75ce776f4e86fb',1,'ML::fil']]],
+  ['grow_5fdeep_5ftree_397',['grow_deep_tree',['../classML_1_1DecisionTree_1_1DecisionTreeBase.html#a9e5ac43c46530176e26cbffc8731de26',1,'ML::DecisionTree::DecisionTreeBase']]]
 ];
