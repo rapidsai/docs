@@ -30,9 +30,9 @@ Operations
 Phase | Start | End | Duration
 -- | -- | -- | --
 Development | Thu, Aug 6th | Wed, Sept 30th | 39 days
-Burn Down | Thu, Oct 1st | Wed, Oct 7th | 5 days
-Code Freeze/Testing | Thu, Oct 8th | Tue, Oct 13th | 4 days
-Release | Wed, Oct 14th | Wed, Oct 14th | 1 day
+Burn Down | Thu, Oct 1st | Wed, Oct 14th | 10 days
+Code Freeze/Testing | Thu, Oct 15th | Tue, Oct 20th | 4 days
+Release | Wed, Oct 21th | Wed, Oct 21th | 1 day
 
 ## _PROPOSED_ Release v0.17 Schedule
 
