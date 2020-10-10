@@ -224,20 +224,36 @@ reached from in the traversal</p>
 <span id="helper-functions"></span><h3>Helper functions<a class="headerlink" href="#module-cugraph.comms.comms" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
 <dt id="cugraph.comms.comms.initialize">
-<code class="sig-prename descclassname">cugraph.comms.comms.</code><code class="sig-name descname">initialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">comms</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p2p</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.comms.comms.initialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize a communicator for multi-node/multi-gpu communications.
-It is expected to be called right after client initialization for running
-multi-GPU algorithms. It wraps raft comms that manages underlying NCCL and
-UCX comms handles across the workers of a Dask cluster.
-It is recommended to also call <cite>destroy()</cite> when the comms are no longer
+<code class="sig-prename descclassname">cugraph.comms.comms.</code><code class="sig-name descname">initialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">comms</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p2p</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">prows</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pcols</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">partition_type</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cugraph.comms.comms.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a communicator for multi-node/multi-gpu communications.  It is
+expected to be called right after client initialization for running
+multi-GPU algorithms (this wraps raft comms that manages underlying NCCL
+and UCX comms handles across the workers of a Dask cluster).</p>
+<p>It is recommended to also call <cite>destroy()</cite> when the comms are no longer
 needed so the underlying resources can be cleaned up.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>comms</strong><span class="classifier">raft Comms</span></dt><dd><p>A pre-initialized raft communicator. If provided, this is used for mnmg
-communications.</p>
+communications. If not provided, default comms are initialized as per
+client information.</p>
 </dd>
-<dt><strong>p2p</strong><span class="classifier">bool</span></dt><dd><p>Initialize UCX endpoints</p>
+<dt><strong>p2p</strong><span class="classifier">bool</span></dt><dd><p>Initialize UCX endpoints if True. Default is False.</p>
+</dd>
+<dt><strong>prows</strong><span class="classifier">int</span></dt><dd><p>Specifies the number of rows when performing a 2D partitioning of the
+input graph. If specified, this must be a factor of the total number of
+parallel processes. When specified with pcols, prows*pcols should be
+equal to the total number of parallel processes.</p>
+</dd>
+<dt><strong>pcols</strong><span class="classifier">int</span></dt><dd><p>Specifies the number of columns when performing a 2D partitioning of
+the input graph. If specified, this must be a factor of the total
+number of parallel processes. When specified with prows, prows*pcols
+should be equal to the total number of parallel processes.</p>
+</dd>
+<dt><strong>partition_type</strong><span class="classifier">int</span></dt><dd><p>Valid values are currently 1 or any int other than 1. A value of 1 (the
+default) represents a partitioning resulting in prows*pcols
+partitions. A non-1 value currently results in a partitioning of
+p*pcols partitions, where p is the number of GPUs.</p>
 </dd>
 </dl>
 </dd>
