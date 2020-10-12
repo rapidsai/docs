@@ -1,7 +1,7 @@
 var searchData=
 [
   ['adjgraph_198',['AdjGraph',['../namespaceDbscan_1_1AdjGraph.html',1,'Dbscan']]],
-  ['d_199',['D',['../structML_1_1ARIMAOrder.html#a6a99c4985a7b0321d47660b47e072539',1,'ML::ARIMAOrder::D()'],['../structDbscan_1_1VertexDeg_1_1Pack.html#a6cec7344923dab45b25c79bc8b0f0d66',1,'Dbscan::VertexDeg::Pack::D()'],['../structML_1_1ARIMAOrder.html#ace8195d2da697b1130adda6b0c292613',1,'ML::ARIMAOrder::d()']]],
+  ['d_199',['d',['../structML_1_1ARIMAOrder.html#ace8195d2da697b1130adda6b0c292613',1,'ML::ARIMAOrder::d()'],['../structML_1_1ARIMAOrder.html#a6a99c4985a7b0321d47660b47e072539',1,'ML::ARIMAOrder::D()'],['../structDbscan_1_1VertexDeg_1_1Pack.html#a6cec7344923dab45b25c79bc8b0f0d66',1,'Dbscan::VertexDeg::Pack::D()']]],
   ['d_5fchild_5fbest_5fmetric_200',['d_child_best_metric',['../structTemporaryMemory.html#a797f5bfb99f2e369a702954ce76f0807',1,'TemporaryMemory']]],
   ['d_5fchild_5fcount_201',['d_child_count',['../structTemporaryMemory.html#a89809d9134219a1470704946c5c0362e',1,'TemporaryMemory']]],
   ['d_5fchild_5fhist_202',['d_child_hist',['../structTemporaryMemory.html#a7b650378094a51cd2e211c685eaca3c9',1,'TemporaryMemory']]],

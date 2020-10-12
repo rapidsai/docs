@@ -2,7 +2,7 @@ var searchData=
 [
   ['predict_20functions_739',['Predict functions',['../group__DecisionTreeClassifierPredict.html',1,'']]],
   ['predict_20functions_740',['Predict functions',['../group__DecisionTreeRegressorPredict.html',1,'']]],
-  ['p_741',['P',['../structML_1_1ARIMAOrder.html#a201baecf93423c247300bd2729c22fd2',1,'ML::ARIMAOrder::P()'],['../structML_1_1ARIMAOrder.html#a1294c0c2729a50b5f44b21f1b2b63a02',1,'ML::ARIMAOrder::p()']]],
+  ['p_741',['p',['../structML_1_1ARIMAOrder.html#a1294c0c2729a50b5f44b21f1b2b63a02',1,'ML::ARIMAOrder::p()'],['../structML_1_1ARIMAOrder.html#a201baecf93423c247300bd2729c22fd2',1,'ML::ARIMAOrder::P()']]],
   ['pack_742',['Pack',['../structDbscan_1_1VertexDeg_1_1Pack.html',1,'Dbscan::VertexDeg::Pack&lt; Type, Index_ &gt;'],['../structDbscan_1_1AdjGraph_1_1Pack.html',1,'Dbscan::AdjGraph::Pack&lt; Index_ &gt;'],['../structML_1_1ARIMAParams.html#afa95dde59b1a56ef56d4c6498a4ef236',1,'ML::ARIMAParams::pack()']]],
   ['pack_2eh_743',['pack.h',['../adjgraph_2pack_8h.html',1,'(Global Namespace)'],['../vertexdeg_2pack_8h.html',1,'(Global Namespace)']]],
   ['pairwisedistance_744',['pairwiseDistance',['../namespaceML_1_1Metrics.html#a98c293088fa070931974f56450bf53e6',1,'ML::Metrics::pairwiseDistance(const raft::handle_t &amp;handle, const double *x, const double *y, double *dist, int m, int n, int k, ML::Distance::DistanceType metric, bool isRowMajor=true)'],['../namespaceML_1_1Metrics.html#ae811cd0788ff42fda2be077e6b2a0587',1,'ML::Metrics::pairwiseDistance(const raft::handle_t &amp;handle, const float *x, const float *y, float *dist, int m, int n, int k, ML::Distance::DistanceType metric, bool isRowMajor=true)']]],
