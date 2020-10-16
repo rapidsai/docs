@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['edge_5fdata_378',['edge_data',['../classcugraph_1_1GraphViewBase.html#abde533c19935925fbcb6262533c09c68',1,'cugraph::GraphViewBase']]]
+  ['edge_5fdata_414',['edge_data',['../classcugraph_1_1GraphViewBase.html#abde533c19935925fbcb6262533c09c68',1,'cugraph::GraphViewBase']]]
 ];

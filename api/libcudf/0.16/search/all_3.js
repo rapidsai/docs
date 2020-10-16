@@ -129,12 +129,14 @@ var searchData=
   ['current_5fconfigs_216',['current_configs',['../classcudf_1_1io_1_1external_1_1kafka_1_1kafka__consumer.html#a2d6b173ec424e70f660cd93e2fb471e9',1,'cudf::io::external::kafka::kafka_consumer']]],
   ['compute_20day_217',['Compute Day',['../group__datetime__compute.html',1,'']]],
   ['dictionary_218',['dictionary',['../namespacecudf_1_1dictionary.html',1,'cudf']]],
-  ['groupby_219',['groupby',['../namespacecudf_1_1groupby.html',1,'cudf']]],
-  ['io_220',['io',['../namespacecudf_1_1io.html',1,'cudf']]],
-  ['replace_2ehpp_221',['replace.hpp',['../cudf_2replace_8hpp.html',1,'(Global Namespace)'],['../cudf_2strings_2replace_8hpp.html',1,'(Global Namespace)']]],
-  ['strings_222',['strings',['../namespacecudf_1_1strings.html',1,'cudf']]],
-  ['case_223',['Case',['../group__strings__case.html',1,'']]],
-  ['combining_224',['Combining',['../group__strings__combine.html',1,'']]],
-  ['converting_225',['Converting',['../group__strings__convert.html',1,'']]],
-  ['character_20types_226',['Character Types',['../group__strings__types.html',1,'']]]
+  ['element_3c_20numeric_3a_3adecimal32_20_3e_219',['element&lt; numeric::decimal32 &gt;',['../namespacecudf.html#a99018169ea78a61f14bb8a25aa416487',1,'cudf']]],
+  ['element_3c_20numeric_3a_3adecimal64_20_3e_220',['element&lt; numeric::decimal64 &gt;',['../namespacecudf.html#a1fbc99852b6f020dac5d98fc16b0d3ee',1,'cudf']]],
+  ['groupby_221',['groupby',['../namespacecudf_1_1groupby.html',1,'cudf']]],
+  ['io_222',['io',['../namespacecudf_1_1io.html',1,'cudf']]],
+  ['replace_2ehpp_223',['replace.hpp',['../cudf_2replace_8hpp.html',1,'(Global Namespace)'],['../cudf_2strings_2replace_8hpp.html',1,'(Global Namespace)']]],
+  ['strings_224',['strings',['../namespacecudf_1_1strings.html',1,'cudf']]],
+  ['case_225',['Case',['../group__strings__case.html',1,'']]],
+  ['combining_226',['Combining',['../group__strings__combine.html',1,'']]],
+  ['converting_227',['Converting',['../group__strings__convert.html',1,'']]],
+  ['character_20types_228',['Character Types',['../group__strings__types.html',1,'']]]
 ];

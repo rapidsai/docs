@@ -111,57 +111,61 @@ $(function() {
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span> <span class="keyword">using</span> pair_comms_t =</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>   std::pair&lt;std::shared_ptr&lt;raft::comms::comms_t&gt;, std::shared_ptr&lt;raft::comms::comms_t&gt;&gt;;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>  </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span> <span class="comment">// class responsible for creating 2D partition sub-comms:</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span> <span class="comment">// this is instantiated by each worker (processing element, PE)</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span> <span class="comment">// for the row/column it belongs to;</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span> <span class="comment">// FIXME: This class is a misnomer since the python layer is currently</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span> <span class="comment">// responsible for creating and managing partitioning. Consider renaming it or</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span> <span class="comment">// refactoring it away.</span></div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span> <span class="comment">//</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span> <span class="comment">// naming policy defaults to simplified naming:</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span> <span class="comment">// one key per row subcomms, one per column subcomms;</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span> <span class="comment">//</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> name_policy_t = key_naming_t, <span class="keyword">typename</span> <span class="keywordtype">size_t</span>ype = <span class="keywordtype">int</span>&gt;</div>
-<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classcugraph_1_1partition__2d_1_1subcomm__factory__t.html">   65</a></span> <span class="keyword">class </span><a class="code" href="classcugraph_1_1partition__2d_1_1subcomm__factory__t.html">subcomm_factory_t</a> {</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>   <a class="code" href="classcugraph_1_1partition__2d_1_1subcomm__factory__t.html">subcomm_factory_t</a>(raft::handle_t&amp; handle, size_type row_size)</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>     : handle_(handle), row_size_(row_size)</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>   {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>     init_row_col_comms();</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>   }</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>   <span class="keyword">virtual</span> ~<a class="code" href="classcugraph_1_1partition__2d_1_1subcomm__factory__t.html">subcomm_factory_t</a>(<span class="keywordtype">void</span>) {}</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>  </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>   pair_comms_t <span class="keyword">const</span>&amp; row_col_comms(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> row_col_subcomms_; }</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>  </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>  <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> init_row_col_comms(<span class="keywordtype">void</span>)</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>   {</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>     name_policy_t key;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>     raft::comms::comms_t <span class="keyword">const</span>&amp; communicator = handle_.get_comms();</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>  </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>     <span class="keywordtype">int</span> <span class="keyword">const</span> rank = communicator.get_rank();</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>     <span class="keywordtype">int</span> row_index  = rank / row_size_;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>     <span class="keywordtype">int</span> col_index  = rank % row_size_;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span> <span class="comment">// class responsible for creating 2D partition sub-comms:</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span> <span class="comment">// this is instantiated by each worker (processing element, PE)</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span> <span class="comment">// for the row/column it belongs to;</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span> <span class="comment">//</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span> <span class="comment">// naming policy defaults to simplified naming:</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span> <span class="comment">// one key per row subcomms, one per column subcomms;</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span> <span class="comment">//</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> name_policy_t = key_naming_t, <span class="keyword">typename</span> <span class="keywordtype">size_t</span>ype = <span class="keywordtype">int</span>&gt;</div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classcugraph_1_1partition__2d_1_1subcomm__factory__t.html">   69</a></span> <span class="keyword">class </span><a class="code" href="classcugraph_1_1partition__2d_1_1subcomm__factory__t.html">subcomm_factory_t</a> {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>   <a class="code" href="classcugraph_1_1partition__2d_1_1subcomm__factory__t.html">subcomm_factory_t</a>(raft::handle_t&amp; handle, size_type row_size)</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>     : handle_(handle), row_size_(row_size)</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>   {</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>     init_row_col_comms();</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>   }</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>   <span class="keyword">virtual</span> ~<a class="code" href="classcugraph_1_1partition__2d_1_1subcomm__factory__t.html">subcomm_factory_t</a>(<span class="keywordtype">void</span>) {}</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>  </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>   pair_comms_t <span class="keyword">const</span>&amp; row_col_comms(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> row_col_subcomms_; }</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>  </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>  <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> init_row_col_comms(<span class="keywordtype">void</span>)</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>   {</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>     name_policy_t key;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>     raft::comms::comms_t <span class="keyword">const</span>&amp; communicator = handle_.get_comms();</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>  </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>     <span class="keyword">auto</span> row_comm =</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>       std::make_shared&lt;raft::comms::comms_t&gt;(communicator.comm_split(row_index, col_index));</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>     handle_.set_subcomm(key.row_name(), row_comm);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>     <span class="keywordtype">int</span> <span class="keyword">const</span> rank = communicator.get_rank();</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>     <span class="keywordtype">int</span> row_index  = rank / row_size_;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>     <span class="keywordtype">int</span> col_index  = rank % row_size_;</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>  </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>     <span class="keyword">auto</span> col_comm =</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>       std::make_shared&lt;raft::comms::comms_t&gt;(communicator.comm_split(col_index, row_index));</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>     handle_.set_subcomm(key.col_name(), col_comm);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>     <span class="keyword">auto</span> row_comm =</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>       std::make_shared&lt;raft::comms::comms_t&gt;(communicator.comm_split(row_index, col_index));</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>     handle_.set_subcomm(key.row_name(), row_comm);</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>  </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>     row_col_subcomms_.first  = row_comm;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>     row_col_subcomms_.second = col_comm;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>   }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>     <span class="keyword">auto</span> col_comm =</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>       std::make_shared&lt;raft::comms::comms_t&gt;(communicator.comm_split(col_index, row_index));</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>     handle_.set_subcomm(key.col_name(), col_comm);</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>  </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>   raft::handle_t&amp; handle_;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>   size_type row_size_;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>   pair_comms_t row_col_subcomms_;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span> };</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span> }  <span class="comment">// namespace partition_2d</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span> }  <span class="comment">// namespace cugraph</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>     row_col_subcomms_.first  = row_comm;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>     row_col_subcomms_.second = col_comm;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>   }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>  </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>   raft::handle_t&amp; handle_;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>   size_type row_size_;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>   pair_comms_t row_col_subcomms_;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span> };</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span> }  <span class="comment">// namespace partition_2d</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span> }  <span class="comment">// namespace cugraph</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacecugraph_html"><div class="ttname"><a href="namespacecugraph.html">cugraph</a></div><div class="ttdoc">Katz Centrality implementation.</div><div class="ttdef"><b>Definition:</b> betweenness_centrality.cu:32</div></div>
-<div class="ttc" id="aclasscugraph_1_1partition__2d_1_1subcomm__factory__t_html"><div class="ttname"><a href="classcugraph_1_1partition__2d_1_1subcomm__factory__t.html">cugraph::partition_2d::subcomm_factory_t</a></div><div class="ttdef"><b>Definition:</b> partition_manager.hpp:65</div></div>
+<div class="ttc" id="aclasscugraph_1_1partition__2d_1_1subcomm__factory__t_html"><div class="ttname"><a href="classcugraph_1_1partition__2d_1_1subcomm__factory__t.html">cugraph::partition_2d::subcomm_factory_t</a></div><div class="ttdef"><b>Definition:</b> partition_manager.hpp:69</div></div>
 <div class="ttc" id="astructcugraph_1_1partition__2d_1_1key__naming__t_html"><div class="ttname"><a href="structcugraph_1_1partition__2d_1_1key__naming__t.html">cugraph::partition_2d::key_naming_t</a></div><div class="ttdef"><b>Definition:</b> partition_manager.hpp:34</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
