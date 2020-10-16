@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['cugraph_343',['cugraph',['../namespacecugraph.html',1,'']]]
+  ['cugraph_368',['cugraph',['../namespacecugraph.html',1,'']]]
 ];
