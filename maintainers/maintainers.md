@@ -29,16 +29,16 @@ Operations
 
 Phase | Start | End | Duration
 -- | -- | -- | --
-Development | Thu, Aug 6th | Wed, Sept 30th | 39 days
-Burn Down | Thu, Oct 1st | Wed, Oct 14th | 10 days
-Code Freeze/Testing | Thu, Oct 15th | Tue, Oct 20th | 4 days
-Release | Wed, Oct 21st | Wed, Oct 21st | 1 day
-
-## _PROPOSED_ Release v0.17 Schedule
-
-Phase | Start | End | Duration
--- | -- | -- | --
 Development | Thu, Oct 1st | Mon, Nov 23rd | 38 days
 Burn Down | Tue, Nov 24th | Wed, Dec 2nd | 5 days
 Code Freeze/Testing | Thu, Dec 3rd | Tue, Dec 8th | 4 days
 Release | Wed, Dec 9th | Wed, Dec 9th | 1 day
+
+## _PROPOSED_ Release v0.18 Schedule
+
+Phase | Start | End | Duration
+-- | -- | -- | --
+Development | Tue, Nov 24th | Wed, Jan 27th | 41 days
+Burn Down | Thu, Jan 28th | Wed, Feb 3rd | 5 days
+Code Freeze/Testing | Thu, Feb 4th | Tue, Feb 9th | 4 days
+Release | Wed, Feb 10th | Wed, Feb 10th | 1 day
