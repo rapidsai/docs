@@ -6,6 +6,11 @@ title: RAPIDS Demo Container
 permalink: rapids-demo
 redirect_from: "containers/rapids-demo" # redirect from old page to ensure existing links still work
 ---
+{% assign STABLE_VER = site.data.releases.stable.version %}
+{% assign LEGACY_VER = site.data.releases.legacy.version %}
+{% assign CUDA_VER = site.data.versions.CUDA_VER %}
+{% assign PYTHON_VER = site.data.versions.PYTHON_VER %}
+{% assign UBUNTU_VER = site.data.versions.UBUNTU_VER %}
 
 # RAPIDS Demo Container
 
@@ -17,21 +22,22 @@ Get started with our preconfigured RAPIDS demo container, featuring several demo
 
 ### Current Version
 
-#### RAPIDS {{ site.data.releases.stable.version }} - {{ site.data.releases.stable.date }}
+#### RAPIDS {{ STABLE_VER }} - {{ site.data.releases.stable.date }}
 
-Versions of libraries included in the `{{ site.data.releases.stable.version }}` images:
-- `cuDF` [v{{ site.data.releases.stable.version }}](https://github.com/rapidsai/cudf/tree/v{{ site.data.releases.stable.version }}.0), `cuML` [v{{ site.data.releases.stable.version }}](https://github.com/rapidsai/cuml/tree/v{{ site.data.releases.stable.version }}.0), `cuGraph` [v{{ site.data.releases.stable.version }}](https://github.com/rapidsai/cugraph/tree/v{{ site.data.releases.stable.version }}.0), `RMM` [v{{ site.data.releases.stable.version }}](https://github.com/rapidsai/RMM/tree/v{{ site.data.releases.stable.version }}.0), `cuSpatial` [v{{ site.data.releases.stable.version }}](https://github.com/rapidsai/cuspatial/tree/v{{ site.data.releases.stable.version }}.0), `cuSignal` [v{{ site.data.releases.stable.version }}](https://github.com/rapidsai/cusignal/tree/v{{ site.data.releases.stable.version }}.0)
-  - **IMPORTANT:** CUDA 10.0 & Python 3.6 support ended in v0.14; v0.15 includes CUDA 11.0 & Python 3.8 support
-  - **NOTE:** See [RAPIDS Notices](https://docs.rapids.ai/notices) for release changes for `clx` & `cuxfilter` as well as other recent changes
+Versions of libraries included in the `{{ STABLE_VER }}` images:
+- `cuDF` [v{{ STABLE_VER }}](https://github.com/rapidsai/cudf/tree/v{{ STABLE_VER }}.0), `cuML` [v{{ STABLE_VER }}](https://github.com/rapidsai/cuml/tree/v{{ STABLE_VER }}.0), `cuGraph` [v{{ STABLE_VER }}](https://github.com/rapidsai/cugraph/tree/v{{ STABLE_VER }}.0), `RMM` [v{{ STABLE_VER }}](https://github.com/rapidsai/RMM/tree/v{{ STABLE_VER }}.0), `cuSpatial` [v{{ STABLE_VER }}](https://github.com/rapidsai/cuspatial/tree/v{{ STABLE_VER }}.0), `cuxfilter` [v{{ STABLE_VER }}](https://github.com/rapidsai/cuxfilter/tree/v{{ STABLE_VER }}.0), `cuSignal` [v{{ STABLE_VER }}](https://github.com/rapidsai/cusignal/tree/v{{ STABLE_VER }}.0)
+- `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-{{ STABLE_VER }}-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-{{ STABLE_VER }})
+
 
 ### Former Version
 
-#### RAPIDS {{ site.data.releases.legacy.version }} - {{ site.data.releases.legacy.date }}
+#### RAPIDS {{ LEGACY_VER }} - {{ site.data.releases.legacy.date }}
 
-Versions of libraries included in the `{{ site.data.releases.legacy.version }}` images:
-- `cuDF` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/cudf/tree/v{{ site.data.releases.legacy.version }}.0), `cuML` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/cuml/tree/v{{ site.data.releases.legacy.version }}.0), `cuGraph` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/cugraph/tree/v{{ site.data.releases.legacy.version }}.0), `RMM` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/RMM/tree/v{{ site.data.releases.legacy.version }}.0), `cuSpatial` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/cuspatial/tree/v{{ site.data.releases.legacy.version }}.0), `cuxfilter` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/cuxfilter/tree/v{{ site.data.releases.legacy.version }}.0), `cuSignal` [v{{ site.data.releases.legacy.version }}](https://github.com/rapidsai/cusignal/tree/v{{ site.data.releases.legacy.version }}.0)
-  - **NOTE:** `cuxfilter` is only available in `runtime` containers
-- `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-{{ site.data.releases.legacy.version }}-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-{{ site.data.releases.legacy.version }})
+Versions of libraries included in the `{{ LEGACY_VER }}` images:
+- `cuDF` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cudf/tree/v{{ LEGACY_VER }}.0), `cuML` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cuml/tree/v{{ LEGACY_VER }}.0), `cuGraph` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cugraph/tree/v{{ LEGACY_VER }}.0), `RMM` [v{{ LEGACY_VER }}](https://github.com/rapidsai/RMM/tree/v{{ LEGACY_VER }}.0), `cuSpatial` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cuspatial/tree/v{{ LEGACY_VER }}.0), `cuxfilter` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cuxfilter/tree/v{{ LEGACY_VER }}.0), `cuSignal` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cusignal/tree/v{{ LEGACY_VER }}.0)
+  - **IMPORTANT:** CUDA 10.0 & Python 3.6 support ended in v0.14; v0.15 includes CUDA 11.0 & Python 3.8 support
+  - **NOTE:** See [RAPIDS Notices](https://docs.rapids.ai/notices) for release changes for `clx` & `cuxfilter` as well as other recent changes
+- `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-{{ LEGACY_VER }}-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-{{ LEGACY_VER }})
 
 ### Image Types
 
@@ -54,7 +60,7 @@ The [rapidsai/rapidsai-dev](https://hub.docker.com/r/rapidsai/rapidsai-dev/tags)
 
 The tag naming scheme for RAPIDS images incorporates key platform details into the tag as shown below:
 ```
-{{ site.data.releases.stable.version }}-cuda{{ site.data.versions.CUDA_VER }}-runtime-ubuntu18.04-py{{ site.data.versions.PYTHON_VER }}
+{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
  ^       ^    ^        ^         ^
  |       |    type     |         python version
  |       |             |
@@ -63,12 +69,12 @@ The tag naming scheme for RAPIDS images incorporates key platform details into t
  RAPIDS version        linux version
 ```
 
-To get the latest RAPIDS version of a specific platform combination, simply exclude the RAPIDS version.  For example, to pull the latest version of RAPIDS for the `runtime` image with support for CUDA {{ site.data.versions.CUDA_VER }}, Python {{ site.data.versions.PYTHON_VER }}, and Ubuntu 18.04, use the following tag:
+To get the latest RAPIDS version of a specific platform combination, simply exclude the RAPIDS version.  For example, to pull the latest version of RAPIDS for the `runtime` image with support for CUDA {{ CUDA_VER }}, Python {{ PYTHON_VER }}, and Ubuntu 18.04, use the following tag:
 ```
-cuda{{ site.data.versions.CUDA_VER }}-runtime-ubuntu18.04-py{{ site.data.versions.PYTHON_VER }}
+cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
 
-Many users do not need a specific platform combination but would like to ensure they're getting the latest version of RAPIDS, so as an additional convenience, a tag named simply `latest` is also provided which is equivalent to `cuda{{ site.data.versions.CUDA_VER }}-runtime-ubuntu16.04-py{{ site.data.versions.PYTHON_VER }}`.
+Many users do not need a specific platform combination but would like to ensure they're getting the latest version of RAPIDS, so as an additional convenience, a tag named simply `latest` is also provided which is equivalent to `cuda{{ CUDA_VER }}-runtime-ubuntu16.04-py{{ PYTHON_VER }}`.
 
 ## Prerequisites
 
@@ -84,23 +90,23 @@ Many users do not need a specific platform combination but would like to ensure 
 
 #### Preferred - Docker CE v19+ and `nvidia-container-toolkit`
 ```bash
-$ docker pull rapidsai/rapidsai:cuda{{ site.data.versions.CUDA_VER }}-runtime-ubuntu18.04-py{{ site.data.versions.PYTHON_VER }}
+$ docker pull rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 $ docker run --gpus all --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
-         rapidsai/rapidsai:cuda{{ site.data.versions.CUDA_VER }}-runtime-ubuntu18.04-py{{ site.data.versions.PYTHON_VER }}
+         rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
 **NOTE:** This will open a shell with [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) running in the background on port 8888 on your host machine.
 
 #### Legacy - Docker CE v18 and `nvidia-docker2`
 ```bash
-$ docker pull rapidsai/rapidsai:cuda{{ site.data.versions.CUDA_VER }}-runtime-ubuntu18.04-py{{ site.data.versions.PYTHON_VER }}
+$ docker pull rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 $ docker run --runtime=nvidia --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
-         rapidsai/rapidsai:cuda{{ site.data.versions.CUDA_VER }}-runtime-ubuntu18.04-py{{ site.data.versions.PYTHON_VER }}
+         rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
 **NOTE:** This will open a shell with [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) running in the background on port 8888 on your host machine.
 
 ### Use JupyterLab to Explore the Notebooks
 
-Notebooks can be found in the following directories within the {{ site.data.releases.stable.version }} container:
+Notebooks can be found in the following directories within the {{ STABLE_VER }} container:
 
 * `/rapids/notebooks/clx` - CLX demo notebooks
 * `/rapids/notebooks/cugraph` - cuGraph demo notebooks
@@ -109,7 +115,7 @@ Notebooks can be found in the following directories within the {{ site.data.rele
 * `/rapids/notebooks/cuxfilter` - cuXfilter demo notebooks
 * `/rapids/notebooks/xgboost` - XGBoost demo notebooks
 
-For a full description of each notebook, see the [README](https://github.com/rapidsai/notebooks/blob/branch-{{ site.data.releases.stable.version }}/README.md) in the notebooks repository.
+For a full description of each notebook, see the [README](https://github.com/rapidsai/notebooks/blob/branch-{{ STABLE_VER }}/README.md) in the notebooks repository.
 
 ### Custom Data and Advanced Usage
 
@@ -119,14 +125,14 @@ You are free to modify the above steps. For example, you can launch an interacti
 ```bash
 $ docker run --gpus all --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
          -v /path/to/host/data:/rapids/my_data \
-                  rapidsai/rapidsai:cuda{{ site.data.versions.CUDA_VER }}-runtime-ubuntu18.04-py{{ site.data.versions.PYTHON_VER }}
+                  rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
 
 #### Legacy - Docker CE v18 and `nvidia-docker2`
 ```bash
 $ docker run --runtime=nvidia --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
          -v /path/to/host/data:/rapids/my_data \
-                  rapidsai/rapidsai:cuda{{ site.data.versions.CUDA_VER }}-runtime-ubuntu18.04-py{{ site.data.versions.PYTHON_VER }}
+                  rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
 This will map data from your host operating system to the container OS in the `/rapids/my_data` directory. You may need to modify the provided notebooks for the new data paths.
 

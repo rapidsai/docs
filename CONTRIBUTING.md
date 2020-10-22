@@ -9,6 +9,9 @@
 
 ## Development
 
+> **Note:** Jekyll will throw an error if you try to serve the project with symlinks enabled.
+To temporarily remove symlinks, run `./update_symlinks.sh rm` from the project's root directory. Make sure not to commit the removed symlinks. Re-add them with `./update_symlinks.sh 17`, where `17` is the latest nightly version number.
+
 ### Preferred - Excluding API docs
 
 Given the size of the API docs the following config file setup will greatly
