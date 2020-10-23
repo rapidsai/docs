@@ -38,7 +38,7 @@ Release | Wed, Dec 9th | Wed, Dec 9th | 1 day
 
 Phase | Start | End | Duration
 -- | -- | -- | --
-Development | Tue, Nov 24th | Wed, Jan 27th | 41 days
-Burn Down | Thu, Jan 28th | Wed, Feb 3rd | 5 days
-Code Freeze/Testing | Thu, Feb 4th | Tue, Feb 9th | 4 days
-Release | Wed, Feb 10th | Wed, Feb 10th | 1 day
+Development | Tue, Nov 24th | Tue, Feb 9th | 49 days
+Burn Down | Wed, Feb 10th | Wed, Feb 17th | 5 days
+Code Freeze/Testing | Thu, Feb 18th | Tue, Feb 23rd | 4 days
+Release | Wed, Feb 24th | Wed, Feb 24th | 1 day
