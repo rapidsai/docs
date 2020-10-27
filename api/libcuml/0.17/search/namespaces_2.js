@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['raft_1210',['raft',['../namespaceraft.html',1,'']]]
+  ['linalg_1201',['linalg',['../namespaceraft_1_1linalg.html',1,'raft']]],
+  ['raft_1202',['raft',['../namespaceraft.html',1,'']]]
 ];

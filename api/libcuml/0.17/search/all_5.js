@@ -6,7 +6,7 @@ var searchData=
   ['eltwise_2ecuh_298',['eltwise.cuh',['../eltwise_8cuh.html',1,'']]],
   ['eltwise2d_2ecuh_299',['eltwise2d.cuh',['../eltwise2d_8cuh.html',1,'']]],
   ['end_300',['end',['../classML_1_1Tensor.html#a93f49c33010054ce2d544ac279558d12',1,'ML::Tensor::end()'],['../classML_1_1Tensor.html#a4bb10048829edcaa043a5fa060820946',1,'ML::Tensor::end() const']]],
-  ['entropy_301',['ENTROPY',['../namespaceML.html#a823912afaa51f58a997564eadb6d9405ab55a4e6aef097bd8f786f4ddfd1de161',1,'ML::ENTROPY()'],['../namespaceML_1_1Metrics.html#ae2518306c3ea9ccda0bb2dd4b46dc373',1,'ML::Metrics::entropy()']]],
+  ['entropy_301',['entropy',['../namespaceML_1_1Metrics.html#ae2518306c3ea9ccda0bb2dd4b46dc373',1,'ML::Metrics::entropy()'],['../namespaceML.html#a823912afaa51f58a997564eadb6d9405ab55a4e6aef097bd8f786f4ddfd1de161',1,'ML::ENTROPY()']]],
   ['entropy_2ecuh_302',['entropy.cuh',['../entropy_8cuh.html',1,'']]],
   ['eps_303',['eps',['../group__paramsRPROJ.html#ga461753748a1c7492db77eddeedaaca21',1,'ML::paramsRPROJ::eps()'],['../structML_1_1OptimParams.html#a298dbbca9eaa11fded3e59ebaf089226',1,'ML::OptimParams::eps()'],['../structDbscan_1_1VertexDeg_1_1Pack.html#a362c2a1ccfa06c9ca9073a2adf394b7e',1,'Dbscan::VertexDeg::Pack::eps()']]],
   ['epsilon_304',['epsilon',['../structML_1_1SVM_1_1svmParameter.html#a0a24c4bd265d16dab3bfec57fb196e9c',1,'ML::SVM::svmParameter']]],
