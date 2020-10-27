@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['is_5fhead_296',['is_head',['../structrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a7d2ab1c6de906379274085997e559a4c',1,'rmm::mr::detail::arena::block']]]
+  ['ptr_295',['ptr',['../structrmm_1_1mr_1_1detail_1_1block__base.html#a72c4e6db5cfe26694b7592b362ce3f9f',1,'rmm::mr::detail::block_base']]]
 ];

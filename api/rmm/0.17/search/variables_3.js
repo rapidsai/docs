@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['pointer_297',['pointer',['../structrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a2badcd38cf91dcba47e13a172ac7028b',1,'rmm::mr::detail::arena::block']]],
-  ['ptr_298',['ptr',['../structrmm_1_1mr_1_1detail_1_1block__base.html#a72c4e6db5cfe26694b7592b362ce3f9f',1,'rmm::mr::detail::block_base']]]
+  ['remainder_296',['remainder',['../structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1split__block.html#ac9956a8ee3f95de52f2217532700a3eb',1,'rmm::mr::detail::stream_ordered_memory_resource::split_block']]],
+  ['reserved_5fsize_297',['reserved_size',['../classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#aa7ca12862921fb184159b304b7afae4c',1,'rmm::mr::detail::arena::global_arena']]]
 ];
