@@ -14,5 +14,7 @@ var searchData=
   ['cuda_5fdevice_5fid_26',['cuda_device_id',['../structrmm_1_1cuda__device__id.html',1,'rmm::cuda_device_id'],['../structrmm_1_1cuda__device__id.html#a35360d244654fbaa0f8458635436195d',1,'rmm::cuda_device_id::cuda_device_id()']]],
   ['cuda_5ferror_27',['cuda_error',['../structrmm_1_1cuda__error.html',1,'rmm']]],
   ['cuda_5fmemory_5fresource_28',['cuda_memory_resource',['../classrmm_1_1mr_1_1cuda__memory__resource.html',1,'rmm::mr']]],
-  ['current_5fdevice_29',['current_device',['../per__device__resource_8hpp.html#a79ef20080ffcff8be3df76160aa4f87e',1,'rmm::mr::detail']]]
+  ['cuda_5fstream_29',['cuda_stream',['../classrmm_1_1cuda__stream.html',1,'rmm::cuda_stream'],['../classrmm_1_1cuda__stream.html#ac932f583a6b7c4a25baaa3481ea18506',1,'rmm::cuda_stream::cuda_stream(cuda_stream &amp;&amp;)=default'],['../classrmm_1_1cuda__stream.html#a6c804b70001045b587624e7d1fbc0205',1,'rmm::cuda_stream::cuda_stream()']]],
+  ['cuda_5fstream_5fview_30',['cuda_stream_view',['../classrmm_1_1cuda__stream__view.html',1,'rmm::cuda_stream_view'],['../classrmm_1_1cuda__stream__view.html#a4ae6cba0b4329610296d2dc97a0eba91',1,'rmm::cuda_stream_view::cuda_stream_view()']]],
+  ['current_5fdevice_31',['current_device',['../per__device__resource_8hpp.html#a79ef20080ffcff8be3df76160aa4f87e',1,'rmm::mr::detail']]]
 ];
