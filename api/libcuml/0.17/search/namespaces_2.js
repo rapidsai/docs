@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['linalg_1201',['linalg',['../namespaceraft_1_1linalg.html',1,'raft']]],
-  ['raft_1202',['raft',['../namespaceraft.html',1,'']]]
+  ['sinks_1158',['sinks',['../namespacespdlog_1_1sinks.html',1,'spdlog']]],
+  ['spdlog_1159',['spdlog',['../namespacespdlog.html',1,'']]]
 ];
