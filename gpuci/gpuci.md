@@ -68,7 +68,7 @@ This is helpful when trying to troubleshoot issues with the build process and/or
 * To approve PR author for just the current PR, comment the command:
   * `ok to test`
 * To approve PR author for all PRs in the future, comment the command:
-  * `add to whitelist`
+  * `add to allowlist`
 
 ### Users
 
