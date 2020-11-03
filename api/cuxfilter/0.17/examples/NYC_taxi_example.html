@@ -362,7 +362,7 @@ div.rendered_html tbody tr:hover {
 <span></span><span class="kn">from</span> <span class="nn">cuxfilter</span> <span class="kn">import</span> <span class="n">charts</span>
 <span class="kn">import</span> <span class="nn">cuxfilter</span>
 <span class="kn">from</span> <span class="nn">bokeh</span> <span class="kn">import</span> <span class="n">palettes</span>
-<span class="kn">from</span> <span class="nn">cuxfilter.layouts</span> <span class="kn">import</span> <span class="n">double_feature</span>
+<span class="kn">from</span> <span class="nn">cuxfilter.layouts</span> <span class="kn">import</span> <span class="n">feature_and_double_base</span>
 
 <span class="kn">import</span> <span class="nn">cudf</span><span class="o">,</span> <span class="nn">dask_cudf</span>
 
@@ -406,22 +406,26 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">cudf_df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'./data/nyc_taxi.csv'</span><span class="p">,</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span></span><span class="n">cudf_df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_DIR</span> <span class="o">+</span> <span class="s1">'/nyc_taxi.csv'</span><span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">pyproj</span> <span class="kn">import</span> <span class="n">Proj</span><span class="p">,</span> <span class="n">transform</span>
+<span class="kn">from</span> <span class="nn">pyproj</span> <span class="kn">import</span> <span class="n">Proj</span><span class="p">,</span> <span class="n">Transformer</span>
 
-<span class="n">inProj</span> <span class="o">=</span> <span class="n">Proj</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="s1">'epsg:4326'</span><span class="p">)</span> <span class="c1"># Latitude and longitudes</span>
-<span class="n">outProj</span> <span class="o">=</span> <span class="n">Proj</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="s1">'epsg:3857'</span><span class="p">)</span> <span class="c1"># 2D projected points</span>
-
-<span class="n">cudf_df</span><span class="p">[</span><span class="s1">'dropoff_x'</span><span class="p">],</span> <span class="n">cudf_df</span><span class="p">[</span><span class="s1">'dropoff_y'</span><span class="p">]</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">inProj</span><span class="p">,</span> <span class="n">outProj</span><span class="p">,</span> <span class="n">cudf_df</span><span class="p">[</span><span class="s1">'dropoff_longitude'</span><span class="p">]</span><span class="o">.</span><span class="n">to_array</span><span class="p">(),</span> <span class="n">cudf_df</span><span class="p">[</span><span class="s1">'dropoff_latitude'</span><span class="p">]</span><span class="o">.</span><span class="n">to_array</span><span class="p">())</span> <span class="c1"># Apply transformation</span>
+<span class="c1"># Apply transformation</span>
+<span class="n">transform_4326_to_3857</span> <span class="o">=</span> <span class="n">Transformer</span><span class="o">.</span><span class="n">from_crs</span><span class="p">(</span><span class="s1">'epsg:4326'</span><span class="p">,</span> <span class="s1">'epsg:3857'</span><span class="p">)</span>
+<span class="n">cudf_df</span><span class="p">[</span><span class="s1">'dropoff_x'</span><span class="p">],</span> <span class="n">cudf_df</span><span class="p">[</span><span class="s1">'dropoff_y'</span><span class="p">]</span> <span class="o">=</span> <span class="n">transform_4326_to_3857</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span>
+                                                <span class="n">cudf_df</span><span class="p">[</span><span class="s1">'dropoff_latitude'</span><span class="p">]</span><span class="o">.</span><span class="n">to_array</span><span class="p">(),</span> <span class="n">cudf_df</span><span class="p">[</span><span class="s1">'dropoff_longitude'</span><span class="p">]</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
+                                            <span class="p">)</span>
 
 <span class="n">cudf_df</span> <span class="o">=</span> <span class="n">cudf_df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">'dropoff_latitude'</span><span class="p">,</span> <span class="s1">'dropoff_longitude'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">cudf_df</span> <span class="o">=</span> <span class="n">cudf_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
+<span class="c1"># Filter over Manhattan</span>
+<span class="n">cudf_df</span> <span class="o">=</span> <span class="n">cudf_df</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">cudf_df</span><span class="o">.</span><span class="n">dropoff_x</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">8239910.23</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cudf_df</span><span class="o">.</span><span class="n">dropoff_x</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">8229529.24</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cudf_df</span><span class="o">.</span><span class="n">dropoff_y</span> <span class="o">&gt;</span> <span class="mf">4968481.34</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cudf_df</span><span class="o">.</span><span class="n">dropoff_y</span> <span class="o">&lt;</span> <span class="mf">4983152.92</span><span class="p">)</span>
+<span class="p">]</span>
 
-<span class="n">cudf_df</span> <span class="o">=</span> <span class="n">cudf_df</span><span class="p">[(</span><span class="n">cudf_df</span><span class="o">.</span><span class="n">dropoff_x</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">8239910.23</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cudf_df</span><span class="o">.</span><span class="n">dropoff_x</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">8229529.24</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cudf_df</span><span class="o">.</span><span class="n">dropoff_y</span> <span class="o">&gt;</span> <span class="mf">4968481.34</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cudf_df</span><span class="o">.</span><span class="n">dropoff_y</span> <span class="o">&lt;</span> <span class="mf">4983152.92</span><span class="p">)]</span> <span class="c1"># Filter over Manhattan</span>
-
-
+<span class="n">cudf_df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">cudf_df</span><span class="o">.</span><span class="n">tpep_pickup_datetime</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">cudf_df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">cudf_df</span><span class="o">.</span><span class="n">tpep_dropoff_datetime</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">cudf_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -442,7 +446,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Read-the-dataset">
 <h2>Read the dataset<a class="headerlink" href="#Read-the-dataset" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -454,7 +458,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Define-charts">
 <h2>Define charts<a class="headerlink" href="#Define-charts" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -465,7 +469,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>Uncomment the below lines and replace MAPBOX_TOKEN with mapbox token string if you want to use mapbox map-tiles. Can be created for free here -<a class="reference external" href="https://www.mapbox.com/help/define-access-token/">https://www.mapbox.com/help/define-access-token/</a></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -475,7 +479,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -485,6 +489,8 @@ div.rendered_html tbody tr:hover {
                          <span class="n">tile_provider</span><span class="o">=</span><span class="n">tile_provider</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">8239910.23</span><span class="p">,</span><span class="o">-</span><span class="mf">8229529.24</span><span class="p">),</span> <span class="n">y_range</span><span class="o">=</span><span class="p">(</span><span class="mf">4968481.34</span><span class="p">,</span><span class="mf">4983152.92</span><span class="p">))</span>
 
 <span class="n">chart2</span> <span class="o">=</span> <span class="n">charts</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="s1">'passenger_count'</span><span class="p">,</span> <span class="n">data_points</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">chart3</span> <span class="o">=</span> <span class="n">cuxfilter</span><span class="o">.</span><span class="n">charts</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="s1">'tpep_pickup_datetime'</span><span class="p">)</span>
+<span class="n">chart4</span> <span class="o">=</span> <span class="n">cuxfilter</span><span class="o">.</span><span class="n">charts</span><span class="o">.</span><span class="n">date_range_slider</span><span class="p">(</span><span class="s1">'tpep_dropoff_datetime'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -496,12 +502,12 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">d</span> <span class="o">=</span> <span class="n">cux_df</span><span class="o">.</span><span class="n">dashboard</span><span class="p">([</span><span class="n">chart1</span><span class="p">,</span> <span class="n">chart2</span><span class="p">],</span> <span class="n">layout</span><span class="o">=</span><span class="n">double_feature</span><span class="p">,</span> <span class="n">theme</span><span class="o">=</span><span class="n">cuxfilter</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">rapids</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span> <span class="s1">'NYC TAXI DATASET'</span><span class="p">)</span>
+<span></span><span class="n">d</span> <span class="o">=</span> <span class="n">cux_df</span><span class="o">.</span><span class="n">dashboard</span><span class="p">([</span><span class="n">chart1</span><span class="p">,</span> <span class="n">chart2</span><span class="p">,</span> <span class="n">chart3</span><span class="p">,</span> <span class="n">chart4</span><span class="p">],</span> <span class="n">layout</span><span class="o">=</span><span class="n">feature_and_double_base</span><span class="p">,</span> <span class="n">theme</span><span class="o">=</span><span class="n">cuxfilter</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">rapids</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span> <span class="s1">'NYC TAXI DATASET'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -509,48 +515,6 @@ div.rendered_html tbody tr:hover {
 <span class="n">d</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="admonition warning">
-<p>Data type cannot be displayed:</p>
-</div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div id="1078">
-<div class="bk-root" data-root-id="1078" id="71268035-1df9-43b5-b533-ec8df681c364"></div>
-</div>
-<script type="application/javascript">(function(root) {
-  function embed_document(root) {
-  var docs_json = {"9771b819-2b29-4d5e-b1e8-bea27cab7b9b":{"roots":{"references":[{"attributes":{"margin":[5,5,5,5],"name":"HTML00027"},"id":"1080","type":"panel.models.markup.HTML"},{"attributes":{"children":[{"id":"1079"},{"id":"1080"}],"margin":[0,0,0,0],"min_width":800,"name":"Column00031","width":800},"id":"1078","type":"Column"},{"attributes":{"client_comm_id":"3ad34a53aff04189a5669465f33c9d03","comm_id":"e3b01fd284fa48f9b6f3a1becafdf149","plot_id":"1078"},"id":"1081","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["markdown"],"margin":[5,5,5,5],"name":"Markdown00029","text":"&lt;h4&gt;cuxfilter DashBoard&lt;/h4&gt;\n&lt;div class=&quot;codehilite&quot;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Markdown&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;&lt;/span&gt;\n&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chart1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sizing_mode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;scale_both&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;900&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;&lt;/span&gt;\n&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bokeh&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Figure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;&lt;/span&gt;\n&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chart2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sizing_mode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;scale_both&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;900&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;&lt;/span&gt;\n&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bokeh&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Figure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;&lt;/span&gt;\n&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RangeSlider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sizing_mode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;scale_width&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;step&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;900&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;&lt;/span&gt;\n&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;widgets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;&lt;/span&gt;\n&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;css_classes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;&amp;#39;non-handle-temp&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sizing_mode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;scale_both&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;&lt;/span&gt;\n&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FloatSlider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bar_color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;#5742f5&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11075631&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Data Points selected&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sizing_mode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;scale_both&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11075631&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;280&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;&lt;/span&gt;\n&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;"},"id":"1079","type":"panel.models.markup.HTML"}],"root_ids":["1078","1081"]},"title":"Bokeh Application","version":"2.1.1"}};
-  var render_items = [{"docid":"9771b819-2b29-4d5e-b1e8-bea27cab7b9b","root_ids":["1078"],"roots":{"1078":"71268035-1df9-43b5-b533-ec8df681c364"}}];
-  root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
-  }
-if (root.Bokeh !== undefined) {
-    embed_document(root);
-  } else {
-    var attempts = 0;
-    var timer = setInterval(function(root) {
-      if (root.Bokeh !== undefined) {
-        clearInterval(timer);
-        embed_document(root);
-      } else if (document.readyState == "complete") {
-        attempts++;
-        if (attempts > 100) {
-          clearInterval(timer);
-          console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
-        }
-      }
-    }, 10, root)
-  }
-})(window);</script></div>
 </div>
 </div>
 <div class="section" id="Starting-the-dashboard">
@@ -583,22 +547,14 @@ if (root.Bokeh !== undefined) {
 </div>
 <div class="section" id="Export-the-queried-data-into-a-dataframe">
 <h2>Export the queried data into a dataframe<a class="headerlink" href="#Export-the-queried-data-into-a-dataframe" title="Permalink to this headline">¶</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">queried_df</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">export</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-no querying done, returning original dataframe
-</pre></div></div>
 </div>
 </div>
 </div>
