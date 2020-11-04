@@ -8,5 +8,5 @@ var searchData=
   ['memory_5ftype_1590',['memory_type',['../namespaceML.html#a2ea5c03024c5683984f17d889421f40c',1,'ML']]],
   ['merge_5fseries_1591',['merge_series',['../namespaceML.html#aeb8f25b52e0576997c85d1488367ab76',1,'ML::merge_series(const raft::handle_t &amp;handle, const float *const *hd_in, const int *d_id_to_pos, const int *d_id_to_sub, float *d_out, int batch_size, int n_sub, int n_obs)'],['../namespaceML.html#a03e79871ae0209450671f11bcd8965fe',1,'ML::merge_series(const raft::handle_t &amp;handle, const double *const *hd_in, const int *d_id_to_pos, const int *d_id_to_sub, double *d_out, int batch_size, int n_sub, int n_obs)']]],
   ['multiply_5fadd_1592',['multiply_add',['../structMLCommon_1_1LinAlg_1_1ThreadDiffSquaredAdd.html#a102e9cd085c5be0466bba2138572438c',1,'MLCommon::LinAlg::ThreadDiffSquaredAdd::multiply_add()'],['../structMLCommon_1_1LinAlg_1_1ThreadL1NormAdd.html#aafd3b839501dac1633e76e8adc52cf6c',1,'MLCommon::LinAlg::ThreadL1NormAdd::multiply_add()']]],
-  ['mutualinfoscore_1593',['mutualInfoScore',['../namespaceML_1_1Metrics.html#a880c10a4e6d07e2106e0b6fa4ac1bb8f',1,'ML::Metrics']]]
+  ['mutual_5finfo_5fscore_1593',['mutual_info_score',['../namespaceML_1_1Metrics.html#a247051bf2983d4b52944db67c1e38f98',1,'ML::Metrics']]]
 ];

@@ -2,7 +2,7 @@ var searchData=
 [
   ['r2_5fscore_2ecu_1386',['r2_score.cu',['../r2__score_8cu.html',1,'']]],
   ['rand_5findex_2ecu_1387',['rand_index.cu',['../rand__index_8cu.html',1,'']]],
-  ['randindex_2ecuh_1388',['randIndex.cuh',['../randIndex_8cuh.html',1,'']]],
+  ['rand_5findex_2ecuh_1388',['rand_index.cuh',['../rand__index_8cuh.html',1,'']]],
   ['random_5falgo_2ecuh_1389',['random_algo.cuh',['../random__algo_8cuh.html',1,'']]],
   ['randomforest_2ecu_1390',['randomforest.cu',['../randomforest_8cu.html',1,'']]],
   ['randomforest_2ehpp_1391',['randomforest.hpp',['../randomforest_8hpp.html',1,'']]],

@@ -22,6 +22,6 @@ var searchData=
   ['ml_5fcuda_5futils_2eh_1350',['ml_cuda_utils.h',['../ml__cuda__utils_8h.html',1,'']]],
   ['ml_5fmg_5futils_2ecuh_1351',['ml_mg_utils.cuh',['../ml__mg__utils_8cuh.html',1,'']]],
   ['mutual_5finfo_5fscore_2ecu_1352',['mutual_info_score.cu',['../mutual__info__score_8cu.html',1,'']]],
-  ['mutualinfoscore_2ecuh_1353',['mutualInfoScore.cuh',['../mutualInfoScore_8cuh.html',1,'']]],
+  ['mutual_5finfo_5fscore_2ecuh_1353',['mutual_info_score.cuh',['../mutual__info__score_8cuh.html',1,'']]],
   ['mvg_2ecuh_1354',['mvg.cuh',['../mvg_8cuh.html',1,'']]]
 ];

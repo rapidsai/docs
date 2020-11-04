@@ -2,7 +2,7 @@ var searchData=
 [
   ['pack_2eh_1364',['pack.h',['../adjgraph_2pack_8h.html',1,'(Global Namespace)'],['../vertexdeg_2pack_8h.html',1,'(Global Namespace)']]],
   ['pairwise_5fdistance_2ecu_1365',['pairwise_distance.cu',['../pairwise__distance_8cu.html',1,'']]],
-  ['pairwisedistance_2ecuh_1366',['pairwiseDistance.cuh',['../pairwiseDistance_8cuh.html',1,'']]],
+  ['pairwise_5fdistance_2ecuh_1366',['pairwise_distance.cuh',['../pairwise__distance_8cuh.html',1,'']]],
   ['params_2ehpp_1367',['params.hpp',['../decomposition_2params_8hpp.html',1,'(Global Namespace)'],['../solvers_2params_8hpp.html',1,'(Global Namespace)']]],
   ['pca_2ecu_1368',['pca.cu',['../pca_8cu.html',1,'']]],
   ['pca_2ecuh_1369',['pca.cuh',['../pca_8cuh.html',1,'']]],

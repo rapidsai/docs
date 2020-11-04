@@ -2,7 +2,7 @@ var searchData=
 [
   ['accuracy_5fscore_2ecu_1172',['accuracy_score.cu',['../accuracy__score_8cu.html',1,'']]],
   ['adjusted_5frand_5findex_2ecu_1173',['adjusted_rand_index.cu',['../adjusted__rand__index_8cu.html',1,'']]],
-  ['adjustedrandindex_2ecuh_1174',['adjustedRandIndex.cuh',['../adjustedRandIndex_8cuh.html',1,'']]],
+  ['adjusted_5frand_5findex_2ecuh_1174',['adjusted_rand_index.cuh',['../adjusted__rand__index_8cuh.html',1,'']]],
   ['algo_2ecuh_1175',['algo.cuh',['../dbscan_2adjgraph_2algo_8cuh.html',1,'(Global Namespace)'],['../dbscan_2vertexdeg_2algo_8cuh.html',1,'(Global Namespace)'],['../umap_2knn__graph_2algo_8cuh.html',1,'(Global Namespace)'],['../umap_2simpl__set__embed_2algo_8cuh.html',1,'(Global Namespace)']]],
   ['algo1_2ecuh_1176',['algo1.cuh',['../algo1_8cuh.html',1,'']]],
   ['algo_5fhelper_2eh_1177',['algo_helper.h',['../algo__helper_8h.html',1,'']]],

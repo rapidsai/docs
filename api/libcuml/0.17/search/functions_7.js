@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['homogeneityscore_1565',['homogeneityScore',['../namespaceML_1_1Metrics.html#a76bcbaeff442b14964253ce54f22fe43',1,'ML::Metrics']]]
+  ['homogeneity_5fscore_1565',['homogeneity_score',['../namespaceML_1_1Metrics.html#a171fca93c119c01a2aeaede8cdbb2db8',1,'ML::Metrics']]]
 ];

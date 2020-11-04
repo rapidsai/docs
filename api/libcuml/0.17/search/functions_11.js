@@ -2,8 +2,8 @@ var searchData=
 [
   ['r_1642',['r',['../structML_1_1ARIMAOrder.html#a39f7d68579f2290043745989d93a30e4',1,'ML::ARIMAOrder']]],
   ['r2_5fscore_5fpy_1643',['r2_score_py',['../namespaceML_1_1Metrics.html#afda48449d5ba22b85291641b960e33d3',1,'ML::Metrics::r2_score_py(const raft::handle_t &amp;handle, float *y, float *y_hat, int n)'],['../namespaceML_1_1Metrics.html#a25ff0c42364beed2e187ea8dd17e86e3',1,'ML::Metrics::r2_score_py(const raft::handle_t &amp;handle, double *y, double *y_hat, int n)']]],
-  ['rand_5fmat_1644',['rand_mat',['../group__paramsRPROJ.html#gac557b4076085569cf24031922b4b6c89',1,'ML::rand_mat']]],
-  ['randindex_1645',['randIndex',['../namespaceML_1_1Metrics.html#a67165c753f2a9ac382f8093e39925eec',1,'ML::Metrics']]],
+  ['rand_5findex_1644',['rand_index',['../namespaceML_1_1Metrics.html#a7da40f1a166a2ad609fc99ff691c4ccd',1,'ML::Metrics']]],
+  ['rand_5fmat_1645',['rand_mat',['../group__paramsRPROJ.html#gac557b4076085569cf24031922b4b6c89',1,'ML::rand_mat']]],
   ['randomforestmetadata_1646',['RandomForestMetaData',['../structML_1_1RandomForestMetaData.html#a09bbb996a944611f40e24c2d754ee8ff',1,'ML::RandomForestMetaData']]],
   ['rd_1647',['rd',['../structML_1_1ARIMAOrder.html#a596446205bf93367c288d57e5e4ca677',1,'ML::ARIMAOrder']]],
   ['regdloss_1648',['regDLoss',['../namespaceML_1_1Solver.html#ab0ea23c3a02dc38694c5eff78a179d8a',1,'ML::Solver']]],

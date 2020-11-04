@@ -10,7 +10,7 @@ var searchData=
   ['sign_5fflip_5fmg_2ecu_1414',['sign_flip_mg.cu',['../sign__flip__mg_8cu.html',1,'']]],
   ['sign_5fflip_5fmg_2ehpp_1415',['sign_flip_mg.hpp',['../sign__flip__mg_8hpp.html',1,'']]],
   ['silhouette_5fscore_2ecu_1416',['silhouette_score.cu',['../silhouette__score_8cu.html',1,'']]],
-  ['silhouettescore_2ecuh_1417',['silhouetteScore.cuh',['../silhouetteScore_8cuh.html',1,'']]],
+  ['silhouette_5fscore_2ecuh_1417',['silhouette_score.cuh',['../silhouette__score_8cuh.html',1,'']]],
   ['simple_5fmat_2ecuh_1418',['simple_mat.cuh',['../simple__mat_8cuh.html',1,'']]],
   ['smo_5fsets_2ecuh_1419',['smo_sets.cuh',['../smo__sets_8cuh.html',1,'']]],
   ['smoblocksolve_2ecuh_1420',['smoblocksolve.cuh',['../smoblocksolve_8cuh.html',1,'']]],

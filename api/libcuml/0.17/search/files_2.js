@@ -11,7 +11,7 @@ var searchData=
   ['common_5fhelper_2ecuh_1201',['common_helper.cuh',['../common__helper_8cuh.html',1,'']]],
   ['common_5fkernel_2ecuh_1202',['common_kernel.cuh',['../common__kernel_8cuh.html',1,'']]],
   ['completeness_5fscore_2ecu_1203',['completeness_score.cu',['../completeness__score_8cu.html',1,'']]],
-  ['completenessscore_2ecuh_1204',['completenessScore.cuh',['../completenessScore_8cuh.html',1,'']]],
+  ['completeness_5fscore_2ecuh_1204',['completeness_score.cuh',['../completeness__score_8cuh.html',1,'']]],
   ['contingencymatrix_2ecuh_1205',['contingencyMatrix.cuh',['../contingencyMatrix_8cuh.html',1,'']]],
   ['contractions_2ecuh_1206',['contractions.cuh',['../contractions_8cuh.html',1,'']]],
   ['coo_2ecuh_1207',['coo.cuh',['../coo_8cuh.html',1,'']]],

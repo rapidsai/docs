@@ -6,7 +6,7 @@ var searchData=
   ['kernelparams_2eh_1296',['kernelparams.h',['../kernelparams_8h.html',1,'']]],
   ['kernels_2ecuh_1297',['kernels.cuh',['../kernels_8cuh.html',1,'']]],
   ['kl_5fdivergence_2ecu_1298',['kl_divergence.cu',['../kl__divergence_8cu.html',1,'']]],
-  ['kldivergence_2ecuh_1299',['klDivergence.cuh',['../klDivergence_8cuh.html',1,'']]],
+  ['kl_5fdivergence_2ecuh_1299',['kl_divergence.cuh',['../kl__divergence_8cuh.html',1,'']]],
   ['kmeans_2ecu_1300',['kmeans.cu',['../kmeans_8cu.html',1,'']]],
   ['kmeans_2ehpp_1301',['kmeans.hpp',['../kmeans_8hpp.html',1,'']]],
   ['kmeans_5fmg_2ecu_1302',['kmeans_mg.cu',['../kmeans__mg_8cu.html',1,'']]],
