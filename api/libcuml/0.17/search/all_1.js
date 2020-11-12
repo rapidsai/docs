@@ -35,5 +35,7 @@ var searchData=
   ['auto_5farima_2ecu_41',['auto_arima.cu',['../auto__arima_8cu.html',1,'']]],
   ['auto_5farima_2ecuh_42',['auto_arima.cuh',['../auto__arima_8cuh.html',1,'']]],
   ['auto_5farima_2eh_43',['auto_arima.h',['../auto__arima_8h.html',1,'']]],
-  ['avg_44',['AVG',['../namespaceML_1_1fil.html#a47faec5c2359b42a308e0d55c195aca9aa3ec82271336802c47a80e6cb8801d83',1,'ML::fil']]]
+  ['avg_44',['AVG',['../namespaceML_1_1fil.html#a47faec5c2359b42a308e0d55c195aca9aa3ec82271336802c47a80e6cb8801d83',1,'ML::fil']]],
+  ['avg_5fclass_45',['AVG_CLASS',['../namespaceML_1_1fil.html#a47faec5c2359b42a308e0d55c195aca9a0a272ec28dae189ecb13c931da711e71',1,'ML::fil']]],
+  ['avg_5fsigmoid_5fclass_46',['AVG_SIGMOID_CLASS',['../namespaceML_1_1fil.html#a47faec5c2359b42a308e0d55c195aca9a82c253dc676228ec5b69df89e36c1150',1,'ML::fil']]]
 ];
