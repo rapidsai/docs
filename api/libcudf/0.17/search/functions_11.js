@@ -7,7 +7,7 @@ var searchData=
   ['read_5forc_2148',['read_orc',['../group__io__readers.html#ga48fe4888cec77a5428022d3dc792ddd5',1,'cudf::io']]],
   ['read_5forc_5fstatistics_2149',['read_orc_statistics',['../group__io__readers.html#ga7b29fd8706fe1f4592a73a52742a3652',1,'cudf::io']]],
   ['read_5fparquet_2150',['read_parquet',['../group__io__readers.html#ga539a82d720387747800c360ba68d748f',1,'cudf::io']]],
-  ['reduce_2151',['reduce',['../group__aggregation__reduction.html#ga382c3ca1ce3191138795a5c0c4619450',1,'cudf']]],
+  ['reduce_2151',['reduce',['../group__aggregation__reduction.html#gae4a6e7b821f22ac479d15e8e394fc640',1,'cudf']]],
   ['relational_5fcompare_2152',['relational_compare',['../namespacecudf.html#ab89f4b229384ea60a02872433e68571f',1,'cudf']]],
   ['release_2153',['release',['../classcudf_1_1column.html#addbbc491f4e77906b49ecbebd20cdadd',1,'cudf::column::release()'],['../classcudf_1_1table.html#a1c06b52f77c29d3951c29467933b9869',1,'cudf::table::release()'],['../classcudf_1_1test_1_1detail_1_1column__wrapper.html#aa4b41ca375eaad8efcdf91978201b607',1,'cudf::test::detail::column_wrapper::release()']]],
   ['remove_5fkeys_2154',['remove_keys',['../group__dictionary__update.html#ga744d304901a436fc773050addfb92add',1,'cudf::dictionary']]],
