@@ -58,7 +58,7 @@ var searchData=
   ['duration_5fnanoseconds_285',['DURATION_NANOSECONDS',['../group__utility__types.html#ggadf077607da617d1dadcc5417e2783539a628d57b49cb66c1d14ce8db33be558ce',1,'cudf']]],
   ['duration_5fns_286',['duration_ns',['../group__timestamp__classes.html#ga77a409a91199765a01f236d5bb0a147c',1,'cudf']]],
   ['duration_5fs_287',['duration_s',['../group__timestamp__classes.html#gad06e89f900cf27a97521739db81348c2',1,'cudf']]],
-  ['duration_5fscalar_288',['duration_scalar',['../structcudf_1_1duration__scalar.html',1,'cudf::duration_scalar&lt; T &gt;'],['../structcudf_1_1duration__scalar.html#a2e9013562ae50f4134a821a29721d5b8',1,'cudf::duration_scalar::duration_scalar()']]],
+  ['duration_5fscalar_288',['duration_scalar',['../structcudf_1_1duration__scalar.html',1,'cudf::duration_scalar&lt; T &gt;'],['../structcudf_1_1duration__scalar.html#a2d25d48c1604efb05b4d295f6c78639f',1,'cudf::duration_scalar::duration_scalar()']]],
   ['duration_5fscalar_5fdevice_5fview_289',['duration_scalar_device_view',['../classcudf_1_1duration__scalar__device__view.html',1,'cudf']]],
   ['duration_5fseconds_290',['DURATION_SECONDS',['../group__utility__types.html#ggadf077607da617d1dadcc5417e2783539a77029488e6452eca1a908121589d7fd9',1,'cudf']]],
   ['duration_5fus_291',['duration_us',['../group__timestamp__classes.html#gac29fba3aec9576b047dd4315fd2e7fa6',1,'cudf']]],

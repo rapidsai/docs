@@ -9,7 +9,7 @@ var searchData=
   ['bit_2ehpp_65',['bit.hpp',['../bit_8hpp.html',1,'']]],
   ['bit_5fis_5fset_66',['bit_is_set',['../group__utility__bitmask.html#gaccd9af00974def8f416225ad650d33c9',1,'cudf']]],
   ['bitmask_5fallocation_5fsize_5fbytes_67',['bitmask_allocation_size_bytes',['../group__column__nullmask.html#ga3c26b8cbca80321602bc3f39ab6cce8d',1,'cudf']]],
-  ['bitmask_5fand_68',['bitmask_and',['../group__column__nullmask.html#ga266e1c2bed1b755fd6e3ca4c2bd1ed8b',1,'cudf']]],
+  ['bitmask_5fand_68',['bitmask_and',['../group__column__nullmask.html#gad02d632cd9889f9ad12b706b4221f81f',1,'cudf']]],
   ['bitwise_5fand_69',['BITWISE_AND',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcaaa5f2eafabf8fa18cbb708c657f37245',1,'cudf']]],
   ['bitwise_5for_70',['BITWISE_OR',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca0d89cfe1f2f7f0c2deb3d35455783ab9',1,'cudf']]],
   ['bitwise_5fxor_71',['BITWISE_XOR',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca6d7cca7c0f0f278c56131a25e77c4a5c',1,'cudf']]],
