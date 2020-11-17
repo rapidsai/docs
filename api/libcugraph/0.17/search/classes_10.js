@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['thrust_5ftuple_5fsize_5for_5fone_342',['thrust_tuple_size_or_one',['../structcugraph_1_1experimental_1_1thrust__tuple__size__or__one.html',1,'cugraph::experimental']]],
-  ['thrust_5ftuple_5fsize_5for_5fone_3c_20thrust_3a_3atuple_3c_20ts_2e_2e_2e_20_3e_20_3e_343',['thrust_tuple_size_or_one&lt; thrust::tuple&lt; Ts... &gt; &gt;',['../structcugraph_1_1experimental_1_1thrust__tuple__size__or__one_3_01thrust_1_1tuple_3_01Ts_8_8_8_01_4_01_4.html',1,'cugraph::experimental']]]
+  ['update_5ftuple_5ffrom_5fvector_5fof_5ftuple_5fscalar_5felements_5fimpl_327',['update_tuple_from_vector_of_tuple_scalar_elements_impl',['../structcugraph_1_1experimental_1_1detail_1_1update__tuple__from__vector__of__tuple__scalar__elements__impl.html',1,'cugraph::experimental::detail']]],
+  ['update_5ftuple_5ffrom_5fvector_5fof_5ftuple_5fscalar_5felements_5fimpl_3c_20tupletype_2c_20i_2c_20i_20_3e_328',['update_tuple_from_vector_of_tuple_scalar_elements_impl&lt; TupleType, I, I &gt;',['../structcugraph_1_1experimental_1_1detail_1_1update__tuple__from__vector__of__tuple__scalar__elemea84ffc5f863c5ef4b2520a3681b825c2.html',1,'cugraph::experimental::detail']]],
+  ['update_5fvector_5fof_5ftuple_5fscalar_5felements_5ffrom_5ftuple_5fimpl_329',['update_vector_of_tuple_scalar_elements_from_tuple_impl',['../structcugraph_1_1experimental_1_1detail_1_1update__vector__of__tuple__scalar__elements__from__tuple__impl.html',1,'cugraph::experimental::detail']]],
+  ['update_5fvector_5fof_5ftuple_5fscalar_5felements_5ffrom_5ftuple_5fimpl_3c_20tupletype_2c_20i_2c_20i_20_3e_330',['update_vector_of_tuple_scalar_elements_from_tuple_impl&lt; TupleType, I, I &gt;',['../structcugraph_1_1experimental_1_1detail_1_1update__vector__of__tuple__scalar__elements__from__tu7242d85cdf051837f0217fe5dbd84837.html',1,'cugraph::experimental::detail']]]
 ];

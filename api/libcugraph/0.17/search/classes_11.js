@@ -1,7 +1,18 @@
 var searchData=
 [
-  ['update_5ftuple_5ffrom_5fvector_5fof_5ftuple_5fscalar_5felements_5fimpl_344',['update_tuple_from_vector_of_tuple_scalar_elements_impl',['../structcugraph_1_1experimental_1_1detail_1_1update__tuple__from__vector__of__tuple__scalar__elements__impl.html',1,'cugraph::experimental::detail']]],
-  ['update_5ftuple_5ffrom_5fvector_5fof_5ftuple_5fscalar_5felements_5fimpl_3c_20tupletype_2c_20i_2c_20i_20_3e_345',['update_tuple_from_vector_of_tuple_scalar_elements_impl&lt; TupleType, I, I &gt;',['../structcugraph_1_1experimental_1_1detail_1_1update__tuple__from__vector__of__tuple__scalar__elemea84ffc5f863c5ef4b2520a3681b825c2.html',1,'cugraph::experimental::detail']]],
-  ['update_5fvector_5fof_5ftuple_5fscalar_5felements_5ffrom_5ftuple_5fimpl_346',['update_vector_of_tuple_scalar_elements_from_tuple_impl',['../structcugraph_1_1experimental_1_1detail_1_1update__vector__of__tuple__scalar__elements__from__tuple__impl.html',1,'cugraph::experimental::detail']]],
-  ['update_5fvector_5fof_5ftuple_5fscalar_5felements_5ffrom_5ftuple_5fimpl_3c_20tupletype_2c_20i_2c_20i_20_3e_347',['update_vector_of_tuple_scalar_elements_from_tuple_impl&lt; TupleType, I, I &gt;',['../structcugraph_1_1experimental_1_1detail_1_1update__vector__of__tuple__scalar__elements__from__tu7242d85cdf051837f0217fe5dbd84837.html',1,'cugraph::experimental::detail']]]
+  ['vec_5ft_331',['vec_t',['../structcugraph_1_1detail_1_1traversal_1_1vec__t.html',1,'cugraph::detail::traversal']]],
+  ['vec_5ft_3c_20double_20_3e_332',['vec_t&lt; double &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01double_01_4.html',1,'cugraph::detail::traversal']]],
+  ['vec_5ft_3c_20float_20_3e_333',['vec_t&lt; float &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01float_01_4.html',1,'cugraph::detail::traversal']]],
+  ['vec_5ft_3c_20int_20_3e_334',['vec_t&lt; int &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01int_01_4.html',1,'cugraph::detail::traversal']]],
+  ['vec_5ft_3c_20long_20_3e_335',['vec_t&lt; long &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01long_01_4.html',1,'cugraph::detail::traversal']]],
+  ['vec_5ft_3c_20long_20long_20int_20_3e_336',['vec_t&lt; long long int &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01long_01long_01int_01_4.html',1,'cugraph::detail::traversal']]],
+  ['vec_5ft_3c_20unsigned_20_3e_337',['vec_t&lt; unsigned &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01unsigned_01_4.html',1,'cugraph::detail::traversal']]],
+  ['vertex_5fdevice_5fview_5ft_338',['vertex_device_view_t',['../classcugraph_1_1experimental_1_1detail_1_1compute__partition__t_1_1vertex__device__view__t.html',1,'cugraph::experimental::detail::compute_partition_t']]],
+  ['vertex_5fpartition_5fdevice_5fbase_5ft_339',['vertex_partition_device_base_t',['../classcugraph_1_1experimental_1_1vertex__partition__device__base__t.html',1,'cugraph::experimental']]],
+  ['vertex_5fpartition_5fdevice_5fbase_5ft_3c_20graphviewtype_3a_3avertex_5ftype_20_3e_340',['vertex_partition_device_base_t&lt; GraphViewType::vertex_type &gt;',['../classcugraph_1_1experimental_1_1vertex__partition__device__base__t.html',1,'cugraph::experimental']]],
+  ['vertex_5fpartition_5fdevice_5ft_341',['vertex_partition_device_t',['../classcugraph_1_1experimental_1_1vertex__partition__device__t.html',1,'cugraph::experimental']]],
+  ['vertex_5fpartition_5fdevice_5ft_3c_20graphviewtype_2c_20std_3a_3aenable_5fif_5ft_3c_20graphviewtype_3a_3ais_5fmulti_5fgpu_20_3e_20_3e_342',['vertex_partition_device_t&lt; GraphViewType, std::enable_if_t&lt; GraphViewType::is_multi_gpu &gt; &gt;',['../classcugraph_1_1experimental_1_1vertex__partition__device__t_3_01GraphViewType_00_01std_1_1enabl761f0a2941f615b60a4eaab69e1ea5d7.html',1,'cugraph::experimental']]],
+  ['vertex_5fpartition_5fdevice_5ft_3c_20graphviewtype_2c_20std_3a_3aenable_5fif_5ft_3c_21graphviewtype_3a_3ais_5fmulti_5fgpu_20_3e_20_3e_343',['vertex_partition_device_t&lt; GraphViewType, std::enable_if_t&lt;!GraphViewType::is_multi_gpu &gt; &gt;',['../classcugraph_1_1experimental_1_1vertex__partition__device__t_3_01GraphViewType_00_01std_1_1enabl17c59f6a9cea06e2bbf01ef51d7847d7.html',1,'cugraph::experimental']]],
+  ['vertexbinner_344',['VertexBinner',['../classcugraph_1_1mg_1_1detail_1_1VertexBinner.html',1,'cugraph::mg::detail']]],
+  ['vertexfrontier_345',['VertexFrontier',['../classcugraph_1_1experimental_1_1VertexFrontier.html',1,'cugraph::experimental']]]
 ];

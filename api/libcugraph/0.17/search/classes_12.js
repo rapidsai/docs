@@ -1,18 +1,8 @@
 var searchData=
 [
-  ['vec_5ft_348',['vec_t',['../structcugraph_1_1detail_1_1traversal_1_1vec__t.html',1,'cugraph::detail::traversal']]],
-  ['vec_5ft_3c_20double_20_3e_349',['vec_t&lt; double &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01double_01_4.html',1,'cugraph::detail::traversal']]],
-  ['vec_5ft_3c_20float_20_3e_350',['vec_t&lt; float &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01float_01_4.html',1,'cugraph::detail::traversal']]],
-  ['vec_5ft_3c_20int_20_3e_351',['vec_t&lt; int &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01int_01_4.html',1,'cugraph::detail::traversal']]],
-  ['vec_5ft_3c_20long_20_3e_352',['vec_t&lt; long &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01long_01_4.html',1,'cugraph::detail::traversal']]],
-  ['vec_5ft_3c_20long_20long_20int_20_3e_353',['vec_t&lt; long long int &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01long_01long_01int_01_4.html',1,'cugraph::detail::traversal']]],
-  ['vec_5ft_3c_20unsigned_20_3e_354',['vec_t&lt; unsigned &gt;',['../structcugraph_1_1detail_1_1traversal_1_1vec__t_3_01unsigned_01_4.html',1,'cugraph::detail::traversal']]],
-  ['vertex_5fdevice_5fview_5ft_355',['vertex_device_view_t',['../classcugraph_1_1experimental_1_1detail_1_1compute__partition__t_1_1vertex__device__view__t.html',1,'cugraph::experimental::detail::compute_partition_t']]],
-  ['vertex_5fpartition_5fdevice_5fbase_5ft_356',['vertex_partition_device_base_t',['../classcugraph_1_1experimental_1_1vertex__partition__device__base__t.html',1,'cugraph::experimental']]],
-  ['vertex_5fpartition_5fdevice_5fbase_5ft_3c_20graphviewtype_3a_3avertex_5ftype_20_3e_357',['vertex_partition_device_base_t&lt; GraphViewType::vertex_type &gt;',['../classcugraph_1_1experimental_1_1vertex__partition__device__base__t.html',1,'cugraph::experimental']]],
-  ['vertex_5fpartition_5fdevice_5ft_358',['vertex_partition_device_t',['../classcugraph_1_1experimental_1_1vertex__partition__device__t.html',1,'cugraph::experimental']]],
-  ['vertex_5fpartition_5fdevice_5ft_3c_20graphviewtype_2c_20std_3a_3aenable_5fif_5ft_3c_20graphviewtype_3a_3ais_5fmulti_5fgpu_20_3e_20_3e_359',['vertex_partition_device_t&lt; GraphViewType, std::enable_if_t&lt; GraphViewType::is_multi_gpu &gt; &gt;',['../classcugraph_1_1experimental_1_1vertex__partition__device__t_3_01GraphViewType_00_01std_1_1enabl761f0a2941f615b60a4eaab69e1ea5d7.html',1,'cugraph::experimental']]],
-  ['vertex_5fpartition_5fdevice_5ft_3c_20graphviewtype_2c_20std_3a_3aenable_5fif_5ft_3c_21graphviewtype_3a_3ais_5fmulti_5fgpu_20_3e_20_3e_360',['vertex_partition_device_t&lt; GraphViewType, std::enable_if_t&lt;!GraphViewType::is_multi_gpu &gt; &gt;',['../classcugraph_1_1experimental_1_1vertex__partition__device__t_3_01GraphViewType_00_01std_1_1enabl17c59f6a9cea06e2bbf01ef51d7847d7.html',1,'cugraph::experimental']]],
-  ['vertexbinner_361',['VertexBinner',['../classcugraph_1_1mg_1_1detail_1_1VertexBinner.html',1,'cugraph::mg::detail']]],
-  ['vertexfrontier_362',['VertexFrontier',['../classcugraph_1_1experimental_1_1VertexFrontier.html',1,'cugraph::experimental']]]
+  ['warp_5freduce_5fedge_5fop_5fresult_346',['warp_reduce_edge_op_result',['../structcugraph_1_1experimental_1_1warp__reduce__edge__op__result.html',1,'cugraph::experimental']]],
+  ['warp_5freduce_5fthrust_5ftuple_347',['warp_reduce_thrust_tuple',['../structcugraph_1_1experimental_1_1warp__reduce__thrust__tuple.html',1,'cugraph::experimental']]],
+  ['warp_5freduce_5fthrust_5ftuple_5fimpl_348',['warp_reduce_thrust_tuple_impl',['../structcugraph_1_1experimental_1_1detail_1_1warp__reduce__thrust__tuple__impl.html',1,'cugraph::experimental::detail']]],
+  ['warp_5freduce_5fthrust_5ftuple_5fimpl_3c_20tupletype_2c_20i_2c_20i_20_3e_349',['warp_reduce_thrust_tuple_impl&lt; TupleType, I, I &gt;',['../structcugraph_1_1experimental_1_1detail_1_1warp__reduce__thrust__tuple__impl_3_01TupleType_00_01I_00_01I_01_4.html',1,'cugraph::experimental::detail']]],
+  ['weakccstate_350',['WeakCCState',['../classMLCommon_1_1Sparse_1_1WeakCCState.html',1,'MLCommon::Sparse']]]
 ];
