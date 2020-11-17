@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['random_5fmatrix_5ftype_2048',['random_matrix_type',['../group__paramsRPROJ.html#ga134c8dc1d94a4ee420679aec61849e2b',1,'ML']]],
-  ['rf_5ftype_2049',['RF_type',['../namespaceML.html#a4d83b99fe769e2e9bf3596bb1604ab4f',1,'ML']]]
+  ['seasonaltype_2040',['SeasonalType',['../namespaceML.html#a8d55de18185e36dd8f8a6d735e6a91e6',1,'ML']]],
+  ['solver_2041',['solver',['../namespaceML.html#a7324898185a2fc9a9145f9bad555049b',1,'ML']]],
+  ['split_5falgo_2042',['SPLIT_ALGO',['../namespaceML.html#afe9899e0c7ff1cf722a35bcf35283953',1,'ML']]],
+  ['storage_5ftype_5ft_2043',['storage_type_t',['../namespaceML_1_1fil.html#a2260584f7152bb5497b528729b6bd216',1,'ML::fil']]],
+  ['svmtype_2044',['SvmType',['../namespaceML_1_1SVM.html#a94b5c3bf8c9646f2443ebc5bb7433e00',1,'ML::SVM']]]
 ];

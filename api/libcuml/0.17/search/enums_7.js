@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['norm_2044',['Norm',['../namespaceML.html#a1529da2b94c67018bb14f404f6e9aeac',1,'ML']]]
+  ['optimcriterion_2035',['OptimCriterion',['../namespaceML.html#a85e691126b37f5e1dc834841cad1479c',1,'ML']]],
+  ['output_5ft_2036',['output_t',['../namespaceML_1_1fil.html#a47faec5c2359b42a308e0d55c195aca9',1,'ML::fil']]]
 ];

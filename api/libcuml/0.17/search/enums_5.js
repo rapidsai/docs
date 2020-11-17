@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['leaf_5falgo_5ft_2038',['leaf_algo_t',['../namespaceML_1_1fil.html#ac1d4835a10b52131204607c9ec472110',1,'ML::fil']]],
-  ['loglikemethod_2039',['LoglikeMethod',['../namespaceML.html#a0dcbb2c0993e8446dffd09b5de731a26',1,'ML']]],
-  ['loss_5ffunct_2040',['loss_funct',['../namespaceML.html#a67da49ce109878bcdbb29a8777d28de1',1,'ML']]],
-  ['lr_5ftype_2041',['lr_type',['../namespaceML.html#a1adf3fea9cf9cde96ecf353b43818079',1,'ML']]]
+  ['metrictype_2032',['MetricType',['../classML_1_1UMAPParams.html#ace5a6381bcdee73fddf908d8520351b3',1,'ML::UMAPParams::MetricType()'],['../namespaceML.html#a4d9fd2e8fe0cfbbd81877eee212b88d9',1,'ML::MetricType()']]],
+  ['mg_5fsolver_2033',['mg_solver',['../namespaceML.html#a9a3879adb63715cec17550171436f6ab',1,'ML']]]
 ];
