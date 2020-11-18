@@ -33,7 +33,7 @@ var searchData=
   ['log_5fbase_663',['LOG_BASE',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca21fb6e241507492d75c488a9c65d12fe',1,'cudf']]],
   ['logic_5ferror_664',['logic_error',['../structcudf_1_1logic__error.html',1,'cudf']]],
   ['logical_5fand_665',['LOGICAL_AND',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcaa770916377f618641eccd6783b13503a',1,'cudf']]],
-  ['logical_5fcast_666',['logical_cast',['../classcudf_1_1column__view.html#a717273557e167d6d294eea92a772d652',1,'cudf::column_view::logical_cast()'],['../namespacecudf.html#a1d27eec7f48bfb7005607cb4a662b6f6',1,'cudf::logical_cast()']]],
+  ['logical_5fcast_666',['logical_cast',['../classcudf_1_1column__view.html#a717273557e167d6d294eea92a772d652',1,'cudf::column_view::logical_cast()'],['../classcudf_1_1mutable__column__view.html#aaa8bc087520297e18452d2286615ee52',1,'cudf::mutable_column_view::logical_cast()'],['../namespacecudf.html#a1d27eec7f48bfb7005607cb4a662b6f6',1,'cudf::logical_cast(column_view const &amp;input, data_type type)'],['../namespacecudf.html#a6af3b819d1871b0214ef0d18e58dda12',1,'cudf::logical_cast(mutable_column_view const &amp;input, data_type type)']]],
   ['logical_5for_667',['LOGICAL_OR',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca0d0389dd347e259ac16a47fc9db81c18',1,'cudf']]],
   ['lower_668',['LOWER',['../group__strings__types.html#ggacdc71043841f369de3cc8dd827a0eea1af5d2d29b7b10415b8744844bda9ff731',1,'cudf::strings::LOWER()'],['../group__utility__types.html#gga9cd17c1cdf028ead9a4783f605276ab3aa7c48ba367e019d004bfb0239b85f2b3',1,'cudf::LOWER()']]],
   ['lower_5fbound_669',['lower_bound',['../group__column__search.html#ga2c4c5a8ff7f2959cf26f2e5e3568522d',1,'cudf']]]
