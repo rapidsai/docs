@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['unary_5foperation_2302',['unary_operation',['../group__transformation__unaryops.html#gafa0b1284b8d6e93363d954d6ed826480',1,'cudf']]],
+  ['unary_5foperation_2302',['unary_operation',['../group__transformation__unaryops.html#gadaf20d224086fed5223b5b4098133bc8',1,'cudf']]],
   ['uniformrandomgenerator_2303',['UniformRandomGenerator',['../classcudf_1_1test_1_1UniformRandomGenerator.html#a51863bb73cf38ee19bfe49c20a923af7',1,'cudf::test::UniformRandomGenerator::UniformRandomGenerator(T lower, T upper, uint64_t seed=detail::random_generator_incrementing_seed())'],['../classcudf_1_1test_1_1UniformRandomGenerator.html#a624f7b8f0c6a24c6f8fb2183750ca28e',1,'cudf::test::UniformRandomGenerator::UniformRandomGenerator(typename TL::rep lower, typename TL::rep upper, uint64_t seed=detail::random_generator_incrementing_seed())']]],
   ['unsubscribe_2304',['unsubscribe',['../classcudf_1_1io_1_1external_1_1kafka_1_1kafka__consumer.html#a08a9c06de25a8fa83d5fbcd0ac761c32',1,'cudf::io::external::kafka::kafka_consumer']]],
   ['upper_5fbound_2305',['upper_bound',['../group__column__search.html#ga07489a0796a2f69386b241390b81a153',1,'cudf']]],

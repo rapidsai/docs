@@ -9,7 +9,7 @@ var searchData=
   ['uint8_1230',['UINT8',['../group__utility__types.html#ggadf077607da617d1dadcc5417e2783539aecfc091ed2a607335524c8389cfa41b5',1,'cudf']]],
   ['unallocated_1231',['UNALLOCATED',['../group__utility__types.html#gga4daf20c000ab374d76f4d56f0ddb7b26a628732521c22dcf8a24bf1a0326bde80',1,'cudf']]],
   ['unary_2ehpp_1232',['unary.hpp',['../unary_8hpp.html',1,'']]],
-  ['unary_5foperation_1233',['unary_operation',['../group__transformation__unaryops.html#gafa0b1284b8d6e93363d954d6ed826480',1,'cudf']]],
+  ['unary_5foperation_1233',['unary_operation',['../group__transformation__unaryops.html#gadaf20d224086fed5223b5b4098133bc8',1,'cudf']]],
   ['unequal_1234',['UNEQUAL',['../group__utility__types.html#gga08a672308cd0f61562410d106b377771ac0df9e531f39895029236b71d0d1c0ac',1,'cudf']]],
   ['uniform_5fdistribution_5fimpl_1235',['uniform_distribution_impl',['../structcudf_1_1test_1_1uniform__distribution__impl.html',1,'cudf::test']]],
   ['uniform_5fdistribution_5fimpl_3c_20t_2c_20std_3a_3aenable_5fif_5ft_3c_20cudf_3a_3ais_5fboolean_3c_20t_20_3e_28_29_3e_20_3e_1236',['uniform_distribution_impl&lt; T, std::enable_if_t&lt; cudf::is_boolean&lt; T &gt;()&gt; &gt;',['../structcudf_1_1test_1_1uniform__distribution__impl_3_01T_00_01std_1_1enable__if__t_3_01cudf_1_1isa5745ec3c393202243a0668c705667d6.html',1,'cudf::test']]],
