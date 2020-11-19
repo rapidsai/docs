@@ -2,7 +2,7 @@ var searchData=
 [
   ['c_1744',['C',['../structML_1_1SVM_1_1svmParameter.html#a5b566bf962ea46af5b734ec9c041ac6c',1,'ML::SVM::svmParameter']]],
   ['cache_5fsize_1745',['cache_size',['../structML_1_1SVM_1_1svmParameter.html#a1826bb515d71cbc8c1cec9267fd47faf',1,'ML::SVM::svmParameter']]],
-  ['callback_1746',['callback',['../classML_1_1UMAPParams.html#a9de544ee70412ccbedbc34bfc38db797',1,'ML::UMAPParams']]],
+  ['callback_1746',['callback',['../classML_1_1UMAPParams.html#aceb104a4af64c6c5888b235130e6e973',1,'ML::UMAPParams']]],
   ['childsz_1747',['childsz',['../structTemporaryMemory.html#a8ccf653aad95b78db8a769352489f097',1,'TemporaryMemory']]],
   ['coef0_1748',['coef0',['../structMLCommon_1_1Matrix_1_1KernelParams.html#aaef880e78bbc8dbc98cb0172a2bf40d2',1,'MLCommon::Matrix::KernelParams']]],
   ['colid_1749',['colid',['../structSparseTreeNode.html#abd4073da5bb753b797575ec6422ad6d5',1,'SparseTreeNode']]],
