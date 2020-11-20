@@ -1,13 +1,11 @@
 var searchData=
 [
-  ['rand_5fmat_1105',['rand_mat',['../structML_1_1rand__mat.html',1,'ML']]],
-  ['randomforestmetadata_1106',['RandomForestMetaData',['../structML_1_1RandomForestMetaData.html',1,'ML']]],
-  ['rebind_1107',['rebind',['../structML_1_1stdAllocatorAdapter_1_1rebind.html',1,'ML::stdAllocatorAdapter']]],
-  ['rf_1108',['rf',['../classML_1_1rf.html',1,'ML']]],
-  ['rf_3c_20t_2c_20int_20_3e_1109',['rf&lt; T, int &gt;',['../classML_1_1rf.html',1,'ML']]],
-  ['rf_3c_20t_2c_20t_20_3e_1110',['rf&lt; T, T &gt;',['../classML_1_1rf.html',1,'ML']]],
-  ['rf_5fmetrics_1111',['RF_metrics',['../structML_1_1RF__metrics.html',1,'ML']]],
-  ['rf_5fparams_1112',['RF_params',['../structML_1_1RF__params.html',1,'ML']]],
-  ['rfclassifier_1113',['rfClassifier',['../classML_1_1rfClassifier.html',1,'ML']]],
-  ['rfregressor_1114',['rfRegressor',['../classML_1_1rfRegressor.html',1,'ML']]]
+  ['pack_1136',['Pack',['../structDbscan_1_1AdjGraph_1_1Pack.html',1,'Dbscan::AdjGraph::Pack&lt; Index_ &gt;'],['../structDbscan_1_1VertexDeg_1_1Pack.html',1,'Dbscan::VertexDeg::Pack&lt; Type, Index_ &gt;']]],
+  ['params_1137',['params',['../classML_1_1params.html',1,'ML']]],
+  ['paramspcatemplate_1138',['paramsPCATemplate',['../classML_1_1paramsPCATemplate.html',1,'ML']]],
+  ['paramsrproj_1139',['paramsRPROJ',['../structML_1_1paramsRPROJ.html',1,'ML']]],
+  ['paramssolver_1140',['paramsSolver',['../classML_1_1paramsSolver.html',1,'ML']]],
+  ['paramstsvdtemplate_1141',['paramsTSVDTemplate',['../classML_1_1paramsTSVDTemplate.html',1,'ML']]],
+  ['paramstsvdtemplate_3c_20solver_20_3e_1142',['paramsTSVDTemplate&lt; solver &gt;',['../classML_1_1paramsTSVDTemplate.html',1,'ML']]],
+  ['patternsetter_1143',['PatternSetter',['../classML_1_1PatternSetter.html',1,'ML']]]
 ];

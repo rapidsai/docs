@@ -1,11 +1,13 @@
 var searchData=
 [
-  ['sparse_5fnode16_5fextra_5fdata_1115',['sparse_node16_extra_data',['../structML_1_1fil_1_1sparse__node16__extra__data.html',1,'ML::fil']]],
-  ['sparse_5fnode16_5ft_1116',['sparse_node16_t',['../structML_1_1fil_1_1sparse__node16__t.html',1,'ML::fil']]],
-  ['sparse_5fnode8_5ft_1117',['sparse_node8_t',['../structML_1_1fil_1_1sparse__node8__t.html',1,'ML::fil']]],
-  ['sparsetreenode_1118',['SparseTreeNode',['../structSparseTreeNode.html',1,'']]],
-  ['stdallocatoradapter_1119',['stdAllocatorAdapter',['../classML_1_1stdAllocatorAdapter.html',1,'ML']]],
-  ['svc_1120',['SVC',['../classML_1_1SVM_1_1SVC.html',1,'ML::SVM']]],
-  ['svmmodel_1121',['svmModel',['../structML_1_1SVM_1_1svmModel.html',1,'ML::SVM']]],
-  ['svmparameter_1122',['svmParameter',['../structML_1_1SVM_1_1svmParameter.html',1,'ML::SVM']]]
+  ['rand_5fmat_1144',['rand_mat',['../structML_1_1rand__mat.html',1,'ML']]],
+  ['randomforestmetadata_1145',['RandomForestMetaData',['../structML_1_1RandomForestMetaData.html',1,'ML']]],
+  ['rebind_1146',['rebind',['../structML_1_1stdAllocatorAdapter_1_1rebind.html',1,'ML::stdAllocatorAdapter']]],
+  ['rf_1147',['rf',['../classML_1_1rf.html',1,'ML']]],
+  ['rf_3c_20t_2c_20int_20_3e_1148',['rf&lt; T, int &gt;',['../classML_1_1rf.html',1,'ML']]],
+  ['rf_3c_20t_2c_20t_20_3e_1149',['rf&lt; T, T &gt;',['../classML_1_1rf.html',1,'ML']]],
+  ['rf_5fmetrics_1150',['RF_metrics',['../structML_1_1RF__metrics.html',1,'ML']]],
+  ['rf_5fparams_1151',['RF_params',['../structML_1_1RF__params.html',1,'ML']]],
+  ['rfclassifier_1152',['rfClassifier',['../classML_1_1rfClassifier.html',1,'ML']]],
+  ['rfregressor_1153',['rfRegressor',['../classML_1_1rfRegressor.html',1,'ML']]]
 ];

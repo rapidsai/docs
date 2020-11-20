@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kerneltype_2027',['KernelType',['../namespaceMLCommon_1_1Matrix.html#a77ca4104554a91afb08885d275724ed4',1,'MLCommon::Matrix']]]
+  ['initmethod_2089',['InitMethod',['../structML_1_1kmeans_1_1KMeansParams.html#a8ad93f8c860bc5af658750119dcccf39',1,'ML::kmeans::KMeansParams']]]
 ];
