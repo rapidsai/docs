@@ -57,7 +57,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <a href="table__device__view_8cuh.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span> <span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span> <span class="comment"> * Copyright (c) 2019, NVIDIA CORPORATION.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span> <span class="comment"> * Copyright (c) 2019-2020, NVIDIA CORPORATION.</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span> <span class="comment"> *</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span> <span class="comment"> * Licensed under the Apache License, Version 2.0 (the "License");</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span> <span class="comment"> * you may not use this file except in compliance with the License.</span></div>
@@ -77,104 +77,106 @@ $(function() {
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span> <span class="preprocessor">#include &lt;<a class="code" href="table__view_8hpp.html">cudf/table/table_view.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span> <span class="preprocessor">#include &lt;<a class="code" href="types_8hpp.html">cudf/types.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>  </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span> <span class="preprocessor">#include &lt;cassert&gt;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span> <span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>  </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span> <span class="keyword">namespace </span><a class="code" href="namespacecudf.html">cudf</a> {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span> <span class="keyword">namespace </span>detail {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ColumnDeviceView, <span class="keyword">typename</span> HostTableView&gt;</div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classcudf_1_1detail_1_1table__device__view__base.html">   33</a></span> <span class="keyword">class </span><a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a> {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>   <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>()                              = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>   ~<a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>()                             = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>   <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>(<a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a> <span class="keyword">const</span>&amp;) = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>   <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>(<a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>&amp;&amp;)      = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>   <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>&amp; operator=(<a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a> <span class="keyword">const</span>&amp;) = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>   <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>&amp; operator=(<a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>&amp;&amp;) = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>  </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>   __device__ ColumnDeviceView* begin() <span class="keyword">const</span> noexcept { <span class="keywordflow">return</span> _columns; }</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span> <span class="preprocessor">#include &lt;rmm/cuda_stream_view.hpp&gt;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>  </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span> <span class="preprocessor">#include &lt;cassert&gt;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span> <span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>  </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span> <span class="keyword">namespace </span><a class="code" href="namespacecudf.html">cudf</a> {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span> <span class="keyword">namespace </span>detail {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ColumnDeviceView, <span class="keyword">typename</span> HostTableView&gt;</div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classcudf_1_1detail_1_1table__device__view__base.html">   35</a></span> <span class="keyword">class </span><a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a> {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>   <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>()                              = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>   ~<a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>()                             = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>   <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>(<a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a> <span class="keyword">const</span>&amp;) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>   <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>(<a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>&amp;&amp;)      = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>   <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>&amp; operator=(<a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a> <span class="keyword">const</span>&amp;) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>   <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>&amp; operator=(<a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>&amp;&amp;) = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>  </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>   __device__ ColumnDeviceView* end() <span class="keyword">const</span> noexcept { <span class="keywordflow">return</span> _columns + _num_columns; }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>   __device__ ColumnDeviceView* begin() <span class="keyword">const</span> noexcept { <span class="keywordflow">return</span> _columns; }</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>  </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>   __device__ ColumnDeviceView <span class="keyword">const</span>&amp; <a class="code" href="classcudf_1_1column.html">column</a>(size_type column_index) <span class="keyword">const</span> noexcept</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>   {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>     assert(column_index &gt;= 0);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>     assert(column_index &lt; _num_columns);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>     <span class="keywordflow">return</span> _columns[column_index];</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>   }</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>  </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>   __device__ ColumnDeviceView&amp; <a class="code" href="classcudf_1_1column.html">column</a>(size_type column_index) noexcept</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>   {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>     assert(column_index &gt;= 0);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>     assert(column_index &lt; _num_columns);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>     <span class="keywordflow">return</span> _columns[column_index];</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>   }</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>  </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>   __host__ __device__ size_type num_columns() <span class="keyword">const</span> noexcept { <span class="keywordflow">return</span> _num_columns; }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>   __device__ ColumnDeviceView* end() <span class="keyword">const</span> noexcept { <span class="keywordflow">return</span> _columns + _num_columns; }</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>  </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>   __device__ ColumnDeviceView <span class="keyword">const</span>&amp; <a class="code" href="classcudf_1_1column.html">column</a>(size_type column_index) <span class="keyword">const</span> noexcept</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>   {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>     assert(column_index &gt;= 0);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>     assert(column_index &lt; _num_columns);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>     <span class="keywordflow">return</span> _columns[column_index];</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>   }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>  </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>   __device__ ColumnDeviceView&amp; <a class="code" href="classcudf_1_1column.html">column</a>(size_type column_index) noexcept</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>   {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>     assert(column_index &gt;= 0);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>     assert(column_index &lt; _num_columns);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>     <span class="keywordflow">return</span> _columns[column_index];</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>   }</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>  </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>   __host__ __device__ size_type num_rows() <span class="keyword">const</span> noexcept { <span class="keywordflow">return</span> _num_rows; }</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>   __host__ __device__ size_type num_columns() <span class="keyword">const</span> noexcept { <span class="keywordflow">return</span> _num_columns; }</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>  </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>   <span class="keywordtype">void</span> destroy();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>   __host__ __device__ size_type num_rows() <span class="keyword">const</span> noexcept { <span class="keywordflow">return</span> _num_rows; }</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>  </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>   ColumnDeviceView* _columns{};  </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>   size_type _num_rows{};</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>   size_type _num_columns{};</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>   <a class="code" href="types_8hpp.html#a27a677c66bef483a40f3d65c02b09e0f">cudaStream_t</a> _stream{};</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>  </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>  <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>   <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>(HostTableView source_view, <a class="code" href="types_8hpp.html#a27a677c66bef483a40f3d65c02b09e0f">cudaStream_t</a> stream);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>  </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>   rmm::device_buffer* _descendant_storage{};</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span> };</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span> }  <span class="comment">// namespace detail</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>  </div>
-<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="classcudf_1_1table__device__view.html">   79</a></span> <span class="keyword">class </span><a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a> : <span class="keyword">public</span> <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">detail::table_device_view_base</a>&lt;column_device_view, table_view&gt; {</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>   <span class="keyword">static</span> <span class="keyword">auto</span> create(<a class="code" href="classcudf_1_1table__view.html">table_view</a> source_view, <a class="code" href="types_8hpp.html#a27a677c66bef483a40f3d65c02b09e0f">cudaStream_t</a> stream = 0)</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>   {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>     <span class="keyword">auto</span> deleter = [](<a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a>* t) { t-&gt;destroy(); };</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>     <span class="keywordflow">return</span> std::unique_ptr&lt;<a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a>, decltype(deleter)&gt;{</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>       <span class="keyword">new</span> <a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a>(source_view, stream), deleter};</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>   }</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>  </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>   <a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a>(<a class="code" href="classcudf_1_1table__view.html">table_view</a> source_view, <a class="code" href="types_8hpp.html#a27a677c66bef483a40f3d65c02b09e0f">cudaStream_t</a> stream)</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>     : <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">detail::table_device_view_base&lt;column_device_view, table_view&gt;</a>(source_view, stream)</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>   {</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>   }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span> };</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>  </div>
-<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="classcudf_1_1mutable__table__device__view.html">   95</a></span> <span class="keyword">class </span><a class="code" href="classcudf_1_1mutable__table__device__view.html">mutable_table_device_view</a></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>   : <span class="keyword">public</span> <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">detail::table_device_view_base</a>&lt;mutable_column_device_view, mutable_table_view&gt; {</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>   <span class="keyword">static</span> <span class="keyword">auto</span> create(<a class="code" href="classcudf_1_1mutable__table__view.html">mutable_table_view</a> source_view, <a class="code" href="types_8hpp.html#a27a677c66bef483a40f3d65c02b09e0f">cudaStream_t</a> stream = 0)</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>   {</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>     <span class="keyword">auto</span> deleter = [](<a class="code" href="classcudf_1_1mutable__table__device__view.html">mutable_table_device_view</a>* t) { t-&gt;destroy(); };</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>     <span class="keywordflow">return</span> std::unique_ptr&lt;<a class="code" href="classcudf_1_1mutable__table__device__view.html">mutable_table_device_view</a>, decltype(deleter)&gt;{</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>       <span class="keyword">new</span> <a class="code" href="classcudf_1_1mutable__table__device__view.html">mutable_table_device_view</a>(source_view, stream), deleter};</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>   }</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>  </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>   <a class="code" href="classcudf_1_1mutable__table__device__view.html">mutable_table_device_view</a>(<a class="code" href="classcudf_1_1mutable__table__view.html">mutable_table_view</a> source_view, <a class="code" href="types_8hpp.html#a27a677c66bef483a40f3d65c02b09e0f">cudaStream_t</a> stream)</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>     : <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">detail::table_device_view_base&lt;mutable_column_device_view, mutable_table_view&gt;</a>(source_view,</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>                                                                                      stream)</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>   {</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>   }</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span> };</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span> }  <span class="comment">// namespace cudf</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>   <span class="keywordtype">void</span> destroy();</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>  </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>   ColumnDeviceView* _columns{};  </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>   size_type _num_rows{};</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>   size_type _num_columns{};</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>  </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>  <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>   <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">table_device_view_base</a>(HostTableView source_view, rmm::cuda_stream_view stream);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>  </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>   rmm::device_buffer* _descendant_storage{};</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span> };</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span> }  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>  </div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="classcudf_1_1table__device__view.html">   80</a></span> <span class="keyword">class </span><a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a> : <span class="keyword">public</span> <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">detail::table_device_view_base</a>&lt;column_device_view, table_view&gt; {</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>   <span class="keyword">static</span> <span class="keyword">auto</span> create(<a class="code" href="classcudf_1_1table__view.html">table_view</a> source_view,</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>                      rmm::cuda_stream_view stream = rmm::cuda_stream_default)</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>   {</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>     <span class="keyword">auto</span> deleter = [](<a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a>* t) { t-&gt;destroy(); };</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>     <span class="keywordflow">return</span> std::unique_ptr&lt;<a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a>, decltype(deleter)&gt;{</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>       <span class="keyword">new</span> <a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a>(source_view, stream), deleter};</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>   }</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>  </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>   <a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a>(<a class="code" href="classcudf_1_1table__view.html">table_view</a> source_view, rmm::cuda_stream_view stream)</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>     : <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">detail::table_device_view_base&lt;column_device_view, table_view&gt;</a>(source_view, stream)</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>   {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>   }</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span> };</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>  </div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="classcudf_1_1mutable__table__device__view.html">   97</a></span> <span class="keyword">class </span><a class="code" href="classcudf_1_1mutable__table__device__view.html">mutable_table_device_view</a></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>   : <span class="keyword">public</span> <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">detail::table_device_view_base</a>&lt;mutable_column_device_view, mutable_table_view&gt; {</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>   <span class="keyword">static</span> <span class="keyword">auto</span> create(<a class="code" href="classcudf_1_1mutable__table__view.html">mutable_table_view</a> source_view,</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>                      rmm::cuda_stream_view stream = rmm::cuda_stream_default)</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>   {</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>     <span class="keyword">auto</span> deleter = [](<a class="code" href="classcudf_1_1mutable__table__device__view.html">mutable_table_device_view</a>* t) { t-&gt;destroy(); };</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>     <span class="keywordflow">return</span> std::unique_ptr&lt;<a class="code" href="classcudf_1_1mutable__table__device__view.html">mutable_table_device_view</a>, decltype(deleter)&gt;{</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>       <span class="keyword">new</span> <a class="code" href="classcudf_1_1mutable__table__device__view.html">mutable_table_device_view</a>(source_view, stream), deleter};</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>   }</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>  </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>   <a class="code" href="classcudf_1_1mutable__table__device__view.html">mutable_table_device_view</a>(<a class="code" href="classcudf_1_1mutable__table__view.html">mutable_table_view</a> source_view, rmm::cuda_stream_view stream)</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>     : <a class="code" href="classcudf_1_1detail_1_1table__device__view__base.html">detail::table_device_view_base&lt;mutable_column_device_view, mutable_table_view&gt;</a>(source_view,</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>                                                                                      stream)</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>   {</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>   }</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span> };</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span> }  <span class="comment">// namespace cudf</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasscudf_1_1mutable__table__view_html"><div class="ttname"><a href="classcudf_1_1mutable__table__view.html">cudf::mutable_table_view</a></div><div class="ttdoc">A set of mutable_column_views of the same size.</div><div class="ttdef"><b>Definition:</b> <a href="table__view_8hpp_source.html#l00198">table_view.hpp:198</a></div></div>
 <div class="ttc" id="atable__view_8hpp_html"><div class="ttname"><a href="table__view_8hpp.html">table_view.hpp</a></div><div class="ttdoc">Class definitions for (mutable)_table_view</div></div>
 <div class="ttc" id="aclasscudf_1_1column_html"><div class="ttname"><a href="classcudf_1_1column.html">cudf::column</a></div><div class="ttdoc">A container of nullable device data as a column of elements.</div><div class="ttdef"><b>Definition:</b> <a href="column_8hpp_source.html#l00045">column.hpp:45</a></div></div>
-<div class="ttc" id="aclasscudf_1_1table__device__view_html"><div class="ttname"><a href="classcudf_1_1table__device__view.html">cudf::table_device_view</a></div><div class="ttdef"><b>Definition:</b> <a href="table__device__view_8cuh_source.html#l00079">table_device_view.cuh:79</a></div></div>
+<div class="ttc" id="aclasscudf_1_1table__device__view_html"><div class="ttname"><a href="classcudf_1_1table__device__view.html">cudf::table_device_view</a></div><div class="ttdef"><b>Definition:</b> <a href="table__device__view_8cuh_source.html#l00080">table_device_view.cuh:80</a></div></div>
 <div class="ttc" id="atypes_8hpp_html"><div class="ttname"><a href="types_8hpp.html">types.hpp</a></div><div class="ttdoc">Type declarations for libcudf.</div></div>
 <div class="ttc" id="acolumn__device__view_8cuh_html"><div class="ttname"><a href="column__device__view_8cuh.html">column_device_view.cuh</a></div><div class="ttdoc">Column device view class definitons.</div></div>
 <div class="ttc" id="aclasscudf_1_1table__view_html"><div class="ttname"><a href="classcudf_1_1table__view.html">cudf::table_view</a></div><div class="ttdoc">A set of cudf::column_view's of the same size.</div><div class="ttdef"><b>Definition:</b> <a href="table__view_8hpp_source.html#l00149">table_view.hpp:149</a></div></div>
-<div class="ttc" id="aclasscudf_1_1detail_1_1table__device__view__base_html"><div class="ttname"><a href="classcudf_1_1detail_1_1table__device__view__base.html">cudf::detail::table_device_view_base</a></div><div class="ttdef"><b>Definition:</b> <a href="table__device__view_8cuh_source.html#l00033">table_device_view.cuh:33</a></div></div>
+<div class="ttc" id="aclasscudf_1_1detail_1_1table__device__view__base_html"><div class="ttname"><a href="classcudf_1_1detail_1_1table__device__view__base.html">cudf::detail::table_device_view_base</a></div><div class="ttdef"><b>Definition:</b> <a href="table__device__view_8cuh_source.html#l00035">table_device_view.cuh:35</a></div></div>
 <div class="ttc" id="anamespacecudf_html"><div class="ttname"><a href="namespacecudf.html">cudf</a></div><div class="ttdoc">cuDF interfaces</div><div class="ttdef"><b>Definition:</b> <a href="aggregation_8hpp_source.html#l00034">aggregation.hpp:34</a></div></div>
-<div class="ttc" id="aclasscudf_1_1mutable__table__device__view_html"><div class="ttname"><a href="classcudf_1_1mutable__table__device__view.html">cudf::mutable_table_device_view</a></div><div class="ttdef"><b>Definition:</b> <a href="table__device__view_8cuh_source.html#l00095">table_device_view.cuh:96</a></div></div>
-<div class="ttc" id="atypes_8hpp_html_a27a677c66bef483a40f3d65c02b09e0f"><div class="ttname"><a href="types_8hpp.html#a27a677c66bef483a40f3d65c02b09e0f">cudaStream_t</a></div><div class="ttdeci">struct CUstream_st * cudaStream_t</div><div class="ttdoc">Forward declaration of cudaStream_t.</div><div class="ttdef"><b>Definition:</b> <a href="types_8hpp_source.html#l00043">types.hpp:43</a></div></div>
+<div class="ttc" id="aclasscudf_1_1mutable__table__device__view_html"><div class="ttname"><a href="classcudf_1_1mutable__table__device__view.html">cudf::mutable_table_device_view</a></div><div class="ttdef"><b>Definition:</b> <a href="table__device__view_8cuh_source.html#l00097">table_device_view.cuh:98</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by <a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"/></a> 1.8.20
