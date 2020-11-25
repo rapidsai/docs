@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['ols_2ecuh_1397',['ols.cuh',['../ols_8cuh.html',1,'']]],
-  ['ols_5fmg_2ecu_1398',['ols_mg.cu',['../ols__mg_8cu.html',1,'']]],
-  ['ols_5fmg_2ehpp_1399',['ols_mg.hpp',['../ols__mg_8hpp.html',1,'']]],
-  ['optimize_2ecuh_1400',['optimize.cuh',['../optimize_8cuh.html',1,'']]],
-  ['optimize_5fbatch_5fkernel_2ecuh_1401',['optimize_batch_kernel.cuh',['../optimize__batch__kernel_8cuh.html',1,'']]]
+  ['ols_2ecuh_1398',['ols.cuh',['../ols_8cuh.html',1,'']]],
+  ['ols_5fmg_2ecu_1399',['ols_mg.cu',['../ols__mg_8cu.html',1,'']]],
+  ['ols_5fmg_2ehpp_1400',['ols_mg.hpp',['../ols__mg_8hpp.html',1,'']]],
+  ['optimize_2ecuh_1401',['optimize.cuh',['../optimize_8cuh.html',1,'']]],
+  ['optimize_5fbatch_5fkernel_2ecuh_1402',['optimize_batch_kernel.cuh',['../optimize__batch__kernel_8cuh.html',1,'']]]
 ];
