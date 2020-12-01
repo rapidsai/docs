@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['force_5fatlas2_363',['force_atlas2',['../namespacecugraph.html#ac8873e434e072d0018bf88ea606622c2',1,'cugraph']]]
+  ['force_5fatlas2_365',['force_atlas2',['../namespacecugraph.html#a41dc9ab1b345bb978f7684d173d7ef29',1,'cugraph']]]
 ];

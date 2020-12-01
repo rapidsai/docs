@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['sssp_387',['sssp',['../namespacecugraph.html#afbcb939cffaf811289ba6a5edc7f6b04',1,'cugraph']]]
+  ['pagerank_389',['pagerank',['../namespacecugraph.html#a8e07829e671204ff42aa226f40ff92d5',1,'cugraph']]]
 ];

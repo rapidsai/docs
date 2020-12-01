@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['updatedevice_388',['updateDevice',['../group__Copy.html#ga18a265a5eb16da13a51f486fe5e3acb7',1,'MLCommon']]],
-  ['updatehost_389',['updateHost',['../group__Copy.html#ga9c1498ebc5825f9e63a9de94ced042d5',1,'MLCommon']]]
+  ['renumber_5fvertices_390',['renumber_vertices',['../namespacecugraph.html#ae0e49dce7b1e20902d940e8156a83ea9',1,'cugraph']]]
 ];

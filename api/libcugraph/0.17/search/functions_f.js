@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['what_391',['what',['../classMLCommon_1_1Exception.html#ab0fbec35530d6998ae97b429579d8f17',1,'MLCommon::Exception']]]
+  ['updatedevice_392',['updateDevice',['../group__Copy.html#ga18a265a5eb16da13a51f486fe5e3acb7',1,'MLCommon']]],
+  ['updatehost_393',['updateHost',['../group__Copy.html#ga9c1498ebc5825f9e63a9de94ced042d5',1,'MLCommon']]]
 ];
