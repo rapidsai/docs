@@ -698,7 +698,7 @@ to distinguish legitimate and DGA domain names.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#clx.analytics.phishing_detector.PhishingDetector.init_model" title="clx.analytics.phishing_detector.PhishingDetector.init_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_model</span></code></a>([model_or_path])</p></td>
 <td><p>Load a pretrained BERT model.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#clx.analytics.phishing_detector.PhishingDetector.predict" title="clx.analytics.phishing_detector.PhishingDetector.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(emails[, max_seq_len, batch_size])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#clx.analytics.phishing_detector.PhishingDetector.predict" title="clx.analytics.phishing_detector.PhishingDetector.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(emails[, max_seq_len, threshold])</p></td>
 <td><p>Predict the class with the trained model</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#clx.analytics.phishing_detector.PhishingDetector.save_model" title="clx.analytics.phishing_detector.PhishingDetector.save_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_model</span></code></a>([save_to_path])</p></td>
@@ -753,18 +753,19 @@ to distinguish legitimate and DGA domain names.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="clx.analytics.phishing_detector.PhishingDetector.predict">
-<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">emails</span></em>, <em class="sig-param"><span class="n">max_seq_len</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">32</span></em><span class="sig-paren">)</span><a class="headerlink" href="#clx.analytics.phishing_detector.PhishingDetector.predict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">emails</span></em>, <em class="sig-param"><span class="n">max_seq_len</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#clx.analytics.phishing_detector.PhishingDetector.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict the class with the trained model</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>emails</strong> (<em>cudf.DataFrame</em>) – dataframe where each row contains one column holding email text</p></li>
+<li><p><strong>emails</strong> (<em>cudf.Series</em>) – series where each element is text from single email</p></li>
 <li><p><strong>max_seq_len</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Limits the length of the sequence returned by tokenizer. If tokenized sentence is shorter than max_seq_len, output will be padded with 0s. If the tokenized sentence is longer than max_seq_len it will be truncated to max_seq_len.</p></li>
 <li><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – batch size</p></li>
+<li><p><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – results with probabilities higher than this will be labeled as positive</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>predictions: predicted labels (0 or 1) for each email</p>
+<dd class="field-even"><p>predictions: predicted labels (False or True) for each email</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>cudf.Series</p>
@@ -774,7 +775,7 @@ to distinguish legitimate and DGA domain names.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cuml.preprocessing.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">emails_train</span><span class="p">,</span> <span class="n">emails_test</span><span class="p">,</span> <span class="n">labels_train</span><span class="p">,</span> <span class="n">labels_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">train_emails_df</span><span class="p">,</span> <span class="s1">'label'</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">phish_detect</span><span class="o">.</span><span class="n">train_model</span><span class="p">(</span><span class="n">emails_train</span><span class="p">,</span> <span class="n">labels_train</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predictions</span> <span class="o">=</span> <span class="n">phish_detect</span><span class="p">(</span><span class="n">new_emails_df</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predictions</span> <span class="o">=</span> <span class="n">phish_detect</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">new_emails</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
