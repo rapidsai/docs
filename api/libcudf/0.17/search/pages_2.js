@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unicode_20limitations_2680',['Unicode Limitations',['../md_unicode.html',1,'']]]
+  ['unicode_20limitations_2695',['Unicode Limitations',['../md_unicode.html',1,'']]]
 ];
