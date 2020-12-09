@@ -26,7 +26,7 @@ Get started with our preconfigured RAPIDS demo container, featuring several demo
 
 Versions of libraries included in the `{{ STABLE_VER }}` images:
 - `cuDF` [v{{ STABLE_VER }}](https://github.com/rapidsai/cudf/tree/v{{ STABLE_VER }}.0), `cuML` [v{{ STABLE_VER }}](https://github.com/rapidsai/cuml/tree/v{{ STABLE_VER }}.0), `cuGraph` [v{{ STABLE_VER }}](https://github.com/rapidsai/cugraph/tree/v{{ STABLE_VER }}.0), `RMM` [v{{ STABLE_VER }}](https://github.com/rapidsai/RMM/tree/v{{ STABLE_VER }}.0), `cuSpatial` [v{{ STABLE_VER }}](https://github.com/rapidsai/cuspatial/tree/v{{ STABLE_VER }}.0), `cuxfilter` [v{{ STABLE_VER }}](https://github.com/rapidsai/cuxfilter/tree/v{{ STABLE_VER }}.0), `cuSignal` [v{{ STABLE_VER }}](https://github.com/rapidsai/cusignal/tree/v{{ STABLE_VER }}.0)
-- `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-{{ STABLE_VER }}-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-{{ STABLE_VER }})
+- `blazingsql` [branch](https://github.com/BlazingDB/blazingsql/tree/branch--{{ STABLE_VER }}), `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-{{ STABLE_VER }}-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-{{ STABLE_VER }})
 
 
 ### Former Version
@@ -35,8 +35,6 @@ Versions of libraries included in the `{{ STABLE_VER }}` images:
 
 Versions of libraries included in the `{{ LEGACY_VER }}` images:
 - `cuDF` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cudf/tree/v{{ LEGACY_VER }}.0), `cuML` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cuml/tree/v{{ LEGACY_VER }}.0), `cuGraph` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cugraph/tree/v{{ LEGACY_VER }}.0), `RMM` [v{{ LEGACY_VER }}](https://github.com/rapidsai/RMM/tree/v{{ LEGACY_VER }}.0), `cuSpatial` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cuspatial/tree/v{{ LEGACY_VER }}.0), `cuxfilter` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cuxfilter/tree/v{{ LEGACY_VER }}.0), `cuSignal` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cusignal/tree/v{{ LEGACY_VER }}.0)
-  - **IMPORTANT:** CUDA 10.0 & Python 3.6 support ended in v0.14; v0.15 includes CUDA 11.0 & Python 3.8 support
-  - **NOTE:** See [RAPIDS Notices](https://docs.rapids.ai/notices) for release changes for `clx` & `cuxfilter` as well as other recent changes
 - `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-{{ LEGACY_VER }}-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-{{ LEGACY_VER }})
 
 ### Image Types
@@ -113,7 +111,8 @@ Notebooks can be found in the following directories within the {{ STABLE_VER }} 
 * `/rapids/notebooks/cuml` - cuML demo notebooks
 * `/rapids/notebooks/cusignal` - cuSignal demo notebooks
 * `/rapids/notebooks/cuxfilter` - cuXfilter demo notebooks
-* `/rapids/notebooks/xgboost` - XGBoost demo notebooks
+* `/rapids/notebooks/cuxfilter` - BlazingSQL demo notebooks
+* `/blazing/Welcome_to_BlazingSQL_Notebooks` - XGBoost demo notebooks
 
 For a full description of each notebook, see the [README](https://github.com/rapidsai/notebooks/blob/branch-{{ STABLE_VER }}/README.md) in the notebooks repository.
 
