@@ -32,11 +32,11 @@ def get_version_from_fp():
     """
     match = re.search(r"0.\d{1,3}", FILEPATH)
     version_number = int(match[0].split(".")[1])
-    version_name = "legacy"
-    if version_number == VERSIONS_DICT["nightly"]:
+    version_name = "stable"
+    if version_number > VERSIONS_DICT["stable"]:
         version_name = "nightly"
-    if version_number == VERSIONS_DICT["stable"]:
-        version_name = "stable"
+    if version_number < VERSIONS_DICT["stable"]:
+        version_name = "legacy"
     return {"name": version_name, "number": version_number}
 
 
