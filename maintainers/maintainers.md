@@ -41,10 +41,10 @@ Release | Wed, Feb 17 | Wed, Feb 17 | 1 day
 
 Phase | Start | End | Duration
 -- | -- | -- | --
-Development (cuDF/RMMM) | Wed, Jan 27 | Wed, Mar 24 | 40
-Development (others) | Wed, Feb 3 | Wed, Mar 31 | 40
-Burn Down (cuDF/RMMM) | Thu, Mar 25 | Wed, Mar 31 | 5
-Burn Down (others) | Thu, Apr 1 | Wed, Apr 7 | 5
-Code Freeze/Testing (cuDF/RMMM) | Thu, Apr 1 | Wed, Apr 7 | 5
-Code Freeze/Testing (others) | Thu, Apr 8 | Tue, Apr 13 | 4
-Release | Wed, Apr 14 | Wed, Apr 14 | 1
+Development (cuDF/RMMM) | Wed, Jan 27 | Wed, Mar 24 | 40 days
+Development (others) | Wed, Feb 3 | Wed, Mar 31 | 40 days
+Burn Down (cuDF/RMMM) | Thu, Mar 25 | Wed, Mar 31 | 5 days
+Burn Down (others) | Thu, Apr 1 | Wed, Apr 7 | 5 days
+Code Freeze/Testing (cuDF/RMMM) | Thu, Apr 1 | Wed, Apr 7 | 5 days
+Code Freeze/Testing (others) | Thu, Apr 8 | Tue, Apr 13 | 4 days
+Release | Wed, Apr 14 | Wed, Apr 14 | 1 days
