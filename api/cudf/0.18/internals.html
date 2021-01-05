@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+
+<html class="writer-html5" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>cuDF internals — cudf 0.15.0 documentation</title>
+<link href="_static/css/theme.css" rel="stylesheet" type="text/css"/>
+<link href="_static/pygments.css" rel="stylesheet" type="text/css"/>
+<link href="_static/copybutton.css" rel="stylesheet" type="text/css"/>
+<link href="_static/params.css" rel="stylesheet" type="text/css"/>
+<link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet" type="text/css"/>
+<!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js" type="text/javascript"></script>
+<script src="_static/jquery.js"></script>
+<script src="_static/underscore.js"></script>
+<script src="_static/doctools.js"></script>
+<script src="_static/clipboard.min.js"></script>
+<script src="_static/copybutton.js"></script>
+<script src="_static/copybutton_pydocs.js"></script>
+<script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+<script src="_static/js/theme.js" type="text/javascript"></script>
+<link href="genindex.html" rel="index" title="Index"/>
+<link href="search.html" rel="search" title="Search"/>
+<link href="guide-to-udfs.html" rel="prev" title="Overview of User Defined Functions with cuDF"/>
+<link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"/></head>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search"><div id="rapids-sphinx-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">cudf</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/stable/api.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable/api.html">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (0.18)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/nightly/api.html">nightly (0.18)</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/api.html">stable (0.17)</a><a class="rapids-selector__menu-item" href="/api/cudf/legacy/api.html">legacy (0.16)</a></div></div></div>
+
+
+<div role="search">
+<form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+<input name="q" placeholder="Search docs" type="text"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
+</form>
+</div>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api.html">cuDF API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10min.html">10 Minutes to cuDF and Dask-cuDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basics.html">Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dask-cudf.html">Multi-GPU with Dask-cuDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10min-cudf-cupy.html">10 Minutes to cuDF and CuPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide-to-udfs.html">Overview of User Defined Functions with cuDF</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">cuDF internals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#column">Column</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#buffer">Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#columnaccessor">ColumnAccessor</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="index.html">cudf</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a class="icon icon-home" href="index.html"></a> »</li>
+<li>cuDF internals</li>
+<li class="wy-breadcrumbs-aside">
+<a href="_sources/internals.md.txt" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr/>
+</div>
+<div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+<div itemprop="articleBody">
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="cudf-internals">
+<h1>cuDF internals<a class="headerlink" href="#cudf-internals" title="Permalink to this headline">¶</a></h1>
+<p>The cuDF API closely matches that of the <a class="reference external" href="https://pandas.pydata.org/">Pandas</a> library.
+Thus, we have the types <code class="docutils literal notranslate"><span class="pre">cudf.Series</span></code>, <code class="docutils literal notranslate"><span class="pre">cudf.DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">cudf.Index</span></code> which look and
+feel very much like their Pandas counterparts.</p>
+<p>Under the hood, however, cuDF uses data structures very different from Pandas. In this document,
+we describe these internal data structures.</p>
+<div class="section" id="column">
+<h2>Column<a class="headerlink" href="#column" title="Permalink to this headline">¶</a></h2>
+<p>Columns are cuDF’s core data structure and they are modeled after
+the <a class="reference external" href="https://arrow.apache.org/docs/format/Columnar.html">Apache Arrow Columnar Format</a>.</p>
+<p>A column represents a sequence of values, any number of which may be “null”. Columns are
+specialized based on the type of data they contain. Thus we have <code class="docutils literal notranslate"><span class="pre">NumericalColumn</span></code>, <code class="docutils literal notranslate"><span class="pre">StringColumn</span></code>,
+<code class="docutils literal notranslate"><span class="pre">DatetimeColumn</span></code>, etc.,</p>
+<p>A column is composed of the following:</p>
+<ul class="simple">
+<li><p>A <strong>data type</strong>, specifying the type of each element.</p></li>
+<li><p>A <strong>data buffer</strong> that may store the data for the column elements.
+Some column types do not have a data buffer, instead storing data in the children columns.</p></li>
+<li><p>A <strong>mask buffer</strong> whose bits represent the validity (null or not null) of each element.
+Columns whose elements are all “valid” may not have a mask buffer. Mask buffers are padded
+to 64 bytes.</p></li>
+<li><p>A tuple of <strong>children</strong> columns, which enable the representation complex types such as
+columns with non-fixed width elements such as strings or lists.</p></li>
+<li><p>A <strong>size</strong> indicating the number of elements in the column.</p></li>
+<li><p>An integer <strong>offset</strong>: a column may represent a “slice” of another column,
+in which case this offset represents the first element of the slice. The size of
+the column then gives the extent of the slice. A column that is not a slice
+has an offset of 0.</p></li>
+</ul>
+<p>For example, the <code class="docutils literal notranslate"><span class="pre">NumericalColumn</span></code> backing a Series with 1000 elements of type ‘int32’
+and containing nulls is composed of:</p>
+<ol class="simple">
+<li><p>A data buffer of size 4000 bytes (sizeof(int32) * 1000)</p></li>
+<li><p>A mask buffer of size 128 bytes (1000/8 padded to a multiple of 64 bytes)</p></li>
+<li><p>No children columns</p></li>
+</ol>
+<p>As another example, the <code class="docutils literal notranslate"><span class="pre">StringColumn</span></code> backing the Series
+<code class="docutils literal notranslate"><span class="pre">['do',</span> <span class="pre">'you',</span> <span class="pre">'have',</span> <span class="pre">'any',</span> <span class="pre">'cheese?']</span></code> is composed of:</p>
+<ol class="simple">
+<li><p>No data buffer</p></li>
+<li><p>No mask buffer as there are no nulls in the Series</p></li>
+<li><p>Two children columns:</p>
+<ul class="simple">
+<li><p>A column of 8-bit characters <code class="docutils literal notranslate"><span class="pre">['d',</span> <span class="pre">'o',</span> <span class="pre">'y',</span> <span class="pre">'o',</span> <span class="pre">'u',</span> <span class="pre">h'</span> <span class="pre">...</span> <span class="pre">'?']</span></code></p></li>
+<li><p>A column of “offsets” to the characters column (in this case, <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">2,</span> <span class="pre">5,</span> <span class="pre">9,</span> <span class="pre">12,</span> <span class="pre">19]</span></code>)</p></li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="buffer">
+<h2>Buffer<a class="headerlink" href="#buffer" title="Permalink to this headline">¶</a></h2>
+<p>The data and mask buffers of a column represent data in GPU memory (a.k.a <em>device memory</em>),
+and are object of type <code class="docutils literal notranslate"><span class="pre">cudf.core.buffer.Buffer</span></code>.</p>
+<p>Buffers can be constructed from array-like objects that live either on the host (e.g., numpy arrays)
+or the device (e.g., cupy arrays). Arrays must be of <code class="docutils literal notranslate"><span class="pre">uint8</span></code> dtype or viewed as such.</p>
+<p>When constructing a Buffer from a host object such as a numpy array, new device memory is allocated:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cudf.core.buffer</span> <span class="kn">import</span> <span class="n">Buffer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="s2">"uint8"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">ptr</span><span class="p">)</span>  <span class="c1"># address of new device memory allocation</span>
+<span class="go">140050901762560</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="go">24</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">_owner</span><span class="p">)</span>
+<span class="go">&lt;rmm._lib.device_buffer.DeviceBuffer object at 0x7f6055baab50&gt;</span>
+</pre></div>
+</div>
+<p>cuDF uses the <a class="reference external" href="https://github.com/rapidsai/rmm">RMM</a> library for allocating device memory.
+You can read more about device memory allocation with RMM
+<a class="reference external" href="https://github.com/rapidsai/rmm#devicebuffers">here</a>.</p>
+<p>When constructing a Buffer from a device object such as a CuPy array, no new device memory is
+allocated. Instead, the Buffer points to the existing allocation, keeping a reference to the device
+array:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c_ary</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int64'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span> <span class="o">=</span> <span class="n">Buffer</span><span class="p">(</span><span class="n">c_ary</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="s2">"uint8"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">c_ary</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">mem</span><span class="o">.</span><span class="n">ptr</span><span class="p">)</span>
+<span class="go">140050901762560</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">ptr</span><span class="p">)</span>
+<span class="go">140050901762560</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="go">24</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">_owner</span> <span class="ow">is</span> <span class="n">c_ary</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>An uninitialized block of device memory can be allocated with <code class="docutils literal notranslate"><span class="pre">Buffer.empty</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span> <span class="o">=</span> <span class="n">Buffer</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="go">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">_owner</span><span class="p">)</span>
+<span class="go">&lt;rmm._lib.device_buffer.DeviceBuffer object at 0x7f6055baa890&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="columnaccessor">
+<h2>ColumnAccessor<a class="headerlink" href="#columnaccessor" title="Permalink to this headline">¶</a></h2>
+<p>cuDF  <code class="docutils literal notranslate"><span class="pre">Series</span></code>, <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">Index</span></code> are all subclasses of an internal <code class="docutils literal notranslate"><span class="pre">Frame</span></code> class.
+The underlying data structure of <code class="docutils literal notranslate"><span class="pre">Frame</span></code> is an ordered, dictionary-like object
+known as <code class="docutils literal notranslate"><span class="pre">ColumnAccessor</span></code>, which can be accessed via the <code class="docutils literal notranslate"><span class="pre">._data</span></code> attribute:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'x'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">'y'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">_data</span>
+<span class="go">ColumnAccessor(OrderedColumnDict([('x', &lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d12e050&gt;), ('y', &lt;cudf.core.column.string.StringColumn object at 0x7f5a7d12e320&gt;)]), multiindex=False, level_names=(None,))</span>
+</pre></div>
+</div>
+<p>ColumnAccessor is an ordered mapping of column labels to columns. In addition to behaving
+like an OrderedDict, it supports things like selecting multiple columns (both by index and label), as well as hierarchical indexing.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cudf.core.column_accessor</span> <span class="kn">import</span> <span class="n">ColumnAccessor</span>
+</pre></div>
+</div>
+<p>The values of a ColumnAccessor are coerced to Columns during construction:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span> <span class="o">=</span> <span class="n">ColumnAccessor</span><span class="p">({</span><span class="s1">'x'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">'y'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span>
+<span class="go">&lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d5789e0&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="p">[</span><span class="s1">'y'</span><span class="p">]</span>
+<span class="go">&lt;cudf.core.column.string.StringColumn object at 0x7f5a7d578b90&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">'x'</span><span class="p">)</span>
+<span class="go">&lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d5789e0&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span>
+<span class="go">ColumnAccessor(OrderedColumnDict([('y', &lt;cudf.core.column.string.StringColumn object at 0x7f5a7d578b90&gt;)]), multiindex=False, level_names=(None,))</span>
+</pre></div>
+</div>
+<p>Columns can be inserted at a specified location:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s1">'z'</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span>
+<span class="go">ColumnAccessor(OrderedColumnDict([('x', &lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d578dd0&gt;), ('z', &lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d578680&gt;), ('y', &lt;cudf.core.column.string.StringColumn object at 0x7f5a7d12e3b0&gt;)]), multiindex=False, level_names=(None,))</span>
+</pre></div>
+</div>
+<p>Selecting columns by index:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span> <span class="o">=</span> <span class="n">ColumnAccessor</span><span class="p">({</span><span class="s1">'x'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">'y'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">],</span> <span class="s1">'z'</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="o">.</span><span class="n">select_by_index</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">ColumnAccessor(OrderedColumnDict([('y', &lt;cudf.core.column.string.StringColumn object at 0x7f5a7d578830&gt;)]), multiindex=False, level_names=(None,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="o">.</span><span class="n">select_by_index</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="go">ColumnAccessor(OrderedColumnDict([('x', &lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d5789e0&gt;), ('y', &lt;cudf.core.column.string.StringColumn object at 0x7f5a7d578830&gt;)]), multiindex=False, level_names=(None,))    </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="o">.</span><span class="n">select_by_index</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">ColumnAccessor(OrderedColumnDict([('y', &lt;cudf.core.column.string.StringColumn object at 0x7f5a7d578830&gt;), ('z', &lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d5788c0&gt;)]), multiindex=False, level_names=(None,))</span>
+</pre></div>
+</div>
+<p>Selecting columns by label:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="o">.</span><span class="n">select_by_label</span><span class="p">([</span><span class="s1">'y'</span><span class="p">,</span> <span class="s1">'z'</span><span class="p">])</span>
+<span class="go">ColumnAccessor(OrderedColumnDict([('y', &lt;cudf.core.column.string.StringColumn object at 0x7f5a7d578830&gt;), ('z', &lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d5788c0&gt;)]), multiindex=False, level_names=(None,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="o">.</span><span class="n">select_by_label</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="s1">'x'</span><span class="p">,</span> <span class="s1">'y'</span><span class="p">))</span>
+<span class="go">ColumnAccessor(OrderedColumnDict([('x', &lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d5789e0&gt;), ('y', &lt;cudf.core.column.string.StringColumn object at 0x7f5a7d578830&gt;)]), multiindex=False, level_names=(None,))</span>
+</pre></div>
+</div>
+<p>A ColumnAccessor with tuple keys (and constructed with <code class="docutils literal notranslate"><span class="pre">multiindex=True</span></code>)
+can be hierarchically indexed:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span> <span class="o">=</span> <span class="n">ColumnAccessor</span><span class="p">({(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">):</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">):</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="s1">'b'</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]},</span> <span class="n">multiindex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="o">.</span><span class="n">select_by_label</span><span class="p">(</span><span class="s1">'a'</span><span class="p">)</span>
+<span class="go">ColumnAccessor(OrderedColumnDict([('b', &lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d5789e0&gt;), ('c', &lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d578dd0&gt;)]), multiindex=False, level_names=(None,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="o">.</span><span class="n">select_by_label</span><span class="p">((</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">))</span>
+<span class="go">ColumnAccessor(OrderedColumnDict([(('a', 'b'), &lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d5789e0&gt;)]), multiindex=False, level_names=(None,))</span>
+</pre></div>
+</div>
+<p>“Wildcard” indexing is also allowed:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span> <span class="o">=</span> <span class="n">ColumnAccessor</span><span class="p">({(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">):</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">):</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">(</span><span class="s1">'d'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">):</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]},</span> <span class="n">multiindex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="o">.</span><span class="n">select_by_label</span><span class="p">((</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="s1">'b'</span><span class="p">))</span>
+<span class="go">ColumnAccessor(OrderedColumnDict([(('a', 'b'), &lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d578830&gt;), (('d', 'b'), &lt;cudf.core.column.numerical.NumericalColumn object at 0x7f5a7d578680&gt;)]), multiindex=True, level_names=(None, None))</span>
+</pre></div>
+</div>
+<p>Finally, ColumnAccessors can convert to Pandas <code class="docutils literal notranslate"><span class="pre">Index</span></code> or <code class="docutils literal notranslate"><span class="pre">MultiIndex</span></code> objects:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="o">.</span><span class="n">to_pandas_index</span><span class="p">()</span>
+<span class="go">MultiIndex([('a', 'b'),</span>
+<span class="go">            ('a', 'c'),</span>
+<span class="go">            ('d', 'b')],</span>
+<span class="go">           )</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a accesskey="p" class="btn btn-neutral float-left" href="guide-to-udfs.html" rel="prev" title="Overview of User Defined Functions with cuDF"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<p>
+        
+        © Copyright 2020, NVIDIA
+
+    </p>
+</div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+</div>
+</div>
+</section>
+</div>
+<script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script></body>
+</html>

@@ -29,16 +29,22 @@ Operations
 
 Phase | Start | End | Duration
 -- | -- | -- | --
-Development | Thu, Oct 1st | Mon, Nov 23rd | 38 days
-Burn Down | Tue, Nov 24th | Thu, Dec 3rd | 6 days
-Code Freeze/Testing | Fri, Dec 4th | Wed, Dec 9th | 4 days
-Release | Thu, Dec 10th | Thu, Dec 10th | 1 day
+Development (cuDF/RMMM) | Tue, Nov 24 | Tue, Jan 26 | 34 days
+Development (others) | Tue, Nov 24 | Tue, Feb 2 | 39 days
+Burn Down (cuDF/RMMM) | Wed, Jan 27 | Tue, Feb 2 | 5 days
+Burn Down (others) | Wed, Feb 3 | Tue, Feb 9 | 5 days
+Code Freeze/Testing (cuDF/RMMM) | Wed, Feb 3 | Tue, Feb 9 | 5 days
+Code Freeze/Testing (others) | Wed, Feb 10 | Tue, Feb 16 | 4 days
+Release | Wed, Feb 17 | Wed, Feb 17 | 1 day
 
-## _PROPOSED_ Release v0.18 Schedule
+## _PROPOSED_ Release v0.19 Schedule
 
 Phase | Start | End | Duration
 -- | -- | -- | --
-Development | Tue, Nov 24th | Tue, Feb 9th | 49 days
-Burn Down | Wed, Feb 10th | Wed, Feb 17th | 5 days
-Code Freeze/Testing | Thu, Feb 18th | Tue, Feb 23rd | 4 days
-Release | Wed, Feb 24th | Wed, Feb 24th | 1 day
+Development (cuDF/RMMM) | Wed, Jan 27 | Wed, Mar 24 | 40 days
+Development (others) | Wed, Feb 3 | Wed, Mar 31 | 40 days
+Burn Down (cuDF/RMMM) | Thu, Mar 25 | Wed, Mar 31 | 5 days
+Burn Down (others) | Thu, Apr 1 | Wed, Apr 7 | 5 days
+Code Freeze/Testing (cuDF/RMMM) | Thu, Apr 1 | Wed, Apr 7 | 5 days
+Code Freeze/Testing (others) | Thu, Apr 8 | Tue, Apr 13 | 4 days
+Release | Wed, Apr 14 | Wed, Apr 14 | 1 days
