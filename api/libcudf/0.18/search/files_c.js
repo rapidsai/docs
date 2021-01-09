@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['ngrams_5ftokenize_2ehpp_1645',['ngrams_tokenize.hpp',['../ngrams__tokenize_8hpp.html',1,'']]],
-  ['normalize_2ehpp_1646',['normalize.hpp',['../normalize_8hpp.html',1,'']]],
-  ['null_5fmask_2ehpp_1647',['null_mask.hpp',['../null__mask_8hpp.html',1,'']]],
-  ['replace_2ehpp_1648',['replace.hpp',['../nvtext_2replace_8hpp.html',1,'']]]
+  ['ngrams_5ftokenize_2ehpp_1649',['ngrams_tokenize.hpp',['../ngrams__tokenize_8hpp.html',1,'']]],
+  ['normalize_2ehpp_1650',['normalize.hpp',['../normalize_8hpp.html',1,'']]],
+  ['null_5fmask_2ehpp_1651',['null_mask.hpp',['../null__mask_8hpp.html',1,'']]],
+  ['replace_2ehpp_1652',['replace.hpp',['../nvtext_2replace_8hpp.html',1,'']]]
 ];
