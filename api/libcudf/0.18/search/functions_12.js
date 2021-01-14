@@ -2,7 +2,7 @@ var searchData=
 [
   ['sample_2219',['sample',['../group__column__copy.html#gaf2c879c97a852fdf113781d63a303aa7',1,'cudf']]],
   ['scalar_2220',['scalar',['../classcudf_1_1scalar.html#a4c0c1005c672c8b93d2b536c10903b99',1,'cudf::scalar']]],
-  ['scale_2221',['scale',['../classcudf_1_1data__type.html#a5215d0d432a510a29c9a11653f0cba93',1,'cudf::data_type']]],
+  ['scale_2221',['scale',['../classnumeric_1_1fixed__point.html#ac010c0ac8470fd746be4ad5abddbfb42',1,'numeric::fixed_point::scale()'],['../classcudf_1_1data__type.html#a5215d0d432a510a29c9a11653f0cba93',1,'cudf::data_type::scale()']]],
   ['scan_2222',['scan',['../group__aggregation__reduction.html#ga8133471b63103542233cbcd7e37a46bc',1,'cudf']]],
   ['scatter_2223',['scatter',['../group__copy__scatter.html#gaa4274057627ebf33639e757f660e2ec6',1,'cudf::scatter(table_view const &amp;source, column_view const &amp;scatter_map, table_view const &amp;target, bool check_bounds=false, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())'],['../group__copy__scatter.html#ga3940b7eebe85a49b6cf4e37c1965f63e',1,'cudf::scatter(std::vector&lt; std::reference_wrapper&lt; const scalar &gt;&gt; const &amp;source, column_view const &amp;indices, table_view const &amp;target, bool check_bounds=false, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())']]],
   ['scatter_5fcolumns_2224',['scatter_columns',['../namespacecudf.html#ab3eece7be385b3be2bda53b24a48dbdc',1,'cudf']]],

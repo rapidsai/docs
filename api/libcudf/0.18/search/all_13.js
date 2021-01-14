@@ -19,7 +19,7 @@ var searchData=
   ['scalar_5fdevice_5fview_5fbase_993',['scalar_device_view_base',['../classcudf_1_1detail_1_1scalar__device__view__base.html',1,'cudf::detail']]],
   ['scalar_5ffactories_2ehpp_994',['scalar_factories.hpp',['../scalar__factories_8hpp.html',1,'']]],
   ['scalar_5ftype_5ft_995',['scalar_type_t',['../group__utility__dispatcher.html#ga9446c2558fd01c19f5fb5fa33927586f',1,'cudf']]],
-  ['scale_996',['scale',['../classcudf_1_1data__type.html#a5215d0d432a510a29c9a11653f0cba93',1,'cudf::data_type']]],
+  ['scale_996',['scale',['../classnumeric_1_1fixed__point.html#ac010c0ac8470fd746be4ad5abddbfb42',1,'numeric::fixed_point::scale()'],['../classcudf_1_1data__type.html#a5215d0d432a510a29c9a11653f0cba93',1,'cudf::data_type::scale()']]],
   ['scaled_5finteger_997',['scaled_integer',['../structnumeric_1_1scaled__integer.html',1,'numeric']]],
   ['scan_998',['scan',['../group__aggregation__reduction.html#ga8133471b63103542233cbcd7e37a46bc',1,'cudf']]],
   ['scan_5ftype_999',['scan_type',['../group__aggregation__reduction.html#ga269c5a531bd3bb4da9ebe4590db028af',1,'cudf']]],
