@@ -559,7 +559,7 @@ to distinguish legitimate and DGA domain names.</p>
 <col style="width: 90%"/>
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#clx.analytics.dga_detector.DGADetector.evaluate_model" title="clx.analytics.dga_detector.DGADetector.evaluate_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_model</span></code></a>(detector_dataset)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#clx.analytics.dga_detector.DGADetector.evaluate_model" title="clx.analytics.dga_detector.DGADetector.evaluate_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_model</span></code></a>(dataloader)</p></td>
 <td><p>This function evaluates the trained model to verify it’s accuracy.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#clx.analytics.dga_detector.DGADetector.init_model" title="clx.analytics.dga_detector.DGADetector.init_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_model</span></code></a>([char_vocab, hidden_size, …])</p></td>
@@ -568,24 +568,24 @@ to distinguish legitimate and DGA domain names.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#clx.analytics.dga_detector.DGADetector.load_model" title="clx.analytics.dga_detector.DGADetector.load_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_model</span></code></a>(file_path)</p></td>
 <td><p>This function load already saved model and sets cuda parameters.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#clx.analytics.dga_detector.DGADetector.predict" title="clx.analytics.dga_detector.DGADetector.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(domains)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#clx.analytics.dga_detector.DGADetector.predict" title="clx.analytics.dga_detector.DGADetector.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(domains[, probability])</p></td>
 <td><p>This function accepts cudf series of domains as an argument to classify domain names as benign/malicious and returns the learned label for each object in the form of cudf series.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#clx.analytics.dga_detector.DGADetector.save_model" title="clx.analytics.dga_detector.DGADetector.save_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_model</span></code></a>(file_path)</p></td>
 <td><p>This function saves model to given location.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#clx.analytics.dga_detector.DGADetector.train_model" title="clx.analytics.dga_detector.DGADetector.train_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_model</span></code></a>(detector_dataset)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#clx.analytics.dga_detector.DGADetector.train_model" title="clx.analytics.dga_detector.DGADetector.train_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_model</span></code></a>(train_data, labels[, …])</p></td>
 <td><p>This function is used for training RNNClassifier model with a given training dataset.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt id="clx.analytics.dga_detector.DGADetector.evaluate_model">
-<code class="sig-name descname">evaluate_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">detector_dataset</span></em><span class="sig-paren">)</span><a class="headerlink" href="#clx.analytics.dga_detector.DGADetector.evaluate_model" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">evaluate_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataloader</span></em><span class="sig-paren">)</span><a class="headerlink" href="#clx.analytics.dga_detector.DGADetector.evaluate_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function evaluates the trained model to verify it’s accuracy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>detector_dataset</strong> (<em>DetectorDataset</em>) – Instance holds preprocessed data.</p>
+<dd class="field-odd"><p><strong>dataloader</strong> (<em>DataLoader</em>) – Instance holds preprocessed data.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Model accuracy</p>
@@ -597,7 +597,7 @@ to distinguish legitimate and DGA domain names.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span> <span class="o">=</span> <span class="n">DGADetector</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span><span class="o">.</span><span class="n">init_model</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span><span class="o">.</span><span class="n">evaluate_model</span><span class="p">(</span><span class="n">detector_dataset</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span><span class="o">.</span><span class="n">evaluate_model</span><span class="p">(</span><span class="n">dataloader</span><span class="p">)</span>
 <span class="go">Evaluating trained model ...</span>
 <span class="go">Test set: Accuracy: 3/4 (0.75)</span>
 </pre></div>
@@ -630,26 +630,18 @@ to distinguish legitimate and DGA domain names.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="clx.analytics.dga_detector.DGADetector.predict">
-<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">domains</span></em><span class="sig-paren">)</span><a class="headerlink" href="#clx.analytics.dga_detector.DGADetector.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function accepts cudf series of domains as an argument to classify domain names as benign/malicious and returns the learned label for each object in the form of cudf series.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>domains</strong> (<em>cudf.Series</em>) – List of domains.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Predicted results with respect to given domains.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>cudf.Series</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="s1">'nvidia.com'</span><span class="p">,</span> <span class="s1">'dgadomain'</span><span class="p">])</span>
-<span class="go">0    0</span>
-<span class="go">1    1</span>
-<span class="go">Name: is_dga, dtype: int64</span>
-</pre></div>
-</div>
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">domains</span></em>, <em class="sig-param"><span class="n">probability</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#clx.analytics.dga_detector.DGADetector.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function accepts cudf series of domains as an argument to classify domain names as benign/malicious and returns the learned label for each object in the form of cudf series.
+:param domains: List of domains.
+:type domains: cudf.Series
+:return: Predicted results with respect to given domains.
+:rtype: cudf.Series
+Examples
+——–
+&gt;&gt;&gt; dd.predict([‘nvidia.com’, ‘dgadomain’])
+0    0.010
+1    0.924
+Name: dga_probability, dtype: decimal</p>
 </dd></dl>
 <dl class="py method">
 <dt id="clx.analytics.dga_detector.DGADetector.save_model">
@@ -663,18 +655,23 @@ to distinguish legitimate and DGA domain names.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="clx.analytics.dga_detector.DGADetector.train_model">
-<code class="sig-name descname">train_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">detector_dataset</span></em><span class="sig-paren">)</span><a class="headerlink" href="#clx.analytics.dga_detector.DGADetector.train_model" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">train_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_data</span></em>, <em class="sig-param"><span class="n">labels</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">train_size</span><span class="o">=</span><span class="default_value">0.7</span></em><span class="sig-paren">)</span><a class="headerlink" href="#clx.analytics.dga_detector.DGADetector.train_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function is used for training RNNClassifier model with a given training dataset. It returns total loss to determine model prediction accuracy.
-:param detector_dataset: Instance holds preprocessed data
-:type detector_dataset: DetectorDataset
-:return: Total loss
-:rtype: int</p>
+:param train_data: Training data
+:type train_data: cudf.Series
+:param labels: labels data
+:type labels: cudf.Series
+:param batch_size: batch size
+:type batch_size: int
+:param epochs: Number of epochs for training
+:type epochs: int
+:param train_size: Training size for splitting training and test data
+:type train_size: int</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">clx.analytics.dga_detector</span> <span class="kn">import</span> <span class="n">DGADetector</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">partitioned_dfs</span> <span class="o">=</span> <span class="o">...</span> <span class="c1"># partitioned_dfs = [df1, df2, ...] represents training dataset</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span> <span class="o">=</span> <span class="n">DGADetector</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span><span class="o">.</span><span class="n">init_model</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span><span class="o">.</span><span class="n">train_model</span><span class="p">(</span><span class="n">detector_dataset</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dd</span><span class="o">.</span><span class="n">train_model</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 <span class="go">1.5728906989097595</span>
 </pre></div>
 </div>
@@ -822,7 +819,7 @@ to distinguish legitimate and DGA domain names.</p>
 </dd></dl>
 <dl class="py class">
 <dt id="clx.analytics.model.rnn_classifier.RNNClassifier">
-<em class="property">class </em><code class="sig-prename descclassname">clx.analytics.model.rnn_classifier.</code><code class="sig-name descname">RNNClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_size</span></em>, <em class="sig-param"><span class="n">hidden_size</span></em>, <em class="sig-param"><span class="n">output_size</span></em>, <em class="sig-param"><span class="n">n_layers</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">bidirectional</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#clx.analytics.model.rnn_classifier.RNNClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">clx.analytics.model.rnn_classifier.</code><code class="sig-name descname">RNNClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_size</span></em>, <em class="sig-param"><span class="n">hidden_size</span></em>, <em class="sig-param"><span class="n">output_size</span></em>, <em class="sig-param"><span class="n">n_layers</span></em>, <em class="sig-param"><span class="n">bidirectional</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#clx.analytics.model.rnn_classifier.RNNClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p class="rubric">Methods</p>
 <table class="longtable docutils align-default">
 <colgroup>
