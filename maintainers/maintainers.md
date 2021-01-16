@@ -35,7 +35,7 @@ Burn Down (cuDF/RMM) | Wed, Jan 27 | Tue, Feb 2 | 5 days
 Burn Down (others) | Wed, Feb 3 | Tue, Feb 9 | 5 days
 Code Freeze/Testing (cuDF/RMM) | Wed, Feb 3 | Tue, Feb 9 | 5 days
 Code Freeze/Testing (others) | Wed, Feb 10 | Tue, Feb 16 | 4 days
-Release | Wed, Feb 17 | Wed, Feb 17 | 1 day
+Release | Wed, Feb 17 | Thu, Feb 18 | 2 days
 
 ## _PROPOSED_ Release v0.19 Schedule
 
@@ -47,4 +47,4 @@ Burn Down (cuDF/RMM) | Thu, Mar 25 | Wed, Mar 31 | 5 days
 Burn Down (others) | Thu, Apr 1 | Wed, Apr 7 | 5 days
 Code Freeze/Testing (cuDF/RMM) | Thu, Apr 1 | Wed, Apr 7 | 5 days
 Code Freeze/Testing (others) | Thu, Apr 8 | Tue, Apr 13 | 4 days
-Release | Wed, Apr 14 | Wed, Apr 14 | 1 days
+Release | Wed, Apr 14 | Thu, Apr 15 | 2 days
