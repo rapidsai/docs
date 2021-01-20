@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['schema_5finfo_2399',['schema_info',['../structcudf_1_1io_1_1table__metadata.html#aca88d41ea923a24e060dbd4165d7bccb',1,'cudf::io::table_metadata']]],
-  ['sequence_5flength_2400',['sequence_length',['../structnvtext_1_1tokenizer__result.html#a09a5e713c18852fde26b0eeec2632c78',1,'nvtext::tokenizer_result']]]
+  ['remainder_2749',['remainder',['https://docs.rapids.ai/api/librmm/0.18/structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1split__block.html#ac9956a8ee3f95de52f2217532700a3eb',1,'rmm::mr::detail::stream_ordered_memory_resource::split_block']]],
+  ['reserved_5fsize_2750',['reserved_size',['https://docs.rapids.ai/api/librmm/0.18/classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#aa7ca12862921fb184159b304b7afae4c',1,'rmm::mr::detail::arena::global_arena']]],
+  ['results_2751',['results',['../structcudf_1_1groupby_1_1aggregation__result.html#a1d0e11864ac37b44b2b19051fca616fe',1,'cudf::groupby::aggregation_result']]]
 ];

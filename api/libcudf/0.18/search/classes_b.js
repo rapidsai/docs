@@ -1,10 +1,13 @@
 var searchData=
 [
-  ['list_5fdevice_5fview_1459',['list_device_view',['../classcudf_1_1list__device__view.html',1,'cudf']]],
-  ['list_5fview_1460',['list_view',['../classcudf_1_1list__view.html',1,'cudf']]],
-  ['lists_5fcolumn_5fdevice_5fview_1461',['lists_column_device_view',['../classcudf_1_1detail_1_1lists__column__device__view.html',1,'cudf::detail']]],
-  ['lists_5fcolumn_5fview_1462',['lists_column_view',['../classcudf_1_1lists__column__view.html',1,'cudf']]],
-  ['lists_5fcolumn_5fwrapper_1463',['lists_column_wrapper',['../classcudf_1_1test_1_1lists__column__wrapper.html',1,'cudf::test']]],
-  ['literal_1464',['literal',['../classcudf_1_1ast_1_1literal.html',1,'cudf::ast']]],
-  ['logic_5ferror_1465',['logic_error',['../structcudf_1_1logic__error.html',1,'cudf']]]
+  ['limiting_5fresource_5fadaptor_1664',['limiting_resource_adaptor',['https://docs.rapids.ai/api/librmm/0.18/classrmm_1_1mr_1_1limiting__resource__adaptor.html',1,'rmm::mr']]],
+  ['list_5fdevice_5fview_1665',['list_device_view',['../classcudf_1_1list__device__view.html',1,'cudf']]],
+  ['list_5fview_1666',['list_view',['../classcudf_1_1list__view.html',1,'cudf']]],
+  ['lists_5fcolumn_5fdevice_5fview_1667',['lists_column_device_view',['../classcudf_1_1detail_1_1lists__column__device__view.html',1,'cudf::detail']]],
+  ['lists_5fcolumn_5fview_1668',['lists_column_view',['../classcudf_1_1lists__column__view.html',1,'cudf']]],
+  ['lists_5fcolumn_5fwrapper_1669',['lists_column_wrapper',['../classcudf_1_1test_1_1lists__column__wrapper.html',1,'cudf::test']]],
+  ['literal_1670',['literal',['../classcudf_1_1ast_1_1literal.html',1,'cudf::ast']]],
+  ['logger_5fwrapper_1671',['logger_wrapper',['https://docs.rapids.ai/api/librmm/0.18/structrmm_1_1detail_1_1logger__wrapper.html',1,'rmm::detail']]],
+  ['logging_5fresource_5fadaptor_1672',['logging_resource_adaptor',['https://docs.rapids.ai/api/librmm/0.18/classrmm_1_1mr_1_1logging__resource__adaptor.html',1,'rmm::mr']]],
+  ['logic_5ferror_1673',['logic_error',['https://docs.rapids.ai/api/librmm/0.18/structrmm_1_1logic__error.html',1,'rmm::logic_error'],['../structcudf_1_1logic__error.html',1,'cudf::logic_error']]]
 ];
