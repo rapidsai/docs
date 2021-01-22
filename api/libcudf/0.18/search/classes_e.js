@@ -15,11 +15,12 @@ var searchData=
   ['options_1703',['Options',['../classcxxopts_1_1Options.html',1,'cxxopts']]],
   ['optionspecexception_1704',['OptionSpecException',['../classcxxopts_1_1OptionSpecException.html',1,'cxxopts']]],
   ['optionvalue_1705',['OptionValue',['../classcxxopts_1_1OptionValue.html',1,'cxxopts']]],
-  ['orc_5freader_5foptions_1706',['orc_reader_options',['../classcudf_1_1io_1_1orc__reader__options.html',1,'cudf::io']]],
-  ['orc_5freader_5foptions_5fbuilder_1707',['orc_reader_options_builder',['../classcudf_1_1io_1_1orc__reader__options__builder.html',1,'cudf::io']]],
-  ['orc_5fwriter_5foptions_1708',['orc_writer_options',['../classcudf_1_1io_1_1orc__writer__options.html',1,'cudf::io']]],
-  ['orc_5fwriter_5foptions_5fbuilder_1709',['orc_writer_options_builder',['../classcudf_1_1io_1_1orc__writer__options__builder.html',1,'cudf::io']]],
-  ['order_5finfo_1710',['order_info',['../structcudf_1_1order__info.html',1,'cudf']]],
-  ['out_5fof_5frange_1711',['out_of_range',['https://docs.rapids.ai/api/librmm/0.18/classrmm_1_1out__of__range.html',1,'rmm']]],
-  ['owning_5fwrapper_1712',['owning_wrapper',['https://docs.rapids.ai/api/librmm/0.18/classrmm_1_1mr_1_1owning__wrapper.html',1,'rmm::mr']]]
+  ['orc_5fchunked_5fwriter_1706',['orc_chunked_writer',['../classcudf_1_1io_1_1orc__chunked__writer.html',1,'cudf::io']]],
+  ['orc_5freader_5foptions_1707',['orc_reader_options',['../classcudf_1_1io_1_1orc__reader__options.html',1,'cudf::io']]],
+  ['orc_5freader_5foptions_5fbuilder_1708',['orc_reader_options_builder',['../classcudf_1_1io_1_1orc__reader__options__builder.html',1,'cudf::io']]],
+  ['orc_5fwriter_5foptions_1709',['orc_writer_options',['../classcudf_1_1io_1_1orc__writer__options.html',1,'cudf::io']]],
+  ['orc_5fwriter_5foptions_5fbuilder_1710',['orc_writer_options_builder',['../classcudf_1_1io_1_1orc__writer__options__builder.html',1,'cudf::io']]],
+  ['order_5finfo_1711',['order_info',['../structcudf_1_1order__info.html',1,'cudf']]],
+  ['out_5fof_5frange_1712',['out_of_range',['https://docs.rapids.ai/api/librmm/0.18/classrmm_1_1out__of__range.html',1,'rmm']]],
+  ['owning_5fwrapper_1713',['owning_wrapper',['https://docs.rapids.ai/api/librmm/0.18/classrmm_1_1mr_1_1owning__wrapper.html',1,'rmm::mr']]]
 ];

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['value_1831',['Value',['../classcxxopts_1_1Value.html',1,'cxxopts']]],
-  ['value_5faccessor_1832',['value_accessor',['../structcudf_1_1detail_1_1value__accessor.html',1,'cudf::detail']]]
+  ['value_1832',['Value',['../classcxxopts_1_1Value.html',1,'cxxopts']]],
+  ['value_5faccessor_1833',['value_accessor',['../structcudf_1_1detail_1_1value__accessor.html',1,'cudf::detail']]]
 ];
