@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['reduction_3034',['Reduction',['../group__aggregation__reduction.html',1,'']]],
-  ['rolling_20window_3035',['Rolling Window',['../group__aggregation__rolling.html',1,'']]],
-  ['reordering_3036',['Reordering',['../group__column__reorder.html',1,'']]],
-  ['reshaping_3037',['Reshaping',['../group__column__reshape.html',1,'']]],
-  ['readers_3038',['Readers',['../group__io__readers.html',1,'']]],
-  ['replacing_3039',['Replacing',['../group__nvtext__replace.html',1,'']]],
-  ['replacing_3040',['Replacing',['../group__strings__replace.html',1,'']]],
-  ['replacing_3041',['Replacing',['../group__transformation__replace.html',1,'']]]
+  ['reduction_3036',['Reduction',['../group__aggregation__reduction.html',1,'']]],
+  ['rolling_20window_3037',['Rolling Window',['../group__aggregation__rolling.html',1,'']]],
+  ['reordering_3038',['Reordering',['../group__column__reorder.html',1,'']]],
+  ['reshaping_3039',['Reshaping',['../group__column__reshape.html',1,'']]],
+  ['readers_3040',['Readers',['../group__io__readers.html',1,'']]],
+  ['replacing_3041',['Replacing',['../group__nvtext__replace.html',1,'']]],
+  ['replacing_3042',['Replacing',['../group__strings__replace.html',1,'']]],
+  ['replacing_3043',['Replacing',['../group__transformation__replace.html',1,'']]]
 ];
