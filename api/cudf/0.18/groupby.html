@@ -148,6 +148,32 @@ by one or more columns:</p>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">gb3</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">]))</span>  <span class="c1"># grouping by an external column</span>
 </pre></div>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>cuDF uses <cite>sort=False</cite> by default to achieve better performance, which provides no gaurentee to the group order in outputs. This deviates from Pandas default behavior.</p>
+<p>For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'a'</span> <span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">'b'</span> <span class="p">:</span> <span class="p">[</span><span class="mi">42</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">11</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'a'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="go">   b</span>
+<span class="go">a</span>
+<span class="go">2  63</span>
+<span class="go">1  11</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'a'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="go">   b</span>
+<span class="go">a</span>
+<span class="go">1  11</span>
+<span class="go">2  63</span>
+</pre></div>
+</div>
+<p>Setting <cite>sort=True</cite> will produce Pandas-like output, but with some performance penalty:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="go">   b</span>
+<span class="go">a</span>
+<span class="go">1  11</span>
+<span class="go">2  63</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="grouping-by-index-levels">
 <h3>Grouping by index levels<a class="headerlink" href="#grouping-by-index-levels" title="Permalink to this headline">¶</a></h3>
 <p>You can also group by one or more levels of a MultiIndex:</p>
@@ -179,7 +205,7 @@ by one or more columns:</p>
 <div class="section" id="aggregation">
 <h2>Aggregation<a class="headerlink" href="#aggregation" title="Permalink to this headline">¶</a></h2>
 <p>Aggregations on groups is supported via the <code class="docutils literal notranslate"><span class="pre">agg</span></code> method:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
 <span class="go">   a  b  c</span>
 <span class="go">0  1  1  1</span>
 <span class="go">1  1  1  2</span>
