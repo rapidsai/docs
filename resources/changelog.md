@@ -25,7 +25,7 @@ Project Leads
 
 ### Process
 
-During the development cycle of each RAPIDS release, merged pull requests will be automatically recorded in a GitHub pre-release. The pre-releases can be found in a repository's _Release_ section on GitHub. (i.e. https://github.com/rapidsai/cudf/releases). At release time, the contents of the pre-release's body will be copied into the `CHANGELOG.md` file found in each repository's root directory.
+During the development cycle of each RAPIDS release, merged pull requests will be automatically recorded in a GitHub pre-release. The pre-releases can be found in a repository's _Release_ section on GitHub. (i.e. <https://github.com/rapidsai/cudf/releases>). At release time, the contents of the pre-release's body will be copied into the `CHANGELOG.md` file found in each repository's root directory.
 
 ### Body
 
