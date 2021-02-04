@@ -86,7 +86,7 @@ Also see the [Burn down guide]({% link resources/burn-down-guide.md %})
 
 ## Code freeze
 
-Code freeze is the process when the release undergoes thorogh testing. Pull requests are no longer accepted into the development branch. An exception may be made for [hotfix]({% link releases/hotfix.md %}) issues. All pull requests from Burn Down should be merged before Code Freeze begins or be moved to the next release.
+Code freeze is the process when the release undergoes thorough testing. Pull requests are no longer accepted into the development branch. An exception may be made for [hotfix]({% link releases/hotfix.md %}) issues. All pull requests from Burn Down should be merged before Code Freeze begins or be moved to the next release.
 ### Timing
 
 For the selection of a `code freeze date`, the general guidelines should be followed:
