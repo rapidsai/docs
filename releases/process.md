@@ -40,7 +40,7 @@ From this point forward you can follow the git branching & release model used by
 Both major and minor releases follow the same steps with little variation. For both, release types there are two key dates that need to be known well in advance:
 
 * `Burn down date`
-* `Code freeze data`
+* `Code freeze date`
 * `Release date`
 
 The `burn down date` will always be several days before the `code freeze date` which in turn is several days before the `release date`. This is to ensure there is enough time to finish active development, and to handle any unknown bugs/issues.
