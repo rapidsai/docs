@@ -445,6 +445,32 @@
     <name>crtp&lt; PoolResource &gt;</name>
     <filename>structrmm_1_1mr_1_1detail_1_1crtp.html</filename>
   </compound>
+  <compound kind="class">
+    <name>rmm::mr::cuda_async_memory_resource</name>
+    <filename>classrmm_1_1mr_1_1cuda__async__memory__resource.html</filename>
+    <base>rmm::mr::device_memory_resource</base>
+    <member kind="function">
+      <type></type>
+      <name>cuda_async_memory_resource</name>
+      <anchorfile>classrmm_1_1mr_1_1cuda__async__memory__resource.html</anchorfile>
+      <anchor>acd67c968518362c62f7039745ed1ddde</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>supports_streams</name>
+      <anchorfile>classrmm_1_1mr_1_1cuda__async__memory__resource.html</anchorfile>
+      <anchor>a1f4a03ddac6152e2727d2e9d58069ea2</anchor>
+      <arglist>() const noexcept override</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>supports_get_mem_info</name>
+      <anchorfile>classrmm_1_1mr_1_1cuda__async__memory__resource.html</anchorfile>
+      <anchor>a403025ec8d405306db6c7ad0119a4627</anchor>
+      <arglist>() const noexcept override</arglist>
+    </member>
+  </compound>
   <compound kind="struct">
     <name>rmm::cuda_device_id</name>
     <filename>structrmm_1_1cuda__device__id.html</filename>
