@@ -64,9 +64,9 @@ For each RAPIDS project, navigate to the current release board and follow [these
 
 Update the gpuCI configuration file to include the `branch-0.B`. Then run the RAPIDS Seed Job to generate the new jobs.
 
-### Auto-mergers
+### forward-mergers
 
-Update each of the [auto-mergers](https://gpuci.gpuopenanalytics.com/view/gpuCI%20-%20auto-mergers/) to merge from `0.A` to `0.B`.
+Update each of the [forward-mergers](https://gpuci.gpuopenanalytics.com/view/gpuCI%20-%20forward-mergers/) to merge from `0.A` to `0.B`.
 
 Make sure to update all of the following
 * Job name
@@ -93,7 +93,7 @@ Please keep the following in mind:
 - *Concentrate all dev efforts* to close any issues or PRs on the v0.9 boards
 - *Check open PRs* to ensure they target the correct branch before merging
 - *Move open issues/PRs* to the new v0.9 boards and branch
-- Auto-mergers are in place to merge updates from v0.9 to v0.10 - https://gpuci.gpuopenanalytics.com/view/gpuCI%20-%20auto-mergers/
+- Forward-mergers are in place to merge updates from v0.9 to v0.10 - https://gpuci.gpuopenanalytics.com/view/gpuCI%20-%20forward-mergers/
 
 See https://docs.rapids.ai/releases/process/#burn-down for more details on the burn down and development process.
 

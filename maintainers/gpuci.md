@@ -111,13 +111,13 @@ These builds can publish nightly conda packages.
 
 Each branch is built in a container using CUDA {{ site.data.versions.CUDA_VER }} and Python {{ site.data.versions.PYTHON_VER }}. the purpose of this job is primarily for testing with a GPU present.
 
-#### Auto-mergers
+#### forward-mergers
 
-During the release process, the branch for the next release is created and set as default. Once this happens, the auto-merger branch jobs are activated. Auto-mergers automatically merge any commits made to the release branch to the latest default branch during burn down.
+During the release process, the branch for the next release is created and set as default. Once this happens, the forward-merger branch jobs are activated. Forward-mergers automatically merge any commits made to the release branch to the latest default branch during burn down.
 
 **When Auto Merging Fails**
 
-It is important to note that the auto-merge jobs will sometimes fail due to merge conflicts, and will request a manual merge to be done. *Never* use the GitHub Web UI to fix the merge conflicts as it will cause changes in the default branch to be merged into the release branch. Please use the following steps to fix the merge conflicts manually:
+It is important to note that the forward-merge jobs will sometimes fail due to merge conflicts, and will request a manual merge to be done. *Never* use the GitHub Web UI to fix the merge conflicts as it will cause changes in the default branch to be merged into the release branch. Please use the following steps to fix the merge conflicts manually:
 
 Using the example of `branch-{{ site.data.releases.stable.version }}` release branch and a new default `branch-{{ site.data.releases.nightly.version }}`.
 
@@ -137,7 +137,7 @@ Once this is done, open a PR that targets the new default branch (`branch-{{ sit
 
 **IMPORTANT**: Before merging and approving this PR, be sure to change the merging strategy to `Create a Merge Commit`. Otherwise, history will be lost and the branches become incompatible.
 
-Once this PR is approved and merged, the auto-merger PR should automatically be merged since it will contain the same commit hashes.
+Once this PR is approved and merged, the forward-merger PR should automatically be merged since it will contain the same commit hashes.
 
 ## Scripts
 
