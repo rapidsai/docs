@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['kerneltype_2122',['KernelType',['../namespaceMLCommon_1_1Matrix.html#a77ca4104554a91afb08885d275724ed4',1,'MLCommon::Matrix']]]
+  ['loglikemethod_2359',['LoglikeMethod',['../namespaceML.html#a0dcbb2c0993e8446dffd09b5de731a26',1,'ML']]],
+  ['loss_5ffunct_2360',['loss_funct',['../namespaceML.html#a67da49ce109878bcdbb29a8777d28de1',1,'ML']]],
+  ['lr_5ftype_2361',['lr_type',['../namespaceML.html#a1adf3fea9cf9cde96ecf353b43818079',1,'ML']]]
 ];

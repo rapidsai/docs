@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['penalty_2132',['penalty',['../namespaceML.html#a899c5f26e201a81a2c12bb7eed9b015d',1,'ML']]]
+  ['quantizertype_2368',['QuantizerType',['../namespaceML.html#afe38bfbbab4fa672be59b329e7decc17',1,'ML']]]
 ];
