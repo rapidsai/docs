@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['betweenness_5fcentrality_364',['betweenness_centrality',['../namespacecugraph.html#afa8eadf92af49adf18fe1403b7c5d62e',1,'cugraph']]],
-  ['bfs_365',['bfs',['../namespacecugraph.html#a007a963984961523802b2b66a6dd33db',1,'cugraph']]]
+  ['analyzeclustering_5fedge_5fcut_379',['analyzeClustering_edge_cut',['../namespacecugraph_1_1ext__raft.html#a13f5375802a82a339c1e6c4ef5ee7804',1,'cugraph::ext_raft']]],
+  ['analyzeclustering_5fmodularity_380',['analyzeClustering_modularity',['../namespacecugraph_1_1ext__raft.html#a8747c4f204ed487ee10823614e5a16f9',1,'cugraph::ext_raft']]],
+  ['analyzeclustering_5fratio_5fcut_381',['analyzeClustering_ratio_cut',['../namespacecugraph_1_1ext__raft.html#aa71bf7f1ef24c5c97951834853edd78d',1,'cugraph::ext_raft']]]
 ];

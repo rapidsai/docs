@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['degree_370',['degree',['../classcugraph_1_1GraphCOOView.html#a6f67fe7766f395bb573a21d34023ffe5',1,'cugraph::GraphCOOView::degree()'],['../classcugraph_1_1GraphCompressedSparseBaseView.html#a2f28ad94f7b827c10f8370eda8c61723',1,'cugraph::GraphCompressedSparseBaseView::degree()']]]
+  ['comms_5fbcast_384',['comms_bcast',['../namespacecugraph.html#a3ea68fa26fc144e25e2bb392903c4ec4',1,'cugraph']]],
+  ['connected_5fcomponents_385',['connected_components',['../namespacecugraph.html#a6c61241ace7da8b4f3b3f35a8a3f3980',1,'cugraph']]],
+  ['coo_5fto_5fcsr_386',['coo_to_csr',['../namespacecugraph.html#a4ddfbabee24b22217e4bbfdecb55980e',1,'cugraph']]],
+  ['core_5fnumber_387',['core_number',['../namespacecugraph.html#aa9d5c8e792f3082f524d07e0f8e489b2',1,'cugraph']]]
 ];
