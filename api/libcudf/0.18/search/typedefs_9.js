@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unique_2804',['Unique',['../type__list__utilities_8hpp.html#af31dc0e8a0f6b72d8ea657546d0a3ec4',1,'cudf::test']]]
+  ['unique_2818',['Unique',['../type__list__utilities_8hpp.html#af31dc0e8a0f6b72d8ea657546d0a3ec4',1,'cudf::test']]]
 ];

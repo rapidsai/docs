@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['vertex_5fdevice_5fview_404',['vertex_device_view',['../classcugraph_1_1experimental_1_1detail_1_1compute__partition__t.html#ab52d407c51b0815f8eb329297f2cf639',1,'cugraph::experimental::detail::compute_partition_t']]]
+  ['updatedevice_421',['updateDevice',['../group__Copy.html#ga18a265a5eb16da13a51f486fe5e3acb7',1,'MLCommon']]],
+  ['updatehost_422',['updateHost',['../group__Copy.html#ga9c1498ebc5825f9e63a9de94ced042d5',1,'MLCommon']]]
 ];

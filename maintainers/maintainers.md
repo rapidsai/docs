@@ -31,11 +31,11 @@ Phase | Start | End | Duration
 -- | -- | -- | --
 Development (cuDF/RMM) | Tue, Nov 24 | Tue, Jan 26 | 34 days
 Development (others) | Tue, Nov 24 | Tue, Feb 2 | 39 days
-[Burn Down]({% link releases/process.md %}#burn-down) (cuDF/RMM) | Wed, Jan 27 | Tue, Feb 2 | 5 days
-[Burn Down]({% link releases/process.md %}#burn-down) (others) | Wed, Feb 3 | Tue, Feb 9 | 5 days
-[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM) | Wed, Feb 3 | Tue, Feb 9 | 5 days
-[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | Wed, Feb 10 | Tue, Feb 16 | 4 days
-[Release]({% link releases/process.md %}#releasing) | Wed, Feb 17 | Thu, Feb 18 | 2 days
+[Burn Down]({% link releases/process.md %}#burn-down) (cuDF/RMM) | Wed, Jan 27 | Tue, Feb 16 | 14 days
+[Burn Down]({% link releases/process.md %}#burn-down) (others) | Wed, Feb 3 | Tue, Feb 16 | 9 days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM) | Wed, Feb 17 | Tue, Feb 23 | 5 days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | Wed, Feb 17 | Tue, Feb 23 | 5 days
+[Release]({% link releases/process.md %}#releasing) | Wed, Feb 24 | Thu, Feb 25 | 2 days
 
 ## _PROPOSED_ Release v0.19 Schedule
 

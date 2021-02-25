@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['norm_2129',['Norm',['../namespaceML.html#a1529da2b94c67018bb14f404f6e9aeac',1,'ML']]]
+  ['optimcriterion_2366',['OptimCriterion',['../namespaceML.html#a85e691126b37f5e1dc834841cad1479c',1,'ML']]]
 ];
