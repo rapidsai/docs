@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+
+<html class="writer-html5" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Deploying a multi-user Dashboard — cuxfilter 0.19.0 documentation</title>
+<link href="_static/css/theme.css" rel="stylesheet" type="text/css"/>
+<link href="_static/pygments.css" rel="stylesheet" type="text/css"/>
+<link href="_static/jupyter-sphinx.css" rel="stylesheet" type="text/css"/>
+<link href="_static/thebelab.css" rel="stylesheet" type="text/css"/>
+<link href="_static/custom.css" rel="stylesheet" type="text/css"/>
+<!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js" type="text/javascript"></script>
+<script src="_static/jquery.js"></script>
+<script src="_static/underscore.js"></script>
+<script src="_static/doctools.js"></script>
+<script src="_static/thebelab-helper.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+<script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+<script src="_static/js/theme.js" type="text/javascript"></script>
+<link href="genindex.html" rel="index" title="Index"/>
+<link href="search.html" rel="search" title="Search"/>
+<link href="10%20minutes%20to%20cuxfilter.html" rel="next" title="10 minutes to cuxfilter"/>
+<link href="dataframe.html" rel="prev" title="API Reference"/>
+<link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"/></head>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search"><div id="rapids-sphinx-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">cuxfilter</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/api.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/legacy">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable/api.html">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">cuspatial</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (0.19)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cuxfilter/nightly">nightly (0.19)</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">stable (0.18)</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/legacy">legacy (0.17)</a></div></div></div>
+
+
+<div role="search">
+<form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+<input name="q" placeholder="Search docs" type="text"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
+</form>
+</div>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataframe.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Deploying a multi-user Dashboard</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#main-py">main.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-balancing">Load balancing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="10%20minutes%20to%20cuxfilter.html">10 minutes to cuxfilter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="charts/charts.html">Charts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layouts/Layouts.html">Layouts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="themes/Themes.html">Themes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html">Examples</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="index.html">cuxfilter</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a class="icon icon-home" href="index.html"></a> »</li>
+<li>Deploying a multi-user Dashboard</li>
+<li class="wy-breadcrumbs-aside">
+<a href="_sources/deployment.rst.txt" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr/>
+</div>
+<div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+<div itemprop="articleBody">
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="deploying-a-multi-user-dashboard">
+<h1>Deploying a multi-user Dashboard<a class="headerlink" href="#deploying-a-multi-user-dashboard" title="Permalink to this headline">¶</a></h1>
+<p>cuXfilter dashboard when run from a jupyter/jupyterlab notebook, can be run as a single session temporary dashboard within the context of the notebook session.
+Since it is a Bokeh web application, it is also possible to run it as a multi-instance, multi-user dashboard behind a load balancer (e.g: nginx load balancer).</p>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Running the auto_accidents dashboard behind a local load balancer:</p>
+<div class="section" id="main-py">
+<h3>main.py<a class="headerlink" href="#main-py" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bokeh.server.server</span> <span class="kn">import</span> <span class="n">Server</span>
+<span class="kn">import</span> <span class="nn">cuxfilter</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s1">'./data'</span>
+
+<span class="n">cux_df</span> <span class="o">=</span> <span class="n">cuxfilter</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_arrow</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="o">+</span><span class="s1">'/auto_accidents.arrow'</span><span class="p">)</span>
+<span class="n">cux_df</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">'ST_CASE'</span><span class="p">]</span> <span class="o">=</span> <span class="n">cux_df</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">'ST_CASE'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float64'</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">bkapp</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">cux_df</span>
+    <span class="n">label_map</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s1">'Sunday'</span><span class="p">,</span>    <span class="mi">2</span><span class="p">:</span> <span class="s1">'Monday'</span><span class="p">,</span>    <span class="mi">3</span><span class="p">:</span> <span class="s1">'Tuesday'</span><span class="p">,</span>    <span class="mi">4</span><span class="p">:</span> <span class="s1">'Wednesday'</span><span class="p">,</span>   <span class="mi">5</span><span class="p">:</span> <span class="s1">'Thursday'</span><span class="p">,</span>    <span class="mi">6</span><span class="p">:</span> <span class="s1">'Friday'</span><span class="p">,</span>    <span class="mi">7</span><span class="p">:</span> <span class="s1">'Saturday'</span><span class="p">,</span>    <span class="mi">9</span><span class="p">:</span> <span class="s1">'Unknown'</span><span class="p">}</span>
+    <span class="n">gtc_demo_red_blue_palette</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="mi">49</span><span class="p">,</span><span class="mi">130</span><span class="p">,</span><span class="mi">189</span><span class="p">),</span> <span class="p">(</span><span class="mi">107</span><span class="p">,</span><span class="mi">174</span><span class="p">,</span><span class="mi">214</span><span class="p">),</span> <span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="mi">142</span><span class="p">,</span> <span class="mi">216</span><span class="p">),</span> <span class="p">(</span><span class="mi">226</span><span class="p">,</span><span class="mi">103</span><span class="p">,</span><span class="mi">152</span><span class="p">),</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">104</span><span class="p">)</span> <span class="p">,</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span> <span class="p">]</span>
+
+    <span class="c1"># declare charts</span>
+    <span class="n">chart1</span> <span class="o">=</span> <span class="n">cuxfilter</span><span class="o">.</span><span class="n">charts</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">'dropoff_x'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'dropoff_y'</span><span class="p">,</span> <span class="n">aggregate_col</span><span class="o">=</span><span class="s1">'ST_CASE'</span><span class="p">,</span>
+                                            <span class="n">color_palette</span><span class="o">=</span><span class="n">gtc_demo_red_blue_palette</span><span class="p">)</span>
+    <span class="n">chart2</span> <span class="o">=</span> <span class="n">cuxfilter</span><span class="o">.</span><span class="n">charts</span><span class="o">.</span><span class="n">multi_select</span><span class="p">(</span><span class="s1">'YEAR'</span><span class="p">)</span>
+    <span class="n">chart3</span> <span class="o">=</span> <span class="n">cuxfilter</span><span class="o">.</span><span class="n">charts</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="s1">'DAY_WEEK'</span><span class="p">,</span> <span class="n">x_label_map</span><span class="o">=</span><span class="n">label_map</span><span class="p">)</span>
+    <span class="n">chart4</span> <span class="o">=</span> <span class="n">cuxfilter</span><span class="o">.</span><span class="n">charts</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="s1">'MONTH'</span><span class="p">)</span>
+
+    <span class="c1"># declare dashboard</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">cux_df</span><span class="o">.</span><span class="n">dashboard</span><span class="p">([</span><span class="n">chart1</span><span class="p">,</span> <span class="n">chart2</span><span class="p">,</span> <span class="n">chart3</span><span class="p">,</span> <span class="n">chart4</span><span class="p">],</span> <span class="n">layout</span><span class="o">=</span><span class="n">cuxfilter</span><span class="o">.</span><span class="n">layouts</span><span class="o">.</span><span class="n">feature_and_double_base</span><span class="p">,</span><span class="n">theme</span> <span class="o">=</span> <span class="n">cuxfilter</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">light</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">'Auto Accident Dataset'</span><span class="p">)</span>
+
+    <span class="c1"># run the dashboard as a webapp:</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">_dashboard</span><span class="o">.</span><span class="n">generate_dashboard</span><span class="p">(</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">_charts</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">_theme</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">server_doc</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">Server</span><span class="p">({</span><span class="s1">'/custom_dashboard'</span><span class="p">:</span> <span class="n">bkapp</span><span class="p">},</span> <span class="n">num_procs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">allow_websocket_origin</span><span class="o">=</span><span class="p">[</span><span class="s2">"127.0.0.1:80"</span><span class="p">])</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'running server on port '</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">))</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">io_loop</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="load-balancing">
+<h3>Load balancing<a class="headerlink" href="#load-balancing" title="Permalink to this headline">¶</a></h3>
+<p>Based on Bokeh deployment documentation mentioned <a class="reference external" href="https://docs.bokeh.org/en/latest/docs/user_guide/server.html#basic-reverse-proxy-setup)">here</a>, we can setup load balancing with nginx reverse proxying setup.</p>
+<p>Example nginx.conf</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">upstream demos {</span>
+    <span class="l l-Scalar l-Scalar-Plain">least_conn;</span>
+    <span class="l l-Scalar l-Scalar-Plain">server 127.0.0.1:5001;</span>
+    <span class="l l-Scalar l-Scalar-Plain">server 127.0.0.1:5000;</span>
+<span class="l l-Scalar l-Scalar-Plain">}</span>
+
+<span class="l l-Scalar l-Scalar-Plain">server {</span>
+    <span class="l l-Scalar l-Scalar-Plain">listen 80 default_server;</span>
+    <span class="l l-Scalar l-Scalar-Plain">server_name _;</span>
+
+    <span class="l l-Scalar l-Scalar-Plain">location / {</span>
+        <span class="l l-Scalar l-Scalar-Plain">proxy_pass http://demos;</span>
+        <span class="l l-Scalar l-Scalar-Plain">proxy_set_header Upgrade $http_upgrade;</span>
+        <span class="l l-Scalar l-Scalar-Plain">proxy_set_header Connection "upgrade";</span>
+        <span class="l l-Scalar l-Scalar-Plain">proxy_http_version 1.1;</span>
+        <span class="l l-Scalar l-Scalar-Plain">proxy_set_header X-Forwarded-Proto $scheme;</span>
+        <span class="l l-Scalar l-Scalar-Plain">proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span>
+        <span class="l l-Scalar l-Scalar-Plain">proxy_set_header Host $host:$server_port;</span>
+        <span class="l l-Scalar l-Scalar-Plain">proxy_buffering off;</span>
+    <span class="l l-Scalar l-Scalar-Plain">}</span>
+
+<span class="l l-Scalar l-Scalar-Plain">}</span>
+</pre></div>
+</div>
+<p>Run the above as a python script:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python main.py <span class="m">5000</span>
+python main.py <span class="m">5001</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a accesskey="n" class="btn btn-neutral float-right" href="10%20minutes%20to%20cuxfilter.html" rel="next" title="10 minutes to cuxfilter">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+<a accesskey="p" class="btn btn-neutral float-left" href="dataframe.html" rel="prev" title="API Reference"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<p>
+        © Copyright 2019, NVIDIA.
+
+    </p>
+</div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+</div>
+</div>
+</section>
+</div>
+<script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script></body>
+</html>

@@ -1,0 +1,516 @@
+
+<!DOCTYPE html>
+
+<html class="writer-html5" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Multi-GPU with cuGraph — cugraph 0.19.0 documentation</title>
+<link href="_static/css/theme.css" rel="stylesheet" type="text/css"/>
+<link href="_static/pygments.css" rel="stylesheet" type="text/css"/>
+<link href="_static/copybutton.css" rel="stylesheet" type="text/css"/>
+<link href="_static/params.css" rel="stylesheet" type="text/css"/>
+<link href="_static/references.css" rel="stylesheet" type="text/css"/>
+<!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js" type="text/javascript"></script>
+<script src="_static/jquery.js"></script>
+<script src="_static/underscore.js"></script>
+<script src="_static/doctools.js"></script>
+<script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+<script src="_static/js/theme.js" type="text/javascript"></script>
+<link href="genindex.html" rel="index" title="Index"/>
+<link href="search.html" rel="search" title="Search"/>
+<link href="cugraph_blogs.html" rel="next" title="cuGraph BLOGS and Presentations"/>
+<link href="api.html" rel="prev" title="cuGraph API Reference"/>
+<link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"/></head>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search"><div id="rapids-sphinx-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">cugraph</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/api.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/legacy">cudf-java</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cugraph/stable/api.html">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (0.19)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cugraph/nightly/api.html">nightly (0.19)</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable/api.html">stable (0.18)</a><a class="rapids-selector__menu-item" href="/api/cugraph/legacy/api.html">legacy (0.17)</a></div></div></div>
+
+
+<div role="search">
+<form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+<input name="q" placeholder="Search docs" type="text"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
+</form>
+</div>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cugraph_intro.html">cuGraph Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cugraph_intro.html#vision">Vision</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cugraph_intro.html#terminology">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">cuGraph API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Multi-GPU with cuGraph</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#distributed-graph-analytics">Distributed graph analytics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-cugraph.dask.link_analysis.pagerank">Distributed Graph Algorithms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cugraph.comms.comms">Helper functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#consolidation">Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#batch-processing">Batch Processing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#algorithms-supporting-batch-processing">Algorithms supporting Batch Processing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cugraph_blogs.html">cuGraph BLOGS and Presentations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cugraph_ref.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nx_transition.html">NetworkX Compatibility and Transition</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="index.html">cugraph</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a class="icon icon-home" href="index.html"></a> »</li>
+<li>Multi-GPU with cuGraph</li>
+<li class="wy-breadcrumbs-aside">
+<a href="_sources/dask-cugraph.rst.txt" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr/>
+</div>
+<div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+<div itemprop="articleBody">
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="multi-gpu-with-cugraph">
+<h1>Multi-GPU with cuGraph<a class="headerlink" href="#multi-gpu-with-cugraph" title="Permalink to this headline">¶</a></h1>
+<p>cuGraph supports multi-GPU leveraging <a class="reference external" href="https://dask.org">Dask</a>. Dask is a flexible library for parallel computing in Python which makes scaling out your workflow smooth and simple. cuGraph also uses other Dask-based RAPIDS projects such as <a class="reference external" href="https://github.com/rapidsai/dask-cuda">dask-cuda</a>. The maximum graph size is currently limited to 2 Billion vertices (to be waived in the next versions).</p>
+<div class="section" id="distributed-graph-analytics">
+<h2>Distributed graph analytics<a class="headerlink" href="#distributed-graph-analytics" title="Permalink to this headline">¶</a></h2>
+<p>The current solution is able to scale across multiple GPUs on multiple machines. Distributing the graph and computation lets you analyze datasets far larger than a single GPU’s memory.</p>
+<p>With cuGraph and Dask, whether you’re using a single NVIDIA GPU or multiple nodes, your RAPIDS workflow will run smoothly, intelligently distributing the workload across the available resources.</p>
+<p>If your graph comfortably fits in memory on a single GPU, you would want to use the single-GPU version of cuGraph. If you want to distribute your workflow across multiple GPUs and have more data than you can fit in memory on a single GPU, you would want to use cuGraph’s multi-GPU features.</p>
+<div class="section" id="module-cugraph.dask.link_analysis.pagerank">
+<span id="distributed-graph-algorithms"></span><h3>Distributed Graph Algorithms<a class="headerlink" href="#module-cugraph.dask.link_analysis.pagerank" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="cugraph.dask.link_analysis.pagerank.pagerank">
+<code class="sig-prename descclassname"><span class="pre">cugraph.dask.link_analysis.pagerank.</span></code><code class="sig-name descname"><span class="pre">pagerank</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.85</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">personalization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/89bffa5/python/cugraph/dask/link_analysis/pagerank.py#L49"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.dask.link_analysis.pagerank.pagerank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the PageRank values for each vertex in a graph using multiple GPUs.
+cuGraph computes an approximation of the Pagerank using the power method.
+The input graph must contain edge list as  dask-cudf dataframe with
+one partition per GPU.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier">cugraph.DiGraph</span></dt><dd><p>cuGraph graph descriptor, should contain the connectivity information
+as dask cudf edge list dataframe(edge weights are not used for this
+algorithm). Undirected Graph not currently supported.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>The damping factor alpha represents the probability to follow an
+outgoing edge, standard value is 0.85.
+Thus, 1.0-alpha is the probability to “teleport” to a random vertex.
+Alpha should be greater than 0.0 and strictly lower than 1.0.</p>
+</dd>
+<dt><strong>personalization</strong><span class="classifier">cudf.Dataframe</span></dt><dd><p>GPU Dataframe containing the personalization information.
+Currently not supported.
+personalization[‘vertex’] : cudf.Series</p>
+<blockquote>
+<div><p>Subset of vertices of graph for personalization</p>
+</div></blockquote>
+<dl class="simple">
+<dt>personalization[‘values’]<span class="classifier">cudf.Series</span></dt><dd><p>Personalization values for vertices</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>max_iter</strong><span class="classifier">int</span></dt><dd><p>The maximum number of iterations before an answer is returned.
+If this value is lower or equal to 0 cuGraph will use the default
+value, which is 30.</p>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float</span></dt><dd><p>Set the tolerance the approximation, this parameter should be a small
+magnitude value.
+The lower the tolerance the better the approximation. If this value is
+0.0f, cuGraph will use the default value which is 1.0E-5.
+Setting too small a tolerance can lead to non-convergence due to
+numerical roundoff. Usually values between 0.01 and 0.00001 are
+acceptable.</p>
+</dd>
+<dt><strong>nstart</strong><span class="classifier">not supported</span></dt><dd><p>initial guess for pagerank</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>PageRank</strong><span class="classifier">dask_cudf.DataFrame</span></dt><dd><p>GPU data frame containing two dask_cudf.Series of size V: the
+vertex identifiers and the corresponding PageRank values.</p>
+<dl class="simple">
+<dt>ddf[‘vertex’]<span class="classifier">dask_cudf.Series</span></dt><dd><p>Contains the vertex identifiers</p>
+</dd>
+<dt>ddf[‘pagerank’]<span class="classifier">dask_cudf.Series</span></dt><dd><p>Contains the PageRank score</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cugraph.dask</span> <span class="k">as</span> <span class="nn">dcg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Comms</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">p2p</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chunksize</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">get_chunksize</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ddf</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
+<span class="go">                             delimiter=' ',</span>
+<span class="go">                             names=['src', 'dst', 'value'],</span>
+<span class="go">                             dtype=['int32', 'int32', 'float32'])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dg</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dg</span><span class="o">.</span><span class="n">from_dask_cudf_edgelist</span><span class="p">(</span><span class="n">ddf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'src'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'dst'</span><span class="p">,</span>
+<span class="go">                               edge_attr='value')</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span><span class="n">dg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Comms</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+<span class="target" id="module-cugraph.dask.traversal.bfs"></span><dl class="py function">
+<dt id="cugraph.dask.traversal.bfs.bfs">
+<code class="sig-prename descclassname"><span class="pre">cugraph.dask.traversal.bfs.</span></code><code class="sig-name descname"><span class="pre">bfs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_distances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/89bffa5/python/cugraph/dask/traversal/bfs.py#L44"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.dask.traversal.bfs.bfs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the distances and predecessors for a breadth first traversal of a
+graph.
+The input graph must contain edge list as  dask-cudf dataframe with
+one partition per GPU.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">cugraph.DiGraph</span></dt><dd><p>cuGraph graph descriptor, should contain the connectivity information
+as dask cudf edge list dataframe(edge weights are not used for this
+algorithm). Undirected Graph not currently supported.</p>
+</dd>
+<dt><strong>start</strong><span class="classifier">Integer</span></dt><dd><p>Specify starting vertex for breadth-first search; this function
+iterates over edges in the component reachable from this node.</p>
+</dd>
+<dt><strong>return_distances</strong><span class="classifier">bool, optional, default=False</span></dt><dd><p>Indicates if distances should be returned</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>df</strong><span class="classifier">dask_cudf.DataFrame</span></dt><dd><p>df[‘vertex’] gives the vertex id</p>
+<p>df[‘distance’] gives the path distance from the
+starting vertex (Only if return_distances is True)</p>
+<p>df[‘predecessor’] gives the vertex it was
+reached from in the traversal</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cugraph.dask</span> <span class="k">as</span> <span class="nn">dcg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Comms</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">p2p</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chunksize</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">get_chunksize</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ddf</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
+<span class="go">                             delimiter=' ',</span>
+<span class="go">                             names=['src', 'dst', 'value'],</span>
+<span class="go">                             dtype=['int32', 'int32', 'float32'])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dg</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dg</span><span class="o">.</span><span class="n">from_dask_cudf_edgelist</span><span class="p">(</span><span class="n">ddf</span><span class="p">,</span> <span class="s1">'src'</span><span class="p">,</span> <span class="s1">'dst'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">bfs</span><span class="p">(</span><span class="n">dg</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Comms</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+</div>
+<div class="section" id="module-cugraph.comms.comms">
+<span id="helper-functions"></span><h3>Helper functions<a class="headerlink" href="#module-cugraph.comms.comms" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="cugraph.comms.comms.initialize">
+<code class="sig-prename descclassname"><span class="pre">cugraph.comms.comms.</span></code><code class="sig-name descname"><span class="pre">initialize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pcols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partition_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/89bffa5/python/cugraph/comms/comms.py#L70"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.comms.comms.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a communicator for multi-node/multi-gpu communications.  It is
+expected to be called right after client initialization for running
+multi-GPU algorithms (this wraps raft comms that manages underlying NCCL
+and UCX comms handles across the workers of a Dask cluster).</p>
+<p>It is recommended to also call <cite>destroy()</cite> when the comms are no longer
+needed so the underlying resources can be cleaned up.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>comms</strong><span class="classifier">raft Comms</span></dt><dd><p>A pre-initialized raft communicator. If provided, this is used for mnmg
+communications. If not provided, default comms are initialized as per
+client information.</p>
+</dd>
+<dt><strong>p2p</strong><span class="classifier">bool</span></dt><dd><p>Initialize UCX endpoints if True. Default is False.</p>
+</dd>
+<dt><strong>prows</strong><span class="classifier">int</span></dt><dd><p>Specifies the number of rows when performing a 2D partitioning of the
+input graph. If specified, this must be a factor of the total number of
+parallel processes. When specified with pcols, prows*pcols should be
+equal to the total number of parallel processes.</p>
+</dd>
+<dt><strong>pcols</strong><span class="classifier">int</span></dt><dd><p>Specifies the number of columns when performing a 2D partitioning of
+the input graph. If specified, this must be a factor of the total
+number of parallel processes. When specified with prows, prows*pcols
+should be equal to the total number of parallel processes.</p>
+</dd>
+<dt><strong>partition_type</strong><span class="classifier">int</span></dt><dd><p>Valid values are currently 1 or any int other than 1. A value of 1 (the
+default) represents a partitioning resulting in prows*pcols
+partitions. A non-1 value currently results in a partitioning of
+p*pcols partitions, where p is the number of GPUs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+<span class="target" id="module-0"></span><dl class="py function">
+<dt id="cugraph.comms.comms.destroy">
+<code class="sig-prename descclassname"><span class="pre">cugraph.comms.comms.</span></code><code class="sig-name descname"><span class="pre">destroy</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/89bffa5/python/cugraph/comms/comms.py#L176"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.comms.comms.destroy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shuts down initialized comms and cleans up resources.</p>
+</dd></dl>
+<span class="target" id="module-cugraph.dask.common.read_utils"></span><dl class="py function">
+<dt id="cugraph.dask.common.read_utils.get_chunksize">
+<code class="sig-prename descclassname"><span class="pre">cugraph.dask.common.read_utils.</span></code><code class="sig-name descname"><span class="pre">get_chunksize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/89bffa5/python/cugraph/dask/common/read_utils.py#L22"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.dask.common.read_utils.get_chunksize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the appropriate chunksize for dask_cudf.read_csv
+to get a number of partitions equal to the number of GPUs.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dask_cugraph.pagerank</span> <span class="k">as</span> <span class="nn">dcg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chunksize</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">get_chunksize</span><span class="p">(</span><span class="n">edge_list</span><span class="o">.</span><span class="n">csv</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</div>
+</div>
+<div class="section" id="consolidation">
+<h2>Consolidation<a class="headerlink" href="#consolidation" title="Permalink to this headline">¶</a></h2>
+<p>cuGraph can transparently interpret the Dask cuDF Dataframe as a regular Dataframe when loading the edge list. This is particularly helpful for workflows extracting a single GPU sized edge list from a distributed dataset. From there any existing single GPU feature will just work on this input.</p>
+<p>For instance, consolidation allows leveraging Dask cuDF CSV reader to load file(s) on multiple GPUs and consolidate this input to a single GPU graph. Reading is often the time and memory bottleneck, with this feature users can call the Multi-GPU version of the reader without changing anything else.</p>
+</div>
+<div class="section" id="batch-processing">
+<h2>Batch Processing<a class="headerlink" href="#batch-processing" title="Permalink to this headline">¶</a></h2>
+<p>cuGraph can leverage multi GPUs to increase processing speed for graphs that fit on a single GPU, providing faster analytics on such graphs.
+You will be able to use the Graph the same way as you used to in a Single GPU environment, but analytics that support batch processing will automatically use the GPUs available to the dask client.
+For example, Betweenness Centrality scores can be slow to obtain depending on the number of vertices used in the approximation. Thank to Multi GPUs Batch Processing,
+you can create Single GPU graph as you would regularly do it using cuDF CSV reader, enable Batch analytics on it, and obtain scores much faster as each GPU will handle a sub-set of the sources.
+In order to use Batch Analytics you need to set up a Dask Cluster and Client in addition to the cuGraph communicator, then you can simply call <cite>enable_batch()</cite> on you graph, and algorithms supporting batch processing will use multiple GPUs.</p>
+<div class="section" id="algorithms-supporting-batch-processing">
+<h3>Algorithms supporting Batch Processing<a class="headerlink" href="#algorithms-supporting-batch-processing" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt>
+<code class="sig-prename descclassname"><span class="pre">cugraph.centrality.</span></code><code class="sig-name descname"><span class="pre">betweenness_centrality</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">G</span></em>, <em class="sig-param"><span class="pre">k=None</span></em>, <em class="sig-param"><span class="pre">normalized=True</span></em>, <em class="sig-param"><span class="pre">weight=None</span></em>, <em class="sig-param"><span class="pre">endpoints=False</span></em>, <em class="sig-param"><span class="pre">seed=None</span></em>, <em class="sig-param"><span class="pre">result_dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/89bffa5/python/cugraph/centrality/betweenness_centrality.py#L25"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Compute the betweenness centrality for all vertices of the graph G.
+Betweenness centrality is a measure of the number of shortest paths that
+pass through a vertex.  A vertex with a high betweenness centrality score
+has more paths passing through it and is therefore believed to be more
+important.</p>
+<p>To improve performance. rather than doing an all-pair shortest path,
+a sample of k starting vertices can be used.</p>
+<p>CuGraph does not currently support the ‘endpoints’ and ‘weight’ parameters
+as seen in the corresponding networkX call.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>G</strong><span class="classifier">cuGraph.Graph or networkx.Graph</span></dt><dd><p>The graph can be either directed (DiGraph) or undirected (Graph).
+Weights in the graph are ignored, the current implementation uses
+BFS traversals. Use weight parameter if weights need to be considered
+(currently not supported)</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int or list or None, optional, default=None</span></dt><dd><p>If k is not None, use k node samples to estimate betweenness.  Higher
+values give better approximation.  If k is a list, use the content
+of the list for estimation: the list should contain vertex
+identifiers. If k is None (the default), all the vertices are used
+to estimate betweenness.  Vertices obtained through sampling or
+defined as a list will be used assources for traversals inside the
+algorithm.</p>
+</dd>
+<dt><strong>normalized</strong><span class="classifier">bool, optional</span></dt><dd><p>Default is True.
+If true, the betweenness values are normalized by
+__2 / ((n - 1) * (n - 2))__ for Graphs (undirected), and
+__1 / ((n - 1) * (n - 2))__ for DiGraphs (directed graphs)
+where n is the number of nodes in G.
+Normalization will ensure that values are in [0, 1],
+this normalization scales for the highest possible value where one
+node is crossed by every single shortest path.</p>
+</dd>
+<dt><strong>weight</strong><span class="classifier">cudf.DataFrame, optional, default=None</span></dt><dd><p>Specifies the weights to be used for each edge.
+Should contain a mapping between
+edges and weights.
+(Not Supported)</p>
+</dd>
+<dt><strong>endpoints</strong><span class="classifier">bool, optional, default=False</span></dt><dd><p>If true, include the endpoints in the shortest path counts.
+(Not Supported)</p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">optional</span></dt><dd><p>if k is specified and k is an integer, use seed to initialize the
+random number generator.
+Using None as seed relies on random.seed() behavior: using current
+system time
+If k is either None or list: seed parameter is ignored</p>
+</dd>
+<dt><strong>result_dtype</strong><span class="classifier">np.float32 or np.float64, optional, default=np.float64</span></dt><dd><p>Indicate the data type of the betweenness centrality scores</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>df</strong><span class="classifier">cudf.DataFrame or Dictionary if using NetworkX</span></dt><dd><p>GPU data frame containing two cudf.Series of size V: the vertex
+identifiers and the corresponding betweenness centrality values.
+Please note that the resulting the ‘vertex’ column might not be
+in ascending order.  The Dictionary conatains the same two columns</p>
+<dl class="simple">
+<dt>df[‘vertex’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers</p>
+</dd>
+<dt>df[‘betweenness_centrality’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the betweenness centrality of vertices</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bc</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+<dl class="py function">
+<dt>
+<code class="sig-prename descclassname"><span class="pre">cugraph.centrality.</span></code><code class="sig-name descname"><span class="pre">edge_betweenness_centrality</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">G</span></em>, <em class="sig-param"><span class="pre">k=None</span></em>, <em class="sig-param"><span class="pre">normalized=True</span></em>, <em class="sig-param"><span class="pre">weight=None</span></em>, <em class="sig-param"><span class="pre">seed=None</span></em>, <em class="sig-param"><span class="pre">result_dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/89bffa5/python/cugraph/centrality/betweenness_centrality.py#L148"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Compute the edge betweenness centrality for all edges of the graph G.
+Betweenness centrality is a measure of the number of shortest paths
+that pass over an edge.  An edge with a high betweenness centrality
+score has more paths passing over it and is therefore believed to be
+more important.</p>
+<p>To improve performance, rather than doing an all-pair shortest path,
+a sample of k starting vertices can be used.</p>
+<p>CuGraph does not currently support the ‘weight’ parameter
+as seen in the corresponding networkX call.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>G</strong><span class="classifier">cuGraph.Graph or networkx.Graph</span></dt><dd><p>The graph can be either directed (DiGraph) or undirected (Graph).
+Weights in the graph are ignored, the current implementation uses
+BFS traversals. Use weight parameter if weights need to be considered
+(currently not supported)</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int or list or None, optional, default=None</span></dt><dd><p>If k is not None, use k node samples to estimate betweenness.  Higher
+values give better approximation.
+If k is a list, use the content of the list for estimation: the list
+should contain vertices identifiers.
+Vertices obtained through sampling or defined as a list will be used as
+sources for traversals inside the algorithm.</p>
+</dd>
+<dt><strong>normalized</strong><span class="classifier">bool, optional</span></dt><dd><p>Default is True.
+If true, the betweenness values are normalized by
+2 / (n * (n - 1)) for Graphs (undirected), and
+1 / (n * (n - 1)) for DiGraphs (directed graphs)
+where n is the number of nodes in G.
+Normalization will ensure that values are in [0, 1],
+this normalization scales for the highest possible value where one
+edge is crossed by every single shortest path.</p>
+</dd>
+<dt><strong>weight</strong><span class="classifier">cudf.DataFrame, optional, default=None</span></dt><dd><p>Specifies the weights to be used for each edge.
+Should contain a mapping between
+edges and weights.
+(Not Supported)</p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">optional</span></dt><dd><p>if k is specified and k is an integer, use seed to initialize the
+random number generator.
+Using None as seed relies on random.seed() behavior: using current
+system time
+If k is either None or list: seed parameter is ignored</p>
+</dd>
+<dt><strong>result_dtype</strong><span class="classifier">np.float32 or np.float64, optional, default=np.float64</span></dt><dd><p>Indicate the data type of the betweenness centrality scores
+Using double automatically switch implementation to “default”</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>df</strong><span class="classifier">cudf.DataFrame or Dictionary if using NetworkX</span></dt><dd><p>GPU data frame containing three cudf.Series of size E: the vertex
+identifiers of the sources, the vertex identifies of the destinations
+and the corresponding betweenness centrality values.
+Please note that the resulting the ‘src’, ‘dst’ column might not be
+in ascending order.</p>
+<dl class="simple">
+<dt>df[‘src’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers of the source of each edge</p>
+</dd>
+<dt>df[‘dst’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the vertex identifiers of the destination of each edge</p>
+</dd>
+<dt>df[‘edge_betweenness_centrality’]<span class="classifier">cudf.Series</span></dt><dd><p>Contains the betweenness centrality of edges</p>
+</dd>
+</dl>
+<p>When using undirected graphs, ‘src’ and ‘dst’ only contains elements
+such that ‘src’ &lt; ‘dst’, which might differ from networkx and user’s
+input. Namely edge (1 -&gt; 0) is transformed into (0 -&gt; 1) but
+contains the betweenness centrality of edge (1 -&gt; 0).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'datasets/karate.csv'</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'int32'</span><span class="p">,</span> <span class="s1">'float32'</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">from_cudf_edgelist</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'0'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ebc</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">edge_betweenness_centrality</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a accesskey="n" class="btn btn-neutral float-right" href="cugraph_blogs.html" rel="next" title="cuGraph BLOGS and Presentations">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+<a accesskey="p" class="btn btn-neutral float-left" href="api.html" rel="prev" title="cuGraph API Reference"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<p>
+        © Copyright 2019-2020, NVIDIA.
+
+    </p>
+</div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+</div>
+</div>
+</section>
+</div>
+<script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script></body>
+</html>
