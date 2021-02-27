@@ -503,161 +503,173 @@ $(function() {
 <div class="line"><a name="l00494"></a><span class="lineno">  494</span>              : <span class="keyword">static_cast&lt;</span>weight_t const*<span class="keyword">&gt;</span>(<span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00495"></a><span class="lineno">  495</span>   }</div>
 <div class="line"><a name="l00496"></a><span class="lineno">  496</span>  </div>
-<div class="line"><a name="l00497"></a><span class="lineno">  497</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>   std::vector&lt;edge_t const*&gt; adj_matrix_partition_offsets_{};</div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>   std::vector&lt;vertex_t const*&gt; adj_matrix_partition_indices_{};</div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>   std::vector&lt;weight_t const*&gt; adj_matrix_partition_weights_{};</div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>   std::vector&lt;edge_t&gt; adj_matrix_partition_number_of_edges_{};</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>   rmm::device_uvector&lt;edge_t&gt; compute_in_degrees(raft::handle_t <span class="keyword">const</span>&amp; handle) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>   rmm::device_uvector&lt;edge_t&gt; compute_out_degrees(raft::handle_t <span class="keyword">const</span>&amp; handle) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>  </div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>   rmm::device_uvector&lt;weight_t&gt; compute_in_weight_sums(raft::handle_t <span class="keyword">const</span>&amp; handle) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>   rmm::device_uvector&lt;weight_t&gt; compute_out_weight_sums(raft::handle_t <span class="keyword">const</span>&amp; handle) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00502"></a><span class="lineno">  502</span>  </div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>   <a class="code" href="classcugraph_1_1experimental_1_1partition__t.html">partition_t&lt;vertex_t&gt;</a> partition_{};</div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>  </div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>   std::vector&lt;vertex_t&gt;</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>     vertex_partition_segment_offsets_{};  <span class="comment">// segment offsets within the vertex partition based on</span></div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>                                           <span class="comment">// vertex degree, relevant only if</span></div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>                                           <span class="comment">// sorted_by_global_degree_within_vertex_partition is true</span></div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span> };</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>   std::vector&lt;edge_t const*&gt; adj_matrix_partition_offsets_{};</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>   std::vector&lt;vertex_t const*&gt; adj_matrix_partition_indices_{};</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>   std::vector&lt;weight_t const*&gt; adj_matrix_partition_weights_{};</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>   std::vector&lt;edge_t&gt; adj_matrix_partition_number_of_edges_{};</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>  </div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>   <a class="code" href="classcugraph_1_1experimental_1_1partition__t.html">partition_t&lt;vertex_t&gt;</a> partition_{};</div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>  </div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span> <span class="comment">// single-GPU version</span></div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t,</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>           <span class="keyword">typename</span> edge_t,</div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>           <span class="keyword">typename</span> weight_t,</div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>           <span class="keywordtype">bool</span> store_transposed,</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>           <span class="keywordtype">bool</span> multi_gpu&gt;</div>
-<div class="line"><a name="l00517"></a><span class="lineno"><a class="line" href="classcugraph_1_1experimental_1_1graph__view__t_3_01vertex__t_00_01edge__t_00_01weight__t_00_01st8a7ef5a276951fc783fe91173d921cdb.html">  517</a></span> <span class="keyword">class </span><a class="code" href="classcugraph_1_1experimental_1_1graph__view__t.html">graph_view_t</a>&lt;vertex_t,</div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>                    edge_t,</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>                    weight_t,</div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>                    store_transposed,</div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>                    multi_gpu,</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>                    std::enable_if_t&lt;!multi_gpu&gt;&gt;</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>   : <span class="keyword">public</span> <a class="code" href="classcugraph_1_1experimental_1_1detail_1_1graph__base__t.html">detail::graph_base_t</a>&lt;vertex_t, edge_t, weight_t&gt; {</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>   <span class="keyword">using</span> vertex_type                              = vertex_t;</div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>   <span class="keyword">using</span> edge_type                                = edge_t;</div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>   <span class="keyword">using</span> weight_type                              = weight_t;</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>   <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> is_adj_matrix_transposed = store_transposed;</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>   <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> is_multi_gpu             = multi_gpu;</div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>  </div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>   <a class="code" href="classcugraph_1_1experimental_1_1graph__view__t.html">graph_view_t</a>(raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>                edge_t <span class="keyword">const</span>* offsets,</div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>                vertex_t <span class="keyword">const</span>* indices,</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>                weight_t <span class="keyword">const</span>* weights,</div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>                std::vector&lt;vertex_t&gt; <span class="keyword">const</span>&amp; segment_offsets,</div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>                vertex_t number_of_vertices,</div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>                edge_t number_of_edges,</div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>                <a class="code" href="structcugraph_1_1experimental_1_1graph__properties__t.html">graph_properties_t</a> properties,</div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>                <span class="keywordtype">bool</span> sorted_by_degree,</div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span>                <span class="keywordtype">bool</span> do_expensive_check = <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>  </div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>   <span class="keywordtype">bool</span> is_weighted()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> weights_ != <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00543"></a><span class="lineno">  543</span>  </div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>   vertex_t get_number_of_local_vertices()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> this-&gt;get_number_of_vertices(); }</div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>  </div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>   constexpr vertex_t get_local_vertex_first()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> vertex_t{0}; }</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>   std::vector&lt;vertex_t&gt;</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>     vertex_partition_segment_offsets_{};  <span class="comment">// segment offsets within the vertex partition based on</span></div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>                                           <span class="comment">// vertex degree, relevant only if</span></div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>                                           <span class="comment">// sorted_by_global_degree_within_vertex_partition is true</span></div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span> };</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>  </div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span> <span class="comment">// single-GPU version</span></div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t,</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>           <span class="keyword">typename</span> edge_t,</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>           <span class="keyword">typename</span> weight_t,</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>           <span class="keywordtype">bool</span> store_transposed,</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>           <span class="keywordtype">bool</span> multi_gpu&gt;</div>
+<div class="line"><a name="l00523"></a><span class="lineno"><a class="line" href="classcugraph_1_1experimental_1_1graph__view__t_3_01vertex__t_00_01edge__t_00_01weight__t_00_01st8a7ef5a276951fc783fe91173d921cdb.html">  523</a></span> <span class="keyword">class </span><a class="code" href="classcugraph_1_1experimental_1_1graph__view__t.html">graph_view_t</a>&lt;vertex_t,</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>                    edge_t,</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>                    weight_t,</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>                    store_transposed,</div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>                    multi_gpu,</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>                    std::enable_if_t&lt;!multi_gpu&gt;&gt;</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>   : <span class="keyword">public</span> <a class="code" href="classcugraph_1_1experimental_1_1detail_1_1graph__base__t.html">detail::graph_base_t</a>&lt;vertex_t, edge_t, weight_t&gt; {</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>   <span class="keyword">using</span> vertex_type                              = vertex_t;</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>   <span class="keyword">using</span> edge_type                                = edge_t;</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>   <span class="keyword">using</span> weight_type                              = weight_t;</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>   <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> is_adj_matrix_transposed = store_transposed;</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>   <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> is_multi_gpu             = multi_gpu;</div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>  </div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>   <a class="code" href="classcugraph_1_1experimental_1_1graph__view__t.html">graph_view_t</a>(raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>                edge_t <span class="keyword">const</span>* offsets,</div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>                vertex_t <span class="keyword">const</span>* indices,</div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>                weight_t <span class="keyword">const</span>* weights,</div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>                std::vector&lt;vertex_t&gt; <span class="keyword">const</span>&amp; segment_offsets,</div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>                vertex_t number_of_vertices,</div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>                edge_t number_of_edges,</div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>                <a class="code" href="structcugraph_1_1experimental_1_1graph__properties__t.html">graph_properties_t</a> properties,</div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>                <span class="keywordtype">bool</span> sorted_by_degree,</div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>                <span class="keywordtype">bool</span> do_expensive_check = <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00547"></a><span class="lineno">  547</span>  </div>
-<div class="line"><a name="l00548"></a><span class="lineno">  548</span>   vertex_t get_local_vertex_last()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> this-&gt;get_number_of_vertices(); }</div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>   <span class="keywordtype">bool</span> is_weighted()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> weights_ != <span class="keyword">nullptr</span>; }</div>
 <div class="line"><a name="l00549"></a><span class="lineno">  549</span>  </div>
-<div class="line"><a name="l00550"></a><span class="lineno">  550</span>   vertex_t get_vertex_partition_first(<span class="keywordtype">size_t</span> vertex_partition_idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> vertex_t{0}; }</div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>   vertex_t get_number_of_local_vertices()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> this-&gt;get_number_of_vertices(); }</div>
 <div class="line"><a name="l00551"></a><span class="lineno">  551</span>  </div>
-<div class="line"><a name="l00552"></a><span class="lineno">  552</span>   vertex_t get_vertex_partition_last(<span class="keywordtype">size_t</span> vertex_partition_idx)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00553"></a><span class="lineno">  553</span> <span class="keyword"> </span>{</div>
-<div class="line"><a name="l00554"></a><span class="lineno">  554</span>     <span class="keywordflow">return</span> this-&gt;get_number_of_vertices();</div>
-<div class="line"><a name="l00555"></a><span class="lineno">  555</span>   }</div>
-<div class="line"><a name="l00556"></a><span class="lineno">  556</span>  </div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>   vertex_t get_vertex_partition_size(<span class="keywordtype">size_t</span> vertex_partition_idx)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span> <span class="keyword"> </span>{</div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>     <span class="keywordflow">return</span> get_vertex_partition_last(vertex_partition_idx) -</div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>            get_vertex_partition_first(vertex_partition_idx);</div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>   constexpr vertex_t get_local_vertex_first()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> vertex_t{0}; }</div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>  </div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>   vertex_t get_local_vertex_last()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> this-&gt;get_number_of_vertices(); }</div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>  </div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>   vertex_t get_vertex_partition_first(<span class="keywordtype">size_t</span> vertex_partition_idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> vertex_t{0}; }</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>  </div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>   vertex_t get_vertex_partition_last(<span class="keywordtype">size_t</span> vertex_partition_idx)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span> <span class="keyword"> </span>{</div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>     <span class="keywordflow">return</span> this-&gt;get_number_of_vertices();</div>
 <div class="line"><a name="l00561"></a><span class="lineno">  561</span>   }</div>
 <div class="line"><a name="l00562"></a><span class="lineno">  562</span>  </div>
-<div class="line"><a name="l00563"></a><span class="lineno">  563</span>   constexpr <span class="keywordtype">bool</span> is_local_vertex_nocheck(vertex_t v)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">true</span>; }</div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>  </div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>   constexpr <span class="keywordtype">size_t</span> get_number_of_local_adj_matrix_partitions()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> size_t(1); }</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>  </div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>   vertex_t get_number_of_local_adj_matrix_partition_rows()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00568"></a><span class="lineno">  568</span> <span class="keyword"> </span>{</div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>     <span class="keywordflow">return</span> this-&gt;get_number_of_vertices();</div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>   }</div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>  </div>
-<div class="line"><a name="l00572"></a><span class="lineno">  572</span>   vertex_t get_number_of_local_adj_matrix_partition_cols()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span> <span class="keyword"> </span>{</div>
-<div class="line"><a name="l00574"></a><span class="lineno">  574</span>     <span class="keywordflow">return</span> this-&gt;get_number_of_vertices();</div>
-<div class="line"><a name="l00575"></a><span class="lineno">  575</span>   }</div>
-<div class="line"><a name="l00576"></a><span class="lineno">  576</span>  </div>
-<div class="line"><a name="l00577"></a><span class="lineno">  577</span>   edge_t get_number_of_local_adj_matrix_partition_edges(<span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span> <span class="keyword"> </span>{</div>
-<div class="line"><a name="l00579"></a><span class="lineno">  579</span>     assert(adj_matrix_partition_idx == 0);</div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>     <span class="keywordflow">return</span> this-&gt;get_number_of_edges();</div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>   vertex_t get_vertex_partition_size(<span class="keywordtype">size_t</span> vertex_partition_idx)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span> <span class="keyword"> </span>{</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>     <span class="keywordflow">return</span> get_vertex_partition_last(vertex_partition_idx) -</div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>            get_vertex_partition_first(vertex_partition_idx);</div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>   }</div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>  </div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>   constexpr <span class="keywordtype">bool</span> is_local_vertex_nocheck(vertex_t v)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">true</span>; }</div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>  </div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>   constexpr <span class="keywordtype">size_t</span> get_number_of_local_adj_matrix_partitions()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> size_t(1); }</div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>  </div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>   vertex_t get_number_of_local_adj_matrix_partition_rows()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00574"></a><span class="lineno">  574</span> <span class="keyword"> </span>{</div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>     <span class="keywordflow">return</span> this-&gt;get_number_of_vertices();</div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>   }</div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>  </div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>   vertex_t get_number_of_local_adj_matrix_partition_cols()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span> <span class="keyword"> </span>{</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>     <span class="keywordflow">return</span> this-&gt;get_number_of_vertices();</div>
 <div class="line"><a name="l00581"></a><span class="lineno">  581</span>   }</div>
 <div class="line"><a name="l00582"></a><span class="lineno">  582</span>  </div>
-<div class="line"><a name="l00583"></a><span class="lineno">  583</span>   vertex_t get_local_adj_matrix_partition_row_first(<span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>   edge_t get_number_of_local_adj_matrix_partition_edges(<span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00584"></a><span class="lineno">  584</span> <span class="keyword"> </span>{</div>
 <div class="line"><a name="l00585"></a><span class="lineno">  585</span>     assert(adj_matrix_partition_idx == 0);</div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>     <span class="keywordflow">return</span> vertex_t{0};</div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>     <span class="keywordflow">return</span> this-&gt;get_number_of_edges();</div>
 <div class="line"><a name="l00587"></a><span class="lineno">  587</span>   }</div>
 <div class="line"><a name="l00588"></a><span class="lineno">  588</span>  </div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>   vertex_t get_local_adj_matrix_partition_row_last(<span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>   vertex_t get_local_adj_matrix_partition_row_first(<span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00590"></a><span class="lineno">  590</span> <span class="keyword"> </span>{</div>
 <div class="line"><a name="l00591"></a><span class="lineno">  591</span>     assert(adj_matrix_partition_idx == 0);</div>
-<div class="line"><a name="l00592"></a><span class="lineno">  592</span>     <span class="keywordflow">return</span> this-&gt;get_number_of_vertices();</div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>     <span class="keywordflow">return</span> vertex_t{0};</div>
 <div class="line"><a name="l00593"></a><span class="lineno">  593</span>   }</div>
 <div class="line"><a name="l00594"></a><span class="lineno">  594</span>  </div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>   vertex_t get_local_adj_matrix_partition_row_value_start_offset(</div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>     <span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span> <span class="keyword"> </span>{</div>
-<div class="line"><a name="l00598"></a><span class="lineno">  598</span>     assert(adj_matrix_partition_idx == 0);</div>
-<div class="line"><a name="l00599"></a><span class="lineno">  599</span>     <span class="keywordflow">return</span> vertex_t{0};</div>
-<div class="line"><a name="l00600"></a><span class="lineno">  600</span>   }</div>
-<div class="line"><a name="l00601"></a><span class="lineno">  601</span>  </div>
-<div class="line"><a name="l00602"></a><span class="lineno">  602</span>   vertex_t get_local_adj_matrix_partition_col_first(<span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>   vertex_t get_local_adj_matrix_partition_row_last(<span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span> <span class="keyword"> </span>{</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>     assert(adj_matrix_partition_idx == 0);</div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>     <span class="keywordflow">return</span> this-&gt;get_number_of_vertices();</div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>   }</div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>  </div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>   vertex_t get_local_adj_matrix_partition_row_value_start_offset(</div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>     <span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00603"></a><span class="lineno">  603</span> <span class="keyword"> </span>{</div>
 <div class="line"><a name="l00604"></a><span class="lineno">  604</span>     assert(adj_matrix_partition_idx == 0);</div>
 <div class="line"><a name="l00605"></a><span class="lineno">  605</span>     <span class="keywordflow">return</span> vertex_t{0};</div>
 <div class="line"><a name="l00606"></a><span class="lineno">  606</span>   }</div>
 <div class="line"><a name="l00607"></a><span class="lineno">  607</span>  </div>
-<div class="line"><a name="l00608"></a><span class="lineno">  608</span>   vertex_t get_local_adj_matrix_partition_col_last(<span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>   vertex_t get_local_adj_matrix_partition_col_first(<span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00609"></a><span class="lineno">  609</span> <span class="keyword"> </span>{</div>
 <div class="line"><a name="l00610"></a><span class="lineno">  610</span>     assert(adj_matrix_partition_idx == 0);</div>
-<div class="line"><a name="l00611"></a><span class="lineno">  611</span>     <span class="keywordflow">return</span> this-&gt;get_number_of_vertices();</div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>     <span class="keywordflow">return</span> vertex_t{0};</div>
 <div class="line"><a name="l00612"></a><span class="lineno">  612</span>   }</div>
 <div class="line"><a name="l00613"></a><span class="lineno">  613</span>  </div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>   vertex_t get_local_adj_matrix_partition_col_value_start_offset(</div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>     <span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span> <span class="keyword"> </span>{</div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>     assert(adj_matrix_partition_idx == 0);</div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>     <span class="keywordflow">return</span> vertex_t{0};</div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>   }</div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>  </div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>   <span class="keywordtype">bool</span> is_hypergraph_partitioned()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>  </div>
-<div class="line"><a name="l00623"></a><span class="lineno">  623</span>   <span class="comment">// FIXME: this function is not part of the public stable API.This function is mainly for pattern</span></div>
-<div class="line"><a name="l00624"></a><span class="lineno">  624</span>   <span class="comment">// accelerator implementation. This function is currently public to support the legacy</span></div>
-<div class="line"><a name="l00625"></a><span class="lineno">  625</span>   <span class="comment">// implementations directly accessing CSR/CSC data, but this function will eventually become</span></div>
-<div class="line"><a name="l00626"></a><span class="lineno">  626</span>   <span class="comment">// private.</span></div>
-<div class="line"><a name="l00627"></a><span class="lineno">  627</span>   edge_t <span class="keyword">const</span>* offsets()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> offsets_; }</div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>   vertex_t get_local_adj_matrix_partition_col_last(<span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span> <span class="keyword"> </span>{</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>     assert(adj_matrix_partition_idx == 0);</div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>     <span class="keywordflow">return</span> this-&gt;get_number_of_vertices();</div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>   }</div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>  </div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>   vertex_t get_local_adj_matrix_partition_col_value_start_offset(</div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>     <span class="keywordtype">size_t</span> adj_matrix_partition_idx)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span> <span class="keyword"> </span>{</div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>     assert(adj_matrix_partition_idx == 0);</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>     <span class="keywordflow">return</span> vertex_t{0};</div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>   }</div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>  </div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>   <span class="keywordtype">bool</span> is_hypergraph_partitioned()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
 <div class="line"><a name="l00628"></a><span class="lineno">  628</span>  </div>
 <div class="line"><a name="l00629"></a><span class="lineno">  629</span>   <span class="comment">// FIXME: this function is not part of the public stable API.This function is mainly for pattern</span></div>
 <div class="line"><a name="l00630"></a><span class="lineno">  630</span>   <span class="comment">// accelerator implementation. This function is currently public to support the legacy</span></div>
 <div class="line"><a name="l00631"></a><span class="lineno">  631</span>   <span class="comment">// implementations directly accessing CSR/CSC data, but this function will eventually become</span></div>
 <div class="line"><a name="l00632"></a><span class="lineno">  632</span>   <span class="comment">// private.</span></div>
-<div class="line"><a name="l00633"></a><span class="lineno">  633</span>   vertex_t <span class="keyword">const</span>* indices()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> indices_; }</div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>   edge_t <span class="keyword">const</span>* offsets()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> offsets_; }</div>
 <div class="line"><a name="l00634"></a><span class="lineno">  634</span>  </div>
 <div class="line"><a name="l00635"></a><span class="lineno">  635</span>   <span class="comment">// FIXME: this function is not part of the public stable API.This function is mainly for pattern</span></div>
 <div class="line"><a name="l00636"></a><span class="lineno">  636</span>   <span class="comment">// accelerator implementation. This function is currently public to support the legacy</span></div>
 <div class="line"><a name="l00637"></a><span class="lineno">  637</span>   <span class="comment">// implementations directly accessing CSR/CSC data, but this function will eventually become</span></div>
 <div class="line"><a name="l00638"></a><span class="lineno">  638</span>   <span class="comment">// private.</span></div>
-<div class="line"><a name="l00639"></a><span class="lineno">  639</span>   weight_t <span class="keyword">const</span>* weights()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> weights_; }</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>   vertex_t <span class="keyword">const</span>* indices()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> indices_; }</div>
 <div class="line"><a name="l00640"></a><span class="lineno">  640</span>  </div>
-<div class="line"><a name="l00641"></a><span class="lineno">  641</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>   edge_t <span class="keyword">const</span>* offsets_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>   vertex_t <span class="keyword">const</span>* indices_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>   weight_t <span class="keyword">const</span>* weights_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>  </div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>   std::vector&lt;vertex_t&gt; segment_offsets_{};  <span class="comment">// segment offsets based on vertex degree, relevant</span></div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>                                              <span class="comment">// only if sorted_by_global_degree is true</span></div>
-<div class="line"><a name="l00648"></a><span class="lineno">  648</span> };</div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>   <span class="comment">// FIXME: this function is not part of the public stable API.This function is mainly for pattern</span></div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>   <span class="comment">// accelerator implementation. This function is currently public to support the legacy</span></div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>   <span class="comment">// implementations directly accessing CSR/CSC data, but this function will eventually become</span></div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>   <span class="comment">// private.</span></div>
+<div class="line"><a name="l00645"></a><span class="lineno">  645</span>   weight_t <span class="keyword">const</span>* weights()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> weights_; }</div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>  </div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>   rmm::device_uvector&lt;edge_t&gt; compute_in_degrees(raft::handle_t <span class="keyword">const</span>&amp; handle) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00648"></a><span class="lineno">  648</span>   rmm::device_uvector&lt;edge_t&gt; compute_out_degrees(raft::handle_t <span class="keyword">const</span>&amp; handle) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00649"></a><span class="lineno">  649</span>  </div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span> }  <span class="comment">// namespace experimental</span></div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span> }  <span class="comment">// namespace cugraph</span></div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>   rmm::device_uvector&lt;weight_t&gt; compute_in_weight_sums(raft::handle_t <span class="keyword">const</span>&amp; handle) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>   rmm::device_uvector&lt;weight_t&gt; compute_out_weight_sums(raft::handle_t <span class="keyword">const</span>&amp; handle) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>  </div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00654"></a><span class="lineno">  654</span>   edge_t <span class="keyword">const</span>* offsets_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>   vertex_t <span class="keyword">const</span>* indices_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>   weight_t <span class="keyword">const</span>* weights_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>  </div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>   std::vector&lt;vertex_t&gt; segment_offsets_{};  <span class="comment">// segment offsets based on vertex degree, relevant</span></div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>                                              <span class="comment">// only if sorted_by_global_degree is true</span></div>
+<div class="line"><a name="l00660"></a><span class="lineno">  660</span> };</div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>  </div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span> }  <span class="comment">// namespace experimental</span></div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span> }  <span class="comment">// namespace cugraph</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasscugraph_1_1experimental_1_1partition__t_html"><div class="ttname"><a href="classcugraph_1_1experimental_1_1partition__t.html">cugraph::experimental::partition_t</a></div><div class="ttdoc">store vertex partitioning map</div><div class="ttdef"><b>Definition:</b> graph_view.hpp:83</div></div>
 <div class="ttc" id="anamespacecugraph_html"><div class="ttname"><a href="namespacecugraph.html">cugraph</a></div><div class="ttdoc">Katz Centrality implementation.</div><div class="ttdef"><b>Definition:</b> betweenness_centrality.cu:32</div></div>
