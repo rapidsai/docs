@@ -1,20 +1,19 @@
 #!/bin/bash
 #######################################
 # Updates or removes all symlinked folders based on the given positional parameter
-#
-# Usage:
-# update_symlinks.sh 17 # used to update symlink folders
-#
-# or
-#
-# update_symlinks.sh rm # used to remove existing symlink folders
-#
-# Positional Arguments:
-#   1) Either of the following:
-#      - NIGHTLY_VERSION: current RAPIDS nightly version (i.e. 16, 17, 18, etc.)
-#      - "rm"
 #######################################
 set -e
+
+display_usage() {
+  echo "Usage:"
+  echo " - update_symlinks 19 ## updates symlinks to use 19 as nightly version"
+  echo " - update_symlinks rm ## removes all current symlinks"
+}
+
+if [[ $# -eq 0 ]]; then
+  display_usage
+  exit 1
+fi
 
 PROJ_ROOT=$(pwd)
 
