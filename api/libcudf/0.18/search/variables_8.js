@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['results_2386',['results',['../structcudf_1_1groupby_1_1aggregation__result.html#a1d0e11864ac37b44b2b19051fca616fe',1,'cudf::groupby::aggregation_result']]]
+  ['ptr_2778',['ptr',['https://docs.rapids.ai/api/librmm/0.18/structrmm_1_1mr_1_1detail_1_1block__base.html#a72c4e6db5cfe26694b7592b362ce3f9f',1,'rmm::mr::detail::block_base']]]
 ];

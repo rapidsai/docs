@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['user_5fdata_2392',['user_data',['../structcudf_1_1io_1_1table__metadata.html#aeb297cb3944fe8f8ca1950d985fe3f53',1,'cudf::io::table_metadata']]]
+  ['tensor_5fattention_5fmask_2784',['tensor_attention_mask',['../structnvtext_1_1tokenizer__result.html#ac055b2cf5b74a76c4b0e7cfd875d9da3',1,'nvtext::tokenizer_result']]],
+  ['tensor_5fmetadata_2785',['tensor_metadata',['../structnvtext_1_1tokenizer__result.html#aaae9539ffa571f2adf5130af8421b760',1,'nvtext::tokenizer_result']]],
+  ['tensor_5ftoken_5fids_2786',['tensor_token_ids',['../structnvtext_1_1tokenizer__result.html#a23c1491bbabce7cdb8ed76d8e26e06a2',1,'nvtext::tokenizer_result']]]
 ];
