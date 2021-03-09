@@ -64,7 +64,7 @@ For each RAPIDS project, navigate to the current release board and follow [these
 
 Update the gpuCI configuration file to include the `branch-0.B`. Then run the RAPIDS Seed Job to generate the new jobs.
 
-### forward-mergers
+### Forward-mergers
 
 Update each of the [forward-mergers](https://gpuci.gpuopenanalytics.com/view/gpuCI%20-%20forward-mergers/) to merge from `0.A` to `0.B`.
 

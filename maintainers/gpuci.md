@@ -111,7 +111,7 @@ These builds can publish nightly conda packages.
 
 Each branch is built in a container using CUDA {{ site.data.versions.CUDA_VER }} and Python {{ site.data.versions.PYTHON_VER }}. the purpose of this job is primarily for testing with a GPU present.
 
-#### forward-mergers
+#### Forward-mergers
 
 During the release process, the branch for the next release is created and set as default. Once this happens, the forward-merger branch jobs are activated. Forward-mergers automatically merge any commits made to the release branch to the latest default branch during burn down.
 
