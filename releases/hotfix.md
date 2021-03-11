@@ -65,12 +65,12 @@ Also consider the timing of when the next release is scheduled. If the freeze or
 Developers
 {: .label .label-green}
 1. Hotfix issues will be assigned to you
-2. Create your branch from the `branch-M.B` branch
+2. Create your branch from the `branch-M.A` branch
 3. Implement the fix succinctly
   1. Change the minimal amount of code required
   2. Update related documentation and unit tests
   3. It is acceptable to implement a quick fix and open a new issue for a more in depth solution
-4. Once complete, create a [pull request]({% link contributing/prs.md %}) targeting `branch-M.B`
+4. Once complete, create a [pull request]({% link contributing/prs.md %}) targeting `branch-M.A`
 5. Notify the project lead
 
 Project Leads
@@ -87,8 +87,8 @@ Operations
 1. Once notified by a Project Lead, review the pull request
 2. Begin testing of conda and containers for correctness and functionality
 3. Review documentation to ensure version numbers (updating to `M.A.Y`) and instructions are correct
-4. Merge release PR targeting `branch-M.B` after approval
-5. Create a new PR from `branch-M.B` targeting `main`
+4. Merge the developer's PR targeting `branch-M.A` after approval
+5. Create a new PR from `branch-M.A` targeting `main`
 6. Merge the PR targeting `main` after review and approval
 7. Monitor process of automated tools
 8. Spot check deliverables to ensure correctness
