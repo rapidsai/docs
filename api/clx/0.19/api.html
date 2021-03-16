@@ -1388,6 +1388,44 @@ registered hooks while the latter silently ignores them.</p>
 </dd>
 </dl>
 </dd></dl>
+<span class="target" id="module-clx.analytics.anomaly_detection"></span><dl class="py function">
+<dt id="clx.analytics.anomaly_detection.dbscan">
+<code class="sig-prename descclassname"><span class="pre">clx.analytics.anomaly_detection.</span></code><code class="sig-name descname"><span class="pre">dbscan</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clx.analytics.anomaly_detection.dbscan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass a feature dataframe to this function to detect anomalies in your feature dataframe. This function uses <code class="docutils literal notranslate"><span class="pre">cugraph</span></code> DBSCAN to detect anomalies
+and outputs associated labels 0,1,-1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>:param feature_dataframe: Feature dataframe to be used for clustering</strong></dt><dd></dd>
+<dt><strong>:type feature_dataframe: cudf.DataFrame</strong></dt><dd></dd>
+<dt><strong>:param min_samples: Minimum samples to use for dbscan</strong></dt><dd></dd>
+<dt><strong>:type min_samples: int</strong></dt><dd></dd>
+<dt><strong>:param eps: Max distance to use for dbscan</strong></dt><dd></dd>
+<dt><strong>:type eps: float</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">clx.features</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">clx.analytics.anomaly_detection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="s2">"time"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="s2">"user"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"u1"</span><span class="p">,</span><span class="s2">"u1"</span><span class="p">,</span><span class="s2">"u1"</span><span class="p">,</span><span class="s2">"u1"</span><span class="p">,</span><span class="s2">"u1"</span><span class="p">,</span><span class="s2">"u1"</span><span class="p">,</span><span class="s2">"u1"</span><span class="p">,</span><span class="s2">"u1"</span><span class="p">,</span><span class="s2">"u1"</span><span class="p">,</span><span class="s2">"u1"</span><span class="p">,</span><span class="s2">"u5"</span><span class="p">,</span><span class="s2">"u4"</span><span class="p">,</span><span class="s2">"u2"</span><span class="p">,</span><span class="s2">"u3"</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="s2">"computer"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"c1"</span><span class="p">,</span><span class="s2">"c2"</span><span class="p">,</span><span class="s2">"c3"</span><span class="p">,</span><span class="s2">"c1"</span><span class="p">,</span><span class="s2">"c2"</span><span class="p">,</span><span class="s2">"c3"</span><span class="p">,</span><span class="s2">"c1"</span><span class="p">,</span><span class="s2">"c1"</span><span class="p">,</span><span class="s2">"c2"</span><span class="p">,</span><span class="s2">"c3"</span><span class="p">,</span><span class="s2">"c1"</span><span class="p">,</span><span class="s2">"c1"</span><span class="p">,</span><span class="s2">"c5"</span><span class="p">,</span><span class="s2">"c6"</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feature_df</span> <span class="o">=</span> <span class="n">clx</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">frequency</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">entity_id</span><span class="o">=</span><span class="s2">"user"</span><span class="p">,</span> <span class="n">feature_id</span><span class="o">=</span><span class="s2">"computer"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span> <span class="o">=</span> <span class="n">clx</span><span class="o">.</span><span class="n">analytics</span><span class="o">.</span><span class="n">anomaly_detection</span><span class="o">.</span><span class="n">dbscan</span><span class="p">(</span><span class="n">feature_df</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span>
+<span class="go">    0   -1</span>
+<span class="go">    1   -1</span>
+<span class="go">    2   -1</span>
+<span class="go">    dtype: int32</span>
+</pre></div>
+</div>
+</dd></dl>
 </div>
 <div class="section" id="module-clx.dns.dns_extractor">
 <span id="dns-extractor"></span><h2>DNS Extractor<a class="headerlink" href="#module-clx.dns.dns_extractor" title="Permalink to this headline">¶</a></h2>
