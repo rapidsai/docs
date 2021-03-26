@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['cuml_1329',['cuml',['../namespacecuml.html',1,'']]],
-  ['genetic_1330',['genetic',['../namespacecuml_1_1genetic.html',1,'cuml']]]
+  ['cuml_1267',['cuml',['../namespacecuml.html',1,'']]],
+  ['genetic_1268',['genetic',['../namespacecuml_1_1genetic.html',1,'cuml']]]
 ];
