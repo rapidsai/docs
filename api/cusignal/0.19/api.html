@@ -4803,6 +4803,68 @@ by <code class="docutils literal notranslate"><span class="pre">f</span> <span c
 with it.</p>
 </dd></dl>
 <dl class="py function">
+<dt id="cusignal.wavelets.wavelets.morlet2">
+<code class="sig-prename descclassname"><span class="pre">cusignal.wavelets.wavelets.</span></code><code class="sig-name descname"><span class="pre">morlet2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cusignal.wavelets.wavelets.morlet2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Complex Morlet wavelet, designed to work with <cite>cwt</cite>.
+Returns the complete version of morlet wavelet, normalised
+according to <cite>s</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="n">s</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">pi</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">)</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>M<span class="classifier">int</span></dt><dd><p>Length of the wavelet.</p>
+</dd>
+<dt>s<span class="classifier">float</span></dt><dd><p>Width parameter of the wavelet.</p>
+</dd>
+<dt>w<span class="classifier">float, optional</span></dt><dd><p>Omega0. Default is 5</p>
+</dd>
+</dl>
+<p>morlet : (M,) ndarray
+See Also
+——–
+morlet : Implementation of Morlet wavelet, incompatible with <cite>cwt</cite>
+Notes
+—–
+.. versionadded:: 1.4.0
+This function was designed to work with <cite>cwt</cite>. Because <cite>morlet2</cite>
+returns an array of complex numbers, the <cite>dtype</cite> argument of <cite>cwt</cite>
+should be set to <cite>complex128</cite> for best results.
+Note the difference in implementation with <cite>morlet</cite>.
+The fundamental frequency of this wavelet in Hz is given by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">w</span><span class="o">*</span><span class="n">fs</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">s</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">fs</span></code> is the sampling rate and <cite>s</cite> is the wavelet width parameter.
+Similarly we can get the wavelet width parameter at <code class="docutils literal notranslate"><span class="pre">f</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">w</span><span class="o">*</span><span class="n">fs</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="mf">4.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wavelet</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">morlet2</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">wavelet</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="go">This example shows basic use of `morlet2` with `cwt` in time-frequency</span>
+<span class="go">analysis:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">retstep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">dt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="mf">6.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="mi">50</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">40</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">widths</span> <span class="o">=</span> <span class="n">w</span><span class="o">*</span><span class="n">fs</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">freq</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cwtm</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">cwt</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">morlet2</span><span class="p">,</span> <span class="n">widths</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cwtm</span><span class="p">),</span>
+<span class="go">    cmap='viridis', shading='gouraud')</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+<dl class="py function">
 <dt id="cusignal.wavelets.wavelets.qmf">
 <code class="sig-prename descclassname"><span class="pre">cusignal.wavelets.wavelets.</span></code><code class="sig-name descname"><span class="pre">qmf</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hk</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cusignal.wavelets.wavelets.qmf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return high-pass qmf filter from low-pass</p>
