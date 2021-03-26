@@ -97,13 +97,6 @@
       <arglist>(void *p, std::size_t bytes, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function">
-      <type>bool</type>
-      <name>deallocate</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html</anchorfile>
-      <anchor>af6bfb8a7044b29decf166eb20c2490a3</anchor>
-      <arglist>(void *p, std::size_t bytes)</arglist>
-    </member>
-    <member kind="function">
       <type>void</type>
       <name>clean</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html</anchorfile>
@@ -862,43 +855,57 @@
       <type></type>
       <name>device_scalar</name>
       <anchorfile>classrmm_1_1device__scalar.html</anchorfile>
-      <anchor>a4cf6ffe9f45e179f402e945eed9679c4</anchor>
-      <arglist>(cuda_stream_view const &amp;stream, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>aa9ebaac490a1ab5c4f38ab98445cf0ed</anchor>
+      <arglist>(cuda_stream_view stream, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>device_scalar</name>
       <anchorfile>classrmm_1_1device__scalar.html</anchorfile>
-      <anchor>a18df596363861a9c4463a8bd5606b9a0</anchor>
-      <arglist>(T const &amp;initial_value, cuda_stream_view const &amp;stream=cuda_stream_view{}, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a4e94fcd6425bdf9d717fef10ad2e25d7</anchor>
+      <arglist>(T const &amp;initial_value, cuda_stream_view stream=cuda_stream_view{}, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>device_scalar</name>
       <anchorfile>classrmm_1_1device__scalar.html</anchorfile>
-      <anchor>a464bb2969157818a679c0d7a679f4daf</anchor>
-      <arglist>(device_scalar const &amp;other, cuda_stream_view const &amp;stream={}, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a653bf7b182b3a73908a81bbba76e9fcc</anchor>
+      <arglist>(device_scalar const &amp;other, cuda_stream_view stream={}, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>T</type>
       <name>value</name>
       <anchorfile>classrmm_1_1device__scalar.html</anchorfile>
-      <anchor>a6f715c48e3de82c450f8099463097c07</anchor>
-      <arglist>(cuda_stream_view const &amp;stream=cuda_stream_view{}) const</arglist>
+      <anchor>a06010ff69ec1d82652868e77129a4f36</anchor>
+      <arglist>(cuda_stream_view stream=cuda_stream_view{}) const</arglist>
     </member>
     <member kind="function">
       <type>auto</type>
       <name>set_value</name>
       <anchorfile>classrmm_1_1device__scalar.html</anchorfile>
-      <anchor>a21b88701bd277589d26fcd646713bb4a</anchor>
-      <arglist>(T const &amp;host_value, cuda_stream_view const &amp;stream=cuda_stream_view{}) -&gt; std::enable_if_t&lt; std::is_fundamental&lt; T &gt;::value, Placeholder &gt;</arglist>
+      <anchor>a1430433ed409182d2de8fcc997c80499</anchor>
+      <arglist>(U const &amp;host_value, cuda_stream_view stream=cuda_stream_view{}) -&gt; std::enable_if_t&lt; std::is_fundamental&lt; U &gt;::value &amp;&amp;not std::is_same&lt; U, bool &gt;::value, void &gt;</arglist>
     </member>
     <member kind="function">
       <type>auto</type>
       <name>set_value</name>
       <anchorfile>classrmm_1_1device__scalar.html</anchorfile>
-      <anchor>a400b86e83042e6fbecffac07b61b1505</anchor>
-      <arglist>(T const &amp;host_value, cuda_stream_view const &amp;stream=cuda_stream_view{}) -&gt; std::enable_if_t&lt; not std::is_fundamental&lt; T &gt;::value, Placeholder &gt;</arglist>
+      <anchor>a45a02e68cf5698a962fbb94949e14407</anchor>
+      <arglist>(U const &amp;host_value, cuda_stream_view stream=cuda_stream_view{}) -&gt; std::enable_if_t&lt; std::is_same&lt; U, bool &gt;::value, void &gt;</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>set_value</name>
+      <anchorfile>classrmm_1_1device__scalar.html</anchorfile>
+      <anchor>ab816b7e37fd2277373b4f24d0209ef05</anchor>
+      <arglist>(T const &amp;host_value, cuda_stream_view stream=cuda_stream_view{}) -&gt; std::enable_if_t&lt; not std::is_fundamental&lt; U &gt;::value, void &gt;</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>set_value_zero</name>
+      <anchorfile>classrmm_1_1device__scalar.html</anchorfile>
+      <anchor>a965a3134bb62d8dcad5bf07406c6ae4f</anchor>
+      <arglist>(cuda_stream_view stream=cuda_stream_view{}) -&gt; std::enable_if_t&lt; std::is_fundamental&lt; U &gt;::value, void &gt;</arglist>
     </member>
     <member kind="function">
       <type>T *</type>
