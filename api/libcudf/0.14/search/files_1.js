@@ -1,4 +1,0 @@
-var searchData=
-[
-  ['bit_2ehpp_882',['bit.hpp',['../bit_8hpp.html',1,'']]]
-];

@@ -29,16 +29,22 @@ Operations
 
 Phase | Start | End | Duration
 -- | -- | -- | --
-Development | Thu, Aug 6th | Wed, Sept 30th | 39 days
-Burn Down | Thu, Oct 1st | Wed, Oct 7th | 5 days
-Code Freeze/Testing | Thu, Oct 8th | Tue, Oct 13th | 4 days
-Release | Wed, Oct 14th | Wed, Oct 14th | 1 day
+Development (cuDF/RMM) | Wed, Jan 27 | Wed, Mar 24 | 40 days
+Development (others) | Wed, Feb 3 | Wed, Mar 31 | 40 days
+[Burn Down]({% link releases/process.md %}#burn-down) (cuDF/RMM) | Thu, Mar 25 | Wed, Mar 31 | 5 days
+[Burn Down]({% link releases/process.md %}#burn-down) (others) | Thu, Apr 1 | Wed, Apr 7 | 5 days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM) | Thu, Apr 1 | Wed, Apr 7 | 5 days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | Thu, Apr 8 | Tue, Apr 13 | 4 days
+[Release]({% link releases/process.md %}#releasing) | Wed, Apr 14 | Thu, Apr 15 | 2 days
 
-## _PROPOSED_ Release v0.17 Schedule
+## _PROPOSED_ Release v0.20 Schedule
 
 Phase | Start | End | Duration
 -- | -- | -- | --
-Development | Thu, Oct 1st | Mon, Nov 23rd | 38 days
-Burn Down | Tue, Nov 24th | Wed, Dec 2nd | 5 days
-Code Freeze/Testing | Thu, Dec 3rd | Tue, Dec 8th | 4 days
-Release | Wed, Dec 9th | Wed, Dec 9th | 1 day
+Development (cuDF/RMM) | Thu, Mar 25 | Tue, May 18 | 39 days
+Development (others) | Thu, Apr 1 | Tue, May 25 | 39 days
+[Burn Down]({% link releases/process.md %}#burn-down)(cuDF/RMM) | Wed, May 19 | Tue, May 25 | 5 days
+[Burn Down]({% link releases/process.md %}#burn-down) (others) | Wed, May 26 | Wed, Jun 2 | 5 days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM) | Wed, May 26 | Wed, Jun 2 | 4 days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | Thu, Jun 3 | Tue, Jun 8 | 4 days
+[Release]({% link releases/process.md %}#releasing) | Wed, Jun 9 | Thu, Jun 10 | 2 days

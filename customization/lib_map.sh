@@ -35,7 +35,7 @@ for FOLDER in api/*/ ; do
     if [ -d "${VERSION}" ]; then
       DEFAULT_PATH+="/${VERSION}"
 
-      if [[ "${LIB}" =~ ^(rmm|libnvstrings)$ ]]; then
+      if [[ "${LIB}" =~ ^(librmm|libnvstrings)$ ]]; then
         DEFAULT_PATH+="/annotated.html"
 
       elif [ "${LIB}" = libcudf ]; then

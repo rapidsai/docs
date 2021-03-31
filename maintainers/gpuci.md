@@ -133,7 +133,11 @@ git commit -am "Merge branch-{{ site.data.releases.stable.version }} into branch
 git push <personal fork> branch-{{ site.data.releases.nightly.version }}-merge-{{ site.data.releases.stable.version }}
 ```
 
-Once this is done, open a PR that targets the new default branch (`branch-{{ site.data.releases.nightly.version }}` in this example) with your changes. Once this PR is approved and merged, the auto-merger PR should automatically be merged since it will contain the same commit hashes.
+Once this is done, open a PR that targets the new default branch (`branch-{{ site.data.releases.nightly.version }}` in this example) with your changes. 
+
+**IMPORTANT**: Before merging and approving this PR, be sure to change the merging strategy to `Create a Merge Commit`. Otherwise, history will be lost and the branches become incompatible.
+
+Once this PR is approved and merged, the auto-merger PR should automatically be merged since it will contain the same commit hashes.
 
 ## Scripts
 
@@ -247,9 +251,19 @@ gpuCI exposes various environment variables that the CI scripts can utilize.
 4. `changelog` - For the changelog checker job using the `ci/checks/changelog.sh` script
 5. `gpu-matrix` - For full GPU matrix test job using the `ci/gpu` scripts
 
-`SOURCE_BRANCH` is the name of the branch being built. For pull requests, this is the head (or compare) branch.
+Other variables:
+- `SOURCE_BRANCH` - The name of the branch being built. For pull requests, this is the head (or compare) branch.
+- `COMMIT_HASH` - The current commit being built. For pull requests, this is `pull/${PR_ID}/merge` (for GitHub builds). For branch builds, this is the tip of the branch.
+- `CUDA` - The current version of CUDA being used for the build formatted as `major.minor` (`10.1` or `11.0`)
+- `PYTHON` - The current version of Python being used for the build formatted as `major.minor` (`3.7` or `3.8`)
 
 During a pull request build, the following environment variables are exposed:
 - `PR_ID` - The numeric ID of the pull request
 - `PR_AUTHOR` - The username of who opened pull request
 - `TARGET_BRANCH` - The base branch of the pull request
+- `REPORT_HASH` - The git hash for reporting GitHub status. This is typically equivalent to `pull/${PR_ID}/head`.
+
+### Project flash
+
+- `PROJECT_FLASH` - Set to `1` when Project Flash is enabled for the build
+- `FLASH_ID` - Unique identifier used to mark artifacts passed between Project Flash builds
