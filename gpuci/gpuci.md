@@ -79,8 +79,6 @@ This is helpful when trying to troubleshoot issues with the build process and/or
   * **NOTE:** The changelog check will still run.
 * To skip the changelog check (e.g. for manual auto-merger resolution) add the following to the title of the PR:
   * `[skip ci changelog]`
-* For repositories that contain a benchmark build script in `ci/benchmark/`, trigger a benchmark build by commenting:
- * `run bench`
 
 ## Help
 
