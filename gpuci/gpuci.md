@@ -74,7 +74,7 @@ Comment `run bench` in a PR that may have noticeable performance impacts to trig
 * To approve PR author for just the current PR, comment the command:
   * `ok to test`
 * To approve PR author for all PRs in the future, comment the command:
-  * `add to whitelist`
+  * `add to allowlist`
 
 ### Users
 
