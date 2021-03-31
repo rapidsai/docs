@@ -79,6 +79,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gae27f8f8e480e0025ab43975869bef5c1"><td align="right" class="memItemLeft" valign="top">std::unique_ptr&lt; <a class="el" href="classcudf_1_1column.html">column</a> &gt; </td><td class="memItemRight" valign="bottom"><a class="el" href="group__transformation__transform.html#gae27f8f8e480e0025ab43975869bef5c1">cudf::mask_to_bools</a> (bitmask_type const *bitmask, size_type begin_bit, size_type end_bit, <a class="elRef" href="https://docs.rapids.ai/api/librmm/0.19/classrmm_1_1mr_1_1device__memory__resource.html">rmm::mr::device_memory_resource</a> *mr=<a class="elRef" href="https://docs.rapids.ai/api/librmm/0.19/per__device__resource_8hpp.html#a95bf69637b8f3d29b13b33562370fc8f">rmm::mr::get_current_device_resource</a>())</td></tr>
 <tr class="memdesc:gae27f8f8e480e0025ab43975869bef5c1"><td class="mdescLeft"> </td><td class="mdescRight">Creates a boolean column from given bitmask.  <a href="group__transformation__transform.html#gae27f8f8e480e0025ab43975869bef5c1">More...</a><br/></td></tr>
 <tr class="separator:gae27f8f8e480e0025ab43975869bef5c1"><td class="memSeparator" colspan="2"> </td></tr>
+<tr class="memitem:gab27d67ff3ed6460655694745d834ec47"><td align="right" class="memItemLeft" valign="top">std::unique_ptr&lt; <a class="el" href="classcudf_1_1column.html">column</a> &gt; </td><td class="memItemRight" valign="bottom"><a class="el" href="group__transformation__transform.html#gab27d67ff3ed6460655694745d834ec47">cudf::row_bit_count</a> (<a class="el" href="classcudf_1_1table__view.html">table_view</a> const &amp;t, <a class="elRef" href="https://docs.rapids.ai/api/librmm/0.19/classrmm_1_1mr_1_1device__memory__resource.html">rmm::mr::device_memory_resource</a> *mr=<a class="elRef" href="https://docs.rapids.ai/api/librmm/0.19/per__device__resource_8hpp.html#a95bf69637b8f3d29b13b33562370fc8f">rmm::mr::get_current_device_resource</a>())</td></tr>
+<tr class="memdesc:gab27d67ff3ed6460655694745d834ec47"><td class="mdescLeft"> </td><td class="mdescRight">Returns an approximate cumulative size in bits of all columns in the <code><a class="el" href="classcudf_1_1table__view.html" title="A set of cudf::column_view's of the same size.">table_view</a></code> for each row.  <a href="group__transformation__transform.html#gab27d67ff3ed6460655694745d834ec47">More...</a><br/></td></tr>
+<tr class="separator:gab27d67ff3ed6460655694745d834ec47"><td class="memSeparator" colspan="2"> </td></tr>
 </table>
 <a id="details" name="details"></a><h2 class="groupheader">Detailed Description</h2>
 <h2 class="groupheader">Function Documentation</h2>
@@ -263,6 +266,46 @@ Functions</h2></td></tr>
 </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pair containing a <code>device_buffer</code> with the new bitmask and it's null count obtained by replacing <code>NaN</code> in <code>input</code> with null. </dd></dl>
+</div>
+</div>
+<a id="gab27d67ff3ed6460655694745d834ec47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab27d67ff3ed6460655694745d834ec47">◆ </a></span>row_bit_count()</h2>
+<div class="memitem">
+<div class="memproto">
+<table class="memname">
+<tr>
+<td class="memname">std::unique_ptr&lt;<a class="el" href="classcudf_1_1column.html">column</a>&gt; cudf::row_bit_count </td>
+<td>(</td>
+<td class="paramtype"><a class="el" href="classcudf_1_1table__view.html">table_view</a> const &amp; </td>
+<td class="paramname"><em>t</em>, </td>
+</tr>
+<tr>
+<td class="paramkey"></td>
+<td></td>
+<td class="paramtype"><a class="elRef" href="https://docs.rapids.ai/api/librmm/0.19/classrmm_1_1mr_1_1device__memory__resource.html">rmm::mr::device_memory_resource</a> * </td>
+<td class="paramname"><em>mr</em> = <code><a class="elRef" href="https://docs.rapids.ai/api/librmm/0.19/per__device__resource_8hpp.html#a95bf69637b8f3d29b13b33562370fc8f">rmm::mr::get_current_device_resource</a>()</code> </td>
+</tr>
+<tr>
+<td></td>
+<td>)</td>
+<td></td><td></td>
+</tr>
+</table>
+</div><div class="memdoc">
+<p>Returns an approximate cumulative size in bits of all columns in the <code><a class="el" href="classcudf_1_1table__view.html" title="A set of cudf::column_view's of the same size.">table_view</a></code> for each row. </p>
+<p>This function counts bits instead of bytes to account for the null mask which only has one bit per row.</p>
+<p>Each row in the returned column is the sum of the per-row size for each column in the table.</p>
+<p>In some cases, this is an inexact approximation. Specifically, columns of lists and strings require N+1 offsets to represent N rows. It is up to the caller to calculate the small additional overhead of the terminating offset for any group of rows being considered.</p>
+<p>This function returns the per-row sizes as the columns are currently formed. This can end up being larger than the number you would get by gathering the rows. Specifically, the push-down of struct column validity masks can nullify rows that contain data for string or list columns. In these cases, the size returned is conservative:</p>
+<p>row_bit_count(column(x)) &gt;= row_bit_count(gather(column(x)))</p>
+<dl class="params"><dt>Parameters</dt><dd>
+<table class="params">
+<tr><td class="paramname">t</td><td>The table view to perform the computation on. </td></tr>
+<tr><td class="paramname">mr</td><td>Device memory resource used to allocate the returned columns's device memory </td></tr>
+</table>
+</dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A 32-bit integer column containing the per-row bit counts. </dd></dl>
 </div>
 </div>
 <a id="gaf79991ded097d2cf7db62edf38181022"></a>
