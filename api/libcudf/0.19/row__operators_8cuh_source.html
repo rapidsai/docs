@@ -342,112 +342,125 @@ $(function() {
 <div class="line"><a name="l00428"></a><span class="lineno"><a class="line" href="classcudf_1_1element__hasher__with__seed.html">  428</a></span> <span class="keyword">class </span><a class="code" href="classcudf_1_1element__hasher__with__seed.html">element_hasher_with_seed</a> {</div>
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>  <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>   <a class="code" href="classcudf_1_1element__hasher__with__seed.html">element_hasher_with_seed</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>   __device__ <a class="code" href="classcudf_1_1element__hasher__with__seed.html">element_hasher_with_seed</a>(uint32_t seed, hash_value_type null_hash)</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>     : _seed{seed}, _null_hash(null_hash)</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>   {</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>   }</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>  </div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>   template &lt;typename T, CUDF_ENABLE_IF(column_device_view::has_element_accessor&lt;T&gt;())&gt;</div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>   __device__ hash_value_type <span class="keyword">operator</span>()(<a class="code" href="classcudf_1_1column__device__view.html">column_device_view</a> col, size_type row_index) <span class="keyword">const</span></div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>   {</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>     <span class="keywordflow">if</span> (has_nulls &amp;&amp; col.<a class="code" href="classcudf_1_1detail_1_1column__device__view__base.html#a5245896861cf175c99c6fd60d197e59e">is_null</a>(row_index)) { <span class="keywordflow">return</span> _null_hash; }</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>     <span class="keywordflow">return</span> hash_function&lt;T&gt;{_seed}(col.<a class="code" href="classcudf_1_1column__device__view.html#aaf3b17ddf058173c6fcae742947c7ee6">element</a>&lt;T&gt;(row_index));</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>   }</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>  </div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>   template &lt;typename T, CUDF_ENABLE_IF(not column_device_view::has_element_accessor&lt;T&gt;())&gt;</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>   __device__ hash_value_type <span class="keyword">operator</span>()(<a class="code" href="classcudf_1_1column__device__view.html">column_device_view</a> col, size_type row_index) <span class="keyword">const</span></div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>   {</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>     cudf_assert(<span class="keyword">false</span> &amp;&amp; <span class="stringliteral">"Unsupported type in hash."</span>);</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>     <span class="keywordflow">return</span> {};</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>   }</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>  </div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>   uint32_t _seed{0};</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>   hash_value_type _null_hash{std::numeric_limits&lt;hash_value_type&gt;::max()};</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span> };</div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>  </div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span> <span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>&gt; <span class="keyword">class </span>hash_function, <span class="keywordtype">bool</span> has_nulls = <span class="keyword">true</span>&gt;</div>
-<div class="line"><a name="l00462"></a><span class="lineno"><a class="line" href="classcudf_1_1row__hasher.html">  462</a></span> <span class="keyword">class </span><a class="code" href="classcudf_1_1row__hasher.html">row_hasher</a> {</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>   <a class="code" href="classcudf_1_1row__hasher.html">row_hasher</a>() = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>   <a class="code" href="classcudf_1_1row__hasher.html">row_hasher</a>(<a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a> t) : _table{t} {}</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>  </div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>   __device__ <span class="keyword">auto</span> operator()(size_type row_index)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span> <span class="keyword"> </span>{</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>     <span class="keyword">auto</span> hash_combiner = [](hash_value_type lhs, hash_value_type rhs) {</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>       <span class="keywordflow">return</span> hash_function&lt;hash_value_type&gt;{}.hash_combine(lhs, rhs);</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>     };</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>  </div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>     <span class="comment">// Hashes an element in a column</span></div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>     <span class="keyword">auto</span> hasher = [=](size_type column_index) {</div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>       <span class="keywordflow">return</span> <a class="code" href="group__utility__dispatcher.html#ga2f44d6f3521f3f3bc585055cd38d588c">cudf::type_dispatcher</a>(_table.column(column_index).<a class="code" href="classcudf_1_1detail_1_1column__device__view__base.html#a18049291d87fb72a96209ed2df518876">type</a>(),</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>                                    <a class="code" href="classcudf_1_1element__hasher.html">element_hasher&lt;hash_function, has_nulls&gt;</a>{},</div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>                                    _table.column(column_index),</div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>                                    row_index);</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>     };</div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>  </div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>     <span class="comment">// Hash each element and combine all the hash values together</span></div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>     <span class="keywordflow">return</span> thrust::transform_reduce(thrust::seq,</div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>                                     thrust::make_counting_iterator(0),</div>
-<div class="line"><a name="l00484"></a><span class="lineno">  484</span>                                     thrust::make_counting_iterator(_table.num_columns()),</div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>                                     hasher,</div>
-<div class="line"><a name="l00486"></a><span class="lineno">  486</span>                                     hash_value_type{0},</div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>                                     hash_combiner);</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>   }</div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>  </div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>   <a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a> _table;</div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span> };</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>  </div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span> <span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>&gt; <span class="keyword">class </span>hash_function, <span class="keywordtype">bool</span> has_nulls = <span class="keyword">true</span>&gt;</div>
-<div class="line"><a name="l00502"></a><span class="lineno"><a class="line" href="classcudf_1_1row__hasher__initial__values.html">  502</a></span> <span class="keyword">class </span><a class="code" href="classcudf_1_1row__hasher__initial__values.html">row_hasher_initial_values</a> {</div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>   <a class="code" href="classcudf_1_1row__hasher__initial__values.html">row_hasher_initial_values</a>() = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>   <a class="code" href="classcudf_1_1row__hasher__initial__values.html">row_hasher_initial_values</a>(<a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a> t, hash_value_type* initial_hash)</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>     : _table{t}, _initial_hash(initial_hash)</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>   {</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>   }</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>  </div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>   __device__ <span class="keyword">auto</span> operator()(size_type row_index)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span> <span class="keyword"> </span>{</div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>     <span class="keyword">auto</span> hash_combiner = [](hash_value_type lhs, hash_value_type rhs) {</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>       <span class="keywordflow">return</span> hash_function&lt;hash_value_type&gt;{}.hash_combine(lhs, rhs);</div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>     };</div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>  </div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>     <span class="comment">// Hashes an element in a column and combines with an initial value</span></div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>     <span class="keyword">auto</span> hasher = [=](size_type column_index) {</div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>       <span class="keyword">auto</span> hash_value = <a class="code" href="group__utility__dispatcher.html#ga2f44d6f3521f3f3bc585055cd38d588c">cudf::type_dispatcher</a>(_table.column(column_index).<a class="code" href="classcudf_1_1detail_1_1column__device__view__base.html#a18049291d87fb72a96209ed2df518876">type</a>(),</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>                                               <a class="code" href="classcudf_1_1element__hasher.html">element_hasher&lt;hash_function, has_nulls&gt;</a>{},</div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>                                               _table.column(column_index),</div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>                                               row_index);</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>   __device__ <a class="code" href="classcudf_1_1element__hasher__with__seed.html">element_hasher_with_seed</a>(uint32_t seed) : _seed{seed} {}</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>   __device__ <a class="code" href="classcudf_1_1element__hasher__with__seed.html">element_hasher_with_seed</a>(uint32_t seed, hash_value_type null_hash)</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>     : _seed{seed}, _null_hash(null_hash)</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>   {</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>   }</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>  </div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>   template &lt;typename T, CUDF_ENABLE_IF(column_device_view::has_element_accessor&lt;T&gt;())&gt;</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>   __device__ hash_value_type <span class="keyword">operator</span>()(<a class="code" href="classcudf_1_1column__device__view.html">column_device_view</a> col, size_type row_index) <span class="keyword">const</span></div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>   {</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>     <span class="keywordflow">if</span> (has_nulls &amp;&amp; col.<a class="code" href="classcudf_1_1detail_1_1column__device__view__base.html#a5245896861cf175c99c6fd60d197e59e">is_null</a>(row_index)) { <span class="keywordflow">return</span> _null_hash; }</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>     <span class="keywordflow">return</span> hash_function&lt;T&gt;{_seed}(col.<a class="code" href="classcudf_1_1column__device__view.html#aaf3b17ddf058173c6fcae742947c7ee6">element</a>&lt;T&gt;(row_index));</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>   }</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>  </div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>   template &lt;typename T, CUDF_ENABLE_IF(not column_device_view::has_element_accessor&lt;T&gt;())&gt;</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>   __device__ hash_value_type <span class="keyword">operator</span>()(<a class="code" href="classcudf_1_1column__device__view.html">column_device_view</a> col, size_type row_index) <span class="keyword">const</span></div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>   {</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>     cudf_assert(<span class="keyword">false</span> &amp;&amp; <span class="stringliteral">"Unsupported type in hash."</span>);</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>     <span class="keywordflow">return</span> {};</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>   }</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>  </div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>   uint32_t _seed{DEFAULT_HASH_SEED};</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>   hash_value_type _null_hash{std::numeric_limits&lt;hash_value_type&gt;::max()};</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span> };</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>  </div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span> <span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>&gt; <span class="keyword">class </span>hash_function, <span class="keywordtype">bool</span> has_nulls = <span class="keyword">true</span>&gt;</div>
+<div class="line"><a name="l00463"></a><span class="lineno"><a class="line" href="classcudf_1_1row__hasher.html">  463</a></span> <span class="keyword">class </span><a class="code" href="classcudf_1_1row__hasher.html">row_hasher</a> {</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>   <a class="code" href="classcudf_1_1row__hasher.html">row_hasher</a>() = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>   <a class="code" href="classcudf_1_1row__hasher.html">row_hasher</a>(<a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a> t) : _table{t} {}</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>   <a class="code" href="classcudf_1_1row__hasher.html">row_hasher</a>(<a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a> t, uint32_t seed) : _table{t}, _seed(seed) {}</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>  </div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>   __device__ <span class="keyword">auto</span> operator()(size_type row_index)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span> <span class="keyword"> </span>{</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>     <span class="keyword">auto</span> hash_combiner = [](hash_value_type lhs, hash_value_type rhs) {</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>       <span class="keywordflow">return</span> hash_function&lt;hash_value_type&gt;{}.hash_combine(lhs, rhs);</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>     };</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>  </div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>     <span class="comment">// Hash the first column w/ the seed</span></div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>     <span class="keyword">auto</span> <span class="keyword">const</span> initial_hash =</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>       hash_combiner(hash_value_type{0},</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>                     <a class="code" href="group__utility__dispatcher.html#ga2f44d6f3521f3f3bc585055cd38d588c">type_dispatcher</a>(_table.column(0).<a class="code" href="classcudf_1_1detail_1_1column__device__view__base.html#a18049291d87fb72a96209ed2df518876">type</a>(),</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>                                     <a class="code" href="classcudf_1_1element__hasher__with__seed.html">element_hasher_with_seed&lt;hash_function, has_nulls&gt;</a>{_seed},</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>                                     _table.column(0),</div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>                                     row_index));</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>  </div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>     <span class="comment">// Hashes an element in a column</span></div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>     <span class="keyword">auto</span> hasher = [=](size_type column_index) {</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>       <span class="keywordflow">return</span> <a class="code" href="group__utility__dispatcher.html#ga2f44d6f3521f3f3bc585055cd38d588c">cudf::type_dispatcher</a>(_table.column(column_index).<a class="code" href="classcudf_1_1detail_1_1column__device__view__base.html#a18049291d87fb72a96209ed2df518876">type</a>(),</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>                                    <a class="code" href="classcudf_1_1element__hasher.html">element_hasher&lt;hash_function, has_nulls&gt;</a>{},</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>                                    _table.column(column_index),</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>                                    row_index);</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>     };</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>  </div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>     <span class="comment">// Hash each element and combine all the hash values together</span></div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>     <span class="keywordflow">return</span> thrust::transform_reduce(</div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>       thrust::seq,</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>       <span class="comment">// note that this starts at 1 and not 0 now since we already hashed the first column</span></div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>       thrust::make_counting_iterator(1),</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>       thrust::make_counting_iterator(_table.num_columns()),</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>       hasher,</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>       initial_hash,</div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>       hash_combiner);</div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>   }</div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>  </div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>   <a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a> _table;</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>   uint32_t _seed{DEFAULT_HASH_SEED};</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span> };</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>  </div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span> <span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>&gt; <span class="keyword">class </span>hash_function, <span class="keywordtype">bool</span> has_nulls = <span class="keyword">true</span>&gt;</div>
+<div class="line"><a name="l00515"></a><span class="lineno"><a class="line" href="classcudf_1_1row__hasher__initial__values.html">  515</a></span> <span class="keyword">class </span><a class="code" href="classcudf_1_1row__hasher__initial__values.html">row_hasher_initial_values</a> {</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>   <a class="code" href="classcudf_1_1row__hasher__initial__values.html">row_hasher_initial_values</a>() = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>   <a class="code" href="classcudf_1_1row__hasher__initial__values.html">row_hasher_initial_values</a>(<a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a> t, hash_value_type* initial_hash)</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>     : _table{t}, _initial_hash(initial_hash)</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>   {</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>   }</div>
 <div class="line"><a name="l00522"></a><span class="lineno">  522</span>  </div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>       <span class="keywordflow">return</span> hash_combiner(_initial_hash[column_index], hash_value);</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>     };</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>  </div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>     <span class="comment">// Hash each element and combine all the hash values together</span></div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>     <span class="keywordflow">return</span> thrust::transform_reduce(thrust::seq,</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>                                     thrust::make_counting_iterator(0),</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>                                     thrust::make_counting_iterator(_table.num_columns()),</div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>                                     hasher,</div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>                                     hash_value_type{0},</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>                                     hash_combiner);</div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>   }</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>  </div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>   <a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a> _table;</div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>   hash_value_type* _initial_hash;</div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span> };</div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>  </div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span> }  <span class="comment">// namespace cudf</span></div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>   __device__ <span class="keyword">auto</span> operator()(size_type row_index)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span> <span class="keyword"> </span>{</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>     <span class="keyword">auto</span> hash_combiner = [](hash_value_type lhs, hash_value_type rhs) {</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>       <span class="keywordflow">return</span> hash_function&lt;hash_value_type&gt;{}.hash_combine(lhs, rhs);</div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>     };</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>  </div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>     <span class="comment">// Hashes an element in a column and combines with an initial value</span></div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>     <span class="keyword">auto</span> hasher = [=](size_type column_index) {</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>       <span class="keyword">auto</span> hash_value = <a class="code" href="group__utility__dispatcher.html#ga2f44d6f3521f3f3bc585055cd38d588c">cudf::type_dispatcher</a>(_table.column(column_index).<a class="code" href="classcudf_1_1detail_1_1column__device__view__base.html#a18049291d87fb72a96209ed2df518876">type</a>(),</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>                                               <a class="code" href="classcudf_1_1element__hasher.html">element_hasher&lt;hash_function, has_nulls&gt;</a>{},</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>                                               _table.column(column_index),</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>                                               row_index);</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>  </div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>       <span class="keywordflow">return</span> hash_combiner(_initial_hash[column_index], hash_value);</div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>     };</div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>  </div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>     <span class="comment">// Hash each element and combine all the hash values together</span></div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>     <span class="keywordflow">return</span> thrust::transform_reduce(thrust::seq,</div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>                                     thrust::make_counting_iterator(0),</div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>                                     thrust::make_counting_iterator(_table.num_columns()),</div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>                                     hasher,</div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>                                     hash_value_type{0},</div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>                                     hash_combiner);</div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>   }</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>  </div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>   <a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a> _table;</div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>   hash_value_type* _initial_hash;</div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span> };</div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>  </div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span> }  <span class="comment">// namespace cudf</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasscudf_1_1row__hasher__initial__values_html"><div class="ttname"><a href="classcudf_1_1row__hasher__initial__values.html">cudf::row_hasher_initial_values</a></div><div class="ttdoc">Computes the hash value of a row in the given table, combined with an initial hash value for each col...</div><div class="ttdef"><b>Definition:</b> <a href="row__operators_8cuh_source.html#l00502">row_operators.cuh:502</a></div></div>
+<div class="ttc" id="aclasscudf_1_1row__hasher__initial__values_html"><div class="ttname"><a href="classcudf_1_1row__hasher__initial__values.html">cudf::row_hasher_initial_values</a></div><div class="ttdoc">Computes the hash value of a row in the given table, combined with an initial hash value for each col...</div><div class="ttdef"><b>Definition:</b> <a href="row__operators_8cuh_source.html#l00515">row_operators.cuh:515</a></div></div>
 <div class="ttc" id="agroup__utility__dispatcher_html_ga2f44d6f3521f3f3bc585055cd38d588c"><div class="ttname"><a href="group__utility__dispatcher.html#ga2f44d6f3521f3f3bc585055cd38d588c">cudf::type_dispatcher</a></div><div class="ttdeci">constexpr decltype(auto) CUDA_HOST_DEVICE_CALLABLE type_dispatcher(cudf::data_type dtype, Functor f, Ts &amp;&amp;... args)</div><div class="ttdoc">Invokes an operator() template with the type instantiation based on the specified cudf::data_type's i...</div><div class="ttdef"><b>Definition:</b> <a href="type__dispatcher_8hpp_source.html#l00414">type_dispatcher.hpp:414</a></div></div>
 <div class="ttc" id="aclasscudf_1_1row__lexicographic__comparator_html"><div class="ttname"><a href="classcudf_1_1row__lexicographic__comparator.html">cudf::row_lexicographic_comparator</a></div><div class="ttdoc">Computes whether one row is lexicographically less than another row.</div><div class="ttdef"><b>Definition:</b> <a href="row__operators_8cuh_source.html#l00336">row_operators.cuh:336</a></div></div>
 <div class="ttc" id="anamespacecudf_html_ab40c94dd30f35059d818f00575687637"><div class="ttname"><a href="namespacecudf.html#ab40c94dd30f35059d818f00575687637">cudf::null_compare</a></div><div class="ttdeci">__device__ auto null_compare(bool lhs_is_null, bool rhs_is_null, null_order null_precedence)</div><div class="ttdoc">Compare the nulls according to null order.</div><div class="ttdef"><b>Definition:</b> <a href="row__operators_8cuh_source.html#l00104">row_operators.cuh:104</a></div></div>
 <div class="ttc" id="aclasscudf_1_1table__device__view_html"><div class="ttname"><a href="classcudf_1_1table__device__view.html">cudf::table_device_view</a></div><div class="ttdef"><b>Definition:</b> <a href="table__device__view_8cuh_source.html#l00081">table_device_view.cuh:81</a></div></div>
 <div class="ttc" id="aclasscudf_1_1column__device__view_html"><div class="ttname"><a href="classcudf_1_1column__device__view.html">cudf::column_device_view</a></div><div class="ttdoc">An immutable, non-owning view of device data as a column of elements that is trivially copyable and u...</div><div class="ttdef"><b>Definition:</b> <a href="column__device__view_8cuh_source.html#l00276">column_device_view.cuh:276</a></div></div>
 <div class="ttc" id="aclasscudf_1_1element__equality__comparator_html_ad83698c7a8a4706e4cc30a3fa422c2aa"><div class="ttname"><a href="classcudf_1_1element__equality__comparator.html#ad83698c7a8a4706e4cc30a3fa422c2aa">cudf::element_equality_comparator::element_equality_comparator</a></div><div class="ttdeci">__host__ __device__ element_equality_comparator(column_device_view lhs, column_device_view rhs, bool nulls_are_equal=true)</div><div class="ttdoc">Construct type-dispatched function object for comparing equality between two elements.</div><div class="ttdef"><b>Definition:</b> <a href="row__operators_8cuh_source.html#l00178">row_operators.cuh:178</a></div></div>
-<div class="ttc" id="aclasscudf_1_1row__hasher_html"><div class="ttname"><a href="classcudf_1_1row__hasher.html">cudf::row_hasher</a></div><div class="ttdoc">Computes the hash value of a row in the given table.</div><div class="ttdef"><b>Definition:</b> <a href="row__operators_8cuh_source.html#l00462">row_operators.cuh:462</a></div></div>
+<div class="ttc" id="aclasscudf_1_1row__hasher_html"><div class="ttname"><a href="classcudf_1_1row__hasher.html">cudf::row_hasher</a></div><div class="ttdoc">Computes the hash value of a row in the given table.</div><div class="ttdef"><b>Definition:</b> <a href="row__operators_8cuh_source.html#l00463">row_operators.cuh:463</a></div></div>
 <div class="ttc" id="aclasscudf_1_1element__relational__comparator_html_aabe401b79edd20c5cb776473e2f2081b"><div class="ttname"><a href="classcudf_1_1element__relational__comparator.html#aabe401b79edd20c5cb776473e2f2081b">cudf::element_relational_comparator::element_relational_comparator</a></div><div class="ttdeci">__host__ __device__ element_relational_comparator(column_device_view lhs, column_device_view rhs, null_order null_precedence)</div><div class="ttdoc">Construct type-dispatched function object for performing a relational comparison between two elements...</div><div class="ttdef"><b>Definition:</b> <a href="row__operators_8cuh_source.html#l00271">row_operators.cuh:271</a></div></div>
 <div class="ttc" id="aclasscudf_1_1element__hasher__with__seed_html"><div class="ttname"><a href="classcudf_1_1element__hasher__with__seed.html">cudf::element_hasher_with_seed</a></div><div class="ttdef"><b>Definition:</b> <a href="row__operators_8cuh_source.html#l00428">row_operators.cuh:428</a></div></div>
 <div class="ttc" id="agroup__utility__types_html_ga058e6d6e8a21583ce0e85ee73e5abb31"><div class="ttname"><a href="group__utility__types.html#ga058e6d6e8a21583ce0e85ee73e5abb31">cudf::null_order</a></div><div class="ttdeci">null_order</div><div class="ttdoc">Indicates how null values compare against all other values.</div><div class="ttdef"><b>Definition:</b> <a href="types_8hpp_source.html#l00160">types.hpp:160</a></div></div>
