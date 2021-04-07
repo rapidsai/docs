@@ -77,7 +77,7 @@ This is helpful when trying to troubleshoot issues with the build process and/or
 * To skip CI testing (for documentation changes) add the following to the title of the PR:
   * `[skip ci]`
   * **NOTE:** The changelog check will still run.
-* To skip the changelog check (e.g. for manual auto-merger resolution) add the following to the title of the PR:
+* To skip the changelog check (e.g. for manual forward-merger resolution) add the following to the title of the PR:
   * `[skip ci changelog]`
 
 ## Help
