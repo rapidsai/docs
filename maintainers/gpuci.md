@@ -115,7 +115,7 @@ Each branch is built in a container using CUDA {{ site.data.versions.CUDA_VER }}
 
 During the release process, the branch for the next release is created and set as default. Once this happens, the forward-merger branch jobs are activated. Forward-mergers automatically merge any commits made to the release branch to the latest default branch during burn down.
 
-**When Auto Merging Fails**
+**When Forward Merging Fails**
 
 It is important to note that the forward-merge jobs will sometimes fail due to merge conflicts, and will request a manual merge to be done. *Never* use the GitHub Web UI to fix the merge conflicts as it will cause changes in the default branch to be merged into the release branch. Please use the following steps to fix the merge conflicts manually:
 
