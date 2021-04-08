@@ -1,22 +1,10 @@
 var searchData=
 [
-  ['mae_2439',['mae',['../namespacecuml_1_1genetic.html#a76647c78ee5b868872dbbe108a2cf8a9aeb4a4a36e4d53916f9979759c3d3b822',1,'cuml::genetic::mae()'],['../namespaceML.html#a823912afaa51f58a997564eadb6d9405a71d3454116e1aace7f91b15f56567b1e',1,'ML::MAE()']]],
-  ['max_2440',['max',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77a2ffe4e77325d9a7152f7086ea7aa5114',1,'cuml::genetic::node']]],
-  ['metric_5fbraycurtis_2441',['METRIC_BrayCurtis',['../namespaceML.html#a4d9fd2e8fe0cfbbd81877eee212b88d9a2124363d5cceb96ec8c9d87e0e9ece05',1,'ML']]],
-  ['metric_5fcanberra_2442',['METRIC_Canberra',['../namespaceML.html#a4d9fd2e8fe0cfbbd81877eee212b88d9ae507c1b9eb779a39b742fa8e3e22cd0e',1,'ML']]],
-  ['metric_5fcorrelation_2443',['METRIC_Correlation',['../namespaceML.html#a4d9fd2e8fe0cfbbd81877eee212b88d9ad4bc32758f26d167d264e7574429b024',1,'ML']]],
-  ['metric_5fcosine_2444',['METRIC_Cosine',['../namespaceML.html#a4d9fd2e8fe0cfbbd81877eee212b88d9ae401fdab977404f1b08e85985f7b4bf8',1,'ML']]],
-  ['metric_5fhellinger_2445',['METRIC_Hellinger',['../namespaceML.html#a4d9fd2e8fe0cfbbd81877eee212b88d9afd7a01732eb761888d743095273d7608',1,'ML']]],
-  ['metric_5finner_5fproduct_2446',['METRIC_INNER_PRODUCT',['../namespaceML.html#a4d9fd2e8fe0cfbbd81877eee212b88d9a138628cbf0d89bc28f2dd159f426c13d',1,'ML']]],
-  ['metric_5fjaccard_2447',['METRIC_Jaccard',['../namespaceML.html#a4d9fd2e8fe0cfbbd81877eee212b88d9a01f3cffd800f3377063512e9d70541e9',1,'ML']]],
-  ['metric_5fjensenshannon_2448',['METRIC_JensenShannon',['../namespaceML.html#a4d9fd2e8fe0cfbbd81877eee212b88d9ad4265672a802bf53d58db72de56ddd22',1,'ML']]],
-  ['metric_5fl1_2449',['METRIC_L1',['../namespaceML.html#a4d9fd2e8fe0cfbbd81877eee212b88d9a6d9ec7c577a546e75c72ee872241ef4e',1,'ML']]],
-  ['metric_5fl2_2450',['METRIC_L2',['../namespaceML.html#a4d9fd2e8fe0cfbbd81877eee212b88d9a5e87bd6f2a6c86ad23937eedf66de99b',1,'ML']]],
-  ['metric_5flinf_2451',['METRIC_Linf',['../namespaceML.html#a4d9fd2e8fe0cfbbd81877eee212b88d9aa01f9bc4910d9f004046489a11dc815e',1,'ML']]],
-  ['metric_5flp_2452',['METRIC_Lp',['../namespaceML.html#a4d9fd2e8fe0cfbbd81877eee212b88d9ab136e195c4dd9de8a55edaa0830ddf2f',1,'ML']]],
-  ['min_2453',['min',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77ad8bd79cc131920d5de426f914d17405a',1,'cuml::genetic::node']]],
-  ['mle_2454',['MLE',['../namespaceML.html#a0dcbb2c0993e8446dffd09b5de731a26a92f2a8dd8be6748c2cd43657a28232ab',1,'ML']]],
-  ['mse_2455',['mse',['../namespacecuml_1_1genetic.html#a76647c78ee5b868872dbbe108a2cf8a9a7f04af006bdeba02616023b6e6c68409',1,'cuml::genetic::mse()'],['../namespaceML.html#a823912afaa51f58a997564eadb6d9405a746a9f45470e731c984d37744c48432e',1,'ML::MSE()']]],
-  ['mul_2456',['mul',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77a353942263d1bedfbe06b7bfa78226253',1,'cuml::genetic::node']]],
-  ['multiplicative_2457',['MULTIPLICATIVE',['../holtwinters__api_8h.html#a4ded4b12305b242cb879c10230581a2aa2618be531dddb3647be5874ddcae5164',1,'MULTIPLICATIVE():&#160;holtwinters_api.h'],['../namespaceML.html#a8d55de18185e36dd8f8a6d735e6a91e6abc34c50dc7f29a357f52f9e5c0308226',1,'ML::MULTIPLICATIVE()']]]
+  ['mae_2337',['mae',['../namespacecuml_1_1genetic.html#a76647c78ee5b868872dbbe108a2cf8a9aeb4a4a36e4d53916f9979759c3d3b822',1,'cuml::genetic::mae()'],['../namespaceML.html#a823912afaa51f58a997564eadb6d9405a71d3454116e1aace7f91b15f56567b1e',1,'ML::MAE()']]],
+  ['max_2338',['max',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77a2ffe4e77325d9a7152f7086ea7aa5114',1,'cuml::genetic::node']]],
+  ['min_2339',['min',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77ad8bd79cc131920d5de426f914d17405a',1,'cuml::genetic::node']]],
+  ['mle_2340',['MLE',['../namespaceML.html#a0dcbb2c0993e8446dffd09b5de731a26a92f2a8dd8be6748c2cd43657a28232ab',1,'ML']]],
+  ['mse_2341',['mse',['../namespacecuml_1_1genetic.html#a76647c78ee5b868872dbbe108a2cf8a9a7f04af006bdeba02616023b6e6c68409',1,'cuml::genetic::mse()'],['../namespaceML.html#a823912afaa51f58a997564eadb6d9405a746a9f45470e731c984d37744c48432e',1,'ML::MSE()']]],
+  ['mul_2342',['mul',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77a353942263d1bedfbe06b7bfa78226253',1,'cuml::genetic::node']]],
+  ['multiplicative_2343',['MULTIPLICATIVE',['../holtwinters__api_8h.html#a4ded4b12305b242cb879c10230581a2aa2618be531dddb3647be5874ddcae5164',1,'MULTIPLICATIVE():&#160;holtwinters_api.h'],['../namespaceML.html#a8d55de18185e36dd8f8a6d735e6a91e6abc34c50dc7f29a357f52f9e5c0308226',1,'ML::MULTIPLICATIVE()']]]
 ];

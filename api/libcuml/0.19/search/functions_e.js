@@ -1,11 +1,12 @@
 var searchData=
 [
-  ['n_5fdiff_1869',['n_diff',['../structML_1_1ARIMAOrder.html#adef5f183a630c7f734f3629bad6d967c',1,'ML::ARIMAOrder']]],
-  ['n_5fphi_1870',['n_phi',['../structML_1_1ARIMAOrder.html#a15553a52e94b11d670850e50fd7dd61f',1,'ML::ARIMAOrder']]],
-  ['n_5ftheta_1871',['n_theta',['../structML_1_1ARIMAOrder.html#aa5294c41eaa05627c4fda11a5e47d0fb',1,'ML::ARIMAOrder']]],
-  ['need_5fdiff_1872',['need_diff',['../structML_1_1ARIMAOrder.html#a982ee8cc1c31fc50506163699d3a33ae',1,'ML::ARIMAOrder']]],
-  ['node_1873',['node',['../structcuml_1_1genetic_1_1node.html#a2b57e9e221ca33e948eb96dc53a1ab41',1,'cuml::genetic::node::node(type ft)'],['../structcuml_1_1genetic_1_1node.html#a06ac2f811eda74b233c1494389b451b2',1,'cuml::genetic::node::node(int fid)'],['../structcuml_1_1genetic_1_1node.html#a7f96e11e45842c8ca880c338dd42b12b',1,'cuml::genetic::node::node(float val)'],['../structcuml_1_1genetic_1_1node.html#ac624eb81a1e28b10fc2488bbd94516ef',1,'cuml::genetic::node::node(const node &amp;src)']]],
-  ['node_5fid_5finfo_1874',['Node_ID_info',['../structNode__ID__info.html#acd06a8dc53e91c11bc4d94a32af634d4',1,'Node_ID_info::Node_ID_info()'],['../structNode__ID__info.html#aff7c29eb48e433d1ac990e707fbe55e7',1,'Node_ID_info::Node_ID_info(const SparseTreeNode&lt; T, L &gt; &amp;cfg_node, int cfg_unique_node_id)']]],
-  ['null_5ftrees_5fptr_1875',['null_trees_ptr',['../namespaceML.html#ab1275db1b0385b97fbb481b719322a25',1,'ML']]],
-  ['numelements_1876',['numElements',['../classML_1_1Tensor.html#a96486f6f89a7836453adf18aaf3704db',1,'ML::Tensor']]]
+  ['olsfit_1787',['olsFit',['../group__olsFit.html#ga250774bf43ec105ad841ef529c15b67f',1,'ML::GLM::olsFit(const raft::handle_t &amp;handle, float *input, int n_rows, int n_cols, float *labels, float *coef, float *intercept, bool fit_intercept, bool normalize, int algo=0)'],['../group__olsFit.html#ga691e08e7464a2555c2b2064e0af7552f',1,'ML::GLM::olsFit(const raft::handle_t &amp;handle, double *input, int n_rows, int n_cols, double *labels, double *coef, double *intercept, bool fit_intercept, bool normalize, int algo=0)']]],
+  ['on_5fepoch_5fend_1788',['on_epoch_end',['../classML_1_1Internals_1_1GraphBasedDimRedCallback.html#a5aa6a3f633eb7327e90a112c210cf70c',1,'ML::Internals::GraphBasedDimRedCallback']]],
+  ['on_5fpreprocess_5fend_1789',['on_preprocess_end',['../classML_1_1Internals_1_1GraphBasedDimRedCallback.html#a09ef9e92283cc85f0272350c5f451eb8',1,'ML::Internals::GraphBasedDimRedCallback']]],
+  ['on_5ftrain_5fend_1790',['on_train_end',['../classML_1_1Internals_1_1GraphBasedDimRedCallback.html#a7e9baad920fb835b447dcfebbaec7e0d',1,'ML::Internals::GraphBasedDimRedCallback']]],
+  ['operator_21_3d_1791',['operator!=',['../classML_1_1stdAllocatorAdapter.html#a6317566d046cbcd0aee77fa6afacf6df',1,'ML::stdAllocatorAdapter']]],
+  ['operator_28_29_1792',['operator()',['../structMLCommon_1_1Distance_1_1DistanceGlobalTileAATraits_1_1ThreadOffset.html#a8e96f4239aba37d51e347933eb01035f',1,'MLCommon::Distance::DistanceGlobalTileAATraits::ThreadOffset::operator()()'],['../structMLCommon_1_1Distance_1_1DistanceGlobalTileBBTraits_1_1ThreadOffset.html#a38197817e42363b075f8471b8e746152',1,'MLCommon::Distance::DistanceGlobalTileBBTraits::ThreadOffset::operator()()']]],
+  ['operator_3d_1793',['operator=',['../structcuml_1_1genetic_1_1node.html#a004ac06779decb3df1f5f63db524d723',1,'cuml::genetic::node::operator=()'],['../classML_1_1stdAllocatorAdapter.html#a313e246bf39ec828f6cbc6a486567441',1,'ML::stdAllocatorAdapter::operator=()']]],
+  ['operator_3d_3d_1794',['operator==',['../classML_1_1stdAllocatorAdapter.html#a855f9ee6c006759f937ad3fc535e50cb',1,'ML::stdAllocatorAdapter']]],
+  ['optimal_1795',['optimal',['../namespaceML_1_1Solver.html#aaa9be19819040d2acf6491379f3ee906',1,'ML::Solver']]]
 ];

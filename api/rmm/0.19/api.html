@@ -31,7 +31,7 @@
 <div class="wy-grid-for-nav">
 <nav class="wy-nav-side" data-toggle="wy-nav-shift">
 <div class="wy-side-scroll">
-<div class="wy-side-nav-search"><div id="rapids-sphinx-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">rmm</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/api.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable/api.html">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (0.19)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/rmm/nightly/api.html">nightly (0.19)</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">stable (0.18)</a><a class="rapids-selector__menu-item" href="/api/rmm/legacy/api.html">legacy (0.17)</a></div></div></div>
+<div class="wy-side-nav-search"><div id="rapids-sphinx-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">rmm</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/nightly/api.html">cucim</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/api.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable/api.html">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (0.19)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/rmm/nightly/api.html">nightly (0.19)</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">stable (0.18)</a><a class="rapids-selector__menu-item" href="/api/rmm/legacy/api.html">legacy (0.17)</a></div></div></div>
 
 
 <div role="search">
@@ -246,11 +246,23 @@ When <cite>pool_allocator</cite> is False, this argument is ignored if provided.
 This has significant performance impact.</p>
 </dd>
 <dt><strong>log_file_name</strong><span class="classifier">str</span></dt><dd><p>Name of the log file. If not specified, the environment variable
-RMM_LOG_FILE is used. A TypeError is thrown if neither is available.</p>
+RMM_LOG_FILE is used. A ValueError is thrown if neither is available.
+A separate log file is produced for each device,
+and the suffix <cite>“.dev{id}”</cite> is automatically added to the log file
+name.</p>
 </dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>Note that if you use the environment variable CUDA_VISIBLE_DEVICES
+with logging enabled, the suffix may not be what you expect. For
+example, if you set CUDA_VISIBLE_DEVICES=1, the log file produced
+will still have suffix <cite>0</cite>. Similarly, if you set
+CUDA_VISIBLE_DEVICES=1,0 and use devices 0 and 1, the log file
+with suffix <cite>0</cite> will correspond to the GPU with device ID <cite>1</cite>.
+Use <cite>rmm.get_log_filenames()</cite> to get the log file names
+corresponding to each device.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="rmm.rmm.rmm_cupy_allocator">
@@ -268,8 +280,8 @@ RMM_LOG_FILE is used. A TypeError is thrown if neither is available.</p>
 <span id="memory-resources"></span><h2>Memory Resources<a class="headerlink" href="#module-rmm.mr" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="rmm.mr.BinningMemoryResource">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">BinningMemoryResource</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">MemoryResource</span> <span class="pre">upstream_mr</span></em>, <em class="sig-param"><span class="pre">int8_t</span> <span class="pre">min_size_exponent=-1</span></em>, <em class="sig-param"><span class="pre">int8_t</span> <span class="pre">max_size_exponent=-1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.BinningMemoryResource" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.MemoryResource</span></code></p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">BinningMemoryResource</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">DeviceMemoryResource</span> <span class="pre">upstream_mr</span></em>, <em class="sig-param"><span class="pre">int8_t</span> <span class="pre">min_size_exponent=-1</span></em>, <em class="sig-param"><span class="pre">int8_t</span> <span class="pre">max_size_exponent=-1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.BinningMemoryResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.UpstreamResourceAdaptor</span></code></p>
 <p>Allocates memory from a set of specified “bin” sizes based on a
 specified allocation size.</p>
 <p>If min_size_exponent and max_size_exponent are specified, initializes
@@ -279,7 +291,7 @@ with one or more FixedSizeMemoryResource bins in the range
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>upstream_mr</strong><span class="classifier">MemoryResource</span></dt><dd><p>The memory resource to use for allocations larger than any of the
+<dt><strong>upstream_mr</strong><span class="classifier">DeviceMemoryResource</span></dt><dd><p>The memory resource to use for allocations larger than any of the
 bins</p>
 </dd>
 <dt><strong>min_size_exponent</strong><span class="classifier">size_t</span></dt><dd><p>The base-2 exponent of the minimum size FixedSizeMemoryResource
@@ -290,6 +302,12 @@ bin to create.</p>
 </dd>
 </dl>
 </dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>bin_mrs</strong></dt><dd></dd>
+<dt><strong>upstream_mr</strong></dt><dd></dd>
+</dl>
+</dd>
 </dl>
 <p class="rubric">Methods</p>
 <table class="longtable docutils align-default">
@@ -298,14 +316,17 @@ bin to create.</p>
 <col style="width: 90%"/>
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rmm.mr.BinningMemoryResource.add_bin" title="rmm.mr.BinningMemoryResource.add_bin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_bin</span></code></a>(self, size_t allocation_size[, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rmm.mr.BinningMemoryResource.add_bin" title="rmm.mr.BinningMemoryResource.add_bin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_bin</span></code></a>(self, size_t allocation_size, …)</p></td>
 <td><p>Adds a bin of the specified maximum allocation size to this memory resource.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_upstream</span></code>(self)</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt id="rmm.mr.BinningMemoryResource.add_bin">
-<code class="sig-name descname"><span class="pre">add_bin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">size_t</span> <span class="pre">allocation_size</span></em>, <em class="sig-param"><span class="pre">bin_resource=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.BinningMemoryResource.add_bin" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">add_bin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">size_t</span> <span class="pre">allocation_size</span></em>, <em class="sig-param"><span class="pre">DeviceMemoryResource</span> <span class="pre">bin_resource=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.BinningMemoryResource.add_bin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a bin of the specified maximum allocation size to this memory
 resource. If specified, uses bin_resource for allocation for this bin.
 If not specified, creates and uses a FixedSizeMemoryResource for
@@ -317,28 +338,46 @@ smaller bin size will use this fixed-size memory resource.</p>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>allocation_size</strong><span class="classifier">size_t</span></dt><dd><p>The maximum allocation size in bytes for the created bin</p>
 </dd>
-<dt><strong>bin_resource</strong><span class="classifier">MemoryResource</span></dt><dd><p>The resource to use for this bin (optional)</p>
+<dt><strong>bin_resource</strong><span class="classifier">DeviceMemoryResource</span></dt><dd><p>The resource to use for this bin (optional)</p>
 </dd>
 </dl>
 </dd>
 </dl>
 </dd></dl>
+<dl class="py attribute">
+<dt id="rmm.mr.BinningMemoryResource.bin_mrs">
+<code class="sig-name descname"><span class="pre">bin_mrs</span></code><a class="headerlink" href="#rmm.mr.BinningMemoryResource.bin_mrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>!! processed by numpydoc !!</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="rmm.mr.CudaAsyncMemoryResource">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">CudaAsyncMemoryResource</span></code><a class="headerlink" href="#rmm.mr.CudaAsyncMemoryResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.DeviceMemoryResource</span></code></p>
+<p>Memory resource that uses cudaMallocAsync/Free for
+allocation/deallocation</p>
 </dd></dl>
 <dl class="py class">
 <dt id="rmm.mr.CudaMemoryResource">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">CudaMemoryResource</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.CudaMemoryResource" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.MemoryResource</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.DeviceMemoryResource</span></code></p>
 <p>Memory resource that uses cudaMalloc/Free for allocation/deallocation</p>
 </dd></dl>
 <dl class="py class">
+<dt id="rmm.mr.DeviceMemoryResource">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">DeviceMemoryResource</span></code><a class="headerlink" href="#rmm.mr.DeviceMemoryResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+</dd></dl>
+<dl class="py class">
 <dt id="rmm.mr.FixedSizeMemoryResource">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">FixedSizeMemoryResource</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">MemoryResource</span> <span class="pre">upstream</span></em>, <em class="sig-param"><span class="pre">size_t</span> <span class="pre">block_size=1048576</span></em>, <em class="sig-param"><span class="pre">size_t</span> <span class="pre">blocks_to_preallocate=128</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.FixedSizeMemoryResource" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.MemoryResource</span></code></p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">FixedSizeMemoryResource</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">DeviceMemoryResource</span> <span class="pre">upstream_mr</span></em>, <em class="sig-param"><span class="pre">size_t</span> <span class="pre">block_size=1048576</span></em>, <em class="sig-param"><span class="pre">size_t</span> <span class="pre">blocks_to_preallocate=128</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.FixedSizeMemoryResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.UpstreamResourceAdaptor</span></code></p>
 <p>Memory resource which allocates memory blocks of a single fixed size.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>upstream</strong><span class="classifier">MemoryResource</span></dt><dd><p>The MemoryResource from which to allocate blocks for the pool.</p>
+<dt><strong>upstream_mr</strong><span class="classifier">DeviceMemoryResource</span></dt><dd><p>The DeviceMemoryResource from which to allocate blocks for the
+pool.</p>
 </dd>
 <dt><strong>block_size</strong><span class="classifier">int, optional</span></dt><dd><p>The size of blocks to allocate (default is 1MiB).</p>
 </dd>
@@ -350,20 +389,44 @@ smaller bin size will use this fixed-size memory resource.</p>
 <p class="rubric">Notes</p>
 <p>Supports only allocations of size smaller than the configured
 block_size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>upstream_mr</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_upstream</span></code>(self)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 <dl class="py class">
 <dt id="rmm.mr.LoggingResourceAdaptor">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">LoggingResourceAdaptor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">MemoryResource</span> <span class="pre">upstream</span></em>, <em class="sig-param"><span class="pre">log_file_name=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.LoggingResourceAdaptor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.MemoryResource</span></code></p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">LoggingResourceAdaptor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">DeviceMemoryResource</span> <span class="pre">upstream_mr</span></em>, <em class="sig-param"><span class="pre">log_file_name=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.LoggingResourceAdaptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.UpstreamResourceAdaptor</span></code></p>
 <p>Memory resource that logs information about allocations/deallocations
 performed by an upstream memory resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>upstream</strong><span class="classifier">MemoryResource</span></dt><dd><p>The upstream memory resource.</p>
+<dt><strong>upstream</strong><span class="classifier">DeviceMemoryResource</span></dt><dd><p>The upstream memory resource.</p>
 </dd>
 <dt><strong>log_file_name</strong><span class="classifier">str</span></dt><dd><p>Path to the file to which logs are written.</p>
 </dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>upstream_mr</strong></dt><dd></dd>
 </dl>
 </dd>
 </dl>
@@ -380,7 +443,7 @@ performed by an upstream memory resource.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#rmm.mr.LoggingResourceAdaptor.get_file_name" title="rmm.mr.LoggingResourceAdaptor.get_file_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_file_name</span></code></a>(self)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rmm.mr.LoggingResourceAdaptor.get_upstream" title="rmm.mr.LoggingResourceAdaptor.get_upstream"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_upstream</span></code></a>(self)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_upstream</span></code>(self)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -393,33 +456,25 @@ performed by an upstream memory resource.</p>
 <dt id="rmm.mr.LoggingResourceAdaptor.get_file_name">
 <code class="sig-name descname"><span class="pre">get_file_name</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.LoggingResourceAdaptor.get_file_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-<dl class="py method">
-<dt id="rmm.mr.LoggingResourceAdaptor.get_upstream">
-<code class="sig-name descname"><span class="pre">get_upstream</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#rmm.mr.MemoryResource" title="rmm.mr.MemoryResource"><span class="pre">MemoryResource</span></a><a class="headerlink" href="#rmm.mr.LoggingResourceAdaptor.get_upstream" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 </dd></dl>
 <dl class="py class">
 <dt id="rmm.mr.ManagedMemoryResource">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">ManagedMemoryResource</span></code><a class="headerlink" href="#rmm.mr.ManagedMemoryResource" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.MemoryResource</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.DeviceMemoryResource</span></code></p>
 <p>Memory resource that uses cudaMallocManaged/Free for
 allocation/deallocation.</p>
 </dd></dl>
 <dl class="py class">
-<dt id="rmm.mr.MemoryResource">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">MemoryResource</span></code><a class="headerlink" href="#rmm.mr.MemoryResource" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-</dd></dl>
-<dl class="py class">
 <dt id="rmm.mr.PoolMemoryResource">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">PoolMemoryResource</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">MemoryResource</span> <span class="pre">upstream</span></em>, <em class="sig-param"><span class="pre">initial_pool_size=None</span></em>, <em class="sig-param"><span class="pre">maximum_pool_size=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.PoolMemoryResource" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.MemoryResource</span></code></p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">PoolMemoryResource</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">DeviceMemoryResource</span> <span class="pre">upstream_mr</span></em>, <em class="sig-param"><span class="pre">initial_pool_size=None</span></em>, <em class="sig-param"><span class="pre">maximum_pool_size=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.PoolMemoryResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.UpstreamResourceAdaptor</span></code></p>
 <p>Coalescing best-fit suballocator which uses a pool of memory allocated
 from an upstream memory resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>upstream</strong><span class="classifier">MemoryResource</span></dt><dd><p>The MemoryResource from which to allocate blocks for the pool.</p>
+<dt><strong>upstream_mr</strong><span class="classifier">DeviceMemoryResource</span></dt><dd><p>The DeviceMemoryResource from which to allocate blocks for the
+pool.</p>
 </dd>
 <dt><strong>initial_pool_size</strong><span class="classifier">int,optional</span></dt><dd><p>Initial pool size in bytes. By default, an implementation defined
 pool size is used.</p>
@@ -428,7 +483,24 @@ pool size is used.</p>
 </dd>
 </dl>
 </dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>upstream_mr</strong></dt><dd></dd>
 </dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_upstream</span></code>(self)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 <dl class="py function">
 <dt id="rmm.mr.disable_logging">
@@ -439,11 +511,32 @@ pool size is used.</p>
 <dl class="py function">
 <dt id="rmm.mr.enable_logging">
 <code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">enable_logging</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.enable_logging" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enable logging of run-time events.</p>
+<dd><p>Enable logging of run-time events for all devices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>log_file_name:  str, optional</strong></dt><dd><p>Name of the log file. If not specified, the environment variable
+RMM_LOG_FILE is used. A ValueError is thrown if neither is available.
+A separate log file is produced for each device,
+and the suffix <cite>“.dev{id}”</cite> is automatically added to the log file
+name.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Note that if you use the environment variable CUDA_VISIBLE_DEVICES
+with logging enabled, the suffix may not be what you expect. For
+example, if you set CUDA_VISIBLE_DEVICES=1, the log file produced
+will still have suffix <cite>0</cite>. Similarly, if you set
+CUDA_VISIBLE_DEVICES=1,0 and use devices 0 and 1, the log file
+with suffix <cite>0</cite> will correspond to the GPU with device ID <cite>1</cite>.
+Use <cite>rmm.get_log_filenames()</cite> to get the log file names
+corresponding to each device.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="rmm.mr.get_current_device_resource">
-<code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">get_current_device_resource</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> → <a class="reference internal" href="#rmm.mr.MemoryResource" title="rmm.mr.MemoryResource"><span class="pre">MemoryResource</span></a><a class="headerlink" href="#rmm.mr.get_current_device_resource" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">get_current_device_resource</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> → <a class="reference internal" href="#rmm.mr.DeviceMemoryResource" title="rmm.mr.DeviceMemoryResource"><span class="pre">DeviceMemoryResource</span></a><a class="headerlink" href="#rmm.mr.get_current_device_resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the memory resource used for RMM device allocations on the current
 device.</p>
 <p>If the returned memory resource is used when a different device is the
@@ -454,6 +547,20 @@ active CUDA device, behavior is undefined.</p>
 <code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">get_current_device_resource_type</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.get_current_device_resource_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the memory resource type used for RMM device allocations on the
 current device.</p>
+</dd></dl>
+<dl class="py function">
+<dt id="rmm.mr.get_log_filenames">
+<code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">get_log_filenames</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.get_log_filenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the log filename (or <cite>None</cite> if not writing logs)
+for each device in use.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">rmm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rmm</span><span class="o">.</span><span class="n">reinitialize</span><span class="p">(</span><span class="n">devices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">logging</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_file_name</span><span class="o">=</span><span class="s2">"rmm.log"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rmm</span><span class="o">.</span><span class="n">get_log_filenames</span><span class="p">()</span>
+<span class="go">{0: '/home/user/workspace/rapids/rmm/python/rmm.dev0.log',</span>
+<span class="go"> 1: '/home/user/workspace/rapids/rmm/python/rmm.dev1.log'}</span>
+</pre></div>
+</div>
 </dd></dl>
 <dl class="py function">
 <dt id="rmm.mr.get_per_device_resource">
@@ -491,12 +598,12 @@ specified device.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="rmm.mr.set_current_device_resource">
-<code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">set_current_device_resource</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">MemoryResource</span> <span class="pre">mr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.set_current_device_resource" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">set_current_device_resource</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">DeviceMemoryResource</span> <span class="pre">mr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.set_current_device_resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the default memory resource for the current device.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>mr</strong><span class="classifier">MemoryResource</span></dt><dd><p>The memory resource to set. Must have been created while the current
+<dt><strong>mr</strong><span class="classifier">DeviceMemoryResource</span></dt><dd><p>The memory resource to set. Must have been created while the current
 device is the active CUDA device.</p>
 </dd>
 </dl>
@@ -505,14 +612,14 @@ device is the active CUDA device.</p>
 </dd></dl>
 <dl class="py function">
 <dt id="rmm.mr.set_per_device_resource">
-<code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">set_per_device_resource</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">int</span> <span class="pre">device</span></em>, <em class="sig-param"><span class="pre">MemoryResource</span> <span class="pre">mr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.set_per_device_resource" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">rmm.mr.</span></code><code class="sig-name descname"><span class="pre">set_per_device_resource</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">int</span> <span class="pre">device</span></em>, <em class="sig-param"><span class="pre">DeviceMemoryResource</span> <span class="pre">mr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.set_per_device_resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the default memory resource for the specified device.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>device</strong><span class="classifier">int</span></dt><dd><p>The ID of the device for which to get the memory resource.</p>
 </dd>
-<dt><strong>mr</strong><span class="classifier">MemoryResource</span></dt><dd><p>The memory resource to set.  Must have been created while device was
+<dt><strong>mr</strong><span class="classifier">DeviceMemoryResource</span></dt><dd><p>The memory resource to set.  Must have been created while device was
 the active CUDA device.</p>
 </dd>
 </dl>
