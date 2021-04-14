@@ -34,8 +34,8 @@ Development (others) | Wed, Feb 3 | Wed, Mar 31 | 40 days
 [Burn Down]({% link releases/process.md %}#burn-down) (cuDF/RMM) | Thu, Mar 25 | Wed, Mar 31 | 5 days
 [Burn Down]({% link releases/process.md %}#burn-down) (others) | Thu, Apr 1 | Wed, Apr 7 | 5 days
 [Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM) | Thu, Apr 1 | Wed, Apr 7 | 5 days
-[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | Thu, Apr 8 | Tue, Apr 13 | 4 days
-[Release]({% link releases/process.md %}#releasing) | Wed, Apr 14 | Thu, Apr 15 | 2 days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | Thu, Apr 8 | Tue, Apr 13 | 9 days
+[Release]({% link releases/process.md %}#releasing) | Wed, Apr 21 | Thu, Apr 22 | 2 days
 
 ## _PROPOSED_ Release v0.20 Schedule
 
