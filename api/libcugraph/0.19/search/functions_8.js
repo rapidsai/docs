@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['jaccard_424',['jaccard',['../namespacecugraph.html#aa581ef3206fc57bc0bfaaaf87a1e7428',1,'cugraph']]],
-  ['jaccard_5flist_425',['jaccard_list',['../namespacecugraph.html#aada0a5fdbdfb025445745dd6dcc15436',1,'cugraph']]]
+  ['insert_443',['insert',['../classcugraph_1_1experimental_1_1SortedUniqueElementBucket.html#a02610f98c8935d726a5ee4a98b44015c',1,'cugraph::experimental::SortedUniqueElementBucket']]]
 ];

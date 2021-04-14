@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['traveling_5fsalesperson_438',['traveling_salesperson',['../namespacecugraph.html#a75cae03f49d08c9257d7eb1e81e19530',1,'cugraph']]]
+  ['spectralmodularitymaximization_456',['spectralModularityMaximization',['../namespacecugraph_1_1ext__raft.html#a1bf90290126605ab557db202be9995b5',1,'cugraph::ext_raft']]],
+  ['sssp_457',['sssp',['../namespacecugraph.html#afbcb939cffaf811289ba6a5edc7f6b04',1,'cugraph']]]
 ];
