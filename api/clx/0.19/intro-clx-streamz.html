@@ -361,23 +361,23 @@ div.rendered_html tbody tr:hover {
 <h2>Create Docker Container<a class="headerlink" href="#Create-Docker-Container" title="Permalink to this headline">¶</a></h2>
 <p>A Docker container is created using the image above. The ‘docker run’ format to build your container is shown below. Note: volume binding to the container is an optional argument.</p>
 <p><strong>Preferred - Docker CE v19+ and nvidia-container-toolkit</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> \
-    <span class="o">-</span><span class="n">p</span> <span class="mi">9787</span><span class="p">:</span><span class="mi">8787</span> \
-    <span class="o">-</span><span class="n">p</span> <span class="mi">9888</span><span class="p">:</span><span class="mi">8888</span> \
-    <span class="o">-</span><span class="n">v</span> <span class="o">&lt;</span><span class="n">your_volume_binding_host_directory_path</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">your_volume_binding_container_directory_path</span><span class="o">&gt;</span> \
-    <span class="o">--</span><span class="n">gpus</span> <span class="s1">'"device=0,1,2"'</span> \
-    <span class="o">--</span><span class="n">name</span> <span class="n">clx_streamz</span> \
-    <span class="o">-</span><span class="n">d</span> <span class="n">clx</span><span class="o">-</span><span class="n">streamz</span><span class="p">:</span><span class="n">latest</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>docker run -it \
+    -p 9787:8787 \
+    -p 9888:8888 \
+    -v &lt;your_volume_binding_host_directory_path&gt;:&lt;your_volume_binding_container_directory_path&gt; \
+    --gpus '"device=0,1,2"' \
+    --name clx_streamz \
+    -d clx-streamz:latest
 </pre></div>
 </div>
 <p><strong>Legacy - Docker CE v18 and nvidia-docker2</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> \
-    <span class="o">-</span><span class="n">p</span> <span class="mi">9787</span><span class="p">:</span><span class="mi">8787</span> \
-    <span class="o">-</span><span class="n">p</span> <span class="mi">9888</span><span class="p">:</span><span class="mi">8888</span> \
-     <span class="o">-</span><span class="n">v</span> <span class="o">&lt;</span><span class="n">your_volume_binding_host_directory_path</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">your_volume_binding_container_directory_path</span><span class="o">&gt;</span> \
-    <span class="o">--</span><span class="n">runtime</span><span class="o">=</span><span class="n">nvidia</span> \
-    <span class="o">--</span><span class="n">name</span> <span class="n">clx_streamz</span> \
-    <span class="o">-</span><span class="n">d</span> <span class="n">cybert</span><span class="o">-</span><span class="n">streamz</span><span class="p">:</span><span class="n">latest</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>docker run -it \
+    -p 9787:8787 \
+    -p 9888:8888 \
+     -v &lt;your_volume_binding_host_directory_path&gt;:&lt;your_volume_binding_container_directory_path&gt; \
+    --runtime=nvidia \
+    --name clx_streamz \
+    -d cybert-streamz:latest
 </pre></div>
 </div>
 <p>The Dockerfile contains an ENTRYPOINT which calls <a class="reference external" href="https://github.com/rapidsai/clx/blob/branch-0.17/examples/streamz/scripts/entrypoint.sh">entrypoint.sh</a> to: 1. Configure and install Kafka 2. Run Kafka broker on <code class="docutils literal notranslate"><span class="pre">localhost:9092</span></code> and Zookeeper on <code class="docutils literal notranslate"><span class="pre">localhost:2181</span></code> 3. Creates (cyBERT and DGA detection) specific input and output kafka topics and publishes sample input data</p>
@@ -385,32 +385,32 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="Run-cyBERT-Streamz-Example-on-Apache-Logs">
 <h2>Run cyBERT Streamz Example on Apache Logs<a class="headerlink" href="#Run-cyBERT-Streamz-Example-on-Apache-Logs" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="n">clx_streamz</span> <span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s1">'source activate rapids </span><span class="se">\</span>
-<span class="s1">    &amp;&amp; python $CLX_STREAMZ_HOME/python/cybert.py </span><span class="se">\</span>
-<span class="s1">    --conf $CLX_STREAMZ_HOME/resources/cybert.yaml </span><span class="se">\</span>
-<span class="s1">    --model $CLX_STREAMZ_HOME/ml/models/cybert/pytorch_model.bin </span><span class="se">\</span>
-<span class="s1">    --label_map $CLX_STREAMZ_HOME/ml/models/cybert/config.json </span><span class="se">\</span>
-<span class="s1">    --poll_interval 1s </span><span class="se">\</span>
-<span class="s1">    --max_batch_size 500'</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>docker exec clx_streamz bash -c 'source activate rapids \
+    &amp;&amp; python $CLX_STREAMZ_HOME/python/cybert.py \
+    --conf $CLX_STREAMZ_HOME/resources/cybert.yaml \
+    --model $CLX_STREAMZ_HOME/ml/models/cybert/pytorch_model.bin \
+    --label_map $CLX_STREAMZ_HOME/ml/models/cybert/config.json \
+    --poll_interval 1s \
+    --max_batch_size 500'
 </pre></div>
 </div>
 </div>
 <div class="section" id="Run-DGA-Streamz-Example-on-Sample-Domains">
 <h2>Run DGA Streamz Example on Sample Domains<a class="headerlink" href="#Run-DGA-Streamz-Example-on-Sample-Domains" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="n">clx_streamz</span> <span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s1">'source activate rapids </span><span class="se">\</span>
-<span class="s1">    &amp;&amp; python $CLX_STREAMZ_HOME/python/dga_detection.py </span><span class="se">\</span>
-<span class="s1">    --conf $CLX_STREAMZ_HOME/resources/dga_detection.yaml </span><span class="se">\</span>
-<span class="s1">    --model $CLX_STREAMZ_HOME/ml/models/dga/pytorch_model.bin </span><span class="se">\</span>
-<span class="s1">    --poll_interval 1s </span><span class="se">\</span>
-<span class="s1">    --max_batch_size 500'</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>docker exec clx_streamz bash -c 'source activate rapids \
+    &amp;&amp; python $CLX_STREAMZ_HOME/python/dga_detection.py \
+    --conf $CLX_STREAMZ_HOME/resources/dga_detection.yaml \
+    --model $CLX_STREAMZ_HOME/ml/models/dga/pytorch_model.bin \
+    --poll_interval 1s \
+    --max_batch_size 500'
 </pre></div>
 </div>
 <p>Processed data will be pushed to the given kafka output topic. To view all processed output run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="n">clx_streamz</span> <span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s1">'source activate rapids </span><span class="se">\</span>
-<span class="s1">       &amp;&amp; $KAFKA_HOME/bin/kafka-console-consumer.sh </span><span class="se">\</span>
-<span class="s1">       --bootstrap-server &lt;broker&gt; </span><span class="se">\</span>
-<span class="s1">       --topic &lt;output_topic&gt; </span><span class="se">\</span>
-<span class="s1">       --from-beginning'</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>docker exec clx_streamz bash -c 'source activate rapids \
+       &amp;&amp; $KAFKA_HOME/bin/kafka-console-consumer.sh \
+       --bootstrap-server &lt;broker&gt; \
+       --topic &lt;output_topic&gt; \
+       --from-beginning'
 </pre></div>
 </div>
 <p>View the data processing activity on the dask dashboard by visiting <a class="reference external" href="http://localhost:9787">http://localhost:9787</a> or <code class="docutils literal notranslate"><span class="pre">&lt;host&gt;:9787</span></code></p>
@@ -418,19 +418,19 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Capturing-Benchmarks">
 <h2>Capturing Benchmarks<a class="headerlink" href="#Capturing-Benchmarks" title="Permalink to this headline">¶</a></h2>
 <p>To capture benchmarks add the benchmark flag along with average log size (kb), for throughput (mb/s) and average batch size (mb) estimates, to the docker run command above. In this case, we are benchmarking the cyBERT workflow with the commands below. Similarly, we can also do it for the DGA detection workflow.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="n">clx_streamz</span> <span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s1">'source activate rapids </span><span class="se">\</span>
-<span class="s1">    &amp;&amp; python $CLX_STREAMZ_HOME/python/cybert.py </span><span class="se">\</span>
-<span class="s1">    --conf $CLX_STREAMZ_HOME/resources/cybert.yaml </span><span class="se">\</span>
-<span class="s1">    --model $CLX_STREAMZ_HOME/ml/models/cybert/pytorch_model.bin </span><span class="se">\</span>
-<span class="s1">    --label_map $CLX_STREAMZ_HOME/ml/models/cybert/config.json </span><span class="se">\</span>
-<span class="s1">    --poll_interval 1s </span><span class="se">\</span>
-<span class="s1">    --max_batch_size 500 </span><span class="se">\</span>
-<span class="s1">    --benchmark 20'</span> \
-    <span class="o">&gt;</span> <span class="n">cybert_workflow</span><span class="o">.</span><span class="n">log</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="mi">1</span> <span class="o">&amp;</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>docker exec clx_streamz bash -c 'source activate rapids \
+    &amp;&amp; python $CLX_STREAMZ_HOME/python/cybert.py \
+    --conf $CLX_STREAMZ_HOME/resources/cybert.yaml \
+    --model $CLX_STREAMZ_HOME/ml/models/cybert/pytorch_model.bin \
+    --label_map $CLX_STREAMZ_HOME/ml/models/cybert/config.json \
+    --poll_interval 1s \
+    --max_batch_size 500 \
+    --benchmark 20' \
+    &gt; cybert_workflow.log 2&gt;&amp;1 &amp;
 </pre></div>
 </div>
 <p>To print benchmark, send a SIGINT signal to the running cybert process.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># To get the PID
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># To get the PID
 $ docker exec clx_streamz ps aux | grep "cybert\.py" | awk '{print $2}'
 # Kill process
 $ docker exec clx_streamz kill -SIGINT &lt;pid&gt;
@@ -442,24 +442,24 @@ $ less cybert_workflow.log
 <h2>Steps to Run Workflow with Custom Arguments<a class="headerlink" href="#Steps-to-Run-Workflow-with-Custom-Arguments" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
 <li><p>Create kafka topics for the clx_streamz workflows that you want to run and publish input data.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="n">clx_streamz</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s1">'source activate rapids </span><span class="se">\</span>
-<span class="s1">    &amp;&amp; $CLX_STREAMZ_HOME/scripts/kafka_topic_setup.sh </span><span class="se">\</span>
-<span class="s1">    -b localhost:9092 </span><span class="se">\</span>
-<span class="s1">    -i &lt;input_topic&gt; </span><span class="se">\</span>
-<span class="s1">    -o &lt;output_topic&gt; </span><span class="se">\</span>
-<span class="s1">    -d &lt;data_filepath&gt;'</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>docker exec clx_streamz /bin/bash -c 'source activate rapids \
+    &amp;&amp; $CLX_STREAMZ_HOME/scripts/kafka_topic_setup.sh \
+    -b localhost:9092 \
+    -i &lt;input_topic&gt; \
+    -o &lt;output_topic&gt; \
+    -d &lt;data_filepath&gt;'
 </pre></div>
 </div>
 </li>
 <li><p>Start workflow</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="n">clx_streamz</span> <span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s1">'source activate rapids </span><span class="se">\</span>
-<span class="s1">    &amp;&amp; python $CLX_STREAMZ_HOME/python/&lt;workflow_script&gt; </span><span class="se">\</span>
-<span class="s1">    --conf &lt;configuration filepath&gt; </span><span class="se">\</span>
-<span class="s1">    --model &lt;model filepath&gt; </span><span class="se">\</span>
-<span class="s1">    --label_map &lt;labels filepath&gt; </span><span class="se">\</span>
-<span class="s1">    --poll_interval &lt;poll_interval&gt; </span><span class="se">\</span>
-<span class="s1">    --max_batch_size &lt;max_batch_size&gt; </span><span class="se">\</span>
-<span class="s1">    --benchmark &lt;avg log size&gt;'</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>docker exec clx_streamz bash -c 'source activate rapids \
+    &amp;&amp; python $CLX_STREAMZ_HOME/python/&lt;workflow_script&gt; \
+    --conf &lt;configuration filepath&gt; \
+    --model &lt;model filepath&gt; \
+    --label_map &lt;labels filepath&gt; \
+    --poll_interval &lt;poll_interval&gt; \
+    --max_batch_size &lt;max_batch_size&gt; \
+    --benchmark &lt;avg log size&gt;'
 </pre></div>
 </div>
 <p><strong>Parameters:</strong></p>
