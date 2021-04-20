@@ -4,6 +4,7 @@
 <html class="writer-html5" lang="en">
 <head>
 <meta charset="utf-8"/>
+<meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Overview of User Defined Functions with cuDF — cudf 0.19.0 documentation</title>
 <link href="_static/css/theme.css" rel="stylesheet" type="text/css"/>
@@ -44,7 +45,7 @@
 </div>
 </div>
 <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api.html">cuDF API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="10min.html">10 Minutes to cuDF and Dask-cuDF</a></li>
@@ -362,7 +363,7 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="Overview-of-User-Defined-Functions-with-cuDF">
+<section id="Overview-of-User-Defined-Functions-with-cuDF">
 <h1>Overview of User Defined Functions with cuDF<a class="headerlink" href="#Overview-of-User-Defined-Functions-with-cuDF" title="Permalink to this headline">¶</a></h1>
 <p>Like many tabular data processing APIs, cuDF provides a range of composable, DataFrame style operators. While out of the box functions are flexible and useful, it is sometimes necessary to write custom code, or user-defined functions (UDFs), that can be applied to rows, columns, and other groupings of the cells making up the DataFrame.</p>
 <p>In conjunction with the broader GPU PyData ecosystem, cuDF provides interfaces to run UDFs on a variety of data structures. Currently, we can only execute UDFs on numeric and Boolean typed data (support for strings is being planned). This guide covers writing and executing UDFs on the following data structures:</p>
@@ -375,7 +376,7 @@ div.rendered_html tbody tr:hover {
 <li><p>Numba DeviceNDArrays</p></li>
 </ul>
 <p>It also demonstrates cuDF’s default null handling behavior, and how to write UDFs that can interact with null values in a limited fashion.</p>
-<div class="section" id="Overview">
+<section id="Overview">
 <h2>Overview<a class="headerlink" href="#Overview" title="Permalink to this headline">¶</a></h2>
 <p>When cuDF executes a UDF, it gets just-in-time (JIT) compiled into a CUDA kernel (either explicitly or implicitly) and is run on the GPU. Exploring CUDA and GPU architecture in-depth is out of scope for this guide. At a high level:</p>
 <ul class="simple">
@@ -383,8 +384,8 @@ div.rendered_html tbody tr:hover {
 <li><p>Within each block, many “threads” operate independently and simultaneously access their block-specific shared memory with low latency</p></li>
 </ul>
 <p>This guide covers APIs that automatically handle dividing columns into chunks and assigning them into different GPU blocks for parallel computation (see <a class="reference external" href="https://docs.rapids.ai/api/cudf/stable/api.html#cudf.core.dataframe.DataFrame.apply_chunks">apply_chunks</a> or the <a class="reference external" href="https://numba.pydata.org/numba-doc/dev/cuda/index.html">numba CUDA JIT API</a> if you need to control this yourself).</p>
-</div>
-<div class="section" id="Series-UDFs">
+</section>
+<section id="Series-UDFs">
 <h2>Series UDFs<a class="headerlink" href="#Series-UDFs" title="Permalink to this headline">¶</a></h2>
 <p>You can execute UDFs on Series in two ways:</p>
 <ul class="simple">
@@ -625,8 +626,8 @@ what allows us to directly call our Numba kernel on our Series.</p>
 </div></div>
 </div>
 <p>Note that, while we’re operating on the Series <code class="docutils literal notranslate"><span class="pre">df['e']</span></code>, the kernel executes on the <a class="reference external" href="https://numba.pydata.org/numba-doc/dev/cuda/memory.html#device-arrays">DeviceNDArray</a> “underneath” the Series. If you ever need to access the underlying DeviceNDArray of a Series, you can do so with <code class="docutils literal notranslate"><span class="pre">Series.data.mem</span></code>. We’ll use this during an example in the Null Handling section of this guide.</p>
-</div>
-<div class="section" id="DataFrame-UDFs">
+</section>
+<section id="DataFrame-UDFs">
 <h2>DataFrame UDFs<a class="headerlink" href="#DataFrame-UDFs" title="Permalink to this headline">¶</a></h2>
 <p>We could apply a UDF on a DataFrame like we did above with <code class="docutils literal notranslate"><span class="pre">forall</span></code>. We’d need to write a kernel that expects multiple inputs, and pass multiple Series as arguments when we execute our kernel. Because this is fairly common and can be difficult to manage, cuDF provides two APIs to streamline this: <code class="docutils literal notranslate"><span class="pre">apply_rows</span></code> and <code class="docutils literal notranslate"><span class="pre">apply_chunks</span></code>. Below, we walk through an example of using <code class="docutils literal notranslate"><span class="pre">apply_rows</span></code>. <code class="docutils literal notranslate"><span class="pre">apply_chunks</span></code> works in a similar way, but also offers more control over low-level kernel behavior.</p>
 <p>Now that we have two numeric columns in our DataFrame, let’s write a kernel that uses both of them.</p>
@@ -737,8 +738,8 @@ These names must match our function arguments. - kwargs (optional) - We can opti
 </div></div>
 </div>
 <p>As expected, we see our conditional addition worked. At this point, we’ve successfully executed UDFs on the core data structures of cuDF.</p>
-</div>
-<div class="section" id="Rolling-Window-UDFs">
+</section>
+<section id="Rolling-Window-UDFs">
 <h2>Rolling Window UDFs<a class="headerlink" href="#Rolling-Window-UDFs" title="Permalink to this headline">¶</a></h2>
 <p>For time-series data, we may need to operate on a small “window” of our column at a time, processing each portion independently. We could slide (“roll”) this window over the entire column to answer questions like “What is the 3-day moving average of a stock price over the past year?”</p>
 <p>We can apply more complex functions to rolling windows to <code class="docutils literal notranslate"><span class="pre">rolling</span></code> Series and DataFrames using <code class="docutils literal notranslate"><span class="pre">apply</span></code>. This example is adapted from cuDF’s <a class="reference external" href="https://docs.rapids.ai/api/cudf/stable/api.html#cudf.core.dataframe.DataFrame.rolling">API documentation</a>. First, we’ll create an example Series and then create a <code class="docutils literal notranslate"><span class="pre">rolling</span></code> object from the Series.</p>
@@ -991,8 +992,8 @@ dtype: float64
 </table>
 </div></div>
 </div>
-</div>
-<div class="section" id="GroupBy-DataFrame-UDFs">
+</section>
+<section id="GroupBy-DataFrame-UDFs">
 <h2>GroupBy DataFrame UDFs<a class="headerlink" href="#GroupBy-DataFrame-UDFs" title="Permalink to this headline">¶</a></h2>
 <p>We can also apply UDFs to grouped DataFrames using <code class="docutils literal notranslate"><span class="pre">apply_grouped</span></code>. This example is also drawn and adapted from the RAPIDS <a class="reference external" href="https://docs.rapids.ai/api/cudf/stable/api.html#cudf.core.groupby.groupby.GroupBy.apply_grouped">API documentation</a>.</p>
 <p>First, we’ll group our DataFrame based on column <code class="docutils literal notranslate"><span class="pre">b</span></code>, which is either True or False. Note that we currently need to pass <code class="docutils literal notranslate"><span class="pre">method="cudf"</span></code> to use UDFs with GroupBy objects.</p>
@@ -1259,8 +1260,8 @@ dtype: float64
 </div></div>
 </div>
 <p>Notice how, with a window size of three in the kernel, the first two values in each group for our output column are null.</p>
-</div>
-<div class="section" id="Numba-Kernels-on-CuPy-Arrays">
+</section>
+<section id="Numba-Kernels-on-CuPy-Arrays">
 <h2>Numba Kernels on CuPy Arrays<a class="headerlink" href="#Numba-Kernels-on-CuPy-Arrays" title="Permalink to this headline">¶</a></h2>
 <p>We can also execute Numba kernels on CuPy NDArrays, again thanks to the <code class="docutils literal notranslate"><span class="pre">__cuda_array_interface__</span></code>. We can even run the same UDF on the Series and the CuPy array. First, we define a Series and then create a CuPy array from that Series.</p>
 <div class="nbinput docutils container">
@@ -1340,8 +1341,8 @@ dtype: int32
 array([ 5., 10., 15., 20., 50.])
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="Null-Handling-in-UDFs">
+</section>
+<section id="Null-Handling-in-UDFs">
 <h2>Null Handling in UDFs<a class="headerlink" href="#Null-Handling-in-UDFs" title="Permalink to this headline">¶</a></h2>
 <p>Above, we covered most basic usage of UDFs with cuDF.</p>
 <p>The remainder of the guide focuses on considerations for executing UDFs on DataFrames containing null values. If your UDFs will read or write any column containing nulls, <strong>you should read this section carefully</strong>.</p>
@@ -1511,13 +1512,13 @@ handling is the safe and consistent approach. You can see an example below.</p>
 </div></div>
 </div>
 <p>As expected, we end up with two nulls in our output. The null values from the columns we used propogated to our output, but the null from the column we ignored did not.</p>
-</div>
-<div class="section" id="Operating-on-Null-Values">
+</section>
+<section id="Operating-on-Null-Values">
 <h2>Operating on Null Values<a class="headerlink" href="#Operating-on-Null-Values" title="Permalink to this headline">¶</a></h2>
 <p>If you don’t need to conditionally handle null values in your UDFs, feel free to skip these final two sections.</p>
 <p>As a developer or data scientist, you may sometimes need to write UDFs that operate on null values. This means you need to think about the null bitmask array when writing your UDF. As a note, cuDF allows you to turn off pessimistic null handling in <code class="docutils literal notranslate"><span class="pre">apply_rows</span></code>. Instead of doing this, if you need to operate on null values we recommend writing standard <code class="docutils literal notranslate"><span class="pre">Numba.cuda</span></code> kernels. To help you interact with null bitmasks from Python, cuDF provides the <code class="docutils literal notranslate"><span class="pre">mask_get</span></code> utility function. The following
 example illustrates how you can use <code class="docutils literal notranslate"><span class="pre">mask_get</span></code> in Numba kernels like we used earlier in this guide.</p>
-<div class="section" id="Standard-Numba-Kernels">
+<section id="Standard-Numba-Kernels">
 <h3>Standard Numba Kernels<a class="headerlink" href="#Standard-Numba-Kernels" title="Permalink to this headline">¶</a></h3>
 <p>First, we import <code class="docutils literal notranslate"><span class="pre">mask_get</span></code> and create a DataFrame with some null values.</p>
 <div class="nbinput docutils container">
@@ -1689,9 +1690,9 @@ example illustrates how you can use <code class="docutils literal notranslate"><
 </table>
 </div></div>
 </div>
-</div>
-</div>
-<div class="section" id="Summary">
+</section>
+</section>
+<section id="Summary">
 <h2>Summary<a class="headerlink" href="#Summary" title="Permalink to this headline">¶</a></h2>
 <p>This guide has covered a lot of content. At this point, you should hopefully feel comfortable writing UDFs (with or without null values) that operate on</p>
 <ul class="simple">
@@ -1703,8 +1704,8 @@ example illustrates how you can use <code class="docutils literal notranslate"><
 <li><p>Numba DeviceNDArrays</p></li>
 </ul>
 <p>For more information please see the <a class="reference external" href="https://docs.rapids.ai/api/cudf/nightly/">cuDF</a>, <a class="reference external" href="https://numba.pydata.org/numba-doc/dev/cuda/index.html">Numba.cuda</a>, and <a class="reference external" href="https://docs-cupy.chainer.org/en/stable/">CuPy</a> documentation.</p>
-</div>
-</div>
+</section>
+</section>
 </div>
 </div>
 <footer>

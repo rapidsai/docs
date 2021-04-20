@@ -4,6 +4,7 @@
 <html class="writer-html5" lang="en">
 <head>
 <meta charset="utf-8"/>
+<meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>GroupBy — cudf 0.19.0 documentation</title>
 <link href="_static/css/theme.css" rel="stylesheet" type="text/css"/>
@@ -44,7 +45,7 @@
 </div>
 </div>
 <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api.html">cuDF API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="10min.html">10 Minutes to cuDF and Dask-cuDF</a></li>
@@ -116,18 +117,18 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="groupby">
+<section id="groupby">
 <h1>GroupBy<a class="headerlink" href="#groupby" title="Permalink to this headline">¶</a></h1>
 <p>cuDF supports a small (but important) subset of
 Pandas’ <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html">groupby API</a>.</p>
-<div class="section" id="summary-of-supported-operations">
+<section id="summary-of-supported-operations">
 <h2>Summary of supported operations<a class="headerlink" href="#summary-of-supported-operations" title="Permalink to this headline">¶</a></h2>
 <ol class="simple">
 <li><p>Grouping by one or more columns</p></li>
 <li><p>Basic aggregations such as “sum”, “mean”, etc.</p></li>
 <li><p>Quantile aggregation</p></li>
 <li><p>A “collect” or <code class="docutils literal notranslate"><span class="pre">list</span></code> aggregation for collecting values in a group into lists</p></li>
-<li><p>Automatic exclusion of columns with unsupported dtypes (“nuisance” columns) when aggregating</p></li>
+<li><p>Automatic exclusion of columns with unsupported dtypes (”nuisance” columns) when aggregating</p></li>
 <li><p>Iterating over the groups of a GroupBy object</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">GroupBy.groups</span></code> API that returns a mapping of group keys to row labels</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">GroupBy.apply</span></code> API for performing arbitrary operations on each group. Note that
@@ -135,8 +136,8 @@ this has very limited functionality compared to the equivalent Pandas function.
 See the section on <a class="reference external" href="#groupby-apply">apply</a> for more details.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">GroupBy.pipe</span></code> similar to <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html#piping-function-calls">Pandas</a>.</p></li>
 </ol>
-</div>
-<div class="section" id="grouping">
+</section>
+<section id="grouping">
 <h2>Grouping<a class="headerlink" href="#grouping" title="Permalink to this headline">¶</a></h2>
 <p>A GroupBy object is created by grouping the values of a <code class="docutils literal notranslate"><span class="pre">Series</span></code> or <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>
 by one or more columns:</p>
@@ -175,7 +176,7 @@ by one or more columns:</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="grouping-by-index-levels">
+<section id="grouping-by-index-levels">
 <h3>Grouping by index levels<a class="headerlink" href="#grouping-by-index-levels" title="Permalink to this headline">¶</a></h3>
 <p>You can also group by one or more levels of a MultiIndex:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
@@ -185,8 +186,8 @@ by one or more columns:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">'a'</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="the-grouper-object">
+</section>
+<section id="the-grouper-object">
 <h3>The <code class="docutils literal notranslate"><span class="pre">Grouper</span></code> object<a class="headerlink" href="#the-grouper-object" title="Permalink to this headline">¶</a></h3>
 <p>A <code class="docutils literal notranslate"><span class="pre">Grouper</span></code> can be used to disambiguate between columns and levels when they have the same name:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
@@ -201,9 +202,9 @@ by one or more columns:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="n">cudf</span><span class="o">.</span><span class="n">Grouper</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">'b'</span><span class="p">),</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Grouper</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">'b'</span><span class="p">)])</span>  <span class="c1"># OK</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="aggregation">
+</section>
+</section>
+<section id="aggregation">
 <h2>Aggregation<a class="headerlink" href="#aggregation" title="Permalink to this headline">¶</a></h2>
 <p>Aggregations on groups is supported via the <code class="docutils literal notranslate"><span class="pre">agg</span></code> method:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
@@ -419,8 +420,8 @@ by one or more columns:</p>
 <td></td>
 </tr>
 </tbody>
-</table></div>
-<div class="section" id="groupby-apply">
+</table></section>
+<section id="groupby-apply">
 <h2>GroupBy apply<a class="headerlink" href="#groupby-apply" title="Permalink to this headline">¶</a></h2>
 <p>To apply function on each group, use the <code class="docutils literal notranslate"><span class="pre">GroupBy.apply()</span></code> method:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
@@ -437,7 +438,7 @@ by one or more columns:</p>
 <span class="go">1  0  1  1</span>
 </pre></div>
 </div>
-<div class="section" id="limitations">
+<section id="limitations">
 <h3>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">apply</span></code> works by applying the provided function to each group sequentially,
@@ -450,9 +451,9 @@ Some post-processing may be required to match Pandas behavior.</p></li>
 <li><p>cuDF does not support some of the exceptional cases that Pandas supports with
 <code class="docutils literal notranslate"><span class="pre">apply</span></code>, such as <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html#flexible-apply"><code class="docutils literal notranslate"><span class="pre">describe</span></code></a>.</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="rolling-window-calculations">
+</section>
+</section>
+<section id="rolling-window-calculations">
 <h2>Rolling window calculations<a class="headerlink" href="#rolling-window-calculations" title="Permalink to this headline">¶</a></h2>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">GroupBy.rolling()</span></code> method to perform rolling window calculations on each group:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
@@ -475,8 +476,8 @@ Some post-processing may be required to match Pandas behavior.</p></li>
 <span class="go">  4     4     5     9</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 </div>
 </div>
 <footer>
