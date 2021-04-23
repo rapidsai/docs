@@ -89,10 +89,14 @@ def create_version_options():
         doc_version["name"] == "legacy"
         and VERSIONS_DICT["legacy"] != doc_version["number"]
     )
+    doc_is_extra_nightly = (  # extra nightly means the doc version is newer then current nightly
+        doc_version["name"] == "nightly"
+        and VERSIONS_DICT["nightly"] != doc_version["number"]
+    )
     for version_name, version_path in [
         (_, path) for _, path in LIB_PATH_DICT[doc_lib].items() if path is not None
     ]:
-        if doc_is_extra_legacy and version_name == "legacy":
+        if (doc_is_extra_legacy and version_name == "legacy") or (doc_is_extra_nightly and version_name == "nightly"):
             version_number = doc_version["number"]
         else:
             version_number = VERSIONS_DICT[version_name]
