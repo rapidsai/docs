@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['radix_2924',['Radix',['../namespacenumeric.html#a045400c0ebe33ec6b78a0d1294068fb2',1,'numeric']]],
-  ['rank_5fmethod_2925',['rank_method',['../group__column__sort.html#ga1b10429fb5d86af4db72da1118f2ad5d',1,'cudf']]],
-  ['replace_5fpolicy_2926',['replace_policy',['../group__transformation__replace.html#ga7cdbc9bc3671930a743c86f36c38abf9',1,'cudf']]],
-  ['rounding_5fmethod_2927',['rounding_method',['../group__transformation__unaryops.html#ga02028fc18312cdb2f07159c6297e74bb',1,'cudf']]]
+  ['radix_2929',['Radix',['../namespacenumeric.html#a045400c0ebe33ec6b78a0d1294068fb2',1,'numeric']]],
+  ['rank_5fmethod_2930',['rank_method',['../group__column__sort.html#ga1b10429fb5d86af4db72da1118f2ad5d',1,'cudf']]],
+  ['replace_5fpolicy_2931',['replace_policy',['../group__transformation__replace.html#ga7cdbc9bc3671930a743c86f36c38abf9',1,'cudf']]],
+  ['rounding_5fmethod_2932',['rounding_method',['../group__transformation__unaryops.html#ga02028fc18312cdb2f07159c6297e74bb',1,'cudf']]]
 ];
