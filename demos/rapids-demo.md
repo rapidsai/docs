@@ -77,9 +77,9 @@ Many users do not need a specific platform combination but would like to ensure 
 ## Prerequisites
 
 * NVIDIA Pascal™ GPU architecture or better
-* CUDA [10.1/10.2/11.0](https://developer.nvidia.com/cuda-downloads) with a compatible NVIDIA driver
-* Ubuntu 16.04/18.04 or CentOS 7
-* Docker CE v18+
+* CUDA [10.1/10.2/11.0/11.2](https://developer.nvidia.com/cuda-downloads) with a compatible NVIDIA driver
+* Ubuntu 16.04/18.04/20.04 or CentOS 7
+* Docker CE v19.03+
 * [nvidia-docker](https://github.com/nvidia/nvidia-docker/wiki/Installation-(version-2.0)) v2+
 
 ## Usage
@@ -145,13 +145,13 @@ This prints the function signature and its usage documentation. If this is not e
 ```
 [1] ??pygdf.read_csv
 ```
-Check out the RAPIDS [documentation](http://rapids.ai/start.html) for more detailed information and a RAPIDS [cheat sheet](https://rapids.ai/files/cheatsheet.pdf).
+Check out the RAPIDS [documentation](http://rapids.ai/start.html) for more detailed information and a RAPIDS [cheat sheet]( https://resources.nvidia.com/en-us-ds-cheat-sheets/ds-pandas-cheat-sheet).
 
 ## More Information
 
 Check out the [RAPIDS](https://docs.rapids.ai/api) and [XGBoost](https://xgboost.readthedocs.io/en/latest/) API docs.
 
-Learn how to setup a mult-node cuDF and XGBoost data preparation and distributed training environment by following the [mortgage data example notebook and scripts](https://github.com/rapidsai/notebooks).
+Learn how to setup a mult-node cuDF and XGBoost data preparation and distributed training environment by following the [mortgage data example notebook and scripts](https://github.com/rapidsai-community/showcase/tree/main/benchmarks/mortgage).
 
 ## Where can I get help or file bugs/requests?
 
@@ -159,4 +159,4 @@ Please submit issues with the container to this GitHub repository: [https://gith
 
 For issues with RAPIDS libraries like cuDF, cuML, RMM, or others file an issue in the related GitHub project.
 
-Additional help can be found on [Stack Overflow](https://stackoverflow.com/tags/rapids) or [Google Groups](https://groups.google.com/forum/#!forum/rapidsai).
+Additional help can be found on [Stack Overflow](https://stackoverflow.com/tags/rapids), [NVIDIA Developer Forums](https://forums.developer.nvidia.com/c/ai-data-science/data-processing/324/none) or [Google Groups](https://groups.google.com/forum/#!forum/rapidsai).
