@@ -298,30 +298,41 @@ $(function() {
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>     <span class="keywordflow">return</span> {this-&gt;data() + flatten_index(row, 0, this-&gt;size()), this-&gt;size().second};</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>   }</div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>  </div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>   <span class="keyword">template</span> &lt;<span class="keyword">typename</span> OtherT,</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>             <span class="keyword">template</span> &lt;<span class="keyword">typename</span>, <span class="keywordtype">size_t</span>&gt;</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>             <span class="keyword">typename</span> OtherRowType,</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>             <span class="keyword">typename</span> std::enable_if&lt;std::is_convertible&lt;OtherRowType&lt;OtherT, dynamic_extent&gt;,</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>                                                         RowType&lt;T, dynamic_extent&gt;&gt;::value,</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>                                     <span class="keywordtype">void</span>&gt;::type* = <span class="keyword">nullptr</span>&gt;</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>   constexpr <a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">base_2dspan</a>(<a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">base_2dspan&lt;OtherT, OtherRowType&gt;</a> <span class="keyword">const</span>&amp; other) noexcept</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>     : _data{other.data()}, _size{other.size()}</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>   {</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>   constexpr <a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">base_2dspan</a> subspan(<span class="keywordtype">size_t</span> first_row, <span class="keywordtype">size_t</span> num_rows) <span class="keyword">const</span> noexcept</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>   {</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>     <span class="keywordflow">return</span> <a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">base_2dspan</a>(</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>       _data + flatten_index(first_row, 0, this-&gt;size()), num_rows, this-&gt;size().second);</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>   }</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>  </div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>   constexpr RowType&lt;T, dynamic_extent&gt; flat_view()</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>   {</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>     <span class="keywordflow">return</span> {this-&gt;data(), this-&gt;size().first * this-&gt;size().second};</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>   }</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>  </div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>  <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>   T* _data = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>   size_type _size{0, 0};</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span> };</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>  </div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span> <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span> <span class="keyword">using</span> <a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">host_2dspan</a> = <a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">base_2dspan&lt;T, host_span&gt;</a>;</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>  </div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span> <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span> <span class="keyword">using</span> <a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">device_2dspan</a> = <a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">base_2dspan&lt;T, device_span&gt;</a>;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>  </div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span> }  <span class="comment">// namespace detail</span></div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span> }  <span class="comment">// namespace cudf</span></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>   <span class="keyword">template</span> &lt;<span class="keyword">typename</span> OtherT,</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>             <span class="keyword">template</span> &lt;<span class="keyword">typename</span>, <span class="keywordtype">size_t</span>&gt;</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>             <span class="keyword">typename</span> OtherRowType,</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>             <span class="keyword">typename</span> std::enable_if&lt;std::is_convertible&lt;OtherRowType&lt;OtherT, dynamic_extent&gt;,</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>                                                         RowType&lt;T, dynamic_extent&gt;&gt;::value,</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>                                     <span class="keywordtype">void</span>&gt;::type* = <span class="keyword">nullptr</span>&gt;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>   constexpr <a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">base_2dspan</a>(<a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">base_2dspan&lt;OtherT, OtherRowType&gt;</a> <span class="keyword">const</span>&amp; other) noexcept</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>     : _data{other.data()}, _size{other.size()}</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>   {</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>   }</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>  </div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>  <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>   T* _data = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>   size_type _size{0, 0};</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span> };</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>  </div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span> <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span> <span class="keyword">using</span> <a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">host_2dspan</a> = <a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">base_2dspan&lt;T, host_span&gt;</a>;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>  </div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span> <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span> <span class="keyword">using</span> <a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">device_2dspan</a> = <a class="code" href="classcudf_1_1detail_1_1base__2dspan.html">base_2dspan&lt;T, device_span&gt;</a>;</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>  </div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span> }  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span> }  <span class="comment">// namespace cudf</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasscudf_1_1detail_1_1span__base_html_a6cf5820ed1c653ff012311e5f6fce571"><div class="ttname"><a href="classcudf_1_1detail_1_1span__base.html#a6cf5820ed1c653ff012311e5f6fce571">cudf::detail::span_base::last</a></div><div class="ttdeci">constexpr Derived last(size_type count) const noexcept</div><div class="ttdoc">Obtains a subspan consisting of the last N elements of the sequence.</div><div class="ttdef"><b>Definition:</b> <a href="span_8hpp_source.html#l00090">span.hpp:90</a></div></div>
 <div class="ttc" id="aclasscudf_1_1column_html"><div class="ttname"><a href="classcudf_1_1column.html">cudf::column</a></div><div class="ttdoc">A container of nullable device data as a column of elements.</div><div class="ttdef"><b>Definition:</b> <a href="column_8hpp_source.html#l00045">column.hpp:45</a></div></div>
