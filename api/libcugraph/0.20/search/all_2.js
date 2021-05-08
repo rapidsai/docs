@@ -15,13 +15,14 @@ var searchData=
   ['compute_5fthrust_5ftuple_5felement_5fsizes_5fimpl_31',['compute_thrust_tuple_element_sizes_impl',['../structcugraph_1_1experimental_1_1detail_1_1compute__thrust__tuple__element__sizes__impl.html',1,'cugraph::experimental::detail']]],
   ['compute_5fthrust_5ftuple_5felement_5fsizes_5fimpl_3c_20tupletype_2c_20i_2c_20i_20_3e_32',['compute_thrust_tuple_element_sizes_impl&lt; TupleType, I, I &gt;',['../structcugraph_1_1experimental_1_1detail_1_1compute__thrust__tuple__element__sizes__impl_3_01TupleType_00_01I_00_01I_01_4.html',1,'cugraph::experimental::detail']]],
   ['connected_5fcomponents_33',['connected_components',['../namespacecugraph.html#a6c61241ace7da8b4f3b3f35a8a3f3980',1,'cugraph']]],
-  ['coo_5fto_5fcsr_34',['coo_to_csr',['../namespacecugraph.html#a4ddfbabee24b22217e4bbfdecb55980e',1,'cugraph']]],
-  ['copy_20methods_35',['Copy methods',['../group__Copy.html',1,'']]],
-  ['core_5fnumber_36',['core_number',['../namespacecugraph.html#aa9d5c8e792f3082f524d07e0f8e489b2',1,'cugraph']]],
-  ['cstablechecker_37',['CStableChecker',['../structCStableChecker.html',1,'']]],
-  ['cugraph_38',['cugraph',['../namespacecugraph.html',1,'']]],
-  ['cugraph_5fcc_5ft_39',['cugraph_cc_t',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27',1,'cugraph']]],
-  ['cugraph_5fstrong_40',['CUGRAPH_STRONG',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27a5882369885616cc6ba190202b140ee02',1,'cugraph']]],
-  ['cy_5fmulti_5fedgelists_5ft_41',['cy_multi_edgelists_t',['../structcugraph_1_1cython_1_1cy__multi__edgelists__t.html',1,'cugraph::cython']]],
-  ['ext_5fraft_42',['ext_raft',['../namespacecugraph_1_1ext__raft.html',1,'cugraph']]]
+  ['coo_5fconvertor_5ft_34',['coo_convertor_t',['../structcugraph_1_1experimental_1_1detail_1_1coo__convertor__t.html',1,'cugraph::experimental::detail']]],
+  ['coo_5fto_5fcsr_35',['coo_to_csr',['../namespacecugraph.html#a4ddfbabee24b22217e4bbfdecb55980e',1,'cugraph']]],
+  ['copy_20methods_36',['Copy methods',['../group__Copy.html',1,'']]],
+  ['core_5fnumber_37',['core_number',['../namespacecugraph.html#aa9d5c8e792f3082f524d07e0f8e489b2',1,'cugraph']]],
+  ['cstablechecker_38',['CStableChecker',['../structCStableChecker.html',1,'']]],
+  ['cugraph_39',['cugraph',['../namespacecugraph.html',1,'']]],
+  ['cugraph_5fcc_5ft_40',['cugraph_cc_t',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27',1,'cugraph']]],
+  ['cugraph_5fstrong_41',['CUGRAPH_STRONG',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27a5882369885616cc6ba190202b140ee02',1,'cugraph']]],
+  ['cy_5fmulti_5fedgelists_5ft_42',['cy_multi_edgelists_t',['../structcugraph_1_1cython_1_1cy__multi__edgelists__t.html',1,'cugraph::cython']]],
+  ['ext_5fraft_43',['ext_raft',['../namespacecugraph_1_1ext__raft.html',1,'cugraph']]]
 ];
