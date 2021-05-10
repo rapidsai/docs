@@ -48,7 +48,7 @@ var searchData=
   ['plant_808',['plant',['../classML_1_1DecisionTree_1_1DecisionTreeBase.html#a25babf25fbd5d5d7789c756d38676067',1,'ML::DecisionTree::DecisionTreeBase']]],
   ['pointer_809',['pointer',['../classML_1_1stdAllocatorAdapter.html#abb25e4357a000afa6c08631789825a7f',1,'ML::stdAllocatorAdapter']]],
   ['polynomial_810',['POLYNOMIAL',['../namespaceMLCommon_1_1Matrix.html#a77ca4104554a91afb08885d275724ed4ad641fe4a734547c62c8681e1737e48a0',1,'MLCommon::Matrix::POLYNOMIAL()'],['../svm__api_8h.html#abcfb30112724acc92ab466a03d8961d7a412e53300e8c1062adefbeb918f2e635',1,'POLYNOMIAL():&#160;svm_api.h']]],
-  ['pop_5frange_811',['POP_RANGE',['../namespaceML.html#a516be7eeb210dc391738e9761a886533',1,'ML']]],
+  ['pop_5frange_811',['POP_RANGE',['../namespaceML.html#a7a0bba9857ed5cdfd28c6801397bd629',1,'ML::POP_RANGE(cudaStream_t stream)'],['../namespaceML.html#a516be7eeb210dc391738e9761a886533',1,'ML::POP_RANGE()']]],
   ['population_5fsize_812',['population_size',['../structcuml_1_1genetic_1_1param.html#a238a7d9bd2e854e69856eefb2732b092',1,'cuml::genetic::param']]],
   ['postprocess_5flabels_813',['postprocess_labels',['../namespaceML.html#a05ee22c0f2c66e9bb7d60c72e5d61b32',1,'ML']]],
   ['postprocessdata_814',['postProcessData',['../namespaceML_1_1GLM_1_1opg.html#ad1701f3776a27f6622110d1805fa0e16',1,'ML::GLM::opg::postProcessData(raft::handle_t &amp;handle, std::vector&lt; MLCommon::Matrix::Data&lt; float &gt; * &gt; &amp;input_data, MLCommon::Matrix::PartDescriptor &amp;input_desc, std::vector&lt; MLCommon::Matrix::Data&lt; float &gt; * &gt; &amp;labels, float *coef, float *intercept, float *mu_input, float *mu_labels, float *norm2_input, bool fit_intercept, bool normalize, cudaStream_t *streams, int n_streams, bool verbose)'],['../namespaceML_1_1GLM_1_1opg.html#a087873051507e352e50a8b8d9054b5d4',1,'ML::GLM::opg::postProcessData(raft::handle_t &amp;handle, std::vector&lt; MLCommon::Matrix::Data&lt; double &gt; * &gt; &amp;input_data, MLCommon::Matrix::PartDescriptor &amp;input_desc, std::vector&lt; MLCommon::Matrix::Data&lt; double &gt; * &gt; &amp;labels, double *coef, double *intercept, double *mu_input, double *mu_labels, double *norm2_input, bool fit_intercept, bool normalize, cudaStream_t *streams, int n_streams, bool verbose)']]],
@@ -75,6 +75,6 @@ var searchData=
   ['processing_2ecuh_835',['processing.cuh',['../processing_8cuh.html',1,'']]],
   ['program_836',['program',['../structcuml_1_1genetic_1_1program.html',1,'cuml::genetic']]],
   ['program_2eh_837',['program.h',['../program_8h.html',1,'']]],
-  ['push_5frange_838',['PUSH_RANGE',['../namespaceML.html#aacfa74158f3a2d08f6ddae02dbfb2992',1,'ML']]],
+  ['push_5frange_838',['PUSH_RANGE',['../namespaceML.html#a98c6eb4be0b83cb7e0fdceb1890bff09',1,'ML::PUSH_RANGE(const char *name, cudaStream_t stream)'],['../namespaceML.html#aacfa74158f3a2d08f6ddae02dbfb2992',1,'ML::PUSH_RANGE(const char *name)']]],
   ['pw_5fdist_5fgraph_2ecuh_839',['pw_dist_graph.cuh',['../pw__dist__graph_8cuh.html',1,'']]]
 ];
