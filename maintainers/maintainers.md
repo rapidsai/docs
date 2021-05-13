@@ -37,7 +37,7 @@ Development (others) | Thu, Apr 1 | Tue, May 25 | 39 days
 [Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | Thu, Jun 3 | Tue, Jun 8 | 4 days
 [Release]({% link releases/process.md %}#releasing) | Wed, Jun 9 | Thu, Jun 10 | 2 days
 
-## _PROPOSED_ Release v0.21 Schedule
+## _PROPOSED_ Release v21.08 Schedule
 
 Phase | Start | End | Duration
 -- | -- | -- | --
