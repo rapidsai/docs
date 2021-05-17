@@ -205,11 +205,13 @@ def delete_existing_elements(soup):
     doxygen_title_area = "#titlearea > table"
     sphinx_home_btn = ".wy-side-nav-search .icon.icon-home"
     sphinx_doc_version = ".wy-side-nav-search .version"
-    existing_sphinx_container = "#rapids-sphinx-container"
+    existing_jtd_container = "#rapids-jtd-container"
+    existing_pydata_container = "#rapids-pydata-container"
     existing_doxygen_container = "#rapids-doxygen-container"
 
     for element in [
-        existing_sphinx_container,
+        existing_jtd_container,
+        existing_pydata_container,
         existing_doxygen_container,
         sphinx_doc_version,
         sphinx_home_btn,
@@ -217,6 +219,7 @@ def delete_existing_elements(soup):
         f"#{SCRIPT_TAG_ID}",
         f"#{STYLE_TAG_ID}",
         f"#{FA_TAG_ID}",
+        "#rapids-sphinx-container" # old sphinx-selector. this can be removed once no more HTML files contain this element (i.e. after they're all re-processed)
     ]:
         delete_element(soup, element)
 
@@ -227,14 +230,21 @@ def is_sphinx_or_doxygen(soup):
     by parsing the HTML. Returns a string identifier and reference element
     that is used for inserting the library/version selectors to the doc.
     """
-    sphinx_identifier = ".wy-side-nav-search"
+    # Sphinx Themes
+    jtd_identifier = ".wy-side-nav-search" # Just-the-docs theme
+    pydata_identifier = ".bd-sidebar" # Pydata theme
+
+    # Doxygen
     doxygen_identifier = "#titlearea"
 
-    if soup.select(sphinx_identifier):
-        return "sphinx", soup.select(sphinx_identifier)[0]
+    if soup.select(jtd_identifier):
+        return "jtd", soup.select(jtd_identifier)[0]
 
     if soup.select(doxygen_identifier):
         return "doxygen", soup.select(doxygen_identifier)[0]
+
+    if soup.select(pydata_identifier):
+        return "pydata", soup.select(pydata_identifier)[0]
 
     raise Exception(f"Couldn't identify {FILEPATH} as either Doxygen or Sphinx")
 
@@ -246,7 +256,7 @@ def main():
     """
     print(f"--- {FILEPATH} ---")
     with open(FILEPATH) as fp:
-        soup = BeautifulSoup(fp, "html.parser")
+        soup = BeautifulSoup(fp, "html5lib")
 
     doc_type, reference_el = is_sphinx_or_doxygen(soup)
 
@@ -276,7 +286,7 @@ def main():
     soup.head.append(style_tab)
 
     with open(FILEPATH, "w") as fp:
-        fp.write(str(soup))
+        fp.write(soup.decode(formatter="html5"))
 
 
 if __name__ == "__main__":

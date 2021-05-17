@@ -31,13 +31,14 @@ if [ ! -d "${FOLDER_TO_CUSTOMIZE}" ]; then
 fi
 
 SCRIPT_SRC_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" # directory of where this script is located
-SPHINX_SEARCH_TERM='class="wy-side-nav-search"'
+JTD_SEARCH_TERM='class="wy-side-nav-search"'
 DOXYGEN_SEARCH_TERM='id="titlearea"'
+PYDATA_SEARCH_TERM='class="col-12 col-md-3 bd-sidebar"'
 
 # IFS is changed due to cuxfilter docs having spaces in their filenames
 OIFS="$IFS"
 IFS=$'\n'
-for FILE in $(grep "${SPHINX_SEARCH_TERM}\|${DOXYGEN_SEARCH_TERM}" -rl \
+for FILE in $(grep "${JTD_SEARCH_TERM}\|${DOXYGEN_SEARCH_TERM}\|${PYDATA_SEARCH_TERM}" -rl \
   --include=\*.html \
   --exclude-dir=stable \
   --exclude-dir=nightly \
