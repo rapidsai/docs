@@ -19,14 +19,14 @@ The documentation below describes how the scripts work to customize the generate
 
 For the doc customization to work correctly, all of the symlinks need to be up to date. The symlinks ultimately enable us to generate paths like `/cudf/stable/` that point to the latest RAPIDS release version folder (i.e. `/cudf/0.13/`).
 
-[update_symlinks.sh](/update_symlinks.sh) is a shell script that accepts the current RAPIDS nightly version (i.e. `13`) as a positional parameter and updates each project's symlinks accordingly. It looks for the legacy, stable, and nightly version folders (i.e. `0.11`, `0.12`, etc.) and creates the corresponding symlinks if those folders exist.
+[update_symlinks.sh](/update_symlinks.sh) is a shell script that updates each project's symlinks according to the versions in [releases.json](/_data/releases.json). It looks for the legacy, stable, and nightly version folders (i.e. `0.11`, `0.12`, etc.) and creates the corresponding symlinks if those folders exist.
 
 **Usage:**
 
 > **Note:** This script is intended to be run from the project's root.
 
 ```sh
-update_symlinks.sh 13
+update_symlinks.sh
 ```
 
 ### Generate Library Map
@@ -116,7 +116,7 @@ To customize the docs, run:
 ```sh
 NIGHTLY_VERSION="19"
 
-update_symlinks.sh ${NIGHTLY_VERSION} # ensures symlink accuracy
+update_symlinks.sh # ensures symlink accuracy
 
 customization/lib_map.sh # generates a JSON file needed by customize_docs.py
 

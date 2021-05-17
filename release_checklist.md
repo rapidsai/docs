@@ -11,7 +11,7 @@ On release day, the following changes need to be made to the site:
 ```sh
 NIGHTLY_VERSION="19" # new nightly version (i.e. version after release version)
 
-update_symlinks.sh ${NIGHTLY_VERSION} # ensures symlink accuracy
+update_symlinks.sh # ensures symlink accuracy
 
 customization/lib_map.sh # generates a JSON file needed by customize_docs.py
 
