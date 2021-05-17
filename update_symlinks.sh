@@ -6,8 +6,8 @@ set -eEo pipefail
 
 display_usage() {
   echo "Usage:"
-  echo " - update_symlinks ## updates symlinks to match versions in _data/releases.json"
-  echo " - update_symlinks rm ## removes all current symlinks"
+  echo " - update_symlinks        # updates symlinks to match versions in _data/releases.json"
+  echo " - update_symlinks rm     # removes all current symlinks"
 }
 
 # If there is more than one argument, or if there is one argument that's not "rm"
