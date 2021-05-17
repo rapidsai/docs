@@ -9,13 +9,11 @@ On release day, the following changes need to be made to the site:
   - Run codeblock below (from project's root directory) to update all symlinks and re-customize docs to reflect new RAPIDS versions.
 
 ```sh
-NIGHTLY_VERSION="19" # new nightly version (i.e. version after release version)
-
 update_symlinks.sh # ensures symlink accuracy
 
 customization/lib_map.sh # generates a JSON file needed by customize_docs.py
 
-customization/customize_docs_in_folder.sh api/ ${NIGHTLY_VERSION}
+customization/customize_docs_in_folder.sh api/
 
 ```
 

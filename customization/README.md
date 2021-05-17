@@ -100,13 +100,11 @@ python customization/customize_docs.py ${ABS_PATH_TO_HTML_FILE} ${CURRENT_RAPIDS
 > **Note:** This script is intended to be run from the project's root.
 
 ```sh
-NIGHTLY_VERSION=19
-
-customization/customize_docs_in_folder.sh api/ ${NIGHTLY_VERSION}
+customization/customize_docs_in_folder.sh api/
 
 # or
 
-customization/customize_docs_in_folder.sh api/rmm ${NIGHTLY_VERSION}
+customization/customize_docs_in_folder.sh api/rmm
 ```
 
 ### TL;DR
@@ -114,12 +112,10 @@ customization/customize_docs_in_folder.sh api/rmm ${NIGHTLY_VERSION}
 To customize the docs, run:
 
 ```sh
-NIGHTLY_VERSION="19"
-
 update_symlinks.sh # ensures symlink accuracy
 
 customization/lib_map.sh # generates a JSON file needed by customize_docs.py
 
-customization/customize_docs_in_folder.sh api/rmm ${NIGHTLY_VERSION}
+customization/customize_docs_in_folder.sh api/rmm
 
 ```
