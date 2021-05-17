@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multi-GPU with Dask-cuDF &#8212; cudf 0.20.0 documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/params.css" />
+    <link rel="stylesheet" type="text/css" href="https://docs.rapids.ai/assets/css/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/copybutton_pydocs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="cuDF internals" href="internals.html" />
+    <link rel="prev" title="GroupBy" href="groupby.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../index.html">
+  <img src="../_static/RAPIDS-logo-purple.png" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class=" collapse navbar-collapse">
+    <div id="navbar-center" class="ml-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../user_guide/index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="index.html">
+  Basics
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../api_docs/index.html">
+  API reference
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/rapidsai/cudf" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter">
+            <span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="basics.html">
+   Basics
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="io.html">
+   Input / Output
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="io-supported-types.html">
+     I/O Supported dtypes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="groupby.html">
+   GroupBy
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Multi-GPU with Dask-cuDF
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="internals.html">
+   cuDF internals
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#what-works">
+   What works
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#developing-the-api">
+   Developing the API
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#navigating-the-api">
+   Navigating the API
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="multi-gpu-with-dask-cudf">
+<h1>Multi-GPU with Dask-cuDF<a class="headerlink" href="#multi-gpu-with-dask-cudf" title="Permalink to this headline">¶</a></h1>
+<p>cuDF is a single-GPU library. For Multi-GPU cuDF solutions we use <a class="reference external" href="https://dask.org/">Dask</a> and the <a class="reference external" href="https://github.com/rapidsai/cudf/tree/main/python/dask_cudf">dask-cudf package</a>, which is able to scale cuDF across multiple GPUs on a single machine, or multiple GPUs across many machines in a cluster.</p>
+<p><a class="reference external" href="http://docs.dask.org/en/latest/dataframe.html">Dask DataFrame</a> was originally designed to scale Pandas, orchestrating many Pandas DataFrames spread across many CPUs into a cohesive parallel DataFrame. Because cuDF currently implements only a subset of Pandas’s API, not all Dask DataFrame operations work with cuDF.</p>
+<p>The following is tested and expected to work:</p>
+<div class="section" id="what-works">
+<h2>What works<a class="headerlink" href="#what-works" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Data ingestion</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">dask_cudf.read_csv</span></code></p></li>
+<li><p>Use standard Dask ingestion with Pandas, then convert to cuDF (For
+Parquet and other formats this is often decently fast)</p></li>
+</ul>
+</li>
+<li><p>Linear operations</p>
+<ul>
+<li><p>Element-wise operations:  <code class="docutils literal notranslate"><span class="pre">df.x</span> <span class="pre">+</span> <span class="pre">df.y</span></code>, <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">**</span> <span class="pre">2</span></code></p></li>
+<li><p>Assignment: <code class="docutils literal notranslate"><span class="pre">df['z']</span> <span class="pre">=</span> <span class="pre">df.x</span> <span class="pre">+</span> <span class="pre">df.y</span></code></p></li>
+<li><p>Row-wise selections:  <code class="docutils literal notranslate"><span class="pre">df[df.x</span> <span class="pre">&gt;</span> <span class="pre">0]</span></code></p></li>
+<li><p>Loc:  <code class="docutils literal notranslate"><span class="pre">df.loc['2001-01-01':</span> <span class="pre">'2005-02-02']</span></code></p></li>
+<li><p>Date time/string accessors:  <code class="docutils literal notranslate"><span class="pre">df.timestamp.dt.dayofweek</span></code></p></li>
+<li><p>… and most similar operations in this category that are already implemented in cuDF</p></li>
+</ul>
+</li>
+<li><p>Reductions</p>
+<ul>
+<li><p>Like <code class="docutils literal notranslate"><span class="pre">sum</span></code>, <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">count</span></code>, and so on on <code class="docutils literal notranslate"><span class="pre">Series</span></code> objects</p></li>
+<li><p><strike>Support for reductions on full dataframes</strike></p></li>
+<li><p><strike><code class="docutils literal notranslate"><span class="pre">std</span></code></strike></p></li>
+<li><p>Custom reductions with <a class="reference external" href="http://docs.dask.org/en/latest/dataframe-api.html#dask.dataframe.Series.reduction">dask.dataframe.reduction</a></p></li>
+</ul>
+</li>
+<li><p>Groupby aggregations</p>
+<ul>
+<li><p>On single columns: <code class="docutils literal notranslate"><span class="pre">df.groupby('x').y.max()</span></code></p></li>
+<li><p>With custom aggregations:</p></li>
+<li><p><strike>groupby standard deviation</strike></p></li>
+<li><p><strike>grouping on multiple columns</strike></p></li>
+<li><p><strike>groupby agg for multiple outputs</strike></p></li>
+</ul>
+</li>
+<li><p>Joins:</p>
+<ul>
+<li><p>On full unsorted columns: <code class="docutils literal notranslate"><span class="pre">left.merge(right,</span> <span class="pre">on='id')</span></code> (expensive)</p></li>
+<li><p>On sorted indexes: <code class="docutils literal notranslate"><span class="pre">left.merge(right,</span> <span class="pre">left_index=True,</span> <span class="pre">right_index=True)</span></code> (fast)</p></li>
+<li><p>On large and small dataframes: <code class="docutils literal notranslate"><span class="pre">left.merge(cudf_df,</span> <span class="pre">on='id')</span></code> (fast)</p></li>
+</ul>
+</li>
+<li><p><strike>Rolling operations</strike></p></li>
+<li><p>Converting to and from other forms</p>
+<ul>
+<li><p>Dask + Pandas to Dask + cuDF <code class="docutils literal notranslate"><span class="pre">df.map_partitions(cudf.from_pandas)</span></code></p></li>
+<li><p>Dask + cuDF to Dask + Pandas <code class="docutils literal notranslate"><span class="pre">df.map_partitions(lambda</span> <span class="pre">df:</span> <span class="pre">df.to_pandas())</span></code></p></li>
+<li><p>cuDF to Dask + cuDF: <code class="docutils literal notranslate"><span class="pre">dask.dataframe.from_pandas(df,</span> <span class="pre">npartitions=20)</span></code></p></li>
+<li><p>Dask + cuDF to cuDF: <code class="docutils literal notranslate"><span class="pre">df.compute()</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>Additionally all generic Dask operations, like <code class="docutils literal notranslate"><span class="pre">compute</span></code>, <code class="docutils literal notranslate"><span class="pre">persist</span></code>,
+<code class="docutils literal notranslate"><span class="pre">visualize</span></code> and so on work regardless.</p>
+</div>
+<div class="section" id="developing-the-api">
+<h2>Developing the API<a class="headerlink" href="#developing-the-api" title="Permalink to this headline">¶</a></h2>
+<p>Above we mention the following:</p>
+<blockquote>
+<div><p>and most similar operations in this category that are already implemented in cuDF</p>
+</div></blockquote>
+<p>This is because it is difficult to create a comprehensive list of operations in
+the cuDF and Pandas libraries.  The API is large enough to be difficult to track
+effectively.  For any operation that operates row-wise like <code class="docutils literal notranslate"><span class="pre">fillna</span></code> or
+<code class="docutils literal notranslate"><span class="pre">query</span></code> things will likely, but not certainly work.  If operations don’t work
+it is often due to a slight inconsistency between Pandas and cuDF that is
+generally easy to fix.  We encourage users to look at the <a class="reference external" href="https://github.com/rapidsai/cudf/issues">cuDF issue
+tracker</a> to see if their issue has
+already been reported and, if not,
+<a class="reference external" href="https://github.com/rapidsai/cudf/issues/new">raise a new issue</a>.</p>
+</div>
+<div class="section" id="navigating-the-api">
+<h2>Navigating the API<a class="headerlink" href="#navigating-the-api" title="Permalink to this headline">¶</a></h2>
+<p>This project reuses the
+<a class="reference external" href="https://docs.dask.org/en/latest/dataframe.html">Dask DataFrame</a> project, which
+was originally designed for Pandas, with the newer library cuDF.  Because we use
+the same Dask classes for both projects there are often methods that are
+implemented for Pandas, but not yet for cuDF.  As a result users looking at the
+full Dask DataFrame API can be misleading, and often lead to frustration when
+operations that are advertised in the Dask API do not work as expected with
+cuDF.  We apologize for this in advance.</p>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="groupby.html" title="previous page">GroupBy</a>
+    <a class='right-next' id="next-link" href="internals.html" title="next page">cuDF internals</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+    
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2018-2021, NVIDIA.<br/>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

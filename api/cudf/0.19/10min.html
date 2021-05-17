@@ -1,121 +1,350 @@
 
 <!DOCTYPE html>
 
-<html class="writer-html5" lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>10 Minutes to cuDF and Dask-cuDF — cudf 0.19.0 documentation</title>
-<link href="_static/css/theme.css" rel="stylesheet" type="text/css"/>
-<link href="_static/pygments.css" rel="stylesheet" type="text/css"/>
-<link href="_static/copybutton.css" rel="stylesheet" type="text/css"/>
-<link href="_static/params.css" rel="stylesheet" type="text/css"/>
-<link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet" type="text/css"/>
-<!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js" type="text/javascript"></script>
-<script src="_static/jquery.js"></script>
-<script src="_static/underscore.js"></script>
-<script src="_static/doctools.js"></script>
-<script src="_static/clipboard.min.js"></script>
-<script src="_static/copybutton.js"></script>
-<script src="_static/copybutton_pydocs.js"></script>
-<script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-<script src="_static/js/theme.js" type="text/javascript"></script>
-<link href="genindex.html" rel="index" title="Index"/>
-<link href="search.html" rel="search" title="Search"/>
-<link href="basics.html" rel="next" title="Basics"/>
-<link href="api.html" rel="prev" title="cuDF API Reference"/>
-<link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"/></head>
-<body class="wy-body-for-nav">
-<div class="wy-grid-for-nav">
-<nav class="wy-nav-side" data-toggle="wy-nav-shift">
-<div class="wy-side-scroll">
-<div class="wy-side-nav-search"><div id="rapids-sphinx-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">cudf</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/stable/api.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable/api.html">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">stable (0.19)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/cudf/nightly/api.html">nightly (0.20)</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/stable/api.html">stable (0.19)</a><a class="rapids-selector__menu-item" href="/api/cudf/legacy/api.html">legacy (0.18)</a></div></div></div>
-<div role="search">
-<form action="search.html" class="wy-form" id="rtd-search-form" method="get">
-<input name="q" placeholder="Search docs" type="text"/>
-<input name="check_keywords" type="hidden" value="yes"/>
-<input name="area" type="hidden" value="default"/>
-</form>
-</div>
-</div>
-<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
-<p><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="api.html">cuDF API Reference</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">10 Minutes to cuDF and Dask-cuDF</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#What-are-these-Libraries?">What are these Libraries?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#When-to-use-cuDF-and-Dask-cuDF">When to use cuDF and Dask-cuDF</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Object-Creation">Object Creation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Viewing-Data">Viewing Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Selection">Selection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Getting">Getting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Selection-by-Label">Selection by Label</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Selection-by-Position">Selection by Position</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Boolean-Indexing">Boolean Indexing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#MultiIndex">MultiIndex</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Missing-Data">Missing Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Operations">Operations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Stats">Stats</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Applymap">Applymap</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Histogramming">Histogramming</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#String-Methods">String Methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Concat">Concat</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Join">Join</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Append">Append</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Grouping">Grouping</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Transpose">Transpose</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Time-Series">Time Series</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Categoricals">Categoricals</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Converting-Data-Representation">Converting Data Representation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Pandas">Pandas</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Numpy">Numpy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Arrow">Arrow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Getting-Data-In/Out">Getting Data In/Out</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#CSV">CSV</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Parquet">Parquet</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ORC">ORC</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Dask-Performance-Tips">Dask Performance Tips</a></li>
-</ul>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>10 Minutes to cuDF and Dask-cuDF &#8212; cudf 0.20.0 documentation</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/params.css" />
+    <link rel="stylesheet" type="text/css" href="https://docs.rapids.ai/assets/css/custom.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/copybutton_pydocs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="index.html">
+  <img src="_static/RAPIDS-logo-purple.png" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class=" collapse navbar-collapse">
+    <div id="navbar-center" class="ml-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="user_guide/index.html">
+  User Guide
+ </a>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#Persisting-Data">Persisting Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Wait">Wait</a></li>
-</ul>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="basics/index.html">
+  Basics
+ </a>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="basics.html">Basics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="io.html">Input / Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="groupby.html">GroupBy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dask-cudf.html">Multi-GPU with Dask-cuDF</a></li>
-<li class="toctree-l1"><a class="reference internal" href="10min-cudf-cupy.html">10 Minutes to cuDF and CuPy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guide-to-udfs.html">Overview of User Defined Functions with cuDF</a></li>
-<li class="toctree-l1"><a class="reference internal" href="internals.html">cuDF internals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Working-with-missing-data.html">Working with missing data</a></li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="api_docs/index.html">
+  API reference
+ </a>
+</li>
+
+    
 </ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/rapidsai/cudf" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter">
+            <span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
 </div>
-</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
 </nav>
-<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
-<nav aria-label="top navigation" class="wy-nav-top">
-<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
-<a href="index.html">cudf</a>
-</nav>
-<div class="wy-nav-content">
-<div class="rst-content">
-<div aria-label="breadcrumbs navigation" role="navigation">
-<ul class="wy-breadcrumbs">
-<li><a class="icon icon-home" href="index.html"></a> »</li>
-<li>10 Minutes to cuDF and Dask-cuDF</li>
-<li class="wy-breadcrumbs-aside">
-<a href="_sources/10min.ipynb.txt" rel="nofollow"> View page source</a>
-</li>
-</ul>
-<hr/>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
 </div>
-<div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
-<div itemprop="articleBody">
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#What-are-these-Libraries?">
+   What are these Libraries?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#When-to-use-cuDF-and-Dask-cuDF">
+   When to use cuDF and Dask-cuDF
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Object-Creation">
+     Object Creation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Viewing-Data">
+     Viewing Data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Selection">
+     Selection
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Getting">
+     Getting
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Selection-by-Label">
+     Selection by Label
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Selection-by-Position">
+     Selection by Position
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Boolean-Indexing">
+     Boolean Indexing
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#MultiIndex">
+     MultiIndex
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Missing-Data">
+     Missing Data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Operations">
+     Operations
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Stats">
+     Stats
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Applymap">
+     Applymap
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Histogramming">
+     Histogramming
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#String-Methods">
+     String Methods
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Concat">
+     Concat
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Join">
+     Join
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Append">
+     Append
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Grouping">
+     Grouping
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Transpose">
+     Transpose
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Time-Series">
+     Time Series
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Categoricals">
+     Categoricals
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Converting-Data-Representation">
+     Converting Data Representation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Pandas">
+     Pandas
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Numpy">
+     Numpy
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Arrow">
+     Arrow
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Getting-Data-In/Out">
+     Getting Data In/Out
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#CSV">
+     CSV
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Parquet">
+     Parquet
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ORC">
+     ORC
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Dask-Performance-Tips">
+     Dask Performance Tips
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Persisting-Data">
+   Persisting Data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Wait">
+   Wait
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  
 <style>
 /* CSS for nbsphinx extension */
 
@@ -362,39 +591,17 @@ div.rendered_html tbody tr:nth-child(odd) {
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
-
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
 </style>
-<section id="10-Minutes-to-cuDF-and-Dask-cuDF">
+<div class="section" id="10-Minutes-to-cuDF-and-Dask-cuDF">
 <h1>10 Minutes to cuDF and Dask-cuDF<a class="headerlink" href="#10-Minutes-to-cuDF-and-Dask-cuDF" title="Permalink to this headline">¶</a></h1>
 <p>Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF and Dask-cuDF, geared mainly for new users.</p>
-<section id="What-are-these-Libraries?">
+<div class="section" id="What-are-these-Libraries?">
 <h2>What are these Libraries?<a class="headerlink" href="#What-are-these-Libraries?" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/rapidsai/cudf">cuDF</a> is a Python GPU DataFrame library (built on the Apache Arrow columnar memory format) for loading, joining, aggregating, filtering, and otherwise manipulating tabular data using a DataFrame style API.</p>
 <p><a class="reference external" href="https://dask.org/">Dask</a> is a flexible library for parallel computing in Python that makes scaling out your workflow smooth and simple. On the CPU, Dask uses Pandas to execute operations in parallel on DataFrame partitions.</p>
 <p><a class="reference external" href="https://github.com/rapidsai/cudf/tree/main/python/dask_cudf">Dask-cuDF</a> extends Dask where necessary to allow its DataFrame partitions to be processed by cuDF GPU DataFrames as opposed to Pandas DataFrames. For instance, when you call dask_cudf.read_csv(…), your cluster’s GPUs do the work of parsing the CSV file(s) with underlying cudf.read_csv().</p>
-</section>
-<section id="When-to-use-cuDF-and-Dask-cuDF">
+</div>
+<div class="section" id="When-to-use-cuDF-and-Dask-cuDF">
 <h2>When to use cuDF and Dask-cuDF<a class="headerlink" href="#When-to-use-cuDF-and-Dask-cuDF" title="Permalink to this headline">¶</a></h2>
 <p>If your workflow is fast enough on a single GPU or your data comfortably fits in memory on a single GPU, you would want to use cuDF. If you want to distribute your workflow across multiple GPUs, have more data than you can fit in memory on a single GPU, or want to analyze data spread across many files at once, you would want to use Dask-cuDF.</p>
 <div class="nbinput nblast docutils container">
@@ -417,7 +624,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<section id="Object-Creation">
+<div class="section" id="Object-Creation">
 <h3>Object Creation<a class="headerlink" href="#Object-Creation" title="Permalink to this headline">¶</a></h3>
 <p>Creating a <code class="docutils literal notranslate"><span class="pre">cudf.Series</span></code> and <code class="docutils literal notranslate"><span class="pre">dask_cudf.Series</span></code>.</p>
 <div class="nbinput docutils container">
@@ -474,9 +681,9 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)),</span>
-                     <span class="s1">'b'</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">))),</span>
-                     <span class="s1">'c'</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+<span></span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)),</span>
+                     <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">))),</span>
+                     <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
                     <span class="p">})</span>
 <span class="n">df</span>
 </pre></div>
@@ -488,7 +695,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -502,136 +709,136 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-<td>2</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-<td>4</td>
-</tr>
-<tr>
-<th>5</th>
-<td>5</td>
-<td>14</td>
-<td>5</td>
-</tr>
-<tr>
-<th>6</th>
-<td>6</td>
-<td>13</td>
-<td>6</td>
-</tr>
-<tr>
-<th>7</th>
-<td>7</td>
-<td>12</td>
-<td>7</td>
-</tr>
-<tr>
-<th>8</th>
-<td>8</td>
-<td>11</td>
-<td>8</td>
-</tr>
-<tr>
-<th>9</th>
-<td>9</td>
-<td>10</td>
-<td>9</td>
-</tr>
-<tr>
-<th>10</th>
-<td>10</td>
-<td>9</td>
-<td>10</td>
-</tr>
-<tr>
-<th>11</th>
-<td>11</td>
-<td>8</td>
-<td>11</td>
-</tr>
-<tr>
-<th>12</th>
-<td>12</td>
-<td>7</td>
-<td>12</td>
-</tr>
-<tr>
-<th>13</th>
-<td>13</td>
-<td>6</td>
-<td>13</td>
-</tr>
-<tr>
-<th>14</th>
-<td>14</td>
-<td>5</td>
-<td>14</td>
-</tr>
-<tr>
-<th>15</th>
-<td>15</td>
-<td>4</td>
-<td>15</td>
-</tr>
-<tr>
-<th>16</th>
-<td>16</td>
-<td>3</td>
-<td>16</td>
-</tr>
-<tr>
-<th>17</th>
-<td>17</td>
-<td>2</td>
-<td>17</td>
-</tr>
-<tr>
-<th>18</th>
-<td>18</td>
-<td>1</td>
-<td>18</td>
-</tr>
-<tr>
-<th>19</th>
-<td>19</td>
-<td>0</td>
-<td>19</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>14</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>13</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>12</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>11</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>10</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>9</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>8</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>7</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>6</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>14</td>
+      <td>5</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>15</td>
+      <td>4</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>3</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17</td>
+      <td>2</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18</td>
+      <td>1</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>19</td>
+      <td>0</td>
+      <td>19</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -651,7 +858,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -665,136 +872,136 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-<td>2</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-<td>4</td>
-</tr>
-<tr>
-<th>5</th>
-<td>5</td>
-<td>14</td>
-<td>5</td>
-</tr>
-<tr>
-<th>6</th>
-<td>6</td>
-<td>13</td>
-<td>6</td>
-</tr>
-<tr>
-<th>7</th>
-<td>7</td>
-<td>12</td>
-<td>7</td>
-</tr>
-<tr>
-<th>8</th>
-<td>8</td>
-<td>11</td>
-<td>8</td>
-</tr>
-<tr>
-<th>9</th>
-<td>9</td>
-<td>10</td>
-<td>9</td>
-</tr>
-<tr>
-<th>10</th>
-<td>10</td>
-<td>9</td>
-<td>10</td>
-</tr>
-<tr>
-<th>11</th>
-<td>11</td>
-<td>8</td>
-<td>11</td>
-</tr>
-<tr>
-<th>12</th>
-<td>12</td>
-<td>7</td>
-<td>12</td>
-</tr>
-<tr>
-<th>13</th>
-<td>13</td>
-<td>6</td>
-<td>13</td>
-</tr>
-<tr>
-<th>14</th>
-<td>14</td>
-<td>5</td>
-<td>14</td>
-</tr>
-<tr>
-<th>15</th>
-<td>15</td>
-<td>4</td>
-<td>15</td>
-</tr>
-<tr>
-<th>16</th>
-<td>16</td>
-<td>3</td>
-<td>16</td>
-</tr>
-<tr>
-<th>17</th>
-<td>17</td>
-<td>2</td>
-<td>17</td>
-</tr>
-<tr>
-<th>18</th>
-<td>18</td>
-<td>1</td>
-<td>18</td>
-</tr>
-<tr>
-<th>19</th>
-<td>19</td>
-<td>0</td>
-<td>19</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>14</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>13</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>12</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>11</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>10</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>9</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>8</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>7</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>6</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>14</td>
+      <td>5</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>15</td>
+      <td>4</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>3</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17</td>
+      <td>2</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18</td>
+      <td>1</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>19</td>
+      <td>0</td>
+      <td>19</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -805,7 +1012,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">pdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span><span class="s1">'b'</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]})</span>
+<span></span><span class="n">pdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]})</span>
 <span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
 <span class="n">gdf</span>
 </pre></div>
@@ -817,7 +1024,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -831,35 +1038,35 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>0.1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>0.2</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>null</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>0.3</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>0.3</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -879,7 +1086,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -893,40 +1100,40 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>0.1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>0.2</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>null</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>0.3</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>0.3</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
-</section>
-<section id="Viewing-Data">
+</div>
+<div class="section" id="Viewing-Data">
 <h3>Viewing Data<a class="headerlink" href="#Viewing-Data" title="Permalink to this headline">¶</a></h3>
 <p>Viewing the top rows of a GPU dataframe.</p>
 <div class="nbinput docutils container">
@@ -944,7 +1151,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -958,28 +1165,28 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -998,7 +1205,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1012,28 +1219,28 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -1043,7 +1250,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'b'</span><span class="p">)</span>
+<span></span><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1053,7 +1260,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1067,136 +1274,136 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>19</th>
-<td>19</td>
-<td>0</td>
-<td>19</td>
-</tr>
-<tr>
-<th>18</th>
-<td>18</td>
-<td>1</td>
-<td>18</td>
-</tr>
-<tr>
-<th>17</th>
-<td>17</td>
-<td>2</td>
-<td>17</td>
-</tr>
-<tr>
-<th>16</th>
-<td>16</td>
-<td>3</td>
-<td>16</td>
-</tr>
-<tr>
-<th>15</th>
-<td>15</td>
-<td>4</td>
-<td>15</td>
-</tr>
-<tr>
-<th>14</th>
-<td>14</td>
-<td>5</td>
-<td>14</td>
-</tr>
-<tr>
-<th>13</th>
-<td>13</td>
-<td>6</td>
-<td>13</td>
-</tr>
-<tr>
-<th>12</th>
-<td>12</td>
-<td>7</td>
-<td>12</td>
-</tr>
-<tr>
-<th>11</th>
-<td>11</td>
-<td>8</td>
-<td>11</td>
-</tr>
-<tr>
-<th>10</th>
-<td>10</td>
-<td>9</td>
-<td>10</td>
-</tr>
-<tr>
-<th>9</th>
-<td>9</td>
-<td>10</td>
-<td>9</td>
-</tr>
-<tr>
-<th>8</th>
-<td>8</td>
-<td>11</td>
-<td>8</td>
-</tr>
-<tr>
-<th>7</th>
-<td>7</td>
-<td>12</td>
-<td>7</td>
-</tr>
-<tr>
-<th>6</th>
-<td>6</td>
-<td>13</td>
-<td>6</td>
-</tr>
-<tr>
-<th>5</th>
-<td>5</td>
-<td>14</td>
-<td>5</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-<td>4</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-<td>2</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-</tr>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>19</th>
+      <td>19</td>
+      <td>0</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18</td>
+      <td>1</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17</td>
+      <td>2</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>3</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>15</td>
+      <td>4</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>14</td>
+      <td>5</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>6</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>7</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>8</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>9</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>10</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>11</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>12</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>13</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>14</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -1205,7 +1412,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'b'</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1215,7 +1422,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1229,144 +1436,144 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>19</th>
-<td>19</td>
-<td>0</td>
-<td>19</td>
-</tr>
-<tr>
-<th>18</th>
-<td>18</td>
-<td>1</td>
-<td>18</td>
-</tr>
-<tr>
-<th>17</th>
-<td>17</td>
-<td>2</td>
-<td>17</td>
-</tr>
-<tr>
-<th>16</th>
-<td>16</td>
-<td>3</td>
-<td>16</td>
-</tr>
-<tr>
-<th>15</th>
-<td>15</td>
-<td>4</td>
-<td>15</td>
-</tr>
-<tr>
-<th>14</th>
-<td>14</td>
-<td>5</td>
-<td>14</td>
-</tr>
-<tr>
-<th>13</th>
-<td>13</td>
-<td>6</td>
-<td>13</td>
-</tr>
-<tr>
-<th>12</th>
-<td>12</td>
-<td>7</td>
-<td>12</td>
-</tr>
-<tr>
-<th>11</th>
-<td>11</td>
-<td>8</td>
-<td>11</td>
-</tr>
-<tr>
-<th>10</th>
-<td>10</td>
-<td>9</td>
-<td>10</td>
-</tr>
-<tr>
-<th>9</th>
-<td>9</td>
-<td>10</td>
-<td>9</td>
-</tr>
-<tr>
-<th>8</th>
-<td>8</td>
-<td>11</td>
-<td>8</td>
-</tr>
-<tr>
-<th>7</th>
-<td>7</td>
-<td>12</td>
-<td>7</td>
-</tr>
-<tr>
-<th>6</th>
-<td>6</td>
-<td>13</td>
-<td>6</td>
-</tr>
-<tr>
-<th>5</th>
-<td>5</td>
-<td>14</td>
-<td>5</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-<td>4</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-<td>2</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-</tr>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>19</th>
+      <td>19</td>
+      <td>0</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18</td>
+      <td>1</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17</td>
+      <td>2</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>3</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>15</td>
+      <td>4</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>14</td>
+      <td>5</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>6</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>7</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>8</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>9</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>10</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>11</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>12</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>13</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>14</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
-</section>
-<section id="Selection">
+</div>
+<div class="section" id="Selection">
 <h3>Selection<a class="headerlink" href="#Selection" title="Permalink to this headline">¶</a></h3>
-</section>
-<section id="Getting">
+</div>
+<div class="section" id="Getting">
 <h3>Getting<a class="headerlink" href="#Getting" title="Permalink to this headline">¶</a></h3>
 <p>Selecting a single column, which initially yields a <code class="docutils literal notranslate"><span class="pre">cudf.Series</span></code> or <code class="docutils literal notranslate"><span class="pre">dask_cudf.Series</span></code>. Calling <code class="docutils literal notranslate"><span class="pre">compute</span></code> results in a <code class="docutils literal notranslate"><span class="pre">cudf.Series</span></code> (equivalent to <code class="docutils literal notranslate"><span class="pre">df.a</span></code>).</p>
 <div class="nbinput docutils container">
@@ -1374,7 +1581,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span>
+<span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1412,7 +1619,7 @@ Name: a, dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddf</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span></span><span class="n">ddf</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1445,8 +1652,8 @@ Name: a, dtype: int64
 Name: a, dtype: int64
 </pre></div></div>
 </div>
-</section>
-<section id="Selection-by-Label">
+</div>
+<div class="section" id="Selection-by-Label">
 <h3>Selection by Label<a class="headerlink" href="#Selection-by-Label" title="Permalink to this headline">¶</a></h3>
 <p>Selecting rows from index 2 to index 5 from columns ‘a’ and ‘b’.</p>
 <div class="nbinput docutils container">
@@ -1454,7 +1661,7 @@ Name: a, dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">]]</span>
+<span></span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">]]</span>
 </pre></div>
 </div>
 </div>
@@ -1464,7 +1671,7 @@ Name: a, dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1478,35 +1685,35 @@ Name: a, dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-</tr>
-<tr>
-<th>5</th>
-<td>5</td>
-<td>14</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>14</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -1515,7 +1722,7 @@ Name: a, dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">]]</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1525,7 +1732,7 @@ Name: a, dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1539,40 +1746,40 @@ Name: a, dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-</tr>
-<tr>
-<th>5</th>
-<td>5</td>
-<td>14</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>14</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
-</section>
-<section id="Selection-by-Position">
+</div>
+<div class="section" id="Selection-by-Position">
 <h3>Selection by Position<a class="headerlink" href="#Selection-by-Position" title="Permalink to this headline">¶</a></h3>
 <p>Selecting via integers and integer slices, like numpy/pandas. Note that this functionality is not available for Dask-cuDF DataFrames.</p>
 <div class="nbinput docutils container">
@@ -1611,7 +1818,7 @@ Name: 0, dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1625,30 +1832,30 @@ Name: 0, dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -1668,7 +1875,7 @@ Name: 0, dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1682,28 +1889,28 @@ Name: 0, dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-<td>4</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+      <td>4</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -1727,8 +1934,8 @@ Name: 0, dtype: int64
 dtype: int64
 </pre></div></div>
 </div>
-</section>
-<section id="Boolean-Indexing">
+</div>
+<div class="section" id="Boolean-Indexing">
 <h3>Boolean Indexing<a class="headerlink" href="#Boolean-Indexing" title="Permalink to this headline">¶</a></h3>
 <p>Selecting rows in a <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> or <code class="docutils literal notranslate"><span class="pre">Series</span></code> by direct Boolean indexing.</p>
 <div class="nbinput docutils container">
@@ -1746,7 +1953,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1760,40 +1967,40 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-<td>2</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -1812,7 +2019,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1826,40 +2033,40 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-<td>2</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -1869,7 +2076,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"b == 3"</span><span class="p">)</span>
+<span></span><span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;b == 3&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1879,7 +2086,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1893,22 +2100,22 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>16</th>
-<td>16</td>
-<td>3</td>
-<td>16</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>3</td>
+      <td>16</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -1917,7 +2124,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"b == 3"</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;b == 3&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1927,7 +2134,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1941,33 +2148,33 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>16</th>
-<td>16</td>
-<td>3</td>
-<td>16</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>3</td>
+      <td>16</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
-<p>You can also pass local variables to Dask-cuDF queries, via the <code class="docutils literal notranslate"><span class="pre">local_dict</span></code> keyword. With standard cuDF, you may either use the <code class="docutils literal notranslate"><span class="pre">local_dict</span></code> keyword or directly pass the variable via the <code class="docutils literal notranslate"><span class="pre">@</span></code> keyword. Supported logical operators include <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, and <code class="docutils literal notranslate"><span class="pre">!=</span></code>.</p>
+<p>You can also pass local variables to Dask-cuDF queries, via the <code class="docutils literal notranslate"><span class="pre">local_dict</span></code> keyword. With standard cuDF, you may either use the <code class="docutils literal notranslate"><span class="pre">local_dict</span></code> keyword or directly pass the variable via the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> keyword. Supported logical operators include <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, and <code class="docutils literal notranslate"><span class="pre">!=</span></code>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">cudf_comparator</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"b == @cudf_comparator"</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;b == @cudf_comparator&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1977,7 +2184,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1991,22 +2198,22 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>16</th>
-<td>16</td>
-<td>3</td>
-<td>16</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>3</td>
+      <td>16</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -2016,7 +2223,7 @@ dtype: int64
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">dask_cudf_comparator</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">ddf</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"b == @val"</span><span class="p">,</span> <span class="n">local_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">'val'</span><span class="p">:</span><span class="n">dask_cudf_comparator</span><span class="p">})</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="n">ddf</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;b == @val&quot;</span><span class="p">,</span> <span class="n">local_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;val&#39;</span><span class="p">:</span><span class="n">dask_cudf_comparator</span><span class="p">})</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2026,7 +2233,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2040,22 +2247,22 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>16</th>
-<td>16</td>
-<td>3</td>
-<td>16</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>3</td>
+      <td>16</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -2075,7 +2282,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2089,33 +2296,33 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-</tr>
-<tr>
-<th>5</th>
-<td>5</td>
-<td>14</td>
-<td>5</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>14</td>
+      <td>5</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
-</section>
-<section id="MultiIndex">
+</div>
+<div class="section" id="MultiIndex">
 <h3>MultiIndex<a class="headerlink" href="#MultiIndex" title="Permalink to this headline">¶</a></h3>
 <p>cuDF supports hierarchical indexing of DataFrames using MultiIndex. Grouping hierarchically (see <code class="docutils literal notranslate"><span class="pre">Grouping</span></code> below) automatically produces a DataFrame with a MultiIndex.</p>
 <div class="nbinput docutils container">
@@ -2123,7 +2330,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">arrays</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>
+<span></span><span class="n">arrays</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>
 <span class="n">tuples</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">arrays</span><span class="p">))</span>
 <span class="n">idx</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_tuples</span><span class="p">(</span><span class="n">tuples</span><span class="p">)</span>
 <span class="n">idx</span>
@@ -2156,7 +2363,7 @@ codes=   0  1
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">gdf1</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'first'</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="s1">'second'</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">)})</span>
+<span></span><span class="n">gdf1</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;first&#39;</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="s1">&#39;second&#39;</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">)})</span>
 <span class="n">gdf1</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">idx</span>
 <span class="n">gdf1</span>
 </pre></div>
@@ -2168,7 +2375,7 @@ codes=   0  1
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2182,38 +2389,38 @@ codes=   0  1
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th></th>
-<th>first</th>
-<th>second</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th rowspan="2" valign="top">a</th>
-<th>1</th>
-<td>0.082654</td>
-<td>0.967955</td>
-</tr>
-<tr>
-<th>2</th>
-<td>0.399417</td>
-<td>0.441425</td>
-</tr>
-<tr>
-<th rowspan="2" valign="top">b</th>
-<th>3</th>
-<td>0.784297</td>
-<td>0.793582</td>
-</tr>
-<tr>
-<th>4</th>
-<td>0.070303</td>
-<td>0.271711</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>first</th>
+      <th>second</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">a</th>
+      <th>1</th>
+      <td>0.082654</td>
+      <td>0.967955</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.399417</td>
+      <td>0.441425</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">b</th>
+      <th>3</th>
+      <td>0.784297</td>
+      <td>0.793582</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.070303</td>
+      <td>0.271711</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -2222,7 +2429,7 @@ codes=   0  1
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">gdf2</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'first'</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="s1">'second'</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">)})</span><span class="o">.</span><span class="n">T</span>
+<span></span><span class="n">gdf2</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;first&#39;</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="s1">&#39;second&#39;</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">)})</span><span class="o">.</span><span class="n">T</span>
 <span class="n">gdf2</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">idx</span>
 <span class="n">gdf2</span>
 </pre></div>
@@ -2234,7 +2441,7 @@ codes=   0  1
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2248,36 +2455,36 @@ codes=   0  1
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr>
-<th></th>
-<th colspan="2" halign="left">a</th>
-<th colspan="2" halign="left">b</th>
-</tr>
-<tr>
-<th></th>
-<th>1</th>
-<th>2</th>
-<th>3</th>
-<th>4</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>first</th>
-<td>0.343382</td>
-<td>0.003700</td>
-<td>0.20043</td>
-<td>0.581614</td>
-</tr>
-<tr>
-<th>second</th>
-<td>0.907812</td>
-<td>0.101512</td>
-<td>0.24179</td>
-<td>0.224180</td>
-</tr>
-</tbody>
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="2" halign="left">a</th>
+      <th colspan="2" halign="left">b</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>first</th>
+      <td>0.343382</td>
+      <td>0.003700</td>
+      <td>0.20043</td>
+      <td>0.581614</td>
+    </tr>
+    <tr>
+      <th>second</th>
+      <td>0.907812</td>
+      <td>0.101512</td>
+      <td>0.24179</td>
+      <td>0.224180</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -2287,7 +2494,7 @@ codes=   0  1
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">gdf1</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="s1">'b'</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span>
+<span></span><span class="n">gdf1</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span>
 </pre></div>
 </div>
 </div>
@@ -2297,7 +2504,7 @@ codes=   0  1
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2311,33 +2518,33 @@ codes=   0  1
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th></th>
-<th>first</th>
-<th>second</th>
-</tr>
-<tr>
-<th>0</th>
-<th>1</th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>b</th>
-<th>3</th>
-<td>0.784297</td>
-<td>0.793582</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>first</th>
+      <th>second</th>
+    </tr>
+    <tr>
+      <th>0</th>
+      <th>1</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>b</th>
+      <th>3</th>
+      <td>0.784297</td>
+      <td>0.793582</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
-</section>
-<section id="Missing-Data">
+</div>
+<div class="section" id="Missing-Data">
 <h3>Missing Data<a class="headerlink" href="#Missing-Data" title="Permalink to this headline">¶</a></h3>
 <p>Missing data can be replaced by using the <code class="docutils literal notranslate"><span class="pre">fillna</span></code> method.</p>
 <div class="nbinput docutils container">
@@ -2386,11 +2593,11 @@ dtype: int64
 dtype: int64
 </pre></div></div>
 </div>
-</section>
-<section id="Operations">
+</div>
+<div class="section" id="Operations">
 <h3>Operations<a class="headerlink" href="#Operations" title="Permalink to this headline">¶</a></h3>
-</section>
-<section id="Stats">
+</div>
+<div class="section" id="Stats">
 <h3>Stats<a class="headerlink" href="#Stats" title="Permalink to this headline">¶</a></h3>
 <p>Calculating descriptive statistics for a <code class="docutils literal notranslate"><span class="pre">Series</span></code>.</p>
 <div class="nbinput docutils container">
@@ -2429,8 +2636,8 @@ dtype: int64
 (2.5, 1.6666666666666667)
 </pre></div></div>
 </div>
-</section>
-<section id="Applymap">
+</div>
+<div class="section" id="Applymap">
 <h3>Applymap<a class="headerlink" href="#Applymap" title="Permalink to this headline">¶</a></h3>
 <p>Applying functions to a <code class="docutils literal notranslate"><span class="pre">Series</span></code>. Note that applying user defined functions directly with Dask-cuDF is not yet implemented. For now, you can use <a class="reference external" href="http://docs.dask.org/en/stable/dataframe-api.html#dask.dataframe.DataFrame.map_partitions">map_partitions</a> to apply a function to each partition of the distributed dataframe.</p>
 <div class="nbinput docutils container">
@@ -2441,7 +2648,7 @@ dtype: int64
 <span></span><span class="k">def</span> <span class="nf">add_ten</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">num</span> <span class="o">+</span> <span class="mi">10</span>
 
-<span class="n">df</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">add_ten</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">add_ten</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2479,7 +2686,7 @@ Name: a, dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddf</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span><span class="o">.</span><span class="n">map_partitions</span><span class="p">(</span><span class="n">add_ten</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span></span><span class="n">ddf</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map_partitions</span><span class="p">(</span><span class="n">add_ten</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2512,8 +2719,8 @@ Name: a, dtype: int64
 Name: a, dtype: int64
 </pre></div></div>
 </div>
-</section>
-<section id="Histogramming">
+</div>
+<div class="section" id="Histogramming">
 <h3>Histogramming<a class="headerlink" href="#Histogramming" title="Permalink to this headline">¶</a></h3>
 <p>Counting the number of occurrences of each unique value of variable.</p>
 <div class="nbinput docutils container">
@@ -2592,8 +2799,8 @@ Name: a, dtype: int32
 Name: a, dtype: int64
 </pre></div></div>
 </div>
-</section>
-<section id="String-Methods">
+</div>
+<div class="section" id="String-Methods">
 <h3>String Methods<a class="headerlink" href="#String-Methods" title="Permalink to this headline">¶</a></h3>
 <p>Like pandas, cuDF provides string processing methods in the <code class="docutils literal notranslate"><span class="pre">str</span></code> attribute of <code class="docutils literal notranslate"><span class="pre">Series</span></code>. Full documentation of string methods is a work in progress. Please see the cuDF API documentation for more information.</p>
 <div class="nbinput docutils container">
@@ -2601,7 +2808,7 @@ Name: a, dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">s</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">'A'</span><span class="p">,</span> <span class="s1">'B'</span><span class="p">,</span> <span class="s1">'C'</span><span class="p">,</span> <span class="s1">'Aaba'</span><span class="p">,</span> <span class="s1">'Baca'</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">'CABA'</span><span class="p">,</span> <span class="s1">'dog'</span><span class="p">,</span> <span class="s1">'cat'</span><span class="p">])</span>
+<span></span><span class="n">s</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;Aaba&#39;</span><span class="p">,</span> <span class="s1">&#39;Baca&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;CABA&#39;</span><span class="p">,</span> <span class="s1">&#39;dog&#39;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">])</span>
 <span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -2652,8 +2859,8 @@ dtype: object
 dtype: object
 </pre></div></div>
 </div>
-</section>
-<section id="Concat">
+</div>
+<div class="section" id="Concat">
 <h3>Concat<a class="headerlink" href="#Concat" title="Permalink to this headline">¶</a></h3>
 <p>Concatenating <code class="docutils literal notranslate"><span class="pre">Series</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrames</span></code> row-wise.</p>
 <div class="nbinput docutils container">
@@ -2714,8 +2921,8 @@ dtype: int64
 dtype: int64
 </pre></div></div>
 </div>
-</section>
-<section id="Join">
+</div>
+<div class="section" id="Join">
 <h3>Join<a class="headerlink" href="#Join" title="Permalink to this headline">¶</a></h3>
 <p>Performing SQL style merges. Note that the dataframe order is not maintained, but may be restored post-merge by sorting by the index.</p>
 <div class="nbinput docutils container">
@@ -2724,14 +2931,14 @@ dtype: int64
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">df_a</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-<span class="n">df_a</span><span class="p">[</span><span class="s1">'key'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">,</span> <span class="s1">'d'</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">]</span>
-<span class="n">df_a</span><span class="p">[</span><span class="s1">'vals_a'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+<span class="n">df_a</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">]</span>
+<span class="n">df_a</span><span class="p">[</span><span class="s1">&#39;vals_a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
 
 <span class="n">df_b</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-<span class="n">df_b</span><span class="p">[</span><span class="s1">'key'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">]</span>
-<span class="n">df_b</span><span class="p">[</span><span class="s1">'vals_b'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">100</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+<span class="n">df_b</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">]</span>
+<span class="n">df_b</span><span class="p">[</span><span class="s1">&#39;vals_b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">100</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
 
-<span class="n">merged</span> <span class="o">=</span> <span class="n">df_a</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_b</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">'key'</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span>
+<span class="n">merged</span> <span class="o">=</span> <span class="n">df_a</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_b</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
 <span class="n">merged</span>
 </pre></div>
 </div>
@@ -2742,7 +2949,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2756,46 +2963,46 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>key</th>
-<th>vals_a</th>
-<th>vals_b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>a</td>
-<td>10.0</td>
-<td>100.0</td>
-</tr>
-<tr>
-<th>1</th>
-<td>c</td>
-<td>12.0</td>
-<td>101.0</td>
-</tr>
-<tr>
-<th>2</th>
-<td>e</td>
-<td>14.0</td>
-<td>102.0</td>
-</tr>
-<tr>
-<th>3</th>
-<td>b</td>
-<td>11.0</td>
-<td>null</td>
-</tr>
-<tr>
-<th>4</th>
-<td>d</td>
-<td>13.0</td>
-<td>null</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>key</th>
+      <th>vals_a</th>
+      <th>vals_b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>a</td>
+      <td>10.0</td>
+      <td>100.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>c</td>
+      <td>12.0</td>
+      <td>101.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>e</td>
+      <td>14.0</td>
+      <td>102.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>b</td>
+      <td>11.0</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>d</td>
+      <td>13.0</td>
+      <td>null</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -2807,7 +3014,7 @@ dtype: int64
 <span></span><span class="n">ddf_a</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">from_cudf</span><span class="p">(</span><span class="n">df_a</span><span class="p">,</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">ddf_b</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">from_cudf</span><span class="p">(</span><span class="n">df_b</span><span class="p">,</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="n">merged</span> <span class="o">=</span> <span class="n">ddf_a</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ddf_b</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">'key'</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="n">merged</span> <span class="o">=</span> <span class="n">ddf_a</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ddf_b</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 <span class="n">merged</span>
 </pre></div>
 </div>
@@ -2818,7 +3025,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2832,51 +3039,51 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>key</th>
-<th>vals_a</th>
-<th>vals_b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>a</td>
-<td>10.0</td>
-<td>100.0</td>
-</tr>
-<tr>
-<th>1</th>
-<td>c</td>
-<td>12.0</td>
-<td>101.0</td>
-</tr>
-<tr>
-<th>2</th>
-<td>b</td>
-<td>11.0</td>
-<td>null</td>
-</tr>
-<tr>
-<th>0</th>
-<td>e</td>
-<td>14.0</td>
-<td>102.0</td>
-</tr>
-<tr>
-<th>1</th>
-<td>d</td>
-<td>13.0</td>
-<td>null</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>key</th>
+      <th>vals_a</th>
+      <th>vals_b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>a</td>
+      <td>10.0</td>
+      <td>100.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>c</td>
+      <td>12.0</td>
+      <td>101.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>b</td>
+      <td>11.0</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>e</td>
+      <td>14.0</td>
+      <td>102.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>d</td>
+      <td>13.0</td>
+      <td>null</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
-</section>
-<section id="Append">
+</div>
+<div class="section" id="Append">
 <h3>Append<a class="headerlink" href="#Append" title="Permalink to this headline">¶</a></h3>
 <p>Appending values from another <code class="docutils literal notranslate"><span class="pre">Series</span></code> or array-like object.</p>
 <div class="nbinput docutils container">
@@ -2935,8 +3142,8 @@ dtype: int64
 dtype: int64
 </pre></div></div>
 </div>
-</section>
-<section id="Grouping">
+</div>
+<div class="section" id="Grouping">
 <h3>Grouping<a class="headerlink" href="#Grouping" title="Permalink to this headline">¶</a></h3>
 <p>Like pandas, cuDF and Dask-cuDF support the Split-Apply-Combine groupby paradigm.</p>
 <div class="nbinput nblast docutils container">
@@ -2944,8 +3151,8 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span><span class="p">[</span><span class="s1">'agg_col1'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))]</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">'agg_col2'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))]</span>
+<span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;agg_col1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;agg_col2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))]</span>
 
 <span class="n">ddf</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">from_cudf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
@@ -2957,7 +3164,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'agg_col1'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span></span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;agg_col1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2967,7 +3174,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2981,38 +3188,38 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-<th>agg_col2</th>
-</tr>
-<tr>
-<th>agg_col1</th>
-<th></th>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>100</td>
-<td>90</td>
-<td>100</td>
-<td>3</td>
-</tr>
-<tr>
-<th>1</th>
-<td>90</td>
-<td>100</td>
-<td>90</td>
-<td>4</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>agg_col2</th>
+    </tr>
+    <tr>
+      <th>agg_col1</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>100</td>
+      <td>90</td>
+      <td>100</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>90</td>
+      <td>100</td>
+      <td>90</td>
+      <td>4</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -3021,7 +3228,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'agg_col1'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;agg_col1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -3031,7 +3238,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3045,38 +3252,38 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-<th>agg_col2</th>
-</tr>
-<tr>
-<th>agg_col1</th>
-<th></th>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>100</td>
-<td>90</td>
-<td>100</td>
-<td>3</td>
-</tr>
-<tr>
-<th>1</th>
-<td>90</td>
-<td>100</td>
-<td>90</td>
-<td>4</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>agg_col2</th>
+    </tr>
+    <tr>
+      <th>agg_col1</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>100</td>
+      <td>90</td>
+      <td>100</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>90</td>
+      <td>100</td>
+      <td>90</td>
+      <td>4</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -3086,7 +3293,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">'agg_col1'</span><span class="p">,</span> <span class="s1">'agg_col2'</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span></span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;agg_col1&#39;</span><span class="p">,</span> <span class="s1">&#39;agg_col2&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -3096,7 +3303,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3110,50 +3317,50 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-<tr>
-<th>agg_col1</th>
-<th>agg_col2</th>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th rowspan="2" valign="top">0</th>
-<th>0</th>
-<td>73</td>
-<td>60</td>
-<td>73</td>
-</tr>
-<tr>
-<th>1</th>
-<td>27</td>
-<td>30</td>
-<td>27</td>
-</tr>
-<tr>
-<th rowspan="2" valign="top">1</th>
-<th>0</th>
-<td>54</td>
-<td>60</td>
-<td>54</td>
-</tr>
-<tr>
-<th>1</th>
-<td>36</td>
-<td>40</td>
-<td>36</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+    <tr>
+      <th>agg_col1</th>
+      <th>agg_col2</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">0</th>
+      <th>0</th>
+      <td>73</td>
+      <td>60</td>
+      <td>73</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>27</td>
+      <td>30</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">1</th>
+      <th>0</th>
+      <td>54</td>
+      <td>60</td>
+      <td>54</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>36</td>
+      <td>40</td>
+      <td>36</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -3162,7 +3369,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">'agg_col1'</span><span class="p">,</span> <span class="s1">'agg_col2'</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;agg_col1&#39;</span><span class="p">,</span> <span class="s1">&#39;agg_col2&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -3172,7 +3379,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3186,52 +3393,52 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-<tr>
-<th>agg_col1</th>
-<th>agg_col2</th>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>1</th>
-<th>1</th>
-<td>36</td>
-<td>40</td>
-<td>36</td>
-</tr>
-<tr>
-<th>0</th>
-<th>0</th>
-<td>73</td>
-<td>60</td>
-<td>73</td>
-</tr>
-<tr>
-<th>1</th>
-<th>0</th>
-<td>54</td>
-<td>60</td>
-<td>54</td>
-</tr>
-<tr>
-<th>0</th>
-<th>1</th>
-<td>27</td>
-<td>30</td>
-<td>27</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+    <tr>
+      <th>agg_col1</th>
+      <th>agg_col2</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <th>1</th>
+      <td>36</td>
+      <td>40</td>
+      <td>36</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <th>0</th>
+      <td>73</td>
+      <td>60</td>
+      <td>73</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <th>0</th>
+      <td>54</td>
+      <td>60</td>
+      <td>54</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <th>1</th>
+      <td>27</td>
+      <td>30</td>
+      <td>27</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -3241,7 +3448,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'agg_col1'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span><span class="s1">'max'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">:</span><span class="s1">'mean'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">:</span><span class="s1">'sum'</span><span class="p">})</span>
+<span></span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;agg_col1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span><span class="s1">&#39;sum&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
@@ -3251,7 +3458,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3265,34 +3472,34 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-<tr>
-<th>agg_col1</th>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>19</td>
-<td>9.0</td>
-<td>100</td>
-</tr>
-<tr>
-<th>1</th>
-<td>18</td>
-<td>10.0</td>
-<td>90</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+    <tr>
+      <th>agg_col1</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>19</td>
+      <td>9.0</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>18</td>
+      <td>10.0</td>
+      <td>90</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -3301,7 +3508,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'agg_col1'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span><span class="s1">'max'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">:</span><span class="s1">'mean'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">:</span><span class="s1">'sum'</span><span class="p">})</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;agg_col1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span><span class="s1">&#39;sum&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -3311,7 +3518,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3325,39 +3532,39 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-<tr>
-<th>agg_col1</th>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>19</td>
-<td>9.0</td>
-<td>100</td>
-</tr>
-<tr>
-<th>1</th>
-<td>18</td>
-<td>10.0</td>
-<td>90</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+    <tr>
+      <th>agg_col1</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>19</td>
+      <td>9.0</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>18</td>
+      <td>10.0</td>
+      <td>90</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
-</section>
-<section id="Transpose">
+</div>
+<div class="section" id="Transpose">
 <h3>Transpose<a class="headerlink" href="#Transpose" title="Permalink to this headline">¶</a></h3>
 <p>Transposing a dataframe, using either the <code class="docutils literal notranslate"><span class="pre">transpose</span></code> method or <code class="docutils literal notranslate"><span class="pre">T</span></code> property. Currently, all columns must have the same type. Transposing is not currently implemented in Dask-cuDF.</p>
 <div class="nbinput docutils container">
@@ -3365,7 +3572,7 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">sample</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">'b'</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]})</span>
+<span></span><span class="n">sample</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]})</span>
 <span class="n">sample</span>
 </pre></div>
 </div>
@@ -3376,7 +3583,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3390,30 +3597,30 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>1</td>
-<td>4</td>
-</tr>
-<tr>
-<th>1</th>
-<td>2</td>
-<td>5</td>
-</tr>
-<tr>
-<th>2</th>
-<td>3</td>
-<td>6</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>6</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -3432,7 +3639,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3446,33 +3653,33 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>0</th>
-<th>1</th>
-<th>2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>a</th>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-</tr>
-<tr>
-<th>b</th>
-<td>4</td>
-<td>5</td>
-<td>6</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
-</section>
-<section id="Time-Series">
+</div>
+<div class="section" id="Time-Series">
 <h3>Time Series<a class="headerlink" href="#Time-Series" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">DataFrames</span></code> supports <code class="docutils literal notranslate"><span class="pre">datetime</span></code> typed columns, which allow users to interact with and filter data based on specific timestamps.</p>
 <div class="nbinput docutils container">
@@ -3483,11 +3690,11 @@ dtype: int64
 <span></span><span class="kn">import</span> <span class="nn">datetime</span> <span class="k">as</span> <span class="nn">dt</span>
 
 <span class="n">date_df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-<span class="n">date_df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">'11/20/2018'</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">'D'</span><span class="p">)</span>
-<span class="n">date_df</span><span class="p">[</span><span class="s1">'value'</span><span class="p">]</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">date_df</span><span class="p">))</span>
+<span class="n">date_df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;11/20/2018&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
+<span class="n">date_df</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">date_df</span><span class="p">))</span>
 
-<span class="n">search_date</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s1">'2018-11-23'</span><span class="p">,</span> <span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">)</span>
-<span class="n">date_df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">'date &lt;= @search_date'</span><span class="p">)</span>
+<span class="n">search_date</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s1">&#39;2018-11-23&#39;</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">date_df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;date &lt;= @search_date&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -3497,7 +3704,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3511,35 +3718,35 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>date</th>
-<th>value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>2018-11-20</td>
-<td>0.986051</td>
-</tr>
-<tr>
-<th>1</th>
-<td>2018-11-21</td>
-<td>0.232034</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2018-11-22</td>
-<td>0.397617</td>
-</tr>
-<tr>
-<th>3</th>
-<td>2018-11-23</td>
-<td>0.103839</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2018-11-20</td>
+      <td>0.986051</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2018-11-21</td>
+      <td>0.232034</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2018-11-22</td>
+      <td>0.397617</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2018-11-23</td>
+      <td>0.103839</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -3549,7 +3756,7 @@ dtype: int64
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">date_ddf</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">from_cudf</span><span class="p">(</span><span class="n">date_df</span><span class="p">,</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">date_ddf</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">'date &lt;= @search_date'</span><span class="p">,</span> <span class="n">local_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">'search_date'</span><span class="p">:</span><span class="n">search_date</span><span class="p">})</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="n">date_ddf</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;date &lt;= @search_date&#39;</span><span class="p">,</span> <span class="n">local_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;search_date&#39;</span><span class="p">:</span><span class="n">search_date</span><span class="p">})</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -3559,7 +3766,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3573,40 +3780,40 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>date</th>
-<th>value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>2018-11-20</td>
-<td>0.986051</td>
-</tr>
-<tr>
-<th>1</th>
-<td>2018-11-21</td>
-<td>0.232034</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2018-11-22</td>
-<td>0.397617</td>
-</tr>
-<tr>
-<th>3</th>
-<td>2018-11-23</td>
-<td>0.103839</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2018-11-20</td>
+      <td>0.986051</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2018-11-21</td>
+      <td>0.232034</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2018-11-22</td>
+      <td>0.397617</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2018-11-23</td>
+      <td>0.103839</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
-</section>
-<section id="Categoricals">
+</div>
+<div class="section" id="Categoricals">
 <h3>Categoricals<a class="headerlink" href="#Categoricals" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">DataFrames</span></code> support categorical columns.</p>
 <div class="nbinput docutils container">
@@ -3614,8 +3821,8 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"id"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="s2">"grade"</span><span class="p">:[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">]})</span>
-<span class="n">gdf</span><span class="p">[</span><span class="s1">'grade'</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s1">'grade'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span></span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="s2">&quot;grade&quot;</span><span class="p">:[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">]})</span>
+<span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;grade&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;grade&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
 <span class="n">gdf</span>
 </pre></div>
 </div>
@@ -3626,7 +3833,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3640,45 +3847,45 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>id</th>
-<th>grade</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>1</td>
-<td>a</td>
-</tr>
-<tr>
-<th>1</th>
-<td>2</td>
-<td>b</td>
-</tr>
-<tr>
-<th>2</th>
-<td>3</td>
-<td>b</td>
-</tr>
-<tr>
-<th>3</th>
-<td>4</td>
-<td>a</td>
-</tr>
-<tr>
-<th>4</th>
-<td>5</td>
-<td>a</td>
-</tr>
-<tr>
-<th>5</th>
-<td>6</td>
-<td>e</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>grade</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>e</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -3698,7 +3905,7 @@ dtype: int64
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3712,45 +3919,45 @@ dtype: int64
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>id</th>
-<th>grade</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>1</td>
-<td>a</td>
-</tr>
-<tr>
-<th>1</th>
-<td>2</td>
-<td>b</td>
-</tr>
-<tr>
-<th>2</th>
-<td>3</td>
-<td>b</td>
-</tr>
-<tr>
-<th>3</th>
-<td>4</td>
-<td>a</td>
-</tr>
-<tr>
-<th>4</th>
-<td>5</td>
-<td>a</td>
-</tr>
-<tr>
-<th>5</th>
-<td>6</td>
-<td>e</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>grade</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>e</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -3770,7 +3977,7 @@ dtype: int64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-StringIndex(['a' 'b' 'e'], dtype='object')
+StringIndex([&#39;a&#39; &#39;b&#39; &#39;e&#39;], dtype=&#39;object&#39;)
 </pre></div></div>
 </div>
 <p>Accessing the underlying code values of each categorical observation.</p>
@@ -3822,11 +4029,11 @@ dtype: int8
 dtype: int8
 </pre></div></div>
 </div>
-</section>
-<section id="Converting-Data-Representation">
+</div>
+<div class="section" id="Converting-Data-Representation">
 <h3>Converting Data Representation<a class="headerlink" href="#Converting-Data-Representation" title="Permalink to this headline">¶</a></h3>
-</section>
-<section id="Pandas">
+</div>
+<div class="section" id="Pandas">
 <h3>Pandas<a class="headerlink" href="#Pandas" title="Permalink to this headline">¶</a></h3>
 <p>Converting a cuDF and Dask-cuDF <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> to a pandas <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>.</p>
 <div class="nbinput docutils container">
@@ -3844,7 +4051,7 @@ dtype: int8
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3858,58 +4065,58 @@ dtype: int8
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-<th>agg_col1</th>
-<th>agg_col2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-<td>2</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-<td>4</td>
-<td>1</td>
-<td>0</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>agg_col1</th>
+      <th>agg_col2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+      <td>4</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -3928,7 +4135,7 @@ dtype: int8
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3942,63 +4149,63 @@ dtype: int8
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-<th>agg_col1</th>
-<th>agg_col2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-<td>2</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-<td>4</td>
-<td>1</td>
-<td>0</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>agg_col1</th>
+      <th>agg_col2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+      <td>4</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
-</section>
-<section id="Numpy">
+</div>
+<div class="section" id="Numpy">
 <h3>Numpy<a class="headerlink" href="#Numpy" title="Permalink to this headline">¶</a></h3>
 <p>Converting a cuDF or Dask-cuDF <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> to a numpy <code class="docutils literal notranslate"><span class="pre">ndarray</span></code>.</p>
 <div class="nbinput docutils container">
@@ -4081,7 +4288,7 @@ array([[ 0, 19,  0,  1,  1],
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
+<span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -4100,7 +4307,7 @@ array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddf</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
+<span></span><span class="n">ddf</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -4114,8 +4321,8 @@ array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
        17, 18, 19])
 </pre></div></div>
 </div>
-</section>
-<section id="Arrow">
+</div>
+<div class="section" id="Arrow">
 <h3>Arrow<a class="headerlink" href="#Arrow" title="Permalink to this headline">¶</a></h3>
 <p>Converting a cuDF or Dask-cuDF <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> to a PyArrow <code class="docutils literal notranslate"><span class="pre">Table</span></code>.</p>
 <div class="nbinput docutils container">
@@ -4141,20 +4348,20 @@ agg_col1: int64
 agg_col2: int64
 metadata
 --------
-{b'pandas': b'{"index_columns": [{"kind": "range", "name": null, "start": 0, "'
-            b'stop": 20, "step": 1}], "column_indexes": [{"name": null, "field'
-            b'_name": null, "pandas_type": "unicode", "numpy_type": "object", '
-            b'"metadata": {"encoding": "UTF-8"}}], "columns": [{"name": "a", "'
-            b'field_name": "a", "pandas_type": "int64", "numpy_type": "int64",'
-            b' "metadata": null}, {"name": "b", "field_name": "b", "pandas_typ'
-            b'e": "int64", "numpy_type": "int64", "metadata": null}, {"name": '
-            b'"c", "field_name": "c", "pandas_type": "int64", "numpy_type": "i'
-            b'nt64", "metadata": null}, {"name": "agg_col1", "field_name": "ag'
-            b'g_col1", "pandas_type": "int64", "numpy_type": "int64", "metadat'
-            b'a": null}, {"name": "agg_col2", "field_name": "agg_col2", "panda'
-            b's_type": "int64", "numpy_type": "int64", "metadata": null}], "cr'
-            b'eator": {"library": "pyarrow", "version": "0.15.0"}, "pandas_ver'
-            b'sion": "0.25.3"}'}
+{b&#39;pandas&#39;: b&#39;{&#34;index_columns&#34;: [{&#34;kind&#34;: &#34;range&#34;, &#34;name&#34;: null, &#34;start&#34;: 0, &#34;&#39;
+            b&#39;stop&#34;: 20, &#34;step&#34;: 1}], &#34;column_indexes&#34;: [{&#34;name&#34;: null, &#34;field&#39;
+            b&#39;_name&#34;: null, &#34;pandas_type&#34;: &#34;unicode&#34;, &#34;numpy_type&#34;: &#34;object&#34;, &#39;
+            b&#39;&#34;metadata&#34;: {&#34;encoding&#34;: &#34;UTF-8&#34;}}], &#34;columns&#34;: [{&#34;name&#34;: &#34;a&#34;, &#34;&#39;
+            b&#39;field_name&#34;: &#34;a&#34;, &#34;pandas_type&#34;: &#34;int64&#34;, &#34;numpy_type&#34;: &#34;int64&#34;,&#39;
+            b&#39; &#34;metadata&#34;: null}, {&#34;name&#34;: &#34;b&#34;, &#34;field_name&#34;: &#34;b&#34;, &#34;pandas_typ&#39;
+            b&#39;e&#34;: &#34;int64&#34;, &#34;numpy_type&#34;: &#34;int64&#34;, &#34;metadata&#34;: null}, {&#34;name&#34;: &#39;
+            b&#39;&#34;c&#34;, &#34;field_name&#34;: &#34;c&#34;, &#34;pandas_type&#34;: &#34;int64&#34;, &#34;numpy_type&#34;: &#34;i&#39;
+            b&#39;nt64&#34;, &#34;metadata&#34;: null}, {&#34;name&#34;: &#34;agg_col1&#34;, &#34;field_name&#34;: &#34;ag&#39;
+            b&#39;g_col1&#34;, &#34;pandas_type&#34;: &#34;int64&#34;, &#34;numpy_type&#34;: &#34;int64&#34;, &#34;metadat&#39;
+            b&#39;a&#34;: null}, {&#34;name&#34;: &#34;agg_col2&#34;, &#34;field_name&#34;: &#34;agg_col2&#34;, &#34;panda&#39;
+            b&#39;s_type&#34;: &#34;int64&#34;, &#34;numpy_type&#34;: &#34;int64&#34;, &#34;metadata&#34;: null}], &#34;cr&#39;
+            b&#39;eator&#34;: {&#34;library&#34;: &#34;pyarrow&#34;, &#34;version&#34;: &#34;0.15.0&#34;}, &#34;pandas_ver&#39;
+            b&#39;sion&#34;: &#34;0.25.3&#34;}&#39;}
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -4181,28 +4388,28 @@ agg_col2: int64
 __index_level_0__: int64
 metadata
 --------
-{b'pandas': b'{"index_columns": ["__index_level_0__"], "column_indexes": [{"na'
-            b'me": null, "field_name": null, "pandas_type": "unicode", "numpy_'
-            b'type": "object", "metadata": {"encoding": "UTF-8"}}], "columns":'
-            b' [{"name": "a", "field_name": "a", "pandas_type": "int64", "nump'
-            b'y_type": "int64", "metadata": null}, {"name": "b", "field_name":'
-            b' "b", "pandas_type": "int64", "numpy_type": "int64", "metadata":'
-            b' null}, {"name": "c", "field_name": "c", "pandas_type": "int64",'
-            b' "numpy_type": "int64", "metadata": null}, {"name": "agg_col1", '
-            b'"field_name": "agg_col1", "pandas_type": "int64", "numpy_type": '
-            b'"int64", "metadata": null}, {"name": "agg_col2", "field_name": "'
-            b'agg_col2", "pandas_type": "int64", "numpy_type": "int64", "metad'
-            b'ata": null}, {"name": null, "field_name": "__index_level_0__", "'
-            b'pandas_type": "int64", "numpy_type": "int64", "metadata": null}]'
-            b', "creator": {"library": "pyarrow", "version": "0.15.0"}, "panda'
-            b's_version": "0.25.3"}'}
+{b&#39;pandas&#39;: b&#39;{&#34;index_columns&#34;: [&#34;__index_level_0__&#34;], &#34;column_indexes&#34;: [{&#34;na&#39;
+            b&#39;me&#34;: null, &#34;field_name&#34;: null, &#34;pandas_type&#34;: &#34;unicode&#34;, &#34;numpy_&#39;
+            b&#39;type&#34;: &#34;object&#34;, &#34;metadata&#34;: {&#34;encoding&#34;: &#34;UTF-8&#34;}}], &#34;columns&#34;:&#39;
+            b&#39; [{&#34;name&#34;: &#34;a&#34;, &#34;field_name&#34;: &#34;a&#34;, &#34;pandas_type&#34;: &#34;int64&#34;, &#34;nump&#39;
+            b&#39;y_type&#34;: &#34;int64&#34;, &#34;metadata&#34;: null}, {&#34;name&#34;: &#34;b&#34;, &#34;field_name&#34;:&#39;
+            b&#39; &#34;b&#34;, &#34;pandas_type&#34;: &#34;int64&#34;, &#34;numpy_type&#34;: &#34;int64&#34;, &#34;metadata&#34;:&#39;
+            b&#39; null}, {&#34;name&#34;: &#34;c&#34;, &#34;field_name&#34;: &#34;c&#34;, &#34;pandas_type&#34;: &#34;int64&#34;,&#39;
+            b&#39; &#34;numpy_type&#34;: &#34;int64&#34;, &#34;metadata&#34;: null}, {&#34;name&#34;: &#34;agg_col1&#34;, &#39;
+            b&#39;&#34;field_name&#34;: &#34;agg_col1&#34;, &#34;pandas_type&#34;: &#34;int64&#34;, &#34;numpy_type&#34;: &#39;
+            b&#39;&#34;int64&#34;, &#34;metadata&#34;: null}, {&#34;name&#34;: &#34;agg_col2&#34;, &#34;field_name&#34;: &#34;&#39;
+            b&#39;agg_col2&#34;, &#34;pandas_type&#34;: &#34;int64&#34;, &#34;numpy_type&#34;: &#34;int64&#34;, &#34;metad&#39;
+            b&#39;ata&#34;: null}, {&#34;name&#34;: null, &#34;field_name&#34;: &#34;__index_level_0__&#34;, &#34;&#39;
+            b&#39;pandas_type&#34;: &#34;int64&#34;, &#34;numpy_type&#34;: &#34;int64&#34;, &#34;metadata&#34;: null}]&#39;
+            b&#39;, &#34;creator&#34;: {&#34;library&#34;: &#34;pyarrow&#34;, &#34;version&#34;: &#34;0.15.0&#34;}, &#34;panda&#39;
+            b&#39;s_version&#34;: &#34;0.25.3&#34;}&#39;}
 </pre></div></div>
 </div>
-</section>
-<section id="Getting-Data-In/Out">
+</div>
+<div class="section" id="Getting-Data-In/Out">
 <h3>Getting Data In/Out<a class="headerlink" href="#Getting-Data-In/Out" title="Permalink to this headline">¶</a></h3>
-</section>
-<section id="CSV">
+</div>
+<div class="section" id="CSV">
 <h3>CSV<a class="headerlink" href="#CSV" title="Permalink to this headline">¶</a></h3>
 <p>Writing to a CSV file.</p>
 <div class="nbinput nblast docutils container">
@@ -4210,10 +4417,10 @@ metadata
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">'example_output'</span><span class="p">):</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s1">'example_output'</span><span class="p">)</span>
+<span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;example_output&#39;</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s1">&#39;example_output&#39;</span><span class="p">)</span>
 
-<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">'example_output/foo.csv'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;example_output/foo.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -4222,7 +4429,7 @@ metadata
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">'example_output/foo_dask.csv'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;example_output/foo_dask.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -4232,7 +4439,7 @@ metadata
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'example_output/foo.csv'</span><span class="p">)</span>
+<span></span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;example_output/foo.csv&#39;</span><span class="p">)</span>
 <span class="n">df</span>
 </pre></div>
 </div>
@@ -4243,7 +4450,7 @@ metadata
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -4257,178 +4464,178 @@ metadata
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-<th>agg_col1</th>
-<th>agg_col2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-<td>2</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-<td>4</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>5</th>
-<td>5</td>
-<td>14</td>
-<td>5</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>6</th>
-<td>6</td>
-<td>13</td>
-<td>6</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>7</th>
-<td>7</td>
-<td>12</td>
-<td>7</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>8</th>
-<td>8</td>
-<td>11</td>
-<td>8</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>9</th>
-<td>9</td>
-<td>10</td>
-<td>9</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>10</th>
-<td>10</td>
-<td>9</td>
-<td>10</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>11</th>
-<td>11</td>
-<td>8</td>
-<td>11</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>12</th>
-<td>12</td>
-<td>7</td>
-<td>12</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>13</th>
-<td>13</td>
-<td>6</td>
-<td>13</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>14</th>
-<td>14</td>
-<td>5</td>
-<td>14</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>15</th>
-<td>15</td>
-<td>4</td>
-<td>15</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>16</th>
-<td>16</td>
-<td>3</td>
-<td>16</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>17</th>
-<td>17</td>
-<td>2</td>
-<td>17</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>18</th>
-<td>18</td>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>19</th>
-<td>19</td>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-<td>0</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>agg_col1</th>
+      <th>agg_col2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+      <td>4</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>14</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>13</td>
+      <td>6</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>12</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>11</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>10</td>
+      <td>9</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>9</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>8</td>
+      <td>11</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>7</td>
+      <td>12</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>6</td>
+      <td>13</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>14</td>
+      <td>5</td>
+      <td>14</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>15</td>
+      <td>4</td>
+      <td>15</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>3</td>
+      <td>16</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17</td>
+      <td>2</td>
+      <td>17</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18</td>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>19</td>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -4437,7 +4644,7 @@ metadata
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddf</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'example_output/foo_dask.csv'</span><span class="p">)</span>
+<span></span><span class="n">ddf</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;example_output/foo_dask.csv&#39;</span><span class="p">)</span>
 <span class="n">ddf</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -4448,7 +4655,7 @@ metadata
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -4462,178 +4669,178 @@ metadata
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-<th>agg_col1</th>
-<th>agg_col2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-<td>2</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-<td>4</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>5</th>
-<td>5</td>
-<td>14</td>
-<td>5</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>6</th>
-<td>6</td>
-<td>13</td>
-<td>6</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>7</th>
-<td>7</td>
-<td>12</td>
-<td>7</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>8</th>
-<td>8</td>
-<td>11</td>
-<td>8</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>9</th>
-<td>9</td>
-<td>10</td>
-<td>9</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>10</th>
-<td>10</td>
-<td>9</td>
-<td>10</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>11</th>
-<td>11</td>
-<td>8</td>
-<td>11</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>12</th>
-<td>12</td>
-<td>7</td>
-<td>12</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>13</th>
-<td>13</td>
-<td>6</td>
-<td>13</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>14</th>
-<td>14</td>
-<td>5</td>
-<td>14</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>15</th>
-<td>15</td>
-<td>4</td>
-<td>15</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>16</th>
-<td>16</td>
-<td>3</td>
-<td>16</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>17</th>
-<td>17</td>
-<td>2</td>
-<td>17</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>18</th>
-<td>18</td>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>19</th>
-<td>19</td>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-<td>0</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>agg_col1</th>
+      <th>agg_col2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+      <td>4</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>14</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>13</td>
+      <td>6</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>12</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>11</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>10</td>
+      <td>9</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>9</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>8</td>
+      <td>11</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>7</td>
+      <td>12</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>6</td>
+      <td>13</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>14</td>
+      <td>5</td>
+      <td>14</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>15</td>
+      <td>4</td>
+      <td>15</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>3</td>
+      <td>16</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17</td>
+      <td>2</td>
+      <td>17</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18</td>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>19</td>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -4643,7 +4850,7 @@ metadata
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddf</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'example_output/*.csv'</span><span class="p">)</span>
+<span></span><span class="n">ddf</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;example_output/*.csv&#39;</span><span class="p">)</span>
 <span class="n">ddf</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -4654,7 +4861,7 @@ metadata
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -4668,343 +4875,343 @@ metadata
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-<th>agg_col1</th>
-<th>agg_col2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-<td>2</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-<td>4</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>5</th>
-<td>5</td>
-<td>14</td>
-<td>5</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>6</th>
-<td>6</td>
-<td>13</td>
-<td>6</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>7</th>
-<td>7</td>
-<td>12</td>
-<td>7</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>8</th>
-<td>8</td>
-<td>11</td>
-<td>8</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>9</th>
-<td>9</td>
-<td>10</td>
-<td>9</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>10</th>
-<td>10</td>
-<td>9</td>
-<td>10</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>11</th>
-<td>11</td>
-<td>8</td>
-<td>11</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>12</th>
-<td>12</td>
-<td>7</td>
-<td>12</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>13</th>
-<td>13</td>
-<td>6</td>
-<td>13</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>14</th>
-<td>14</td>
-<td>5</td>
-<td>14</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>15</th>
-<td>15</td>
-<td>4</td>
-<td>15</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>16</th>
-<td>16</td>
-<td>3</td>
-<td>16</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>17</th>
-<td>17</td>
-<td>2</td>
-<td>17</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>18</th>
-<td>18</td>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>19</th>
-<td>19</td>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-<td>2</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-<td>4</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>5</th>
-<td>5</td>
-<td>14</td>
-<td>5</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>6</th>
-<td>6</td>
-<td>13</td>
-<td>6</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>7</th>
-<td>7</td>
-<td>12</td>
-<td>7</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>8</th>
-<td>8</td>
-<td>11</td>
-<td>8</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>9</th>
-<td>9</td>
-<td>10</td>
-<td>9</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>10</th>
-<td>10</td>
-<td>9</td>
-<td>10</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>11</th>
-<td>11</td>
-<td>8</td>
-<td>11</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>12</th>
-<td>12</td>
-<td>7</td>
-<td>12</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>13</th>
-<td>13</td>
-<td>6</td>
-<td>13</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>14</th>
-<td>14</td>
-<td>5</td>
-<td>14</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>15</th>
-<td>15</td>
-<td>4</td>
-<td>15</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>16</th>
-<td>16</td>
-<td>3</td>
-<td>16</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>17</th>
-<td>17</td>
-<td>2</td>
-<td>17</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>18</th>
-<td>18</td>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>19</th>
-<td>19</td>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-<td>0</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>agg_col1</th>
+      <th>agg_col2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+      <td>4</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>14</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>13</td>
+      <td>6</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>12</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>11</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>10</td>
+      <td>9</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>9</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>8</td>
+      <td>11</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>7</td>
+      <td>12</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>6</td>
+      <td>13</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>14</td>
+      <td>5</td>
+      <td>14</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>15</td>
+      <td>4</td>
+      <td>15</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>3</td>
+      <td>16</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17</td>
+      <td>2</td>
+      <td>17</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18</td>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>19</td>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+      <td>4</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>14</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>13</td>
+      <td>6</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>12</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>11</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>10</td>
+      <td>9</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>9</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>8</td>
+      <td>11</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>7</td>
+      <td>12</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>6</td>
+      <td>13</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>14</td>
+      <td>5</td>
+      <td>14</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>15</td>
+      <td>4</td>
+      <td>15</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>3</td>
+      <td>16</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17</td>
+      <td>2</td>
+      <td>17</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18</td>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>19</td>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
-</section>
-<section id="Parquet">
+</div>
+<div class="section" id="Parquet">
 <h3>Parquet<a class="headerlink" href="#Parquet" title="Permalink to this headline">¶</a></h3>
 <p>Writing to parquet files, using the CPU via PyArrow.</p>
 <div class="nbinput nblast docutils container">
@@ -5012,7 +5219,7 @@ metadata
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s1">'example_output/temp_parquet'</span><span class="p">)</span>
+<span></span><span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s1">&#39;example_output/temp_parquet&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -5022,7 +5229,7 @@ metadata
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">'example_output/temp_parquet'</span><span class="p">)</span>
+<span></span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;example_output/temp_parquet&#39;</span><span class="p">)</span>
 <span class="n">df</span>
 </pre></div>
 </div>
@@ -5033,7 +5240,7 @@ metadata
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -5047,178 +5254,178 @@ metadata
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-<th>agg_col1</th>
-<th>agg_col2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>2</th>
-<td>2</td>
-<td>17</td>
-<td>2</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3</td>
-<td>16</td>
-<td>3</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>4</th>
-<td>4</td>
-<td>15</td>
-<td>4</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>5</th>
-<td>5</td>
-<td>14</td>
-<td>5</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>6</th>
-<td>6</td>
-<td>13</td>
-<td>6</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>7</th>
-<td>7</td>
-<td>12</td>
-<td>7</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>8</th>
-<td>8</td>
-<td>11</td>
-<td>8</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>9</th>
-<td>9</td>
-<td>10</td>
-<td>9</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>10</th>
-<td>10</td>
-<td>9</td>
-<td>10</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>11</th>
-<td>11</td>
-<td>8</td>
-<td>11</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>12</th>
-<td>12</td>
-<td>7</td>
-<td>12</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>13</th>
-<td>13</td>
-<td>6</td>
-<td>13</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>14</th>
-<td>14</td>
-<td>5</td>
-<td>14</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>15</th>
-<td>15</td>
-<td>4</td>
-<td>15</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<th>16</th>
-<td>16</td>
-<td>3</td>
-<td>16</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<th>17</th>
-<td>17</td>
-<td>2</td>
-<td>17</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<th>18</th>
-<td>18</td>
-<td>1</td>
-<td>18</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<th>19</th>
-<td>19</td>
-<td>0</td>
-<td>19</td>
-<td>0</td>
-<td>0</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>agg_col1</th>
+      <th>agg_col2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>17</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>16</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>15</td>
+      <td>4</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>14</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>13</td>
+      <td>6</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>12</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>11</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>10</td>
+      <td>9</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>9</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>8</td>
+      <td>11</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>7</td>
+      <td>12</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>6</td>
+      <td>13</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>14</td>
+      <td>5</td>
+      <td>14</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>15</td>
+      <td>4</td>
+      <td>15</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>3</td>
+      <td>16</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17</td>
+      <td>2</td>
+      <td>17</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18</td>
+      <td>1</td>
+      <td>18</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>19</td>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
@@ -5228,12 +5435,12 @@ metadata
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s1">'example_files'</span><span class="p">)</span>
+<span></span><span class="n">ddf</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s1">&#39;example_files&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-</section>
-<section id="ORC">
+</div>
+<div class="section" id="ORC">
 <h3>ORC<a class="headerlink" href="#ORC" title="Permalink to this headline">¶</a></h3>
 <p>Reading ORC files.</p>
 <div class="nbinput docutils container">
@@ -5241,7 +5448,7 @@ metadata
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df2</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_orc</span><span class="p">(</span><span class="s1">'/rapids/cudf/python/cudf/cudf/tests/data/orc/TestOrcFile.test1.orc'</span><span class="p">)</span>
+<span></span><span class="n">df2</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_orc</span><span class="p">(</span><span class="s1">&#39;/rapids/cudf/python/cudf/cudf/tests/data/orc/TestOrcFile.test1.orc&#39;</span><span class="p">)</span>
 <span class="n">df2</span>
 </pre></div>
 </div>
@@ -5252,7 +5459,7 @@ metadata
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -5266,72 +5473,72 @@ metadata
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>boolean1</th>
-<th>byte1</th>
-<th>short1</th>
-<th>int1</th>
-<th>long1</th>
-<th>float1</th>
-<th>double1</th>
-<th>bytes1</th>
-<th>string1</th>
-<th>middle.list.int1</th>
-<th>middle.list.string1</th>
-<th>list.int1</th>
-<th>list.string1</th>
-<th>map</th>
-<th>map.int1</th>
-<th>map.string1</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>False</td>
-<td>1</td>
-<td>1024</td>
-<td>65536</td>
-<td>9223372036854775807</td>
-<td>1.0</td>
-<td>-15.0</td>
-<td></td>
-<td>hi</td>
-<td>3</td>
-<td>bye</td>
-<td>4</td>
-<td></td>
-<td>chani</td>
-<td>5</td>
-<td>chani</td>
-</tr>
-<tr>
-<th>1</th>
-<td>True</td>
-<td>100</td>
-<td>2048</td>
-<td>65536</td>
-<td>9223372036854775807</td>
-<td>2.0</td>
-<td>-5.0</td>
-<td></td>
-<td>bye</td>
-<td>0</td>
-<td>bye</td>
-<td>0</td>
-<td></td>
-<td>mauddib</td>
-<td>1</td>
-<td>mauddib</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>boolean1</th>
+      <th>byte1</th>
+      <th>short1</th>
+      <th>int1</th>
+      <th>long1</th>
+      <th>float1</th>
+      <th>double1</th>
+      <th>bytes1</th>
+      <th>string1</th>
+      <th>middle.list.int1</th>
+      <th>middle.list.string1</th>
+      <th>list.int1</th>
+      <th>list.string1</th>
+      <th>map</th>
+      <th>map.int1</th>
+      <th>map.string1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>False</td>
+      <td>1</td>
+      <td>1024</td>
+      <td>65536</td>
+      <td>9223372036854775807</td>
+      <td>1.0</td>
+      <td>-15.0</td>
+      <td></td>
+      <td>hi</td>
+      <td>3</td>
+      <td>bye</td>
+      <td>4</td>
+      <td></td>
+      <td>chani</td>
+      <td>5</td>
+      <td>chani</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>True</td>
+      <td>100</td>
+      <td>2048</td>
+      <td>65536</td>
+      <td>9223372036854775807</td>
+      <td>2.0</td>
+      <td>-5.0</td>
+      <td></td>
+      <td>bye</td>
+      <td>0</td>
+      <td>bye</td>
+      <td>0</td>
+      <td></td>
+      <td>mauddib</td>
+      <td>1</td>
+      <td>mauddib</td>
+    </tr>
+  </tbody>
 </table>
 </div></div>
 </div>
-</section>
-<section id="Dask-Performance-Tips">
+</div>
+<div class="section" id="Dask-Performance-Tips">
 <h3>Dask Performance Tips<a class="headerlink" href="#Dask-Performance-Tips" title="Permalink to this headline">¶</a></h3>
 <p>Like Apache Spark, Dask operations are <a class="reference external" href="https://en.wikipedia.org/wiki/Lazy_evaluation">lazy</a>. Instead of being executed at that moment, most operations are added to a task graph and the actual evaluation is delayed until the result is needed.</p>
 <p>Sometimes, though, we want to force the execution of operations. Calling <code class="docutils literal notranslate"><span class="pre">persist</span></code> on a Dask collection fully computes it (or actively computes it in the background), persisting the result into memory. When we’re using distributed systems, we may want to wait until <code class="docutils literal notranslate"><span class="pre">persist</span></code> is finished before beginning any downstream operations. We can enforce this contract by using <code class="docutils literal notranslate"><span class="pre">wait</span></code>. Wrapping an operation with <code class="docutils literal notranslate"><span class="pre">wait</span></code> will ensure it doesn’t begin executing until all necessary upstream operations
@@ -5365,24 +5572,24 @@ have finished.</p>
 <td style="vertical-align: top; border: 0px solid white">
 <h3 style="text-align: left;">Client</h3>
 <ul style="text-align: left; list-style: none; margin: 0; padding: 0;">
-<li><b>Scheduler: </b>tcp://127.0.0.1:37255</li>
-<li><b>Dashboard: </b><a href="http://127.0.0.1:8787/status" target="_blank">http://127.0.0.1:8787/status</a></li>
+  <li><b>Scheduler: </b>tcp://127.0.0.1:37255</li>
+  <li><b>Dashboard: </b><a href='http://127.0.0.1:8787/status' target='_blank'>http://127.0.0.1:8787/status</a></li>
 </ul>
 </td>
 <td style="vertical-align: top; border: 0px solid white">
 <h3 style="text-align: left;">Cluster</h3>
 <ul style="text-align: left; list-style:none; margin: 0; padding: 0;">
-<li><b>Workers: </b>4</li>
-<li><b>Cores: </b>4</li>
-<li><b>Memory: </b>404.32 GB</li>
+  <li><b>Workers: </b>4</li>
+  <li><b>Cores: </b>4</li>
+  <li><b>Memory: </b>404.32 GB</li>
 </ul>
 </td>
 </tr>
 </table></div>
 </div>
-</section>
-</section>
-<section id="Persisting-Data">
+</div>
+</div>
+<div class="section" id="Persisting-Data">
 <h2>Persisting Data<a class="headerlink" href="#Persisting-Data" title="Permalink to this headline">¶</a></h2>
 <p>Next, we create our Dask-cuDF DataFrame and apply a transformation, storing the result as a new column.</p>
 <div class="nbinput docutils container">
@@ -5392,9 +5599,9 @@ have finished.</p>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">nrows</span> <span class="o">=</span> <span class="mi">10000000</span>
 
-<span class="n">df2</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrows</span><span class="p">),</span> <span class="s1">'b'</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrows</span><span class="p">)})</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrows</span><span class="p">),</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrows</span><span class="p">)})</span>
 <span class="n">ddf2</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">from_cudf</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">ddf2</span><span class="p">[</span><span class="s1">'c'</span><span class="p">]</span> <span class="o">=</span> <span class="n">ddf2</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="n">ddf2</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ddf2</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">5</span>
 <span class="n">ddf2</span>
 </pre></div>
 </div>
@@ -5406,7 +5613,7 @@ have finished.</p>
 <div class="output_area rendered_html docutils container">
 <div><strong>Dask DataFrame Structure:</strong></div>
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -5420,52 +5627,52 @@ have finished.</p>
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-<tr>
-<th>npartitions=5</th>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>int64</td>
-<td>int64</td>
-<td>int64</td>
-</tr>
-<tr>
-<th>2000000</th>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-<tr>
-<th>...</th>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-<tr>
-<th>8000000</th>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-<tr>
-<th>9999999</th>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+    <tr>
+      <th>npartitions=5</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>int64</td>
+      <td>int64</td>
+      <td>int64</td>
+    </tr>
+    <tr>
+      <th>2000000</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>8000000</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>9999999</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+  </tbody>
 </table>
 </div>
 <div>Dask Name: assign, 20 tasks</div></div>
@@ -5534,7 +5741,7 @@ Thu Jun  4 05:36:08 2020
 <div class="output_area rendered_html docutils container">
 <div><strong>Dask DataFrame Structure:</strong></div>
 <div>
-<style scoped="">
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -5548,52 +5755,52 @@ Thu Jun  4 05:36:08 2020
     }
 </style>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>a</th>
-<th>b</th>
-<th>c</th>
-</tr>
-<tr>
-<th>npartitions=5</th>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>int64</td>
-<td>int64</td>
-<td>int64</td>
-</tr>
-<tr>
-<th>2000000</th>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-<tr>
-<th>...</th>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-<tr>
-<th>8000000</th>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-<tr>
-<th>9999999</th>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+    <tr>
+      <th>npartitions=5</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>int64</td>
+      <td>int64</td>
+      <td>int64</td>
+    </tr>
+    <tr>
+      <th>2000000</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>8000000</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>9999999</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+  </tbody>
 </table>
 </div>
 <div>Dask Name: assign, 5 tasks</div></div>
@@ -5645,8 +5852,8 @@ Thu Jun  4 05:36:09 2020
 </pre></div></div>
 </div>
 <p>Because we forced computation, we now have a larger object in distributed GPU memory.</p>
-</section>
-<section id="Wait">
+</div>
+<div class="section" id="Wait">
 <h2>Wait<a class="headerlink" href="#Wait" title="Permalink to this headline">¶</a></h2>
 <p>Depending on our workflow or distributed computing setup, we may want to <code class="docutils literal notranslate"><span class="pre">wait</span></code> until all upstream tasks have finished before proceeding with a specific function. This section shows an example of this behavior, adapted from the Dask documentation.</p>
 <p>First, we create a new Dask DataFrame and define a function that we’ll map to every partition in the dataframe.</p>
@@ -5657,7 +5864,7 @@ Thu Jun  4 05:36:09 2020
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">nrows</span> <span class="o">=</span> <span class="mi">10000000</span>
 
-<span class="n">df1</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrows</span><span class="p">),</span> <span class="s1">'b'</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrows</span><span class="p">)})</span>
+<span class="n">df1</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrows</span><span class="p">),</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">cp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrows</span><span class="p">)})</span>
 <span class="n">ddf1</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">from_cudf</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
@@ -5693,44 +5900,47 @@ Thu Jun  4 05:36:09 2020
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-DoneAndNotDoneFutures(done={&lt;Future: finished, type: cudf.DataFrame, key: ('func-9bb5c8a87fdfc7be52f8be0d02f5d274', 2)&gt;, &lt;Future: finished, type: cudf.DataFrame, key: ('func-9bb5c8a87fdfc7be52f8be0d02f5d274', 3)&gt;, &lt;Future: finished, type: cudf.DataFrame, key: ('func-9bb5c8a87fdfc7be52f8be0d02f5d274', 4)&gt;, &lt;Future: finished, type: cudf.DataFrame, key: ('func-9bb5c8a87fdfc7be52f8be0d02f5d274', 0)&gt;, &lt;Future: finished, type: cudf.DataFrame, key: ('func-9bb5c8a87fdfc7be52f8be0d02f5d274', 1)&gt;}, not_done=set())
+DoneAndNotDoneFutures(done={&lt;Future: finished, type: cudf.DataFrame, key: (&#39;func-9bb5c8a87fdfc7be52f8be0d02f5d274&#39;, 2)&gt;, &lt;Future: finished, type: cudf.DataFrame, key: (&#39;func-9bb5c8a87fdfc7be52f8be0d02f5d274&#39;, 3)&gt;, &lt;Future: finished, type: cudf.DataFrame, key: (&#39;func-9bb5c8a87fdfc7be52f8be0d02f5d274&#39;, 4)&gt;, &lt;Future: finished, type: cudf.DataFrame, key: (&#39;func-9bb5c8a87fdfc7be52f8be0d02f5d274&#39;, 0)&gt;, &lt;Future: finished, type: cudf.DataFrame, key: (&#39;func-9bb5c8a87fdfc7be52f8be0d02f5d274&#39;, 1)&gt;}, not_done=set())
 </pre></div></div>
 </div>
 <p>With <code class="docutils literal notranslate"><span class="pre">wait</span></code>, we can safely proceed on in our workflow.</p>
-</section>
-</section>
 </div>
 </div>
-<footer>
-<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-<a accesskey="n" class="btn btn-neutral float-right" href="basics.html" rel="next" title="Basics">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
-<a accesskey="p" class="btn btn-neutral float-left" href="api.html" rel="prev" title="cuDF API Reference"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
-</div>
-<hr/>
-<div role="contentinfo">
-<p>
-        © Copyright 2018-2021, NVIDIA.
 
-    </p>
-</div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+    
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2018-2021, NVIDIA.<br/>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+</p>
+    </div>
+    
+  </div>
 </footer>
-</div>
-</div>
-</section>
-</div>
-<script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script></body>
+  </body>
 </html>
