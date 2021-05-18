@@ -31,7 +31,7 @@ The RAPIDS team is aware of the impacts that public API changes cause to users, 
 
 ## Release types and tagging
 
-Using CalVer for versioning, RAPIDS projects use the notation `YY.MM.PP` for releases/tags where `YY` indicates the zero padded year, `MM` indicates the zero padded month, and `PP` indicates the hotfix/patch version. Each release is accompanied by a tag in the git repo with the same formatting and leading `v`.
+Using CalVer for versioning, RAPIDS projects use the notation `YY.MM.PP` for releases/tags where `YY` indicates the zero padded year, `MM` indicates the zero padded month, and `PP` indicates the zero padded hotfix/patch version. Each release is accompanied by a tag in the git repo with the same formatting and leading `v`.
 
 ### Hotfix/Patch
 
