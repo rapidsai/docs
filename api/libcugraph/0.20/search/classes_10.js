@@ -1,7 +1,12 @@
 var searchData=
 [
-  ['update_5ftuple_5ffrom_5fvector_5fof_5ftuple_5fscalar_5felements_5fimpl_393',['update_tuple_from_vector_of_tuple_scalar_elements_impl',['../structcugraph_1_1experimental_1_1detail_1_1update__tuple__from__vector__of__tuple__scalar__elements__impl.html',1,'cugraph::experimental::detail']]],
-  ['update_5ftuple_5ffrom_5fvector_5fof_5ftuple_5fscalar_5felements_5fimpl_3c_20tupletype_2c_20i_2c_20i_20_3e_394',['update_tuple_from_vector_of_tuple_scalar_elements_impl&lt; TupleType, I, I &gt;',['../structcugraph_1_1experimental_1_1detail_1_1update__tuple__from__vector__of__tuple__scalar__elemea84ffc5f863c5ef4b2520a3681b825c2.html',1,'cugraph::experimental::detail']]],
-  ['update_5fvector_5fof_5ftuple_5fscalar_5felements_5ffrom_5ftuple_5fimpl_395',['update_vector_of_tuple_scalar_elements_from_tuple_impl',['../structcugraph_1_1experimental_1_1detail_1_1update__vector__of__tuple__scalar__elements__from__tuple__impl.html',1,'cugraph::experimental::detail']]],
-  ['update_5fvector_5fof_5ftuple_5fscalar_5felements_5ffrom_5ftuple_5fimpl_3c_20tupletype_2c_20i_2c_20i_20_3e_396',['update_vector_of_tuple_scalar_elements_from_tuple_impl&lt; TupleType, I, I &gt;',['../structcugraph_1_1experimental_1_1detail_1_1update__vector__of__tuple__scalar__elements__from__tu7242d85cdf051837f0217fe5dbd84837.html',1,'cugraph::experimental::detail']]]
+  ['scc_5fdata_393',['SCC_Data',['../structSCC__Data.html',1,'']]],
+  ['self_5floop_5fflagger_394',['self_loop_flagger',['../structself__loop__flagger.html',1,'']]],
+  ['set_5fnth_5fbit_395',['set_nth_bit',['../structcugraph_1_1mg_1_1detail_1_1set__nth__bit.html',1,'cugraph::mg::detail']]],
+  ['shrink_5fto_5ffit_5fdataframe_5fbuffer_5ftuple_5fiterator_5felement_5fimpl_396',['shrink_to_fit_dataframe_buffer_tuple_iterator_element_impl',['../structcugraph_1_1experimental_1_1detail_1_1shrink__to__fit__dataframe__buffer__tuple__iterator__element__impl.html',1,'cugraph::experimental::detail']]],
+  ['shrink_5fto_5ffit_5fdataframe_5fbuffer_5ftuple_5fiterator_5felement_5fimpl_3c_20tupletype_2c_20buffertype_2c_20i_2c_20i_20_3e_397',['shrink_to_fit_dataframe_buffer_tuple_iterator_element_impl&lt; TupleType, BufferType, I, I &gt;',['../structcugraph_1_1experimental_1_1detail_1_1shrink__to__fit__dataframe__buffer__tuple__iterator__d8458c4fa1345cbe24a0d3fdc6c0ff37.html',1,'cugraph::experimental::detail']]],
+  ['sorteduniquekeybucket_398',['SortedUniqueKeyBucket',['../classcugraph_1_1experimental_1_1SortedUniqueKeyBucket.html',1,'cugraph::experimental']]],
+  ['square_399',['square',['../structcugraph_1_1detail_1_1square.html',1,'cugraph::detail']]],
+  ['sssp_400',['SSSP',['../classcugraph_1_1detail_1_1SSSP.html',1,'cugraph::detail']]],
+  ['subcomm_5ffactory_5ft_401',['subcomm_factory_t',['../classcugraph_1_1partition__2d_1_1subcomm__factory__t.html',1,'cugraph::partition_2d']]]
 ];
