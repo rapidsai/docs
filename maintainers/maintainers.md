@@ -29,22 +29,22 @@ Operations
 
 Phase | Start | End | Duration
 -- | -- | -- | --
-Development (cuDF/RMM) | Thu, Mar 25 | Tue, May 18 | 39 days
-Development (others) | Thu, Apr 1 | Tue, May 25 | 39 days
-[Burn Down]({% link releases/process.md %}#burn-down)(cuDF/RMM) | Wed, May 19 | Tue, May 25 | 5 days
-[Burn Down]({% link releases/process.md %}#burn-down) (others) | Wed, May 26 | Wed, Jun 2 | 5 days
-[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM) | Wed, May 26 | Wed, Jun 2 | 4 days
-[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | Thu, Jun 3 | Tue, Jun 8 | 4 days
-[Release]({% link releases/process.md %}#releasing) | Wed, Jun 9 | Thu, Jun 10 | 2 days
+Development (cuDF/RMM) | {{ site.data.releases.nightly.cudf_dev.start | date: "%a, %b %e" }} | {{ site.data.releases.nightly.cudf_dev.end | date: "%a, %b %e" }} | {{ site.data.releases.nightly.cudf_dev.days }} days
+Development (others) | {{ site.data.releases.nightly.other_dev.start | date: "%a, %b %e" }} | {{ site.data.releases.nightly.other_dev.end | date: "%a, %b %e" }} | {{ site.data.releases.nightly.other_dev.days }} days
+[Burn Down]({% link releases/process.md %}#burn-down)(cuDF/RMM) | {{ site.data.releases.nightly.cudf_burndown.start | date: "%a, %b %e" }} | {{ site.data.releases.nightly.cudf_burndown.end | date: "%a, %b %e" }} | {{ site.data.releases.nightly.cudf_burndown.days }} days
+[Burn Down]({% link releases/process.md %}#burn-down) (others) | {{ site.data.releases.nightly.other_burndown.start | date: "%a, %b %e" }} | {{ site.data.releases.nightly.other_burndown.end | date: "%a, %b %e" }} | {{ site.data.releases.nightly.other_burndown.days }} days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM) | {{ site.data.releases.nightly.cudf_codefreeze.start | date: "%a, %b %e" }} | {{ site.data.releases.nightly.cudf_codefreeze.end | date: "%a, %b %e" }} | {{ site.data.releases.nightly.cudf_codefreeze.days }} days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | {{ site.data.releases.nightly.other_codefreeze.start | date: "%a, %b %e" }} | {{ site.data.releases.nightly.other_codefreeze.end | date: "%a, %b %e" }} | {{ site.data.releases.nightly.other_codefreeze.days }} days
+[Release]({% link releases/process.md %}#releasing) | {{ site.data.releases.nightly.release.start | date: "%a, %b %e" }} | {{ site.data.releases.nightly.release.end | date: "%a, %b %e" }} | {{ site.data.releases.nightly.release.days }} days
 
-## _PROPOSED_ Release v21.08 Schedule
+## _PROPOSED_ Release v{{ site.data.releases.next_nightly.version }} Schedule
 
 Phase | Start | End | Duration
 -- | -- | -- | --
-Development (cuDF/RMM) | Wed, May 19 | Wed, Jul 14 | 39 days
-Development (others) | Wed, May 26 | Wed, Jul 21 | 39 days
-[Burn Down]({% link releases/process.md %}#burn-down)(cuDF/RMM) | Wed, Jul 14 | Tue, Jul 20 | 5 days
-[Burn Down]({% link releases/process.md %}#burn-down) (others) | Wed, Jul 21 | Wed, Jul 28 | 6 days
-[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM) | Wed, Jul 21 | Wed, Jul 28 | 6 days
-[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | Thu, Jul 29 | Tue, Aug 3 | 4 days
-[Release]({% link releases/process.md %}#releasing) | Wed, Aug 4 | Thu, Aug 5 | 2 days
+Development (cuDF/RMM) | {{ site.data.releases.next_nightly.cudf_dev.start | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.cudf_dev.end | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.cudf_dev.days }} days
+Development (others) | {{ site.data.releases.next_nightly.other_dev.start | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.other_dev.end | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.other_dev.days }} days
+[Burn Down]({% link releases/process.md %}#burn-down)(cuDF/RMM) | {{ site.data.releases.next_nightly.cudf_burndown.start | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.cudf_burndown.end | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.cudf_burndown.days }} days
+[Burn Down]({% link releases/process.md %}#burn-down) (others) | {{ site.data.releases.next_nightly.other_burndown.start | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.other_burndown.end | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.other_burndown.days }} days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM) | {{ site.data.releases.next_nightly.cudf_codefreeze.start | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.cudf_codefreeze.end | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.cudf_codefreeze.days }} days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | {{ site.data.releases.next_nightly.other_codefreeze.start | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.other_codefreeze.end | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.other_codefreeze.days }} days
+[Release]({% link releases/process.md %}#releasing) | {{ site.data.releases.next_nightly.release.start | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.release.end | date: "%a, %b %e" }} | {{ site.data.releases.next_nightly.release.days }} days

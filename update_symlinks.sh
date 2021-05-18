@@ -2,61 +2,56 @@
 #######################################
 # Updates or removes all symlinked folders based on the given positional parameter
 #######################################
-set -e
+set -eEo pipefail
 
 display_usage() {
   echo "Usage:"
-  echo " - update_symlinks 19 ## updates symlinks to use 19 as nightly version"
-  echo " - update_symlinks rm ## removes all current symlinks"
+  echo " - update_symlinks        # updates symlinks to match versions in _data/releases.json"
+  echo " - update_symlinks rm     # removes all current symlinks"
 }
 
-if [[ $# -eq 0 ]]; then
+# If there is more than one argument, or if there is one argument that's not "rm"
+# then show usage info and exit.
+if [[ $# -eq "1" && "$1" != "rm" ]] || [[ $# -gt 1 ]]; then
   display_usage
   exit 1
 fi
 
-PROJ_ROOT=$(pwd)
+PROJ_ROOT=$(dirname $(realpath $0))
 
-if [ "${1}" = "rm" ]; then
-  RM_SYMLINKS="true"
-  echo "Removing symlinks..."
-else
-  RM_SYMLINKS="false"
-  NIGHTLY_VERSION="${1}"
-  STABLE_FOLDER=$(echo "0.$((${NIGHTLY_VERSION} - 1))")
-  LEGACY_FOLDER=$(echo "0.$((${NIGHTLY_VERSION} - 2))")
-  NIGHTLY_FOLDER=$(echo "0.$((${NIGHTLY_VERSION}))")
+echo "Removing existing symlinks..."
+find ${PROJ_ROOT} -type l -ls -delete > /dev/null
+
+if [[ "$1" == "rm" ]]; then
+  exit 0
 fi
 
+STABLE_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.stable.version')
+LEGACY_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.legacy.version')
+NIGHTLY_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.nightly.version')
+
+echo "Updating symlinks..."
+echo ""
 for FOLDER in api/*/ ; do
 
   cd ${FOLDER}
   echo ""
   echo "${FOLDER}--------"
 
-  # Remove existing symlinks
-  rm -rf legacy stable latest nightly
+  if [ -d "${STABLE_FOLDER}" ]; then
+    ln -s ${STABLE_FOLDER} stable
+    ln -s ${STABLE_FOLDER} latest
+    echo "  - stable & latest point to ${STABLE_FOLDER}"
+  fi
 
-  if [ "${RM_SYMLINKS}" == "true" ]; then
-    echo "  - symlinks removed"
+  if [ -d "${LEGACY_FOLDER}" ]; then
+    ln -s ${LEGACY_FOLDER} legacy
+    echo "  - legacy points to ${LEGACY_FOLDER}"
+  fi
 
-  elif [ "${RM_SYMLINKS}" == "false" ]; then
-
-    if [ -d "${STABLE_FOLDER}" ]; then
-      ln -s ${STABLE_FOLDER} stable
-      ln -s ${STABLE_FOLDER} latest
-      echo "  - stable & latest point to ${STABLE_FOLDER}"
-    fi
-
-    if [ -d "${LEGACY_FOLDER}" ]; then
-      ln -s ${LEGACY_FOLDER} legacy
-      echo "  - legacy points to ${LEGACY_FOLDER}"
-    fi
-
-    if [ -d "${NIGHTLY_FOLDER}" ]; then
-      ln -s ${NIGHTLY_FOLDER} nightly
-      echo "  - nightly points to ${NIGHTLY_FOLDER}"
-    fi
+  if [ -d "${NIGHTLY_FOLDER}" ]; then
+    ln -s ${NIGHTLY_FOLDER} nightly
+    echo "  - nightly points to ${NIGHTLY_FOLDER}"
   fi
 
   echo "---------------"
