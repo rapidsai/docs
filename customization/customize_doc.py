@@ -8,17 +8,20 @@ import os
 from bs4 import BeautifulSoup
 
 FILEPATH = sys.argv[1]
-NIGHTLY_VERSION = int(sys.argv[2])
 
 LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
+RELEASES_PATH = os.path.join(os.path.dirname(__file__), "../", "_data", "releases.json")
 
-VERSIONS_DICT = {
-    "nightly": NIGHTLY_VERSION,
-    "stable": NIGHTLY_VERSION - 1,
-    "legacy": NIGHTLY_VERSION - 2,
-}
 with open(LIB_MAP_PATH) as fp:
     LIB_PATH_DICT = json.load(fp)
+
+with open(RELEASES_PATH) as fp:
+    release_data = json.load(fp)
+    VERSIONS_DICT = {
+        "nightly": release_data["nightly"]["version"],
+        "stable": release_data["stable"]["version"],
+        "legacy": release_data["legacy"]["version"],
+    }
 
 SCRIPT_TAG_ID = "rapids-selector-js"
 STYLE_TAG_ID = "rapids-selector-css"
@@ -30,14 +33,14 @@ def get_version_from_fp():
     Determines if the current HTML document is for legacy, stable, or nightly versions
     based on the file path
     """
-    match = re.search(r"0.\d{1,3}", FILEPATH)
-    version_number = int(match[0].split(".")[1])
+    match = re.search(r"/(\d?\d\.\d\d)/", FILEPATH)
+    version_number_str = match.group(1)
     version_name = "stable"
-    if version_number > VERSIONS_DICT["stable"]:
+    if version_number_str > VERSIONS_DICT["stable"]:
         version_name = "nightly"
-    if version_number < VERSIONS_DICT["stable"]:
+    if version_number_str < VERSIONS_DICT["stable"]:
         version_name = "legacy"
-    return {"name": version_name, "number": version_number}
+    return {"name": version_name, "number": version_number_str}
 
 
 def get_lib_from_fp():
@@ -97,12 +100,12 @@ def create_version_options():
         (_, path) for _, path in LIB_PATH_DICT[doc_lib].items() if path is not None
     ]:
         if (doc_is_extra_legacy and version_name == "legacy") or (doc_is_extra_nightly and version_name == "nightly"):
-            version_number = doc_version["number"]
+            version_number_str = doc_version["number"]
         else:
-            version_number = VERSIONS_DICT[version_name]
+            version_number_str = VERSIONS_DICT[version_name]
         is_selected = False
         option_href = version_path
-        version_text = f"{version_name} (0.{str(version_number)})"
+        version_text = f"{version_name} ({version_number_str})"
         if version_name == doc_version["name"]:
             print(f"default version: {version_name}")
             is_selected = True

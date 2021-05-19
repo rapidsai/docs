@@ -5,16 +5,25 @@
 # root directory
 #
 # Usage:
-# customization/customize_docs_in_folder.sh api/ 13
+# customization/customize_docs_in_folder.sh api/
 #
 # Positional Arguments:
 #   1) FOLDER_TO_CUSTOMIZE: project root relative folder to customize (i.e. api/, api/rmm, etc.)
-#   2) CURRENT_NIGHTLY_VERSION: current RAPIDS nightly version (i.e. 13, 14, 15, etc.)
 #######################################
 set -e
 
+display_usage() {
+  echo "Usage:"
+  echo " - customization/customize_docs_in_folder.sh api/       # update files in api/ folder"
+  echo " - customization/customize_docs_in_folder.sh api/cudf   # update files in api/cudf folder"
+}
+
 FOLDER_TO_CUSTOMIZE=$1
-CURRENT_NIGHTLY_VERSION=$2
+
+if [[ $# -ne 1 ]]; then
+  display_usage
+  exit 1
+fi
 
 if [ ! -d "${FOLDER_TO_CUSTOMIZE}" ]; then
   echo "Couldn't find subfolder: ${FOLDER_TO_CUSTOMIZE}"
@@ -35,7 +44,7 @@ for FILE in $(grep "${SPHINX_SEARCH_TERM}\|${DOXYGEN_SEARCH_TERM}" -rl \
   --exclude-dir=latest \
   --exclude-dir=legacy \
   ${FOLDER_TO_CUSTOMIZE} ); do
-  python ${SCRIPT_SRC_FOLDER}/customize_doc.py $(realpath ${FILE}) ${CURRENT_NIGHTLY_VERSION}
+  python ${SCRIPT_SRC_FOLDER}/customize_doc.py $(realpath ${FILE})
   echo "" # line break for readability
 done
 IFS="$OIFS"
