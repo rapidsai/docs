@@ -90,7 +90,7 @@ Many users do not need a specific platform combination but would like to ensure 
 ```bash
 $ docker pull rapidsai/rapidsai:{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 $ docker run --gpus all --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
-         rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
+         rapidsai/rapidsai:{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
 **NOTE:** This will open a shell with [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) running in the background on port 8888 on your host machine.
 
@@ -98,7 +98,7 @@ $ docker run --gpus all --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
 ```bash
 $ docker pull rapidsai/rapidsai:{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 $ docker run --runtime=nvidia --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
-         rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
+         rapidsai/rapidsai:{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
 **NOTE:** This will open a shell with [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) running in the background on port 8888 on your host machine.
 
