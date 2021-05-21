@@ -59,6 +59,40 @@
       <arglist>(device_memory_resource *new_mr)</arglist>
     </member>
   </compound>
+  <compound kind="class">
+    <name>rmm::mr::aligned_resource_adaptor</name>
+    <filename>classrmm_1_1mr_1_1aligned__resource__adaptor.html</filename>
+    <templarg></templarg>
+    <base>rmm::mr::device_memory_resource</base>
+    <member kind="function">
+      <type></type>
+      <name>aligned_resource_adaptor</name>
+      <anchorfile>classrmm_1_1mr_1_1aligned__resource__adaptor.html</anchorfile>
+      <anchor>a32642af1a577ae930d76a8aa350656a2</anchor>
+      <arglist>(Upstream *upstream, std::size_t allocation_alignment=rmm::detail::CUDA_ALLOCATION_ALIGNMENT, std::size_t alignment_threshold=default_alignment_threshold)</arglist>
+    </member>
+    <member kind="function">
+      <type>Upstream *</type>
+      <name>get_upstream</name>
+      <anchorfile>classrmm_1_1mr_1_1aligned__resource__adaptor.html</anchorfile>
+      <anchor>aa88f4b97ef458b2389251da4eb0e50a1</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>supports_streams</name>
+      <anchorfile>classrmm_1_1mr_1_1aligned__resource__adaptor.html</anchorfile>
+      <anchor>ae135f9e461944cce4897117bf9547423</anchor>
+      <arglist>() const noexcept override</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>supports_get_mem_info</name>
+      <anchorfile>classrmm_1_1mr_1_1aligned__resource__adaptor.html</anchorfile>
+      <anchor>a13fe7429db0d9ec7847ce8907065eb33</anchor>
+      <arglist>() const noexcept override</arglist>
+    </member>
+  </compound>
   <compound kind="struct">
     <name>rmm::mr::tracking_resource_adaptor::allocation_info</name>
     <filename>structrmm_1_1mr_1_1tracking__resource__adaptor_1_1allocation__info.html</filename>
@@ -1669,8 +1703,8 @@
       <type></type>
       <name>limiting_resource_adaptor</name>
       <anchorfile>classrmm_1_1mr_1_1limiting__resource__adaptor.html</anchorfile>
-      <anchor>ace34d73d5251628ef769f3666ce8fe0b</anchor>
-      <arglist>(Upstream *upstream, std::size_t allocation_limit, std::size_t allocation_alignment=256)</arglist>
+      <anchor>a185d1deae69ab1c8ffa112d6e588db1b</anchor>
+      <arglist>(Upstream *upstream, std::size_t allocation_limit, std::size_t allocation_alignment=rmm::detail::CUDA_ALLOCATION_ALIGNMENT)</arglist>
     </member>
     <member kind="function">
       <type>Upstream *</type>
@@ -2033,13 +2067,13 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>rmm::mr::stream_allocator_adaptor::rebind</name>
-    <filename>structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html</filename>
+    <name>rmm::mr::thrust_allocator::rebind</name>
+    <filename>structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html</filename>
     <templarg></templarg>
   </compound>
   <compound kind="struct">
-    <name>rmm::mr::thrust_allocator::rebind</name>
-    <filename>structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html</filename>
+    <name>rmm::mr::stream_allocator_adaptor::rebind</name>
+    <filename>structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html</filename>
     <templarg></templarg>
   </compound>
   <compound kind="struct">
