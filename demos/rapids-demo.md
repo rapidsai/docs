@@ -69,10 +69,10 @@ The tag naming scheme for RAPIDS images incorporates key platform details into t
 
 To get the latest RAPIDS version of a specific platform combination, simply exclude the RAPIDS version.  For example, to pull the latest version of RAPIDS for the `runtime` image with support for CUDA {{ CUDA_VER }}, Python {{ PYTHON_VER }}, and Ubuntu 18.04, use the following tag:
 ```
-cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
+{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
 
-Many users do not need a specific platform combination but would like to ensure they're getting the latest version of RAPIDS, so as an additional convenience, a tag named simply `latest` is also provided which is equivalent to `cuda{{ CUDA_VER }}-runtime-ubuntu16.04-py{{ PYTHON_VER }}`.
+Many users do not need a specific platform combination but would like to ensure they're getting the latest version of RAPIDS, so as an additional convenience, a tag named simply `latest` is also provided which is equivalent to `{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-ubuntu18.04-py{{ PYTHON_VER }}`.
 
 ## Prerequisites
 
@@ -88,7 +88,7 @@ Many users do not need a specific platform combination but would like to ensure 
 
 #### Preferred - Docker CE v19+ and `nvidia-container-toolkit`
 ```bash
-$ docker pull rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
+$ docker pull rapidsai/rapidsai:{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 $ docker run --gpus all --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
          rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
@@ -96,7 +96,7 @@ $ docker run --gpus all --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
 
 #### Legacy - Docker CE v18 and `nvidia-docker2`
 ```bash
-$ docker pull rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
+$ docker pull rapidsai/rapidsai:{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 $ docker run --runtime=nvidia --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
          rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
@@ -111,8 +111,8 @@ Notebooks can be found in the following directories within the {{ STABLE_VER }} 
 * `/rapids/notebooks/cuml` - cuML demo notebooks
 * `/rapids/notebooks/cusignal` - cuSignal demo notebooks
 * `/rapids/notebooks/cuxfilter` - cuXfilter demo notebooks
-* `/rapids/notebooks/cuxfilter` - BlazingSQL demo notebooks
-* `/blazing/Welcome_to_BlazingSQL_Notebooks` - XGBoost demo notebooks
+* `/rapids/notebooks/xgboost` - XGBoost demo notebooks
+* `/blazing/Welcome_to_BlazingSQL_Notebooks` - BlazingSQL demo notebooks
 
 For a full description of each notebook, see the [README](https://github.com/rapidsai/notebooks/blob/branch-{{ STABLE_VER }}/README.md) in the notebooks repository.
 
@@ -124,14 +124,14 @@ You are free to modify the above steps. For example, you can launch an interacti
 ```bash
 $ docker run --gpus all --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
          -v /path/to/host/data:/rapids/my_data \
-                  rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
+                  rapidsai/rapidsai:{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
 
 #### Legacy - Docker CE v18 and `nvidia-docker2`
 ```bash
 $ docker run --runtime=nvidia --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
          -v /path/to/host/data:/rapids/my_data \
-                  rapidsai/rapidsai:cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
+                  rapidsai/rapidsai:{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
 This will map data from your host operating system to the container OS in the `/rapids/my_data` directory. You may need to modify the provided notebooks for the new data paths.
 
