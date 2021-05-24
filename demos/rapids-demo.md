@@ -69,7 +69,7 @@ The tag naming scheme for RAPIDS images incorporates key platform details into t
 
 To get the latest RAPIDS version of a specific platform combination, simply exclude the RAPIDS version.  For example, to pull the latest version of RAPIDS for the `runtime` image with support for CUDA {{ CUDA_VER }}, Python {{ PYTHON_VER }}, and Ubuntu {{ UBUNTU_VER }}, use the following tag:
 ```
-{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
+cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
 
 Many users do not need a specific platform combination but would like to ensure they're getting the latest version of RAPIDS, so as an additional convenience, a tag named simply `latest` is also provided which is equivalent to `{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-ubuntu18.04-py{{ PYTHON_VER }}`.
