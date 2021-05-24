@@ -127,7 +127,7 @@ git pull <rapidsai remote>
 git checkout branch-{{ site.data.releases.nightly.version }}
 git pull <rapidsai remote>
 git checkout -b branch-{{ site.data.releases.nightly.version }}-merge-{{ site.data.releases.stable.version }}
-git merge branch-{{ site.data.releases.stable.version }}
+git merge --no-squash branch-{{ site.data.releases.stable.version }}
 # Fix any merge conflicts caused by this merge
 git commit -am "Merge branch-{{ site.data.releases.stable.version }} into branch-{{ site.data.releases.nightly.version }}"
 git push <personal fork> branch-{{ site.data.releases.nightly.version }}-merge-{{ site.data.releases.stable.version }}
