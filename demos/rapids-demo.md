@@ -72,7 +72,7 @@ To get the latest RAPIDS version of a specific platform combination, simply excl
 cuda{{ CUDA_VER }}-runtime-{{ UBUNTU_VER }}-py{{ PYTHON_VER }}
 ```
 
-Many users do not need a specific platform combination but would like to ensure they're getting the latest version of RAPIDS, so as an additional convenience, a tag named simply `latest` is also provided which is equivalent to `{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-ubuntu18.04-py{{ PYTHON_VER }}`.
+Many users do not need a specific platform combination but would like to ensure they're getting the latest version of RAPIDS, so as an additional convenience, a tag named simply `latest` is also provided which is equivalent to `{{ STABLE_VER }}-cuda{{ CUDA_VER }}-runtime-ubuntu{{ UBUNTU_VER }}-py{{ PYTHON_VER }}`.
 
 ## Prerequisites
 
