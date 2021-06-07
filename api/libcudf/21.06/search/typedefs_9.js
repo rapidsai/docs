@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unique_2927',['Unique',['../type__list__utilities_8hpp.html#af31dc0e8a0f6b72d8ea657546d0a3ec4',1,'cudf::test']]]
+  ['scalar_5ftype_5ft_2944',['scalar_type_t',['../group__utility__dispatcher.html#ga9446c2558fd01c19f5fb5fa33927586f',1,'cudf']]]
 ];

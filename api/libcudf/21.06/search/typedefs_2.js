@@ -1,9 +1,11 @@
 var searchData=
 [
-  ['device_5fstorage_5ftype_5ft_2909',['device_storage_type_t',['../group__utility__dispatcher.html#gaaf82d369fbe20da0d4a99c0481dd9fea',1,'cudf']]],
-  ['duration_5fd_2910',['duration_D',['../group__timestamp__classes.html#ga6a45112033b50dfa4988d71a0817131c',1,'cudf']]],
-  ['duration_5fms_2911',['duration_ms',['../group__timestamp__classes.html#ga70b6b95d45de41529211d95531fa3f86',1,'cudf']]],
-  ['duration_5fns_2912',['duration_ns',['../group__timestamp__classes.html#ga4efdb8225ec7e415ab3c660c066aa3ee',1,'cudf']]],
-  ['duration_5fs_2913',['duration_s',['../group__timestamp__classes.html#gae344db373c1568bd20e914cb74426519',1,'cudf']]],
-  ['duration_5fus_2914',['duration_us',['../group__timestamp__classes.html#gab8e261e3e2a11e8464efb2a251c107d7',1,'cudf']]]
+  ['call_2923',['Call',['../structcudf_1_1test_1_1ContainedIn.html#a699bfd4643ac344c790b352d9a9c1f9e',1,'cudf::test::ContainedIn']]],
+  ['char_5futf8_2924',['char_utf8',['../namespacecudf.html#a0b75348b715cc23b1a6f8b5cf03589cc',1,'cudf']]],
+  ['concat_2925',['Concat',['../type__list__utilities_8hpp.html#a884a121bef3c0bae548829702e1f6868',1,'cudf::test']]],
+  ['const_5foptional_5fiterator_2926',['const_optional_iterator',['../classcudf_1_1column__device__view.html#a75411f8c08adf41e6bbce4a6f67e9f68',1,'cudf::column_device_view']]],
+  ['const_5fpair_5fiterator_2927',['const_pair_iterator',['../classcudf_1_1column__device__view.html#a6ba2524280de16bad20259f274579b45',1,'cudf::column_device_view']]],
+  ['const_5fpair_5frep_5fiterator_2928',['const_pair_rep_iterator',['../classcudf_1_1column__device__view.html#ae3282a126ed79638e7c8b976f00222e7',1,'cudf::column_device_view']]],
+  ['count_5fit_2929',['count_it',['../classcudf_1_1column__device__view.html#a2a79cf9dbd5b057d222f5dc7f708b994',1,'cudf::column_device_view::count_it()'],['../classcudf_1_1mutable__column__device__view.html#a51d7e8489feafb9b6404f5d8450f45a6',1,'cudf::mutable_column_device_view::count_it()']]],
+  ['crossproduct_2930',['CrossProduct',['../type__list__utilities_8hpp.html#a9bc77db3bcfd7690cc697c7a6dda074d',1,'cudf::test']]]
 ];

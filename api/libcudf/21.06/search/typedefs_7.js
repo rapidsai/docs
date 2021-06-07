@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['scalar_5ftype_5ft_2920',['scalar_type_t',['../group__utility__dispatcher.html#ga9446c2558fd01c19f5fb5fa33927586f',1,'cudf']]]
+  ['no_5fstatistics_2941',['no_statistics',['../namespacecudf_1_1io.html#a9f776ed5167dffd65625471a7bdb3996',1,'cudf::io']]]
 ];

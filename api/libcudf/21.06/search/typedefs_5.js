@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['id_5fto_5ftype_2917',['id_to_type',['../group__utility__dispatcher.html#gad7e12b8accf60e7c0e500294e1ee8536',1,'cudf']]]
+  ['gettype_2939',['GetType',['../type__list__utilities_8hpp.html#afd069722f69b38e1c0aa0a0d0b9d291a',1,'cudf::test']]]
 ];
