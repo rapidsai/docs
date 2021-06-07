@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['forest_5ft_2161',['forest_t',['../namespaceML_1_1fil.html#a71195542fb2df9fa46374176402fb4fa',1,'ML::fil']]],
-  ['fragmenta_2162',['FragmentA',['../structMLCommon_1_1LinAlg_1_1ThreadDiffSquaredAdd.html#af352fe5e0476bd7b85a991dc5944fb22',1,'MLCommon::LinAlg::ThreadDiffSquaredAdd::FragmentA()'],['../structMLCommon_1_1LinAlg_1_1ThreadL1NormAdd.html#a0a3a86fde537db8245b1e04b24130800',1,'MLCommon::LinAlg::ThreadL1NormAdd::FragmentA()']]],
-  ['fragmentb_2163',['FragmentB',['../structMLCommon_1_1LinAlg_1_1ThreadDiffSquaredAdd.html#a4876355754f7be69de55693f6e898920',1,'MLCommon::LinAlg::ThreadDiffSquaredAdd::FragmentB()'],['../structMLCommon_1_1LinAlg_1_1ThreadL1NormAdd.html#a529f28e1e35fc231617c572707c54c03',1,'MLCommon::LinAlg::ThreadL1NormAdd::FragmentB()']]]
+  ['dataptrt_2569',['DataPtrT',['../classML_1_1Tensor.html#a12b3b571e03378ec0116fd1ef310dc96',1,'ML::Tensor']]],
+  ['device_5fbuffer_2570',['device_buffer',['../namespaceMLCommon.html#a967795be8b4131317013e1009d83ebce',1,'MLCommon']]],
+  ['difference_5ftype_2571',['difference_type',['../classML_1_1stdAllocatorAdapter.html#a0f7916bdb04b1c687957562a56e2915f',1,'ML::stdAllocatorAdapter']]]
 ];

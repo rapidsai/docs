@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['graphbaseddimredcallback_1179',['GraphBasedDimRedCallback',['../classML_1_1Internals_1_1GraphBasedDimRedCallback.html',1,'ML::Internals']]]
+  ['fixconnectivitiesredop_1385',['FixConnectivitiesRedOp',['../structML_1_1HDBSCAN_1_1FixConnectivitiesRedOp.html',1,'ML::HDBSCAN']]]
 ];

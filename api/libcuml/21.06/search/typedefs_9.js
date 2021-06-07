@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['other_2170',['other',['../structML_1_1stdAllocatorAdapter_1_1rebind.html#a02e7e1c70b915d58321ef075044655ca',1,'ML::stdAllocatorAdapter::rebind']]]
+  ['modelhandle_2581',['ModelHandle',['../treelite__defs_8hpp.html#af55d689ab3378ed1dd2e821b3650672a',1,'treelite_defs.hpp']]]
 ];

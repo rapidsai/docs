@@ -1,4 +1,8 @@
 var searchData=
 [
-  ['value_5ftype_2190',['value_type',['../classML_1_1stdAllocatorAdapter.html#a93b047335075d5531d91160fb6b423b0',1,'ML::stdAllocatorAdapter::value_type()'],['../classML_1_1thrustAllocatorAdapter.html#a198a8fff4d9c74fc55d788ba07e0ea6b',1,'ML::thrustAllocatorAdapter::value_type()']]]
+  ['threadsperwarp_2598',['ThreadsPerWarp',['../structMLCommon_1_1LinAlg_1_1ThreadDiffSquaredAdd.html#a11840b326f2ac8319f8efac2a5914429',1,'MLCommon::LinAlg::ThreadDiffSquaredAdd::ThreadsPerWarp()'],['../structMLCommon_1_1LinAlg_1_1ThreadL1NormAdd.html#a2dd59ba9c62ebf7f687d27a6e461fbdf',1,'MLCommon::LinAlg::ThreadL1NormAdd::ThreadsPerWarp()']]],
+  ['treeclassifierd_2599',['TreeClassifierD',['../namespaceML_1_1DecisionTree.html#a1ac0ff3e12f3cbb52d294fee78027b51',1,'ML::DecisionTree']]],
+  ['treeclassifierf_2600',['TreeClassifierF',['../namespaceML_1_1DecisionTree.html#a428aa9ffa6efb6a74a89622783719160',1,'ML::DecisionTree']]],
+  ['treeregressord_2601',['TreeRegressorD',['../namespaceML_1_1DecisionTree.html#a73cc2dd066e0fa813de346d60b25cc79',1,'ML::DecisionTree']]],
+  ['treeregressorf_2602',['TreeRegressorF',['../namespaceML_1_1DecisionTree.html#a2215ac7294e3f1de00ccd8662886cdaa',1,'ML::DecisionTree']]]
 ];

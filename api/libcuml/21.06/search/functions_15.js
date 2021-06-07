@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['v_5fmeasure_1853',['v_measure',['../namespaceML_1_1Metrics.html#a2dc4fec50164fed43ba2af4dddef8a94',1,'ML::Metrics']]],
-  ['validity_5fcheck_1854',['validity_check',['../namespaceML.html#a69f0169515a838c25ba3080b48ae2ceb',1,'ML::validity_check()'],['../namespaceML_1_1DecisionTree.html#a32cb57785f3a194af22b7288ddb8442f',1,'ML::DecisionTree::validity_check()']]],
-  ['view_1855',['view',['../classML_1_1Tensor.html#a8e16bd37248b8f197689a1f2b47cd81c',1,'ML::Tensor']]]
+  ['unpack_2155',['unpack',['../structML_1_1ARIMAParams.html#a590e07d69618982b6d4fe821978a8c11',1,'ML::ARIMAParams::unpack()'],['../namespaceML.html#a62e41ec81cdf10cea7be42c97eca6b32',1,'ML::unpack()']]],
+  ['update_5fperm_5fshap_5fvalues_2156',['update_perm_shap_values',['../namespaceML_1_1Explainer.html#aeda7c71cbee6299e0f4ab7e7d751522d',1,'ML::Explainer::update_perm_shap_values(const raft::handle_t &amp;handle, float *shap_values, const float *y_hat, const int ncols, const int *idx)'],['../namespaceML_1_1Explainer.html#a5654c681f26c503ec706c9daa12fa3a0',1,'ML::Explainer::update_perm_shap_values(const raft::handle_t &amp;handle, double *shap_values, const double *y_hat, const int ncols, const int *idx)']]]
 ];

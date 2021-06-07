@@ -1,15 +1,20 @@
 var searchData=
 [
-  ['base_5ffit_1601',['base_fit',['../classML_1_1DecisionTree_1_1DecisionTreeBase.html#a2f28b8d60ef12c3a71ddfa15f20640ae',1,'ML::DecisionTree::DecisionTreeBase']]],
-  ['batched_5fdiff_1602',['batched_diff',['../namespaceML.html#aa0653c7b782547550d2d8df07038e28a',1,'ML']]],
-  ['batched_5fjones_5ftransform_1603',['batched_jones_transform',['../namespaceML.html#a1b3ecb77a2af6ef294f2b05eca4037ee',1,'ML']]],
-  ['batched_5fkalman_5ffilter_1604',['batched_kalman_filter',['../namespaceML.html#a7b41fea6f2923aac90b27f01c5f9149e',1,'ML']]],
-  ['batched_5floglike_1605',['batched_loglike',['../namespaceML.html#a8d434323e4d805be8320a5d517bbd8b9',1,'ML::batched_loglike(raft::handle_t &amp;handle, const double *d_y, int batch_size, int n_obs, const ARIMAOrder &amp;order, const double *d_params, double *loglike, double *d_vs, bool trans=true, bool host_loglike=true, LoglikeMethod method=MLE, int truncate=0, int fc_steps=0, double *d_fc=nullptr, double level=0, double *d_lower=nullptr, double *d_upper=nullptr)'],['../namespaceML.html#ab751422ded5ed3ec53f5f138d8bdcca4',1,'ML::batched_loglike(raft::handle_t &amp;handle, const double *d_y, int batch_size, int n_obs, const ARIMAOrder &amp;order, const ARIMAParams&lt; double &gt; &amp;params, double *loglike, double *d_vs, bool trans=true, bool host_loglike=true, LoglikeMethod method=MLE, int truncate=0, int fc_steps=0, double *d_fc=nullptr, double level=0, double *d_lower=nullptr, double *d_upper=nullptr)']]],
-  ['batched_5floglike_5fgrad_1606',['batched_loglike_grad',['../namespaceML.html#a38169d12d519a05e0e6c255efc45d004',1,'ML']]],
-  ['begin_1607',['begin',['../classML_1_1Tensor.html#aebf360f9cd06ddc9fe2419817aec1fa6',1,'ML::Tensor']]],
-  ['brute_5fforce_5fknn_1608',['brute_force_knn',['../namespaceML.html#a5bcb25fe2fd014d74ea5afb5eae005d3',1,'ML::brute_force_knn()'],['../namespaceML_1_1Sparse.html#ac4d417662d13a53835023ef2a03f6b98',1,'ML::Sparse::brute_force_knn()']]],
-  ['buffer_5fsize_1609',['buffer_size',['../namespaceML_1_1HoltWinters.html#a5582fc7cab5b09de5fbf3af030775810',1,'ML::HoltWinters']]],
-  ['build_5fdivision_5fmap_1610',['build_division_map',['../namespaceML.html#a27ed4fdb2f62155d0a1fd81f1405a779',1,'ML']]],
-  ['build_5ftreelite_5fforest_1611',['build_treelite_forest',['../namespaceML.html#a684813418506a4839a61692008e4cfb9',1,'ML']]],
-  ['build_5ftreelite_5ftree_1612',['build_treelite_tree',['../namespaceML_1_1DecisionTree.html#aa756a1262fbb2919af7236b2e5365e27',1,'ML::DecisionTree']]]
+  ['accuracy_5fscore_5fpy_1832',['accuracy_score_py',['../namespaceML_1_1Metrics.html#abc92c52ec9c021f29a417f43ee14eca7',1,'ML::Metrics']]],
+  ['address_1833',['address',['../classML_1_1stdAllocatorAdapter.html#a948c85409c1321ca8882de07fc53f9f9',1,'ML::stdAllocatorAdapter::address(reference ref) const'],['../classML_1_1stdAllocatorAdapter.html#ac3030e92b8bd4c6aedaf250d05ce3149',1,'ML::stdAllocatorAdapter::address(const_reference ref) const']]],
+  ['adjusted_5frand_5findex_1834',['adjusted_rand_index',['../namespaceML_1_1Metrics.html#ae58883e5e90a23da83325a0361edfdfb',1,'ML::Metrics::adjusted_rand_index(const raft::handle_t &amp;handle, const int64_t *y, const int64_t *y_hat, const int64_t n)'],['../namespaceML_1_1Metrics.html#aa8e585b9c4fc2c505a2b082cdcb4665d',1,'ML::Metrics::adjusted_rand_index(const raft::handle_t &amp;handle, const int *y, const int *y_hat, const int n)']]],
+  ['alloc_5fknn_5fgraph_1835',['alloc_knn_graph',['../structML_1_1manifold__inputs__t.html#a0051c11e69ced5fb0642ff7b418f7b7d',1,'ML::manifold_inputs_t::alloc_knn_graph()'],['../structML_1_1manifold__dense__inputs__t.html#a9fae7f2b5e38441ca16c895172cd8389',1,'ML::manifold_dense_inputs_t::alloc_knn_graph()'],['../structML_1_1manifold__sparse__inputs__t.html#aa29d83eb40392b035bf7baa5d2941f44',1,'ML::manifold_sparse_inputs_t::alloc_knn_graph()'],['../structML_1_1manifold__precomputed__knn__inputs__t.html#a5ebd112c4f0dedab56d63cbb7ddbfb37',1,'ML::manifold_precomputed_knn_inputs_t::alloc_knn_graph()']]],
+  ['allocate_1836',['allocate',['../structML_1_1ARIMAParams.html#a62462dc429d819e0f99c79a584230649',1,'ML::ARIMAParams::allocate()'],['../classML_1_1stdAllocatorAdapter.html#ae8525d10d75d2f6b3dedf8f501dae528',1,'ML::stdAllocatorAdapter::allocate()'],['../classML_1_1thrustAllocatorAdapter.html#a79c63e8eda95c93407d9bad16e9f0e33',1,'ML::thrustAllocatorAdapter::allocate()']]],
+  ['append_5fbuffer_1837',['append_buffer',['../structML_1_1ARIMAMemory.html#ab8b611c719b4884c41e3367891aedf77',1,'ML::ARIMAMemory']]],
+  ['approx_5fknn_5fbuild_5findex_1838',['approx_knn_build_index',['../namespaceML.html#afe64edbcd9d438d62eef462cddad346a',1,'ML']]],
+  ['approx_5fknn_5fsearch_1839',['approx_knn_search',['../namespaceML.html#a85840e42938d39c7ba89168601e2854a',1,'ML']]],
+  ['arimamemory_1840',['ARIMAMemory',['../structML_1_1ARIMAMemory.html#ab589910e59e55e9f22f85e122d393cb6',1,'ML::ARIMAMemory::ARIMAMemory(const ARIMAOrder &amp;order, int batch_size, int n_obs)'],['../structML_1_1ARIMAMemory.html#ada6796da65550247d3afd00d01cf29a8',1,'ML::ARIMAMemory::ARIMAMemory(const ARIMAOrder &amp;order, int batch_size, int n_obs, char *in_buf)']]],
+  ['arity_1841',['arity',['../structcuml_1_1genetic_1_1node.html#a81ce488c9d1fe041c2f17ca0149ae3fc',1,'cuml::genetic::node']]],
+  ['assign_5fbinary_1842',['assign_binary',['../structML_1_1SimpleDenseMat.html#a2ca9486bd6593800d70e8b9322ec03ce',1,'ML::SimpleDenseMat']]],
+  ['assign_5fgemm_1843',['assign_gemm',['../structML_1_1SimpleDenseMat.html#a34cb8005a18dbf9d69ae43354cb7606f',1,'ML::SimpleDenseMat']]],
+  ['assign_5fgemv_1844',['assign_gemv',['../structML_1_1SimpleVec.html#aa338c87d5f530e9b19c886fab2626729',1,'ML::SimpleVec']]],
+  ['assign_5fternary_1845',['assign_ternary',['../structML_1_1SimpleDenseMat.html#ab94727777e38496c2a3b3b5519a244a8',1,'ML::SimpleDenseMat']]],
+  ['assign_5funary_1846',['assign_unary',['../structML_1_1SimpleDenseMat.html#a90b8b30dbd76c689f29b03d7415a1cbb',1,'ML::SimpleDenseMat']]],
+  ['ax_1847',['ax',['../structML_1_1SimpleDenseMat.html#a498569e1fcd6750b8672312479b4fe7e',1,'ML::SimpleDenseMat']]],
+  ['axpy_1848',['axpy',['../structML_1_1SimpleDenseMat.html#a6de94161ce495acbc6c6131b550741e1',1,'ML::SimpleDenseMat']]]
 ];

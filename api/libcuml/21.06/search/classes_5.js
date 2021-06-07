@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['ivfflatparam_1181',['IVFFlatParam',['../structML_1_1IVFFlatParam.html',1,'ML']]],
-  ['ivfparam_1182',['IVFParam',['../structML_1_1IVFParam.html',1,'ML']]],
-  ['ivfpqparam_1183',['IVFPQParam',['../structML_1_1IVFPQParam.html',1,'ML']]],
-  ['ivfsqparam_1184',['IVFSQParam',['../structML_1_1IVFSQParam.html',1,'ML']]]
+  ['handlemap_1387',['HandleMap',['../classML_1_1HandleMap.html',1,'ML']]],
+  ['hdbscan_5foutput_1388',['hdbscan_output',['../classML_1_1HDBSCAN_1_1Common_1_1hdbscan__output.html',1,'ML::HDBSCAN::Common']]],
+  ['hdbscanparams_1389',['HDBSCANParams',['../classML_1_1HDBSCAN_1_1Common_1_1HDBSCANParams.html',1,'ML::HDBSCAN::Common']]]
 ];
