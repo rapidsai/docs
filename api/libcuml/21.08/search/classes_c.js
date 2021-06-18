@@ -1,13 +1,15 @@
 var searchData=
 [
-  ['pack_1411',['Pack',['../structML_1_1Dbscan_1_1AdjGraph_1_1Pack.html',1,'ML::Dbscan::AdjGraph::Pack&lt; Index_ &gt;'],['../structML_1_1Dbscan_1_1VertexDeg_1_1Pack.html',1,'ML::Dbscan::VertexDeg::Pack&lt; Type, Index_ &gt;']]],
-  ['param_1412',['param',['../structcuml_1_1genetic_1_1param.html',1,'cuml::genetic']]],
-  ['params_1413',['params',['../classML_1_1params.html',1,'ML']]],
-  ['paramspcatemplate_1414',['paramsPCATemplate',['../classML_1_1paramsPCATemplate.html',1,'ML']]],
-  ['paramsrproj_1415',['paramsRPROJ',['../structML_1_1paramsRPROJ.html',1,'ML']]],
-  ['paramssolver_1416',['paramsSolver',['../classML_1_1paramsSolver.html',1,'ML']]],
-  ['paramstsvdtemplate_1417',['paramsTSVDTemplate',['../classML_1_1paramsTSVDTemplate.html',1,'ML']]],
-  ['paramstsvdtemplate_3c_20solver_20_3e_1418',['paramsTSVDTemplate&lt; solver &gt;',['../classML_1_1paramsTSVDTemplate.html',1,'ML']]],
-  ['patternsetter_1419',['PatternSetter',['../classML_1_1PatternSetter.html',1,'ML']]],
-  ['program_1420',['program',['../structcuml_1_1genetic_1_1program.html',1,'cuml::genetic']]]
+  ['rand_5fmat_1299',['rand_mat',['../structML_1_1rand__mat.html',1,'ML']]],
+  ['randomforestmetadata_1300',['RandomForestMetaData',['../structML_1_1RandomForestMetaData.html',1,'ML']]],
+  ['rebind_1301',['rebind',['../structML_1_1stdAllocatorAdapter_1_1rebind.html',1,'ML::stdAllocatorAdapter']]],
+  ['rf_1302',['rf',['../classML_1_1rf.html',1,'ML']]],
+  ['rf_3c_20t_2c_20int_20_3e_1303',['rf&lt; T, int &gt;',['../classML_1_1rf.html',1,'ML']]],
+  ['rf_3c_20t_2c_20t_20_3e_1304',['rf&lt; T, T &gt;',['../classML_1_1rf.html',1,'ML']]],
+  ['rf_5fmetrics_1305',['RF_metrics',['../structML_1_1RF__metrics.html',1,'ML']]],
+  ['rf_5fparams_1306',['RF_params',['../structML_1_1RF__params.html',1,'ML']]],
+  ['rfclassifier_1307',['rfClassifier',['../classML_1_1rfClassifier.html',1,'ML']]],
+  ['rfregressor_1308',['rfRegressor',['../classML_1_1rfRegressor.html',1,'ML']]],
+  ['robust_5fsingle_5flinkage_5foutput_1309',['robust_single_linkage_output',['../classML_1_1HDBSCAN_1_1Common_1_1robust__single__linkage__output.html',1,'ML::HDBSCAN::Common']]],
+  ['robustsinglelinkageparams_1310',['RobustSingleLinkageParams',['../classML_1_1HDBSCAN_1_1Common_1_1RobustSingleLinkageParams.html',1,'ML::HDBSCAN::Common']]]
 ];

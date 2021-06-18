@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['ivfflatparam_1392',['IVFFlatParam',['../structML_1_1IVFFlatParam.html',1,'ML']]],
-  ['ivfparam_1393',['IVFParam',['../structML_1_1IVFParam.html',1,'ML']]],
-  ['ivfpqparam_1394',['IVFPQParam',['../structML_1_1IVFPQParam.html',1,'ML']]],
-  ['ivfsqparam_1395',['IVFSQParam',['../structML_1_1IVFSQParam.html',1,'ML']]]
+  ['kernelparams_1276',['KernelParams',['../structMLCommon_1_1Matrix_1_1KernelParams.html',1,'MLCommon::Matrix']]],
+  ['kmeansparams_1277',['KMeansParams',['../structML_1_1kmeans_1_1KMeansParams.html',1,'ML::kmeans']]],
+  ['knn_5fgraph_1278',['knn_graph',['../structML_1_1knn__graph.html',1,'ML']]]
 ];

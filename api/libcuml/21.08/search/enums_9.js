@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['quantizertype_2626',['QuantizerType',['../namespaceML.html#afe38bfbbab4fa672be59b329e7decc17',1,'ML']]]
+  ['random_5fmatrix_5ftype_2404',['random_matrix_type',['../group__paramsRPROJ.html#ga134c8dc1d94a4ee420679aec61849e2b',1,'ML']]],
+  ['rf_5ftype_2405',['RF_type',['../namespaceML.html#a4d83b99fe769e2e9bf3596bb1604ab4f',1,'ML']]]
 ];
