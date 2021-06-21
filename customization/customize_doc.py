@@ -218,8 +218,7 @@ def delete_existing_elements(soup):
         doxygen_title_area,
         f"#{SCRIPT_TAG_ID}",
         f"#{STYLE_TAG_ID}",
-        f"#{FA_TAG_ID}",
-        "#rapids-sphinx-container" # old sphinx-selector. this can be removed once no more HTML files contain this element (i.e. after they're all re-processed)
+        f"#{FA_TAG_ID}"
     ]:
         delete_element(soup, element)
 
