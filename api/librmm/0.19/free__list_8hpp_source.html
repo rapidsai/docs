@@ -1,20 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta content="text/xhtml;charset=utf-8" http-equiv="Content-Type"/>
-<meta content="IE=9" http-equiv="X-UA-Compatible"/>
-<meta content="Doxygen 1.8.20" name="generator"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta content="text/xhtml;charset=utf-8" http-equiv="Content-Type">
+<meta content="IE=9" http-equiv="X-UA-Compatible">
+<meta content="Doxygen 1.8.20" name="generator">
+<meta content="width=device-width, initial-scale=1" name="viewport">
 <title>RMM: free_list.hpp Source File</title>
-<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="tabs.css" rel="stylesheet" type="text/css">
 <script src="jquery.js" type="text/javascript"></script>
 <script src="dynsections.js" type="text/javascript"></script>
-<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<link href="search/search.css" rel="stylesheet" type="text/css">
 <script src="search/searchdata.js" type="text/javascript"></script>
 <script src="search/search.js" type="text/javascript"></script>
-<link href="doxygen.css" rel="stylesheet" type="text/css"/>
-<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" id="rapids-fa-tag" rel="stylesheet"/><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"/></head>
+<link href="doxygen.css" rel="stylesheet" type="text/css">
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" id="rapids-fa-tag" rel="stylesheet"><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <div id="titlearea"><div id="rapids-doxygen-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">librmm</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/api.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable/api.html">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">legacy (0.19)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/librmm/nightly/annotated.html">nightly (21.08)</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">stable (21.06)</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/librmm/legacy/annotated.html">legacy (0.19)</a></div></div></div>
@@ -54,103 +52,103 @@ $(function() {
 <div class="title">free_list.hpp</div> </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span> <span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span> <span class="comment"> * Copyright (c) 2019-2020, NVIDIA CORPORATION.</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span> <span class="comment"> *</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span> <span class="comment"> * Licensed under the Apache License, Version 2.0 (the "License");</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span> <span class="comment"> * you may not use this file except in compliance with the License.</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span> <span class="comment"> * You may obtain a copy of the License at</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span> <span class="comment"> *</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span> <span class="comment"> *     http://www.apache.org/licenses/LICENSE-2.0</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span> <span class="comment"> *</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span> <span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span> <span class="comment"> * distributed under the License is distributed on an "AS IS" BASIS,</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span> <span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span> <span class="comment"> * See the License for the specific language governing permissions and</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span> <span class="comment"> * limitations under the License.</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span> <span class="comment"> */</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>  </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span> <span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>  </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span> <span class="preprocessor">#include &lt;algorithm&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span> <span class="preprocessor">#include &lt;iostream&gt;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span> <span class="preprocessor">#include &lt;list&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>  </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span> <span class="keyword">namespace </span>rmm {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span> <span class="keyword">namespace </span>mr {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span> <span class="keyword">namespace </span>detail {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>  </div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="structrmm_1_1mr_1_1detail_1_1block__base.html">   27</a></span> <span class="keyword">struct </span><a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html">block_base</a> {</div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="structrmm_1_1mr_1_1detail_1_1block__base.html#a72c4e6db5cfe26694b7592b362ce3f9f">   28</a></span>   <span class="keywordtype">void</span>* <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#a72c4e6db5cfe26694b7592b362ce3f9f">ptr</a>{};  </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>  </div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="structrmm_1_1mr_1_1detail_1_1block__base.html#abac93ee1f75419e2613f096b9eefd5ee">   31</a></span>   <span class="keyword">inline</span> <span class="keywordtype">void</span>* <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#abac93ee1f75419e2613f096b9eefd5ee">pointer</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#a72c4e6db5cfe26694b7592b362ce3f9f">ptr</a>; }</div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="structrmm_1_1mr_1_1detail_1_1block__base.html#aa2c5c4fdc11701c5f2786beca86d38f3">   33</a></span>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#aa2c5c4fdc11701c5f2786beca86d38f3">is_valid</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#abac93ee1f75419e2613f096b9eefd5ee">pointer</a>() != <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="structrmm_1_1mr_1_1detail_1_1block__base.html#a0c2db264ab69751e6614c38b949462be">   35</a></span>   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#a0c2db264ab69751e6614c38b949462be">print</a>()<span class="keyword"> const </span>{ std::cout &lt;&lt; <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#abac93ee1f75419e2613f096b9eefd5ee">pointer</a>(); }</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span> };</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>  </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span> <span class="keyword">inline</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, <span class="keyword">const</span> block_base&amp; b)</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span> {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>   out &lt;&lt; b.pointer();</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>   <span class="keywordflow">return</span> out;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span> }</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>  </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span> <span class="keyword">template</span> &lt;<span class="keyword">typename</span> BlockType, <span class="keyword">typename</span> ListType = std::list&lt;BlockType&gt;&gt;</div>
-<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html">   59</a></span> <span class="keyword">class </span><a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html">free_list</a> {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>   <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html">free_list</a>()          = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>   <span class="keyword">virtual</span> ~<a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html">free_list</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>  </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>   <span class="keyword">using</span> block_type     = BlockType;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>   <span class="keyword">using</span> list_type      = ListType;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>   <span class="keyword">using</span> size_type      = <span class="keyword">typename</span> list_type::size_type;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>   <span class="keyword">using</span> iterator       = <span class="keyword">typename</span> list_type::iterator;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>   <span class="keyword">using</span> const_iterator = <span class="keyword">typename</span> list_type::const_iterator;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>  </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>   iterator begin() noexcept { <span class="keywordflow">return</span> blocks.begin(); }                </div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a854a2a281e59d69752250f6a71bcff98">   71</a></span>   const_iterator <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a854a2a281e59d69752250f6a71bcff98">begin</a>() const noexcept { <span class="keywordflow">return</span> blocks.begin(); }    </div>
-<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#aa528a1938cf8845f283fc03a0ca1f846">   72</a></span>   const_iterator <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#aa528a1938cf8845f283fc03a0ca1f846">cbegin</a>() const noexcept { <span class="keywordflow">return</span> blocks.cbegin(); }  </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>  </div>
-<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#ac9912eb22e2a5e1630e19453fbf80c5d">   74</a></span>   iterator <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#ac9912eb22e2a5e1630e19453fbf80c5d">end</a>() noexcept { <span class="keywordflow">return</span> blocks.end(); }                </div>
-<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#af658f86c5295bb4cb367e214d840d7f8">   75</a></span>   const_iterator <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#af658f86c5295bb4cb367e214d840d7f8">end</a>() const noexcept { <span class="keywordflow">return</span> blocks.end(); }    </div>
-<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#ab4831094eea523cbbe8e2a4a505e0032">   76</a></span>   const_iterator <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#ab4831094eea523cbbe8e2a4a505e0032">cend</a>() const noexcept { <span class="keywordflow">return</span> blocks.cend(); }  </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>  </div>
-<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a88c37c7d5b2d845c638c5864c26b97bd">   83</a></span>   size_type <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a88c37c7d5b2d845c638c5864c26b97bd">size</a>() const noexcept { <span class="keywordflow">return</span> blocks.size(); }</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>  </div>
-<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a4362cf121d720b25ad30d6c9bb6b315f">   91</a></span>   <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a4362cf121d720b25ad30d6c9bb6b315f">is_empty</a>() const noexcept { <span class="keywordflow">return</span> blocks.empty(); }</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>  </div>
-<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a6408611a33c6ef1f61250466cce38ecb">   98</a></span>   <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a6408611a33c6ef1f61250466cce38ecb">erase</a>(const_iterator iter) { blocks.erase(iter); }</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>  </div>
-<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a07019a2a1f959e0780d5f7299b023ff7">  104</a></span>   <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a07019a2a1f959e0780d5f7299b023ff7">clear</a>() noexcept { blocks.clear(); }</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>  </div>
-<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a332374ffd8df897ffe7a3147cc35694c">  109</a></span>   <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a332374ffd8df897ffe7a3147cc35694c">print</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span> <span class="keyword"> </span>{</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>     std::cout &lt;&lt; <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a88c37c7d5b2d845c638c5864c26b97bd">size</a>() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>     <span class="keywordflow">for</span> (<span class="keyword">auto</span> <span class="keyword">const</span>&amp; b : blocks) {</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>       std::cout &lt;&lt; b &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>     }</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>   }</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>  </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>  <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a8924e9ebac8e1cbf2060d1077f207246">  124</a></span>   <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a8924e9ebac8e1cbf2060d1077f207246">insert</a>(const_iterator pos, <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html">block_type</a> <span class="keyword">const</span>&amp; b) { blocks.insert(pos, b); }</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>  </div>
-<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a87b61292ae9d22f48c5b91826113606f">  132</a></span>   <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a87b61292ae9d22f48c5b91826113606f">splice</a>(const_iterator pos, <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html">free_list</a>&amp;&amp; other)</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>   {</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>     <span class="keywordflow">return</span> blocks.splice(pos, std::move(other.blocks));</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>   }</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>  </div>
-<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a74c8c201a1f6f0c6315cf5dbf10fe13a">  142</a></span>   <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a74c8c201a1f6f0c6315cf5dbf10fe13a">push_back</a>(<span class="keyword">const</span> <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html">block_type</a>&amp; b) { blocks.push_back(b); }</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>  </div>
-<div class="line"><a name="l00149"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a4863fa0900b34113d6824753258d2536">  149</a></span>   <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a4863fa0900b34113d6824753258d2536">push_back</a>(<a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html">block_type</a>&amp;&amp; b) { blocks.push_back(std::move(b)); }</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>  </div>
-<div class="line"><a name="l00157"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a111f7ea85a2b7c99f135834657519923">  157</a></span>   <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a111f7ea85a2b7c99f135834657519923">pop_front</a>() { blocks.pop_front(); }</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>  </div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>   list_type blocks;  <span class="comment">// The internal container of blocks</span></div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span> };</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>  </div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span> }  <span class="comment">// namespace detail</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span> }  <span class="comment">// namespace mr</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span> }  <span class="comment">// namespace rmm</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&nbsp;<span class="comment">/*</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&nbsp;<span class="comment"> * Copyright (c) 2019-2020, NVIDIA CORPORATION.</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&nbsp;<span class="comment"> *</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&nbsp;<span class="comment"> * Licensed under the Apache License, Version 2.0 (the "License");</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&nbsp;<span class="comment"> * you may not use this file except in compliance with the License.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&nbsp;<span class="comment"> * You may obtain a copy of the License at</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&nbsp;<span class="comment"> *</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&nbsp;<span class="comment"> *     http://www.apache.org/licenses/LICENSE-2.0</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&nbsp;<span class="comment"> *</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&nbsp;<span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&nbsp;<span class="comment"> * distributed under the License is distributed on an "AS IS" BASIS,</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&nbsp;<span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&nbsp;<span class="comment"> * See the License for the specific language governing permissions and</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&nbsp;<span class="comment"> * limitations under the License.</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&nbsp;<span class="comment"> */</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&nbsp; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&nbsp;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&nbsp; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&nbsp;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="preprocessor">#include &lt;list&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp;<span class="keyword">namespace </span>rmm {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp;<span class="keyword">namespace </span>mr {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp;<span class="keyword">namespace </span>detail {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp; </div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="structrmm_1_1mr_1_1detail_1_1block__base.html">   27</a></span>&nbsp;<span class="keyword">struct </span><a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html">block_base</a> {</div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="structrmm_1_1mr_1_1detail_1_1block__base.html#a72c4e6db5cfe26694b7592b362ce3f9f">   28</a></span>&nbsp;  <span class="keywordtype">void</span>* <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#a72c4e6db5cfe26694b7592b362ce3f9f">ptr</a>{};  </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp; </div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="structrmm_1_1mr_1_1detail_1_1block__base.html#abac93ee1f75419e2613f096b9eefd5ee">   31</a></span>&nbsp;  <span class="keyword">inline</span> <span class="keywordtype">void</span>* <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#abac93ee1f75419e2613f096b9eefd5ee">pointer</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#a72c4e6db5cfe26694b7592b362ce3f9f">ptr</a>; }</div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="structrmm_1_1mr_1_1detail_1_1block__base.html#aa2c5c4fdc11701c5f2786beca86d38f3">   33</a></span>&nbsp;  <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#aa2c5c4fdc11701c5f2786beca86d38f3">is_valid</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#abac93ee1f75419e2613f096b9eefd5ee">pointer</a>() != <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="structrmm_1_1mr_1_1detail_1_1block__base.html#a0c2db264ab69751e6614c38b949462be">   35</a></span>&nbsp;  <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#a0c2db264ab69751e6614c38b949462be">print</a>()<span class="keyword"> const </span>{ std::cout &lt;&lt; <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html#abac93ee1f75419e2613f096b9eefd5ee">pointer</a>(); }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;};</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;<span class="keyword">inline</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, <span class="keyword">const</span> block_base&amp; b)</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;{</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;  out &lt;&lt; b.pointer();</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;  <span class="keywordflow">return</span> out;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;}</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> BlockType, <span class="keyword">typename</span> ListType = std::list&lt;BlockType&gt;&gt;</div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html">   59</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html">free_list</a> {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html">free_list</a>()          = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;  <span class="keyword">virtual</span> ~<a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html">free_list</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;  <span class="keyword">using</span> block_type     = BlockType;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;  <span class="keyword">using</span> list_type      = ListType;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp;  <span class="keyword">using</span> size_type      = <span class="keyword">typename</span> list_type::size_type;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp;  <span class="keyword">using</span> iterator       = <span class="keyword">typename</span> list_type::iterator;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp;  <span class="keyword">using</span> const_iterator = <span class="keyword">typename</span> list_type::const_iterator;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp;  iterator begin() noexcept { <span class="keywordflow">return</span> blocks.begin(); }                </div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a854a2a281e59d69752250f6a71bcff98">   71</a></span>&nbsp;  const_iterator <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a854a2a281e59d69752250f6a71bcff98">begin</a>() const noexcept { <span class="keywordflow">return</span> blocks.begin(); }    </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#aa528a1938cf8845f283fc03a0ca1f846">   72</a></span>&nbsp;  const_iterator <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#aa528a1938cf8845f283fc03a0ca1f846">cbegin</a>() const noexcept { <span class="keywordflow">return</span> blocks.cbegin(); }  </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp; </div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#ac9912eb22e2a5e1630e19453fbf80c5d">   74</a></span>&nbsp;  iterator <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#ac9912eb22e2a5e1630e19453fbf80c5d">end</a>() noexcept { <span class="keywordflow">return</span> blocks.end(); }                </div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#af658f86c5295bb4cb367e214d840d7f8">   75</a></span>&nbsp;  const_iterator <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#af658f86c5295bb4cb367e214d840d7f8">end</a>() const noexcept { <span class="keywordflow">return</span> blocks.end(); }    </div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#ab4831094eea523cbbe8e2a4a505e0032">   76</a></span>&nbsp;  const_iterator <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#ab4831094eea523cbbe8e2a4a505e0032">cend</a>() const noexcept { <span class="keywordflow">return</span> blocks.cend(); }  </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp; </div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a88c37c7d5b2d845c638c5864c26b97bd">   83</a></span>&nbsp;  size_type <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a88c37c7d5b2d845c638c5864c26b97bd">size</a>() const noexcept { <span class="keywordflow">return</span> blocks.size(); }</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp; </div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a4362cf121d720b25ad30d6c9bb6b315f">   91</a></span>&nbsp;  <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a4362cf121d720b25ad30d6c9bb6b315f">is_empty</a>() const noexcept { <span class="keywordflow">return</span> blocks.empty(); }</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp; </div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a6408611a33c6ef1f61250466cce38ecb">   98</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a6408611a33c6ef1f61250466cce38ecb">erase</a>(const_iterator iter) { blocks.erase(iter); }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp; </div>
+<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a07019a2a1f959e0780d5f7299b023ff7">  104</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a07019a2a1f959e0780d5f7299b023ff7">clear</a>() noexcept { blocks.clear(); }</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp; </div>
+<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a332374ffd8df897ffe7a3147cc35694c">  109</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a332374ffd8df897ffe7a3147cc35694c">print</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&nbsp;<span class="keyword"> </span>{</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&nbsp;    std::cout &lt;&lt; <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a88c37c7d5b2d845c638c5864c26b97bd">size</a>() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> <span class="keyword">const</span>&amp; b : blocks) {</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp;      std::cout &lt;&lt; b &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp;    }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&nbsp;  }</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&nbsp; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&nbsp; <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a8924e9ebac8e1cbf2060d1077f207246">  124</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a8924e9ebac8e1cbf2060d1077f207246">insert</a>(const_iterator pos, <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html">block_type</a> <span class="keyword">const</span>&amp; b) { blocks.insert(pos, b); }</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&nbsp; </div>
+<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a87b61292ae9d22f48c5b91826113606f">  132</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a87b61292ae9d22f48c5b91826113606f">splice</a>(const_iterator pos, <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html">free_list</a>&amp;&amp; other)</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&nbsp;  {</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&nbsp;    <span class="keywordflow">return</span> blocks.splice(pos, std::move(other.blocks));</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&nbsp;  }</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&nbsp; </div>
+<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a74c8c201a1f6f0c6315cf5dbf10fe13a">  142</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a74c8c201a1f6f0c6315cf5dbf10fe13a">push_back</a>(<span class="keyword">const</span> <a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html">block_type</a>&amp; b) { blocks.push_back(b); }</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&nbsp; </div>
+<div class="line"><a name="l00149"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a4863fa0900b34113d6824753258d2536">  149</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a4863fa0900b34113d6824753258d2536">push_back</a>(<a class="code" href="structrmm_1_1mr_1_1detail_1_1block__base.html">block_type</a>&amp;&amp; b) { blocks.push_back(std::move(b)); }</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&nbsp; </div>
+<div class="line"><a name="l00157"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a111f7ea85a2b7c99f135834657519923">  157</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1free__list.html#a111f7ea85a2b7c99f135834657519923">pop_front</a>() { blocks.pop_front(); }</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&nbsp; </div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&nbsp; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&nbsp;  list_type blocks;  <span class="comment">// The internal container of blocks</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&nbsp;};</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&nbsp; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&nbsp;}  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&nbsp;}  <span class="comment">// namespace mr</span></div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&nbsp;}  <span class="comment">// namespace rmm</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1free__list_html_a74c8c201a1f6f0c6315cf5dbf10fe13a"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1free__list.html#a74c8c201a1f6f0c6315cf5dbf10fe13a">rmm::mr::detail::free_list::push_back</a></div><div class="ttdeci">void push_back(const block_type &amp;b)</div><div class="ttdoc">Appends the given block to the end of the free list.</div><div class="ttdef"><b>Definition:</b> free_list.hpp:142</div></div>
 <div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1free__list_html_ab4831094eea523cbbe8e2a4a505e0032"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1free__list.html#ab4831094eea523cbbe8e2a4a505e0032">rmm::mr::detail::free_list::cend</a></div><div class="ttdeci">const_iterator cend() const noexcept</div><div class="ttdoc">end of the free list</div><div class="ttdef"><b>Definition:</b> free_list.hpp:76</div></div>
@@ -174,8 +172,9 @@ $(function() {
 <div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1free__list_html_a87b61292ae9d22f48c5b91826113606f"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1free__list.html#a87b61292ae9d22f48c5b91826113606f">rmm::mr::detail::free_list::splice</a></div><div class="ttdeci">void splice(const_iterator pos, free_list &amp;&amp;other)</div><div class="ttdoc">Inserts a list of blocks in the free list before the specified position.</div><div class="ttdef"><b>Definition:</b> free_list.hpp:132</div></div>
 <div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1free__list_html_a4863fa0900b34113d6824753258d2536"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1free__list.html#a4863fa0900b34113d6824753258d2536">rmm::mr::detail::free_list::push_back</a></div><div class="ttdeci">void push_back(block_type &amp;&amp;b)</div><div class="ttdoc">Appends the given block to the end of the free list. b is moved to the new element.</div><div class="ttdef"><b>Definition:</b> free_list.hpp:149</div></div>
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by <a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"/></a> 1.8.20
+<hr class="footer"><address class="footer"><small>
+Generated by&nbsp;<a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"></a> 1.8.20
 </small></address>
-<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script></body>
-</html>
+
+
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script></body></html>
