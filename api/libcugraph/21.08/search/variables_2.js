@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['indices_518',['indices',['../classcugraph_1_1GraphCompressedSparseBaseView.html#ac972e41f44cc5aec58dec0ebc1320a8a',1,'cugraph::GraphCompressedSparseBaseView']]]
+  ['indices_514',['indices',['../classcugraph_1_1legacy_1_1GraphCompressedSparseBaseView.html#a7d61e15ee28783da1511cb41b0348887',1,'cugraph::legacy::GraphCompressedSparseBaseView']]]
 ];

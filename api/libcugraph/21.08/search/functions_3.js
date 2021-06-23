@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['degree_465',['degree',['../classcugraph_1_1GraphCOOView.html#a6f67fe7766f395bb573a21d34023ffe5',1,'cugraph::GraphCOOView::degree()'],['../classcugraph_1_1GraphCompressedSparseBaseView.html#a2f28ad94f7b827c10f8370eda8c61723',1,'cugraph::GraphCompressedSparseBaseView::degree()']]]
+  ['degree_461',['degree',['../classcugraph_1_1legacy_1_1GraphCOOView.html#a61e28454bbc875622f196439f9814bcd',1,'cugraph::legacy::GraphCOOView::degree()'],['../classcugraph_1_1legacy_1_1GraphCompressedSparseBaseView.html#ae9b7ac754135ed5857125efc43a54f08',1,'cugraph::legacy::GraphCompressedSparseBaseView::degree()']]]
 ];

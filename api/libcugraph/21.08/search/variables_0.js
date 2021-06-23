@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dst_5findices_516',['dst_indices',['../classcugraph_1_1GraphCOOView.html#a8d5affe64fb19e94d26fa95ac38f08a8',1,'cugraph::GraphCOOView']]]
+  ['dst_5findices_512',['dst_indices',['../classcugraph_1_1legacy_1_1GraphCOOView.html#a9369b2b264219eed85dd5d067c307a73',1,'cugraph::legacy::GraphCOOView']]]
 ];
