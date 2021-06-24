@@ -30,7 +30,7 @@ var searchData=
   ['get_5fdecimal_531',['get_decimal',['../classcudf_1_1io_1_1csv__reader__options.html#abe70ecc1189459a371c8054f15da993a',1,'cudf::io::csv_reader_options']]],
   ['get_5fdecimal_5fprecision_532',['get_decimal_precision',['../classcudf_1_1io_1_1column__in__metadata.html#a7047e6bfa172e1a7885dcb2c781f4bf5',1,'cudf::io::column_in_metadata']]],
   ['get_5fdelimiter_533',['get_delimiter',['../classcudf_1_1io_1_1csv__reader__options.html#a2022d1fd36992f8a16ae72923d6b5881',1,'cudf::io::csv_reader_options']]],
-  ['get_5fdtypes_534',['get_dtypes',['../classcudf_1_1io_1_1csv__reader__options.html#a658e1d98e675873fac9af5aa626f5abe',1,'cudf::io::csv_reader_options::get_dtypes()'],['../classcudf_1_1io_1_1json__reader__options.html#abfd7235226cde0d93440cf5c8bd701fc',1,'cudf::io::json_reader_options::get_dtypes()']]],
+  ['get_5fdtypes_534',['get_dtypes',['../classcudf_1_1io_1_1csv__reader__options.html#a02bad8998a87f7232303c56b5f116dce',1,'cudf::io::csv_reader_options::get_dtypes()'],['../classcudf_1_1io_1_1json__reader__options.html#abfd7235226cde0d93440cf5c8bd701fc',1,'cudf::io::json_reader_options::get_dtypes()']]],
   ['get_5felement_535',['get_element',['../group__column__copy.html#gafdb8ce94112a0353af61119497c1b6ee',1,'cudf']]],
   ['get_5ffalse_5fvalue_536',['get_false_value',['../classcudf_1_1io_1_1csv__writer__options.html#a11d24676783db81eab7554d84af461e4',1,'cudf::io::csv_writer_options']]],
   ['get_5ffalse_5fvalues_537',['get_false_values',['../classcudf_1_1io_1_1csv__reader__options.html#a455bd05cd6ad5ef48bc758e7452d0f99',1,'cudf::io::csv_reader_options']]],

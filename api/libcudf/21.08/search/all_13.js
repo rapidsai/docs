@@ -52,7 +52,7 @@ var searchData=
   ['set_5fdecimal_1244',['set_decimal',['../classcudf_1_1io_1_1csv__reader__options.html#a36ceacac296bb4c4398f866a5fb43f16',1,'cudf::io::csv_reader_options']]],
   ['set_5fdecimal_5fprecision_1245',['set_decimal_precision',['../classcudf_1_1io_1_1column__in__metadata.html#aa9efdf1535f2341362764fed54bcf51f',1,'cudf::io::column_in_metadata']]],
   ['set_5fdelimiter_1246',['set_delimiter',['../classcudf_1_1io_1_1csv__reader__options.html#ad527ee1e46130f2a453be6a89976e446',1,'cudf::io::csv_reader_options']]],
-  ['set_5fdtypes_1247',['set_dtypes',['../classcudf_1_1io_1_1csv__reader__options.html#adbf1423ae865329748986cc9d21cad15',1,'cudf::io::csv_reader_options']]],
+  ['set_5fdtypes_1247',['set_dtypes',['../classcudf_1_1io_1_1csv__reader__options.html#a8b217346f5e22fea3cfdb64d61dd73af',1,'cudf::io::csv_reader_options::set_dtypes(std::vector&lt; data_type &gt; types)'],['../classcudf_1_1io_1_1csv__reader__options.html#adbf1423ae865329748986cc9d21cad15',1,'cudf::io::csv_reader_options::set_dtypes(std::vector&lt; std::string &gt; types)']]],
   ['set_5felement_1248',['set_element',['https://docs.rapids.ai/api/librmm/21.08/classrmm_1_1device__uvector.html#a80ff08f7195e98e7de1176097c6651c0',1,'rmm::device_uvector']]],
   ['set_5felement_5fasync_1249',['set_element_async',['https://docs.rapids.ai/api/librmm/21.08/classrmm_1_1device__uvector.html#afbdc625ba4fd0d5c3f87e364bd8c65f6',1,'rmm::device_uvector']]],
   ['set_5felement_5fto_5fzero_5fasync_1250',['set_element_to_zero_async',['https://docs.rapids.ai/api/librmm/21.08/classrmm_1_1device__uvector.html#a61e085520deb7a6f0b0c316b1ca799f6',1,'rmm::device_uvector']]],
