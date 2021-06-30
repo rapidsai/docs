@@ -313,6 +313,7 @@ Names of those images (such as &lsquo;macro&rsquo; and &lsquo;label&rsquo;) are 
 <li><p>level_count: The number of levels</p></li>
 <li><p>level_dimensions: A tuple of dimension tuples (width, height)</p></li>
 <li><p>level_downsamples: A tuple of down-sample factors</p></li>
+<li><p>level_tile_sizes: A tuple of tile size tuple (tile width, tile_height)</p></li>
 </ul>
 </dd></dl>
 
@@ -3587,8 +3588,8 @@ with intensities representing heights.</p>
 <p>It is derived from the eigen values of the Hessian, and its
 value ranges from -1 to 1 (and is undefined (=NaN) in <em>flat</em> regions),
 with following ranges representing following shapes:</p>
-<table class="docutils align-default" id="id237">
-<caption><span class="caption-text">Ranges of the shape index and corresponding shapes.</span><a class="headerlink" href="#id237" title="Permalink to this table">&para;</a></caption>
+<table class="docutils align-default" id="id241">
+<caption><span class="caption-text">Ranges of the shape index and corresponding shapes.</span><a class="headerlink" href="#id241" title="Permalink to this table">&para;</a></caption>
 <colgroup>
 <col style="width: 59%">
 <col style="width: 41%">
@@ -8467,6 +8468,82 @@ are 1 and 0 otherwise.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="cucim.skimage.morphology.thin">
+<span class="sig-prename descclassname"><span class="pre">cucim.skimage.morphology.</span></span><span class="sig-name descname"><span class="pre">thin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cucim.skimage.morphology.thin" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Perform morphological thinning of a binary image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>image</strong><span class="classifier">binary (M, N) ndarray</span></dt><dd><p>The image to be thinned.</p>
+</dd>
+<dt><strong>max_iter</strong><span class="classifier">int, number of iterations, optional</span></dt><dd><p>Regardless of the value of this parameter, the thinned image
+is returned immediately if an iteration produces no change.
+If this parameter is specified it thus sets an upper bound on
+the number of iterations performed.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">ndarray of bool</span></dt><dd><p>Thinned image.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">skeletonize</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">medial_axis</span></code></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>This algorithm <a class="reference internal" href="#r455cf7e5f861-1" id="id192">[1]</a> works by making multiple passes over the image,
+removing pixels matching a set of criteria designed to thin
+connected regions while preserving eight-connected components and
+2 x 2 squares <a class="reference internal" href="#r455cf7e5f861-2" id="id193">[2]</a>. In each of the two sub-iterations the algorithm
+correlates the intermediate skeleton image with a neighborhood mask,
+then looks up each neighborhood in a lookup table indicating whether
+the central pixel should be deleted in that sub-iteration.</p>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="r455cf7e5f861-1"><span class="brackets"><a class="fn-backref" href="#id192">1</a></span></dt>
+<dd><p>Z. Guo and R. W. Hall, &ldquo;Parallel thinning with
+two-subiteration algorithms,&rdquo; Comm. ACM, vol. 32, no. 3,
+pp. 359-373, 1989. <a class="reference external" href="https://doi.org/10.1145/62065.62074">DOI:10.1145/62065.62074</a></p>
+</dd>
+<dt class="label" id="r455cf7e5f861-2"><span class="brackets"><a class="fn-backref" href="#id193">2</a></span></dt>
+<dd><p>Lam, L., Seong-Whan Lee, and Ching Y. Suen, &ldquo;Thinning
+Methodologies-A Comprehensive Survey,&rdquo; IEEE Transactions on
+Pattern Analysis and Machine Intelligence, Vol 14, No. 9,
+p. 879, 1992. <a class="reference external" href="https://doi.org/10.1109/34.161346">DOI:10.1109/34.161346</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">square</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">square</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">square</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span>  <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">square</span>
+<span class="go">array([[0, 1, 0, 0, 0, 0, 0],</span>
+<span class="go">       [0, 0, 1, 1, 1, 0, 0],</span>
+<span class="go">       [0, 0, 1, 1, 1, 0, 0],</span>
+<span class="go">       [0, 0, 1, 1, 1, 0, 0],</span>
+<span class="go">       [0, 0, 1, 1, 1, 0, 0],</span>
+<span class="go">       [0, 0, 1, 1, 1, 0, 0],</span>
+<span class="go">       [0, 0, 0, 0, 0, 0, 0]], dtype=uint8)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skel</span> <span class="o">=</span> <span class="n">thin</span><span class="p">(</span><span class="n">square</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skel</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="go">array([[0, 1, 0, 0, 0, 0, 0],</span>
+<span class="go">       [0, 0, 1, 0, 0, 0, 0],</span>
+<span class="go">       [0, 0, 0, 1, 0, 0, 0],</span>
+<span class="go">       [0, 0, 0, 1, 0, 0, 0],</span>
+<span class="go">       [0, 0, 0, 1, 0, 0, 0],</span>
+<span class="go">       [0, 0, 0, 0, 0, 0, 0],</span>
+<span class="go">       [0, 0, 0, 0, 0, 0, 0]], dtype=uint8)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="cucim.skimage.morphology.white_tophat">
 <span class="sig-prename descclassname"><span class="pre">cucim.skimage.morphology.</span></span><span class="sig-name descname"><span class="pre">white_tophat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cucim.skimage.morphology.white_tophat" title="Permalink to this definition">&para;</a></dt>
 <dd><p>Return white top hat of an image.</p>
@@ -8532,9 +8609,9 @@ is passed, a new array will be allocated.</p>
 <span class="sig-prename descclassname"><span class="pre">cucim.skimage.registration.</span></span><span class="sig-name descname"><span class="pre">optical_flow_ilk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_image</span></em>, <em class="sig-param"><span class="pre">moving_image</span></em>, <em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">radius=7</span></em>, <em class="sig-param"><span class="pre">num_warp=10</span></em>, <em class="sig-param"><span class="pre">gaussian=False</span></em>, <em class="sig-param"><span class="pre">prefilter=False</span></em>, <em class="sig-param"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float32'&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cucim.skimage.registration.optical_flow_ilk" title="Permalink to this definition">&para;</a></dt>
 <dd><p>Coarse to fine optical flow estimator.</p>
 <p>The iterative Lucas-Kanade (iLK) solver is applied at each level
-of the image pyramid. iLK <a class="reference internal" href="#r8a901ce569ca-1" id="id193">[1]</a> is a fast and robust alternative to
+of the image pyramid. iLK <a class="reference internal" href="#r8a901ce569ca-1" id="id197">[1]</a> is a fast and robust alternative to
 TVL1 algorithm although less accurate for rendering flat surfaces
-and object boundaries (see <a class="reference internal" href="#r8a901ce569ca-2" id="id194">[2]</a>).</p>
+and object boundaries (see <a class="reference internal" href="#r8a901ce569ca-2" id="id198">[2]</a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -8569,18 +8646,18 @@ time compared to double precision.</p>
 </dl>
 <p class="rubric">Notes</p>
 <ul class="simple">
-<li><p>The implemented algorithm is described in <strong>Table2</strong> of <a class="reference internal" href="#r8a901ce569ca-1" id="id195">[1]</a>.</p></li>
+<li><p>The implemented algorithm is described in <strong>Table2</strong> of <a class="reference internal" href="#r8a901ce569ca-1" id="id199">[1]</a>.</p></li>
 <li><p>Color images are not supported.</p></li>
 </ul>
 <p class="rubric">References</p>
 <dl class="citation">
-<dt class="label" id="r8a901ce569ca-1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id193">1</a>,<a href="#id195">2</a>)</span></dt>
+<dt class="label" id="r8a901ce569ca-1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id197">1</a>,<a href="#id199">2</a>)</span></dt>
 <dd><p>Le Besnerais, G., &amp; Champagnat, F. (2005, September). Dense
 optical flow by iterative local window registration. In IEEE
 International Conference on Image Processing 2005 (Vol. 1,
 pp. I-137). IEEE. <a class="reference external" href="https://doi.org/10.1109/ICIP.2005.1529706">DOI:10.1109/ICIP.2005.1529706</a></p>
 </dd>
-<dt class="label" id="r8a901ce569ca-2"><span class="brackets"><a class="fn-backref" href="#id194">2</a></span></dt>
+<dt class="label" id="r8a901ce569ca-2"><span class="brackets"><a class="fn-backref" href="#id198">2</a></span></dt>
 <dd><p>Plyer, A., Le Besnerais, G., &amp; Champagnat,
 F. (2016). Massively parallel Lucas Kanade optical flow for
 real-time video processing applications. Journal of Real-Time
@@ -8595,7 +8672,7 @@ Image Processing, 11(4), 713-730. <a class="reference external" href="https://do
 <dd><p>Coarse to fine optical flow estimator.</p>
 <p>The TV-L1 solver is applied at each level of the image
 pyramid. TV-L1 is a popular algorithm for optical flow estimation
-introduced by Zack et al. <a class="reference internal" href="#rfeed16b8dc8b-1" id="id198">[1]</a>, improved in <a class="reference internal" href="#rfeed16b8dc8b-2" id="id199">[2]</a> and detailed in <a class="reference internal" href="#rfeed16b8dc8b-3" id="id200">[3]</a>.</p>
+introduced by Zack et al. <a class="reference internal" href="#rfeed16b8dc8b-1" id="id202">[1]</a>, improved in <a class="reference internal" href="#rfeed16b8dc8b-2" id="id203">[2]</a> and detailed in <a class="reference internal" href="#rfeed16b8dc8b-3" id="id204">[3]</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -8603,10 +8680,10 @@ introduced by Zack et al. <a class="reference internal" href="#rfeed16b8dc8b-1" 
 </dd>
 <dt><strong>moving_image</strong><span class="classifier">ndarray, shape (M, N[, P[, &hellip;]])</span></dt><dd><p>The second gray scale image of the sequence.</p>
 </dd>
-<dt><strong>attachment</strong><span class="classifier">float, optional</span></dt><dd><p>Attachment parameter (<span class="math notranslate nohighlight">\(\lambda\)</span> in <a class="reference internal" href="#rfeed16b8dc8b-1" id="id201">[1]</a>). The smaller
+<dt><strong>attachment</strong><span class="classifier">float, optional</span></dt><dd><p>Attachment parameter (<span class="math notranslate nohighlight">\(\lambda\)</span> in <a class="reference internal" href="#rfeed16b8dc8b-1" id="id205">[1]</a>). The smaller
 this parameter is, the smoother the returned result will be.</p>
 </dd>
-<dt><strong>tightness</strong><span class="classifier">float, optional</span></dt><dd><p>Tightness parameter (<span class="math notranslate nohighlight">\(\tau\)</span> in <a class="reference internal" href="#rfeed16b8dc8b-1" id="id202">[1]</a>). It should have
+<dt><strong>tightness</strong><span class="classifier">float, optional</span></dt><dd><p>Tightness parameter (<span class="math notranslate nohighlight">\(\tau\)</span> in <a class="reference internal" href="#rfeed16b8dc8b-1" id="id206">[1]</a>). It should have
 a small value in order to maintain attachement and
 regularization parts in correspondence.</p>
 </dd>
@@ -8639,20 +8716,20 @@ time compared to double precision.</p>
 <p>Color images are not supported.</p>
 <p class="rubric">References</p>
 <dl class="citation">
-<dt class="label" id="rfeed16b8dc8b-1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id198">1</a>,<a href="#id201">2</a>,<a href="#id202">3</a>)</span></dt>
+<dt class="label" id="rfeed16b8dc8b-1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id202">1</a>,<a href="#id205">2</a>,<a href="#id206">3</a>)</span></dt>
 <dd><p>Zach, C., Pock, T., &amp; Bischof, H. (2007, September). A
 duality based approach for realtime TV-L 1 optical flow. In Joint
 pattern recognition symposium (pp. 214-223). Springer, Berlin,
 Heidelberg. <a class="reference external" href="https://doi.org/10.1007/978-3-540-74936-3_22">DOI:10.1007/978-3-540-74936-3_22</a></p>
 </dd>
-<dt class="label" id="rfeed16b8dc8b-2"><span class="brackets"><a class="fn-backref" href="#id199">2</a></span></dt>
+<dt class="label" id="rfeed16b8dc8b-2"><span class="brackets"><a class="fn-backref" href="#id203">2</a></span></dt>
 <dd><p>Wedel, A., Pock, T., Zach, C., Bischof, H., &amp; Cremers,
 D. (2009). An improved algorithm for TV-L 1 optical flow. In
 Statistical and geometrical approaches to visual motion analysis
 (pp. 23-45). Springer, Berlin, Heidelberg.
 <a class="reference external" href="https://doi.org/10.1007/978-3-642-03061-1_2">DOI:10.1007/978-3-642-03061-1_2</a></p>
 </dd>
-<dt class="label" id="rfeed16b8dc8b-3"><span class="brackets"><a class="fn-backref" href="#id200">3</a></span></dt>
+<dt class="label" id="rfeed16b8dc8b-3"><span class="brackets"><a class="fn-backref" href="#id204">3</a></span></dt>
 <dd><p>P&eacute;rez, J. S., Meinhardt-Llopis, E., &amp; Facciolo,
 G. (2013). TV-L1 optical flow estimation. Image Processing On
 Line, 2013, 137-150. <a class="reference external" href="https://doi.org/10.5201/ipol.2013.26">DOI:10.5201/ipol.2013.26</a></p>
@@ -8884,10 +8961,10 @@ the integral of the norm of the image gradient. Total variation
 denoising tends to produce &ldquo;cartoon-like&rdquo; images, that is,
 piecewise-constant images.</p>
 <p>This code is an implementation of the algorithm of Rudin, Fatemi and Osher
-that was proposed by Chambolle in <a class="reference internal" href="#rd494debfd106-1" id="id211">[1]</a>.</p>
+that was proposed by Chambolle in <a class="reference internal" href="#rd494debfd106-1" id="id215">[1]</a>.</p>
 <p class="rubric">References</p>
 <dl class="citation">
-<dt class="label" id="rd494debfd106-1"><span class="brackets"><a class="fn-backref" href="#id211">1</a></span></dt>
+<dt class="label" id="rd494debfd106-1"><span class="brackets"><a class="fn-backref" href="#id215">1</a></span></dt>
 <dd><p>A. Chambolle, An algorithm for total variation minimization and
 applications, Journal of Mathematical Imaging and Vision,
 Springer, 2004, 20, 89-97.</p>
@@ -9552,14 +9629,14 @@ plotting intermediate results during the evolution.</p>
 operators instead of solving a partial differential equation (PDE) for the
 evolution of the contour. The set of morphological operators used in this
 algorithm are proved to be infinitesimally equivalent to the Chan-Vese PDE
-(see <a class="reference internal" href="#r2416b93d33b0-1" id="id217">[1]</a>). However, morphological operators are do not suffer from the
+(see <a class="reference internal" href="#r2416b93d33b0-1" id="id221">[1]</a>). However, morphological operators are do not suffer from the
 numerical stability issues typically found in PDEs (it is not necessary to
 find the right time step for the evolution), and are computationally
 faster.</p>
-<p>The algorithm and its theoretical derivation are described in <a class="reference internal" href="#r2416b93d33b0-1" id="id218">[1]</a>.</p>
+<p>The algorithm and its theoretical derivation are described in <a class="reference internal" href="#r2416b93d33b0-1" id="id222">[1]</a>.</p>
 <p class="rubric">References</p>
 <dl class="citation">
-<dt class="label" id="r2416b93d33b0-1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id217">1</a>,<a href="#id218">2</a>)</span></dt>
+<dt class="label" id="r2416b93d33b0-1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id221">1</a>,<a href="#id222">2</a>)</span></dt>
 <dd><p>A Morphological Approach to Curvature-based Evolution of Curves and
 Surfaces, Pablo M&aacute;rquez-Neila, Luis Baumela, Luis &Aacute;lvarez. In IEEE
 Transactions on Pattern Analysis and Machine Intelligence (PAMI),
@@ -9636,14 +9713,14 @@ plotting intermediate results during the evolution.</p>
 morphological operators instead of solving partial differential equations
 (PDEs) for the evolution of the contour. The set of morphological operators
 used in this algorithm are proved to be infinitesimally equivalent to the
-GAC PDEs (see <a class="reference internal" href="#ra07eed798308-1" id="id220">[1]</a>). However, morphological operators are do not suffer
+GAC PDEs (see <a class="reference internal" href="#ra07eed798308-1" id="id224">[1]</a>). However, morphological operators are do not suffer
 from the numerical stability issues typically found in PDEs (e.g., it is
 not necessary to find the right time step for the evolution), and are
 computationally faster.</p>
-<p>The algorithm and its theoretical derivation are described in <a class="reference internal" href="#ra07eed798308-1" id="id221">[1]</a>.</p>
+<p>The algorithm and its theoretical derivation are described in <a class="reference internal" href="#ra07eed798308-1" id="id225">[1]</a>.</p>
 <p class="rubric">References</p>
 <dl class="citation">
-<dt class="label" id="ra07eed798308-1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id220">1</a>,<a href="#id221">2</a>)</span></dt>
+<dt class="label" id="ra07eed798308-1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id224">1</a>,<a href="#id225">2</a>)</span></dt>
 <dd><p>A Morphological Approach to Curvature-based Evolution of Curves and
 Surfaces, Pablo M&aacute;rquez-Neila, Luis Baumela, Luis &Aacute;lvarez. In IEEE
 Transactions on Pattern Analysis and Machine Intelligence (PAMI),
@@ -9749,7 +9826,7 @@ channels are separately normalized prior to running this algorithm.</p>
 <p>The <cite>spacing</cite> argument is specifically for anisotropic datasets, where
 data points are spaced differently in one or more spatial dimensions.
 Anisotropic data is commonly encountered in medical imaging.</p>
-<p>The algorithm was first proposed in <a class="reference internal" href="#rbeca6ade2f68-1" id="id223">[1]</a>.</p>
+<p>The algorithm was first proposed in <a class="reference internal" href="#rbeca6ade2f68-1" id="id227">[1]</a>.</p>
 <p>The algorithm solves the diffusion equation at infinite times for
 sources placed on markers of each phase in turn. A pixel is labeled with
 the phase that has the greatest probability to diffuse first to the pixel.</p>
@@ -9784,7 +9861,7 @@ This linear system is solved in the algorithm using a direct method for
 small images, and an iterative method for larger images.</p>
 <p class="rubric">References</p>
 <dl class="citation">
-<dt class="label" id="rbeca6ade2f68-1"><span class="brackets"><a class="fn-backref" href="#id223">1</a></span></dt>
+<dt class="label" id="rbeca6ade2f68-1"><span class="brackets"><a class="fn-backref" href="#id227">1</a></span></dt>
 <dd><p>Leo Grady, Random walks for image segmentation, IEEE Trans Pattern
 Anal Mach Intell. 2006 Nov;28(11):1768-83.
 <a class="reference external" href="https://doi.org/10.1109/TPAMI.2006.233">DOI:10.1109/TPAMI.2006.233</a>.</p>
@@ -10085,7 +10162,7 @@ transformation with a single scaling factor.</p>
 <dt><strong>matrix</strong><span class="classifier">(D+1, D+1) array, optional</span></dt><dd><p>Homogeneous transformation matrix.</p>
 </dd>
 <dt><strong>rotation</strong><span class="classifier">float or sequence of float, optional</span></dt><dd><p>Rotation angle in counter-clockwise direction as radians. If given as
-a vector, it is interpreted as Euler rotation angles <a class="reference internal" href="#ra85de9f51a41-1" id="id226">[1]</a>. Only 2D
+a vector, it is interpreted as Euler rotation angles <a class="reference internal" href="#ra85de9f51a41-1" id="id230">[1]</a>. Only 2D
 (single rotation) and 3D (Euler rotations) values are supported. For
 higher dimensions, you must provide or estimate the transformation
 matrix.</p>
@@ -10099,7 +10176,7 @@ matrix.</p>
 </dl>
 <p class="rubric">References</p>
 <dl class="citation">
-<dt class="label" id="ra85de9f51a41-1"><span class="brackets"><a class="fn-backref" href="#id226">1</a></span></dt>
+<dt class="label" id="ra85de9f51a41-1"><span class="brackets"><a class="fn-backref" href="#id230">1</a></span></dt>
 <dd><p><a class="reference external" href="https://en.wikipedia.org/wiki/Rotation_matrix#In_three_dimensions">https://en.wikipedia.org/wiki/Rotation_matrix#In_three_dimensions</a></p>
 </dd>
 </dl>
@@ -12201,7 +12278,7 @@ shifted by a single row or column (or an index of a higher dimension).</p>
 <dt><strong>arr_in</strong><span class="classifier">ndarray</span></dt><dd><p>N-d input array.</p>
 </dd>
 <dt><strong>window_shape</strong><span class="classifier">integer or tuple of length arr_in.ndim</span></dt><dd><p>Defines the shape of the elementary n-dimensional orthotope
-(better know as hyperrectangle <a class="reference internal" href="#rba40a1c6483a-1" id="id235">[1]</a>) of the rolling window view.
+(better know as hyperrectangle <a class="reference internal" href="#rba40a1c6483a-1" id="id239">[1]</a>) of the rolling window view.
 If an integer is given, the shape will be a hypercube of
 sidelength given by its value.</p>
 </dd>
@@ -12232,7 +12309,7 @@ be 8*(100-3+1)**3*3**3 which is about 203 MB! The scaling becomes
 even worse as the dimension of the input array becomes larger.</p>
 <p class="rubric">References</p>
 <dl class="citation">
-<dt class="label" id="rba40a1c6483a-1"><span class="brackets"><a class="fn-backref" href="#id235">1</a></span></dt>
+<dt class="label" id="rba40a1c6483a-1"><span class="brackets"><a class="fn-backref" href="#id239">1</a></span></dt>
 <dd><p><a class="reference external" href="https://en.wikipedia.org/wiki/Hyperrectangle">https://en.wikipedia.org/wiki/Hyperrectangle</a></p>
 </dd>
 </dl>
