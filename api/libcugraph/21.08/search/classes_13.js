@@ -16,5 +16,6 @@ var searchData=
   ['vertex_5fpartition_5fdevice_5ft_3c_20graphviewtype_2c_20std_3a_3aenable_5fif_5ft_3c_20graphviewtype_3a_3ais_5fmulti_5fgpu_20_3e_20_3e_440',['vertex_partition_device_t&lt; GraphViewType, std::enable_if_t&lt; GraphViewType::is_multi_gpu &gt; &gt;',['../classcugraph_1_1experimental_1_1vertex__partition__device__t_3_01GraphViewType_00_01std_1_1enabl761f0a2941f615b60a4eaab69e1ea5d7.html',1,'cugraph::experimental']]],
   ['vertex_5fpartition_5fdevice_5ft_3c_20graphviewtype_2c_20std_3a_3aenable_5fif_5ft_3c_21graphviewtype_3a_3ais_5fmulti_5fgpu_20_3e_20_3e_441',['vertex_partition_device_t&lt; GraphViewType, std::enable_if_t&lt;!GraphViewType::is_multi_gpu &gt; &gt;',['../classcugraph_1_1experimental_1_1vertex__partition__device__t_3_01GraphViewType_00_01std_1_1enabl17c59f6a9cea06e2bbf01ef51d7847d7.html',1,'cugraph::experimental']]],
   ['vertexbinner_442',['VertexBinner',['../classcugraph_1_1mg_1_1detail_1_1VertexBinner.html',1,'cugraph::mg::detail']]],
-  ['vertexfrontier_443',['VertexFrontier',['../classcugraph_1_1experimental_1_1VertexFrontier.html',1,'cugraph::experimental']]]
+  ['vertexfrontier_443',['VertexFrontier',['../classcugraph_1_1experimental_1_1VertexFrontier.html',1,'cugraph::experimental']]],
+  ['vertical_5ftraversal_5ft_444',['vertical_traversal_t',['../structcugraph_1_1experimental_1_1detail_1_1vertical__traversal__t.html',1,'cugraph::experimental::detail']]]
 ];
