@@ -21,7 +21,7 @@ var searchData=
   ['set_5frf_5fmetrics_5fclassification_997',['set_rf_metrics_classification',['../namespaceML.html#a85f241652a9dfc89e280200e7618ed32',1,'ML']]],
   ['set_5frf_5fmetrics_5fregression_998',['set_rf_metrics_regression',['../namespaceML.html#aaa0b5eb27fbd28c93285b9ada72930d8',1,'ML']]],
   ['set_5frf_5fparams_999',['set_rf_params',['../namespaceML.html#a1c3bab4b19d98b4912dd8cf273723737',1,'ML']]],
-  ['set_5ftree_5fparams_1000',['set_tree_params',['../namespaceML_1_1DecisionTree.html#a6ff6612f845651f54d7e5d7297dc8671',1,'ML::DecisionTree']]],
+  ['set_5ftree_5fparams_1000',['set_tree_params',['../namespaceML_1_1DecisionTree.html#a2d9cad7b7a36ac53760bab5480a043df',1,'ML::DecisionTree']]],
   ['setcallback_1001',['setCallback',['../classML_1_1Logger.html#aa5c69bed8428bfcdbf447918ec7080bb',1,'ML::Logger']]],
   ['setflush_1002',['setFlush',['../classML_1_1Logger.html#ab9df85ce5cfa4c3680717894d2b58baf',1,'ML::Logger']]],
   ['setlevel_1003',['setLevel',['../classML_1_1Logger.html#a6020edc770e315bdf7b6e35b1e62834b',1,'ML::Logger']]],
