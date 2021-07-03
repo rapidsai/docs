@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['predict_20functions_2543',['Predict functions',['../group__DecisionTreeClassifierPredict.html',1,'']]],
-  ['predict_20functions_2544',['Predict functions',['../group__DecisionTreeRegressorPredict.html',1,'']]]
+  ['scikit_2dlearn_2desq_20make_5fblobs_2444',['scikit-learn-esq make_blobs',['../group__MakeBlobs.html',1,'']]]
 ];
