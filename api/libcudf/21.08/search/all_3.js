@@ -2,7 +2,7 @@ var searchData=
 [
   ['call_116',['Call',['../structcudf_1_1test_1_1ContainedIn.html#a699bfd4643ac344c790b352d9a9c1f9e',1,'cudf::test::ContainedIn']]],
   ['capacity_117',['capacity',['https://docs.rapids.ai/api/librmm/21.08/classrmm_1_1device__buffer.html#a6f10a1f11dc186eeb6493980ab3d7fc5',1,'rmm::device_buffer::capacity()'],['https://docs.rapids.ai/api/librmm/21.08/classrmm_1_1device__uvector.html#a11ada0f15bf7d25a70b6a3c6b4f52f8f',1,'rmm::device_uvector::capacity()']]],
-  ['capitalize_118',['capitalize',['../group__strings__case.html#ga7791b5973b678b7b1adfdef6ba8d4d1a',1,'cudf::strings']]],
+  ['capitalize_118',['capitalize',['../group__strings__case.html#ga52a9846453d5a92087f84b67c25a04cb',1,'cudf::strings']]],
   ['capitalize_2ehpp_119',['capitalize.hpp',['../capitalize_8hpp.html',1,'']]],
   ['case_2ehpp_120',['case.hpp',['../case_8hpp.html',1,'']]],
   ['case_5ftypes_121',['CASE_TYPES',['../group__strings__types.html#ggacdc71043841f369de3cc8dd827a0eea1a229325ffb1070e5111f3200c2c4e585b',1,'cudf::strings']]],
