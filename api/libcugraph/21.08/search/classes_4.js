@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['edge_5fdevice_5fview_5ft_313',['edge_device_view_t',['../classcugraph_1_1experimental_1_1detail_1_1compute__partition__t_1_1edge__device__view__t.html',1,'cugraph::experimental::detail::compute_partition_t']]],
-  ['edgelist_5ft_314',['edgelist_t',['../structcugraph_1_1experimental_1_1edgelist__t.html',1,'cugraph::experimental']]],
-  ['evaluate_5fedge_5fop_315',['evaluate_edge_op',['../structcugraph_1_1experimental_1_1evaluate__edge__op.html',1,'cugraph::experimental']]],
-  ['exception_316',['Exception',['../classMLCommon_1_1Exception.html',1,'MLCommon']]]
+  ['edge_5fdevice_5fview_5ft_319',['edge_device_view_t',['../classcugraph_1_1experimental_1_1detail_1_1compute__partition__t_1_1edge__device__view__t.html',1,'cugraph::experimental::detail::compute_partition_t']]],
+  ['edgelist_5ft_320',['edgelist_t',['../structcugraph_1_1experimental_1_1edgelist__t.html',1,'cugraph::experimental']]],
+  ['evaluate_5fedge_5fop_321',['evaluate_edge_op',['../structcugraph_1_1experimental_1_1evaluate__edge__op.html',1,'cugraph::experimental']]],
+  ['exception_322',['Exception',['../classMLCommon_1_1Exception.html',1,'MLCommon']]]
 ];

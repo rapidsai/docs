@@ -270,91 +270,93 @@ $(function() {
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&nbsp; </div>
 <div class="line"><a name="l00214"></a><span class="lineno">  214</span>&nbsp;    random_engine_t::generate_random(handle, ptr_d_random, d_random.size(), seed0);</div>
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&nbsp; </div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span>* col_indices       = graph.indices();</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span>* row_offsets       = graph.offsets();</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span>* values            = graph.weights();</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&nbsp;    <span class="keyword">auto</span>* ptr_d_sizes             = raw_ptr(d_paths_sz);</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span>&amp; d_cached_out_degs = rand_walker.get_out_degs();</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&nbsp; </div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&nbsp;    <span class="keyword">auto</span> rnd_to_indx_convertor = [] __device__(real_t rnd_vindx, edge_t crt_out_deg) {</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&nbsp;      real_t max_ub     = <span class="keyword">static_cast&lt;</span>real_t<span class="keyword">&gt;</span>(crt_out_deg - 1);</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&nbsp;      <span class="keyword">auto</span> interp_vindx = rnd_vindx * max_ub + real_t{.5};</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&nbsp;      vertex_t v_indx   = <span class="keyword">static_cast&lt;</span>vertex_t<span class="keyword">&gt;</span>(interp_vindx);</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&nbsp;      <span class="keywordflow">return</span> (v_indx &gt;= crt_out_deg ? crt_out_deg - 1 : v_indx);</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&nbsp;    };</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&nbsp; </div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&nbsp;    <span class="keyword">auto</span> next_vw =</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&nbsp;      [row_offsets,</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&nbsp;       col_indices,</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&nbsp;       values] __device__(<span class="keyword">auto</span> v_indx,      <span class="comment">// src vertex to find dst from</span></div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&nbsp;                          <span class="keyword">auto</span> col_indx) {  <span class="comment">// column index, in {0,...,out_deg(v_indx)-1},</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&nbsp;        <span class="comment">// extracted from random value in [0..1]</span></div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&nbsp;        <span class="keyword">auto</span> start_row = row_offsets[v_indx];</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&nbsp; </div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&nbsp;        <span class="keyword">auto</span> weight_value =</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&nbsp;          (values == <span class="keyword">nullptr</span> ? weight_t{1}</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&nbsp;                             : values[start_row + col_indx]);  <span class="comment">// account for un-weighted graphs</span></div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&nbsp;        <span class="keywordflow">return</span> thrust::make_tuple(col_indices[start_row + col_indx], weight_value);</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&nbsp;      };</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&nbsp; </div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&nbsp;    <span class="comment">// start from 1, as 0-th was initialized above:</span></div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&nbsp;    <span class="comment">//</span></div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&nbsp;    thrust::for_each(rmm::exec_policy(handle.get_stream_view()),</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&nbsp;                     thrust::make_counting_iterator&lt;index_t&gt;(0),</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&nbsp;                     thrust::make_counting_iterator&lt;index_t&gt;(num_paths_),</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&nbsp;                     [max_depth            = max_depth_,</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&nbsp;                      ptr_d_cache_out_degs = raw_const_ptr(d_cached_out_degs),</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&nbsp;                      ptr_coalesced_v      = raw_ptr(d_coalesced_v),</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&nbsp;                      ptr_coalesced_w      = raw_ptr(d_coalesced_w),</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&nbsp;                      ptr_d_random,</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&nbsp;                      ptr_d_sizes,</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&nbsp;                      rnd_to_indx_convertor,</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&nbsp;                      next_vw] __device__(<span class="keyword">auto</span> path_index) {</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&nbsp;                       <span class="keyword">auto</span> chunk_offset   = path_index * max_depth;</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&nbsp;                       vertex_t src_vertex = ptr_coalesced_v[chunk_offset];</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&nbsp; </div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&nbsp;                       <span class="keywordflow">for</span> (index_t step_indx = 1; step_indx &lt; max_depth; ++step_indx) {</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&nbsp;                         <span class="keyword">auto</span> crt_out_deg = ptr_d_cache_out_degs[src_vertex];</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&nbsp;                         <span class="keywordflow">if</span> (crt_out_deg == 0) <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&nbsp; </div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&nbsp;                         <span class="comment">// indexing into coalesced arrays of size num_paths x (max_depth -1):</span></div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&nbsp;                         <span class="comment">// (d_random, d_coalesced_w)</span></div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&nbsp;                         <span class="comment">//</span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&nbsp;                         <span class="keyword">auto</span> stepping_index = chunk_offset - path_index + step_indx - 1;</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&nbsp; </div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&nbsp;                         <span class="keyword">auto</span> real_rnd_indx = ptr_d_random[stepping_index];</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span>* col_indices = graph.get_matrix_partition_view().get_indices();</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span>* row_offsets = graph.get_matrix_partition_view().get_offsets();</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span>* values      = graph.get_matrix_partition_view().get_weights()</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&nbsp;                           ? *(graph.get_matrix_partition_view().get_weights())</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&nbsp;                           : <span class="keyword">static_cast&lt;</span>weight_t*<span class="keyword">&gt;</span>(<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&nbsp;    <span class="keyword">auto</span>* ptr_d_sizes             = raw_ptr(d_paths_sz);</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span>&amp; d_cached_out_degs = rand_walker.get_out_degs();</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&nbsp; </div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&nbsp;    <span class="keyword">auto</span> rnd_to_indx_convertor = [] __device__(real_t rnd_vindx, edge_t crt_out_deg) {</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&nbsp;      real_t max_ub     = <span class="keyword">static_cast&lt;</span>real_t<span class="keyword">&gt;</span>(crt_out_deg - 1);</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&nbsp;      <span class="keyword">auto</span> interp_vindx = rnd_vindx * max_ub + real_t{.5};</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&nbsp;      vertex_t v_indx   = <span class="keyword">static_cast&lt;</span>vertex_t<span class="keyword">&gt;</span>(interp_vindx);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&nbsp;      <span class="keywordflow">return</span> (v_indx &gt;= crt_out_deg ? crt_out_deg - 1 : v_indx);</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&nbsp;    };</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&nbsp; </div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&nbsp;    <span class="keyword">auto</span> next_vw =</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&nbsp;      [row_offsets,</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&nbsp;       col_indices,</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&nbsp;       values] __device__(<span class="keyword">auto</span> v_indx,      <span class="comment">// src vertex to find dst from</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&nbsp;                          <span class="keyword">auto</span> col_indx) {  <span class="comment">// column index, in {0,...,out_deg(v_indx)-1},</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&nbsp;        <span class="comment">// extracted from random value in [0..1]</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&nbsp;        <span class="keyword">auto</span> start_row = row_offsets[v_indx];</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&nbsp; </div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&nbsp;        <span class="keyword">auto</span> weight_value =</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&nbsp;          (values == <span class="keyword">nullptr</span> ? weight_t{1}</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&nbsp;                             : values[start_row + col_indx]);  <span class="comment">// account for un-weighted graphs</span></div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&nbsp;        <span class="keywordflow">return</span> thrust::make_tuple(col_indices[start_row + col_indx], weight_value);</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&nbsp;      };</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&nbsp; </div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&nbsp;    <span class="comment">// start from 1, as 0-th was initialized above:</span></div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&nbsp;    <span class="comment">//</span></div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&nbsp;    thrust::for_each(rmm::exec_policy(handle.get_stream_view()),</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&nbsp;                     thrust::make_counting_iterator&lt;index_t&gt;(0),</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&nbsp;                     thrust::make_counting_iterator&lt;index_t&gt;(num_paths_),</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&nbsp;                     [max_depth            = max_depth_,</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&nbsp;                      ptr_d_cache_out_degs = raw_const_ptr(d_cached_out_degs),</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&nbsp;                      ptr_coalesced_v      = raw_ptr(d_coalesced_v),</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&nbsp;                      ptr_coalesced_w      = raw_ptr(d_coalesced_w),</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&nbsp;                      ptr_d_random,</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&nbsp;                      ptr_d_sizes,</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&nbsp;                      rnd_to_indx_convertor,</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&nbsp;                      next_vw] __device__(<span class="keyword">auto</span> path_index) {</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&nbsp;                       <span class="keyword">auto</span> chunk_offset   = path_index * max_depth;</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&nbsp;                       vertex_t src_vertex = ptr_coalesced_v[chunk_offset];</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&nbsp; </div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&nbsp;                       <span class="keywordflow">for</span> (index_t step_indx = 1; step_indx &lt; max_depth; ++step_indx) {</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&nbsp;                         <span class="keyword">auto</span> crt_out_deg = ptr_d_cache_out_degs[src_vertex];</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&nbsp;                         <span class="keywordflow">if</span> (crt_out_deg == 0) <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&nbsp; </div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&nbsp;                         <span class="comment">// indexing into coalesced arrays of size num_paths x (max_depth -1):</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&nbsp;                         <span class="comment">// (d_random, d_coalesced_w)</span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&nbsp;                         <span class="comment">//</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&nbsp;                         <span class="keyword">auto</span> stepping_index = chunk_offset - path_index + step_indx - 1;</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&nbsp; </div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&nbsp;                         <span class="keyword">auto</span> col_indx = rnd_to_indx_convertor(real_rnd_indx, crt_out_deg);</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&nbsp;                         <span class="keyword">auto</span> pair_vw  = next_vw(src_vertex, col_indx);</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&nbsp; </div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&nbsp;                         src_vertex      = thrust::get&lt;0&gt;(pair_vw);</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&nbsp;                         <span class="keyword">auto</span> crt_weight = thrust::get&lt;1&gt;(pair_vw);</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&nbsp; </div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&nbsp;                         ptr_coalesced_v[chunk_offset + step_indx] = src_vertex;</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&nbsp;                         ptr_coalesced_w[stepping_index]           = crt_weight;</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&nbsp;                         ptr_d_sizes[path_index]++;</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&nbsp;                       }</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&nbsp;                     });</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&nbsp;  }</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&nbsp; </div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&nbsp;  <span class="keywordtype">size_t</span> get_random_buff_sz(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_paths_ * (max_depth_ - 1); }</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&nbsp;  <span class="keywordtype">size_t</span> get_tmp_buff_sz(<span class="keywordtype">void</span>)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&nbsp;<span class="keyword">  </span>{</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&nbsp;    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&nbsp;  }  <span class="comment">// no need for tmp buffers</span></div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&nbsp;     <span class="comment">//(see "ignored" above)</span></div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&nbsp; </div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&nbsp; <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&nbsp;  <span class="keywordtype">size_t</span> num_paths_;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&nbsp;  <span class="keywordtype">size_t</span> max_depth_;</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&nbsp;};  <span class="comment">// namespace detail</span></div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&nbsp; </div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&nbsp;}  <span class="comment">// namespace detail</span></div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&nbsp;}  <span class="comment">// namespace experimental</span></div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&nbsp;}  <span class="comment">// namespace cugraph</span></div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&nbsp;                         <span class="keyword">auto</span> real_rnd_indx = ptr_d_random[stepping_index];</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&nbsp; </div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&nbsp;                         <span class="keyword">auto</span> col_indx = rnd_to_indx_convertor(real_rnd_indx, crt_out_deg);</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&nbsp;                         <span class="keyword">auto</span> pair_vw  = next_vw(src_vertex, col_indx);</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&nbsp; </div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&nbsp;                         src_vertex      = thrust::get&lt;0&gt;(pair_vw);</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&nbsp;                         <span class="keyword">auto</span> crt_weight = thrust::get&lt;1&gt;(pair_vw);</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&nbsp; </div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&nbsp;                         ptr_coalesced_v[chunk_offset + step_indx] = src_vertex;</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&nbsp;                         ptr_coalesced_w[stepping_index]           = crt_weight;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&nbsp;                         ptr_d_sizes[path_index]++;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&nbsp;                       }</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&nbsp;                     });</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&nbsp;  }</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&nbsp; </div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&nbsp;  <span class="keywordtype">size_t</span> get_random_buff_sz(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_paths_ * (max_depth_ - 1); }</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&nbsp;  <span class="keywordtype">size_t</span> get_tmp_buff_sz(<span class="keywordtype">void</span>)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&nbsp;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&nbsp;    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&nbsp;  }  <span class="comment">// no need for tmp buffers</span></div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&nbsp;     <span class="comment">//(see "ignored" above)</span></div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&nbsp; </div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&nbsp; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&nbsp;  <span class="keywordtype">size_t</span> num_paths_;</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&nbsp;  <span class="keywordtype">size_t</span> max_depth_;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&nbsp;};  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&nbsp; </div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&nbsp;}  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&nbsp;}  <span class="comment">// namespace experimental</span></div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&nbsp;}  <span class="comment">// namespace cugraph</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasscugraph_1_1experimental_1_1graph__t_html"><div class="ttname"><a href="classcugraph_1_1experimental_1_1graph__t.html">cugraph::experimental::graph_t</a></div><div class="ttdef"><b>Definition:</b> experimental/graph.hpp:47</div></div>
-<div class="ttc" id="astructcugraph_1_1experimental_1_1detail_1_1random__walker__t_html"><div class="ttname"><a href="structcugraph_1_1experimental_1_1detail_1_1random__walker__t.html">cugraph::experimental::detail::random_walker_t</a></div><div class="ttdoc">Class abstracting the RW initialization, stepping, and stopping functionality The outline of the algo...</div><div class="ttdef"><b>Definition:</b> random_walks.cuh:318</div></div>
+<div class="ttc" id="aclasscugraph_1_1experimental_1_1graph__t_html"><div class="ttname"><a href="classcugraph_1_1experimental_1_1graph__t.html">cugraph::experimental::graph_t</a></div><div class="ttdef"><b>Definition:</b> experimental/graph.hpp:48</div></div>
+<div class="ttc" id="astructcugraph_1_1experimental_1_1detail_1_1random__walker__t_html"><div class="ttname"><a href="structcugraph_1_1experimental_1_1detail_1_1random__walker__t.html">cugraph::experimental::detail::random_walker_t</a></div><div class="ttdoc">Class abstracting the RW initialization, stepping, and stopping functionality The outline of the algo...</div><div class="ttdef"><b>Definition:</b> random_walks.cuh:320</div></div>
 <div class="ttc" id="anamespacecugraph_html"><div class="ttname"><a href="namespacecugraph.html">cugraph</a></div><div class="ttdoc">Katz Centrality implementation.</div><div class="ttdef"><b>Definition:</b> betweenness_centrality.cu:34</div></div>
 <div class="ttc" id="astructcugraph_1_1experimental_1_1detail_1_1vertical__traversal__t_html"><div class="ttname"><a href="structcugraph_1_1experimental_1_1detail_1_1vertical__traversal__t.html">cugraph::experimental::detail::vertical_traversal_t</a></div><div class="ttdef"><b>Definition:</b> rw_traversals.hpp:109</div></div>
 <div class="ttc" id="astructcugraph_1_1experimental_1_1detail_1_1device__const__vector__view_html"><div class="ttname"><a href="structcugraph_1_1experimental_1_1detail_1_1device__const__vector__view.html">cugraph::experimental::detail::device_const_vector_view</a></div><div class="ttdef"><b>Definition:</b> rw_traversals.hpp:62</div></div>
