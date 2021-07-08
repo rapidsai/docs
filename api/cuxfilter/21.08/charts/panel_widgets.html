@@ -296,21 +296,22 @@ documentation for more info</p>
     console.debug("Bokeh: all callbacks have finished");
   }
 
-  function load_libs(css_urls, js_urls, callback) {
+  function load_libs(css_urls, js_urls, js_modules, callback) {
     if (css_urls == null) css_urls = [];
     if (js_urls == null) js_urls = [];
+    if (js_modules == null) js_modules = [];
 
     root._bokeh_onload_callbacks.push(callback);
     if (root._bokeh_is_loading > 0) {
       console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
       return null;
     }
-    if (js_urls == null || js_urls.length === 0) {
+    if (js_urls.length === 0 && js_modules.length === 0) {
       run_callbacks();
       return null;
     }
     console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
-    root._bokeh_is_loading = css_urls.length + js_urls.length;
+    root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
 
     function on_load() {
       root._bokeh_is_loading--;
@@ -338,8 +339,16 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      require([], function() {
+      window.requirejs.config({'paths': {'tabulator': 'https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator'}});
+      require(["tabulator"], function(Tabulator,) {
+        window.Tabulator = Tabulator;
       })
+    }
+    if (((window['tabulator'] !== undefined) && (!(window['tabulator'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js', 'https://unpkg.com/moment@2.27.0/moment.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
     }
     for (var i = 0; i < js_urls.length; i++) {
       var url = js_urls[i];
@@ -352,7 +361,19 @@ documentation for more info</p>
       console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
       document.head.appendChild(element);
     }
-	if (!js_urls.length) {
+    for (var i = 0; i < js_modules.length; i++) {
+      var url = js_modules[i];
+      if (skip.indexOf(url) >= 0) { on_load(); continue; }
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    if (!js_urls.length && !js_modules.length) {
       on_load()
     }
   };
@@ -363,10 +384,13 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.3.min.js", "https://unpkg.com/@holoviz/panel@^0.10.3/dist/panel.min.js"];
-  var css_urls = ["https://unpkg.com/@holoviz/panel@0.10.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/widgets.css"];
-
+  var js_urls = ["https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js", "https://unpkg.com/moment@2.27.0/moment.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.2.min.js", "https://unpkg.com/@holoviz/panel@^0.11.3/dist/panel.min.js"];
+  var js_modules = [];
+  var css_urls = ["https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator_simple.min.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/widgets.css"];
   var inline_js = [
+    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
     function(Bokeh) {
       Bokeh.set_log_level("info");
     },
@@ -389,7 +413,7 @@ documentation for more info</p>
     console.debug("Bokeh: BokehJS loaded, going straight to plotting");
     run_inline_js();
   } else {
-    load_libs(css_urls, js_urls, function() {
+    load_libs(css_urls, js_urls, js_modules, function() {
       console.debug("Bokeh: BokehJS plotting callback run at", now());
       run_inline_js();
     });
@@ -682,21 +706,22 @@ if (window.Jupyter !== undefined) {
     console.debug("Bokeh: all callbacks have finished");
   }
 
-  function load_libs(css_urls, js_urls, callback) {
+  function load_libs(css_urls, js_urls, js_modules, callback) {
     if (css_urls == null) css_urls = [];
     if (js_urls == null) js_urls = [];
+    if (js_modules == null) js_modules = [];
 
     root._bokeh_onload_callbacks.push(callback);
     if (root._bokeh_is_loading > 0) {
       console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
       return null;
     }
-    if (js_urls == null || js_urls.length === 0) {
+    if (js_urls.length === 0 && js_modules.length === 0) {
       run_callbacks();
       return null;
     }
     console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
-    root._bokeh_is_loading = css_urls.length + js_urls.length;
+    root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
 
     function on_load() {
       root._bokeh_is_loading--;
@@ -724,11 +749,18 @@ if (window.Jupyter !== undefined) {
 
     var skip = [];
     if (window.requirejs) {
+      window.requirejs.config({'paths': {'tabulator': 'https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator'}});
       window.requirejs.config({'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}});
       require(["deck.gl", "mapbox-gl"], function(deck,mapboxgl,) {
         window.deck = deck;
         window.mapboxgl = mapboxgl;
       })
+    }
+    if (((window['tabulator'] !== undefined) && (!(window['tabulator'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js', 'https://unpkg.com/moment@2.27.0/moment.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
     }
     if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
@@ -753,7 +785,19 @@ if (window.Jupyter !== undefined) {
       console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
       document.head.appendChild(element);
     }
-	if (!js_urls.length) {
+    for (var i = 0; i < js_modules.length; i++) {
+      var url = js_modules[i];
+      if (skip.indexOf(url) >= 0) { on_load(); continue; }
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    if (!js_urls.length && !js_modules.length) {
       on_load()
     }
   };
@@ -764,10 +808,13 @@ if (window.Jupyter !== undefined) {
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.3.min.js", "https://unpkg.com/@holoviz/panel@^0.10.3/dist/panel.min.js"];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/widgets.css"];
-
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js", "https://unpkg.com/moment@2.27.0/moment.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.2.min.js", "https://unpkg.com/@holoviz/panel@^0.11.3/dist/panel.min.js"];
+  var js_modules = [];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator_simple.min.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/widgets.css"];
   var inline_js = [
+    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
     },
@@ -806,21 +853,34 @@ if (window.Jupyter !== undefined) {
         },
         "custom/cuxfilter.charts.datashader.custom_extensions.graph_inspect_widget.custom_inspect_tool": function(require, module, exports) {
       "use strict";
+      var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+      }) : (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          o[k2] = m[k];
+      }));
+      var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+          Object.defineProperty(o, "default", { enumerable: true, value: v });
+      }) : function(o, v) {
+          o["default"] = v;
+      });
       var __importStar = (this && this.__importStar) || function (mod) {
           if (mod && mod.__esModule) return mod;
           var result = {};
-          if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-          result["default"] = mod;
+          if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+          __setModuleDefault(result, mod);
           return result;
       };
       Object.defineProperty(exports, "__esModule", { value: true });
+      exports.CustomInspectTool = exports.CustomInspectToolView = void 0;
       const inspect_tool_1 = require("models/tools/inspectors/inspect_tool");
       const p = __importStar(require("core/properties"));
       class CustomInspectToolView extends inspect_tool_1.InspectToolView {
           connect_signals() {
               super.connect_signals();
               this.connect(this.model.properties.active.change, () => {
-                  this.model._active = this.model.properties.active.spec.value;
+                  this.model._active = this.model.active;
               });
           }
       }
@@ -868,7 +928,7 @@ if (window.Jupyter !== undefined) {
     console.debug("Bokeh: BokehJS loaded, going straight to plotting");
     run_inline_js();
   } else {
-    load_libs(css_urls, js_urls, function() {
+    load_libs(css_urls, js_urls, js_modules, function() {
       console.debug("Bokeh: BokehJS plotting callback run at", now());
       run_inline_js();
     });
@@ -1112,18 +1172,18 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="output text_html"><div id="1001">
+</script><div class="output text_html"><div id="1002">
 
 
 
 
 
-  <div class="bk-root" data-root-id="1001" id="8adca3e4-7353-4e0e-93d8-87f603997caf"></div>
+  <div class="bk-root" data-root-id="1002" id="a84f2358-c76d-4266-847b-059d0a401bcd"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"b1580ae6-378c-4bc2-a957-fd337da28869":{"roots":{"references":[{"attributes":{"end":4,"format":"0[.]00","margin":[5,10,5,10],"start":0,"step":0.1,"value":[0,4],"value_throttled":[0,4]},"id":"1004","type":"RangeSlider"},{"attributes":{"children":[{"id":"1003"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00012","sizing_mode":"stretch_width"},"id":"1002","type":"Row"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00014","sizing_mode":"stretch_width","text":"key_range_slider"},"id":"1003","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"8427abff0a1e45639de4616355210c04","comm_id":"0e91627826e9421da694b77140c973ce","plot_id":"1001"},"id":"1005","type":"panel.models.comm_manager.CommManager"},{"attributes":{"reload":false},"id":"1006","type":"panel.models.location.Location"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1002"},{"id":"1004"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00013","sizing_mode":"stretch_both","width":400},"id":"1001","type":"panel.models.layout.Card"}],"root_ids":["1001","1005","1006"]},"title":"Bokeh Application","version":"2.2.3"}};
-    var render_items = [{"docid":"b1580ae6-378c-4bc2-a957-fd337da28869","root_ids":["1001"],"roots":{"1001":"8adca3e4-7353-4e0e-93d8-87f603997caf"}}];
+    var docs_json = {"5150218e-cf2e-4084-af8a-2aa1fbd6d9fe":{"defs":[],"roots":{"references":[{"attributes":{"reload":false},"id":"1007","type":"panel.models.location.Location"},{"attributes":{"children":[{"id":"1004"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00104","sizing_mode":"stretch_width"},"id":"1003","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1003"},{"id":"1005"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00105","sizing_mode":"stretch_both","width":400},"id":"1002","type":"panel.models.layout.Card"},{"attributes":{"end":4,"margin":[5,10,5,10],"start":0,"step":0.1,"value":[0,4]},"id":"1005","type":"RangeSlider"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00106","sizing_mode":"stretch_width","text":"key_range_slider"},"id":"1004","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"a7e0c27cfb0840e298b8ec444d8de5e6","comm_id":"436006bab9f349d4807e482b9f697f0c","plot_id":"1002"},"id":"1006","type":"panel.models.comm_manager.CommManager"}],"root_ids":["1002","1006","1007"]},"title":"Bokeh Application","version":"2.3.2"}};
+    var render_items = [{"docid":"5150218e-cf2e-4084-af8a-2aa1fbd6d9fe","root_ids":["1002"],"roots":{"1002":"a84f2358-c76d-4266-847b-059d0a401bcd"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -1221,21 +1281,22 @@ DateRangeSlider documentation for more info</p>
     console.debug("Bokeh: all callbacks have finished");
   }
 
-  function load_libs(css_urls, js_urls, callback) {
+  function load_libs(css_urls, js_urls, js_modules, callback) {
     if (css_urls == null) css_urls = [];
     if (js_urls == null) js_urls = [];
+    if (js_modules == null) js_modules = [];
 
     root._bokeh_onload_callbacks.push(callback);
     if (root._bokeh_is_loading > 0) {
       console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
       return null;
     }
-    if (js_urls == null || js_urls.length === 0) {
+    if (js_urls.length === 0 && js_modules.length === 0) {
       run_callbacks();
       return null;
     }
     console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
-    root._bokeh_is_loading = css_urls.length + js_urls.length;
+    root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
 
     function on_load() {
       root._bokeh_is_loading--;
@@ -1263,9 +1324,16 @@ DateRangeSlider documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
+      window.requirejs.config({'paths': {'tabulator': 'https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator'}});
       window.requirejs.config({'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}});
       require([], function() {
       })
+    }
+    if (((window['tabulator'] !== undefined) && (!(window['tabulator'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js', 'https://unpkg.com/moment@2.27.0/moment.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
     }
     if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
@@ -1290,7 +1358,19 @@ DateRangeSlider documentation for more info</p>
       console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
       document.head.appendChild(element);
     }
-	if (!js_urls.length) {
+    for (var i = 0; i < js_modules.length; i++) {
+      var url = js_modules[i];
+      if (skip.indexOf(url) >= 0) { on_load(); continue; }
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    if (!js_urls.length && !js_modules.length) {
       on_load()
     }
   };
@@ -1301,10 +1381,13 @@ DateRangeSlider documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.3.min.js", "https://unpkg.com/@holoviz/panel@^0.10.3/dist/panel.min.js"];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/widgets.css"];
-
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js", "https://unpkg.com/moment@2.27.0/moment.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.2.min.js", "https://unpkg.com/@holoviz/panel@^0.11.3/dist/panel.min.js"];
+  var js_modules = [];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator_simple.min.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/widgets.css"];
   var inline_js = [
+    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
     },
@@ -1343,21 +1426,34 @@ DateRangeSlider documentation for more info</p>
         },
         "custom/cuxfilter.charts.datashader.custom_extensions.graph_inspect_widget.custom_inspect_tool": function(require, module, exports) {
       "use strict";
+      var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+      }) : (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          o[k2] = m[k];
+      }));
+      var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+          Object.defineProperty(o, "default", { enumerable: true, value: v });
+      }) : function(o, v) {
+          o["default"] = v;
+      });
       var __importStar = (this && this.__importStar) || function (mod) {
           if (mod && mod.__esModule) return mod;
           var result = {};
-          if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-          result["default"] = mod;
+          if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+          __setModuleDefault(result, mod);
           return result;
       };
       Object.defineProperty(exports, "__esModule", { value: true });
+      exports.CustomInspectTool = exports.CustomInspectToolView = void 0;
       const inspect_tool_1 = require("models/tools/inspectors/inspect_tool");
       const p = __importStar(require("core/properties"));
       class CustomInspectToolView extends inspect_tool_1.InspectToolView {
           connect_signals() {
               super.connect_signals();
               this.connect(this.model.properties.active.change, () => {
-                  this.model._active = this.model.properties.active.spec.value;
+                  this.model._active = this.model.active;
               });
           }
       }
@@ -1405,7 +1501,7 @@ DateRangeSlider documentation for more info</p>
     console.debug("Bokeh: BokehJS loaded, going straight to plotting");
     run_inline_js();
   } else {
-    load_libs(css_urls, js_urls, function() {
+    load_libs(css_urls, js_urls, js_modules, function() {
       console.debug("Bokeh: BokehJS plotting callback run at", now());
       run_inline_js();
     });
@@ -1649,18 +1745,18 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="output text_html"><div id="1007">
+</script><div class="output text_html"><div id="1008">
 
 
 
 
 
-  <div class="bk-root" data-root-id="1007" id="c051fb5e-5059-42b6-ad2a-71ebb7a5d411"></div>
+  <div class="bk-root" data-root-id="1008" id="5d999f66-53db-4d98-872d-8e9465531d20"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"d094f023-0db0-4613-96d8-ea5fa8860b0e":{"roots":{"references":[{"attributes":{"children":[{"id":"1009"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00027","sizing_mode":"stretch_width"},"id":"1008","type":"Row"},{"attributes":{"client_comm_id":"ffe0f264269544f8abc944d9544a70db","comm_id":"dac2880e209b4c7ea0c4c90a784943f5","plot_id":"1007"},"id":"1011","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1008"},{"id":"1010"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00028","sizing_mode":"stretch_both","width":400},"id":"1007","type":"panel.models.layout.Card"},{"attributes":{"end":1582156800000.0,"format":"%d %b %Y","margin":[5,10,5,10],"sizing_mode":"scale_width","start":1577836800000.0,"value":[1577836800000.0,1582156800000.0],"value_throttled":[1577836800000.0,1582156800000.0],"width":400},"id":"1010","type":"DateRangeSlider"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00029","sizing_mode":"stretch_width","text":"time_date_range_slider"},"id":"1009","type":"panel.models.markup.HTML"}],"root_ids":["1007","1011"]},"title":"Bokeh Application","version":"2.2.3"}};
-    var render_items = [{"docid":"d094f023-0db0-4613-96d8-ea5fa8860b0e","root_ids":["1007"],"roots":{"1007":"c051fb5e-5059-42b6-ad2a-71ebb7a5d411"}}];
+    var docs_json = {"45017e72-ced4-45bf-a863-5ebc09314f64":{"defs":[],"roots":{"references":[{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1009"},{"id":"1011"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00120","sizing_mode":"stretch_both","width":400},"id":"1008","type":"panel.models.layout.Card"},{"attributes":{"end":1582156800000.0,"margin":[5,10,5,10],"sizing_mode":"scale_width","start":1577836800000.0,"value":[1577836800000.0,1582156800000.0],"width":400},"id":"1011","type":"DateRangeSlider"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00121","sizing_mode":"stretch_width","text":"time_date_range_slider"},"id":"1010","type":"panel.models.markup.HTML"},{"attributes":{"children":[{"id":"1010"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00119","sizing_mode":"stretch_width"},"id":"1009","type":"Row"},{"attributes":{"client_comm_id":"c1674a8577af4c6b9e87d5ac56eefbdc","comm_id":"e80c3272cc0b499a99eb5f72181711ad","plot_id":"1008"},"id":"1012","type":"panel.models.comm_manager.CommManager"}],"root_ids":["1008","1012"]},"title":"Bokeh Application","version":"2.3.2"}};
+    var render_items = [{"docid":"45017e72-ced4-45bf-a863-5ebc09314f64","root_ids":["1008"],"roots":{"1008":"5d999f66-53db-4d98-872d-8e9465531d20"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -1756,21 +1852,22 @@ documentation for more info</p>
     console.debug("Bokeh: all callbacks have finished");
   }
 
-  function load_libs(css_urls, js_urls, callback) {
+  function load_libs(css_urls, js_urls, js_modules, callback) {
     if (css_urls == null) css_urls = [];
     if (js_urls == null) js_urls = [];
+    if (js_modules == null) js_modules = [];
 
     root._bokeh_onload_callbacks.push(callback);
     if (root._bokeh_is_loading > 0) {
       console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
       return null;
     }
-    if (js_urls == null || js_urls.length === 0) {
+    if (js_urls.length === 0 && js_modules.length === 0) {
       run_callbacks();
       return null;
     }
     console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
-    root._bokeh_is_loading = css_urls.length + js_urls.length;
+    root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
 
     function on_load() {
       root._bokeh_is_loading--;
@@ -1798,9 +1895,16 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
+      window.requirejs.config({'paths': {'tabulator': 'https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator'}});
       window.requirejs.config({'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}});
       require([], function() {
       })
+    }
+    if (((window['tabulator'] !== undefined) && (!(window['tabulator'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js', 'https://unpkg.com/moment@2.27.0/moment.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
     }
     if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
@@ -1825,7 +1929,19 @@ documentation for more info</p>
       console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
       document.head.appendChild(element);
     }
-	if (!js_urls.length) {
+    for (var i = 0; i < js_modules.length; i++) {
+      var url = js_modules[i];
+      if (skip.indexOf(url) >= 0) { on_load(); continue; }
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    if (!js_urls.length && !js_modules.length) {
       on_load()
     }
   };
@@ -1836,10 +1952,13 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.3.min.js", "https://unpkg.com/@holoviz/panel@^0.10.3/dist/panel.min.js"];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/widgets.css"];
-
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js", "https://unpkg.com/moment@2.27.0/moment.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.2.min.js", "https://unpkg.com/@holoviz/panel@^0.11.3/dist/panel.min.js"];
+  var js_modules = [];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator_simple.min.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/widgets.css"];
   var inline_js = [
+    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
     },
@@ -1878,21 +1997,34 @@ documentation for more info</p>
         },
         "custom/cuxfilter.charts.datashader.custom_extensions.graph_inspect_widget.custom_inspect_tool": function(require, module, exports) {
       "use strict";
+      var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+      }) : (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          o[k2] = m[k];
+      }));
+      var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+          Object.defineProperty(o, "default", { enumerable: true, value: v });
+      }) : function(o, v) {
+          o["default"] = v;
+      });
       var __importStar = (this && this.__importStar) || function (mod) {
           if (mod && mod.__esModule) return mod;
           var result = {};
-          if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-          result["default"] = mod;
+          if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+          __setModuleDefault(result, mod);
           return result;
       };
       Object.defineProperty(exports, "__esModule", { value: true });
+      exports.CustomInspectTool = exports.CustomInspectToolView = void 0;
       const inspect_tool_1 = require("models/tools/inspectors/inspect_tool");
       const p = __importStar(require("core/properties"));
       class CustomInspectToolView extends inspect_tool_1.InspectToolView {
           connect_signals() {
               super.connect_signals();
               this.connect(this.model.properties.active.change, () => {
-                  this.model._active = this.model.properties.active.spec.value;
+                  this.model._active = this.model.active;
               });
           }
       }
@@ -1940,7 +2072,7 @@ documentation for more info</p>
     console.debug("Bokeh: BokehJS loaded, going straight to plotting");
     run_inline_js();
   } else {
-    load_libs(css_urls, js_urls, function() {
+    load_libs(css_urls, js_urls, js_modules, function() {
       console.debug("Bokeh: BokehJS plotting callback run at", now());
       run_inline_js();
     });
@@ -2184,18 +2316,18 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="output text_html"><div id="1012">
+</script><div class="output text_html"><div id="1013">
 
 
 
 
 
-  <div class="bk-root" data-root-id="1012" id="5f033b55-dea2-48a9-bb07-7d12882e654a"></div>
+  <div class="bk-root" data-root-id="1013" id="1b757544-8d48-4d94-a801-8b4effd8a0f0"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"d600fbf0-4519-4e31-9a9b-086cae8f2f22":{"roots":{"references":[{"attributes":{"children":[{"id":"1014"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00044","sizing_mode":"stretch_width"},"id":"1013","type":"Row"},{"attributes":{"client_comm_id":"fef9da8d33584ea184ba67f074506f60","comm_id":"51377b69c3b249b997fbf0ad84322d27","plot_id":"1012"},"id":"1016","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1013"},{"id":"1015"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00045","sizing_mode":"stretch_both","width":400},"id":"1012","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00046","sizing_mode":"stretch_width","text":"key_float_slider"},"id":"1014","type":"panel.models.markup.HTML"},{"attributes":{"end":2.0,"format":"0[.]00","height":40,"margin":[5,10,5,10],"sizing_mode":"fixed","start":0.0,"step":0.5,"value":0.0,"value_throttled":0.0,"width":400},"id":"1015","type":"Slider"}],"root_ids":["1012","1016"]},"title":"Bokeh Application","version":"2.2.3"}};
-    var render_items = [{"docid":"d600fbf0-4519-4e31-9a9b-086cae8f2f22","root_ids":["1012"],"roots":{"1012":"5f033b55-dea2-48a9-bb07-7d12882e654a"}}];
+    var docs_json = {"cbafd412-6eca-45b7-a5f6-73cf21b70d46":{"defs":[],"roots":{"references":[{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00138","sizing_mode":"stretch_width","text":"key_float_slider"},"id":"1015","type":"panel.models.markup.HTML"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1014"},{"id":"1016"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00137","sizing_mode":"stretch_both","width":400},"id":"1013","type":"panel.models.layout.Card"},{"attributes":{"end":2.0,"height":40,"margin":[5,10,5,10],"sizing_mode":"fixed","start":0.0,"step":0.5,"value":0.0,"width":400},"id":"1016","type":"Slider"},{"attributes":{"client_comm_id":"7a61ae55001d495ba67f998c1d925961","comm_id":"1b21bbb945b14fc0b36c7e7d95db9172","plot_id":"1013"},"id":"1017","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1015"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00136","sizing_mode":"stretch_width"},"id":"1014","type":"Row"}],"root_ids":["1013","1017"]},"title":"Bokeh Application","version":"2.3.2"}};
+    var render_items = [{"docid":"cbafd412-6eca-45b7-a5f6-73cf21b70d46","root_ids":["1013"],"roots":{"1013":"1b757544-8d48-4d94-a801-8b4effd8a0f0"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -2292,21 +2424,22 @@ documentation for more info</p>
     console.debug("Bokeh: all callbacks have finished");
   }
 
-  function load_libs(css_urls, js_urls, callback) {
+  function load_libs(css_urls, js_urls, js_modules, callback) {
     if (css_urls == null) css_urls = [];
     if (js_urls == null) js_urls = [];
+    if (js_modules == null) js_modules = [];
 
     root._bokeh_onload_callbacks.push(callback);
     if (root._bokeh_is_loading > 0) {
       console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
       return null;
     }
-    if (js_urls == null || js_urls.length === 0) {
+    if (js_urls.length === 0 && js_modules.length === 0) {
       run_callbacks();
       return null;
     }
     console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
-    root._bokeh_is_loading = css_urls.length + js_urls.length;
+    root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
 
     function on_load() {
       root._bokeh_is_loading--;
@@ -2334,9 +2467,16 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
+      window.requirejs.config({'paths': {'tabulator': 'https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator'}});
       window.requirejs.config({'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}});
       require([], function() {
       })
+    }
+    if (((window['tabulator'] !== undefined) && (!(window['tabulator'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js', 'https://unpkg.com/moment@2.27.0/moment.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
     }
     if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
@@ -2361,7 +2501,19 @@ documentation for more info</p>
       console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
       document.head.appendChild(element);
     }
-	if (!js_urls.length) {
+    for (var i = 0; i < js_modules.length; i++) {
+      var url = js_modules[i];
+      if (skip.indexOf(url) >= 0) { on_load(); continue; }
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    if (!js_urls.length && !js_modules.length) {
       on_load()
     }
   };
@@ -2372,10 +2524,13 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.3.min.js", "https://unpkg.com/@holoviz/panel@^0.10.3/dist/panel.min.js"];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/widgets.css"];
-
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js", "https://unpkg.com/moment@2.27.0/moment.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.2.min.js", "https://unpkg.com/@holoviz/panel@^0.11.3/dist/panel.min.js"];
+  var js_modules = [];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator_simple.min.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/widgets.css"];
   var inline_js = [
+    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
     },
@@ -2414,21 +2569,34 @@ documentation for more info</p>
         },
         "custom/cuxfilter.charts.datashader.custom_extensions.graph_inspect_widget.custom_inspect_tool": function(require, module, exports) {
       "use strict";
+      var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+      }) : (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          o[k2] = m[k];
+      }));
+      var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+          Object.defineProperty(o, "default", { enumerable: true, value: v });
+      }) : function(o, v) {
+          o["default"] = v;
+      });
       var __importStar = (this && this.__importStar) || function (mod) {
           if (mod && mod.__esModule) return mod;
           var result = {};
-          if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-          result["default"] = mod;
+          if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+          __setModuleDefault(result, mod);
           return result;
       };
       Object.defineProperty(exports, "__esModule", { value: true });
+      exports.CustomInspectTool = exports.CustomInspectToolView = void 0;
       const inspect_tool_1 = require("models/tools/inspectors/inspect_tool");
       const p = __importStar(require("core/properties"));
       class CustomInspectToolView extends inspect_tool_1.InspectToolView {
           connect_signals() {
               super.connect_signals();
               this.connect(this.model.properties.active.change, () => {
-                  this.model._active = this.model.properties.active.spec.value;
+                  this.model._active = this.model.active;
               });
           }
       }
@@ -2476,7 +2644,7 @@ documentation for more info</p>
     console.debug("Bokeh: BokehJS loaded, going straight to plotting");
     run_inline_js();
   } else {
-    load_libs(css_urls, js_urls, function() {
+    load_libs(css_urls, js_urls, js_modules, function() {
       console.debug("Bokeh: BokehJS plotting callback run at", now());
       run_inline_js();
     });
@@ -2720,18 +2888,18 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="output text_html"><div id="1017">
+</script><div class="output text_html"><div id="1018">
 
 
 
 
 
-  <div class="bk-root" data-root-id="1017" id="dbb0b707-4eff-460a-ae49-411d0821640a"></div>
+  <div class="bk-root" data-root-id="1018" id="788a01bc-7e63-4986-9ba4-286cc30aa312"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"d4d03872-9f9b-4b96-9b22-27430408b106":{"roots":{"references":[{"attributes":{"end":14,"format":"0[.]00","height":40,"margin":[5,10,5,10],"sizing_mode":"fixed","start":10,"value":10,"value_throttled":10,"width":400},"id":"1020","type":"Slider"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00066","sizing_mode":"stretch_width","text":"val_int_slider"},"id":"1019","type":"panel.models.markup.HTML"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1018"},{"id":"1020"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00065","sizing_mode":"stretch_both","width":400},"id":"1017","type":"panel.models.layout.Card"},{"attributes":{"client_comm_id":"f6b4e58054dc41f186aa44d61bae698d","comm_id":"4ffd850fea594191b8952052c760f7b3","plot_id":"1017"},"id":"1021","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1019"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00064","sizing_mode":"stretch_width"},"id":"1018","type":"Row"}],"root_ids":["1017","1021"]},"title":"Bokeh Application","version":"2.2.3"}};
-    var render_items = [{"docid":"d4d03872-9f9b-4b96-9b22-27430408b106","root_ids":["1017"],"roots":{"1017":"dbb0b707-4eff-460a-ae49-411d0821640a"}}];
+    var docs_json = {"9842772f-ca44-49a0-a6b3-dc8157b1c617":{"defs":[],"roots":{"references":[{"attributes":{"children":[{"id":"1020"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00156","sizing_mode":"stretch_width"},"id":"1019","type":"Row"},{"attributes":{"end":14,"height":40,"margin":[5,10,5,10],"sizing_mode":"fixed","start":10,"value":10,"width":400},"id":"1021","type":"Slider"},{"attributes":{"client_comm_id":"6c08019dd35146bb96bf2b719bd56f27","comm_id":"1b2c57023ff042c886a5a652bbd4d023","plot_id":"1018"},"id":"1022","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1019"},{"id":"1021"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00157","sizing_mode":"stretch_both","width":400},"id":"1018","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00158","sizing_mode":"stretch_width","text":"val_int_slider"},"id":"1020","type":"panel.models.markup.HTML"}],"root_ids":["1018","1022"]},"title":"Bokeh Application","version":"2.3.2"}};
+    var render_items = [{"docid":"9842772f-ca44-49a0-a6b3-dc8157b1c617","root_ids":["1018"],"roots":{"1018":"788a01bc-7e63-4986-9ba4-286cc30aa312"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -2825,21 +2993,22 @@ documentation for more info</p>
     console.debug("Bokeh: all callbacks have finished");
   }
 
-  function load_libs(css_urls, js_urls, callback) {
+  function load_libs(css_urls, js_urls, js_modules, callback) {
     if (css_urls == null) css_urls = [];
     if (js_urls == null) js_urls = [];
+    if (js_modules == null) js_modules = [];
 
     root._bokeh_onload_callbacks.push(callback);
     if (root._bokeh_is_loading > 0) {
       console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
       return null;
     }
-    if (js_urls == null || js_urls.length === 0) {
+    if (js_urls.length === 0 && js_modules.length === 0) {
       run_callbacks();
       return null;
     }
     console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
-    root._bokeh_is_loading = css_urls.length + js_urls.length;
+    root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
 
     function on_load() {
       root._bokeh_is_loading--;
@@ -2867,9 +3036,16 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
+      window.requirejs.config({'paths': {'tabulator': 'https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator'}});
       window.requirejs.config({'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}});
       require([], function() {
       })
+    }
+    if (((window['tabulator'] !== undefined) && (!(window['tabulator'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js', 'https://unpkg.com/moment@2.27.0/moment.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
     }
     if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
@@ -2894,7 +3070,19 @@ documentation for more info</p>
       console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
       document.head.appendChild(element);
     }
-	if (!js_urls.length) {
+    for (var i = 0; i < js_modules.length; i++) {
+      var url = js_modules[i];
+      if (skip.indexOf(url) >= 0) { on_load(); continue; }
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    if (!js_urls.length && !js_modules.length) {
       on_load()
     }
   };
@@ -2905,10 +3093,13 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.3.min.js", "https://unpkg.com/@holoviz/panel@^0.10.3/dist/panel.min.js"];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/widgets.css"];
-
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js", "https://unpkg.com/moment@2.27.0/moment.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.2.min.js", "https://unpkg.com/@holoviz/panel@^0.11.3/dist/panel.min.js"];
+  var js_modules = [];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator_simple.min.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/widgets.css"];
   var inline_js = [
+    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
     },
@@ -2947,21 +3138,34 @@ documentation for more info</p>
         },
         "custom/cuxfilter.charts.datashader.custom_extensions.graph_inspect_widget.custom_inspect_tool": function(require, module, exports) {
       "use strict";
+      var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+      }) : (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          o[k2] = m[k];
+      }));
+      var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+          Object.defineProperty(o, "default", { enumerable: true, value: v });
+      }) : function(o, v) {
+          o["default"] = v;
+      });
       var __importStar = (this && this.__importStar) || function (mod) {
           if (mod && mod.__esModule) return mod;
           var result = {};
-          if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-          result["default"] = mod;
+          if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+          __setModuleDefault(result, mod);
           return result;
       };
       Object.defineProperty(exports, "__esModule", { value: true });
+      exports.CustomInspectTool = exports.CustomInspectToolView = void 0;
       const inspect_tool_1 = require("models/tools/inspectors/inspect_tool");
       const p = __importStar(require("core/properties"));
       class CustomInspectToolView extends inspect_tool_1.InspectToolView {
           connect_signals() {
               super.connect_signals();
               this.connect(this.model.properties.active.change, () => {
-                  this.model._active = this.model.properties.active.spec.value;
+                  this.model._active = this.model.active;
               });
           }
       }
@@ -3009,7 +3213,7 @@ documentation for more info</p>
     console.debug("Bokeh: BokehJS loaded, going straight to plotting");
     run_inline_js();
   } else {
-    load_libs(css_urls, js_urls, function() {
+    load_libs(css_urls, js_urls, js_modules, function() {
       console.debug("Bokeh: BokehJS plotting callback run at", now());
       run_inline_js();
     });
@@ -3253,18 +3457,18 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="output text_html"><div id="1022">
+</script><div class="output text_html"><div id="1023">
 
 
 
 
 
-  <div class="bk-root" data-root-id="1022" id="43103f03-6157-4ae4-b2cd-974c5c94c7a2"></div>
+  <div class="bk-root" data-root-id="1023" id="a9d1be3c-8f7a-44b9-be35-6dcda441e3d7"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"0d421290-e9c8-48c7-b1b4-452813a1a9b3":{"roots":{"references":[{"attributes":{"client_comm_id":"e35da577418b45d0a44e05e30b72a80f","comm_id":"edbb633cabca4a419c4e28d90cbd81b7","plot_id":"1022"},"id":"1026","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1024"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00087","sizing_mode":"stretch_width"},"id":"1023","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1023"},{"id":"1025"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00088","sizing_mode":"stretch_both","width":400},"id":"1022","type":"panel.models.layout.Card"},{"attributes":{"height":50,"margin":[5,10,5,10],"options":["10.0","11.0","12.0","13.0","14.0",""],"sizing_mode":"fixed","width":400},"id":"1025","type":"Select"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00089","sizing_mode":"stretch_width","text":"val_dropdown"},"id":"1024","type":"panel.models.markup.HTML"}],"root_ids":["1022","1026"]},"title":"Bokeh Application","version":"2.2.3"}};
-    var render_items = [{"docid":"0d421290-e9c8-48c7-b1b4-452813a1a9b3","root_ids":["1022"],"roots":{"1022":"43103f03-6157-4ae4-b2cd-974c5c94c7a2"}}];
+    var docs_json = {"cdbdda47-c288-4335-9cc3-a3ce0d7c241e":{"defs":[],"roots":{"references":[{"attributes":{"children":[{"id":"1025"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00179","sizing_mode":"stretch_width"},"id":"1024","type":"Row"},{"attributes":{"client_comm_id":"53c5a5d9e6254c2ba3231bfe9144ee5f","comm_id":"a26482958cd446ecbf9136f10ea4760a","plot_id":"1023"},"id":"1027","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00181","sizing_mode":"stretch_width","text":"val_dropdown"},"id":"1025","type":"panel.models.markup.HTML"},{"attributes":{"height":50,"margin":[5,10,5,10],"options":["10.0","11.0","12.0","13.0","14.0",""],"sizing_mode":"fixed","width":400},"id":"1026","type":"Select"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1024"},{"id":"1026"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00180","sizing_mode":"stretch_both","width":400},"id":"1023","type":"panel.models.layout.Card"}],"root_ids":["1023","1027"]},"title":"Bokeh Application","version":"2.3.2"}};
+    var render_items = [{"docid":"cdbdda47-c288-4335-9cc3-a3ce0d7c241e","root_ids":["1023"],"roots":{"1023":"a9d1be3c-8f7a-44b9-be35-6dcda441e3d7"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -3358,21 +3562,22 @@ documentation for more info</p>
     console.debug("Bokeh: all callbacks have finished");
   }
 
-  function load_libs(css_urls, js_urls, callback) {
+  function load_libs(css_urls, js_urls, js_modules, callback) {
     if (css_urls == null) css_urls = [];
     if (js_urls == null) js_urls = [];
+    if (js_modules == null) js_modules = [];
 
     root._bokeh_onload_callbacks.push(callback);
     if (root._bokeh_is_loading > 0) {
       console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
       return null;
     }
-    if (js_urls == null || js_urls.length === 0) {
+    if (js_urls.length === 0 && js_modules.length === 0) {
       run_callbacks();
       return null;
     }
     console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
-    root._bokeh_is_loading = css_urls.length + js_urls.length;
+    root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
 
     function on_load() {
       root._bokeh_is_loading--;
@@ -3400,9 +3605,16 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
+      window.requirejs.config({'paths': {'tabulator': 'https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator'}});
       window.requirejs.config({'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}});
       require([], function() {
       })
+    }
+    if (((window['tabulator'] !== undefined) && (!(window['tabulator'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js', 'https://unpkg.com/moment@2.27.0/moment.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
     }
     if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
@@ -3427,7 +3639,19 @@ documentation for more info</p>
       console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
       document.head.appendChild(element);
     }
-	if (!js_urls.length) {
+    for (var i = 0; i < js_modules.length; i++) {
+      var url = js_modules[i];
+      if (skip.indexOf(url) >= 0) { on_load(); continue; }
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    if (!js_urls.length && !js_modules.length) {
       on_load()
     }
   };
@@ -3438,10 +3662,13 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.3.min.js", "https://unpkg.com/@holoviz/panel@^0.10.3/dist/panel.min.js"];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/widgets.css"];
-
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js", "https://unpkg.com/moment@2.27.0/moment.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.2.min.js", "https://unpkg.com/@holoviz/panel@^0.11.3/dist/panel.min.js"];
+  var js_modules = [];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator_simple.min.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/widgets.css"];
   var inline_js = [
+    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
     },
@@ -3480,21 +3707,34 @@ documentation for more info</p>
         },
         "custom/cuxfilter.charts.datashader.custom_extensions.graph_inspect_widget.custom_inspect_tool": function(require, module, exports) {
       "use strict";
+      var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+      }) : (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          o[k2] = m[k];
+      }));
+      var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+          Object.defineProperty(o, "default", { enumerable: true, value: v });
+      }) : function(o, v) {
+          o["default"] = v;
+      });
       var __importStar = (this && this.__importStar) || function (mod) {
           if (mod && mod.__esModule) return mod;
           var result = {};
-          if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-          result["default"] = mod;
+          if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+          __setModuleDefault(result, mod);
           return result;
       };
       Object.defineProperty(exports, "__esModule", { value: true });
+      exports.CustomInspectTool = exports.CustomInspectToolView = void 0;
       const inspect_tool_1 = require("models/tools/inspectors/inspect_tool");
       const p = __importStar(require("core/properties"));
       class CustomInspectToolView extends inspect_tool_1.InspectToolView {
           connect_signals() {
               super.connect_signals();
               this.connect(this.model.properties.active.change, () => {
-                  this.model._active = this.model.properties.active.spec.value;
+                  this.model._active = this.model.active;
               });
           }
       }
@@ -3542,7 +3782,7 @@ documentation for more info</p>
     console.debug("Bokeh: BokehJS loaded, going straight to plotting");
     run_inline_js();
   } else {
-    load_libs(css_urls, js_urls, function() {
+    load_libs(css_urls, js_urls, js_modules, function() {
       console.debug("Bokeh: BokehJS plotting callback run at", now());
       run_inline_js();
     });
@@ -3786,18 +4026,18 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="output text_html"><div id="1027">
+</script><div class="output text_html"><div id="1028">
 
 
 
 
 
-  <div class="bk-root" data-root-id="1027" id="1c1693f6-9641-4e4d-a191-396950fc90c2"></div>
+  <div class="bk-root" data-root-id="1028" id="194fe6ee-5f12-4e61-af4e-c026da147b55"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"df3ebe45-fedb-4e4c-95a0-48c46bb11097":{"roots":{"references":[{"attributes":{"client_comm_id":"aa6ae09a62eb4fa89c7ed62a6820a1f1","comm_id":"722738e17e814562856a799bf3262c15","plot_id":"1027"},"id":"1031","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1029"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00113","sizing_mode":"stretch_width"},"id":"1028","type":"Row"},{"attributes":{"height":200,"margin":[5,10,5,10],"options":["10.0","11.0","12.0","13.0","14.0",""],"sizing_mode":"fixed","value":[""],"width":400},"id":"1030","type":"MultiSelect"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00115","sizing_mode":"stretch_width","text":"val_multi_select"},"id":"1029","type":"panel.models.markup.HTML"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1028"},{"id":"1030"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00114","sizing_mode":"stretch_both","width":400},"id":"1027","type":"panel.models.layout.Card"}],"root_ids":["1027","1031"]},"title":"Bokeh Application","version":"2.2.3"}};
-    var render_items = [{"docid":"df3ebe45-fedb-4e4c-95a0-48c46bb11097","root_ids":["1027"],"roots":{"1027":"1c1693f6-9641-4e4d-a191-396950fc90c2"}}];
+    var docs_json = {"9fd2e78f-4912-4d42-b61f-6e2f7bf1c645":{"defs":[],"roots":{"references":[{"attributes":{"client_comm_id":"fcf84bf4e61d464495e15c23a7c01a54","comm_id":"3c8b801f14cb47459942636f47f85d3c","plot_id":"1028"},"id":"1032","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1029"},{"id":"1031"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00206","sizing_mode":"stretch_both","width":400},"id":"1028","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00207","sizing_mode":"stretch_width","text":"val_multi_select"},"id":"1030","type":"panel.models.markup.HTML"},{"attributes":{"height":200,"margin":[5,10,5,10],"options":["10.0","11.0","12.0","13.0","14.0",""],"sizing_mode":"fixed","value":[""],"width":400},"id":"1031","type":"MultiSelect"},{"attributes":{"children":[{"id":"1030"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00205","sizing_mode":"stretch_width"},"id":"1029","type":"Row"}],"root_ids":["1028","1032"]},"title":"Bokeh Application","version":"2.3.2"}};
+    var render_items = [{"docid":"9fd2e78f-4912-4d42-b61f-6e2f7bf1c645","root_ids":["1028"],"roots":{"1028":"194fe6ee-5f12-4e61-af4e-c026da147b55"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -3906,21 +4146,22 @@ documentation for more info</p>
     console.debug("Bokeh: all callbacks have finished");
   }
 
-  function load_libs(css_urls, js_urls, callback) {
+  function load_libs(css_urls, js_urls, js_modules, callback) {
     if (css_urls == null) css_urls = [];
     if (js_urls == null) js_urls = [];
+    if (js_modules == null) js_modules = [];
 
     root._bokeh_onload_callbacks.push(callback);
     if (root._bokeh_is_loading > 0) {
       console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
       return null;
     }
-    if (js_urls == null || js_urls.length === 0) {
+    if (js_urls.length === 0 && js_modules.length === 0) {
       run_callbacks();
       return null;
     }
     console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
-    root._bokeh_is_loading = css_urls.length + js_urls.length;
+    root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
 
     function on_load() {
       root._bokeh_is_loading--;
@@ -3948,9 +4189,16 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
+      window.requirejs.config({'paths': {'tabulator': 'https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator'}});
       window.requirejs.config({'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}});
       require([], function() {
       })
+    }
+    if (((window['tabulator'] !== undefined) && (!(window['tabulator'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js', 'https://unpkg.com/moment@2.27.0/moment.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
     }
     if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
@@ -3975,7 +4223,19 @@ documentation for more info</p>
       console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
       document.head.appendChild(element);
     }
-	if (!js_urls.length) {
+    for (var i = 0; i < js_modules.length; i++) {
+      var url = js_modules[i];
+      if (skip.indexOf(url) >= 0) { on_load(); continue; }
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    if (!js_urls.length && !js_modules.length) {
       on_load()
     }
   };
@@ -3986,10 +4246,13 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.3.min.js", "https://unpkg.com/@holoviz/panel@^0.10.3/dist/panel.min.js"];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/widgets.css"];
-
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js", "https://unpkg.com/moment@2.27.0/moment.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.2.min.js", "https://unpkg.com/@holoviz/panel@^0.11.3/dist/panel.min.js"];
+  var js_modules = [];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator_simple.min.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/widgets.css"];
   var inline_js = [
+    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
     },
@@ -4028,21 +4291,34 @@ documentation for more info</p>
         },
         "custom/cuxfilter.charts.datashader.custom_extensions.graph_inspect_widget.custom_inspect_tool": function(require, module, exports) {
       "use strict";
+      var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+      }) : (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          o[k2] = m[k];
+      }));
+      var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+          Object.defineProperty(o, "default", { enumerable: true, value: v });
+      }) : function(o, v) {
+          o["default"] = v;
+      });
       var __importStar = (this && this.__importStar) || function (mod) {
           if (mod && mod.__esModule) return mod;
           var result = {};
-          if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-          result["default"] = mod;
+          if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+          __setModuleDefault(result, mod);
           return result;
       };
       Object.defineProperty(exports, "__esModule", { value: true });
+      exports.CustomInspectTool = exports.CustomInspectToolView = void 0;
       const inspect_tool_1 = require("models/tools/inspectors/inspect_tool");
       const p = __importStar(require("core/properties"));
       class CustomInspectToolView extends inspect_tool_1.InspectToolView {
           connect_signals() {
               super.connect_signals();
               this.connect(this.model.properties.active.change, () => {
-                  this.model._active = this.model.properties.active.spec.value;
+                  this.model._active = this.model.active;
               });
           }
       }
@@ -4090,7 +4366,7 @@ documentation for more info</p>
     console.debug("Bokeh: BokehJS loaded, going straight to plotting");
     run_inline_js();
   } else {
-    load_libs(css_urls, js_urls, function() {
+    load_libs(css_urls, js_urls, js_modules, function() {
       console.debug("Bokeh: BokehJS plotting callback run at", now());
       run_inline_js();
     });
@@ -4334,18 +4610,18 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="output text_html"><div id="1032">
+</script><div class="output text_html"><div id="1033">
 
 
 
 
 
-  <div class="bk-root" data-root-id="1032" id="3c21f7cc-52b1-4e03-b9eb-91fa9527d07d"></div>
+  <div class="bk-root" data-root-id="1033" id="8d06397b-8d6c-4d9a-b2c3-8a326535ca0d"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"99ab68af-3e0d-4016-9048-23918102c33d":{"roots":{"references":[{"attributes":{"children":[{"id":"1034"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00142","sizing_mode":"stretch_width"},"id":"1033","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1033"},{"id":"1035"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00143","sizing_mode":"stretch_both"},"id":"1032","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00144","sizing_mode":"stretch_width","text":"val"},"id":"1034","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"b1f2e8327ac9436da9df504e0c996c04","comm_id":"0d44b3518bbe41f98e500b2918261747","plot_id":"1032"},"id":"1036","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["indicator"],"margin":[5,10,5,10],"sizing_mode":"stretch_both","text":"&lt;div style=&quot;font-size: 18pt; color: black&quot;&gt;12%&lt;/div&gt;"},"id":"1035","type":"panel.models.markup.HTML"}],"root_ids":["1032","1036"]},"title":"Bokeh Application","version":"2.2.3"}};
-    var render_items = [{"docid":"99ab68af-3e0d-4016-9048-23918102c33d","root_ids":["1032"],"roots":{"1032":"3c21f7cc-52b1-4e03-b9eb-91fa9527d07d"}}];
+    var docs_json = {"1b7ea8b2-f28b-4003-ae25-8ef6af92e021":{"defs":[],"roots":{"references":[{"attributes":{"children":[{"id":"1035"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00234","sizing_mode":"stretch_width"},"id":"1034","type":"Row"},{"attributes":{"client_comm_id":"5198926ca6ba4c67b272918d166f8078","comm_id":"155c18f6aa07473ab816f664939ded80","plot_id":"1033"},"id":"1037","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1034"},{"id":"1036"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00235","sizing_mode":"stretch_both"},"id":"1033","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00236","sizing_mode":"stretch_width","text":"val"},"id":"1035","type":"panel.models.markup.HTML"},{"attributes":{"css_classes":["indicator"],"margin":[5,10,5,10],"sizing_mode":"stretch_both","text":"&lt;div style=&quot;font-size: 18pt; color: black&quot;&gt;12%&lt;/div&gt;"},"id":"1036","type":"panel.models.markup.HTML"}],"root_ids":["1033","1037"]},"title":"Bokeh Application","version":"2.3.2"}};
+    var render_items = [{"docid":"1b7ea8b2-f28b-4003-ae25-8ef6af92e021","root_ids":["1033"],"roots":{"1033":"8d06397b-8d6c-4d9a-b2c3-8a326535ca0d"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -4419,21 +4695,22 @@ if (window.Jupyter !== undefined) {
     console.debug("Bokeh: all callbacks have finished");
   }
 
-  function load_libs(css_urls, js_urls, callback) {
+  function load_libs(css_urls, js_urls, js_modules, callback) {
     if (css_urls == null) css_urls = [];
     if (js_urls == null) js_urls = [];
+    if (js_modules == null) js_modules = [];
 
     root._bokeh_onload_callbacks.push(callback);
     if (root._bokeh_is_loading > 0) {
       console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
       return null;
     }
-    if (js_urls == null || js_urls.length === 0) {
+    if (js_urls.length === 0 && js_modules.length === 0) {
       run_callbacks();
       return null;
     }
     console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
-    root._bokeh_is_loading = css_urls.length + js_urls.length;
+    root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
 
     function on_load() {
       root._bokeh_is_loading--;
@@ -4461,9 +4738,16 @@ if (window.Jupyter !== undefined) {
 
     var skip = [];
     if (window.requirejs) {
+      window.requirejs.config({'paths': {'tabulator': 'https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator'}});
       window.requirejs.config({'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}});
       require([], function() {
       })
+    }
+    if (((window['tabulator'] !== undefined) && (!(window['tabulator'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js', 'https://unpkg.com/moment@2.27.0/moment.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
     }
     if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
@@ -4488,7 +4772,19 @@ if (window.Jupyter !== undefined) {
       console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
       document.head.appendChild(element);
     }
-	if (!js_urls.length) {
+    for (var i = 0; i < js_modules.length; i++) {
+      var url = js_modules[i];
+      if (skip.indexOf(url) >= 0) { on_load(); continue; }
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    if (!js_urls.length && !js_modules.length) {
       on_load()
     }
   };
@@ -4499,10 +4795,13 @@ if (window.Jupyter !== undefined) {
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.3.min.js", "https://unpkg.com/@holoviz/panel@^0.10.3/dist/panel.min.js"];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/widgets.css"];
-
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js", "https://unpkg.com/moment@2.27.0/moment.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.2.min.js", "https://unpkg.com/@holoviz/panel@^0.11.3/dist/panel.min.js"];
+  var js_modules = [];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator_simple.min.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/widgets.css"];
   var inline_js = [
+    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
     },
@@ -4541,21 +4840,34 @@ if (window.Jupyter !== undefined) {
         },
         "custom/cuxfilter.charts.datashader.custom_extensions.graph_inspect_widget.custom_inspect_tool": function(require, module, exports) {
       "use strict";
+      var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+      }) : (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          o[k2] = m[k];
+      }));
+      var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+          Object.defineProperty(o, "default", { enumerable: true, value: v });
+      }) : function(o, v) {
+          o["default"] = v;
+      });
       var __importStar = (this && this.__importStar) || function (mod) {
           if (mod && mod.__esModule) return mod;
           var result = {};
-          if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-          result["default"] = mod;
+          if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+          __setModuleDefault(result, mod);
           return result;
       };
       Object.defineProperty(exports, "__esModule", { value: true });
+      exports.CustomInspectTool = exports.CustomInspectToolView = void 0;
       const inspect_tool_1 = require("models/tools/inspectors/inspect_tool");
       const p = __importStar(require("core/properties"));
       class CustomInspectToolView extends inspect_tool_1.InspectToolView {
           connect_signals() {
               super.connect_signals();
               this.connect(this.model.properties.active.change, () => {
-                  this.model._active = this.model.properties.active.spec.value;
+                  this.model._active = this.model.active;
               });
           }
       }
@@ -4603,7 +4915,7 @@ if (window.Jupyter !== undefined) {
     console.debug("Bokeh: BokehJS loaded, going straight to plotting");
     run_inline_js();
   } else {
-    load_libs(css_urls, js_urls, function() {
+    load_libs(css_urls, js_urls, js_modules, function() {
       console.debug("Bokeh: BokehJS plotting callback run at", now());
       run_inline_js();
     });
@@ -4847,18 +5159,18 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="output text_html"><div id="1037">
+</script><div class="output text_html"><div id="1038">
 
 
 
 
 
-  <div class="bk-root" data-root-id="1037" id="612fe032-5a85-4fb2-a83c-6ad3a3bf6f62"></div>
+  <div class="bk-root" data-root-id="1038" id="5713cd82-5c96-4e52-a59d-e835d16d1cd2"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"cf7a0a3f-6f40-4c47-9b56-14717325cf94":{"roots":{"references":[{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00176","sizing_mode":"stretch_width","text":"custom eval expr"},"id":"1039","type":"panel.models.markup.HTML"},{"attributes":{"children":[{"id":"1039"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00174","sizing_mode":"stretch_width"},"id":"1038","type":"Row"},{"attributes":{"css_classes":["indicator"],"margin":[5,10,5,10],"sizing_mode":"stretch_both","text":"&lt;div style=&quot;font-size: 20pt; color: black&quot;&gt;26,000&lt;/div&gt;"},"id":"1040","type":"panel.models.markup.HTML"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1038"},{"id":"1040"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00175","sizing_mode":"stretch_both"},"id":"1037","type":"panel.models.layout.Card"},{"attributes":{"client_comm_id":"4f6160709d774999a4dc5e28afa4ac76","comm_id":"63e15b6823014e44acc236eb37b0e4bc","plot_id":"1037"},"id":"1041","type":"panel.models.comm_manager.CommManager"}],"root_ids":["1037","1041"]},"title":"Bokeh Application","version":"2.2.3"}};
-    var render_items = [{"docid":"cf7a0a3f-6f40-4c47-9b56-14717325cf94","root_ids":["1037"],"roots":{"1037":"612fe032-5a85-4fb2-a83c-6ad3a3bf6f62"}}];
+    var docs_json = {"686cacaf-1d52-45f3-8f17-8fdcc5b75b5f":{"defs":[],"roots":{"references":[{"attributes":{"children":[{"id":"1040"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00266","sizing_mode":"stretch_width"},"id":"1039","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1039"},{"id":"1041"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00267","sizing_mode":"stretch_both"},"id":"1038","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00268","sizing_mode":"stretch_width","text":"custom eval expr"},"id":"1040","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"a1396ab54c484f6b986d3b17755e8014","comm_id":"c29f39e07eb3461480188abb3fe92537","plot_id":"1038"},"id":"1042","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["indicator"],"margin":[5,10,5,10],"sizing_mode":"stretch_both","text":"&lt;div style=&quot;font-size: 20pt; color: black&quot;&gt;26,000&lt;/div&gt;"},"id":"1041","type":"panel.models.markup.HTML"}],"root_ids":["1038","1042"]},"title":"Bokeh Application","version":"2.3.2"}};
+    var render_items = [{"docid":"686cacaf-1d52-45f3-8f17-8fdcc5b75b5f","root_ids":["1038"],"roots":{"1038":"5713cd82-5c96-4e52-a59d-e835d16d1cd2"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -4966,21 +5278,22 @@ documentation for more info</p>
     console.debug("Bokeh: all callbacks have finished");
   }
 
-  function load_libs(css_urls, js_urls, callback) {
+  function load_libs(css_urls, js_urls, js_modules, callback) {
     if (css_urls == null) css_urls = [];
     if (js_urls == null) js_urls = [];
+    if (js_modules == null) js_modules = [];
 
     root._bokeh_onload_callbacks.push(callback);
     if (root._bokeh_is_loading > 0) {
       console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
       return null;
     }
-    if (js_urls == null || js_urls.length === 0) {
+    if (js_urls.length === 0 && js_modules.length === 0) {
       run_callbacks();
       return null;
     }
     console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
-    root._bokeh_is_loading = css_urls.length + js_urls.length;
+    root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
 
     function on_load() {
       root._bokeh_is_loading--;
@@ -5008,9 +5321,16 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
+      window.requirejs.config({'paths': {'tabulator': 'https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator'}});
       window.requirejs.config({'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}});
       require([], function() {
       })
+    }
+    if (((window['tabulator'] !== undefined) && (!(window['tabulator'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js', 'https://unpkg.com/moment@2.27.0/moment.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
     }
     if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
@@ -5035,7 +5355,19 @@ documentation for more info</p>
       console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
       document.head.appendChild(element);
     }
-	if (!js_urls.length) {
+    for (var i = 0; i < js_modules.length; i++) {
+      var url = js_modules[i];
+      if (skip.indexOf(url) >= 0) { on_load(); continue; }
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      element.type = "module";
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+    if (!js_urls.length && !js_modules.length) {
       on_load()
     }
   };
@@ -5046,10 +5378,13 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.3.min.js", "https://unpkg.com/@holoviz/panel@^0.10.3/dist/panel.min.js"];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.10.3/dist/css/widgets.css"];
-
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js", "https://unpkg.com/moment@2.27.0/moment.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.2.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.2.min.js", "https://unpkg.com/@holoviz/panel@^0.11.3/dist/panel.min.js"];
+  var js_modules = [];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator_simple.min.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/markdown.css", "https://unpkg.com/@holoviz/panel@0.11.3/dist/css/widgets.css"];
   var inline_js = [
+    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
     },
@@ -5088,21 +5423,34 @@ documentation for more info</p>
         },
         "custom/cuxfilter.charts.datashader.custom_extensions.graph_inspect_widget.custom_inspect_tool": function(require, module, exports) {
       "use strict";
+      var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+      }) : (function(o, m, k, k2) {
+          if (k2 === undefined) k2 = k;
+          o[k2] = m[k];
+      }));
+      var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+          Object.defineProperty(o, "default", { enumerable: true, value: v });
+      }) : function(o, v) {
+          o["default"] = v;
+      });
       var __importStar = (this && this.__importStar) || function (mod) {
           if (mod && mod.__esModule) return mod;
           var result = {};
-          if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-          result["default"] = mod;
+          if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+          __setModuleDefault(result, mod);
           return result;
       };
       Object.defineProperty(exports, "__esModule", { value: true });
+      exports.CustomInspectTool = exports.CustomInspectToolView = void 0;
       const inspect_tool_1 = require("models/tools/inspectors/inspect_tool");
       const p = __importStar(require("core/properties"));
       class CustomInspectToolView extends inspect_tool_1.InspectToolView {
           connect_signals() {
               super.connect_signals();
               this.connect(this.model.properties.active.change, () => {
-                  this.model._active = this.model.properties.active.spec.value;
+                  this.model._active = this.model.active;
               });
           }
       }
@@ -5150,7 +5498,7 @@ documentation for more info</p>
     console.debug("Bokeh: BokehJS loaded, going straight to plotting");
     run_inline_js();
   } else {
-    load_libs(css_urls, js_urls, function() {
+    load_libs(css_urls, js_urls, js_modules, function() {
       console.debug("Bokeh: BokehJS plotting callback run at", now());
       run_inline_js();
     });
@@ -5394,18 +5742,18 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="output text_html"><div id="1042">
+</script><div class="output text_html"><div id="1043">
 
 
 
 
 
-  <div class="bk-root" data-root-id="1042" id="5ebb3b01-73a5-48d0-84cd-bfffb1ce9ba5"></div>
+  <div class="bk-root" data-root-id="1043" id="cc35143d-b5d1-483f-b112-a1ce4b5dfcb9"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"b18634c4-ffa3-4517-b3ab-b777dc1f503a":{"roots":{"references":[{"attributes":{"css_classes":["markdown"],"margin":[5,5,5,5],"name":"Markdown00180","text":"&lt;h1&gt;H1&lt;/h1&gt;\n&lt;h2&gt;H2&lt;/h2&gt;\n&lt;h3&gt;H3&lt;/h3&gt;\n&lt;h4&gt;H4&lt;/h4&gt;\n&lt;h5&gt;H5&lt;/h5&gt;\n&lt;h6&gt;H6&lt;/h6&gt;\n&lt;h3&gt;Emphasis&lt;/h3&gt;\n&lt;p&gt;Emphasis, aka italics, with &lt;em&gt;asterisks&lt;/em&gt; or &lt;em&gt;underscores&lt;/em&gt;.&lt;/p&gt;"},"id":"1045","type":"panel.models.markup.HTML"},{"attributes":{"children":[{"id":"1044"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00211","sizing_mode":"stretch_width"},"id":"1043","type":"Row"},{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00213","sizing_mode":"stretch_width","text":"Test Markdown title"},"id":"1044","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"3d50e6bb109d4815a47802f7030499e7","comm_id":"78b9d2c3ed414d29a890be85c1d1ec22","plot_id":"1042"},"id":"1046","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1043"},{"id":"1045"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00212","sizing_mode":"stretch_both"},"id":"1042","type":"panel.models.layout.Card"}],"root_ids":["1042","1046"]},"title":"Bokeh Application","version":"2.2.3"}};
-    var render_items = [{"docid":"b18634c4-ffa3-4517-b3ab-b777dc1f503a","root_ids":["1042"],"roots":{"1042":"5ebb3b01-73a5-48d0-84cd-bfffb1ce9ba5"}}];
+    var docs_json = {"a9b468a9-8d8f-4e26-984d-cdc8f654766f":{"defs":[],"roots":{"references":[{"attributes":{"css_classes":["card-title"],"margin":[2,5,2,5],"name":"HTML00305","sizing_mode":"stretch_width","text":"Test Markdown title"},"id":"1045","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"0d4af218c48d4eb2a753d04d31c80bc4","comm_id":"79213346b9f24b8c8d43a009aec623cd","plot_id":"1043"},"id":"1047","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["markdown"],"margin":[5,5,5,5],"name":"Markdown00272","text":"&lt;h1&gt;H1&lt;/h1&gt;\n&lt;h2&gt;H2&lt;/h2&gt;\n&lt;h3&gt;H3&lt;/h3&gt;\n&lt;h4&gt;H4&lt;/h4&gt;\n&lt;h5&gt;H5&lt;/h5&gt;\n&lt;h6&gt;H6&lt;/h6&gt;\n&lt;h3&gt;Emphasis&lt;/h3&gt;\n&lt;p&gt;Emphasis, aka italics, with &lt;em&gt;asterisks&lt;/em&gt; or &lt;em&gt;underscores&lt;/em&gt;.&lt;/p&gt;"},"id":"1046","type":"panel.models.markup.HTML"},{"attributes":{"children":[{"id":"1045"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00303","sizing_mode":"stretch_width"},"id":"1044","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1044"},{"id":"1046"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00304","sizing_mode":"stretch_both"},"id":"1043","type":"panel.models.layout.Card"}],"root_ids":["1043","1047"]},"title":"Bokeh Application","version":"2.3.2"}};
+    var render_items = [{"docid":"a9b468a9-8d8f-4e26-984d-cdc8f654766f","root_ids":["1043"],"roots":{"1043":"cc35143d-b5d1-483f-b112-a1ce4b5dfcb9"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
