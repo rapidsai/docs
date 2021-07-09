@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['traveling_5fsalesperson_518',['traveling_salesperson',['../namespacecugraph.html#a75cae03f49d08c9257d7eb1e81e19530',1,'cugraph']]]
+  ['traveling_5fsalesperson_528',['traveling_salesperson',['../namespacecugraph.html#ac90ca71c94a6e07a8ac49166bdf9d884',1,'cugraph']]]
 ];

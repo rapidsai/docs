@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['minimum_5fspanning_5ftree_510',['minimum_spanning_tree',['../namespacecugraph.html#a988431d375c02f10f76295cc02f72103',1,'cugraph']]]
+  ['minimum_5fspanning_5ftree_520',['minimum_spanning_tree',['../namespacecugraph.html#a07372c78e975cd7a73daecc486b00dcf',1,'cugraph']]]
 ];

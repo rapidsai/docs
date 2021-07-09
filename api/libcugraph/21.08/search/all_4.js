@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['ecg_74',['ecg',['../namespacecugraph.html#af2de53c5d322dcc0668b41d9abf0f8fc',1,'cugraph']]],
-  ['edge_5fbetweenness_5fcentrality_75',['edge_betweenness_centrality',['../namespacecugraph.html#af4d401722a6b2bcf236d5a8f5670cc25',1,'cugraph']]],
+  ['ecg_74',['ecg',['../namespacecugraph.html#aa3062d0437821f23a9b1a5b37814bfb9',1,'cugraph']]],
+  ['edge_5fbetweenness_5fcentrality_75',['edge_betweenness_centrality',['../namespacecugraph.html#a0a1f1874fab344455c686bcb7c086fbb',1,'cugraph']]],
   ['edge_5fdata_76',['edge_data',['../classcugraph_1_1legacy_1_1GraphViewBase.html#a87f50a527a7f6efc03b1671d69ee71c2',1,'cugraph::legacy::GraphViewBase']]],
   ['edge_5fdevice_5fview_77',['edge_device_view',['../classcugraph_1_1experimental_1_1detail_1_1compute__partition__t.html#a5e53425732d770eedf4e9e818b913fa0',1,'cugraph::experimental::detail::compute_partition_t']]],
   ['edge_5fdevice_5fview_5ft_78',['edge_device_view_t',['../classcugraph_1_1experimental_1_1detail_1_1compute__partition__t_1_1edge__device__view__t.html',1,'cugraph::experimental::detail::compute_partition_t']]],

@@ -91,12 +91,12 @@ $(function() {
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;<span class="keyword">namespace </span>detail {</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp; </div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t, <span class="keyword">typename</span> edge_t, <span class="keyword">typename</span> weight_t&gt;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;<span class="keywordtype">void</span> exact_fa2(raft::handle_t <span class="keyword">const</span> &amp;handle,</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;               legacy::GraphCOOView&lt;vertex_t, edge_t, weight_t&gt; &amp;graph,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;               <span class="keywordtype">float</span> *pos,</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;<span class="keywordtype">void</span> exact_fa2(raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;               legacy::GraphCOOView&lt;vertex_t, edge_t, weight_t&gt;&amp; graph,</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;               <span class="keywordtype">float</span>* pos,</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;               <span class="keyword">const</span> <span class="keywordtype">int</span> max_iter                            = 500,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;               <span class="keywordtype">float</span> *x_start                                = <span class="keyword">nullptr</span>,</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;               <span class="keywordtype">float</span> *y_start                                = <span class="keyword">nullptr</span>,</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;               <span class="keywordtype">float</span>* x_start                                = <span class="keyword">nullptr</span>,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;               <span class="keywordtype">float</span>* y_start                                = <span class="keyword">nullptr</span>,</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;               <span class="keywordtype">bool</span> outbound_attraction_distribution         = <span class="keyword">true</span>,</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;               <span class="keywordtype">bool</span> lin_log_mode                             = <span class="keyword">false</span>,</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;               <span class="keywordtype">bool</span> prevent_overlapping                      = <span class="keyword">false</span>,</div>
@@ -106,18 +106,18 @@ $(function() {
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp;               <span class="keywordtype">bool</span> strong_gravity_mode                      = <span class="keyword">false</span>,</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;               <span class="keyword">const</span> <span class="keywordtype">float</span> gravity                           = 1.0,</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;               <span class="keywordtype">bool</span> verbose                                  = <span class="keyword">false</span>,</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;               internals::GraphBasedDimRedCallback *callback = <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;               internals::GraphBasedDimRedCallback* callback = <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;{</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;  <span class="keyword">auto</span> stream_view = handle.get_stream_view();</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;  <span class="keyword">const</span> edge_t e   = graph.number_of_edges;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;  <span class="keyword">const</span> vertex_t n = graph.number_of_vertices;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;  <span class="keywordtype">float</span> *d_repel{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;  <span class="keywordtype">float</span> *d_attract{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;  <span class="keywordtype">float</span> *d_old_forces{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;  <span class="keywordtype">int</span> *d_mass{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;  <span class="keywordtype">float</span> *d_swinging{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp;  <span class="keywordtype">float</span> *d_traction{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;  <span class="keywordtype">float</span>* d_repel{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;  <span class="keywordtype">float</span>* d_attract{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;  <span class="keywordtype">float</span>* d_old_forces{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;  <span class="keywordtype">int</span>* d_mass{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;  <span class="keywordtype">float</span>* d_swinging{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp;  <span class="keywordtype">float</span>* d_traction{<span class="keyword">nullptr</span>};</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp; </div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;  rmm::device_uvector&lt;float&gt; repel(n * 2, stream_view);</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp;  rmm::device_uvector&lt;float&gt; attract(n * 2, stream_view);</div>
@@ -152,9 +152,9 @@ $(function() {
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&nbsp;  graph.degree(d_mass, cugraph::legacy::DegreeDirection::OUT);</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&nbsp;  CHECK_CUDA(stream_view.value());</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp;  <span class="keyword">const</span> vertex_t *row = graph.src_indices;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp;  <span class="keyword">const</span> vertex_t *col = graph.dst_indices;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp;  <span class="keyword">const</span> weight_t *v   = graph.edge_data;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp;  <span class="keyword">const</span> vertex_t* row = graph.src_indices;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp;  <span class="keyword">const</span> vertex_t* col = graph.dst_indices;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp;  <span class="keyword">const</span> weight_t* v   = graph.edge_data;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&nbsp; </div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp;  <span class="keywordtype">float</span> speed                     = 1.f;</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&nbsp;  <span class="keywordtype">float</span> speed_efficiency          = 1.f;</div>
