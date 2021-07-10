@@ -63,7 +63,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <a href="ml__cuda__utils_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&nbsp;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&nbsp;<span class="comment"> * Copyright (c) 2019, NVIDIA CORPORATION.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&nbsp;<span class="comment"> * Copyright (c) 2019-2021, NVIDIA CORPORATION.</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&nbsp;<span class="comment"> *</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&nbsp;<span class="comment"> * Licensed under the Apache License, Version 2.0 (the "License");</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&nbsp;<span class="comment"> * you may not use this file except in compliance with the License.</span></div>
@@ -85,36 +85,37 @@ $(function() {
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp; </div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp;<span class="keyword">namespace </span><a class="code" href="namespaceML.html">ML</a> {</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp; </div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="namespaceML.html#ae9e9f22920ecd0dd7ab05981dd3a0cac">   24</a></span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="namespaceML.html#ae9e9f22920ecd0dd7ab05981dd3a0cac">get_device</a>(<span class="keyword">const</span> <span class="keywordtype">void</span> *ptr) {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp;  cudaPointerAttributes att;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp;  cudaPointerGetAttributes(&amp;att, ptr);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp;  <span class="keywordflow">return</span> att.device;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp;}</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp; </div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="namespaceML.html#a2ea5c03024c5683984f17d889421f40c">   30</a></span>&nbsp;<span class="keyword">inline</span> cudaMemoryType <a class="code" href="namespaceML.html#a2ea5c03024c5683984f17d889421f40c">memory_type</a>(<span class="keyword">const</span> <span class="keywordtype">void</span> *p) {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp;  cudaPointerAttributes att;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp;  cudaError_t err = cudaPointerGetAttributes(&amp;att, p);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp;  ASSERT(err == cudaSuccess || err == cudaErrorInvalidValue, <span class="stringliteral">"%s"</span>,</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;         cudaGetErrorString(err));</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;  <span class="keywordflow">if</span> (err == cudaErrorInvalidValue) {</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;    <span class="comment">// Make sure the current thread error status has been reset</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;    err = cudaGetLastError();</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;    ASSERT(err == cudaErrorInvalidValue, <span class="stringliteral">"%s"</span>, cudaGetErrorString(err));</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;  }</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;  <span class="keywordflow">return</span> att.type;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;}</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp; </div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="namespaceML.html#a13b2600cf250418d851752f64d633860">   44</a></span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespaceML.html#a13b2600cf250418d851752f64d633860">is_device_or_managed_type</a>(<span class="keyword">const</span> <span class="keywordtype">void</span> *p) {</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;  cudaMemoryType p_memory_type = <a class="code" href="namespaceML.html#a2ea5c03024c5683984f17d889421f40c">memory_type</a>(p);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;  <span class="keywordflow">return</span> p_memory_type == cudaMemoryTypeDevice ||</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;         p_memory_type == cudaMemoryTypeManaged;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;}</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;}  <span class="comment">// namespace ML</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="namespaceML.html#ae9e9f22920ecd0dd7ab05981dd3a0cac">   24</a></span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="namespaceML.html#ae9e9f22920ecd0dd7ab05981dd3a0cac">get_device</a>(<span class="keyword">const</span> <span class="keywordtype">void</span>* ptr)</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp;{</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp;  cudaPointerAttributes att;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp;  cudaPointerGetAttributes(&amp;att, ptr);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp;  <span class="keywordflow">return</span> att.device;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp;}</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp; </div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="namespaceML.html#a2ea5c03024c5683984f17d889421f40c">   31</a></span>&nbsp;<span class="keyword">inline</span> cudaMemoryType <a class="code" href="namespaceML.html#a2ea5c03024c5683984f17d889421f40c">memory_type</a>(<span class="keyword">const</span> <span class="keywordtype">void</span>* p)</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp;{</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp;  cudaPointerAttributes att;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;  cudaError_t err = cudaPointerGetAttributes(&amp;att, p);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp;  ASSERT(err == cudaSuccess || err == cudaErrorInvalidValue, <span class="stringliteral">"%s"</span>, cudaGetErrorString(err));</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;  <span class="keywordflow">if</span> (err == cudaErrorInvalidValue) {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;    <span class="comment">// Make sure the current thread error status has been reset</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;    err = cudaGetLastError();</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;    ASSERT(err == cudaErrorInvalidValue, <span class="stringliteral">"%s"</span>, cudaGetErrorString(err));</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;  }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;  <span class="keywordflow">return</span> att.type;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;}</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp; </div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="namespaceML.html#a13b2600cf250418d851752f64d633860">   45</a></span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespaceML.html#a13b2600cf250418d851752f64d633860">is_device_or_managed_type</a>(<span class="keyword">const</span> <span class="keywordtype">void</span>* p)</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;{</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;  cudaMemoryType p_memory_type = <a class="code" href="namespaceML.html#a2ea5c03024c5683984f17d889421f40c">memory_type</a>(p);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;  <span class="keywordflow">return</span> p_memory_type == cudaMemoryTypeDevice || p_memory_type == cudaMemoryTypeManaged;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp;}</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;}  <span class="comment">// namespace ML</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="anamespaceML_html_a2ea5c03024c5683984f17d889421f40c"><div class="ttname"><a href="namespaceML.html#a2ea5c03024c5683984f17d889421f40c">ML::memory_type</a></div><div class="ttdeci">cudaMemoryType memory_type(const void *p)</div><div class="ttdef"><b>Definition:</b> ml_cuda_utils.h:30</div></div>
-<div class="ttc" id="anamespaceML_html_a13b2600cf250418d851752f64d633860"><div class="ttname"><a href="namespaceML.html#a13b2600cf250418d851752f64d633860">ML::is_device_or_managed_type</a></div><div class="ttdeci">bool is_device_or_managed_type(const void *p)</div><div class="ttdef"><b>Definition:</b> ml_cuda_utils.h:44</div></div>
+<div class="ttc" id="anamespaceML_html_a2ea5c03024c5683984f17d889421f40c"><div class="ttname"><a href="namespaceML.html#a2ea5c03024c5683984f17d889421f40c">ML::memory_type</a></div><div class="ttdeci">cudaMemoryType memory_type(const void *p)</div><div class="ttdef"><b>Definition:</b> ml_cuda_utils.h:31</div></div>
+<div class="ttc" id="anamespaceML_html_a13b2600cf250418d851752f64d633860"><div class="ttname"><a href="namespaceML.html#a13b2600cf250418d851752f64d633860">ML::is_device_or_managed_type</a></div><div class="ttdeci">bool is_device_or_managed_type(const void *p)</div><div class="ttdef"><b>Definition:</b> ml_cuda_utils.h:45</div></div>
 <div class="ttc" id="anamespaceML_html_ae9e9f22920ecd0dd7ab05981dd3a0cac"><div class="ttname"><a href="namespaceML.html#ae9e9f22920ecd0dd7ab05981dd3a0cac">ML::get_device</a></div><div class="ttdeci">int get_device(const void *ptr)</div><div class="ttdef"><b>Definition:</b> ml_cuda_utils.h:24</div></div>
 <div class="ttc" id="anamespaceML_html"><div class="ttname"><a href="namespaceML.html">ML</a></div><div class="ttdef"><b>Definition:</b> dbscan.hpp:26</div></div>
 <!-- start footer part -->
