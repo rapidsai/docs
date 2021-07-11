@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['norm_2333',['Norm',['../namespaceML.html#a1529da2b94c67018bb14f404f6e9aeac',1,'ML']]]
+  ['norm_2335',['Norm',['../namespaceML.html#a1529da2b94c67018bb14f404f6e9aeac',1,'ML']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['graphbaseddimredcallback_1231',['GraphBasedDimRedCallback',['../classML_1_1Internals_1_1GraphBasedDimRedCallback.html',1,'ML::Internals']]]
+  ['graphbaseddimredcallback_1232',['GraphBasedDimRedCallback',['../classML_1_1Internals_1_1GraphBasedDimRedCallback.html',1,'ML::Internals']]]
 ];
