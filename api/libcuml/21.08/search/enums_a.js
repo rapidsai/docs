@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['seasonaltype_2340',['SeasonalType',['../namespaceML.html#a8d55de18185e36dd8f8a6d735e6a91e6',1,'ML']]],
-  ['solver_2341',['solver',['../namespaceML.html#a7324898185a2fc9a9145f9bad555049b',1,'ML']]],
-  ['storage_5forder_2342',['STORAGE_ORDER',['../namespaceML.html#ad2244eba7d9251930ae2519d556f18ea',1,'ML']]],
-  ['storage_5ftype_5ft_2343',['storage_type_t',['../namespaceML_1_1fil.html#a2260584f7152bb5497b528729b6bd216',1,'ML::fil']]],
-  ['svmtype_2344',['SvmType',['../namespaceML_1_1SVM.html#a94b5c3bf8c9646f2443ebc5bb7433e00',1,'ML::SVM']]]
+  ['seasonaltype_2342',['SeasonalType',['../namespaceML.html#a8d55de18185e36dd8f8a6d735e6a91e6',1,'ML']]],
+  ['solver_2343',['solver',['../namespaceML.html#a7324898185a2fc9a9145f9bad555049b',1,'ML']]],
+  ['storage_5forder_2344',['STORAGE_ORDER',['../namespaceML.html#ad2244eba7d9251930ae2519d556f18ea',1,'ML']]],
+  ['storage_5ftype_5ft_2345',['storage_type_t',['../namespaceML_1_1fil.html#a2260584f7152bb5497b528729b6bd216',1,'ML::fil']]],
+  ['svmtype_2346',['SvmType',['../namespaceML_1_1SVM.html#a94b5c3bf8c9646f2443ebc5bb7433e00',1,'ML::SVM']]]
 ];

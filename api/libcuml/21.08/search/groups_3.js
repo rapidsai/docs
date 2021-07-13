@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['helper_20macros_20for_20dealing_20with_20logging_2472',['Helper macros for dealing with logging',['../group__LoggerMacros.html',1,'']]]
+  ['helper_20macros_20for_20dealing_20with_20logging_2474',['Helper macros for dealing with logging',['../group__LoggerMacros.html',1,'']]]
 ];
