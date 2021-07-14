@@ -90,7 +90,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api.html">cuDF API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="10min.html">10 Minutes to cuDF and Dask-cuDF</a></li>
@@ -170,7 +170,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/groupby.md.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/groupby.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -209,28 +209,33 @@
 </style>
 <section id="groupby">
 <h1>GroupBy<a class="headerlink" href="#groupby" title="Permalink to this headline">&para;</a></h1>
-<p>cuDF supports a small (but important) subset of
-Pandas&rsquo; <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html">groupby API</a>.</p>
+<p>cuDF supports a small (but important) subset of Pandas&rsquo; <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html">groupby
+API</a>.</p>
 <section id="summary-of-supported-operations">
 <h2>Summary of supported operations<a class="headerlink" href="#summary-of-supported-operations" title="Permalink to this headline">&para;</a></h2>
-<ol class="simple">
+<ol class="arabic simple">
 <li><p>Grouping by one or more columns</p></li>
 <li><p>Basic aggregations such as &ldquo;sum&rdquo;, &ldquo;mean&rdquo;, etc.</p></li>
 <li><p>Quantile aggregation</p></li>
-<li><p>A &ldquo;collect&rdquo; or <code class="docutils literal notranslate"><span class="pre">list</span></code> aggregation for collecting values in a group into lists</p></li>
-<li><p>Automatic exclusion of columns with unsupported dtypes (&rdquo;nuisance&rdquo; columns) when aggregating</p></li>
+<li><p>A &ldquo;collect&rdquo; or <code class="docutils literal notranslate"><span class="pre">list</span></code> aggregation for collecting values in a group
+into lists</p></li>
+<li><p>Automatic exclusion of columns with unsupported dtypes (&ldquo;nuisance&rdquo;
+columns) when aggregating</p></li>
 <li><p>Iterating over the groups of a GroupBy object</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">GroupBy.groups</span></code> API that returns a mapping of group keys to row labels</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">GroupBy.apply</span></code> API for performing arbitrary operations on each group. Note that
-this has very limited functionality compared to the equivalent Pandas function.
-See the section on <a class="reference external" href="#groupby-apply">apply</a> for more details.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">GroupBy.pipe</span></code> similar to <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html#piping-function-calls">Pandas</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GroupBy.groups</span></code> API that returns a mapping of group keys to row
+labels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GroupBy.apply</span></code> API for performing arbitrary operations on each
+group. Note that this has very limited functionality compared to the
+equivalent Pandas function. See the section on
+<a class="reference external" href="#groupby-apply">apply</a> for more details.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GroupBy.pipe</span></code> similar to
+<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html#piping-function-calls">Pandas</a>.</p></li>
 </ol>
 </section>
 <section id="grouping">
 <h2>Grouping<a class="headerlink" href="#grouping" title="Permalink to this headline">&para;</a></h2>
-<p>A GroupBy object is created by grouping the values of a <code class="docutils literal notranslate"><span class="pre">Series</span></code> or <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>
-by one or more columns:</p>
+<p>A GroupBy object is created by grouping the values of a <code class="docutils literal notranslate"><span class="pre">Series</span></code> or
+<code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> by one or more columns:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cudf</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">'b'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">'c'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]})</span>
@@ -279,7 +284,8 @@ by one or more columns:</p>
 </section>
 <section id="the-grouper-object">
 <h3>The <code class="docutils literal notranslate"><span class="pre">Grouper</span></code> object<a class="headerlink" href="#the-grouper-object" title="Permalink to this headline">&para;</a></h3>
-<p>A <code class="docutils literal notranslate"><span class="pre">Grouper</span></code> can be used to disambiguate between columns and levels when they have the same name:</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">Grouper</span></code> can be used to disambiguate between columns and levels
+when they have the same name:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
 <span class="go">   b  c</span>
 <span class="go">b</span>
@@ -317,103 +323,106 @@ by one or more columns:</p>
 <span class="go">2   5   2  4.5</span>
 </pre></div>
 </div>
-<p>The following table summarizes the available aggregations and the types that support them:</p>
-<table border="1" class="docutils">
+<p>The following table summarizes the available aggregations and the types
+that support them:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 6%">
+<col style="width: 8%">
+<col style="width: 10%">
+<col style="width: 9%">
+</colgroup>
 <thead>
-<tr>
-<th>Aggregations\dtypes</th>
-<th>Numeric</th>
-<th>Datetime</th>
-<th>String</th>
-<th>Categorical</th>
-<th>List</th>
-<th>Struct</th>
-<th>Interval</th>
-<th>Decimal</th>
+<tr class="row-odd"><th class="head"><p>Aggregations / dtypes</p></th>
+<th class="head"><p>Numeric</p></th>
+<th class="head"><p>Datetime</p></th>
+<th class="head"><p>String</p></th>
+<th class="head"><p>Categorical</p></th>
+<th class="head"><p>List</p></th>
+<th class="head"><p>Struct</p></th>
+<th class="head"><p>Interval</p></th>
+<th class="head"><p>Decimal</p></th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>count</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-even"><td><p>count</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
-<td>✅</td>
+<td><p>✅</p></td>
 </tr>
-<tr>
-<td>size</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-odd"><td><p>size</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
-<td>✅</td>
+<td><p>✅</p></td>
 </tr>
-<tr>
-<td>sum</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-even"><td><p>sum</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
-<td>✅</td>
+<td><p>✅</p></td>
 </tr>
-<tr>
-<td>idxmin</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-odd"><td><p>idxmin</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
-<td>✅</td>
+<td><p>✅</p></td>
 </tr>
-<tr>
-<td>idxmax</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-even"><td><p>idxmax</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
-<td>✅</td>
+<td><p>✅</p></td>
 </tr>
-<tr>
-<td>min</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-odd"><td><p>min</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
-<td>✅</td>
+<td><p>✅</p></td>
 </tr>
-<tr>
-<td>max</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-even"><td><p>max</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
-<td>✅</td>
+<td><p>✅</p></td>
 </tr>
-<tr>
-<td>mean</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-odd"><td><p>mean</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
@@ -421,10 +430,9 @@ by one or more columns:</p>
 <td></td>
 <td></td>
 </tr>
-<tr>
-<td>var</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-even"><td><p>var</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
@@ -432,10 +440,9 @@ by one or more columns:</p>
 <td></td>
 <td></td>
 </tr>
-<tr>
-<td>std</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-odd"><td><p>std</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
@@ -443,10 +450,9 @@ by one or more columns:</p>
 <td></td>
 <td></td>
 </tr>
-<tr>
-<td>quantile</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-even"><td><p>quantile</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
@@ -454,10 +460,9 @@ by one or more columns:</p>
 <td></td>
 <td></td>
 </tr>
-<tr>
-<td>median</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-odd"><td><p>median</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
@@ -465,52 +470,49 @@ by one or more columns:</p>
 <td></td>
 <td></td>
 </tr>
-<tr>
-<td>nunique</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-even"><td><p>nunique</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
-<td>✅</td>
+<td><p>✅</p></td>
 </tr>
-<tr>
-<td>nth</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-odd"><td><p>nth</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
-<td>✅</td>
+<td><p>✅</p></td>
 </tr>
-<tr>
-<td>collect</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-even"><td><p>collect</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
-<td>✅</td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
-<td>✅</td>
+<td><p>✅</p></td>
 </tr>
-<tr>
-<td>unique</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
-<td>✅</td>
+<tr class="row-odd"><td><p>unique</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 </tbody>
-</table></section>
+</table>
+</section>
 <section id="groupby-apply">
 <h2>GroupBy apply<a class="headerlink" href="#groupby-apply" title="Permalink to this headline">&para;</a></h2>
 <p>To apply function on each group, use the <code class="docutils literal notranslate"><span class="pre">GroupBy.apply()</span></code> method:</p>
@@ -531,21 +533,26 @@ by one or more columns:</p>
 <section id="limitations">
 <h3>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">&para;</a></h3>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">apply</span></code> works by applying the provided function to each group sequentially,
-and concatenating the results together. <strong>This can be very slow</strong>, especially
-for a large number of small groups. For a small number of large groups, it
-can give acceptable performance</p></li>
-<li><p>The results may not always match Pandas exactly. For example, cuDF may return
-a <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> containing a single column where Pandas returns a <code class="docutils literal notranslate"><span class="pre">Series</span></code>.
-Some post-processing may be required to match Pandas behavior.</p></li>
-<li><p>cuDF does not support some of the exceptional cases that Pandas supports with
-<code class="docutils literal notranslate"><span class="pre">apply</span></code>, such as <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html#flexible-apply"><code class="docutils literal notranslate"><span class="pre">describe</span></code></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">apply</span></code> works by applying the provided function to each group
+sequentially, and concatenating the results together. <strong>This can be
+very slow</strong>, especially for a large number of small groups. For a
+small number of large groups, it can give acceptable performance</p></li>
+<li><p>The results may not always match Pandas exactly. For example, cuDF
+may return a <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> containing a single column where Pandas
+returns a <code class="docutils literal notranslate"><span class="pre">Series</span></code>. Some post-processing may be required to match
+Pandas behavior.</p></li>
+<li><p>cuDF does not support some of the exceptional cases that Pandas
+supports with <code class="docutils literal notranslate"><span class="pre">apply</span></code>, such as calling <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html#flexible-apply"><code class="docutils literal notranslate"><span class="pre">describe</span></code></a> inside the
+callable.</p></li>
 </ul>
+<blockquote>
+<div></div></blockquote>
 </section>
 </section>
 <section id="rolling-window-calculations">
 <h2>Rolling window calculations<a class="headerlink" href="#rolling-window-calculations" title="Permalink to this headline">&para;</a></h2>
-<p>Use the <code class="docutils literal notranslate"><span class="pre">GroupBy.rolling()</span></code> method to perform rolling window calculations on each group:</p>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">GroupBy.rolling()</span></code> method to perform rolling window
+calculations on each group:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
 <span class="go">   a  b  c</span>
 <span class="go">0  1  1  1</span>

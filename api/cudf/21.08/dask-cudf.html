@@ -90,7 +90,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api.html">cuDF API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="10min.html">10 Minutes to cuDF and Dask-cuDF</a></li>
@@ -161,7 +161,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/dask-cudf.md.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/dask-cudf.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -200,8 +200,16 @@
 </style>
 <section id="multi-gpu-with-dask-cudf">
 <h1>Multi-GPU with Dask-cuDF<a class="headerlink" href="#multi-gpu-with-dask-cudf" title="Permalink to this headline">&para;</a></h1>
-<p>cuDF is a single-GPU library. For Multi-GPU cuDF solutions we use <a class="reference external" href="https://dask.org/">Dask</a> and the <a class="reference external" href="https://github.com/rapidsai/cudf/tree/main/python/dask_cudf">dask-cudf package</a>, which is able to scale cuDF across multiple GPUs on a single machine, or multiple GPUs across many machines in a cluster.</p>
-<p><a class="reference external" href="http://docs.dask.org/en/latest/dataframe.html">Dask DataFrame</a> was originally designed to scale Pandas, orchestrating many Pandas DataFrames spread across many CPUs into a cohesive parallel DataFrame. Because cuDF currently implements only a subset of Pandas&rsquo;s API, not all Dask DataFrame operations work with cuDF.</p>
+<p>cuDF is a single-GPU library. For Multi-GPU cuDF solutions we use
+<a class="reference external" href="https://dask.org/">Dask</a> and the <a class="reference external" href="https://github.com/rapidsai/cudf/tree/main/python/dask_cudf">dask-cudf
+package</a>,
+which is able to scale cuDF across multiple GPUs on a single machine, or
+multiple GPUs across many machines in a cluster.</p>
+<p><a class="reference external" href="http://docs.dask.org/en/latest/dataframe.html">Dask DataFrame</a> was
+originally designed to scale Pandas, orchestrating many Pandas
+DataFrames spread across many CPUs into a cohesive parallel DataFrame.
+Because cuDF currently implements only a subset of Pandas&rsquo;s API, not all
+Dask DataFrame operations work with cuDF.</p>
 <p>The following is tested and expected to work:</p>
 <section id="what-works">
 <h2>What works<a class="headerlink" href="#what-works" title="Permalink to this headline">&para;</a></h2>
@@ -215,44 +223,53 @@ Parquet and other formats this is often decently fast)</p></li>
 </li>
 <li><p>Linear operations</p>
 <ul>
-<li><p>Element-wise operations:  <code class="docutils literal notranslate"><span class="pre">df.x</span> <span class="pre">+</span> <span class="pre">df.y</span></code>, <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">**</span> <span class="pre">2</span></code></p></li>
+<li><p>Element-wise operations: <code class="docutils literal notranslate"><span class="pre">df.x</span> <span class="pre">+</span> <span class="pre">df.y</span></code>, <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">**</span> <span class="pre">2</span></code></p></li>
 <li><p>Assignment: <code class="docutils literal notranslate"><span class="pre">df['z']</span> <span class="pre">=</span> <span class="pre">df.x</span> <span class="pre">+</span> <span class="pre">df.y</span></code></p></li>
-<li><p>Row-wise selections:  <code class="docutils literal notranslate"><span class="pre">df[df.x</span> <span class="pre">&gt;</span> <span class="pre">0]</span></code></p></li>
-<li><p>Loc:  <code class="docutils literal notranslate"><span class="pre">df.loc['2001-01-01':</span> <span class="pre">'2005-02-02']</span></code></p></li>
-<li><p>Date time/string accessors:  <code class="docutils literal notranslate"><span class="pre">df.timestamp.dt.dayofweek</span></code></p></li>
-<li><p>&hellip; and most similar operations in this category that are already implemented in cuDF</p></li>
+<li><p>Row-wise selections: <code class="docutils literal notranslate"><span class="pre">df[df.x</span> <span class="pre">&gt;</span> <span class="pre">0]</span></code></p></li>
+<li><p>Loc: <code class="docutils literal notranslate"><span class="pre">df.loc['2001-01-01':</span> <span class="pre">'2005-02-02']</span></code></p></li>
+<li><p>Date time/string accessors: <code class="docutils literal notranslate"><span class="pre">df.timestamp.dt.dayofweek</span></code></p></li>
+<li><p>&hellip; and most similar operations in this category that are already
+implemented in cuDF</p></li>
 </ul>
 </li>
 <li><p>Reductions</p>
 <ul>
-<li><p>Like <code class="docutils literal notranslate"><span class="pre">sum</span></code>, <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">count</span></code>, and so on on <code class="docutils literal notranslate"><span class="pre">Series</span></code> objects</p></li>
-<li><p><strike>Support for reductions on full dataframes</strike></p></li>
-<li><p><strike><code class="docutils literal notranslate"><span class="pre">std</span></code></strike></p></li>
-<li><p>Custom reductions with <a class="reference external" href="http://docs.dask.org/en/latest/dataframe-api.html#dask.dataframe.Series.reduction">dask.dataframe.reduction</a></p></li>
+<li><p>Like <code class="docutils literal notranslate"><span class="pre">sum</span></code>, <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">count</span></code>, and so on on
+<code class="docutils literal notranslate"><span class="pre">Series</span></code> objects</p></li>
+<li><p>Support for reductions on full dataframes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">std</span></code></p></li>
+<li><p>Custom reductions with
+<a class="reference external" href="http://docs.dask.org/en/latest/dataframe-api.html#dask.dataframe.Series.reduction">dask.dataframe.reduction</a></p></li>
 </ul>
 </li>
 <li><p>Groupby aggregations</p>
 <ul>
 <li><p>On single columns: <code class="docutils literal notranslate"><span class="pre">df.groupby('x').y.max()</span></code></p></li>
 <li><p>With custom aggregations:</p></li>
-<li><p><strike>groupby standard deviation</strike></p></li>
-<li><p><strike>grouping on multiple columns</strike></p></li>
-<li><p><strike>groupby agg for multiple outputs</strike></p></li>
+<li><p>groupby standard deviation</p></li>
+<li><p>grouping on multiple columns</p></li>
+<li><p>groupby agg for multiple outputs</p></li>
 </ul>
 </li>
 <li><p>Joins:</p>
 <ul>
-<li><p>On full unsorted columns: <code class="docutils literal notranslate"><span class="pre">left.merge(right,</span> <span class="pre">on='id')</span></code> (expensive)</p></li>
-<li><p>On sorted indexes: <code class="docutils literal notranslate"><span class="pre">left.merge(right,</span> <span class="pre">left_index=True,</span> <span class="pre">right_index=True)</span></code> (fast)</p></li>
-<li><p>On large and small dataframes: <code class="docutils literal notranslate"><span class="pre">left.merge(cudf_df,</span> <span class="pre">on='id')</span></code> (fast)</p></li>
+<li><p>On full unsorted columns: <code class="docutils literal notranslate"><span class="pre">left.merge(right,</span> <span class="pre">on='id')</span></code>
+(expensive)</p></li>
+<li><p>On sorted indexes:
+<code class="docutils literal notranslate"><span class="pre">left.merge(right,</span> <span class="pre">left_index=True,</span> <span class="pre">right_index=True)</span></code> (fast)</p></li>
+<li><p>On large and small dataframes: <code class="docutils literal notranslate"><span class="pre">left.merge(cudf_df,</span> <span class="pre">on='id')</span></code>
+(fast)</p></li>
 </ul>
 </li>
-<li><p><strike>Rolling operations</strike></p></li>
+<li><p>Rolling operations</p></li>
 <li><p>Converting to and from other forms</p>
 <ul>
-<li><p>Dask + Pandas to Dask + cuDF <code class="docutils literal notranslate"><span class="pre">df.map_partitions(cudf.from_pandas)</span></code></p></li>
-<li><p>Dask + cuDF to Dask + Pandas <code class="docutils literal notranslate"><span class="pre">df.map_partitions(lambda</span> <span class="pre">df:</span> <span class="pre">df.to_pandas())</span></code></p></li>
-<li><p>cuDF to Dask + cuDF: <code class="docutils literal notranslate"><span class="pre">dask.dataframe.from_pandas(df,</span> <span class="pre">npartitions=20)</span></code></p></li>
+<li><p>Dask + Pandas to Dask + cuDF
+<code class="docutils literal notranslate"><span class="pre">df.map_partitions(cudf.from_pandas)</span></code></p></li>
+<li><p>Dask + cuDF to Dask + Pandas
+<code class="docutils literal notranslate"><span class="pre">df.map_partitions(lambda</span> <span class="pre">df:</span> <span class="pre">df.to_pandas())</span></code></p></li>
+<li><p>cuDF to Dask + cuDF:
+<code class="docutils literal notranslate"><span class="pre">dask.dataframe.from_pandas(df,</span> <span class="pre">npartitions=20)</span></code></p></li>
 <li><p>Dask + cuDF to cuDF: <code class="docutils literal notranslate"><span class="pre">df.compute()</span></code></p></li>
 </ul>
 </li>
@@ -264,28 +281,31 @@ Parquet and other formats this is often decently fast)</p></li>
 <h2>Developing the API<a class="headerlink" href="#developing-the-api" title="Permalink to this headline">&para;</a></h2>
 <p>Above we mention the following:</p>
 <blockquote>
-<div><p>and most similar operations in this category that are already implemented in cuDF</p>
+<div><p>and most similar operations in this category that are already
+implemented in cuDF</p>
 </div></blockquote>
-<p>This is because it is difficult to create a comprehensive list of operations in
-the cuDF and Pandas libraries.  The API is large enough to be difficult to track
-effectively.  For any operation that operates row-wise like <code class="docutils literal notranslate"><span class="pre">fillna</span></code> or
-<code class="docutils literal notranslate"><span class="pre">query</span></code> things will likely, but not certainly work.  If operations don&rsquo;t work
-it is often due to a slight inconsistency between Pandas and cuDF that is
-generally easy to fix.  We encourage users to look at the <a class="reference external" href="https://github.com/rapidsai/cudf/issues">cuDF issue
-tracker</a> to see if their issue has
-already been reported and, if not,
-<a class="reference external" href="https://github.com/rapidsai/cudf/issues/new">raise a new issue</a>.</p>
+<p>This is because it is difficult to create a comprehensive list of
+operations in the cuDF and Pandas libraries. The API is large enough to
+be difficult to track effectively. For any operation that operates
+row-wise like <code class="docutils literal notranslate"><span class="pre">fillna</span></code> or <code class="docutils literal notranslate"><span class="pre">query</span></code> things will likely, but not
+certainly work. If operations don&rsquo;t work it is often due to a slight
+inconsistency between Pandas and cuDF that is generally easy to fix. We
+encourage users to look at the <a class="reference external" href="https://github.com/rapidsai/cudf/issues">cuDF issue
+tracker</a> to see if their
+issue has already been reported and, if not, <a class="reference external" href="https://github.com/rapidsai/cudf/issues/new">raise a new
+issue</a>.</p>
 </section>
 <section id="navigating-the-api">
 <h2>Navigating the API<a class="headerlink" href="#navigating-the-api" title="Permalink to this headline">&para;</a></h2>
-<p>This project reuses the
-<a class="reference external" href="https://docs.dask.org/en/latest/dataframe.html">Dask DataFrame</a> project, which
-was originally designed for Pandas, with the newer library cuDF.  Because we use
-the same Dask classes for both projects there are often methods that are
-implemented for Pandas, but not yet for cuDF.  As a result users looking at the
-full Dask DataFrame API can be misleading, and often lead to frustration when
-operations that are advertised in the Dask API do not work as expected with
-cuDF.  We apologize for this in advance.</p>
+<p>This project reuses the <a class="reference external" href="https://docs.dask.org/en/latest/dataframe.html">Dask
+DataFrame</a> project,
+which was originally designed for Pandas, with the newer library cuDF.
+Because we use the same Dask classes for both projects there are often
+methods that are implemented for Pandas, but not yet for cuDF. As a
+result users looking at the full Dask DataFrame API can be misleading,
+and often lead to frustration when operations that are advertised in the
+Dask API do not work as expected with cuDF. We apologize for this in
+advance.</p>
 </section>
 </section>
 

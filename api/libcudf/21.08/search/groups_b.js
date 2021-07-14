@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['merging_3263',['Merging',['../group__column__merge.html',1,'']]],
-  ['modifying_3264',['Modifying',['../group__strings__modify.html',1,'']]]
+  ['merging_3265',['Merging',['../group__column__merge.html',1,'']]],
+  ['modifying_3266',['Modifying',['../group__strings__modify.html',1,'']]]
 ];
