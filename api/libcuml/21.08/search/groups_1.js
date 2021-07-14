@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['expand_20a_20c_2dstyle_20format_20string_2470',['Expand a C-style format string',['../group__CStringFormat.html',1,'']]]
+  ['expand_20a_20c_2dstyle_20format_20string_2466',['Expand a C-style format string',['../group__CStringFormat.html',1,'']]]
 ];
