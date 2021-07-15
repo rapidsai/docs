@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['leiden_391',['Leiden',['../classcugraph_1_1Leiden.html',1,'cugraph']]],
-  ['logdistribution_392',['LogDistribution',['../classcugraph_1_1mg_1_1detail_1_1LogDistribution.html',1,'cugraph::mg::detail']]],
-  ['logic_5ferror_393',['logic_error',['../structcugraph_1_1logic__error.html',1,'cugraph']]],
-  ['louvain_394',['Louvain',['../classcugraph_1_1experimental_1_1Louvain.html',1,'cugraph::experimental::Louvain&lt; graph_view_type &gt;'],['../classcugraph_1_1Louvain.html',1,'cugraph::Louvain&lt; graph_type &gt;']]],
-  ['louvain_5ffunctor_395',['louvain_functor',['../classcugraph_1_1cython_1_1detail_1_1louvain__functor.html',1,'cugraph::cython::detail']]]
+  ['leiden_389',['Leiden',['../classcugraph_1_1Leiden.html',1,'cugraph']]],
+  ['logdistribution_390',['LogDistribution',['../classcugraph_1_1mg_1_1detail_1_1LogDistribution.html',1,'cugraph::mg::detail']]],
+  ['logic_5ferror_391',['logic_error',['../structcugraph_1_1logic__error.html',1,'cugraph']]],
+  ['louvain_392',['Louvain',['../classcugraph_1_1Louvain.html',1,'cugraph::Louvain&lt; graph_type &gt;'],['../classcugraph_1_1experimental_1_1Louvain.html',1,'cugraph::experimental::Louvain&lt; graph_view_type &gt;']]],
+  ['louvain_5ffunctor_393',['louvain_functor',['../classcugraph_1_1cython_1_1detail_1_1louvain__functor.html',1,'cugraph::cython::detail']]]
 ];
