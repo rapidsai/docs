@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['quantile_2707',['quantile',['../group__column__quantiles.html#gad309219ccf18eaee72cb7a72b1cf2778',1,'cudf']]],
-  ['quantiles_2708',['quantiles',['../group__column__quantiles.html#ga3da34be52bf8791d27731bd9c330be11',1,'cudf']]],
-  ['quotechar_2709',['quotechar',['../classcudf_1_1io_1_1csv__reader__options__builder.html#a513bc76b53365e78d44fc8362311c2a6',1,'cudf::io::csv_reader_options_builder']]],
-  ['quoting_2710',['quoting',['../classcudf_1_1io_1_1csv__reader__options__builder.html#aaa3dfcc5362623962feb003e75173a11',1,'cudf::io::csv_reader_options_builder']]]
+  ['quantile_2710',['quantile',['../group__column__quantiles.html#gad309219ccf18eaee72cb7a72b1cf2778',1,'cudf']]],
+  ['quantiles_2711',['quantiles',['../group__column__quantiles.html#ga3da34be52bf8791d27731bd9c330be11',1,'cudf']]],
+  ['quotechar_2712',['quotechar',['../classcudf_1_1io_1_1csv__reader__options__builder.html#a513bc76b53365e78d44fc8362311c2a6',1,'cudf::io::csv_reader_options_builder']]],
+  ['quoting_2713',['quoting',['../classcudf_1_1io_1_1csv__reader__options__builder.html#aaa3dfcc5362623962feb003e75173a11',1,'cudf::io::csv_reader_options_builder']]]
 ];
