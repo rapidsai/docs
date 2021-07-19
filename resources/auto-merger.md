@@ -41,7 +41,7 @@ If the merge criteria below are **not satisfied** when the comment is left on th
 - No changes have been requested from users who have `write`, `admin`, or `owner` permissions
 - Any user who left the `@gpucibot merge` comment must have `write` or `admin` privileges on the repo
 
-The pull request will be squash merged and the commit title will be formatted like `<PR_Title> (#<PR_Number>)` . Any square brackets `[]` in the title will be automatically removed. The commit message will be formatted like:
+The pull request will be squash merged and the commit title will be formatted like `<PR_Title> (#<PR_Number>)` . Any square brackets `[]` in the title will be automatically removed. The commit message will be formatted like ([example](https://github.com/rapidsai/cudf/commit/397bf0afb66efdf9025cc5425af422c3478f62fb)):
 
 ```
 This PR adds some extra line breaks to the commit messages.
