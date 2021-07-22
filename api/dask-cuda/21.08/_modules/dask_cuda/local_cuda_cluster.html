@@ -4,7 +4,7 @@
   
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   
-  <title>dask_cuda.local_cuda_cluster &mdash; dask-cuda 0+untagged.1.g63b4646 documentation</title>
+  <title>dask_cuda.local_cuda_cluster &mdash; dask-cuda 0+untagged.1.gc04856e documentation</title>
   
 
   
@@ -180,6 +180,7 @@
     <span class="n">get_cpu_affinity</span><span class="p">,</span>
     <span class="n">get_ucx_config</span><span class="p">,</span>
     <span class="n">get_ucx_net_devices</span><span class="p">,</span>
+    <span class="n">nvml_device_index</span><span class="p">,</span>
     <span class="n">parse_cuda_visible_device</span><span class="p">,</span>
     <span class="n">parse_device_memory_limit</span><span class="p">,</span>
 <span class="p">)</span>
@@ -378,7 +379,7 @@
             <span class="n">memory_limit</span><span class="p">,</span> <span class="n">threads_per_worker</span><span class="p">,</span> <span class="n">n_workers</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">device_memory_limit</span> <span class="o">=</span> <span class="n">parse_device_memory_limit</span><span class="p">(</span>
-            <span class="n">device_memory_limit</span><span class="p">,</span> <span class="n">device_index</span><span class="o">=</span><span class="mi">0</span>
+            <span class="n">device_memory_limit</span><span class="p">,</span> <span class="n">device_index</span><span class="o">=</span><span class="n">nvml_device_index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">CUDA_VISIBLE_DEVICES</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">rmm_pool_size</span> <span class="o">=</span> <span class="n">rmm_pool_size</span>
@@ -524,7 +525,9 @@
             <span class="p">{</span>
                 <span class="s2">"env"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"CUDA_VISIBLE_DEVICES"</span><span class="p">:</span> <span class="n">visible_devices</span><span class="p">,},</span>
                 <span class="s2">"plugins"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="n">CPUAffinity</span><span class="p">(</span><span class="n">get_cpu_affinity</span><span class="p">(</span><span class="n">worker_count</span><span class="p">)),</span>
+                    <span class="n">CPUAffinity</span><span class="p">(</span>
+                        <span class="n">get_cpu_affinity</span><span class="p">(</span><span class="n">nvml_device_index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">visible_devices</span><span class="p">))</span>
+                    <span class="p">),</span>
                     <span class="n">RMMSetup</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">rmm_pool_size</span><span class="p">,</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">rmm_managed_memory</span><span class="p">,</span>
