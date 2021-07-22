@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['filteredges_327',['FilterEdges',['../structcugraph_1_1detail_1_1FilterEdges.html',1,'cugraph::detail']]],
-  ['fixed_5fseeding_5ft_328',['fixed_seeding_t',['../structcugraph_1_1experimental_1_1detail_1_1fixed__seeding__t.html',1,'cugraph::experimental::detail']]],
-  ['frontierexpand_329',['FrontierExpand',['../classcugraph_1_1mg_1_1detail_1_1FrontierExpand.html',1,'cugraph::mg::detail']]]
+  ['filteredges_377',['FilterEdges',['../structcugraph_1_1detail_1_1FilterEdges.html',1,'cugraph::detail']]],
+  ['fixed_5fseeding_5ft_378',['fixed_seeding_t',['../structcugraph_1_1experimental_1_1detail_1_1fixed__seeding__t.html',1,'cugraph::experimental::detail']]],
+  ['frontierexpand_379',['FrontierExpand',['../classcugraph_1_1mg_1_1detail_1_1FrontierExpand.html',1,'cugraph::mg::detail']]]
 ];
