@@ -4,7 +4,7 @@
   
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   
-  <title>dask_cuda.local_cuda_cluster &mdash; dask-cuda 0+untagged.1.gc04856e documentation</title>
+  <title>dask_cuda.local_cuda_cluster &mdash; dask-cuda 0+untagged.1.gc9e3907 documentation</title>
   
 
   
@@ -176,6 +176,7 @@
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">CPUAffinity</span><span class="p">,</span>
     <span class="n">RMMSetup</span><span class="p">,</span>
+    <span class="n">_ucx_111</span><span class="p">,</span>
     <span class="n">cuda_visible_devices</span><span class="p">,</span>
     <span class="n">get_cpu_affinity</span><span class="p">,</span>
     <span class="n">get_ucx_config</span><span class="p">,</span>
@@ -449,13 +450,25 @@
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Enabling InfiniBand or NVLink requires protocol='ucx'"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">ucx_net_devices</span> <span class="o">==</span> <span class="s2">"auto"</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="kn">from</span> <span class="nn">ucp._libs.topological_distance</span> <span class="kn">import</span> <span class="n">TopologicalDistance</span>  <span class="c1"># NOQA</span>
-            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">"ucx_net_devices set to 'auto' but UCX-Py is not "</span>
-                    <span class="s2">"installed or it's compiled without hwloc support"</span>
+            <span class="k">if</span> <span class="n">_ucx_111</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">"Starting with UCX 1.11, `ucx_net_devices='auto' is deprecated, "</span>
+                    <span class="s2">"it should now be left unspecified for the same behavior. "</span>
+                    <span class="s2">"Please make sure to read the updated UCX Configuration section in "</span>
+                    <span class="s2">"https://docs.rapids.ai/api/dask-cuda/nightly/ucx.html, "</span>
+                    <span class="s2">"where significant performance considerations for InfiniBand with "</span>
+                    <span class="s2">"UCX 1.11 and above is documented."</span><span class="p">,</span>
                 <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="kn">from</span> <span class="nn">ucp._libs.topological_distance</span> <span class="kn">import</span> <span class="p">(</span>  <span class="c1"># NOQA</span>
+                        <span class="n">TopologicalDistance</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">"ucx_net_devices set to 'auto' but UCX-Py is not "</span>
+                        <span class="s2">"installed or it's compiled without hwloc support"</span>
+                    <span class="p">)</span>
         <span class="k">elif</span> <span class="n">ucx_net_devices</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"ucx_net_devices can not be an empty string"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ucx_net_devices</span> <span class="o">=</span> <span class="n">ucx_net_devices</span>
