@@ -207,6 +207,7 @@ var menudata={children:[
 {text:"k",url:"globals.html#index_k"},
 {text:"l",url:"globals.html#index_l"},
 {text:"m",url:"globals.html#index_m"},
+{text:"o",url:"globals.html#index_o"},
 {text:"p",url:"globals.html#index_p"},
 {text:"r",url:"globals.html#index_r"},
 {text:"s",url:"globals.html#index_s"},
@@ -214,7 +215,8 @@ var menudata={children:[
 {text:"Functions",url:"globals_func.html",children:[
 {text:"c",url:"globals_func.html#index_c"},
 {text:"f",url:"globals_func.html#index_f"},
-{text:"k",url:"globals_func.html#index_k"}]},
+{text:"k",url:"globals_func.html#index_k"},
+{text:"o",url:"globals_func.html#index_o"}]},
 {text:"Typedefs",url:"globals_type.html"},
 {text:"Enumerations",url:"globals_enum.html"},
 {text:"Enumerator",url:"globals_eval.html"},

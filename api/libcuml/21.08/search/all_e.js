@@ -41,9 +41,8 @@ var searchData=
   ['nrmmax_738',['nrmMax',['../namespaceML.html#a67d0763a9020f84d5b37e00b1521aaaa',1,'ML']]],
   ['nu_5fsvc_739',['NU_SVC',['../namespaceML_1_1SVM.html#a94b5c3bf8c9646f2443ebc5bb7433e00ab6c2aeee04143e29cd1ea59fa55f123a',1,'ML::SVM']]],
   ['nu_5fsvr_740',['NU_SVR',['../namespaceML_1_1SVM.html#a94b5c3bf8c9646f2443ebc5bb7433e00ad3e00bf31e9a39f20745f22c8fcadbef',1,'ML::SVM']]],
-  ['null_5ftrees_5fptr_741',['null_trees_ptr',['../namespaceML.html#ab1275db1b0385b97fbb481b719322a25',1,'ML']]],
-  ['numdim_742',['NumDim',['../classML_1_1Tensor.html#af9b77f0d6f5c82f9e841401ae5e55faea152a8a4e1106c3cb7c39c4965ba0157b',1,'ML::Tensor']]],
-  ['numelements_743',['numElements',['../classML_1_1Tensor.html#a96486f6f89a7836453adf18aaf3704db',1,'ML::Tensor']]],
-  ['nvtx_2ecu_744',['nvtx.cu',['../nvtx_8cu.html',1,'']]],
-  ['nvtx_2ehpp_745',['nvtx.hpp',['../nvtx_8hpp.html',1,'']]]
+  ['numdim_741',['NumDim',['../classML_1_1Tensor.html#af9b77f0d6f5c82f9e841401ae5e55faea152a8a4e1106c3cb7c39c4965ba0157b',1,'ML::Tensor']]],
+  ['numelements_742',['numElements',['../classML_1_1Tensor.html#a96486f6f89a7836453adf18aaf3704db',1,'ML::Tensor']]],
+  ['nvtx_2ecu_743',['nvtx.cu',['../nvtx_8cu.html',1,'']]],
+  ['nvtx_2ehpp_744',['nvtx.hpp',['../nvtx_8hpp.html',1,'']]]
 ];
