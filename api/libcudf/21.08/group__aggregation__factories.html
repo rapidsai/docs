@@ -168,6 +168,14 @@ template&lt;typename Base  = aggregation&gt; </td></tr>
 <tr class="memitem:ga6e3aaa3f354d1774753c5870ae40b92f"><td align="right" class="memTemplItemLeft" valign="top">std::unique_ptr&lt; Base &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__aggregation__factories.html#ga6e3aaa3f354d1774753c5870ae40b92f">cudf::make_row_number_aggregation</a> ()</td></tr>
 <tr class="memdesc:ga6e3aaa3f354d1774753c5870ae40b92f"><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Factory to create a ROW_NUMBER aggregation. <br></td></tr>
 <tr class="separator:ga6e3aaa3f354d1774753c5870ae40b92f"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
+<tr class="memitem:gadfb305a70d1c71fc300c801e0a2b60ff"><td class="memTemplParams" colspan="2">template&lt;typename Base  = aggregation&gt; </td></tr>
+<tr class="memitem:gadfb305a70d1c71fc300c801e0a2b60ff"><td align="right" class="memTemplItemLeft" valign="top">std::unique_ptr&lt; Base &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__aggregation__factories.html#gadfb305a70d1c71fc300c801e0a2b60ff">cudf::make_rank_aggregation</a> ()</td></tr>
+<tr class="memdesc:gadfb305a70d1c71fc300c801e0a2b60ff"><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Factory to create a RANK aggregation.  <a href="group__aggregation__factories.html#gadfb305a70d1c71fc300c801e0a2b60ff">More...</a><br></td></tr>
+<tr class="separator:gadfb305a70d1c71fc300c801e0a2b60ff"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
+<tr class="memitem:gaf0158607150632061d226eadb387b9bd"><td class="memTemplParams" colspan="2">template&lt;typename Base  = aggregation&gt; </td></tr>
+<tr class="memitem:gaf0158607150632061d226eadb387b9bd"><td align="right" class="memTemplItemLeft" valign="top">std::unique_ptr&lt; Base &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__aggregation__factories.html#gaf0158607150632061d226eadb387b9bd">cudf::make_dense_rank_aggregation</a> ()</td></tr>
+<tr class="memdesc:gaf0158607150632061d226eadb387b9bd"><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Factory to create a DENSE_RANK aggregation.  <a href="group__aggregation__factories.html#gaf0158607150632061d226eadb387b9bd">More...</a><br></td></tr>
+<tr class="separator:gaf0158607150632061d226eadb387b9bd"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
 <tr class="memitem:ga97444ec376ca739cd16256f2fcc90b07"><td class="memTemplParams" colspan="2">template&lt;typename Base  = aggregation&gt; </td></tr>
 <tr class="memitem:ga97444ec376ca739cd16256f2fcc90b07"><td align="right" class="memTemplItemLeft" valign="top">std::unique_ptr&lt; Base &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__aggregation__factories.html#ga97444ec376ca739cd16256f2fcc90b07">cudf::make_collect_list_aggregation</a> (<a class="el" href="group__utility__types.html#ga1b8cda4afb95a7c42c4679b4fae61009">null_policy</a> null_handling=<a class="el" href="group__utility__types.html#gga1b8cda4afb95a7c42c4679b4fae61009a4f34e973c167c2296f66c7986cb558f8">null_policy::INCLUDE</a>)</td></tr>
 <tr class="memdesc:ga97444ec376ca739cd16256f2fcc90b07"><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Factory to create a COLLECT_LIST aggregation.  <a href="group__aggregation__factories.html#ga97444ec376ca739cd16256f2fcc90b07">More...</a><br></td></tr>
@@ -353,6 +361,62 @@ template&lt;typename Base  = aggregation&gt; </div>
   </dd>
 </dl>
 
+</div>
+</div>
+<a id="gaf0158607150632061d226eadb387b9bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf0158607150632061d226eadb387b9bd">◆&nbsp;</a></span>make_dense_rank_aggregation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Base  = aggregation&gt; </div>
+      <table class="memname">
+        <tbody><tr>
+          <td class="memname">std::unique_ptr&lt;Base&gt; cudf::make_dense_rank_aggregation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </tbody></table>
+</div><div class="memdoc">
+
+<p>Factory to create a DENSE_RANK aggregation. </p>
+<p><code>DENSE_RANK</code> returns a non-nullable column of size_type "dense ranks": the preceding unique value's rank plus one. As a result, ranks are not unique but there are no gaps in the ranking sequence (unlike RANK aggregations).</p>
+<p>This aggregation only works with "scan" algorithms. The input column into the group or ungrouped scan is an orderby column that orders the rows that the aggregate function ranks. If rows are ordered by more than one column, the orderby input column should be a struct column containing the ordering columns.</p>
+<p>Note:</p><ol type="1">
+<li>This method requires that the rows are presorted by the group keys and order_by columns.</li>
+<li><code>DENSE_RANK</code> aggregations will return a fully valid column regardless of null_handling policy specified in the scan.</li>
+<li><code>DENSE_RANK</code> aggregations are not compatible with exclusive scans.</li>
+</ol>
+<div class="fragment"><div class="line">Example: Consider an motor-racing statistics dataset, containing the following columns:</div>
+<div class="line">  1. driver_name:   (STRING) Name of the car driver</div>
+<div class="line">  2. num_overtakes: (INT32)  Number of times the driver overtook another car in a lap</div>
+<div class="line">  3. lap_number:    (INT32)  The number of the lap</div>
+<div class="line"> </div>
+<div class="line">For the following presorted data:</div>
+<div class="line"> </div>
+<div class="line"> [ // driver_name,  num_overtakes,  lap_number</div>
+<div class="line">   {   "bottas",        2,            3        },</div>
+<div class="line">   {   "bottas",        2,            7        },</div>
+<div class="line">   {   "bottas",        2,            7        },</div>
+<div class="line">   {   "bottas",        1,            1        },</div>
+<div class="line">   {   "bottas",        1,            2        },</div>
+<div class="line">   {   "hamilton",      4,            1        },</div>
+<div class="line">   {   "hamilton",      4,            1        },</div>
+<div class="line">   {   "hamilton",      3,            4        },</div>
+<div class="line">   {   "hamilton",      2,            4        }</div>
+<div class="line"> ]</div>
+<div class="line"> </div>
+<div class="line">A grouped dense rank aggregation scan with:</div>
+<div class="line">  groupby column      : driver_name</div>
+<div class="line">  input orderby column: struct_column{num_overtakes, lap_number}</div>
+<div class="line"> result: column&lt;size_type&gt;{1, 2, 2, 3, 4, 1, 1, 2, 3}</div>
+<div class="line"> </div>
+<div class="line">A grouped dense rank aggregation scan with:</div>
+<div class="line">  groupby column      : driver_name</div>
+<div class="line">  input orderby column: num_overtakes</div>
+<div class="line"> result: column&lt;size_type&gt;{1, 1, 1, 2, 2, 1, 1, 2, 3}</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="gab600cbeb5a9fe9f6d2a7c6b5a769308a"></a>
@@ -571,6 +635,62 @@ template&lt;typename Base  = aggregation&gt; </div>
   </dd>
 </dl>
 
+</div>
+</div>
+<a id="gadfb305a70d1c71fc300c801e0a2b60ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadfb305a70d1c71fc300c801e0a2b60ff">◆&nbsp;</a></span>make_rank_aggregation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Base  = aggregation&gt; </div>
+      <table class="memname">
+        <tbody><tr>
+          <td class="memname">std::unique_ptr&lt;Base&gt; cudf::make_rank_aggregation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </tbody></table>
+</div><div class="memdoc">
+
+<p>Factory to create a RANK aggregation. </p>
+<p><code>RANK</code> returns a non-nullable column of size_type "ranks": the number of rows preceding or equal to the current row plus one. As a result, ranks are not unique and gaps will appear in the ranking sequence.</p>
+<p>This aggregation only works with "scan" algorithms. The input column into the group or ungrouped scan is an orderby column that orders the rows that the aggregate function ranks. If rows are ordered by more than one column, the orderby input column should be a struct column containing the ordering columns.</p>
+<p>Note:</p><ol type="1">
+<li>This method requires that the rows are presorted by the group keys and order_by columns.</li>
+<li><code>RANK</code> aggregations will return a fully valid column regardless of null_handling policy specified in the scan.</li>
+<li><code>RANK</code> aggregations are not compatible with exclusive scans.</li>
+</ol>
+<div class="fragment"><div class="line">Example: Consider an motor-racing statistics dataset, containing the following columns:</div>
+<div class="line">  1. driver_name:   (STRING) Name of the car driver</div>
+<div class="line">  2. num_overtakes: (INT32)  Number of times the driver overtook another car in a lap</div>
+<div class="line">  3. lap_number:    (INT32)  The number of the lap</div>
+<div class="line"> </div>
+<div class="line">For the following presorted data:</div>
+<div class="line"> </div>
+<div class="line"> [ // driver_name,  num_overtakes,  lap_number</div>
+<div class="line">   {   "bottas",        2,            3        },</div>
+<div class="line">   {   "bottas",        2,            7        },</div>
+<div class="line">   {   "bottas",        2,            7        },</div>
+<div class="line">   {   "bottas",        1,            1        },</div>
+<div class="line">   {   "bottas",        1,            2        },</div>
+<div class="line">   {   "hamilton",      4,            1        },</div>
+<div class="line">   {   "hamilton",      4,            1        },</div>
+<div class="line">   {   "hamilton",      3,            4        },</div>
+<div class="line">   {   "hamilton",      2,            4        }</div>
+<div class="line"> ]</div>
+<div class="line"> </div>
+<div class="line">A grouped rank aggregation scan with:</div>
+<div class="line">  groupby column      : driver_name</div>
+<div class="line">  input orderby column: struct_column{num_overtakes, lap_number}</div>
+<div class="line"> result: column&lt;size_type&gt;{1, 2, 2, 4, 5, 1, 1, 3, 4}</div>
+<div class="line"> </div>
+<div class="line">A grouped rank aggregation scan with:</div>
+<div class="line">  groupby column      : driver_name</div>
+<div class="line">  input orderby column: num_overtakes</div>
+<div class="line"> result: column&lt;size_type&gt;{1, 1, 1, 4, 4, 1, 1, 3, 4}</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="ga3d0f22ac076169ad064357f3a62ee40c"></a>
