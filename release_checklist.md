@@ -17,5 +17,5 @@ customization/customize_docs_in_folder.sh api/
 
 ```
 
-- **Delete Old Docs & Tag Release**: Run the Jenkins job below after the release PR is merged to delete old docs and tag new release
-  - <https://gpuci.gpuopenanalytics.com/job/rapidsai/job/doc-builds/job/docs-release/>
+- **Remove old docs** - Use [rm_old_docs.sh](/rm_old_docs.sh) script to remove previous legacy docs
+- **Tag Commit** - After the release PR is merged, tag the commit so it appears on the release page - https://github.com/rapidsai/docs/releases
