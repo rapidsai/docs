@@ -41,6 +41,9 @@ for FOLDER in api/*/ ; do
       elif [ "${LIB}" = libcudf ]; then
         DEFAULT_PATH+="/namespacecudf.html"
 
+      elif [ "${LIB}" = cudf ]; then
+        DEFAULT_PATH+="/index.html"
+
       elif [ -f "${VERSION}/api.html" ]; then
         DEFAULT_PATH+="/api.html"
       fi
