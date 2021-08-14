@@ -7,5 +7,6 @@ var searchData=
   ['invscaling_1810',['invScaling',['../namespaceML_1_1Solver.html#a36be1daaf984e77d13f6b94e7f9e9661',1,'ML::Solver']]],
   ['is_5fdevice_5for_5fmanaged_5ftype_1811',['is_device_or_managed_type',['../namespaceML.html#a13b2600cf250418d851752f64d633860',1,'ML']]],
   ['is_5fnonterminal_1812',['is_nonterminal',['../structcuml_1_1genetic_1_1node.html#a24bfd58378e3bc63649b2cfab68ecf73',1,'cuml::genetic::node']]],
-  ['is_5fterminal_1813',['is_terminal',['../structcuml_1_1genetic_1_1node.html#a55491432a710133d38061c8bafef1494',1,'cuml::genetic::node']]]
+  ['is_5fterminal_1813',['is_terminal',['../structcuml_1_1genetic_1_1node.html#a55491432a710133d38061c8bafef1494',1,'cuml::genetic::node']]],
+  ['isleaf_1814',['IsLeaf',['../structSparseTreeNode.html#a4c11accf4582d6236ecde0a2b2a04e36',1,'SparseTreeNode']]]
 ];
