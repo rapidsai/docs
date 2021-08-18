@@ -74,6 +74,8 @@ This is helpful when trying to troubleshoot issues with the build process and/or
 
 * To manually trigger tests in a PR, comment the command:
   * `rerun tests`
+* To run style checks manually, add the following to the title of the PR:
+  * `[run style]`
 * To skip CI testing (for documentation changes) add the following to the title of the PR:
   * `[skip ci]`
   * **NOTE:** The changelog check will still run.
