@@ -31,7 +31,7 @@ var searchData=
   ['core_5fnumber_54',['core_number',['../namespacecugraph.html#a01fa3a11aa66f35b9ae35a67e11bcd08',1,'cugraph']]],
   ['count_5fif_5fe_55',['count_if_e',['../namespacecugraph.html#a69b4d28ad2017256d865d3f2c9f25930',1,'cugraph']]],
   ['count_5fif_5fv_56',['count_if_v',['../namespacecugraph.html#abe23b1b58ab369299effd2337abac8b5',1,'cugraph::count_if_v(raft::handle_t const &amp;handle, GraphViewType const &amp;graph_view, VertexValueInputIterator vertex_value_input_first, VertexOp v_op)'],['../namespacecugraph.html#a7e723b9bf2c48c9c9572af50f9ea74f5',1,'cugraph::count_if_v(raft::handle_t const &amp;handle, GraphViewType const &amp;graph_view, InputIterator input_first, InputIterator input_last, VertexOp v_op)']]],
-  ['create_5fgraph_5ffrom_5fedgelist_57',['create_graph_from_edgelist',['../namespacecugraph.html#ab83e1736862d5e8d7aff64ce2ff0bc21',1,'cugraph']]],
+  ['create_5fgraph_5ffrom_5fedgelist_57',['create_graph_from_edgelist',['../namespacecugraph.html#a1aaac0d79d98ba7be480e597a8886e20',1,'cugraph']]],
   ['cstablechecker_58',['CStableChecker',['../structCStableChecker.html',1,'']]],
   ['cugraph_59',['cugraph',['../namespacecugraph.html',1,'']]],
   ['cugraph_5fcc_5ft_60',['cugraph_cc_t',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27',1,'cugraph']]],
