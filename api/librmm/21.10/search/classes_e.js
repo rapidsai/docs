@@ -1,6 +1,11 @@
 var searchData=
 [
-  ['thread_5fsafe_5fresource_5fadaptor_222',['thread_safe_resource_adaptor',['../classrmm_1_1mr_1_1thread__safe__resource__adaptor.html',1,'rmm::mr']]],
-  ['thrust_5fallocator_223',['thrust_allocator',['../classrmm_1_1mr_1_1thrust__allocator.html',1,'rmm::mr']]],
-  ['tracking_5fresource_5fadaptor_224',['tracking_resource_adaptor',['../classrmm_1_1mr_1_1tracking__resource__adaptor.html',1,'rmm::mr']]]
+  ['split_5fblock_215',['split_block',['../structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1split__block.html',1,'rmm::mr::detail::stream_ordered_memory_resource']]],
+  ['stack_5ftrace_216',['stack_trace',['../classrmm_1_1detail_1_1stack__trace.html',1,'rmm::detail']]],
+  ['statistics_5fresource_5fadaptor_217',['statistics_resource_adaptor',['../classrmm_1_1mr_1_1statistics__resource__adaptor.html',1,'rmm::mr']]],
+  ['stream_5fallocator_5fadaptor_218',['stream_allocator_adaptor',['../classrmm_1_1mr_1_1stream__allocator__adaptor.html',1,'rmm::mr']]],
+  ['stream_5fevent_5fpair_219',['stream_event_pair',['../structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1stream__event__pair.html',1,'rmm::mr::detail::stream_ordered_memory_resource']]],
+  ['stream_5fordered_5fmemory_5fresource_220',['stream_ordered_memory_resource',['../classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html',1,'rmm::mr::detail']]],
+  ['stream_5fordered_5fmemory_5fresource_3c_20fixed_5fsize_5fmemory_5fresource_3c_20upstream_20_3e_2c_20detail_3a_3afixed_5fsize_5ffree_5flist_20_3e_221',['stream_ordered_memory_resource&lt; fixed_size_memory_resource&lt; Upstream &gt;, detail::fixed_size_free_list &gt;',['../classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html',1,'rmm::mr::detail']]],
+  ['stream_5fordered_5fmemory_5fresource_3c_20pool_5fmemory_5fresource_3c_20upstream_20_3e_2c_20detail_3a_3acoalescing_5ffree_5flist_20_3e_222',['stream_ordered_memory_resource&lt; pool_memory_resource&lt; Upstream &gt;, detail::coalescing_free_list &gt;',['../classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html',1,'rmm::mr::detail']]]
 ];

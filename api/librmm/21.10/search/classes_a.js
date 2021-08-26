@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['out_5fof_5frange_208',['out_of_range',['../classrmm_1_1out__of__range.html',1,'rmm']]],
-  ['owning_5fwrapper_209',['owning_wrapper',['../classrmm_1_1mr_1_1owning__wrapper.html',1,'rmm::mr']]]
+  ['new_5fdelete_5fresource_208',['new_delete_resource',['../classrmm_1_1mr_1_1new__delete__resource.html',1,'rmm::mr']]]
 ];

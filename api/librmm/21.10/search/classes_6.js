@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['host_5fmemory_5fresource_201',['host_memory_resource',['../classrmm_1_1mr_1_1host__memory__resource.html',1,'rmm::mr']]]
+  ['global_5farena_201',['global_arena',['../classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html',1,'rmm::mr::detail::arena']]]
 ];

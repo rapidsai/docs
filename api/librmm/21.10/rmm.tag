@@ -11,13 +11,7 @@
     <name>exec_policy.hpp</name>
     <path>/rapids/rmm/include/rmm/</path>
     <filename>exec__policy_8hpp.html</filename>
-    <member kind="function">
-      <type>auto</type>
-      <name>exec_policy</name>
-      <anchorfile>exec__policy_8hpp.html</anchorfile>
-      <anchor>a55570967b3f26bfcc195594be0d1c8ca</anchor>
-      <arglist>(cuda_stream_view stream=cuda_stream_default, rmm::mr::device_memory_resource *mr=mr::get_current_device_resource())</arglist>
-    </member>
+    <class kind="class">rmm::exec_policy</class>
   </compound>
   <compound kind="file">
     <name>per_device_resource.hpp</name>
@@ -1153,6 +1147,10 @@
       <arglist>() const noexcept</arglist>
     </member>
   </compound>
+  <compound kind="class">
+    <name>rmm::exec_policy</name>
+    <filename>classrmm_1_1exec__policy.html</filename>
+  </compound>
   <compound kind="struct">
     <name>rmm::mr::detail::fixed_size_free_list</name>
     <filename>structrmm_1_1mr_1_1detail_1_1fixed__size__free__list.html</filename>
@@ -2078,13 +2076,13 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>rmm::mr::thrust_allocator::rebind</name>
-    <filename>structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html</filename>
+    <name>rmm::mr::stream_allocator_adaptor::rebind</name>
+    <filename>structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html</filename>
     <templarg></templarg>
   </compound>
   <compound kind="struct">
-    <name>rmm::mr::stream_allocator_adaptor::rebind</name>
-    <filename>structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html</filename>
+    <name>rmm::mr::thrust_allocator::rebind</name>
+    <filename>structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html</filename>
     <templarg></templarg>
   </compound>
   <compound kind="struct">

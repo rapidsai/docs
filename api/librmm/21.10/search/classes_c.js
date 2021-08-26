@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['rebind_213',['rebind',['../structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html',1,'rmm::mr::thrust_allocator&lt; T &gt;::rebind&lt; U &gt;'],['../structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html',1,'rmm::mr::stream_allocator_adaptor&lt; Allocator &gt;::rebind&lt; T &gt;']]]
+  ['pinned_5fmemory_5fresource_211',['pinned_memory_resource',['../classrmm_1_1mr_1_1pinned__memory__resource.html',1,'rmm::mr']]],
+  ['polymorphic_5fallocator_212',['polymorphic_allocator',['../classrmm_1_1mr_1_1polymorphic__allocator.html',1,'rmm::mr']]],
+  ['pool_5fmemory_5fresource_213',['pool_memory_resource',['../classrmm_1_1mr_1_1pool__memory__resource.html',1,'rmm::mr']]]
 ];
