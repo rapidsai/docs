@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['no_5fstatistics_3033',['no_statistics',['../namespacecudf_1_1io.html#a9f776ed5167dffd65625471a7bdb3996',1,'cudf::io']]]
+  ['no_5fstatistics_3063',['no_statistics',['../namespacecudf_1_1io.html#a9f776ed5167dffd65625471a7bdb3996',1,'cudf::io']]]
 ];
