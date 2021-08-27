@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['arena_2018',['arena',['https://docs.rapids.ai/api/librmm/21.10/classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html',1,'rmm::mr::detail']]],
-  ['detail_2019',['detail',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1detail_1_1logger__wrapper.html',1,'rmm::detail'],['https://docs.rapids.ai/api/librmm/21.10/classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html',1,'rmm::mr::detail']]],
-  ['statistics_5fresource_5fadaptor_2020',['statistics_resource_adaptor',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1mr_1_1statistics__resource__adaptor_1_1counter.html',1,'rmm::mr']]],
-  ['stream_5fallocator_5fadaptor_2021',['stream_allocator_adaptor',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html',1,'rmm::mr']]],
-  ['stream_5fordered_5fmemory_5fresource_2022',['stream_ordered_memory_resource',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1split__block.html',1,'rmm::mr::detail']]],
-  ['thrust_5fallocator_2023',['thrust_allocator',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html',1,'rmm::mr']]],
-  ['tracking_5fresource_5fadaptor_2024',['tracking_resource_adaptor',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1mr_1_1tracking__resource__adaptor_1_1allocation__info.html',1,'rmm::mr']]]
+  ['arena_2027',['arena',['https://docs.rapids.ai/api/librmm/21.10/classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html',1,'rmm::mr::detail']]],
+  ['detail_2028',['detail',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1detail_1_1logger__wrapper.html',1,'rmm::detail'],['https://docs.rapids.ai/api/librmm/21.10/classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html',1,'rmm::mr::detail']]],
+  ['statistics_5fresource_5fadaptor_2029',['statistics_resource_adaptor',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1mr_1_1statistics__resource__adaptor_1_1counter.html',1,'rmm::mr']]],
+  ['stream_5fallocator_5fadaptor_2030',['stream_allocator_adaptor',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html',1,'rmm::mr']]],
+  ['stream_5fordered_5fmemory_5fresource_2031',['stream_ordered_memory_resource',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1split__block.html',1,'rmm::mr::detail']]],
+  ['thrust_5fallocator_2032',['thrust_allocator',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html',1,'rmm::mr']]],
+  ['tracking_5fresource_5fadaptor_2033',['tracking_resource_adaptor',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1mr_1_1tracking__resource__adaptor_1_1allocation__info.html',1,'rmm::mr']]]
 ];
