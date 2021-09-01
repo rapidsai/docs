@@ -33,7 +33,7 @@ var searchData=
   ['ipow_707',['ipow',['../fixed__point_8hpp.html#a709df804fc4372faf558dfbb080aafac',1,'numeric::detail']]],
   ['ipv4_5fto_5fintegers_708',['ipv4_to_integers',['../group__strings__convert.html#ga6bbfa8b6908f90126869c956a62bdfd0',1,'cudf::strings']]],
   ['is_5fbegin_5futf8_5fchar_709',['is_begin_utf8_char',['../string__view_8hpp.html#ab544a2c360e250b90b3273553e859a69',1,'cudf::strings::detail']]],
-  ['is_5fbetter_5ffit_710',['is_better_fit',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1mr_1_1detail_1_1block.html#a4dd6d0a004c707290aca334d8c3135eb',1,'rmm::mr::detail::block']]],
+  ['is_5fbetter_5ffit_710',['is_better_fit',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1mr_1_1detail_1_1block.html#a553eb1612fd08d5d4c7922e0d55de3bf',1,'rmm::mr::detail::block']]],
   ['is_5fbit_5fcastable_711',['is_bit_castable',['../group__utility__types.html#gac50d08604b1c456f7f586fd9822871bb',1,'cudf']]],
   ['is_5fbit_5fcastable_5ffrom_5fimpl_712',['is_bit_castable_from_impl',['../structcudf_1_1is__bit__castable__from__impl.html',1,'cudf']]],
   ['is_5fbit_5fcastable_5fto_5fimpl_713',['is_bit_castable_to_impl',['../structcudf_1_1is__bit__castable__to__impl.html',1,'cudf']]],

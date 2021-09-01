@@ -2,7 +2,7 @@ var searchData=
 [
   ['packed_5fcolumns_1889',['packed_columns',['../structcudf_1_1packed__columns.html',1,'cudf']]],
   ['packed_5ftable_1890',['packed_table',['../structcudf_1_1packed__table.html',1,'cudf']]],
-  ['pair_5faccessor_1891',['pair_accessor',['../structcudf_1_1list__device__view_1_1pair__accessor.html',1,'cudf::list_device_view::pair_accessor&lt; T &gt;'],['../structcudf_1_1detail_1_1pair__accessor.html',1,'cudf::detail::pair_accessor&lt; T, has_nulls &gt;']]],
+  ['pair_5faccessor_1891',['pair_accessor',['../structcudf_1_1detail_1_1pair__accessor.html',1,'cudf::detail::pair_accessor&lt; T, has_nulls &gt;'],['../structcudf_1_1list__device__view_1_1pair__accessor.html',1,'cudf::list_device_view::pair_accessor&lt; T &gt;']]],
   ['pair_5frep_5faccessor_1892',['pair_rep_accessor',['../structcudf_1_1detail_1_1pair__rep__accessor.html',1,'cudf::detail::pair_rep_accessor&lt; T, has_nulls &gt;'],['../structcudf_1_1list__device__view_1_1pair__rep__accessor.html',1,'cudf::list_device_view::pair_rep_accessor&lt; T &gt;']]],
   ['parquet_5fchunked_5fwriter_1893',['parquet_chunked_writer',['../classcudf_1_1io_1_1parquet__chunked__writer.html',1,'cudf::io']]],
   ['parquet_5freader_5foptions_1894',['parquet_reader_options',['../classcudf_1_1io_1_1parquet__reader__options.html',1,'cudf::io']]],
