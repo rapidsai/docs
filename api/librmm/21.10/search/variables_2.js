@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ptr_359',['ptr',['../structrmm_1_1mr_1_1detail_1_1block__base.html#a72c4e6db5cfe26694b7592b362ce3f9f',1,'rmm::mr::detail::block_base']]]
+  ['reserved_5fsize_356',['reserved_size',['../classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#aa7ca12862921fb184159b304b7afae4c',1,'rmm::mr::detail::arena::global_arena']]]
 ];

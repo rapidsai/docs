@@ -89,9 +89,6 @@ Collaboration diagram for rmm::mr::detail::stream_ordered_memory_resource&lt; Po
 <table class="memberdecls">
 <tbody><tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td align="right" class="memItemLeft" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1split__block.html">split_block</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the maximum size of a single allocation supported by this suballocator memory resource.  <a href="structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1split__block.html#details">More...</a><br></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
 <tr class="memitem:"><td align="right" class="memItemLeft" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1stream__event__pair.html">stream_event_pair</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
 </tbody></table><table class="memberdecls">
@@ -147,11 +144,15 @@ using&nbsp;</td><td class="memItemRight" valign="bottom"><b>block_type</b> = typ
 <tr class="memitem:aa00fff7c46c352d59114201f94cb1262"><td align="right" class="memItemLeft" valign="top"><a id="aa00fff7c46c352d59114201f94cb1262"></a>
 using&nbsp;</td><td class="memItemRight" valign="bottom"><b>lock_guard</b> = std::lock_guard&lt; std::mutex &gt;</td></tr>
 <tr class="separator:aa00fff7c46c352d59114201f94cb1262"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
+<tr class="memitem:a80561e617cbaf5a13aafe4e76593367f"><td align="right" class="memItemLeft" valign="top"><a id="a80561e617cbaf5a13aafe4e76593367f"></a>
+using&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#a80561e617cbaf5a13aafe4e76593367f">split_block</a> = std::pair&lt; block_type, block_type &gt;</td></tr>
+<tr class="memdesc:a80561e617cbaf5a13aafe4e76593367f"><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Pair representing a block that has been split for allocation. <br></td></tr>
+<tr class="separator:a80561e617cbaf5a13aafe4e76593367f"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
 </tbody></table><table class="memberdecls">
 <tbody><tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a02c26669d357d8cee1a1776389945054"><td align="right" class="memItemLeft" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#a02c26669d357d8cee1a1776389945054">insert_block</a> (block_type const &amp;b, <a class="el" href="classrmm_1_1cuda__stream__view.html">cuda_stream_view</a> stream)</td></tr>
-<tr class="memdesc:a02c26669d357d8cee1a1776389945054"><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Split block <code>b</code> if necessary to return a pointer to memory of <code>size</code> bytes.  <a href="classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#a02c26669d357d8cee1a1776389945054">More...</a><br></td></tr>
+<tr class="memdesc:a02c26669d357d8cee1a1776389945054"><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns the block <code>b</code> (last used on stream <code>stream_event</code>) to the pool.  <a href="classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#a02c26669d357d8cee1a1776389945054">More...</a><br></td></tr>
 <tr class="separator:a02c26669d357d8cee1a1776389945054"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
 <tr class="memitem:aa797194007141fa6d1aba8b2c189f057"><td align="right" class="memItemLeft" valign="top"><a id="aa797194007141fa6d1aba8b2c189f057"></a>
 void&nbsp;</td><td class="memItemRight" valign="bottom"><b>insert_blocks</b> (free_list &amp;&amp;blocks, <a class="el" href="classrmm_1_1cuda__stream__view.html">cuda_stream_view</a> stream)</td></tr>
@@ -178,10 +179,10 @@ class rmm::mr::detail::stream_ordered_memory_resource&lt; PoolResource, FreeList
 <p>For example, a coalescing pool memory resource uses a <a class="el" href="structrmm_1_1mr_1_1detail_1_1coalescing__free__list.html" title="An ordered list of free memory blocks that coalesces contiguous blocks on insertion.">coalescing_free_list</a> and maintains data structures for allocated blocks and has functions to allocate and free blocks and to expand the pool.</p>
 <p>Classes derived from <a class="el" href="classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html" title="Base class for a stream-ordered memory resource.">stream_ordered_memory_resource</a> must implement the following four methods, documented separately:</p>
 <ol type="1">
-<li><code>size_t get_maximum_allocation_size() const</code></li>
-<li><code>block_type expand_pool(size_t size, free_list&amp; blocks, cuda_stream_view stream)</code></li>
-<li><code><a class="el" href="structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1split__block.html" title="Get the maximum size of a single allocation supported by this suballocator memory resource.">split_block</a> allocate_from_block(block_type const&amp; b, size_t size)</code></li>
-<li><code>block_type free_block(void* p, size_t size) noexcept</code> </li>
+<li><code>std::size_t get_maximum_allocation_size() const</code></li>
+<li><code>block_type expand_pool(std::size_t size, free_list&amp; blocks, cuda_stream_view stream)</code></li>
+<li><code>split_block allocate_from_block(block_type const&amp; b, std::size_t size)</code></li>
+<li><code>block_type free_block(void* p, std::size_t size) noexcept</code> </li>
 </ol>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a098b2f8a485e8f5ec1768f1969e65917"></a>
@@ -367,27 +368,7 @@ template&lt;typename PoolResource , typename FreeListType &gt; </div>
 </tbody></table>
 </div><div class="memdoc">
 
-<p>Split block <code>b</code> if necessary to return a pointer to memory of <code>size</code> bytes. </p>
-<p>If the block is split, the remainder is returned as the remainder element in the output <code><a class="el" href="structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1split__block.html" title="Get the maximum size of a single allocation supported by this suballocator memory resource.">split_block</a></code>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tbody><tr><td class="paramname">b</td><td>The block to allocate from. </td></tr>
-    <tr><td class="paramname">size</td><td>The size in bytes of the requested allocation. </td></tr>
-    <tr><td class="paramname">stream_event</td><td>The stream and associated event on which the allocation will be used. </td></tr>
-  </tbody></table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A <code><a class="el" href="structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1split__block.html" title="Get the maximum size of a single allocation supported by this suballocator memory resource.">split_block</a></code> comprising the allocated pointer and any unallocated remainder of the input block.</dd></dl>
-<p>Finds, frees and returns the block associated with pointer <code>p</code>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tbody><tr><td class="paramname">p</td><td>The pointer to the memory to free. </td></tr>
-    <tr><td class="paramname">size</td><td>The size of the memory to free. Must be equal to the original allocation size. </td></tr>
-  </tbody></table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The (now freed) block associated with <code>p</code>. The caller is expected to return the block to the pool.</dd></dl>
-<p>Returns the block <code>b</code> (last used on stream <code>stream_event</code>) to the pool.</p>
+<p>Returns the block <code>b</code> (last used on stream <code>stream_event</code>) to the pool. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tbody><tr><td class="paramname">b</td><td>The block to insert into the pool. </td></tr>

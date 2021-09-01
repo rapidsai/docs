@@ -229,15 +229,15 @@
       <type></type>
       <name>block</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>adff06aff5a89d544353a594576a0e9e9</anchor>
-      <arglist>(char *pointer, size_t size)</arglist>
+      <anchor>a0772c988a344aeca7d5a3ff1c6ee9bca</anchor>
+      <arglist>(char *pointer, std::size_t size)</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>block</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>ae36113d8ddd08099977af2055c03003f</anchor>
-      <arglist>(void *pointer, size_t size)</arglist>
+      <anchor>a0c1694622727eb07b79089551ce6a8c7</anchor>
+      <arglist>(void *pointer, std::size_t size)</arglist>
     </member>
     <member kind="function">
       <type>void *</type>
@@ -247,10 +247,10 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
-      <type>size_t</type>
+      <type>std::size_t</type>
       <name>size</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>a44b57934779ba31c01feacc5bfb06e2c</anchor>
+      <anchor>a0b1b32a7a18fc0e142ba278826bf7125</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
@@ -315,10 +315,10 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
-      <type>size_t</type>
+      <type>std::size_t</type>
       <name>size</name>
       <anchorfile>structrmm_1_1mr_1_1detail_1_1block.html</anchorfile>
-      <anchor>a1b9375c4dc259ccda0a2b49e7034e04f</anchor>
+      <anchor>a95793d6bf9d616a58f07f7d4490e4f81</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
@@ -353,15 +353,15 @@
       <type>bool</type>
       <name>fits</name>
       <anchorfile>structrmm_1_1mr_1_1detail_1_1block.html</anchorfile>
-      <anchor>a46a280d45e29a503f8cbf7da148e86e6</anchor>
-      <arglist>(size_t sz) const noexcept</arglist>
+      <anchor>a954249ebc3a2b2d49d41bb7f31929363</anchor>
+      <arglist>(std::size_t sz) const noexcept</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>is_better_fit</name>
       <anchorfile>structrmm_1_1mr_1_1detail_1_1block.html</anchorfile>
-      <anchor>a4dd6d0a004c707290aca334d8c3135eb</anchor>
-      <arglist>(size_t sz, block const &amp;b) const noexcept</arglist>
+      <anchor>a553eb1612fd08d5d4c7922e0d55de3bf</anchor>
+      <arglist>(std::size_t sz, block const &amp;b) const noexcept</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -425,8 +425,8 @@
       <type>block_type</type>
       <name>get_block</name>
       <anchorfile>structrmm_1_1mr_1_1detail_1_1coalescing__free__list.html</anchorfile>
-      <anchor>af4935430c0b98de527edd75cb5bd7642</anchor>
-      <arglist>(size_t size)</arglist>
+      <anchor>a63bd66fe10f077cf1e1e32eac7f60669</anchor>
+      <arglist>(std::size_t size)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -628,10 +628,10 @@
       <arglist>(std::size_t stream_id) const</arglist>
     </member>
     <member kind="function">
-      <type>size_t</type>
+      <type>std::size_t</type>
       <name>get_pool_size</name>
       <anchorfile>classrmm_1_1cuda__stream__pool.html</anchorfile>
-      <anchor>a003b021f7d6df4febd6da4d2b7e34237</anchor>
+      <anchor>a6d368c94a0c5a6f62acb52aed34efa0f</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="variable" static="yes">
@@ -1180,8 +1180,8 @@
       <type>block_type</type>
       <name>get_block</name>
       <anchorfile>structrmm_1_1mr_1_1detail_1_1fixed__size__free__list.html</anchorfile>
-      <anchor>a2589fe79c6d08756162da99b0fc74911</anchor>
-      <arglist>(size_t size)</arglist>
+      <anchor>ae95497f34d4a1b34d878b99eb6174ba1</anchor>
+      <arglist>(std::size_t size)</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -1232,18 +1232,18 @@
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function" protection="protected">
-      <type>size_t</type>
+      <type>std::size_t</type>
       <name>get_maximum_allocation_size</name>
       <anchorfile>classrmm_1_1mr_1_1fixed__size__memory__resource.html</anchorfile>
-      <anchor>af5b16feb74cd166769cc0ee2a841db3e</anchor>
+      <anchor>a728048c50f75c713fae3bf3641fa7b6e</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>block_type</type>
       <name>expand_pool</name>
       <anchorfile>classrmm_1_1mr_1_1fixed__size__memory__resource.html</anchorfile>
-      <anchor>af982a1ce0703be0afaa82db452d8f362</anchor>
-      <arglist>(size_t size, free_list &amp;blocks, cuda_stream_view stream)</arglist>
+      <anchor>a88b9ebfa1082ab6ae577fc55c18a6b26</anchor>
+      <arglist>(std::size_t size, free_list &amp;blocks, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>free_list</type>
@@ -1256,15 +1256,15 @@
       <type>split_block</type>
       <name>allocate_from_block</name>
       <anchorfile>classrmm_1_1mr_1_1fixed__size__memory__resource.html</anchorfile>
-      <anchor>aec1415e72e2c7e78f4cbe8e263a26490</anchor>
-      <arglist>(block_type const &amp;b, size_t size)</arglist>
+      <anchor>a0c7cc01a60a03aabf1bb70d24357083d</anchor>
+      <arglist>(block_type const &amp;b, std::size_t size)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>block_type</type>
       <name>free_block</name>
       <anchorfile>classrmm_1_1mr_1_1fixed__size__memory__resource.html</anchorfile>
-      <anchor>a1b1af0996fc993d26b4b2c6e7bd1c121</anchor>
-      <arglist>(void *p, size_t size) noexcept</arglist>
+      <anchor>a78378668a5525d5a8b709003ba11c486</anchor>
+      <arglist>(void *p, std::size_t size) noexcept</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>std::pair&lt; std::size_t, std::size_t &gt;</type>
@@ -1984,10 +1984,10 @@
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function" protection="protected">
-      <type>size_t</type>
+      <type>std::size_t</type>
       <name>get_maximum_allocation_size</name>
       <anchorfile>classrmm_1_1mr_1_1pool__memory__resource.html</anchorfile>
-      <anchor>a6fba7d8b42e06a148c230c1d4c43a2a0</anchor>
+      <anchor>a6d0c0b77cfb7db5e1ef9e4bee8b29102</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function" protection="protected">
@@ -2022,28 +2022,28 @@
       <type>thrust::optional&lt; block_type &gt;</type>
       <name>block_from_upstream</name>
       <anchorfile>classrmm_1_1mr_1_1pool__memory__resource.html</anchorfile>
-      <anchor>a906a8690659fcbe65f73dc337b2347dd</anchor>
-      <arglist>(size_t size, cuda_stream_view stream)</arglist>
+      <anchor>a4c687e04a1cc07fe5f9cfee3105f5335</anchor>
+      <arglist>(std::size_t size, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>split_block</type>
       <name>allocate_from_block</name>
       <anchorfile>classrmm_1_1mr_1_1pool__memory__resource.html</anchorfile>
-      <anchor>ab9361e290d4f7705704d76261aaac61d</anchor>
-      <arglist>(block_type const &amp;b, size_t size)</arglist>
+      <anchor>adf121431db4c29ba60afec6799c6369c</anchor>
+      <arglist>(block_type const &amp;b, std::size_t size)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>block_type</type>
       <name>free_block</name>
       <anchorfile>classrmm_1_1mr_1_1pool__memory__resource.html</anchorfile>
-      <anchor>a0fd29d7c0d3c87f71887b33844b7b501</anchor>
-      <arglist>(void *p, size_t size) noexcept</arglist>
+      <anchor>a6b1c4771645a9ba477d145ece03d5919</anchor>
+      <arglist>(void *p, std::size_t size) noexcept</arglist>
     </member>
     <member kind="function" protection="protected">
-      <type>size_t</type>
+      <type>std::size_t</type>
       <name>pool_size</name>
       <anchorfile>classrmm_1_1mr_1_1pool__memory__resource.html</anchorfile>
-      <anchor>a4677808b8358945a398d5647c69e918c</anchor>
+      <anchor>ac7159078675d349b7fe7a8b3429339c6</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function" protection="protected">
@@ -2068,10 +2068,10 @@
       <arglist>(free_list const &amp;blocks)</arglist>
     </member>
     <member kind="function" protection="protected">
-      <type>std::pair&lt; size_t, size_t &gt;</type>
+      <type>std::pair&lt; std::size_t, std::size_t &gt;</type>
       <name>do_get_mem_info</name>
       <anchorfile>classrmm_1_1mr_1_1pool__memory__resource.html</anchorfile>
-      <anchor>a3324baf17c0a61f5f2c7e862c786e057</anchor>
+      <anchor>a5cac2b0ee64cf7458934f6d7393c40a3</anchor>
       <arglist>(cuda_stream_view stream) const override</arglist>
     </member>
   </compound>
@@ -2084,24 +2084,6 @@
     <name>rmm::mr::thrust_allocator::rebind</name>
     <filename>structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html</filename>
     <templarg></templarg>
-  </compound>
-  <compound kind="struct">
-    <name>rmm::mr::detail::stream_ordered_memory_resource::split_block</name>
-    <filename>structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1split__block.html</filename>
-    <member kind="variable">
-      <type>void *</type>
-      <name>allocated_pointer</name>
-      <anchorfile>structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1split__block.html</anchorfile>
-      <anchor>ac0b35f2cf9733b50535f047ad9242920</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>block_type</type>
-      <name>remainder</name>
-      <anchorfile>structrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource_1_1split__block.html</anchorfile>
-      <anchor>ac9956a8ee3f95de52f2217532700a3eb</anchor>
-      <arglist></arglist>
-    </member>
   </compound>
   <compound kind="class">
     <name>rmm::detail::stack_trace</name>
@@ -2222,8 +2204,14 @@
     <templarg></templarg>
     <base>crtp&lt; PoolResource &gt;</base>
     <base>rmm::mr::device_memory_resource</base>
-    <class kind="struct">rmm::mr::detail::stream_ordered_memory_resource::split_block</class>
     <class kind="struct">rmm::mr::detail::stream_ordered_memory_resource::stream_event_pair</class>
+    <member kind="typedef" protection="protected">
+      <type>std::pair&lt; block_type, block_type &gt;</type>
+      <name>split_block</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</anchorfile>
+      <anchor>a80561e617cbaf5a13aafe4e76593367f</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="function" protection="protected">
       <type>void</type>
       <name>insert_block</name>
@@ -2258,6 +2246,13 @@
     <filename>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</filename>
     <base>crtp&lt; fixed_size_memory_resource&lt; Upstream &gt; &gt;</base>
     <base>rmm::mr::device_memory_resource</base>
+    <member kind="typedef" protection="protected">
+      <type>std::pair&lt; block_type, block_type &gt;</type>
+      <name>split_block</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</anchorfile>
+      <anchor>a80561e617cbaf5a13aafe4e76593367f</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="function" protection="protected">
       <type>void</type>
       <name>insert_block</name>
@@ -2292,6 +2287,13 @@
     <filename>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</filename>
     <base>crtp&lt; pool_memory_resource&lt; Upstream &gt; &gt;</base>
     <base>rmm::mr::device_memory_resource</base>
+    <member kind="typedef" protection="protected">
+      <type>std::pair&lt; block_type, block_type &gt;</type>
+      <name>split_block</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</anchorfile>
+      <anchor>a80561e617cbaf5a13aafe4e76593367f</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="function" protection="protected">
       <type>void</type>
       <name>insert_block</name>
