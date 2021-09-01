@@ -1,8 +1,4 @@
 var searchData=
 [
-  ['threadsperwarp_2308',['ThreadsPerWarp',['../structMLCommon_1_1LinAlg_1_1ThreadDiffSquaredAdd.html#a11840b326f2ac8319f8efac2a5914429',1,'MLCommon::LinAlg::ThreadDiffSquaredAdd::ThreadsPerWarp()'],['../structMLCommon_1_1LinAlg_1_1ThreadL1NormAdd.html#a2dd59ba9c62ebf7f687d27a6e461fbdf',1,'MLCommon::LinAlg::ThreadL1NormAdd::ThreadsPerWarp()']]],
-  ['treeclassifierd_2309',['TreeClassifierD',['../namespaceML_1_1DT.html#a79a47bac63d9de96e9c6cc887619f863',1,'ML::DT']]],
-  ['treeclassifierf_2310',['TreeClassifierF',['../namespaceML_1_1DT.html#ad55509f3ba092c856700d3ee9993351a',1,'ML::DT']]],
-  ['treeregressord_2311',['TreeRegressorD',['../namespaceML_1_1DT.html#a20ef38b4d6e391c60b2255d1e942de27',1,'ML::DT']]],
-  ['treeregressorf_2312',['TreeRegressorF',['../namespaceML_1_1DT.html#aac6368ef5925ee1b409c8315a7740292',1,'ML::DT']]]
+  ['value_5ftype_2303',['value_type',['../classML_1_1stdAllocatorAdapter.html#a93b047335075d5531d91160fb6b423b0',1,'ML::stdAllocatorAdapter::value_type()'],['../classML_1_1thrustAllocatorAdapter.html#a198a8fff4d9c74fc55d788ba07e0ea6b',1,'ML::thrustAllocatorAdapter::value_type()']]]
 ];

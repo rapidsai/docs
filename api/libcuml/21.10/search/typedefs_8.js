@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['logcallback_2290',['LogCallback',['../namespacespdlog_1_1sinks.html#a355dc363f9fe1326f759f07083ec3e8b',1,'spdlog::sinks']]]
+  ['modelhandle_2281',['ModelHandle',['../treelite__defs_8hpp.html#af55d689ab3378ed1dd2e821b3650672a',1,'treelite_defs.hpp']]]
 ];
