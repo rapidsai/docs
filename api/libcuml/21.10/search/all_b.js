@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['k_481',['k',['../classML_1_1HDBSCAN_1_1Common_1_1RobustSingleLinkageParams.html#aa9f4347ff755a343d7dedb5b51b25419',1,'ML::HDBSCAN::Common::RobustSingleLinkageParams::k()'],['../structML_1_1ARIMAOrder.html#adcd85fb946354a948c89846e0b12ab5f',1,'ML::ARIMAOrder::k()']]],
+  ['k_481',['k',['../structML_1_1ARIMAOrder.html#adcd85fb946354a948c89846e0b12ab5f',1,'ML::ARIMAOrder']]],
   ['k_5fbatches_482',['K_batches',['../structML_1_1ARIMAMemory.html#a6a438081e8c89fdff8cf2b400fbb8a61',1,'ML::ARIMAMemory']]],
   ['k_5fdense_483',['K_dense',['../structML_1_1ARIMAMemory.html#a0aa7811454932800692d348057746946',1,'ML::ARIMAMemory']]],
   ['kernel_484',['kernel',['../structMLCommon_1_1Matrix_1_1KernelParams.html#ae02e3ba30d736bb1464ce20b242f361d',1,'MLCommon::Matrix::KernelParams']]],
