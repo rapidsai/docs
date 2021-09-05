@@ -18,7 +18,7 @@ var searchData=
   ['batched_5floglike_84',['batched_loglike',['../namespaceML.html#a9fc7125606b4e1a7b56081e66932b528',1,'ML::batched_loglike(raft::handle_t &amp;handle, const ARIMAMemory&lt; double &gt; &amp;arima_mem, const double *d_y, int batch_size, int n_obs, const ARIMAOrder &amp;order, const double *d_params, double *loglike, double *d_vs, bool trans=true, bool host_loglike=true, LoglikeMethod method=MLE, int truncate=0, int fc_steps=0, double *d_fc=nullptr, double level=0, double *d_lower=nullptr, double *d_upper=nullptr)'],['../namespaceML.html#afc6ed78826537f543093c3171b3ccfcd',1,'ML::batched_loglike(raft::handle_t &amp;handle, const ARIMAMemory&lt; double &gt; &amp;arima_mem, const double *d_y, int batch_size, int n_obs, const ARIMAOrder &amp;order, const ARIMAParams&lt; double &gt; &amp;params, double *loglike, double *d_vs, bool trans=true, bool host_loglike=true, LoglikeMethod method=MLE, int truncate=0, int fc_steps=0, double *d_fc=nullptr, double level=0, double *d_lower=nullptr, double *d_upper=nullptr)']]],
   ['batched_5floglike_5fgrad_85',['batched_loglike_grad',['../namespaceML.html#a1a762a7256c1f42cce8aa6bed299c5a1',1,'ML']]],
   ['begin_86',['begin',['../classML_1_1Tensor.html#aebf360f9cd06ddc9fe2419817aec1fa6',1,'ML::Tensor']]],
-  ['best_5fmetric_5fval_87',['best_metric_val',['../structSparseTreeNode.html#af2c87ad78b9cc806eaeef47639f6b89a',1,'SparseTreeNode']]],
+  ['bestmetric_87',['BestMetric',['../structSparseTreeNode.html#adc0b56208cd17cd93bc62e9c26cbf0bd',1,'SparseTreeNode']]],
   ['bfgs_5fiter_5flimit_88',['bfgs_iter_limit',['../structML_1_1OptimParams.html#ade9a9ecc1dcb0eb8eefb0bf67eeebe6b',1,'ML::OptimParams']]],
   ['bh_2ecu_89',['bh.cu',['../bh_8cu.html',1,'']]],
   ['binary_5fbegin_90',['binary_begin',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77aa306e60b05b7bbf70da30b0bbadd2bed',1,'cuml::genetic::node']]],
@@ -39,6 +39,5 @@ var searchData=
   ['build_5fdivision_5fmap_105',['build_division_map',['../namespaceML.html#a27ed4fdb2f62155d0a1fd81f1405a779',1,'ML']]],
   ['build_5flinkage_106',['build_linkage',['../namespaceML_1_1HDBSCAN.html#a6039607d24779d20c31f70fe278b66aa',1,'ML::HDBSCAN']]],
   ['build_5ftreelite_5fforest_107',['build_treelite_forest',['../namespaceML.html#a684813418506a4839a61692008e4cfb9',1,'ML']]],
-  ['builder_2ecuh_108',['builder.cuh',['../builder_8cuh.html',1,'']]],
-  ['builder_5fbase_2ecuh_109',['builder_base.cuh',['../builder__base_8cuh.html',1,'']]]
+  ['builder_2ecuh_108',['builder.cuh',['../builder_8cuh.html',1,'']]]
 ];
