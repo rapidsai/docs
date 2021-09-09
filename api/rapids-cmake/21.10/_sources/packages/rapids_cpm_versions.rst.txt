@@ -1,5 +1,5 @@
 :orphan:
-
+.. _cpm_version_format:
 
 rapids-cmake package version format
 ###################################
