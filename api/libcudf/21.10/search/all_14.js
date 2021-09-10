@@ -67,7 +67,7 @@ var searchData=
   ['tokenizer_5fresult_1521',['tokenizer_result',['../structnvtext_1_1tokenizer__result.html',1,'nvtext']]],
   ['tracking_5fresource_5fadaptor_1522',['tracking_resource_adaptor',['https://docs.rapids.ai/api/librmm/21.10/classrmm_1_1mr_1_1tracking__resource__adaptor.html',1,'rmm::mr::tracking_resource_adaptor&lt; class &gt;'],['https://docs.rapids.ai/api/librmm/21.10/classrmm_1_1mr_1_1tracking__resource__adaptor.html#a1468a4721e3aef90c8a7e8ae7c1ddb63',1,'rmm::mr::tracking_resource_adaptor::tracking_resource_adaptor()']]],
   ['traits_2ehpp_1523',['traits.hpp',['../traits_8hpp.html',1,'']]],
-  ['transform_1524',['Transform',['../type__list__utilities_8hpp.html#afc5541e096aafd209c32503601a7e296',1,'cudf::test::Transform()'],['../group__transformation__transform.html#gaf79991ded097d2cf7db62edf38181022',1,'cudf::transform()']]],
+  ['transform_1524',['transform',['../group__transformation__transform.html#gaf79991ded097d2cf7db62edf38181022',1,'cudf::transform()'],['../type__list__utilities_8hpp.html#afc5541e096aafd209c32503601a7e296',1,'cudf::test::Transform()']]],
   ['transform_2ehpp_1525',['transform.hpp',['../transform_8hpp.html',1,'']]],
   ['transform_1526',['Transform',['../group__transformation__transform.html',1,'']]],
   ['transformimpl_1527',['TransformImpl',['../structcudf_1_1test_1_1TransformImpl.html',1,'cudf::test']]],
