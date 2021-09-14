@@ -7,5 +7,5 @@ var searchData=
   ['allocation_5finfo_4',['allocation_info',['../structrmm_1_1mr_1_1tracking__resource__adaptor_1_1allocation__info.html',1,'rmm::mr::tracking_resource_adaptor']]],
   ['arena_5',['arena',['../classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html',1,'rmm::mr::detail::arena::arena&lt; Upstream &gt;'],['../classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff',1,'rmm::mr::detail::arena::arena::arena()']]],
   ['arena_5fcleaner_6',['arena_cleaner',['../classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html',1,'rmm::mr::detail::arena']]],
-  ['arena_5fmemory_5fresource_7',['arena_memory_resource',['../classrmm_1_1mr_1_1arena__memory__resource.html',1,'rmm::mr::arena_memory_resource&lt; Upstream &gt;'],['../classrmm_1_1mr_1_1arena__memory__resource.html#aa7215b0de2d2d5e4b7acdcdd2ebb7b03',1,'rmm::mr::arena_memory_resource::arena_memory_resource()']]]
+  ['arena_5fmemory_5fresource_7',['arena_memory_resource',['../classrmm_1_1mr_1_1arena__memory__resource.html',1,'rmm::mr::arena_memory_resource&lt; Upstream &gt;'],['../classrmm_1_1mr_1_1arena__memory__resource.html#a09e1952158f170f47e1b42aa2dac9d6a',1,'rmm::mr::arena_memory_resource::arena_memory_resource()']]]
 ];

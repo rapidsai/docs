@@ -76,404 +76,419 @@ $(function() {
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&nbsp;<span class="preprocessor">#include &lt;rmm/cuda_stream_view.hpp&gt;</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp;<span class="preprocessor">#include &lt;rmm/detail/aligned.hpp&gt;</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="preprocessor">#include &lt;rmm/detail/error.hpp&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp;<span class="preprocessor">#include &lt;cuda_runtime_api.h&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp;<span class="preprocessor">#include &lt;cstddef&gt;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp;<span class="preprocessor">#include &lt;limits&gt;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp;<span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp;<span class="preprocessor">#include &lt;mutex&gt;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp;<span class="preprocessor">#include &lt;set&gt;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp;<span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp;<span class="keyword">namespace </span>rmm {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;<span class="keyword">namespace </span>mr {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp;<span class="keyword">namespace </span>detail {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;<span class="keyword">namespace </span>arena {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp;<span class="preprocessor">#include &lt;rmm/logger.hpp&gt;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp;<span class="preprocessor">#include &lt;cuda_runtime_api.h&gt;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp;<span class="preprocessor">#include &lt;spdlog/common.h&gt;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp;<span class="preprocessor">#include &lt;spdlog/fmt/bundled/ostream.h&gt;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp;<span class="preprocessor">#include &lt;cstddef&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp;<span class="preprocessor">#include &lt;limits&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp;<span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp;<span class="preprocessor">#include &lt;mutex&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;<span class="preprocessor">#include &lt;numeric&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp;<span class="preprocessor">#include &lt;set&gt;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;<span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;constexpr std::size_t minimum_superblock_size = 1u &lt;&lt; 18u;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp; </div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">   46</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> {</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#af0924fe6108bce7f2221b806a97a8450">   51</a></span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#af0924fe6108bce7f2221b806a97a8450">block</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp; </div>
-<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0772c988a344aeca7d5a3ff1c6ee9bca">   59</a></span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0772c988a344aeca7d5a3ff1c6ee9bca">block</a>(<span class="keywordtype">char</span>* <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">pointer</a>, std::size_t <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">size</a>) : pointer_(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">pointer</a>), size_(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">size</a>) {}</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp; </div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0c1694622727eb07b79089551ce6a8c7">   67</a></span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0c1694622727eb07b79089551ce6a8c7">block</a>(<span class="keywordtype">void</span>* <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">pointer</a>, std::size_t <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">size</a>) : pointer_(static_cast&lt;char*&gt;(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">pointer</a>)), size_(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">size</a>) {}</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp; </div>
-<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">   70</a></span>&nbsp;  <span class="keywordtype">void</span>* <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">pointer</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> pointer_; }</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp; </div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">   73</a></span>&nbsp;  std::size_t <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">size</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> size_; }</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp; </div>
-<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#abfaef96467aabf64f7fd82811f767646">   76</a></span>&nbsp;  <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#abfaef96467aabf64f7fd82811f767646">is_valid</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> pointer_ != <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp; </div>
-<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#ac45a0299e74e768af8a6adcf6ab5492c">   79</a></span>&nbsp;  <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#ac45a0299e74e768af8a6adcf6ab5492c">is_superblock</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> size_ &gt;= minimum_superblock_size; }</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp; </div>
-<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9e4467e759b1bda668be3bb4db5933e1">   88</a></span>&nbsp;  <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9e4467e759b1bda668be3bb4db5933e1">is_contiguous_before</a>(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <span class="keyword">const</span>&amp; b)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> pointer_ + size_ == b.pointer_; }</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp; </div>
-<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9424b78770c5be89a0b842cbab9e51ce">   96</a></span>&nbsp;  <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9424b78770c5be89a0b842cbab9e51ce">fits</a>(std::size_t sz)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> size_ &gt;= sz; }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp; </div>
-<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a72c5731d9ae27febf1756c13d65b4f86">  104</a></span>&nbsp;  std::pair&lt;block, block&gt; <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a72c5731d9ae27febf1756c13d65b4f86">split</a>(std::size_t sz)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp;<span class="keyword">  </span>{</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp;    RMM_LOGGING_ASSERT(size_ &gt;= sz);</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&nbsp;    <span class="keywordflow">if</span> (size_ &gt; sz) {</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&nbsp;      <span class="keywordflow">return</span> {{pointer_, sz}, {pointer_ + sz, size_ - sz}};</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&nbsp;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&nbsp;      <span class="keywordflow">return</span> {*<span class="keyword">this</span>, {}};</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&nbsp;    }</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp;  }</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp; </div>
-<div class="line"><a name="l00122"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#aedf7951e414146748bc775086627034d">  122</a></span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#aedf7951e414146748bc775086627034d">merge</a>(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <span class="keyword">const</span>&amp; b)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&nbsp;<span class="keyword">  </span>{</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&nbsp;    RMM_LOGGING_ASSERT(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9e4467e759b1bda668be3bb4db5933e1">is_contiguous_before</a>(b));</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&nbsp;    <span class="keywordflow">return</span> {pointer_, size_ + b.size_};</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&nbsp;  }</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&nbsp; </div>
-<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#aed0d8e571e72c619a3616f4a2a705772">  129</a></span>&nbsp;  <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#aed0d8e571e72c619a3616f4a2a705772">operator&lt;</a>(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <span class="keyword">const</span>&amp; b)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> pointer_ &lt; b.pointer_; }</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp; <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp;  <span class="keywordtype">char</span>* pointer_{};     </div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&nbsp;  std::size_t size_{};  </div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&nbsp;};</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;<span class="keyword">namespace </span>rmm::mr::detail::arena {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;constexpr std::size_t minimum_superblock_size = 1u &lt;&lt; 18u;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp; </div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">   48</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> {</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#af0924fe6108bce7f2221b806a97a8450">   53</a></span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#af0924fe6108bce7f2221b806a97a8450">block</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp; </div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0772c988a344aeca7d5a3ff1c6ee9bca">   61</a></span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0772c988a344aeca7d5a3ff1c6ee9bca">block</a>(<span class="keywordtype">char</span>* <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">pointer</a>, std::size_t <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">size</a>) : pointer_(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">pointer</a>), size_(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">size</a>) {}</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp; </div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0c1694622727eb07b79089551ce6a8c7">   69</a></span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0c1694622727eb07b79089551ce6a8c7">block</a>(<span class="keywordtype">void</span>* <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">pointer</a>, std::size_t <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">size</a>) : pointer_(static_cast&lt;char*&gt;(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">pointer</a>)), size_(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">size</a>) {}</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp; </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">   72</a></span>&nbsp;  [[nodiscard]] <span class="keywordtype">void</span>* <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">pointer</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> pointer_; }</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp; </div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">   75</a></span>&nbsp;  [[nodiscard]] std::size_t <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">size</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> size_; }</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp; </div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#abfaef96467aabf64f7fd82811f767646">   78</a></span>&nbsp;  [[nodiscard]] <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#abfaef96467aabf64f7fd82811f767646">is_valid</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> pointer_ != <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp; </div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#ac45a0299e74e768af8a6adcf6ab5492c">   81</a></span>&nbsp;  [[nodiscard]] <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#ac45a0299e74e768af8a6adcf6ab5492c">is_superblock</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> size_ &gt;= minimum_superblock_size; }</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp; </div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9e4467e759b1bda668be3bb4db5933e1">   90</a></span>&nbsp;  [[nodiscard]] <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9e4467e759b1bda668be3bb4db5933e1">is_contiguous_before</a>(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <span class="keyword">const</span>&amp; b)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp;    <span class="keywordflow">return</span> pointer_ + size_ == b.pointer_;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp;  }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&nbsp; </div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9424b78770c5be89a0b842cbab9e51ce">  101</a></span>&nbsp;  [[nodiscard]] <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9424b78770c5be89a0b842cbab9e51ce">fits</a>(std::size_t sz)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> size_ &gt;= sz; }</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp; </div>
+<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a72c5731d9ae27febf1756c13d65b4f86">  109</a></span>&nbsp;  [[nodiscard]] std::pair&lt;block, block&gt; <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a72c5731d9ae27febf1756c13d65b4f86">split</a>(std::size_t sz)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&nbsp;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&nbsp;    RMM_LOGGING_ASSERT(size_ &gt;= sz);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp;    <span class="keywordflow">if</span> (size_ &gt; sz) {</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp;      <span class="keywordflow">return</span> {{pointer_, sz}, {pointer_ + sz, size_ - sz}};</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&nbsp;      <span class="keywordflow">return</span> {*<span class="keyword">this</span>, {}};</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&nbsp;    }</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&nbsp;  }</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&nbsp; </div>
+<div class="line"><a name="l00127"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#aedf7951e414146748bc775086627034d">  127</a></span>&nbsp;  [[nodiscard]] <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#aedf7951e414146748bc775086627034d">merge</a>(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <span class="keyword">const</span>&amp; b)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&nbsp;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&nbsp;    RMM_LOGGING_ASSERT(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9e4467e759b1bda668be3bb4db5933e1">is_contiguous_before</a>(b));</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp;    <span class="keywordflow">return</span> {pointer_, size_ + b.size_};</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp;  }</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp; </div>
+<div class="line"><a name="l00134"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#aed0d8e571e72c619a3616f4a2a705772">  134</a></span>&nbsp;  <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#aed0d8e571e72c619a3616f4a2a705772">operator&lt;</a>(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <span class="keyword">const</span>&amp; b)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> pointer_ &lt; b.pointer_; }</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&nbsp; </div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&nbsp;constexpr std::size_t align_up(std::size_t v) noexcept</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&nbsp;{</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&nbsp;  <span class="keywordflow">return</span> rmm::detail::align_up(v, rmm::detail::CUDA_ALLOCATION_ALIGNMENT);</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&nbsp;}</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&nbsp; </div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&nbsp;constexpr std::size_t align_down(std::size_t v) noexcept</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&nbsp;{</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&nbsp;  <span class="keywordflow">return</span> rmm::detail::align_down(v, rmm::detail::CUDA_ALLOCATION_ALIGNMENT);</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&nbsp;}</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&nbsp; </div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&nbsp;<span class="keyword">inline</span> block first_fit(std::set&lt;block&gt;&amp; free_blocks, std::size_t size)</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&nbsp;{</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> iter = std::find_if(</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&nbsp;    free_blocks.cbegin(), free_blocks.cend(), [size](<span class="keyword">auto</span> <span class="keyword">const</span>&amp; b) { return b.fits(size); });</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&nbsp; </div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&nbsp;  <span class="keywordflow">if</span> (iter == free_blocks.cend()) {</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&nbsp;    <span class="keywordflow">return</span> {};</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&nbsp;  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&nbsp;    <span class="comment">// Remove the block from the free_list.</span></div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> b = *iter;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> i = free_blocks.erase(iter);</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&nbsp; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&nbsp;  <span class="keywordtype">char</span>* pointer_{};     </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&nbsp;  std::size_t size_{};  </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&nbsp;};</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&nbsp; </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">bool</span> block_size_compare(block a, block b) { <span class="keywordflow">return</span> a.size() &lt; b.size(); }</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&nbsp; </div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&nbsp;constexpr std::size_t align_up(std::size_t v) noexcept</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&nbsp;{</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&nbsp;  <span class="keywordflow">return</span> rmm::detail::align_up(v, rmm::detail::CUDA_ALLOCATION_ALIGNMENT);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&nbsp;}</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&nbsp; </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&nbsp;constexpr std::size_t align_down(std::size_t v) noexcept</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&nbsp;{</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&nbsp;  <span class="keywordflow">return</span> rmm::detail::align_down(v, rmm::detail::CUDA_ALLOCATION_ALIGNMENT);</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&nbsp;}</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&nbsp; </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&nbsp;<span class="keyword">inline</span> block first_fit(std::set&lt;block&gt;&amp; free_blocks, std::size_t size)</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&nbsp;{</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> iter = std::find_if(</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&nbsp;    free_blocks.cbegin(), free_blocks.cend(), [size](<span class="keyword">auto</span> <span class="keyword">const</span>&amp; b) { return b.fits(size); });</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&nbsp; </div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&nbsp;    <span class="keywordflow">if</span> (b.size() &gt; size) {</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&nbsp;      <span class="comment">// Split the block and put the remainder back.</span></div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&nbsp;      <span class="keyword">auto</span> <span class="keyword">const</span> split = b.split(size);</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&nbsp;      free_blocks.insert(i, split.second);</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&nbsp;      <span class="keywordflow">return</span> split.first;</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&nbsp;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&nbsp;      <span class="keywordflow">return</span> b;</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&nbsp;    }</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&nbsp;  }</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&nbsp;}</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&nbsp; </div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&nbsp;<span class="keyword">inline</span> block coalesce_block(std::set&lt;block&gt;&amp; free_blocks, block <span class="keyword">const</span>&amp; b)</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&nbsp;{</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&nbsp;  <span class="keywordflow">if</span> (!b.is_valid()) <span class="keywordflow">return</span> b;</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&nbsp; </div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&nbsp;  <span class="comment">// Find the right place (in ascending address order) to insert the block.</span></div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> next     = free_blocks.lower_bound(b);</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> previous = next == free_blocks.cbegin() ? next : std::prev(next);</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&nbsp; </div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&nbsp;  <span class="comment">// Coalesce with neighboring blocks.</span></div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&nbsp;  <span class="keywordtype">bool</span> <span class="keyword">const</span> merge_prev = previous-&gt;is_contiguous_before(b);</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&nbsp;  <span class="keywordtype">bool</span> <span class="keyword">const</span> merge_next = next != free_blocks.cend() &amp;&amp; b.is_contiguous_before(*next);</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&nbsp; </div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&nbsp;  block merged{};</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&nbsp;  <span class="keywordflow">if</span> (merge_prev &amp;&amp; merge_next) {</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&nbsp;    merged = previous-&gt;merge(b).merge(*next);</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&nbsp;    free_blocks.erase(previous);</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> i = free_blocks.erase(next);</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&nbsp;    free_blocks.insert(i, merged);</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (merge_prev) {</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&nbsp;    merged       = previous-&gt;merge(b);</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> i = free_blocks.erase(previous);</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&nbsp;    free_blocks.insert(i, merged);</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (merge_next) {</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&nbsp;    merged       = b.merge(*next);</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> i = free_blocks.erase(next);</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&nbsp;    free_blocks.insert(i, merged);</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&nbsp;  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&nbsp;    free_blocks.emplace(b);</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&nbsp;    merged = b;</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&nbsp;  }</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&nbsp;  <span class="keywordflow">return</span> merged;</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&nbsp;}</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&nbsp; </div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Upstream&gt;</div>
-<div class="line"><a name="l00244"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html">  244</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html">global_arena</a> final {</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&nbsp; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00247"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a21deaed7471c49faf3de1433ac6b4401">  247</a></span>&nbsp;  <span class="keyword">static</span> constexpr std::size_t <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a21deaed7471c49faf3de1433ac6b4401">default_initial_size</a> = std::numeric_limits&lt;std::size_t&gt;::max();</div>
-<div class="line"><a name="l00249"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a829283bd76a5e81912380a369bd4d6e5">  249</a></span>&nbsp;  <span class="keyword">static</span> constexpr std::size_t <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a829283bd76a5e81912380a369bd4d6e5">default_maximum_size</a> = std::numeric_limits&lt;std::size_t&gt;::max();</div>
-<div class="line"><a name="l00251"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#aa7ca12862921fb184159b304b7afae4c">  251</a></span>&nbsp;  <span class="keyword">static</span> constexpr std::size_t <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#aa7ca12862921fb184159b304b7afae4c">reserved_size</a> = 1u &lt;&lt; 26u;</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&nbsp; </div>
-<div class="line"><a name="l00268"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">  268</a></span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">global_arena</a>(Upstream* upstream_mr, std::size_t initial_size, std::size_t maximum_size)</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&nbsp;    : upstream_mr_{upstream_mr}, maximum_size_{maximum_size}</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&nbsp;  {</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&nbsp;    RMM_EXPECTS(<span class="keyword">nullptr</span> != upstream_mr_, <span class="stringliteral">"Unexpected null upstream pointer."</span>);</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&nbsp;    RMM_EXPECTS(initial_size == <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a21deaed7471c49faf3de1433ac6b4401">default_initial_size</a> || initial_size == align_up(initial_size),</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&nbsp;                <span class="stringliteral">"Error, Initial arena size required to be a multiple of 256 bytes"</span>);</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&nbsp;    RMM_EXPECTS(maximum_size_ == <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a829283bd76a5e81912380a369bd4d6e5">default_maximum_size</a> || maximum_size_ == align_up(maximum_size_),</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&nbsp;                <span class="stringliteral">"Error, Maximum arena size required to be a multiple of 256 bytes"</span>);</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&nbsp; </div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&nbsp;    <span class="keywordflow">if</span> (initial_size == <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a21deaed7471c49faf3de1433ac6b4401">default_initial_size</a> || maximum_size == <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a829283bd76a5e81912380a369bd4d6e5">default_maximum_size</a>) {</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&nbsp;      std::size_t free{}, total{};</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&nbsp;      RMM_CUDA_TRY(cudaMemGetInfo(&amp;free, &amp;total));</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&nbsp;      <span class="keywordflow">if</span> (initial_size == <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a21deaed7471c49faf3de1433ac6b4401">default_initial_size</a>) {</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&nbsp;        initial_size = align_up(std::min(free, total / 2));</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&nbsp;      }</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&nbsp;      <span class="keywordflow">if</span> (maximum_size_ == <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a829283bd76a5e81912380a369bd4d6e5">default_maximum_size</a>) {</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&nbsp;        maximum_size_ = align_down(free) - <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#aa7ca12862921fb184159b304b7afae4c">reserved_size</a>;</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&nbsp;      }</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&nbsp;    }</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&nbsp;    RMM_EXPECTS(initial_size &lt;= maximum_size_, <span class="stringliteral">"Initial arena size exceeds the maximum pool size!"</span>);</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&nbsp; </div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&nbsp;    free_blocks_.emplace(expand_arena(initial_size));</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&nbsp;  }</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&nbsp; </div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&nbsp;  <span class="comment">// Disable copy (and move) semantics.</span></div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">global_arena</a>(<span class="keyword">const</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">global_arena</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">global_arena</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">global_arena</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&nbsp; </div>
-<div class="line"><a name="l00300"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a16bbded32f0ed473296d5ad10dfc0b64">  300</a></span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a16bbded32f0ed473296d5ad10dfc0b64">~global_arena</a>()</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&nbsp;  {</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&nbsp;    lock_guard lock(mtx_);</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&nbsp;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> <span class="keyword">const</span>&amp; b : upstream_blocks_) {</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&nbsp;      upstream_mr_-&gt;deallocate(b.pointer(), b.size());</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&nbsp;    }</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&nbsp;  }</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&nbsp; </div>
-<div class="line"><a name="l00316"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a4daf92d526f65fd05478410ce0e8ba72">  316</a></span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a4daf92d526f65fd05478410ce0e8ba72">allocate</a>(std::size_t bytes)</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&nbsp;  {</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&nbsp;    lock_guard lock(mtx_);</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&nbsp;    <span class="keywordflow">return</span> get_block(bytes);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&nbsp;  <span class="keywordflow">if</span> (iter == free_blocks.cend()) {</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&nbsp;    <span class="keywordflow">return</span> {};</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&nbsp;  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&nbsp;    <span class="comment">// Remove the block from the free_list.</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> b = *iter;</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> i = free_blocks.erase(iter);</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&nbsp; </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&nbsp;    <span class="keywordflow">if</span> (b.size() &gt; size) {</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&nbsp;      <span class="comment">// Split the block and put the remainder back.</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&nbsp;      <span class="keyword">auto</span> <span class="keyword">const</span> split = b.split(size);</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&nbsp;      free_blocks.insert(i, split.second);</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&nbsp;      <span class="keywordflow">return</span> split.first;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&nbsp;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&nbsp;      <span class="keywordflow">return</span> b;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&nbsp;    }</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&nbsp;  }</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&nbsp;}</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&nbsp; </div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&nbsp;<span class="keyword">inline</span> block coalesce_block(std::set&lt;block&gt;&amp; free_blocks, block <span class="keyword">const</span>&amp; b)</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&nbsp;{</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&nbsp;  <span class="keywordflow">if</span> (!b.is_valid()) <span class="keywordflow">return</span> b;</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&nbsp; </div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&nbsp;  <span class="comment">// Find the right place (in ascending address order) to insert the block.</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> next     = free_blocks.lower_bound(b);</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> previous = next == free_blocks.cbegin() ? next : std::prev(next);</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&nbsp; </div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&nbsp;  <span class="comment">// Coalesce with neighboring blocks.</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&nbsp;  <span class="keywordtype">bool</span> <span class="keyword">const</span> merge_prev = previous-&gt;is_contiguous_before(b);</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&nbsp;  <span class="keywordtype">bool</span> <span class="keyword">const</span> merge_next = next != free_blocks.cend() &amp;&amp; b.is_contiguous_before(*next);</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&nbsp; </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&nbsp;  block merged{};</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&nbsp;  <span class="keywordflow">if</span> (merge_prev &amp;&amp; merge_next) {</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&nbsp;    merged = previous-&gt;merge(b).merge(*next);</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&nbsp;    free_blocks.erase(previous);</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> i = free_blocks.erase(next);</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&nbsp;    free_blocks.insert(i, merged);</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (merge_prev) {</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&nbsp;    merged       = previous-&gt;merge(b);</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> i = free_blocks.erase(previous);</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&nbsp;    free_blocks.insert(i, merged);</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (merge_next) {</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&nbsp;    merged       = b.merge(*next);</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> i = free_blocks.erase(next);</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&nbsp;    free_blocks.insert(i, merged);</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&nbsp;  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&nbsp;    free_blocks.emplace(b);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&nbsp;    merged = b;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&nbsp;  }</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&nbsp;  <span class="keywordflow">return</span> merged;</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&nbsp;}</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&nbsp; </div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&nbsp;<span class="keyword">inline</span> <span class="keyword">auto</span> total_block_size(T <span class="keyword">const</span>&amp; blocks)</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&nbsp;{</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&nbsp;  <span class="keywordflow">return</span> std::accumulate(</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&nbsp;    blocks.cbegin(), blocks.cend(), std::size_t{}, [](<span class="keyword">auto</span> a, <span class="keyword">auto</span> b) { return a + b.size(); });</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&nbsp;}</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&nbsp; </div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Upstream&gt;</div>
+<div class="line"><a name="l00258"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html">  258</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html">global_arena</a> final {</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&nbsp; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00261"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a21deaed7471c49faf3de1433ac6b4401">  261</a></span>&nbsp;  <span class="keyword">static</span> constexpr std::size_t <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a21deaed7471c49faf3de1433ac6b4401">default_initial_size</a> = std::numeric_limits&lt;std::size_t&gt;::max();</div>
+<div class="line"><a name="l00263"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a829283bd76a5e81912380a369bd4d6e5">  263</a></span>&nbsp;  <span class="keyword">static</span> constexpr std::size_t <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a829283bd76a5e81912380a369bd4d6e5">default_maximum_size</a> = std::numeric_limits&lt;std::size_t&gt;::max();</div>
+<div class="line"><a name="l00265"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#aa7ca12862921fb184159b304b7afae4c">  265</a></span>&nbsp;  <span class="keyword">static</span> constexpr std::size_t <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#aa7ca12862921fb184159b304b7afae4c">reserved_size</a> = 1u &lt;&lt; 26u;</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&nbsp; </div>
+<div class="line"><a name="l00282"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">  282</a></span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">global_arena</a>(Upstream* upstream_mr, std::size_t initial_size, std::size_t maximum_size)</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&nbsp;    : upstream_mr_{upstream_mr}, maximum_size_{maximum_size}</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&nbsp;  {</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&nbsp;    RMM_EXPECTS(<span class="keyword">nullptr</span> != upstream_mr_, <span class="stringliteral">"Unexpected null upstream pointer."</span>);</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&nbsp;    RMM_EXPECTS(initial_size == <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a21deaed7471c49faf3de1433ac6b4401">default_initial_size</a> || initial_size == align_up(initial_size),</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&nbsp;                <span class="stringliteral">"Error, Initial arena size required to be a multiple of 256 bytes"</span>);</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&nbsp;    RMM_EXPECTS(maximum_size_ == <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a829283bd76a5e81912380a369bd4d6e5">default_maximum_size</a> || maximum_size_ == align_up(maximum_size_),</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&nbsp;                <span class="stringliteral">"Error, Maximum arena size required to be a multiple of 256 bytes"</span>);</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&nbsp; </div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&nbsp;    <span class="keywordflow">if</span> (initial_size == <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a21deaed7471c49faf3de1433ac6b4401">default_initial_size</a> || maximum_size == <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a829283bd76a5e81912380a369bd4d6e5">default_maximum_size</a>) {</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&nbsp;      std::size_t free{}, total{};</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&nbsp;      RMM_CUDA_TRY(cudaMemGetInfo(&amp;free, &amp;total));</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&nbsp;      <span class="keywordflow">if</span> (initial_size == <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a21deaed7471c49faf3de1433ac6b4401">default_initial_size</a>) {</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&nbsp;        initial_size = align_up(std::min(free, total / 2));</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&nbsp;      }</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&nbsp;      <span class="keywordflow">if</span> (maximum_size_ == <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a829283bd76a5e81912380a369bd4d6e5">default_maximum_size</a>) {</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&nbsp;        maximum_size_ = align_down(free) - <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#aa7ca12862921fb184159b304b7afae4c">reserved_size</a>;</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&nbsp;      }</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&nbsp;    }</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&nbsp;    RMM_EXPECTS(initial_size &lt;= maximum_size_, <span class="stringliteral">"Initial arena size exceeds the maximum pool size!"</span>);</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&nbsp; </div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&nbsp;    free_blocks_.emplace(expand_arena(initial_size));</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&nbsp;  }</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&nbsp; </div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&nbsp;  <span class="comment">// Disable copy (and move) semantics.</span></div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">global_arena</a>(<span class="keyword">const</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">global_arena</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">global_arena</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">global_arena</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&nbsp; </div>
+<div class="line"><a name="l00314"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a16bbded32f0ed473296d5ad10dfc0b64">  314</a></span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a16bbded32f0ed473296d5ad10dfc0b64">~global_arena</a>()</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&nbsp;  {</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&nbsp;    lock_guard lock(mtx_);</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&nbsp;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> <span class="keyword">const</span>&amp; b : upstream_blocks_) {</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&nbsp;      upstream_mr_-&gt;deallocate(b.pointer(), b.size());</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&nbsp;    }</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&nbsp;  }</div>
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&nbsp; </div>
-<div class="line"><a name="l00329"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#ad5c0b09745292c68e49a820ff7a3b746">  329</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#ad5c0b09745292c68e49a820ff7a3b746">deallocate</a>(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <span class="keyword">const</span>&amp; b)</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&nbsp;  {</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&nbsp;    lock_guard lock(mtx_);</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&nbsp;    coalesce_block(free_blocks_, b);</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&nbsp;  }</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&nbsp; </div>
-<div class="line"><a name="l00340"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a1927ecc632589a7ada324082e2d056da">  340</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a1927ecc632589a7ada324082e2d056da">deallocate</a>(std::set&lt;block&gt; <span class="keyword">const</span>&amp; free_blocks)</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&nbsp;  {</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&nbsp;    lock_guard lock(mtx_);</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&nbsp;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> <span class="keyword">const</span>&amp; b : free_blocks) {</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&nbsp;      coalesce_block(free_blocks_, b);</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&nbsp;    }</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&nbsp;  }</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&nbsp; </div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&nbsp; <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&nbsp;  <span class="keyword">using</span> lock_guard = std::lock_guard&lt;std::mutex&gt;;</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&nbsp; </div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> get_block(std::size_t size)</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&nbsp;  {</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&nbsp;    <span class="comment">// Find the first-fit free block.</span></div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> b = first_fit(free_blocks_, size);</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&nbsp;    <span class="keywordflow">if</span> (b.is_valid()) <span class="keywordflow">return</span> b;</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&nbsp; </div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&nbsp;    <span class="comment">// No existing larger blocks available, so grow the arena.</span></div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> upstream_block = expand_arena(size_to_grow(size));</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&nbsp;    coalesce_block(free_blocks_, upstream_block);</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&nbsp;    <span class="keywordflow">return</span> first_fit(free_blocks_, size);</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&nbsp;  }</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&nbsp; </div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&nbsp;  constexpr std::size_t size_to_grow(std::size_t size)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&nbsp;<span class="keyword">  </span>{</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&nbsp;    <span class="keywordflow">if</span> (current_size_ + size &gt; maximum_size_) {</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&nbsp;      RMM_FAIL(<span class="stringliteral">"Maximum pool size exceeded"</span>, <a class="code" href="classrmm_1_1bad__alloc.html">rmm::bad_alloc</a>);</div>
+<div class="line"><a name="l00330"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a4daf92d526f65fd05478410ce0e8ba72">  330</a></span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a4daf92d526f65fd05478410ce0e8ba72">allocate</a>(std::size_t bytes)</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&nbsp;  {</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&nbsp;    lock_guard lock(mtx_);</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&nbsp;    <span class="keywordflow">return</span> get_block(bytes);</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&nbsp;  }</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&nbsp; </div>
+<div class="line"><a name="l00343"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#ad5c0b09745292c68e49a820ff7a3b746">  343</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#ad5c0b09745292c68e49a820ff7a3b746">deallocate</a>(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <span class="keyword">const</span>&amp; b)</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&nbsp;  {</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&nbsp;    lock_guard lock(mtx_);</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&nbsp;    coalesce_block(free_blocks_, b);</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&nbsp;  }</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&nbsp; </div>
+<div class="line"><a name="l00354"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a1927ecc632589a7ada324082e2d056da">  354</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a1927ecc632589a7ada324082e2d056da">deallocate</a>(std::set&lt;block&gt; <span class="keyword">const</span>&amp; free_blocks)</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&nbsp;  {</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&nbsp;    lock_guard lock(mtx_);</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&nbsp;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> <span class="keyword">const</span>&amp; b : free_blocks) {</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&nbsp;      coalesce_block(free_blocks_, b);</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&nbsp;    }</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&nbsp;  }</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&nbsp; </div>
+<div class="line"><a name="l00367"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a40b2e0848aa2af6e8317f985ee3819c6">  367</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a40b2e0848aa2af6e8317f985ee3819c6">dump_memory_log</a>(std::shared_ptr&lt;spdlog::logger&gt; <span class="keyword">const</span>&amp; logger)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&nbsp;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&nbsp;    lock_guard lock(mtx_);</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&nbsp; </div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&nbsp;    logger-&gt;info(<span class="stringliteral">"  Maximum size: {}"</span>, <a class="code" href="structrmm_1_1detail_1_1bytes.html">rmm::detail::bytes</a>{maximum_size_});</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&nbsp;    logger-&gt;info(<span class="stringliteral">"  Current size: {}"</span>, <a class="code" href="structrmm_1_1detail_1_1bytes.html">rmm::detail::bytes</a>{current_size_});</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&nbsp; </div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&nbsp;    logger-&gt;info(<span class="stringliteral">"  # free blocks: {}"</span>, free_blocks_.size());</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&nbsp;    <span class="keywordflow">if</span> (!free_blocks_.empty()) {</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&nbsp;      logger-&gt;info(<span class="stringliteral">"  Total size of free blocks: {}"</span>,</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&nbsp;                   <a class="code" href="structrmm_1_1detail_1_1bytes.html">rmm::detail::bytes</a>{total_block_size(free_blocks_)});</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&nbsp;      <span class="keyword">auto</span> <span class="keyword">const</span> m =</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&nbsp;        *std::max_element(free_blocks_.begin(), free_blocks_.end(), block_size_compare);</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&nbsp;      logger-&gt;info(<span class="stringliteral">"  Size of largest free block: {}"</span>, <a class="code" href="structrmm_1_1detail_1_1bytes.html">rmm::detail::bytes</a>{m.size()});</div>
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&nbsp;    }</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&nbsp;    <span class="keywordflow">return</span> maximum_size_ - current_size_;</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&nbsp;  }</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&nbsp; </div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&nbsp;  block expand_arena(std::size_t size)</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&nbsp;  {</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&nbsp;    upstream_blocks_.push_back({upstream_mr_-&gt;allocate(size), size});</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&nbsp;    current_size_ += size;</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&nbsp;    <span class="keywordflow">return</span> upstream_blocks_.back();</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&nbsp;  }</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&nbsp; </div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&nbsp;  Upstream* upstream_mr_;</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&nbsp;  std::size_t maximum_size_;</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&nbsp;  std::size_t current_size_{};</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&nbsp;  std::set&lt;block&gt; free_blocks_;</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&nbsp;  std::vector&lt;block&gt; upstream_blocks_;</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&nbsp;  <span class="keyword">mutable</span> std::mutex mtx_;</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&nbsp;};</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&nbsp; </div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Upstream&gt;</div>
-<div class="line"><a name="l00422"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html">  422</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html">arena</a> {</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&nbsp; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00429"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">  429</a></span>&nbsp;  <span class="keyword">explicit</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">arena</a>(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html">global_arena&lt;Upstream&gt;</a>&amp; <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html">global_arena</a>) : global_arena_{<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html">global_arena</a>} {}</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&nbsp; </div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&nbsp;  <span class="comment">// Disable copy (and move) semantics.</span></div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">arena</a>(<span class="keyword">const</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">arena</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">arena</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">arena</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&nbsp; </div>
-<div class="line"><a name="l00443"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a3a9cf415216f0b50104b34572e72a0bf">  443</a></span>&nbsp;  <span class="keywordtype">void</span>* <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a3a9cf415216f0b50104b34572e72a0bf">allocate</a>(std::size_t bytes)</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&nbsp;  {</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&nbsp;    lock_guard lock(mtx_);</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> b = get_block(bytes);</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&nbsp;<span class="preprocessor">#ifdef RMM_POOL_TRACK_ALLOCATIONS</span></div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&nbsp;    allocated_blocks_.emplace(b.pointer(), b);</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&nbsp;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&nbsp;    <span class="keywordflow">return</span> b.pointer();</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&nbsp;  }</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&nbsp; </div>
-<div class="line"><a name="l00462"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#ab4ecb933435fde24875af21e457682c7">  462</a></span>&nbsp;  <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#ab4ecb933435fde24875af21e457682c7">deallocate</a>(<span class="keywordtype">void</span>* p, std::size_t bytes, <a class="code" href="classrmm_1_1cuda__stream__view.html">cuda_stream_view</a> stream)</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&nbsp;  {</div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&nbsp;    lock_guard lock(mtx_);</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&nbsp;<span class="preprocessor">#ifdef RMM_POOL_TRACK_ALLOCATIONS</span></div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> b = free_block(p, bytes);</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&nbsp;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&nbsp;    <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <span class="keyword">const</span> b{p, bytes};</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&nbsp;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&nbsp;    <span class="keywordflow">if</span> (b.is_valid()) {</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&nbsp;      <span class="keyword">auto</span> <span class="keyword">const</span> merged = coalesce_block(free_blocks_, b);</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&nbsp;      shrink_arena(merged, stream);</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&nbsp;    }</div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&nbsp;    <span class="keywordflow">return</span> b.is_valid();</div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&nbsp;  }</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&nbsp; </div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&nbsp;<span class="preprocessor">#ifdef RMM_POOL_TRACK_ALLOCATIONS</span></div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&nbsp; </div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&nbsp;  <span class="keywordtype">bool</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#ab4ecb933435fde24875af21e457682c7">deallocate</a>(<span class="keywordtype">void</span>* p, std::size_t bytes)</div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&nbsp;  {</div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&nbsp;    lock_guard lock(mtx_);</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> b = free_block(p, bytes);</div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&nbsp;    <span class="keywordflow">if</span> (b.is_valid()) { global_arena_.deallocate(b); }</div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&nbsp;    <span class="keywordflow">return</span> b.is_valid();</div>
-<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&nbsp;  }</div>
-<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&nbsp;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&nbsp; </div>
-<div class="line"><a name="l00504"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#ab98c95b4d8f1781aabda59abc5eec4ae">  504</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#ab98c95b4d8f1781aabda59abc5eec4ae">clean</a>()</div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&nbsp;  {</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&nbsp;    lock_guard lock(mtx_);</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&nbsp;    global_arena_.deallocate(free_blocks_);</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&nbsp;    free_blocks_.clear();</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&nbsp;<span class="preprocessor">#ifdef RMM_POOL_TRACK_ALLOCATIONS</span></div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&nbsp;    allocated_blocks_.clear();</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&nbsp;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&nbsp;  }</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&nbsp; </div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&nbsp; <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&nbsp;  <span class="keyword">using</span> lock_guard = std::lock_guard&lt;std::mutex&gt;;</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&nbsp; </div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> get_block(std::size_t size)</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&nbsp;  {</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&nbsp;    <span class="keywordflow">if</span> (size &lt; minimum_superblock_size) {</div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&nbsp;      <span class="comment">// Find the first-fit free block.</span></div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&nbsp;      <span class="keyword">auto</span> <span class="keyword">const</span> b = first_fit(free_blocks_, size);</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&nbsp;      <span class="keywordflow">if</span> (b.is_valid()) { <span class="keywordflow">return</span> b; }</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&nbsp;    }</div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&nbsp; </div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&nbsp;    <span class="comment">// No existing larger blocks available, so grow the arena and obtain a superblock.</span></div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> superblock = expand_arena(size);</div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&nbsp;    coalesce_block(free_blocks_, superblock);</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&nbsp;    <span class="keywordflow">return</span> first_fit(free_blocks_, size);</div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&nbsp;  }</div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&nbsp; </div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&nbsp;  block expand_arena(std::size_t size)</div>
-<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&nbsp;  {</div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> superblock_size = std::max(size, minimum_superblock_size);</div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&nbsp;    <span class="keywordflow">return</span> global_arena_.allocate(superblock_size);</div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&nbsp;  }</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&nbsp; </div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&nbsp;    logger-&gt;info(<span class="stringliteral">"  # upstream blocks={}"</span>, upstream_blocks_.size());</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&nbsp;    logger-&gt;info(<span class="stringliteral">"  Total size of upstream blocks: {}"</span>,</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&nbsp;                 <a class="code" href="structrmm_1_1detail_1_1bytes.html">rmm::detail::bytes</a>{total_block_size(upstream_blocks_)});</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&nbsp;  }</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&nbsp; </div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&nbsp; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&nbsp;  <span class="keyword">using</span> lock_guard = std::lock_guard&lt;std::mutex&gt;;</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&nbsp; </div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> get_block(std::size_t size)</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&nbsp;  {</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&nbsp;    <span class="comment">// Find the first-fit free block.</span></div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> b = first_fit(free_blocks_, size);</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&nbsp;    <span class="keywordflow">if</span> (b.is_valid()) <span class="keywordflow">return</span> b;</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&nbsp; </div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&nbsp;    <span class="comment">// No existing larger blocks available, so grow the arena.</span></div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> upstream_block = expand_arena(size_to_grow(size));</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&nbsp;    coalesce_block(free_blocks_, upstream_block);</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&nbsp;    <span class="keywordflow">return</span> first_fit(free_blocks_, size);</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&nbsp;  }</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&nbsp; </div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&nbsp;  constexpr std::size_t size_to_grow(std::size_t size)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&nbsp;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&nbsp;    <span class="keywordflow">if</span> (current_size_ + size &gt; maximum_size_) {</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&nbsp;      <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&nbsp;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&nbsp;      <span class="keywordflow">return</span> maximum_size_ - current_size_;</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&nbsp;    }</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&nbsp;  }</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&nbsp; </div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&nbsp;  block expand_arena(std::size_t size)</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&nbsp;  {</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&nbsp;    <span class="keywordflow">if</span> (size &gt; 0) {</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&nbsp;      upstream_blocks_.push_back({upstream_mr_-&gt;allocate(size), size});</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&nbsp;      current_size_ += size;</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&nbsp;      <span class="keywordflow">return</span> upstream_blocks_.back();</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&nbsp;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&nbsp;      <span class="keywordflow">return</span> {};</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&nbsp;    }</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&nbsp;  }</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&nbsp; </div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&nbsp;  Upstream* upstream_mr_;</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&nbsp;  std::size_t maximum_size_;</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&nbsp;  std::size_t current_size_{};</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&nbsp;  std::set&lt;block&gt; free_blocks_;</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&nbsp;  std::vector&lt;block&gt; upstream_blocks_;</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&nbsp;  <span class="keyword">mutable</span> std::mutex mtx_;</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&nbsp;};</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&nbsp; </div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Upstream&gt;</div>
+<div class="line"><a name="l00467"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html">  467</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html">arena</a> {</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&nbsp; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00474"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">  474</a></span>&nbsp;  <span class="keyword">explicit</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">arena</a>(<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html">global_arena&lt;Upstream&gt;</a>&amp; <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html">global_arena</a>) : global_arena_{<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html">global_arena</a>} {}</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&nbsp; </div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&nbsp;  <span class="comment">// Disable copy (and move) semantics.</span></div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">arena</a>(<span class="keyword">const</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">arena</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">arena</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">arena</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&nbsp; </div>
+<div class="line"><a name="l00488"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a3a9cf415216f0b50104b34572e72a0bf">  488</a></span>&nbsp;  <span class="keywordtype">void</span>* <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a3a9cf415216f0b50104b34572e72a0bf">allocate</a>(std::size_t bytes)</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&nbsp;  {</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&nbsp;    lock_guard lock(mtx_);</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> b = get_block(bytes);</div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&nbsp;    <span class="keywordflow">return</span> b.pointer();</div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&nbsp;  }</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&nbsp; </div>
+<div class="line"><a name="l00503"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#aef80aac1fe330d45685f8056db9c2a36">  503</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#aef80aac1fe330d45685f8056db9c2a36">deallocate</a>(<span class="keywordtype">void</span>* p, std::size_t bytes, <a class="code" href="classrmm_1_1cuda__stream__view.html">cuda_stream_view</a> stream)</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&nbsp;  {</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&nbsp;    lock_guard lock(mtx_);</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&nbsp;    <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> <span class="keyword">const</span> b{p, bytes};</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> merged = coalesce_block(free_blocks_, b);</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&nbsp;    shrink_arena(merged, stream);</div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&nbsp;  }</div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&nbsp; </div>
+<div class="line"><a name="l00514"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#ab98c95b4d8f1781aabda59abc5eec4ae">  514</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#ab98c95b4d8f1781aabda59abc5eec4ae">clean</a>()</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&nbsp;  {</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&nbsp;    lock_guard lock(mtx_);</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&nbsp;    global_arena_.deallocate(free_blocks_);</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&nbsp;    free_blocks_.clear();</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&nbsp;  }</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&nbsp; </div>
+<div class="line"><a name="l00526"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a0dc5be70b1664ebf34809594f6cab56f">  526</a></span>&nbsp;  <span class="keywordtype">void</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a0dc5be70b1664ebf34809594f6cab56f">dump_memory_log</a>(std::shared_ptr&lt;spdlog::logger&gt; <span class="keyword">const</span>&amp; logger)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&nbsp;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&nbsp;    lock_guard lock(mtx_);</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&nbsp;    logger-&gt;info(<span class="stringliteral">"    # free blocks: {}"</span>, free_blocks_.size());</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&nbsp;    <span class="keywordflow">if</span> (!free_blocks_.empty()) {</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&nbsp;      std::size_t total_free{};</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&nbsp;      <span class="keywordflow">for</span> (<span class="keyword">auto</span> <span class="keyword">const</span>&amp; b : free_blocks_) {</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&nbsp;        total_free += b.size();</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&nbsp;      }</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&nbsp;      logger-&gt;info(<span class="stringliteral">"    Total size of free blocks: {}"</span>,</div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&nbsp;                   <a class="code" href="structrmm_1_1detail_1_1bytes.html">rmm::detail::bytes</a>{total_block_size(free_blocks_)});</div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&nbsp;      <span class="keyword">auto</span> <span class="keyword">const</span> m =</div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&nbsp;        *std::max_element(free_blocks_.begin(), free_blocks_.end(), block_size_compare);</div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&nbsp;      logger-&gt;info(<span class="stringliteral">"    Size of largest free block: {}"</span>, <a class="code" href="structrmm_1_1detail_1_1bytes.html">rmm::detail::bytes</a>{m.size()});</div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&nbsp;    }</div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&nbsp;  }</div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&nbsp; </div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&nbsp; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&nbsp;  <span class="keyword">using</span> lock_guard = std::lock_guard&lt;std::mutex&gt;;</div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&nbsp;  <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> max_free_blocks = 16;</div>
 <div class="line"><a name="l00547"></a><span class="lineno">  547</span>&nbsp; </div>
-<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&nbsp;<span class="preprocessor">#ifdef RMM_POOL_TRACK_ALLOCATIONS</span></div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&nbsp; </div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&nbsp;  block free_block(<span class="keywordtype">void</span>* p, std::size_t size) noexcept</div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&nbsp;  {</div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> i = allocated_blocks_.find(p);</div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&nbsp; </div>
-<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&nbsp;    <span class="comment">// The pointer may be allocated in another arena.</span></div>
-<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&nbsp;    <span class="keywordflow">if</span> (i == allocated_blocks_.end()) { <span class="keywordflow">return</span> {}; }</div>
-<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&nbsp; </div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> found = i-&gt;second;</div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&nbsp;    RMM_LOGGING_ASSERT(found.size() == size);</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&nbsp;    allocated_blocks_.erase(i);</div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&nbsp; </div>
-<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&nbsp;    <span class="keywordflow">return</span> found;</div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&nbsp;  }</div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&nbsp;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">block</a> get_block(std::size_t size)</div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&nbsp;  {</div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&nbsp;    <span class="keywordflow">if</span> (size &lt; minimum_superblock_size) {</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&nbsp;      <span class="comment">// Find the first-fit free block.</span></div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&nbsp;      <span class="keyword">auto</span> <span class="keyword">const</span> b = first_fit(free_blocks_, size);</div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&nbsp;      <span class="keywordflow">if</span> (b.is_valid()) { <span class="keywordflow">return</span> b; }</div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&nbsp;    }</div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&nbsp; </div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&nbsp;    <span class="comment">// No existing larger blocks available, so grow the arena and obtain a superblock.</span></div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> superblock = expand_arena(size);</div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&nbsp;    <span class="keywordflow">if</span> (superblock.is_valid()) {</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&nbsp;      coalesce_block(free_blocks_, superblock);</div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&nbsp;      <span class="keywordflow">return</span> first_fit(free_blocks_, size);</div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&nbsp;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&nbsp;      <span class="keywordflow">return</span> superblock;</div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&nbsp;    }</div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&nbsp;  }</div>
 <div class="line"><a name="l00571"></a><span class="lineno">  571</span>&nbsp; </div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&nbsp;  <span class="keywordtype">void</span> shrink_arena(block <span class="keyword">const</span>&amp; b, cuda_stream_view stream)</div>
-<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&nbsp;  {</div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&nbsp;    <span class="comment">// Don't shrink if b is not a superblock.</span></div>
-<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&nbsp;    <span class="keywordflow">if</span> (!b.is_superblock()) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&nbsp;  block expand_arena(std::size_t size)</div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&nbsp;  {</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span> superblock_size = std::max(size, minimum_superblock_size);</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&nbsp;    <span class="keywordflow">return</span> global_arena_.allocate(superblock_size);</div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&nbsp;  }</div>
 <div class="line"><a name="l00582"></a><span class="lineno">  582</span>&nbsp; </div>
-<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&nbsp;    stream.synchronize_no_throw();</div>
-<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&nbsp; </div>
-<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&nbsp;    global_arena_.deallocate(b);</div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&nbsp;    free_blocks_.erase(b);</div>
-<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&nbsp;  }</div>
-<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&nbsp; </div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&nbsp;  global_arena&lt;Upstream&gt;&amp; global_arena_;</div>
-<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&nbsp;  std::set&lt;block&gt; free_blocks_;</div>
-<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&nbsp;<span class="preprocessor">#ifdef RMM_POOL_TRACK_ALLOCATIONS</span></div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&nbsp;  std::unordered_map&lt;void*, block&gt; allocated_blocks_;</div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&nbsp;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&nbsp;  <span class="keyword">mutable</span> std::mutex mtx_;</div>
-<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&nbsp;};</div>
-<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&nbsp; </div>
-<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Upstream&gt;</div>
-<div class="line"><a name="l00610"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">  610</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a> {</div>
-<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&nbsp; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&nbsp;  <span class="keyword">explicit</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a>(std::shared_ptr&lt;<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html">arena&lt;Upstream&gt;</a>&gt; <span class="keyword">const</span>&amp; a) : arena_(a) {}</div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&nbsp; </div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&nbsp;  <span class="comment">// Disable copy (and move) semantics.</span></div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a>(<span class="keyword">const</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&nbsp; </div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&nbsp;  ~<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a>()</div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&nbsp;  {</div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&nbsp;    <span class="keywordflow">if</span> (!arena_.expired()) {</div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&nbsp;      <span class="keyword">auto</span> arena_ptr = arena_.lock();</div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&nbsp;      arena_ptr-&gt;clean();</div>
-<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&nbsp;    }</div>
-<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&nbsp;  }</div>
-<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&nbsp; </div>
-<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&nbsp; <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&nbsp;  std::weak_ptr&lt;arena&lt;Upstream&gt;&gt; arena_;</div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&nbsp;};</div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&nbsp;  <span class="keywordtype">void</span> shrink_arena(block <span class="keyword">const</span>&amp; b, cuda_stream_view stream)</div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&nbsp;  {</div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&nbsp;    <span class="keywordflow">if</span> (b.is_superblock() || free_blocks_.size() &gt; max_free_blocks) {</div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&nbsp;      stream.synchronize_no_throw();</div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&nbsp;      global_arena_.deallocate(b);</div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&nbsp;      free_blocks_.erase(b);</div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&nbsp;    }</div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&nbsp;  }</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&nbsp; </div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&nbsp;  global_arena&lt;Upstream&gt;&amp; global_arena_;</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&nbsp;  std::set&lt;block&gt; free_blocks_;</div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&nbsp;  <span class="keyword">mutable</span> std::mutex mtx_;</div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&nbsp;};</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&nbsp; </div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Upstream&gt;</div>
+<div class="line"><a name="l00615"></a><span class="lineno"><a class="line" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">  615</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a> {</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&nbsp; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&nbsp;  <span class="keyword">explicit</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a>(std::shared_ptr&lt;<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html">arena&lt;Upstream&gt;</a>&gt; <span class="keyword">const</span>&amp; a) : arena_(a) {}</div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&nbsp; </div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&nbsp;  <span class="comment">// Disable copy (and move) semantics.</span></div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a>(<span class="keyword">const</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&nbsp;  <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&nbsp; </div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&nbsp;  ~<a class="code" href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">arena_cleaner</a>()</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&nbsp;  {</div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&nbsp;    <span class="keywordflow">if</span> (!arena_.expired()) {</div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&nbsp;      <span class="keyword">auto</span> arena_ptr = arena_.lock();</div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&nbsp;      arena_ptr-&gt;clean();</div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&nbsp;    }</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&nbsp;  }</div>
 <div class="line"><a name="l00630"></a><span class="lineno">  630</span>&nbsp; </div>
-<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&nbsp;}  <span class="comment">// namespace arena</span></div>
-<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&nbsp;}  <span class="comment">// namespace detail</span></div>
-<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&nbsp;}  <span class="comment">// namespace mr</span></div>
-<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&nbsp;}  <span class="comment">// namespace rmm</span></div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&nbsp; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&nbsp;  std::weak_ptr&lt;arena&lt;Upstream&gt;&gt; arena_;</div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&nbsp;};</div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&nbsp; </div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&nbsp;}  <span class="comment">// namespace rmm::mr::detail::arena</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_a829283bd76a5e81912380a369bd4d6e5"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a829283bd76a5e81912380a369bd4d6e5">rmm::mr::detail::arena::global_arena::default_maximum_size</a></div><div class="ttdeci">static constexpr std::size_t default_maximum_size</div><div class="ttdoc">The default maximum size for the global arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:249</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_a21deaed7471c49faf3de1433ac6b4401"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a21deaed7471c49faf3de1433ac6b4401">rmm::mr::detail::arena::global_arena::default_initial_size</a></div><div class="ttdeci">static constexpr std::size_t default_initial_size</div><div class="ttdoc">The default initial size for the global arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:247</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_a72c5731d9ae27febf1756c13d65b4f86"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a72c5731d9ae27febf1756c13d65b4f86">rmm::mr::detail::arena::block::split</a></div><div class="ttdeci">std::pair&lt; block, block &gt; split(std::size_t sz) const</div><div class="ttdoc">Split this block into two by the given size.</div><div class="ttdef"><b>Definition:</b> arena.hpp:104</div></div>
-<div class="ttc" id="aclassrmm_1_1bad__alloc_html"><div class="ttname"><a href="classrmm_1_1bad__alloc.html">rmm::bad_alloc</a></div><div class="ttdoc">Exception thrown when an RMM allocation fails.</div><div class="ttdef"><b>Definition:</b> error.hpp:52</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_a1927ecc632589a7ada324082e2d056da"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a1927ecc632589a7ada324082e2d056da">rmm::mr::detail::arena::global_arena::deallocate</a></div><div class="ttdeci">void deallocate(std::set&lt; block &gt; const &amp;free_blocks)</div><div class="ttdoc">Deallocate a set of free blocks from a dying arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:340</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_a9424b78770c5be89a0b842cbab9e51ce"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9424b78770c5be89a0b842cbab9e51ce">rmm::mr::detail::arena::block::fits</a></div><div class="ttdeci">bool fits(std::size_t sz) const</div><div class="ttdoc">Is this block large enough to fit sz bytes?</div><div class="ttdef"><b>Definition:</b> arena.hpp:96</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_ad5c0b09745292c68e49a820ff7a3b746"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#ad5c0b09745292c68e49a820ff7a3b746">rmm::mr::detail::arena::global_arena::deallocate</a></div><div class="ttdeci">void deallocate(block const &amp;b)</div><div class="ttdoc">Deallocate memory pointed to by p.</div><div class="ttdef"><b>Definition:</b> arena.hpp:329</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_a829283bd76a5e81912380a369bd4d6e5"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a829283bd76a5e81912380a369bd4d6e5">rmm::mr::detail::arena::global_arena::default_maximum_size</a></div><div class="ttdeci">static constexpr std::size_t default_maximum_size</div><div class="ttdoc">The default maximum size for the global arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:263</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_a21deaed7471c49faf3de1433ac6b4401"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a21deaed7471c49faf3de1433ac6b4401">rmm::mr::detail::arena::global_arena::default_initial_size</a></div><div class="ttdeci">static constexpr std::size_t default_initial_size</div><div class="ttdoc">The default initial size for the global arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:261</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1arena_html_a0dc5be70b1664ebf34809594f6cab56f"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a0dc5be70b1664ebf34809594f6cab56f">rmm::mr::detail::arena::arena::dump_memory_log</a></div><div class="ttdeci">void dump_memory_log(std::shared_ptr&lt; spdlog::logger &gt; const &amp;logger) const</div><div class="ttdef"><b>Definition:</b> arena.hpp:526</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_a72c5731d9ae27febf1756c13d65b4f86"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a72c5731d9ae27febf1756c13d65b4f86">rmm::mr::detail::arena::block::split</a></div><div class="ttdeci">std::pair&lt; block, block &gt; split(std::size_t sz) const</div><div class="ttdoc">Split this block into two by the given size.</div><div class="ttdef"><b>Definition:</b> arena.hpp:109</div></div>
+<div class="ttc" id="astructrmm_1_1detail_1_1bytes_html"><div class="ttname"><a href="structrmm_1_1detail_1_1bytes.html">rmm::detail::bytes</a></div><div class="ttdoc">Represent a size in number of bytes.</div><div class="ttdef"><b>Definition:</b> logger.hpp:75</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_a1927ecc632589a7ada324082e2d056da"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a1927ecc632589a7ada324082e2d056da">rmm::mr::detail::arena::global_arena::deallocate</a></div><div class="ttdeci">void deallocate(std::set&lt; block &gt; const &amp;free_blocks)</div><div class="ttdoc">Deallocate a set of free blocks from a dying arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:354</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_a9424b78770c5be89a0b842cbab9e51ce"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9424b78770c5be89a0b842cbab9e51ce">rmm::mr::detail::arena::block::fits</a></div><div class="ttdeci">bool fits(std::size_t sz) const</div><div class="ttdoc">Is this block large enough to fit sz bytes?</div><div class="ttdef"><b>Definition:</b> arena.hpp:101</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_ad5c0b09745292c68e49a820ff7a3b746"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#ad5c0b09745292c68e49a820ff7a3b746">rmm::mr::detail::arena::global_arena::deallocate</a></div><div class="ttdeci">void deallocate(block const &amp;b)</div><div class="ttdoc">Deallocate memory pointed to by p.</div><div class="ttdef"><b>Definition:</b> arena.hpp:343</div></div>
 <div class="ttc" id="aclassrmm_1_1cuda__stream__view_html"><div class="ttname"><a href="classrmm_1_1cuda__stream__view.html">rmm::cuda_stream_view</a></div><div class="ttdoc">Strongly-typed non-owning wrapper for CUDA streams with default constructor.</div><div class="ttdef"><b>Definition:</b> cuda_stream_view.hpp:34</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1arena_html_ab4ecb933435fde24875af21e457682c7"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#ab4ecb933435fde24875af21e457682c7">rmm::mr::detail::arena::arena::deallocate</a></div><div class="ttdeci">bool deallocate(void *p, std::size_t bytes, cuda_stream_view stream)</div><div class="ttdoc">Deallocate memory pointed to by p, and possibly return superblocks to upstream.</div><div class="ttdef"><b>Definition:</b> arena.hpp:462</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_aed0d8e571e72c619a3616f4a2a705772"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#aed0d8e571e72c619a3616f4a2a705772">rmm::mr::detail::arena::block::operator&lt;</a></div><div class="ttdeci">bool operator&lt;(block const &amp;b) const</div><div class="ttdoc">Used by std::set to compare blocks.</div><div class="ttdef"><b>Definition:</b> arena.hpp:129</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_a16bbded32f0ed473296d5ad10dfc0b64"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a16bbded32f0ed473296d5ad10dfc0b64">rmm::mr::detail::arena::global_arena::~global_arena</a></div><div class="ttdeci">~global_arena()</div><div class="ttdoc">Destroy the global arena and deallocate all memory it allocated using the upstream resource.</div><div class="ttdef"><b>Definition:</b> arena.hpp:300</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_aedf7951e414146748bc775086627034d"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#aedf7951e414146748bc775086627034d">rmm::mr::detail::arena::block::merge</a></div><div class="ttdeci">block merge(block const &amp;b) const</div><div class="ttdoc">Coalesce two contiguous blocks into one.</div><div class="ttdef"><b>Definition:</b> arena.hpp:122</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_a9e4467e759b1bda668be3bb4db5933e1"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9e4467e759b1bda668be3bb4db5933e1">rmm::mr::detail::arena::block::is_contiguous_before</a></div><div class="ttdeci">bool is_contiguous_before(block const &amp;b) const</div><div class="ttdoc">Verifies whether this block can be merged to the beginning of block b.</div><div class="ttdef"><b>Definition:</b> arena.hpp:88</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner_html"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">rmm::mr::detail::arena::arena_cleaner</a></div><div class="ttdoc">RAII-style cleaner for an arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:610</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_a0c1694622727eb07b79089551ce6a8c7"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0c1694622727eb07b79089551ce6a8c7">rmm::mr::detail::arena::block::block</a></div><div class="ttdeci">block(void *pointer, std::size_t size)</div><div class="ttdoc">Construct a block given a void pointer and size.</div><div class="ttdef"><b>Definition:</b> arena.hpp:67</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1arena_html_a3a9cf415216f0b50104b34572e72a0bf"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a3a9cf415216f0b50104b34572e72a0bf">rmm::mr::detail::arena::arena::allocate</a></div><div class="ttdeci">void * allocate(std::size_t bytes)</div><div class="ttdoc">Allocates memory of size at least bytes.</div><div class="ttdef"><b>Definition:</b> arena.hpp:443</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1arena_html"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html">rmm::mr::detail::arena::arena</a></div><div class="ttdoc">An arena for allocating memory for a thread.</div><div class="ttdef"><b>Definition:</b> arena.hpp:422</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_ac45a0299e74e768af8a6adcf6ab5492c"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#ac45a0299e74e768af8a6adcf6ab5492c">rmm::mr::detail::arena::block::is_superblock</a></div><div class="ttdeci">bool is_superblock() const</div><div class="ttdoc">Returns true if this block is a superblock, false otherwise.</div><div class="ttdef"><b>Definition:</b> arena.hpp:79</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1arena_html_ab98c95b4d8f1781aabda59abc5eec4ae"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#ab98c95b4d8f1781aabda59abc5eec4ae">rmm::mr::detail::arena::arena::clean</a></div><div class="ttdeci">void clean()</div><div class="ttdoc">Clean the arena and deallocate free blocks from the global arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:504</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_abfaef96467aabf64f7fd82811f767646"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#abfaef96467aabf64f7fd82811f767646">rmm::mr::detail::arena::block::is_valid</a></div><div class="ttdeci">bool is_valid() const</div><div class="ttdoc">Returns true if this block is valid (non-null), false otherwise.</div><div class="ttdef"><b>Definition:</b> arena.hpp:76</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_afbdb96737c2f813bf758a762543214a9"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">rmm::mr::detail::arena::block::pointer</a></div><div class="ttdeci">void * pointer() const</div><div class="ttdoc">Returns the underlying pointer.</div><div class="ttdef"><b>Definition:</b> arena.hpp:70</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html">rmm::mr::detail::arena::global_arena</a></div><div class="ttdoc">The global arena for allocating memory from the upstream memory resource.</div><div class="ttdef"><b>Definition:</b> arena.hpp:244</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_aa7ca12862921fb184159b304b7afae4c"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#aa7ca12862921fb184159b304b7afae4c">rmm::mr::detail::arena::global_arena::reserved_size</a></div><div class="ttdeci">static constexpr std::size_t reserved_size</div><div class="ttdoc">Reserved memory that should not be allocated (64 MiB).</div><div class="ttdef"><b>Definition:</b> arena.hpp:251</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_a0772c988a344aeca7d5a3ff1c6ee9bca"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0772c988a344aeca7d5a3ff1c6ee9bca">rmm::mr::detail::arena::block::block</a></div><div class="ttdeci">block(char *pointer, std::size_t size)</div><div class="ttdoc">Construct a block given a pointer and size.</div><div class="ttdef"><b>Definition:</b> arena.hpp:59</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">rmm::mr::detail::arena::block</a></div><div class="ttdoc">Represents a chunk of memory that can be allocated and deallocated.</div><div class="ttdef"><b>Definition:</b> arena.hpp:46</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_a3adf37bcf129f2c4ea78384ffe8d3fe6"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">rmm::mr::detail::arena::global_arena::global_arena</a></div><div class="ttdeci">global_arena(Upstream *upstream_mr, std::size_t initial_size, std::size_t maximum_size)</div><div class="ttdoc">Construct a global arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:268</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_a4daf92d526f65fd05478410ce0e8ba72"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a4daf92d526f65fd05478410ce0e8ba72">rmm::mr::detail::arena::global_arena::allocate</a></div><div class="ttdeci">block allocate(std::size_t bytes)</div><div class="ttdoc">Allocates memory of size at least bytes.</div><div class="ttdef"><b>Definition:</b> arena.hpp:316</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_aed0d8e571e72c619a3616f4a2a705772"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#aed0d8e571e72c619a3616f4a2a705772">rmm::mr::detail::arena::block::operator&lt;</a></div><div class="ttdeci">bool operator&lt;(block const &amp;b) const</div><div class="ttdoc">Used by std::set to compare blocks.</div><div class="ttdef"><b>Definition:</b> arena.hpp:134</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_a16bbded32f0ed473296d5ad10dfc0b64"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a16bbded32f0ed473296d5ad10dfc0b64">rmm::mr::detail::arena::global_arena::~global_arena</a></div><div class="ttdeci">~global_arena()</div><div class="ttdoc">Destroy the global arena and deallocate all memory it allocated using the upstream resource.</div><div class="ttdef"><b>Definition:</b> arena.hpp:314</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1arena_html_aef80aac1fe330d45685f8056db9c2a36"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#aef80aac1fe330d45685f8056db9c2a36">rmm::mr::detail::arena::arena::deallocate</a></div><div class="ttdeci">void deallocate(void *p, std::size_t bytes, cuda_stream_view stream)</div><div class="ttdoc">Deallocate memory pointed to by p, and possibly return superblocks to upstream.</div><div class="ttdef"><b>Definition:</b> arena.hpp:503</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_aedf7951e414146748bc775086627034d"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#aedf7951e414146748bc775086627034d">rmm::mr::detail::arena::block::merge</a></div><div class="ttdeci">block merge(block const &amp;b) const</div><div class="ttdoc">Coalesce two contiguous blocks into one.</div><div class="ttdef"><b>Definition:</b> arena.hpp:127</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_a9e4467e759b1bda668be3bb4db5933e1"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a9e4467e759b1bda668be3bb4db5933e1">rmm::mr::detail::arena::block::is_contiguous_before</a></div><div class="ttdeci">bool is_contiguous_before(block const &amp;b) const</div><div class="ttdoc">Verifies whether this block can be merged to the beginning of block b.</div><div class="ttdef"><b>Definition:</b> arena.hpp:90</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner_html"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena__cleaner.html">rmm::mr::detail::arena::arena_cleaner</a></div><div class="ttdoc">RAII-style cleaner for an arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:615</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_a40b2e0848aa2af6e8317f985ee3819c6"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a40b2e0848aa2af6e8317f985ee3819c6">rmm::mr::detail::arena::global_arena::dump_memory_log</a></div><div class="ttdeci">void dump_memory_log(std::shared_ptr&lt; spdlog::logger &gt; const &amp;logger) const</div><div class="ttdoc">Dump memory to log.</div><div class="ttdef"><b>Definition:</b> arena.hpp:367</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_a0c1694622727eb07b79089551ce6a8c7"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0c1694622727eb07b79089551ce6a8c7">rmm::mr::detail::arena::block::block</a></div><div class="ttdeci">block(void *pointer, std::size_t size)</div><div class="ttdoc">Construct a block given a void pointer and size.</div><div class="ttdef"><b>Definition:</b> arena.hpp:69</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1arena_html_a3a9cf415216f0b50104b34572e72a0bf"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a3a9cf415216f0b50104b34572e72a0bf">rmm::mr::detail::arena::arena::allocate</a></div><div class="ttdeci">void * allocate(std::size_t bytes)</div><div class="ttdoc">Allocates memory of size at least bytes.</div><div class="ttdef"><b>Definition:</b> arena.hpp:488</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1arena_html"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html">rmm::mr::detail::arena::arena</a></div><div class="ttdoc">An arena for allocating memory for a thread.</div><div class="ttdef"><b>Definition:</b> arena.hpp:467</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_ac45a0299e74e768af8a6adcf6ab5492c"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#ac45a0299e74e768af8a6adcf6ab5492c">rmm::mr::detail::arena::block::is_superblock</a></div><div class="ttdeci">bool is_superblock() const</div><div class="ttdoc">Returns true if this block is a superblock, false otherwise.</div><div class="ttdef"><b>Definition:</b> arena.hpp:81</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1arena_html_ab98c95b4d8f1781aabda59abc5eec4ae"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#ab98c95b4d8f1781aabda59abc5eec4ae">rmm::mr::detail::arena::arena::clean</a></div><div class="ttdeci">void clean()</div><div class="ttdoc">Clean the arena and deallocate free blocks from the global arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:514</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_abfaef96467aabf64f7fd82811f767646"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#abfaef96467aabf64f7fd82811f767646">rmm::mr::detail::arena::block::is_valid</a></div><div class="ttdeci">bool is_valid() const</div><div class="ttdoc">Returns true if this block is valid (non-null), false otherwise.</div><div class="ttdef"><b>Definition:</b> arena.hpp:78</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_afbdb96737c2f813bf758a762543214a9"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#afbdb96737c2f813bf758a762543214a9">rmm::mr::detail::arena::block::pointer</a></div><div class="ttdeci">void * pointer() const</div><div class="ttdoc">Returns the underlying pointer.</div><div class="ttdef"><b>Definition:</b> arena.hpp:72</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html">rmm::mr::detail::arena::global_arena</a></div><div class="ttdoc">The global arena for allocating memory from the upstream memory resource.</div><div class="ttdef"><b>Definition:</b> arena.hpp:258</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_aa7ca12862921fb184159b304b7afae4c"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#aa7ca12862921fb184159b304b7afae4c">rmm::mr::detail::arena::global_arena::reserved_size</a></div><div class="ttdeci">static constexpr std::size_t reserved_size</div><div class="ttdoc">Reserved memory that should not be allocated (64 MiB).</div><div class="ttdef"><b>Definition:</b> arena.hpp:265</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_a0772c988a344aeca7d5a3ff1c6ee9bca"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0772c988a344aeca7d5a3ff1c6ee9bca">rmm::mr::detail::arena::block::block</a></div><div class="ttdeci">block(char *pointer, std::size_t size)</div><div class="ttdoc">Construct a block given a pointer and size.</div><div class="ttdef"><b>Definition:</b> arena.hpp:61</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html">rmm::mr::detail::arena::block</a></div><div class="ttdoc">Represents a chunk of memory that can be allocated and deallocated.</div><div class="ttdef"><b>Definition:</b> arena.hpp:48</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_a3adf37bcf129f2c4ea78384ffe8d3fe6"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a3adf37bcf129f2c4ea78384ffe8d3fe6">rmm::mr::detail::arena::global_arena::global_arena</a></div><div class="ttdeci">global_arena(Upstream *upstream_mr, std::size_t initial_size, std::size_t maximum_size)</div><div class="ttdoc">Construct a global arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:282</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1global__arena_html_a4daf92d526f65fd05478410ce0e8ba72"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a4daf92d526f65fd05478410ce0e8ba72">rmm::mr::detail::arena::global_arena::allocate</a></div><div class="ttdeci">block allocate(std::size_t bytes)</div><div class="ttdoc">Allocates memory of size at least bytes.</div><div class="ttdef"><b>Definition:</b> arena.hpp:330</div></div>
 <div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_af0924fe6108bce7f2221b806a97a8450"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#af0924fe6108bce7f2221b806a97a8450">rmm::mr::detail::arena::block::block</a></div><div class="ttdeci">block()=default</div><div class="ttdoc">Construct a default block.</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_a0b1b32a7a18fc0e142ba278826bf7125"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">rmm::mr::detail::arena::block::size</a></div><div class="ttdeci">std::size_t size() const</div><div class="ttdoc">Returns the size of the block.</div><div class="ttdef"><b>Definition:</b> arena.hpp:73</div></div>
-<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1arena_html_a22599f2dab3727a7b2e1019bf5a9dfff"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">rmm::mr::detail::arena::arena::arena</a></div><div class="ttdeci">arena(global_arena&lt; Upstream &gt; &amp;global_arena)</div><div class="ttdoc">Construct an arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:429</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1block_html_a0b1b32a7a18fc0e142ba278826bf7125"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0b1b32a7a18fc0e142ba278826bf7125">rmm::mr::detail::arena::block::size</a></div><div class="ttdeci">std::size_t size() const</div><div class="ttdoc">Returns the size of the block.</div><div class="ttdef"><b>Definition:</b> arena.hpp:75</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1detail_1_1arena_1_1arena_html_a22599f2dab3727a7b2e1019bf5a9dfff"><div class="ttname"><a href="classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html#a22599f2dab3727a7b2e1019bf5a9dfff">rmm::mr::detail::arena::arena::arena</a></div><div class="ttdeci">arena(global_arena&lt; Upstream &gt; &amp;global_arena)</div><div class="ttdoc">Construct an arena.</div><div class="ttdef"><b>Definition:</b> arena.hpp:474</div></div>
 <!-- start footer part -->
 <hr class="footer"><address class="footer"><small>
 Generated by&nbsp;<a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"></a> 1.8.20

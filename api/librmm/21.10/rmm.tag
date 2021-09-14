@@ -110,10 +110,10 @@
       <arglist>(std::size_t bytes)</arglist>
     </member>
     <member kind="function">
-      <type>bool</type>
+      <type>void</type>
       <name>deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html</anchorfile>
-      <anchor>ab4ecb933435fde24875af21e457682c7</anchor>
+      <anchor>aef80aac1fe330d45685f8056db9c2a36</anchor>
       <arglist>(void *p, std::size_t bytes, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function">
@@ -122,6 +122,13 @@
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html</anchorfile>
       <anchor>ab98c95b4d8f1781aabda59abc5eec4ae</anchor>
       <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>dump_memory_log</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html</anchorfile>
+      <anchor>a0dc5be70b1664ebf34809594f6cab56f</anchor>
+      <arglist>(std::shared_ptr&lt; spdlog::logger &gt; const &amp;logger) const</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -138,8 +145,8 @@
       <type></type>
       <name>arena_memory_resource</name>
       <anchorfile>classrmm_1_1mr_1_1arena__memory__resource.html</anchorfile>
-      <anchor>aa7215b0de2d2d5e4b7acdcdd2ebb7b03</anchor>
-      <arglist>(Upstream *upstream_mr, std::size_t initial_size=global_arena::default_initial_size, std::size_t maximum_size=global_arena::default_maximum_size)</arglist>
+      <anchor>a09e1952158f170f47e1b42aa2dac9d6a</anchor>
+      <arglist>(Upstream *upstream_mr, std::size_t initial_size=global_arena::default_initial_size, std::size_t maximum_size=global_arena::default_maximum_size, bool dump_log_on_failure=false)</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
@@ -402,6 +409,10 @@
       <anchor>a72c4e6db5cfe26694b7592b362ce3f9f</anchor>
       <arglist></arglist>
     </member>
+  </compound>
+  <compound kind="struct">
+    <name>rmm::detail::bytes</name>
+    <filename>structrmm_1_1detail_1_1bytes.html</filename>
   </compound>
   <compound kind="struct">
     <name>rmm::mr::detail::coalescing_free_list</name>
@@ -1655,6 +1666,13 @@
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
       <anchor>a1927ecc632589a7ada324082e2d056da</anchor>
       <arglist>(std::set&lt; block &gt; const &amp;free_blocks)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>dump_memory_log</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
+      <anchor>a40b2e0848aa2af6e8317f985ee3819c6</anchor>
+      <arglist>(std::shared_ptr&lt; spdlog::logger &gt; const &amp;logger) const</arglist>
     </member>
     <member kind="variable" static="yes">
       <type>static constexpr std::size_t</type>

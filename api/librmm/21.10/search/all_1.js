@@ -7,5 +7,6 @@ var searchData=
   ['block_12',['block',['../classrmm_1_1mr_1_1detail_1_1arena_1_1block.html',1,'rmm::mr::detail::arena::block'],['../structrmm_1_1mr_1_1detail_1_1block.html',1,'rmm::mr::detail::block'],['../classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#af0924fe6108bce7f2221b806a97a8450',1,'rmm::mr::detail::arena::block::block()=default'],['../classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0772c988a344aeca7d5a3ff1c6ee9bca',1,'rmm::mr::detail::arena::block::block(char *pointer, std::size_t size)'],['../classrmm_1_1mr_1_1detail_1_1arena_1_1block.html#a0c1694622727eb07b79089551ce6a8c7',1,'rmm::mr::detail::arena::block::block(void *pointer, std::size_t size)']]],
   ['block_5fbase_13',['block_base',['../structrmm_1_1mr_1_1detail_1_1block__base.html',1,'rmm::mr::detail']]],
   ['block_5ffrom_5fupstream_14',['block_from_upstream',['../classrmm_1_1mr_1_1pool__memory__resource.html#a4c687e04a1cc07fe5f9cfee3105f5335',1,'rmm::mr::pool_memory_resource']]],
-  ['blocks_5ffrom_5fupstream_15',['blocks_from_upstream',['../classrmm_1_1mr_1_1fixed__size__memory__resource.html#a971b75ce7dda5cb23c15351f84902234',1,'rmm::mr::fixed_size_memory_resource']]]
+  ['blocks_5ffrom_5fupstream_15',['blocks_from_upstream',['../classrmm_1_1mr_1_1fixed__size__memory__resource.html#a971b75ce7dda5cb23c15351f84902234',1,'rmm::mr::fixed_size_memory_resource']]],
+  ['bytes_16',['bytes',['../structrmm_1_1detail_1_1bytes.html',1,'rmm::detail']]]
 ];
