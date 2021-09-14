@@ -39,12 +39,13 @@ var searchData=
   ['byte_5foffset_104',['byte_offset',['../classcudf_1_1string__view.html#abfe2225bd482487ee631400929b961d4',1,'cudf::string_view']]],
   ['byte_5frange_5foffset_105',['byte_range_offset',['../classcudf_1_1io_1_1csv__reader__options__builder.html#a3033114a02e917884da1305a3cb39bc2',1,'cudf::io::csv_reader_options_builder::byte_range_offset()'],['../classcudf_1_1io_1_1json__reader__options__builder.html#af4000f03a5ff482c388127423d9b7c74',1,'cudf::io::json_reader_options_builder::byte_range_offset()']]],
   ['byte_5frange_5fsize_106',['byte_range_size',['../classcudf_1_1io_1_1csv__reader__options__builder.html#a9c412fb2fc6620777b6a55b509bc19e5',1,'cudf::io::csv_reader_options_builder::byte_range_size()'],['../classcudf_1_1io_1_1json__reader__options__builder.html#add3d40af800ff7da4153bc751490c989',1,'cudf::io::json_reader_options_builder::byte_range_size()']]],
-  ['bytes_5fin_5fchar_5futf8_107',['bytes_in_char_utf8',['../string__view_8hpp.html#aedd35aa84a624d2d86e9843267a0f702',1,'cudf::strings::detail']]],
-  ['bytes_5fin_5futf8_5fbyte_108',['bytes_in_utf8_byte',['../string__view_8hpp.html#a84fc81ed8c5309e773228f5c7cca5acf',1,'cudf::strings::detail']]],
-  ['bytes_5fwritten_109',['bytes_written',['../classcudf_1_1io_1_1data__sink.html#a8b43b4b466aa55d96366e4fd934dd971',1,'cudf::io::data_sink']]],
-  ['bzip2_110',['BZIP2',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8a800edd55a1e18b397e3d5d826f85ce34',1,'cudf::io']]],
-  ['bitmask_20operations_111',['Bitmask Operations',['../group__column__nullmask.html',1,'']]],
-  ['bin_20labeling_112',['Bin Labeling',['../group__label__bins.html',1,'']]],
-  ['binary_20operations_113',['Binary Operations',['../group__transformation__binaryops.html',1,'']]],
-  ['bitmask_114',['Bitmask',['../group__utility__bitmask.html',1,'']]]
+  ['bytes_107',['bytes',['https://docs.rapids.ai/api/librmm/21.10/structrmm_1_1detail_1_1bytes.html',1,'rmm::detail']]],
+  ['bytes_5fin_5fchar_5futf8_108',['bytes_in_char_utf8',['../string__view_8hpp.html#aedd35aa84a624d2d86e9843267a0f702',1,'cudf::strings::detail']]],
+  ['bytes_5fin_5futf8_5fbyte_109',['bytes_in_utf8_byte',['../string__view_8hpp.html#a84fc81ed8c5309e773228f5c7cca5acf',1,'cudf::strings::detail']]],
+  ['bytes_5fwritten_110',['bytes_written',['../classcudf_1_1io_1_1data__sink.html#a8b43b4b466aa55d96366e4fd934dd971',1,'cudf::io::data_sink']]],
+  ['bzip2_111',['BZIP2',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8a800edd55a1e18b397e3d5d826f85ce34',1,'cudf::io']]],
+  ['bitmask_20operations_112',['Bitmask Operations',['../group__column__nullmask.html',1,'']]],
+  ['bin_20labeling_113',['Bin Labeling',['../group__label__bins.html',1,'']]],
+  ['binary_20operations_114',['Binary Operations',['../group__transformation__binaryops.html',1,'']]],
+  ['bitmask_115',['Bitmask',['../group__utility__bitmask.html',1,'']]]
 ];
