@@ -4,7 +4,7 @@
   
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   
-  <title>dask_cuda.initialize &mdash; dask-cuda 0+untagged.1.gb6a7448 documentation</title>
+  <title>dask_cuda.initialize &mdash; dask-cuda 0+untagged.1.gaf0e678 documentation</title>
   
 
   
@@ -169,6 +169,7 @@
 <span class="kn">import</span> <span class="nn">numba.cuda</span>
 
 <span class="kn">import</span> <span class="nn">dask</span>
+<span class="kn">import</span> <span class="nn">distributed.comm.ucx</span>
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">get_ucx_config</span><span class="p">,</span> <span class="n">has_cuda_context</span>
 
@@ -177,11 +178,15 @@
 
 <span class="k">def</span> <span class="nf">_create_cuda_context</span><span class="p">():</span>
     <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Added here to ensure the parent `LocalCUDACluster` process creates the CUDA</span>
+        <span class="c1"># context directly from the UCX module, thus avoiding a similar warning there.</span>
+        <span class="n">distributed</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">ucx</span><span class="o">.</span><span class="n">init_once</span><span class="p">()</span>
+
         <span class="n">cuda_visible_device</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
             <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"CUDA_VISIBLE_DEVICES"</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="p">)</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="n">has_cuda_context</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">distributed</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">ucx</span><span class="o">.</span><span class="n">cuda_context_created</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">"A CUDA context for device </span><span class="si">{</span><span class="n">ctx</span><span class="si">}</span><span class="s2"> already exists on process ID "</span>
                 <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span><span class="si">}</span><span class="s2">. This is often the result of a CUDA-enabled library "</span>
@@ -192,16 +197,18 @@
 
         <span class="n">numba</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">current_context</span><span class="p">()</span>
 
-        <span class="n">ctx</span> <span class="o">=</span> <span class="n">has_cuda_context</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">ctx</span> <span class="o">!=</span> <span class="n">cuda_visible_device</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"Worker with process ID </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span><span class="si">}</span><span class="s2"> should have a CUDA context "</span>
-                <span class="sa">f</span><span class="s2">"assigned to device </span><span class="si">{</span><span class="n">cuda_visible_device</span><span class="si">}</span><span class="s2">, but instead the CUDA "</span>
-                <span class="sa">f</span><span class="s2">"context is on device </span><span class="si">{</span><span class="n">ctx</span><span class="si">}</span><span class="s2">. This is often the result of a "</span>
-                <span class="s2">"CUDA-enabled library calling a CUDA runtime function before Dask-CUDA "</span>
-                <span class="s2">"can spawn worker processes. Please make sure any such function calls "</span>
-                <span class="s2">"don't happen at import time or in the global scope of a program."</span>
-            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">distributed</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">ucx</span><span class="o">.</span><span class="n">cuda_context_created</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">ctx</span> <span class="o">=</span> <span class="n">has_cuda_context</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">ctx</span> <span class="o">!=</span> <span class="n">cuda_visible_device</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"Worker with process ID </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span><span class="si">}</span><span class="s2"> should have a CUDA context "</span>
+                    <span class="sa">f</span><span class="s2">"assigned to device </span><span class="si">{</span><span class="n">cuda_visible_device</span><span class="si">}</span><span class="s2">, but instead the CUDA "</span>
+                    <span class="sa">f</span><span class="s2">"context is on device </span><span class="si">{</span><span class="n">ctx</span><span class="si">}</span><span class="s2">. This is often the result of a "</span>
+                    <span class="s2">"CUDA-enabled library calling a CUDA runtime function before "</span>
+                    <span class="s2">"Dask-CUDA can spawn worker processes. Please make sure any such "</span>
+                    <span class="s2">"function calls don't happen at import time or in the global scope "</span>
+                    <span class="s2">"of a program."</span>
+                <span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Unable to start CUDA Context"</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -273,10 +280,6 @@
 <span class="sd">        it is callable. Can be an integer or ``None`` if ``net_devices`` is not</span>
 <span class="sd">        callable.</span>
 <span class="sd">    """</span>
-
-    <span class="k">if</span> <span class="n">create_cuda_context</span><span class="p">:</span>
-        <span class="n">_create_cuda_context</span><span class="p">()</span>
-
     <span class="n">ucx_config</span> <span class="o">=</span> <span class="n">get_ucx_config</span><span class="p">(</span>
         <span class="n">enable_tcp_over_ucx</span><span class="o">=</span><span class="n">enable_tcp_over_ucx</span><span class="p">,</span>
         <span class="n">enable_infiniband</span><span class="o">=</span><span class="n">enable_infiniband</span><span class="p">,</span>
@@ -285,7 +288,10 @@
         <span class="n">net_devices</span><span class="o">=</span><span class="n">net_devices</span><span class="p">,</span>
         <span class="n">cuda_device_index</span><span class="o">=</span><span class="n">cuda_device_index</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">dask</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">({</span><span class="s2">"distributed.comm.ucx"</span><span class="p">:</span> <span class="n">ucx_config</span><span class="p">})</span></div>
+    <span class="n">dask</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">({</span><span class="s2">"distributed.comm.ucx"</span><span class="p">:</span> <span class="n">ucx_config</span><span class="p">})</span>
+
+    <span class="k">if</span> <span class="n">create_cuda_context</span><span class="p">:</span>
+        <span class="n">_create_cuda_context</span><span class="p">()</span></div>
 
 
 <span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
