@@ -91,7 +91,7 @@ $(function() {
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp; </div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;<span class="keyword">inline</span> std::string default_log_filename()</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;{</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;  <span class="keyword">auto</span> filename = std::getenv(<span class="stringliteral">"RMM_DEBUG_LOG_FILE"</span>);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;  <span class="keyword">auto</span>* filename = std::getenv(<span class="stringliteral">"RMM_DEBUG_LOG_FILE"</span>);</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;  <span class="keywordflow">return</span> (filename == <span class="keyword">nullptr</span>) ? std::string{<span class="stringliteral">"rmm_log.txt"</span>} : std::string{filename};</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;}</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp; </div>
@@ -121,38 +121,39 @@ $(function() {
 <div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="structrmm_1_1detail_1_1bytes.html">   75</a></span>&nbsp;<span class="keyword">struct </span><a class="code" href="structrmm_1_1detail_1_1bytes.html">bytes</a> {</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;  std::size_t value;</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;  <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <a class="code" href="structrmm_1_1detail_1_1bytes.html">bytes</a> <span class="keyword">const</span>&amp; b)</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;  <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <a class="code" href="structrmm_1_1detail_1_1bytes.html">bytes</a> <span class="keyword">const</span>&amp; value)</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;  {</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;    std::string <span class="keyword">const</span> units[] = {<span class="stringliteral">"B"</span>, <span class="stringliteral">"KiB"</span>, <span class="stringliteral">"MiB"</span>, <span class="stringliteral">"GiB"</span>, <span class="stringliteral">"TiB"</span>, <span class="stringliteral">"PiB"</span>, <span class="stringliteral">"EiB"</span>, <span class="stringliteral">"ZiB"</span>, <span class="stringliteral">"YiB"</span>};</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp;    <span class="keywordtype">int</span> i                     = 0;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;    <span class="keyword">auto</span> size                 = <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(b.value);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;    <span class="keywordflow">while</span> (size &gt; 1024) {</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp;      size /= 1024;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;      i++;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;    }</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;    <span class="keywordflow">return</span> os &lt;&lt; size &lt;&lt; <span class="charliteral">' '</span> &lt;&lt; units[i];</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp;  }</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;};</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;}  <span class="comment">// namespace detail</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp;<span class="keyword">inline</span> spdlog::logger&amp; logger()</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&nbsp;{</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp;  <span class="keyword">static</span> <a class="code" href="structrmm_1_1detail_1_1logger__wrapper.html">detail::logger_wrapper</a> w{};</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&nbsp;  <span class="keywordflow">return</span> w.logger_;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&nbsp;}</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp;<span class="comment">// The default is INFO, but it should be used sparingly, so that by default a log file is only</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&nbsp;<span class="comment">// output if there is important information, warnings, errors, and critical failures</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&nbsp;<span class="comment">// Log messages that require computation should only be used at level TRACE and DEBUG</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&nbsp;<span class="preprocessor">#define RMM_LOG_TRACE(...)    SPDLOG_LOGGER_TRACE(&amp;rmm::logger(), __VA_ARGS__)</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&nbsp;<span class="preprocessor">#define RMM_LOG_DEBUG(...)    SPDLOG_LOGGER_DEBUG(&amp;rmm::logger(), __VA_ARGS__)</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&nbsp;<span class="preprocessor">#define RMM_LOG_INFO(...)     SPDLOG_LOGGER_INFO(&amp;rmm::logger(), __VA_ARGS__)</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp;<span class="preprocessor">#define RMM_LOG_WARN(...)     SPDLOG_LOGGER_WARN(&amp;rmm::logger(), __VA_ARGS__)</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp;<span class="preprocessor">#define RMM_LOG_ERROR(...)    SPDLOG_LOGGER_ERROR(&amp;rmm::logger(), __VA_ARGS__)</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp;<span class="preprocessor">#define RMM_LOG_CRITICAL(...) SPDLOG_LOGGER_CRITICAL(&amp;rmm::logger(), __VA_ARGS__)</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&nbsp; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&nbsp;}  <span class="comment">// namespace rmm</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;    <span class="keyword">static</span> std::array&lt;std::string, 9&gt; <span class="keyword">const</span> units{</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp;      <span class="stringliteral">"B"</span>, <span class="stringliteral">"KiB"</span>, <span class="stringliteral">"MiB"</span>, <span class="stringliteral">"GiB"</span>, <span class="stringliteral">"TiB"</span>, <span class="stringliteral">"PiB"</span>, <span class="stringliteral">"EiB"</span>, <span class="stringliteral">"ZiB"</span>, <span class="stringliteral">"YiB"</span>};</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;    <span class="keywordtype">int</span> index = 0;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;    <span class="keyword">auto</span> size = <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(value.value);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp;    <span class="keywordflow">while</span> (size &gt; 1024) {</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;      size /= 1024;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;      index++;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;    }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp;    <span class="keywordflow">return</span> os &lt;&lt; size &lt;&lt; <span class="charliteral">' '</span> &lt;&lt; units.at(index);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;  }</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;};</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp;}  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&nbsp;<span class="keyword">inline</span> spdlog::logger&amp; logger()</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp;{</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&nbsp;  <span class="keyword">static</span> <a class="code" href="structrmm_1_1detail_1_1logger__wrapper.html">detail::logger_wrapper</a> wrapped{};</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&nbsp;  <span class="keywordflow">return</span> wrapped.logger_;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp;}</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&nbsp;<span class="comment">// The default is INFO, but it should be used sparingly, so that by default a log file is only</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&nbsp;<span class="comment">// output if there is important information, warnings, errors, and critical failures</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&nbsp;<span class="comment">// Log messages that require computation should only be used at level TRACE and DEBUG</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&nbsp;<span class="preprocessor">#define RMM_LOG_TRACE(...)    SPDLOG_LOGGER_TRACE(&amp;rmm::logger(), __VA_ARGS__)</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&nbsp;<span class="preprocessor">#define RMM_LOG_DEBUG(...)    SPDLOG_LOGGER_DEBUG(&amp;rmm::logger(), __VA_ARGS__)</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp;<span class="preprocessor">#define RMM_LOG_INFO(...)     SPDLOG_LOGGER_INFO(&amp;rmm::logger(), __VA_ARGS__)</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp;<span class="preprocessor">#define RMM_LOG_WARN(...)     SPDLOG_LOGGER_WARN(&amp;rmm::logger(), __VA_ARGS__)</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp;<span class="preprocessor">#define RMM_LOG_ERROR(...)    SPDLOG_LOGGER_ERROR(&amp;rmm::logger(), __VA_ARGS__)</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&nbsp;<span class="preprocessor">#define RMM_LOG_CRITICAL(...) SPDLOG_LOGGER_CRITICAL(&amp;rmm::logger(), __VA_ARGS__)</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&nbsp; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&nbsp;}  <span class="comment">// namespace rmm</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="astructrmm_1_1detail_1_1bytes_html"><div class="ttname"><a href="structrmm_1_1detail_1_1bytes.html">rmm::detail::bytes</a></div><div class="ttdoc">Represent a size in number of bytes.</div><div class="ttdef"><b>Definition:</b> logger.hpp:75</div></div>
 <div class="ttc" id="astructrmm_1_1detail_1_1logger__wrapper_html"><div class="ttname"><a href="structrmm_1_1detail_1_1logger__wrapper.html">rmm::detail::logger_wrapper</a></div><div class="ttdef"><b>Definition:</b> logger.hpp:50</div></div>

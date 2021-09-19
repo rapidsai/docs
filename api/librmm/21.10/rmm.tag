@@ -28,15 +28,15 @@
       <type>device_memory_resource *</type>
       <name>get_per_device_resource</name>
       <anchorfile>per__device__resource_8hpp.html</anchorfile>
-      <anchor>af17df2d070b6befdf6343742a9391b09</anchor>
-      <arglist>(cuda_device_id id)</arglist>
+      <anchor>ae36992092d6747790208049598cb40d5</anchor>
+      <arglist>(cuda_device_id device_id)</arglist>
     </member>
     <member kind="function">
       <type>device_memory_resource *</type>
       <name>set_per_device_resource</name>
       <anchorfile>per__device__resource_8hpp.html</anchorfile>
-      <anchor>a6d38bff906b6001948fd275265ebbcc0</anchor>
-      <arglist>(cuda_device_id id, device_memory_resource *new_mr)</arglist>
+      <anchor>aaa65b924cf2a4a038586d2cdf41752b8</anchor>
+      <arglist>(cuda_device_id device_id, device_memory_resource *new_mr)</arglist>
     </member>
     <member kind="function">
       <type>device_memory_resource *</type>
@@ -62,8 +62,8 @@
       <type></type>
       <name>aligned_resource_adaptor</name>
       <anchorfile>classrmm_1_1mr_1_1aligned__resource__adaptor.html</anchorfile>
-      <anchor>a32642af1a577ae930d76a8aa350656a2</anchor>
-      <arglist>(Upstream *upstream, std::size_t allocation_alignment=rmm::detail::CUDA_ALLOCATION_ALIGNMENT, std::size_t alignment_threshold=default_alignment_threshold)</arglist>
+      <anchor>a8f0d3cae1567eec0673e9eff33dac44e</anchor>
+      <arglist>(Upstream *upstream, std::size_t alignment=rmm::detail::CUDA_ALLOCATION_ALIGNMENT, std::size_t alignment_threshold=default_alignment_threshold)</arglist>
     </member>
     <member kind="function">
       <type>Upstream *</type>
@@ -113,8 +113,8 @@
       <type>void</type>
       <name>deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html</anchorfile>
-      <anchor>aef80aac1fe330d45685f8056db9c2a36</anchor>
-      <arglist>(void *p, std::size_t bytes, cuda_stream_view stream)</arglist>
+      <anchor>a6801450ea2996802f129d6e248767637</anchor>
+      <arglist>(void *ptr, std::size_t bytes, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -190,8 +190,8 @@
       <type></type>
       <name>~binning_memory_resource</name>
       <anchorfile>classrmm_1_1mr_1_1binning__memory__resource.html</anchorfile>
-      <anchor>a0ff3bef0cfd9f5a5bf8e70fc3369b307</anchor>
-      <arglist>()=default</arglist>
+      <anchor>a66b18a38aeb16944ed9da36c51691b4e</anchor>
+      <arglist>() override=default</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
@@ -278,36 +278,36 @@
       <type>bool</type>
       <name>is_contiguous_before</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>a9e4467e759b1bda668be3bb4db5933e1</anchor>
-      <arglist>(block const &amp;b) const</arglist>
+      <anchor>abad2f881436844da18b27b5899c3769f</anchor>
+      <arglist>(block const &amp;blk) const</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>fits</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>a9424b78770c5be89a0b842cbab9e51ce</anchor>
-      <arglist>(std::size_t sz) const</arglist>
+      <anchor>adcafdd2fac8a6563c050be44ac821366</anchor>
+      <arglist>(std::size_t size) const</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; block, block &gt;</type>
       <name>split</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>a72c5731d9ae27febf1756c13d65b4f86</anchor>
-      <arglist>(std::size_t sz) const</arglist>
+      <anchor>a216ac711db427946cb0210d78f54f921</anchor>
+      <arglist>(std::size_t size) const</arglist>
     </member>
     <member kind="function">
       <type>block</type>
       <name>merge</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>aedf7951e414146748bc775086627034d</anchor>
-      <arglist>(block const &amp;b) const</arglist>
+      <anchor>af2895c1a6f4a5d26cd5ce0bb011f1938</anchor>
+      <arglist>(block const &amp;blk) const</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>operator&lt;</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>aed0d8e571e72c619a3616f4a2a705772</anchor>
-      <arglist>(block const &amp;b) const</arglist>
+      <anchor>a92b1c1e9e3259b775b98450af548cb3e</anchor>
+      <arglist>(block const &amp;blk) const</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -346,29 +346,29 @@
       <type>block</type>
       <name>merge</name>
       <anchorfile>structrmm_1_1mr_1_1detail_1_1block.html</anchorfile>
-      <anchor>af577aaaaa1d07761e84f7d67b8c02c63</anchor>
-      <arglist>(block const &amp;b) const noexcept</arglist>
+      <anchor>af71bbf1aa3bf5fe04d09a5c90e44e3c1</anchor>
+      <arglist>(block const &amp;blk) const noexcept</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>is_contiguous_before</name>
       <anchorfile>structrmm_1_1mr_1_1detail_1_1block.html</anchorfile>
-      <anchor>a5f290516a8c26869705f2bf2629c3d91</anchor>
-      <arglist>(block const &amp;b) const noexcept</arglist>
+      <anchor>ae24c6b5067b92981b0b3c5e45163652e</anchor>
+      <arglist>(block const &amp;blk) const noexcept</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>fits</name>
       <anchorfile>structrmm_1_1mr_1_1detail_1_1block.html</anchorfile>
-      <anchor>a954249ebc3a2b2d49d41bb7f31929363</anchor>
-      <arglist>(std::size_t sz) const noexcept</arglist>
+      <anchor>a7607d805bfad962020a9da6c1d49217d</anchor>
+      <arglist>(std::size_t bytes) const noexcept</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>is_better_fit</name>
       <anchorfile>structrmm_1_1mr_1_1detail_1_1block.html</anchorfile>
-      <anchor>a553eb1612fd08d5d4c7922e0d55de3bf</anchor>
-      <arglist>(std::size_t sz, block const &amp;b) const noexcept</arglist>
+      <anchor>a3354308b0df2d3cd51e3200bcf8182f1</anchor>
+      <arglist>(std::size_t bytes, block const &amp;blk) const noexcept</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -422,8 +422,8 @@
       <type>void</type>
       <name>insert</name>
       <anchorfile>structrmm_1_1mr_1_1detail_1_1coalescing__free__list.html</anchorfile>
-      <anchor>aeb512047937081188d47761829d87171</anchor>
-      <arglist>(block_type const &amp;b)</arglist>
+      <anchor>a7f73de612847c3cf64d82f00f2025ca5</anchor>
+      <arglist>(block_type const &amp;block)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -506,8 +506,8 @@
       <type>constexpr</type>
       <name>cuda_device_id</name>
       <anchorfile>structrmm_1_1cuda__device__id.html</anchorfile>
-      <anchor>a35360d244654fbaa0f8458635436195d</anchor>
-      <arglist>(value_type id) noexcept</arglist>
+      <anchor>a14112045da5f196178f1d841543cc6d4</anchor>
+      <arglist>(value_type dev_id) noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr value_type</type>
@@ -843,8 +843,8 @@
       <type>void</type>
       <name>deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1device__memory__resource.html</anchorfile>
-      <anchor>a38c7c6a0c4bbb2d3c9ac7aaafda1c8e6</anchor>
-      <arglist>(void *p, std::size_t bytes, cuda_stream_view stream=cuda_stream_view{})</arglist>
+      <anchor>a8c0227abc75ee1804fe6f11726bd1ed1</anchor>
+      <arglist>(void *ptr, std::size_t bytes, cuda_stream_view stream=cuda_stream_view{})</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
@@ -932,15 +932,15 @@
       <type>void</type>
       <name>set_value_async</name>
       <anchorfile>classrmm_1_1device__scalar.html</anchorfile>
-      <anchor>a8720eef38de810004965e485706b5e31</anchor>
-      <arglist>(value_type const &amp;v, cuda_stream_view s)</arglist>
+      <anchor>ae03bf1e0aff893dbdcdd23aa6d47d7d6</anchor>
+      <arglist>(value_type const &amp;value, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>set_value_to_zero_async</name>
       <anchorfile>classrmm_1_1device__scalar.html</anchorfile>
-      <anchor>ac9ddf59c74d16d83c670f9752b0397f0</anchor>
-      <arglist>(cuda_stream_view s)</arglist>
+      <anchor>ada82359b72a4e7749780e5690383d078</anchor>
+      <arglist>(cuda_stream_view stream)</arglist>
     </member>
     <member kind="function">
       <type>pointer</type>
@@ -1014,43 +1014,43 @@
       <type>void</type>
       <name>set_element_async</name>
       <anchorfile>classrmm_1_1device__uvector.html</anchorfile>
-      <anchor>afbdc625ba4fd0d5c3f87e364bd8c65f6</anchor>
-      <arglist>(std::size_t element_index, value_type const &amp;v, cuda_stream_view s)</arglist>
+      <anchor>a928de4aa5eb4ec4e252d613f9477fb55</anchor>
+      <arglist>(std::size_t element_index, value_type const &amp;value, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>set_element_to_zero_async</name>
       <anchorfile>classrmm_1_1device__uvector.html</anchorfile>
-      <anchor>a61e085520deb7a6f0b0c316b1ca799f6</anchor>
-      <arglist>(std::size_t element_index, cuda_stream_view s)</arglist>
+      <anchor>a8bdc5e1d399d0462b19fe5206159a002</anchor>
+      <arglist>(std::size_t element_index, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>set_element</name>
       <anchorfile>classrmm_1_1device__uvector.html</anchorfile>
-      <anchor>a80ff08f7195e98e7de1176097c6651c0</anchor>
-      <arglist>(std::size_t element_index, T const &amp;v, cuda_stream_view s)</arglist>
+      <anchor>aecfba293433db0a4394f8aae2d2d6315</anchor>
+      <arglist>(std::size_t element_index, T const &amp;value, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function">
       <type>value_type</type>
       <name>element</name>
       <anchorfile>classrmm_1_1device__uvector.html</anchorfile>
-      <anchor>adbf5097fbf94b7f147aea7fb571fc3ea</anchor>
-      <arglist>(std::size_t element_index, cuda_stream_view s) const</arglist>
+      <anchor>ac4eca5d7e33502bcaf19463871d2b1eb</anchor>
+      <arglist>(std::size_t element_index, cuda_stream_view stream) const</arglist>
     </member>
     <member kind="function">
       <type>value_type</type>
       <name>front_element</name>
       <anchorfile>classrmm_1_1device__uvector.html</anchorfile>
-      <anchor>a71df23a3dc3cba930dd70b7cd73d4947</anchor>
-      <arglist>(cuda_stream_view s) const</arglist>
+      <anchor>ad285a44374bd43da16ed5b6464b4020b</anchor>
+      <arglist>(cuda_stream_view stream) const</arglist>
     </member>
     <member kind="function">
       <type>value_type</type>
       <name>back_element</name>
       <anchorfile>classrmm_1_1device__uvector.html</anchorfile>
-      <anchor>a01fc23eb75b33021fd2281f6c7941c6e</anchor>
-      <arglist>(cuda_stream_view s) const</arglist>
+      <anchor>a885e8aa4dd7df7de104cfbb6b083cfc7</anchor>
+      <arglist>(cuda_stream_view stream) const</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -1177,8 +1177,8 @@
       <type>void</type>
       <name>insert</name>
       <anchorfile>structrmm_1_1mr_1_1detail_1_1fixed__size__free__list.html</anchorfile>
-      <anchor>a5145c5fd0d20f515f8d9b16fa8aa8738</anchor>
-      <arglist>(block_type const &amp;b)</arglist>
+      <anchor>a9d857c0a2b365ee5d9365210a3ba2cdb</anchor>
+      <arglist>(block_type const &amp;block)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -1211,8 +1211,8 @@
       <type></type>
       <name>~fixed_size_memory_resource</name>
       <anchorfile>classrmm_1_1mr_1_1fixed__size__memory__resource.html</anchorfile>
-      <anchor>aa0c748d2c233130b3c54fb3ee7c80e19</anchor>
-      <arglist>()</arglist>
+      <anchor>a64ea84c68c1c208adffae85a7827fac9</anchor>
+      <arglist>() override</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
@@ -1267,15 +1267,15 @@
       <type>split_block</type>
       <name>allocate_from_block</name>
       <anchorfile>classrmm_1_1mr_1_1fixed__size__memory__resource.html</anchorfile>
-      <anchor>a0c7cc01a60a03aabf1bb70d24357083d</anchor>
-      <arglist>(block_type const &amp;b, std::size_t size)</arglist>
+      <anchor>afdfb923565be126a3c940a86e42cfa6b</anchor>
+      <arglist>(block_type const &amp;block, std::size_t size)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>block_type</type>
       <name>free_block</name>
       <anchorfile>classrmm_1_1mr_1_1fixed__size__memory__resource.html</anchorfile>
-      <anchor>a78378668a5525d5a8b709003ba11c486</anchor>
-      <arglist>(void *p, std::size_t size) noexcept</arglist>
+      <anchor>a3bba4f88d5568d68f3bcd4dc63198d2e</anchor>
+      <arglist>(void *ptr, std::size_t size) noexcept</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>std::pair&lt; std::size_t, std::size_t &gt;</type>
@@ -1305,6 +1305,13 @@
     <templarg></templarg>
     <templarg></templarg>
     <member kind="function">
+      <type>iterator</type>
+      <name>begin</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
+      <anchor>a905bbb3413c44cfb9ca532d11b82559c</anchor>
+      <arglist>() noexcept</arglist>
+    </member>
+    <member kind="function">
       <type>const_iterator</type>
       <name>begin</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
@@ -1378,8 +1385,8 @@
       <type>void</type>
       <name>insert</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
-      <anchor>a8924e9ebac8e1cbf2060d1077f207246</anchor>
-      <arglist>(const_iterator pos, block_type const &amp;b)</arglist>
+      <anchor>ad337774a35c669e3ec275b9ad99b60e4</anchor>
+      <arglist>(const_iterator pos, block_type const &amp;block)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -1392,15 +1399,15 @@
       <type>void</type>
       <name>push_back</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
-      <anchor>a74c8c201a1f6f0c6315cf5dbf10fe13a</anchor>
-      <arglist>(const block_type &amp;b)</arglist>
+      <anchor>ac047eda42c9f0fcd4b0fccfbb9e2ea67</anchor>
+      <arglist>(const block_type &amp;block)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
       <name>push_back</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
-      <anchor>a4863fa0900b34113d6824753258d2536</anchor>
-      <arglist>(block_type &amp;&amp;b)</arglist>
+      <anchor>ad2cdd22f018359d6e3b24f155d3911c7</anchor>
+      <arglist>(block_type &amp;&amp;block)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -1414,6 +1421,13 @@
     <name>free_list&lt; block &gt;</name>
     <filename>classrmm_1_1mr_1_1detail_1_1free__list.html</filename>
     <member kind="function">
+      <type>iterator</type>
+      <name>begin</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
+      <anchor>a905bbb3413c44cfb9ca532d11b82559c</anchor>
+      <arglist>() noexcept</arglist>
+    </member>
+    <member kind="function">
       <type>const_iterator</type>
       <name>begin</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
@@ -1487,8 +1501,8 @@
       <type>void</type>
       <name>insert</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
-      <anchor>a8924e9ebac8e1cbf2060d1077f207246</anchor>
-      <arglist>(const_iterator pos, block_type const &amp;b)</arglist>
+      <anchor>ad337774a35c669e3ec275b9ad99b60e4</anchor>
+      <arglist>(const_iterator pos, block_type const &amp;block)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -1501,15 +1515,15 @@
       <type>void</type>
       <name>push_back</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
-      <anchor>a74c8c201a1f6f0c6315cf5dbf10fe13a</anchor>
-      <arglist>(const block_type &amp;b)</arglist>
+      <anchor>ac047eda42c9f0fcd4b0fccfbb9e2ea67</anchor>
+      <arglist>(const block_type &amp;block)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
       <name>push_back</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
-      <anchor>a4863fa0900b34113d6824753258d2536</anchor>
-      <arglist>(block_type &amp;&amp;b)</arglist>
+      <anchor>ad2cdd22f018359d6e3b24f155d3911c7</anchor>
+      <arglist>(block_type &amp;&amp;block)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -1523,6 +1537,13 @@
     <name>free_list&lt; block_base &gt;</name>
     <filename>classrmm_1_1mr_1_1detail_1_1free__list.html</filename>
     <member kind="function">
+      <type>iterator</type>
+      <name>begin</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
+      <anchor>a905bbb3413c44cfb9ca532d11b82559c</anchor>
+      <arglist>() noexcept</arglist>
+    </member>
+    <member kind="function">
       <type>const_iterator</type>
       <name>begin</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
@@ -1596,8 +1617,8 @@
       <type>void</type>
       <name>insert</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
-      <anchor>a8924e9ebac8e1cbf2060d1077f207246</anchor>
-      <arglist>(const_iterator pos, block_type const &amp;b)</arglist>
+      <anchor>ad337774a35c669e3ec275b9ad99b60e4</anchor>
+      <arglist>(const_iterator pos, block_type const &amp;block)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -1610,15 +1631,15 @@
       <type>void</type>
       <name>push_back</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
-      <anchor>a74c8c201a1f6f0c6315cf5dbf10fe13a</anchor>
-      <arglist>(const block_type &amp;b)</arglist>
+      <anchor>ac047eda42c9f0fcd4b0fccfbb9e2ea67</anchor>
+      <arglist>(const block_type &amp;block)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
       <name>push_back</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1free__list.html</anchorfile>
-      <anchor>a4863fa0900b34113d6824753258d2536</anchor>
-      <arglist>(block_type &amp;&amp;b)</arglist>
+      <anchor>ad2cdd22f018359d6e3b24f155d3911c7</anchor>
+      <arglist>(block_type &amp;&amp;block)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -1657,8 +1678,8 @@
       <type>void</type>
       <name>deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
-      <anchor>ad5c0b09745292c68e49a820ff7a3b746</anchor>
-      <arglist>(block const &amp;b)</arglist>
+      <anchor>a9fbac37a802b3dc5b49caf9f9b602f9c</anchor>
+      <arglist>(block const &amp;blk)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -1710,8 +1731,8 @@
       <type>void</type>
       <name>deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1host__memory__resource.html</anchorfile>
-      <anchor>ab10391d28793937d14ebfeb1a2495a0f</anchor>
-      <arglist>(void *p, std::size_t bytes, std::size_t alignment=alignof(std::max_align_t))</arglist>
+      <anchor>ac2612213ea6b00d24f24887f9f9873fb</anchor>
+      <arglist>(void *ptr, std::size_t bytes, std::size_t alignment=alignof(std::max_align_t))</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
@@ -1730,8 +1751,8 @@
       <type></type>
       <name>limiting_resource_adaptor</name>
       <anchorfile>classrmm_1_1mr_1_1limiting__resource__adaptor.html</anchorfile>
-      <anchor>a185d1deae69ab1c8ffa112d6e588db1b</anchor>
-      <arglist>(Upstream *upstream, std::size_t allocation_limit, std::size_t allocation_alignment=rmm::detail::CUDA_ALLOCATION_ALIGNMENT)</arglist>
+      <anchor>aa8f35f619276b2a7ccfe5c772b0d1824</anchor>
+      <arglist>(Upstream *upstream, std::size_t allocation_limit, std::size_t alignment=rmm::detail::CUDA_ALLOCATION_ALIGNMENT)</arglist>
     </member>
     <member kind="function">
       <type>Upstream *</type>
@@ -1922,13 +1943,6 @@
       <type></type>
       <name>polymorphic_allocator</name>
       <anchorfile>classrmm_1_1mr_1_1polymorphic__allocator.html</anchorfile>
-      <anchor>a488eefb766f35c438c87b45aabe023ee</anchor>
-      <arglist>(polymorphic_allocator&lt; T &gt; const &amp;other)=default</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>polymorphic_allocator</name>
-      <anchorfile>classrmm_1_1mr_1_1polymorphic__allocator.html</anchorfile>
       <anchor>a526ae5aa78d7214575d5104bc7f68da2</anchor>
       <arglist>(device_memory_resource *mr)</arglist>
     </member>
@@ -1943,15 +1957,15 @@
       <type>value_type *</type>
       <name>allocate</name>
       <anchorfile>classrmm_1_1mr_1_1polymorphic__allocator.html</anchorfile>
-      <anchor>a8ed74cac43e985427c0ec7e239ae3444</anchor>
-      <arglist>(std::size_t n, cuda_stream_view stream)</arglist>
+      <anchor>a7d479e427f4e9237b7d442fc0f73116f</anchor>
+      <arglist>(std::size_t num, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1polymorphic__allocator.html</anchorfile>
-      <anchor>af0546981bd5e56bedbcc425d6bfd4574</anchor>
-      <arglist>(value_type *p, std::size_t n, cuda_stream_view stream)</arglist>
+      <anchor>a6db96e63c9c82dd87fec046d0eaf6184</anchor>
+      <arglist>(value_type *ptr, std::size_t num, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function">
       <type>device_memory_resource *</type>
@@ -1977,8 +1991,8 @@
       <type></type>
       <name>~pool_memory_resource</name>
       <anchorfile>classrmm_1_1mr_1_1pool__memory__resource.html</anchorfile>
-      <anchor>afcc226c485d432831a431edeffc58753</anchor>
-      <arglist>()</arglist>
+      <anchor>acf2d916010f1bdb218f214f09821b3bf</anchor>
+      <arglist>() override</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
@@ -2047,15 +2061,15 @@
       <type>split_block</type>
       <name>allocate_from_block</name>
       <anchorfile>classrmm_1_1mr_1_1pool__memory__resource.html</anchorfile>
-      <anchor>adf121431db4c29ba60afec6799c6369c</anchor>
-      <arglist>(block_type const &amp;b, std::size_t size)</arglist>
+      <anchor>a1c587aaeb13b96bda73f9af1ffaee76e</anchor>
+      <arglist>(block_type const &amp;block, std::size_t size)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>block_type</type>
       <name>free_block</name>
       <anchorfile>classrmm_1_1mr_1_1pool__memory__resource.html</anchorfile>
-      <anchor>a6b1c4771645a9ba477d145ece03d5919</anchor>
-      <arglist>(void *p, std::size_t size) noexcept</arglist>
+      <anchor>a13148a206f1763fba4cd18931f3418aa</anchor>
+      <arglist>(void *ptr, std::size_t size) noexcept</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>std::size_t</type>
@@ -2165,15 +2179,8 @@
       <type></type>
       <name>stream_allocator_adaptor</name>
       <anchorfile>classrmm_1_1mr_1_1stream__allocator__adaptor.html</anchorfile>
-      <anchor>ad778ea42f846c929de5cc75529b95884</anchor>
-      <arglist>(Allocator const &amp;a, cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>stream_allocator_adaptor</name>
-      <anchorfile>classrmm_1_1mr_1_1stream__allocator__adaptor.html</anchorfile>
-      <anchor>a7d63aa675abca0fe5556e263ffe33666</anchor>
-      <arglist>(stream_allocator_adaptor&lt; Allocator &gt; const &amp;other)=default</arglist>
+      <anchor>a8bf084f654f78d9cc55f11006d2feea9</anchor>
+      <arglist>(Allocator const &amp;allocator, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -2186,15 +2193,15 @@
       <type>value_type *</type>
       <name>allocate</name>
       <anchorfile>classrmm_1_1mr_1_1stream__allocator__adaptor.html</anchorfile>
-      <anchor>a9a57f674e68f383306c129636ec4eb48</anchor>
-      <arglist>(std::size_t n)</arglist>
+      <anchor>a3a5eb63343dd8ca71f8cda142d7c0ccc</anchor>
+      <arglist>(std::size_t num)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1stream__allocator__adaptor.html</anchorfile>
-      <anchor>ab370892a0be86f6af0fd6b4142c10bb2</anchor>
-      <arglist>(value_type *p, std::size_t n)</arglist>
+      <anchor>a6e65788864e41f96fbe215d73860c0ca</anchor>
+      <arglist>(value_type *ptr, std::size_t num)</arglist>
     </member>
     <member kind="function">
       <type>cuda_stream_view</type>
@@ -2234,8 +2241,8 @@
       <type>void</type>
       <name>insert_block</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</anchorfile>
-      <anchor>a02c26669d357d8cee1a1776389945054</anchor>
-      <arglist>(block_type const &amp;b, cuda_stream_view stream)</arglist>
+      <anchor>ac1daa0cf0aa4d20d628197b0383d5afd</anchor>
+      <arglist>(block_type const &amp;block, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>std::mutex &amp;</type>
@@ -2244,19 +2251,19 @@
       <anchor>a115882e92e73a7e76cf51537dbceab9b</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function" protection="protected" virtualness="virtual">
-      <type>virtual void *</type>
+    <member kind="function" protection="protected">
+      <type>void *</type>
       <name>do_allocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</anchorfile>
-      <anchor>a098b2f8a485e8f5ec1768f1969e65917</anchor>
-      <arglist>(std::size_t bytes, cuda_stream_view stream) override</arglist>
+      <anchor>ac8545c712c41a34a27159531e069c7f6</anchor>
+      <arglist>(std::size_t size, cuda_stream_view stream) override</arglist>
     </member>
-    <member kind="function" protection="protected" virtualness="virtual">
-      <type>virtual void</type>
+    <member kind="function" protection="protected">
+      <type>void</type>
       <name>do_deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</anchorfile>
-      <anchor>af262b6323118ca0ec996b29a80f22d9c</anchor>
-      <arglist>(void *p, std::size_t bytes, cuda_stream_view stream) override</arglist>
+      <anchor>a0b45555ae4ead99f9fc578cf05e1c82f</anchor>
+      <arglist>(void *ptr, std::size_t size, cuda_stream_view stream) override</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -2275,8 +2282,8 @@
       <type>void</type>
       <name>insert_block</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</anchorfile>
-      <anchor>a02c26669d357d8cee1a1776389945054</anchor>
-      <arglist>(block_type const &amp;b, cuda_stream_view stream)</arglist>
+      <anchor>ac1daa0cf0aa4d20d628197b0383d5afd</anchor>
+      <arglist>(block_type const &amp;block, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>std::mutex &amp;</type>
@@ -2285,19 +2292,19 @@
       <anchor>a115882e92e73a7e76cf51537dbceab9b</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function" protection="protected" virtualness="virtual">
-      <type>virtual void *</type>
+    <member kind="function" protection="protected">
+      <type>void *</type>
       <name>do_allocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</anchorfile>
-      <anchor>a098b2f8a485e8f5ec1768f1969e65917</anchor>
-      <arglist>(std::size_t bytes, cuda_stream_view stream) override</arglist>
+      <anchor>ac8545c712c41a34a27159531e069c7f6</anchor>
+      <arglist>(std::size_t size, cuda_stream_view stream) override</arglist>
     </member>
-    <member kind="function" protection="protected" virtualness="virtual">
-      <type>virtual void</type>
+    <member kind="function" protection="protected">
+      <type>void</type>
       <name>do_deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</anchorfile>
-      <anchor>af262b6323118ca0ec996b29a80f22d9c</anchor>
-      <arglist>(void *p, std::size_t bytes, cuda_stream_view stream) override</arglist>
+      <anchor>a0b45555ae4ead99f9fc578cf05e1c82f</anchor>
+      <arglist>(void *ptr, std::size_t size, cuda_stream_view stream) override</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -2316,8 +2323,8 @@
       <type>void</type>
       <name>insert_block</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</anchorfile>
-      <anchor>a02c26669d357d8cee1a1776389945054</anchor>
-      <arglist>(block_type const &amp;b, cuda_stream_view stream)</arglist>
+      <anchor>ac1daa0cf0aa4d20d628197b0383d5afd</anchor>
+      <arglist>(block_type const &amp;block, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>std::mutex &amp;</type>
@@ -2326,19 +2333,19 @@
       <anchor>a115882e92e73a7e76cf51537dbceab9b</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function" protection="protected" virtualness="virtual">
-      <type>virtual void *</type>
+    <member kind="function" protection="protected">
+      <type>void *</type>
       <name>do_allocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</anchorfile>
-      <anchor>a098b2f8a485e8f5ec1768f1969e65917</anchor>
-      <arglist>(std::size_t bytes, cuda_stream_view stream) override</arglist>
+      <anchor>ac8545c712c41a34a27159531e069c7f6</anchor>
+      <arglist>(std::size_t size, cuda_stream_view stream) override</arglist>
     </member>
-    <member kind="function" protection="protected" virtualness="virtual">
-      <type>virtual void</type>
+    <member kind="function" protection="protected">
+      <type>void</type>
       <name>do_deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</anchorfile>
-      <anchor>af262b6323118ca0ec996b29a80f22d9c</anchor>
-      <arglist>(void *p, std::size_t bytes, cuda_stream_view stream) override</arglist>
+      <anchor>a0b45555ae4ead99f9fc578cf05e1c82f</anchor>
+      <arglist>(void *ptr, std::size_t size, cuda_stream_view stream) override</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -2412,15 +2419,15 @@
       <type>pointer</type>
       <name>allocate</name>
       <anchorfile>classrmm_1_1mr_1_1thrust__allocator.html</anchorfile>
-      <anchor>aa4820af9c1e3fbbf26c6a14338cb8feb</anchor>
-      <arglist>(size_type n)</arglist>
+      <anchor>a74721d0f4ba03bd620ee9b8274f54244</anchor>
+      <arglist>(size_type num)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1thrust__allocator.html</anchorfile>
-      <anchor>ae5510aa288a2e1875b66c330feecf2ad</anchor>
-      <arglist>(pointer p, size_type n)</arglist>
+      <anchor>ac8d759848608442aba85e68854fe6dbc</anchor>
+      <arglist>(pointer ptr, size_type num)</arglist>
     </member>
     <member kind="function">
       <type>device_memory_resource *</type>

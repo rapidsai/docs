@@ -13,7 +13,7 @@ var searchData=
   ['crtp_3c_20pool_5fmemory_5fresource_3c_20upstream_20_3e_20_3e_27',['crtp&lt; pool_memory_resource&lt; Upstream &gt; &gt;',['../structrmm_1_1mr_1_1detail_1_1crtp.html',1,'rmm::mr::detail']]],
   ['crtp_3c_20poolresource_20_3e_28',['crtp&lt; PoolResource &gt;',['../structrmm_1_1mr_1_1detail_1_1crtp.html',1,'rmm::mr::detail']]],
   ['cuda_5fasync_5fmemory_5fresource_29',['cuda_async_memory_resource',['../classrmm_1_1mr_1_1cuda__async__memory__resource.html',1,'rmm::mr::cuda_async_memory_resource'],['../classrmm_1_1mr_1_1cuda__async__memory__resource.html#afc896f1fbf993cd68918a3c4779421f2',1,'rmm::mr::cuda_async_memory_resource::cuda_async_memory_resource()']]],
-  ['cuda_5fdevice_5fid_30',['cuda_device_id',['../structrmm_1_1cuda__device__id.html',1,'rmm::cuda_device_id'],['../structrmm_1_1cuda__device__id.html#a35360d244654fbaa0f8458635436195d',1,'rmm::cuda_device_id::cuda_device_id()']]],
+  ['cuda_5fdevice_5fid_30',['cuda_device_id',['../structrmm_1_1cuda__device__id.html',1,'rmm::cuda_device_id'],['../structrmm_1_1cuda__device__id.html#a14112045da5f196178f1d841543cc6d4',1,'rmm::cuda_device_id::cuda_device_id()']]],
   ['cuda_5ferror_31',['cuda_error',['../structrmm_1_1cuda__error.html',1,'rmm']]],
   ['cuda_5fmemory_5fresource_32',['cuda_memory_resource',['../classrmm_1_1mr_1_1cuda__memory__resource.html',1,'rmm::mr']]],
   ['cuda_5fstream_33',['cuda_stream',['../classrmm_1_1cuda__stream.html',1,'rmm::cuda_stream'],['../classrmm_1_1cuda__stream.html#ac932f583a6b7c4a25baaa3481ea18506',1,'rmm::cuda_stream::cuda_stream(cuda_stream &amp;&amp;)=default'],['../classrmm_1_1cuda__stream.html#a6c804b70001045b587624e7d1fbc0205',1,'rmm::cuda_stream::cuda_stream()']]],
