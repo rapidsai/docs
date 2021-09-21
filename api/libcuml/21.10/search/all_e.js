@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['n_696',['n',['../classML_1_1Internals_1_1GraphBasedDimRedCallback.html#ae21c44c24c785962eb34002bf359070e',1,'ML::Internals::GraphBasedDimRedCallback::n()'],['../structML_1_1manifold__inputs__t.html#a81f98cded87bcb6996b54d62a2fca611',1,'ML::manifold_inputs_t::n()'],['../structML_1_1SimpleMat.html#a64e4e9f210254f51b8720a5ea1f8b373',1,'ML::SimpleMat::n()'],['../structML_1_1SimpleMatOwning.html#a64e4e9f210254f51b8720a5ea1f8b373',1,'ML::SimpleMatOwning::n()'],['../structML_1_1Dbscan_1_1AdjGraph_1_1Pack.html#a43ea71044f62e59cd5d1063121a8d934',1,'ML::Dbscan::AdjGraph::Pack::N()'],['../structML_1_1Dbscan_1_1VertexDeg_1_1Pack.html#a2120f2d1a2583e446f553c5dd7ede492',1,'ML::Dbscan::VertexDeg::Pack::N()']]],
+  ['n_696',['N',['../structML_1_1Dbscan_1_1AdjGraph_1_1Pack.html#a43ea71044f62e59cd5d1063121a8d934',1,'ML::Dbscan::AdjGraph::Pack::N()'],['../structML_1_1Dbscan_1_1VertexDeg_1_1Pack.html#a2120f2d1a2583e446f553c5dd7ede492',1,'ML::Dbscan::VertexDeg::Pack::N()'],['../classML_1_1Internals_1_1GraphBasedDimRedCallback.html#ae21c44c24c785962eb34002bf359070e',1,'ML::Internals::GraphBasedDimRedCallback::n()'],['../structML_1_1manifold__inputs__t.html#a81f98cded87bcb6996b54d62a2fca611',1,'ML::manifold_inputs_t::n()'],['../structML_1_1SimpleMat.html#a64e4e9f210254f51b8720a5ea1f8b373',1,'ML::SimpleMat::n()'],['../structML_1_1SimpleMatOwning.html#a64e4e9f210254f51b8720a5ea1f8b373',1,'ML::SimpleMatOwning::n()']]],
   ['n_5fbins_697',['n_bins',['../structML_1_1DT_1_1DecisionTreeParams.html#a2c285d99980075e84f818ecd55f5ea59',1,'ML::DT::DecisionTreeParams']]],
   ['n_5fclasses_698',['n_classes',['../structML_1_1SVM_1_1SvmModel.html#a9a0450ad98e243ac76d9a93c36861ce0',1,'ML::SVM::SvmModel']]],
   ['n_5fclusters_699',['n_clusters',['../classML_1_1HDBSCAN_1_1Common_1_1robust__single__linkage__output.html#ad2e1893d236b484a1512140c0d929822',1,'ML::HDBSCAN::Common::robust_single_linkage_output::n_clusters()'],['../structML_1_1kmeans_1_1KMeansParams.html#a6b8901e1a7a228ad5d2cea26a972934d',1,'ML::kmeans::KMeansParams::n_clusters()']]],
@@ -40,8 +40,9 @@ var searchData=
   ['nrmmax_733',['nrmMax',['../namespaceML.html#a67d0763a9020f84d5b37e00b1521aaaa',1,'ML']]],
   ['nu_5fsvc_734',['NU_SVC',['../namespaceML_1_1SVM.html#a94b5c3bf8c9646f2443ebc5bb7433e00ab6c2aeee04143e29cd1ea59fa55f123a',1,'ML::SVM']]],
   ['nu_5fsvr_735',['NU_SVR',['../namespaceML_1_1SVM.html#a94b5c3bf8c9646f2443ebc5bb7433e00ad3e00bf31e9a39f20745f22c8fcadbef',1,'ML::SVM']]],
-  ['numdim_736',['NumDim',['../classML_1_1Tensor.html#af9b77f0d6f5c82f9e841401ae5e55faea152a8a4e1106c3cb7c39c4965ba0157b',1,'ML::Tensor']]],
-  ['numelements_737',['numElements',['../classML_1_1Tensor.html#a96486f6f89a7836453adf18aaf3704db',1,'ML::Tensor']]],
-  ['nvtx_2ecu_738',['nvtx.cu',['../nvtx_8cu.html',1,'']]],
-  ['nvtx_2ehpp_739',['nvtx.hpp',['../nvtx_8hpp.html',1,'']]]
+  ['num_5foutputs_736',['num_outputs',['../structML_1_1DT_1_1TreeMetaDataNode.html#ae5d4fb675ca7d3721d0685079629a572',1,'ML::DT::TreeMetaDataNode']]],
+  ['numdim_737',['NumDim',['../classML_1_1Tensor.html#af9b77f0d6f5c82f9e841401ae5e55faea152a8a4e1106c3cb7c39c4965ba0157b',1,'ML::Tensor']]],
+  ['numelements_738',['numElements',['../classML_1_1Tensor.html#a96486f6f89a7836453adf18aaf3704db',1,'ML::Tensor']]],
+  ['nvtx_2ecu_739',['nvtx.cu',['../nvtx_8cu.html',1,'']]],
+  ['nvtx_2ehpp_740',['nvtx.hpp',['../nvtx_8hpp.html',1,'']]]
 ];

@@ -64,7 +64,7 @@ var searchData=
   ['cov_5feig_5fdq_170',['COV_EIG_DQ',['../namespaceML.html#a7324898185a2fc9a9145f9bad555049ba38769546eb5536bd58d5eb9922c3e0bf',1,'ML::COV_EIG_DQ()'],['../namespaceML.html#a9a3879adb63715cec17550171436f6aba38769546eb5536bd58d5eb9922c3e0bf',1,'ML::COV_EIG_DQ()']]],
   ['cov_5feig_5fjacobi_171',['COV_EIG_JACOBI',['../namespaceML.html#a7324898185a2fc9a9145f9bad555049ba3a077c1d31d8e7f29a92eb7ea002daad',1,'ML::COV_EIG_JACOBI()'],['../namespaceML.html#a9a3879adb63715cec17550171436f6aba3a077c1d31d8e7f29a92eb7ea002daad',1,'ML::COV_EIG_JACOBI()']]],
   ['createandinserthandle_172',['createAndInsertHandle',['../classML_1_1HandleMap.html#a88bb3c146dad1ab126f714d10161a124',1,'ML::HandleMap']]],
-  ['createleafnode_173',['CreateLeafNode',['../structSparseTreeNode.html#a9317d784b5646fae16eee885e2788e56',1,'SparseTreeNode']]],
+  ['createleafnode_173',['CreateLeafNode',['../structSparseTreeNode.html#a612229231e65834d8878ee87b2b988bd',1,'SparseTreeNode']]],
   ['createsplitnode_174',['CreateSplitNode',['../structSparseTreeNode.html#a054bb6a67c49bf2ee9f4bf24e62ef34b',1,'SparseTreeNode']]],
   ['criterion_175',['CRITERION',['../namespaceML.html#a823912afaa51f58a997564eadb6d9405',1,'ML']]],
   ['criterion_5fend_176',['CRITERION_END',['../namespaceML.html#a823912afaa51f58a997564eadb6d9405ae346b778011ef4f488c1c87d64c1b174',1,'ML']]],

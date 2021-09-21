@@ -11,8 +11,9 @@ var searchData=
   ['values_1192',['values',['../structML_1_1SimpleSparseMat.html#a8e99ad7d1f66dc6c055c40ff05e5b5bf',1,'ML::SimpleSparseMat']]],
   ['variable_1193',['variable',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77ae04aa5104d082e4a51d241391941ba26',1,'cuml::genetic::node']]],
   ['vd_1194',['vd',['../structML_1_1Dbscan_1_1AdjGraph_1_1Pack.html#a200878a216966a3c50cc9a14b20c3239',1,'ML::Dbscan::AdjGraph::Pack::vd()'],['../structML_1_1Dbscan_1_1VertexDeg_1_1Pack.html#a496acb886bb5e440a83c5ebd5c318c51',1,'ML::Dbscan::VertexDeg::Pack::vd()']]],
-  ['verbose_1195',['verbose',['../classML_1_1paramsSolver.html#a2a74277b8a3f73c243e56a9e0f7912a1',1,'ML::paramsSolver']]],
-  ['verbosity_1196',['verbosity',['../structML_1_1kmeans_1_1KMeansParams.html#aa2c88d07f2797fbcf5cf8b9081863dcc',1,'ML::kmeans::KMeansParams::verbosity()'],['../structML_1_1TSNEParams.html#a28a5599cdce31c83df108ff18c151f48',1,'ML::TSNEParams::verbosity()'],['../classML_1_1UMAPParams.html#ac222ca883e535b1098ed089dc7fcf007',1,'ML::UMAPParams::verbosity()'],['../structML_1_1SVM_1_1SvmParameter.html#a54a563b59cfca8e3bbbb62480630720c',1,'ML::SVM::SvmParameter::verbosity()']]],
-  ['view_1197',['view',['../classML_1_1Tensor.html#a8e16bd37248b8f197689a1f2b47cd81c',1,'ML::Tensor']]],
-  ['vs_1198',['vs',['../structML_1_1ARIMAMemory.html#a3e34278375eb3f2a9ccaeb3ddb588ec8',1,'ML::ARIMAMemory']]]
+  ['vector_5fleaf_1195',['vector_leaf',['../structML_1_1DT_1_1TreeMetaDataNode.html#a13bffc44f1c84e33ee1b3fc44b2643f3',1,'ML::DT::TreeMetaDataNode']]],
+  ['verbose_1196',['verbose',['../classML_1_1paramsSolver.html#a2a74277b8a3f73c243e56a9e0f7912a1',1,'ML::paramsSolver']]],
+  ['verbosity_1197',['verbosity',['../structML_1_1kmeans_1_1KMeansParams.html#aa2c88d07f2797fbcf5cf8b9081863dcc',1,'ML::kmeans::KMeansParams::verbosity()'],['../structML_1_1TSNEParams.html#a28a5599cdce31c83df108ff18c151f48',1,'ML::TSNEParams::verbosity()'],['../classML_1_1UMAPParams.html#ac222ca883e535b1098ed089dc7fcf007',1,'ML::UMAPParams::verbosity()'],['../structML_1_1SVM_1_1SvmParameter.html#a54a563b59cfca8e3bbbb62480630720c',1,'ML::SVM::SvmParameter::verbosity()']]],
+  ['view_1198',['view',['../classML_1_1Tensor.html#a8e16bd37248b8f197689a1f2b47cd81c',1,'ML::Tensor']]],
+  ['vs_1199',['vs',['../structML_1_1ARIMAMemory.html#a3e34278375eb3f2a9ccaeb3ddb588ec8',1,'ML::ARIMAMemory']]]
 ];

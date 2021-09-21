@@ -38,6 +38,6 @@ var searchData=
   ['build_5fcondensed_5fhierarchy_104',['build_condensed_hierarchy',['../namespaceML.html#a08a0cbc81f9a9cd7ef8fb78657cf2224',1,'ML']]],
   ['build_5fdivision_5fmap_105',['build_division_map',['../namespaceML.html#a27ed4fdb2f62155d0a1fd81f1405a779',1,'ML']]],
   ['build_5flinkage_106',['build_linkage',['../namespaceML_1_1HDBSCAN.html#a6039607d24779d20c31f70fe278b66aa',1,'ML::HDBSCAN']]],
-  ['build_5ftreelite_5fforest_107',['build_treelite_forest',['../namespaceML.html#a684813418506a4839a61692008e4cfb9',1,'ML']]],
+  ['build_5ftreelite_5fforest_107',['build_treelite_forest',['../namespaceML.html#afbfb9c47569c55ab326bf282f8dba1e9',1,'ML']]],
   ['builder_2ecuh_108',['builder.cuh',['../builder_8cuh.html',1,'']]]
 ];
