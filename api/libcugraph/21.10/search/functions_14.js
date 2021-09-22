@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['vertex_5fdevice_5fview_722',['vertex_device_view',['../classcugraph_1_1detail_1_1compute__partition__t.html#ac57b1cb3caa180eb5b2f58d91add98b2',1,'cugraph::detail::compute_partition_t']]]
+  ['weakly_5fconnected_5fcomponents_711',['weakly_connected_components',['../namespacecugraph.html#a8a74317d58e73cb48b1240070e9a1c44',1,'cugraph']]],
+  ['what_712',['what',['../classMLCommon_1_1Exception.html#ab0fbec35530d6998ae97b429579d8f17',1,'MLCommon::Exception']]]
 ];
