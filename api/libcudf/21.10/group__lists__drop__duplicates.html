@@ -64,7 +64,7 @@ Files</h2></td></tr>
 <tbody><tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ga14fe51c90abb5129e0aa6fec46063db0"><td align="right" class="memItemLeft" valign="top">std::unique_ptr&lt; <a class="el" href="classcudf_1_1column.html">column</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lists__drop__duplicates.html#ga14fe51c90abb5129e0aa6fec46063db0">cudf::lists::drop_list_duplicates</a> (<a class="el" href="classcudf_1_1lists__column__view.html">lists_column_view</a> const &amp;lists_column, <a class="el" href="group__utility__types.html#ga08a672308cd0f61562410d106b377771">null_equality</a> nulls_equal=null_equality::EQUAL, <a class="el" href="group__utility__types.html#gae9d1055c69c3089452794783c7c82f83">nan_equality</a> nans_equal=<a class="el" href="group__utility__types.html#ggae9d1055c69c3089452794783c7c82f83acd6d9f766e6e2753da429d26078711d7">nan_equality::UNEQUAL</a>, <a class="elRef" href="https://docs.rapids.ai/api/librmm/21.10/classrmm_1_1mr_1_1device__memory__resource.html">rmm::mr::device_memory_resource</a> *mr=<a class="elRef" href="https://docs.rapids.ai/api/librmm/21.10/per__device__resource_8hpp.html#a95bf69637b8f3d29b13b33562370fc8f">rmm::mr::get_current_device_resource</a>())</td></tr>
-<tr class="memdesc:ga14fe51c90abb5129e0aa6fec46063db0"><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create a new lists column by removing duplicated entries from each list element in the given lists column.  <a href="group__lists__drop__duplicates.html#ga14fe51c90abb5129e0aa6fec46063db0">More...</a><br></td></tr>
+<tr class="memdesc:ga14fe51c90abb5129e0aa6fec46063db0"><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create a new lists column by extracting unique entries from list elements in the given lists column.  <a href="group__lists__drop__duplicates.html#ga14fe51c90abb5129e0aa6fec46063db0">More...</a><br></td></tr>
 <tr class="separator:ga14fe51c90abb5129e0aa6fec46063db0"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
 </tbody></table>
 <a id="details" name="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -107,29 +107,28 @@ Functions</h2></td></tr>
       </tbody></table>
 </div><div class="memdoc">
 
-<p>Create a new lists column by removing duplicated entries from each list element in the given lists column. </p>
+<p>Create a new lists column by extracting unique entries from list elements in the given lists column. </p>
+<p>Given an input lists column, the list elements in the column are copied to an output lists column such that their duplicated entries are dropped out to keep only the unique ones. The order of those entries within each list are not guaranteed to be preserved as in the input. In the current implementation, entries in the output lists are sorted by ascending order (nulls last), but this is not guaranteed in future implementation.</p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tbody><tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if any row (list element) in the input column is a nested type.</td></tr>
+    <tbody><tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if the child column of the input lists column contains nested type other than struct.</td></tr>
   </tbody></table>
   </dd>
 </dl>
-<p>Given an <code>input</code> <a class="el" href="classcudf_1_1lists__column__view.html" title="Given a column-view of lists type, an instance of this class provides a wrapper on this compound colu...">lists_column_view</a>, the list elements in the column are copied to an output lists column such that their duplicated entries are dropped out to keep only the unique ones. The order of those entries within each list are not guaranteed to be preserved as in the input. In the current implementation, entries in the output lists are sorted by ascending order (nulls last), but this is not guaranteed in future implementation.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tbody><tr><td class="paramname">lists_column</td><td>The input <a class="el" href="classcudf_1_1lists__column__view.html" title="Given a column-view of lists type, an instance of this class provides a wrapper on this compound colu...">lists_column_view</a> </td></tr>
-    <tr><td class="paramname">nulls_equal</td><td>Flag to specify whether null entries should be considered equal </td></tr>
-    <tr><td class="paramname">nans_equal</td><td>Flag to specify whether NaN entries should be considered as equal value (only applicable for floating point data column) </td></tr>
-    <tr><td class="paramname">mr</td><td>Device resource used to allocate memory</td></tr>
+    <tbody><tr><td class="paramname">lists_column</td><td>The input lists column to extract lists with unique entries. </td></tr>
+    <tr><td class="paramname">nulls_equal</td><td>Flag to specify whether null entries should be considered equal. </td></tr>
+    <tr><td class="paramname">nans_equal</td><td>Flag to specify whether NaN entries should be considered as equal value (only applicable for floating point data column). </td></tr>
+    <tr><td class="paramname">mr</td><td>Device resource used to allocate memory.</td></tr>
   </tbody></table>
   </dd>
 </dl>
-<div class="fragment"><div class="line">lists_column = { {1, 1, 2, 1, 3}, {4}, NULL, {}, {NULL, NULL, NULL, 5, 6, 6, 6, 5} }</div>
+<div class="fragment"><div class="line">input  = { {1, 1, 2, 1, 3}, {4}, NULL, {}, {NULL, NULL, NULL, 5, 6, 6, 6, 5} }</div>
 <div class="line">output = { {1, 2, 3}, {4}, NULL, {}, {5, 6, NULL} }</div>
 <div class="line"> </div>
-<div class="line">Note that permuting the entries of each list in this output also produces another valid</div>
-<div class="line">output.</div>
-</div><!-- fragment --><dl class="section return"><dt>Returns</dt><dd>A list column with list elements having unique entries </dd></dl>
+<div class="line">Note that permuting the entries of each list in this output also produces another valid output.</div>
+</div><!-- fragment --><dl class="section return"><dt>Returns</dt><dd>A lists column with list elements having unique entries. </dd></dl>
 
 </div>
 </div>
