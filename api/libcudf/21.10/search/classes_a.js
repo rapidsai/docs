@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['kafka_5fconsumer_1834',['kafka_consumer',['../classcudf_1_1io_1_1external_1_1kafka_1_1kafka__consumer.html',1,'cudf::io::external::kafka']]],
-  ['keyvalue_1835',['KeyValue',['../classcxxopts_1_1KeyValue.html',1,'cxxopts']]]
+  ['kafka_5fconsumer_1835',['kafka_consumer',['../classcudf_1_1io_1_1external_1_1kafka_1_1kafka__consumer.html',1,'cudf::io::external::kafka']]],
+  ['keyvalue_1836',['KeyValue',['../classcxxopts_1_1KeyValue.html',1,'cxxopts']]]
 ];
