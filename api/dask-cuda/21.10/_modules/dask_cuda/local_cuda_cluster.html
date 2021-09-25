@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en"><head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>dask_cuda.local_cuda_cluster &mdash; dask-cuda 0+untagged.1.ga884233 documentation</title>
+  <title>dask_cuda.local_cuda_cluster &mdash; dask-cuda 0+untagged.1.g5abd4dd documentation</title>
       <link href="../../_static/pygments.css" rel="stylesheet" type="text/css">
       <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css">
   <!--[if lt IE 9]>
@@ -154,6 +154,12 @@
 <span class="sd">        ``"path/to/files"``) or ``None`` to fall back on the value of</span>
 <span class="sd">        ``dask.temporary-directory`` in the local Dask configuration, using the current</span>
 <span class="sd">        working directory if this is not set.</span>
+<span class="sd">    shared_filesystem: bool or None, default None</span>
+<span class="sd">        Whether the `local_directory` above is shared between all workers or not.</span>
+<span class="sd">        If ``None``, the "jit-unspill-shared-fs" config value are used, which</span>
+<span class="sd">        defaults to True. Notice, in all other cases this option defaults to False,</span>
+<span class="sd">        but on a local cluster it defaults to True -- we assume all workers use the</span>
+<span class="sd">        same filesystem.</span>
 <span class="sd">    protocol : str or None, default None</span>
 <span class="sd">        Protocol to use for communication. Can be a string (like ``"tcp"`` or</span>
 <span class="sd">        ``"ucx"``), or ``None`` to automatically choose the correct protocol.</span>
@@ -257,6 +263,7 @@
         <span class="n">device_memory_limit</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
         <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">local_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">shared_filesystem</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">protocol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">enable_tcp_over_ucx</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">enable_infiniband</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -290,7 +297,7 @@
             <span class="n">n_workers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">CUDA_VISIBLE_DEVICES</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">n_workers</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Number of workers cannot be less than 1."</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">host_memory_limit</span> <span class="o">=</span> <span class="n">parse_memory_limit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memory_limit</span> <span class="o">=</span> <span class="n">parse_memory_limit</span><span class="p">(</span>
             <span class="n">memory_limit</span><span class="p">,</span> <span class="n">threads_per_worker</span><span class="p">,</span> <span class="n">n_workers</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">device_memory_limit</span> <span class="o">=</span> <span class="n">parse_device_memory_limit</span><span class="p">(</span>
@@ -337,19 +344,28 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">jit_unspill</span> <span class="o">=</span> <span class="n">jit_unspill</span>
 
+        <span class="k">if</span> <span class="n">shared_filesystem</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Notice, we assume a shared filesystem</span>
+            <span class="n">shared_filesystem</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"jit-unspill-shared-fs"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
         <span class="n">data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jit_unspill</span><span class="p">:</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="n">ProxifyHostFile</span><span class="p">,</span>
-                    <span class="p">{</span><span class="s2">"device_memory_limit"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_memory_limit</span><span class="p">,},</span>
+                    <span class="p">{</span>
+                        <span class="s2">"device_memory_limit"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_memory_limit</span><span class="p">,</span>
+                        <span class="s2">"memory_limit"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory_limit</span><span class="p">,</span>
+                        <span class="s2">"local_directory"</span><span class="p">:</span> <span class="n">local_directory</span><span class="p">,</span>
+                        <span class="s2">"shared_filesystem"</span><span class="p">:</span> <span class="n">shared_filesystem</span><span class="p">,</span>
+                    <span class="p">},</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="n">DeviceHostFile</span><span class="p">,</span>
                     <span class="p">{</span>
                         <span class="s2">"device_memory_limit"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_memory_limit</span><span class="p">,</span>
-                        <span class="s2">"memory_limit"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">host_memory_limit</span><span class="p">,</span>
+                        <span class="s2">"memory_limit"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory_limit</span><span class="p">,</span>
                         <span class="s2">"local_directory"</span><span class="p">:</span> <span class="n">local_directory</span><span class="p">,</span>
                         <span class="s2">"log_spilling"</span><span class="p">:</span> <span class="n">log_spilling</span><span class="p">,</span>
                     <span class="p">},</span>
@@ -407,7 +423,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">n_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
             <span class="n">threads_per_worker</span><span class="o">=</span><span class="n">threads_per_worker</span><span class="p">,</span>
-            <span class="n">memory_limit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">host_memory_limit</span><span class="p">,</span>
+            <span class="n">memory_limit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">memory_limit</span><span class="p">,</span>
             <span class="n">processes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
             <span class="n">local_directory</span><span class="o">=</span><span class="n">local_directory</span><span class="p">,</span>
