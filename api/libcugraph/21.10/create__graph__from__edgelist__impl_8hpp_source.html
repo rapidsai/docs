@@ -80,118 +80,118 @@ $(function() {
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp; </div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp;<span class="preprocessor">#include &lt;raft/handle.hpp&gt;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp;<span class="preprocessor">#include &lt;thrust/functional.h&gt;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp;<span class="preprocessor">#include &lt;thrust/transform_reduce.h&gt;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp;<span class="preprocessor">#include &lt;numeric&gt;</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp;<span class="preprocessor">#include &lt;numeric&gt;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp;<span class="keyword">namespace </span><a class="code" href="namespacecugraph.html">cugraph</a> {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;<span class="keyword">namespace </span>{</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t,</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;          <span class="keyword">typename</span> edge_t,</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;          <span class="keyword">typename</span> weight_t,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;          <span class="keywordtype">bool</span> store_transposed,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;          <span class="keywordtype">bool</span> multi_gpu&gt;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;std::enable_if_t&lt;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;  multi_gpu,</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;  std::tuple&lt;cugraph::graph_t&lt;vertex_t, edge_t, weight_t, store_transposed, multi_gpu&gt;,</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;             std::optional&lt;rmm::device_uvector&lt;vertex_t&gt;&gt;&gt;&gt;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;create_graph_from_edgelist_impl(raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;                                std::optional&lt;rmm::device_uvector&lt;vertex_t&gt;&gt;&amp;&amp; local_vertex_span,</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;                                rmm::device_uvector&lt;vertex_t&gt;&amp;&amp; edgelist_rows,</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;                                rmm::device_uvector&lt;vertex_t&gt;&amp;&amp; edgelist_cols,</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp;                                std::optional&lt;rmm::device_uvector&lt;weight_t&gt;&gt;&amp;&amp; edgelist_weights,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;                                graph_properties_t graph_properties,</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;                                <span class="keywordtype">bool</span> renumber)</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;{</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;  CUGRAPH_EXPECTS(renumber, <span class="stringliteral">"renumber should be true if multi_gpu is true."</span>);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;  <span class="keyword">auto</span>&amp; comm               = handle.get_comms();</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> comm_size     = comm.get_size();</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> comm_rank     = comm.get_rank();</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;  <span class="keyword">auto</span>&amp; row_comm           = handle.get_subcomm(<a class="code" href="structcugraph_1_1partition__2d_1_1key__naming__t.html">cugraph::partition_2d::key_naming_t</a>().row_name());</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> row_comm_size = row_comm.get_size();</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;  <span class="keyword">auto</span>&amp; col_comm           = handle.get_subcomm(<a class="code" href="structcugraph_1_1partition__2d_1_1key__naming__t.html">cugraph::partition_2d::key_naming_t</a>().col_name());</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> col_comm_size = col_comm.get_size();</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp;<span class="keyword">namespace </span><a class="code" href="namespacecugraph.html">cugraph</a> {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp;<span class="keyword">namespace </span>{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t,</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;          <span class="keyword">typename</span> edge_t,</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp;          <span class="keyword">typename</span> weight_t,</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;          <span class="keywordtype">bool</span> store_transposed,</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;          <span class="keywordtype">bool</span> multi_gpu&gt;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;std::enable_if_t&lt;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;  multi_gpu,</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;  std::tuple&lt;cugraph::graph_t&lt;vertex_t, edge_t, weight_t, store_transposed, multi_gpu&gt;,</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;             std::optional&lt;rmm::device_uvector&lt;vertex_t&gt;&gt;&gt;&gt;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;create_graph_from_edgelist_impl(raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;                                std::optional&lt;rmm::device_uvector&lt;vertex_t&gt;&gt;&amp;&amp; local_vertex_span,</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;                                rmm::device_uvector&lt;vertex_t&gt;&amp;&amp; edgelist_rows,</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;                                rmm::device_uvector&lt;vertex_t&gt;&amp;&amp; edgelist_cols,</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;                                std::optional&lt;rmm::device_uvector&lt;weight_t&gt;&gt;&amp;&amp; edgelist_weights,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;                                graph_properties_t graph_properties,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;                                <span class="keywordtype">bool</span> renumber)</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp;{</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;  CUGRAPH_EXPECTS(renumber, <span class="stringliteral">"renumber should be true if multi_gpu is true."</span>);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;  <span class="keyword">auto</span>&amp; comm               = handle.get_comms();</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> comm_size     = comm.get_size();</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> comm_rank     = comm.get_rank();</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;  <span class="keyword">auto</span>&amp; row_comm           = handle.get_subcomm(<a class="code" href="structcugraph_1_1partition__2d_1_1key__naming__t.html">cugraph::partition_2d::key_naming_t</a>().row_name());</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> row_comm_size = row_comm.get_size();</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;  <span class="keyword">auto</span>&amp; col_comm           = handle.get_subcomm(<a class="code" href="structcugraph_1_1partition__2d_1_1key__naming__t.html">cugraph::partition_2d::key_naming_t</a>().col_name());</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;  <span class="keyword">auto</span> <span class="keyword">const</span> col_comm_size = col_comm.get_size();</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;  <span class="comment">// 1. groupby edges to their target local adjacency matrix partition (and further groupby within</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;  <span class="comment">// the local partition by applying the compute_gpu_id_from_vertex_t to minor vertex IDs).</span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp;  <span class="comment">// 1. groupby edges to their target local adjacency matrix partition (and further groupby within</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;  <span class="comment">// the local partition by applying the compute_gpu_id_from_vertex_t to minor vertex IDs).</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp;  <span class="keyword">auto</span> edge_counts = cugraph::detail::groupby_and_count_edgelist_by_local_partition_id(</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp;    handle,</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp;    store_transposed ? edgelist_cols : edgelist_rows,</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp;    store_transposed ? edgelist_rows : edgelist_cols,</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp;    edgelist_weights,</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp;    <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp;  std::vector&lt;size_t&gt; h_edge_counts(edge_counts.size());</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp;  raft::update_host(</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;    h_edge_counts.data(), edge_counts.data(), edge_counts.size(), handle.get_stream());</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;  handle.get_stream_view().synchronize();</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;  std::vector&lt;edge_t&gt; edgelist_edge_counts(col_comm_size, edge_t{0});</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;  <span class="keyword">auto</span> edgelist_intra_partition_segment_offsets =</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;    std::make_optional&lt;std::vector&lt;std::vector&lt;edge_t&gt;&gt;&gt;(</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp;      col_comm_size, std::vector&lt;edge_t&gt;(row_comm_size + 1, edge_t{0}));</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; col_comm_size; ++i) {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;    edgelist_edge_counts[i] = std::accumulate(h_edge_counts.begin() + row_comm_size * i,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp;                                              h_edge_counts.begin() + row_comm_size * (i + 1),</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;                                              edge_t{0});</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;    std::partial_sum(h_edge_counts.begin() + row_comm_size * i,</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;                     h_edge_counts.begin() + row_comm_size * (i + 1),</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp;                     (*edgelist_intra_partition_segment_offsets)[i].begin() + 1);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;  }</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;  std::vector&lt;edge_t&gt; edgelist_displacements(col_comm_size, edge_t{0});</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;  std::partial_sum(edgelist_edge_counts.begin(),</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp;                   edgelist_edge_counts.end() - 1,</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp;                   edgelist_displacements.begin() + 1);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&nbsp; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&nbsp;  <span class="comment">// 2. renumber</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&nbsp; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp;  std::vector&lt;vertex_t*&gt; major_ptrs(col_comm_size);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp;  std::vector&lt;vertex_t*&gt; minor_ptrs(major_ptrs.size());</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; col_comm_size; ++i) {</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp;    major_ptrs[i] = (store_transposed ? edgelist_cols.begin() : edgelist_rows.begin()) +</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&nbsp;                    edgelist_displacements[i];</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp;    minor_ptrs[i] = (store_transposed ? edgelist_rows.begin() : edgelist_cols.begin()) +</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&nbsp;                    edgelist_displacements[i];</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&nbsp;  }</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp;  <span class="keyword">auto</span> [renumber_map_labels, meta] = cugraph::renumber_edgelist&lt;vertex_t, edge_t, multi_gpu&gt;(</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp;    handle,</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&nbsp;    local_vertex_span</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&nbsp;      ? std::optional&lt;std::tuple&lt;vertex_t const*, vertex_t&gt;&gt;{std::make_tuple(</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&nbsp;          (*local_vertex_span).data(), <span class="keyword">static_cast&lt;</span>vertex_t<span class="keyword">&gt;</span>((*local_vertex_span).size()))}</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&nbsp;      : std::nullopt,</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&nbsp;    major_ptrs,</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp;    minor_ptrs,</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp;    edgelist_edge_counts,</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp;    edgelist_intra_partition_segment_offsets);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&nbsp; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&nbsp;  <span class="comment">// 3. create a graph</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&nbsp; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&nbsp;  std::vector&lt;cugraph::edgelist_t&lt;vertex_t, edge_t, weight_t&gt;&gt; edgelists(col_comm_size);</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&nbsp;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; col_comm_size; ++i) {</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&nbsp;    edgelists[i] = <a class="code" href="structcugraph_1_1edgelist__t.html">cugraph::edgelist_t&lt;vertex_t, edge_t, weight_t&gt;</a>{</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&nbsp;      edgelist_rows.data() + edgelist_displacements[i],</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&nbsp;      edgelist_cols.data() + edgelist_displacements[i],</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&nbsp;      edgelist_weights</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&nbsp;        ? std::optional&lt;weight_t const*&gt;{(*edgelist_weights).data() + edgelist_displacements[i]}</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&nbsp;        : std::nullopt,</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&nbsp;      <span class="keyword">static_cast&lt;</span>edge_t<span class="keyword">&gt;</span>(edgelist_edge_counts[i])};</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&nbsp;  }</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&nbsp; </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&nbsp;  <span class="keywordflow">return</span> std::make_tuple(</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp;    <a class="code" href="classcugraph_1_1graph__t.html">cugraph::graph_t&lt;vertex_t, edge_t, weight_t, store_transposed, multi_gpu&gt;</a>(</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp;      handle,</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp;      edgelists,</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&nbsp;      <a class="code" href="structcugraph_1_1graph__meta__t.html">cugraph::graph_meta_t&lt;vertex_t, edge_t, multi_gpu&gt;</a>{meta.number_of_vertices,</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&nbsp;                                                         meta.number_of_edges,</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&nbsp;                                                         graph_properties,</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&nbsp;                                                         meta.partition,</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&nbsp;                                                         meta.segment_offsets}),</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp;  <span class="keyword">auto</span> edge_counts = cugraph::detail::groupby_and_count_edgelist_by_local_partition_id(</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;    handle,</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;    store_transposed ? edgelist_cols : edgelist_rows,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp;    store_transposed ? edgelist_rows : edgelist_cols,</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp;    edgelist_weights,</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp;    <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp;  std::vector&lt;size_t&gt; h_edge_counts(edge_counts.size());</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp;  raft::update_host(</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp;    h_edge_counts.data(), edge_counts.data(), edge_counts.size(), handle.get_stream());</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp;  handle.get_stream_view().synchronize();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;  std::vector&lt;edge_t&gt; edgelist_edge_counts(col_comm_size, edge_t{0});</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;  <span class="keyword">auto</span> edgelist_intra_partition_segment_offsets =</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;    std::make_optional&lt;std::vector&lt;std::vector&lt;edge_t&gt;&gt;&gt;(</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;      col_comm_size, std::vector&lt;edge_t&gt;(row_comm_size + 1, edge_t{0}));</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; col_comm_size; ++i) {</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;    edgelist_edge_counts[i] = std::accumulate(h_edge_counts.begin() + row_comm_size * i,</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp;                                              h_edge_counts.begin() + row_comm_size * (i + 1),</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;                                              edge_t{0});</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;    std::partial_sum(h_edge_counts.begin() + row_comm_size * i,</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp;                     h_edge_counts.begin() + row_comm_size * (i + 1),</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;                     (*edgelist_intra_partition_segment_offsets)[i].begin() + 1);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;  }</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;  std::vector&lt;edge_t&gt; edgelist_displacements(col_comm_size, edge_t{0});</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp;  std::partial_sum(edgelist_edge_counts.begin(),</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;                   edgelist_edge_counts.end() - 1,</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;                   edgelist_displacements.begin() + 1);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp;  <span class="comment">// 2. renumber</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&nbsp;  std::vector&lt;vertex_t*&gt; major_ptrs(col_comm_size);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&nbsp;  std::vector&lt;vertex_t*&gt; minor_ptrs(major_ptrs.size());</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&nbsp;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; col_comm_size; ++i) {</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp;    major_ptrs[i] = (store_transposed ? edgelist_cols.begin() : edgelist_rows.begin()) +</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp;                    edgelist_displacements[i];</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp;    minor_ptrs[i] = (store_transposed ? edgelist_rows.begin() : edgelist_cols.begin()) +</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp;                    edgelist_displacements[i];</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&nbsp;  }</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp;  <span class="keyword">auto</span> [renumber_map_labels, meta] = cugraph::renumber_edgelist&lt;vertex_t, edge_t, multi_gpu&gt;(</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&nbsp;    handle,</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&nbsp;    local_vertex_span</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp;      ? std::optional&lt;std::tuple&lt;vertex_t const*, vertex_t&gt;&gt;{std::make_tuple(</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp;          (*local_vertex_span).data(), <span class="keyword">static_cast&lt;</span>vertex_t<span class="keyword">&gt;</span>((*local_vertex_span).size()))}</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&nbsp;      : std::nullopt,</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&nbsp;    major_ptrs,</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&nbsp;    minor_ptrs,</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&nbsp;    edgelist_edge_counts,</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&nbsp;    edgelist_intra_partition_segment_offsets);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp;  <span class="comment">// 3. create a graph</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&nbsp;  std::vector&lt;cugraph::edgelist_t&lt;vertex_t, edge_t, weight_t&gt;&gt; edgelists(col_comm_size);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&nbsp;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; col_comm_size; ++i) {</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&nbsp;    edgelists[i] = <a class="code" href="structcugraph_1_1edgelist__t.html">cugraph::edgelist_t&lt;vertex_t, edge_t, weight_t&gt;</a>{</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&nbsp;      edgelist_rows.data() + edgelist_displacements[i],</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&nbsp;      edgelist_cols.data() + edgelist_displacements[i],</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&nbsp;      edgelist_weights</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&nbsp;        ? std::optional&lt;weight_t const*&gt;{(*edgelist_weights).data() + edgelist_displacements[i]}</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&nbsp;        : std::nullopt,</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&nbsp;      <span class="keyword">static_cast&lt;</span>edge_t<span class="keyword">&gt;</span>(edgelist_edge_counts[i])};</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&nbsp;  }</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&nbsp; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&nbsp;  <span class="keywordflow">return</span> std::make_tuple(</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&nbsp;    <a class="code" href="classcugraph_1_1graph__t.html">cugraph::graph_t&lt;vertex_t, edge_t, weight_t, store_transposed, multi_gpu&gt;</a>(</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&nbsp;      handle,</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&nbsp;      edgelists,</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp;      <a class="code" href="structcugraph_1_1graph__meta__t.html">cugraph::graph_meta_t&lt;vertex_t, edge_t, multi_gpu&gt;</a>{</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp;        meta.number_of_vertices,</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp;        meta.number_of_edges,</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&nbsp;        graph_properties,</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&nbsp;        meta.partition,</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&nbsp;        meta.segment_offsets,</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&nbsp;        store_transposed ? meta.num_local_unique_edge_minors : meta.num_local_unique_edge_majors,</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&nbsp;        store_transposed ? meta.num_local_unique_edge_majors : meta.num_local_unique_edge_minors}),</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&nbsp;    std::optional&lt;rmm::device_uvector&lt;vertex_t&gt;&gt;{std::move(renumber_map_labels)});</div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&nbsp;}</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&nbsp; </div>
@@ -288,7 +288,7 @@ $(function() {
 <div class="ttc" id="anamespacecugraph_html_a1aaac0d79d98ba7be480e597a8886e20"><div class="ttname"><a href="namespacecugraph.html#a1aaac0d79d98ba7be480e597a8886e20">cugraph::create_graph_from_edgelist</a></div><div class="ttdeci">std::tuple&lt; cugraph::graph_t&lt; vertex_t, edge_t, weight_t, store_transposed, multi_gpu &gt;, std::optional&lt; rmm::device_uvector&lt; vertex_t &gt; &gt; &gt; create_graph_from_edgelist(raft::handle_t const &amp;handle, std::optional&lt; rmm::device_uvector&lt; vertex_t &gt;&gt; &amp;&amp;vertex_span, rmm::device_uvector&lt; vertex_t &gt; &amp;&amp;edgelist_rows, rmm::device_uvector&lt; vertex_t &gt; &amp;&amp;edgelist_cols, std::optional&lt; rmm::device_uvector&lt; weight_t &gt;&gt; &amp;&amp;edgelist_weights, graph_properties_t graph_properties, bool renumber)</div><div class="ttdoc">create a graph from (the optional vertex list and) the given edge list.</div><div class="ttdef"><b>Definition:</b> create_graph_from_edgelist_impl.hpp:211</div></div>
 <div class="ttc" id="astructcugraph_1_1edgelist__t_html"><div class="ttname"><a href="structcugraph_1_1edgelist__t.html">cugraph::edgelist_t</a></div><div class="ttdef"><b>Definition:</b> graph.hpp:33</div></div>
 <div class="ttc" id="anamespacecugraph_html"><div class="ttname"><a href="namespacecugraph.html">cugraph</a></div><div class="ttdoc">Katz Centrality implementation.</div><div class="ttdef"><b>Definition:</b> betweenness_centrality.cu:34</div></div>
-<div class="ttc" id="aclasscugraph_1_1graph__t_html"><div class="ttname"><a href="classcugraph_1_1graph__t.html">cugraph::graph_t</a></div><div class="ttdef"><b>Definition:</b> graph.hpp:73</div></div>
+<div class="ttc" id="aclasscugraph_1_1graph__t_html"><div class="ttname"><a href="classcugraph_1_1graph__t.html">cugraph::graph_t</a></div><div class="ttdef"><b>Definition:</b> graph.hpp:76</div></div>
 <div class="ttc" id="astructcugraph_1_1partition__2d_1_1key__naming__t_html"><div class="ttname"><a href="structcugraph_1_1partition__2d_1_1key__naming__t.html">cugraph::partition_2d::key_naming_t</a></div><div class="ttdef"><b>Definition:</b> partition_manager.hpp:34</div></div>
 <div class="ttc" id="astructcugraph_1_1graph__properties__t_html"><div class="ttname"><a href="structcugraph_1_1graph__properties__t.html">cugraph::graph_properties_t</a></div><div class="ttdef"><b>Definition:</b> graph_view.hpp:217</div></div>
 <div class="ttc" id="astructcugraph_1_1graph__meta__t_html"><div class="ttname"><a href="structcugraph_1_1graph__meta__t.html">cugraph::graph_meta_t</a></div><div class="ttdef"><b>Definition:</b> graph.hpp:41</div></div>

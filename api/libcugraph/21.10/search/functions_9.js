@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['jaccard_679',['jaccard',['../namespacecugraph.html#ac234f529dba8fc868a9f9677e168e7b6',1,'cugraph']]],
-  ['jaccard_5flist_680',['jaccard_list',['../namespacecugraph.html#ac5263bdd552e7951abf3973cc358dfda',1,'cugraph']]]
+  ['jaccard_667',['jaccard',['../namespacecugraph.html#ac234f529dba8fc868a9f9677e168e7b6',1,'cugraph']]],
+  ['jaccard_5flist_668',['jaccard_list',['../namespacecugraph.html#ac5263bdd552e7951abf3973cc358dfda',1,'cugraph']]]
 ];
