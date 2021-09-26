@@ -177,6 +177,7 @@ var menudata={children:[
 {text:"q",url:"functions_eval.html#index_q"},
 {text:"r",url:"functions_eval.html#index_r"},
 {text:"s",url:"functions_eval.html#index_s"},
+{text:"t",url:"functions_eval.html#index_t"},
 {text:"v",url:"functions_eval.html#index_v"}]},
 {text:"Related Functions",url:"functions_rela.html"}]}]},
 {text:"Files",url:"files.html",children:[
