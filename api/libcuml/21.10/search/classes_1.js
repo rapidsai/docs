@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['callback_1229',['Callback',['../classML_1_1Internals_1_1Callback.html',1,'ML::Internals']]],
-  ['callbacksink_1230',['CallbackSink',['../classspdlog_1_1sinks_1_1CallbackSink.html',1,'spdlog::sinks']]],
-  ['condensedhierarchy_1231',['CondensedHierarchy',['../classML_1_1HDBSCAN_1_1Common_1_1CondensedHierarchy.html',1,'ML::HDBSCAN::Common']]],
-  ['cufft_5ferror_1232',['cufft_error',['../structraft_1_1cufft__error.html',1,'raft']]],
-  ['cuffthandle_1233',['CuFFTHandle',['../classraft_1_1CuFFTHandle.html',1,'raft']]]
+  ['callback_1235',['Callback',['../classML_1_1Internals_1_1Callback.html',1,'ML::Internals']]],
+  ['callbacksink_1236',['CallbackSink',['../classspdlog_1_1sinks_1_1CallbackSink.html',1,'spdlog::sinks']]],
+  ['condensedhierarchy_1237',['CondensedHierarchy',['../classML_1_1HDBSCAN_1_1Common_1_1CondensedHierarchy.html',1,'ML::HDBSCAN::Common']]],
+  ['coo_1238',['COO',['../classraft_1_1sparse_1_1COO.html',1,'raft::sparse']]],
+  ['cufft_5ferror_1239',['cufft_error',['../structraft_1_1cufft__error.html',1,'raft']]],
+  ['cuffthandle_1240',['CuFFTHandle',['../classraft_1_1CuFFTHandle.html',1,'raft']]]
 ];
