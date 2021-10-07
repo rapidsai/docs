@@ -22,7 +22,7 @@ Get started with our preconfigured RAPIDS demo container, featuring several demo
 
 ### Current Version
 
-#### RAPIDS {{ STABLE_VER }} - {{ site.data.releases.stable.date }}
+#### RAPIDS {{ STABLE_VER }} - {{ site.data.releases.stable.date | date: "%e %B %Y" }}
 
 Versions of libraries included in the `{{ STABLE_VER }}` images:
 - `cuDF` [v{{ STABLE_VER }}](https://github.com/rapidsai/cudf/tree/v{{ STABLE_VER }}.0), `cuML` [v{{ STABLE_VER }}](https://github.com/rapidsai/cuml/tree/v{{ STABLE_VER }}.0), `cuGraph` [v{{ STABLE_VER }}](https://github.com/rapidsai/cugraph/tree/v{{ STABLE_VER }}.0), `RMM` [v{{ STABLE_VER }}](https://github.com/rapidsai/RMM/tree/v{{ STABLE_VER }}.0), `cuSpatial` [v{{ STABLE_VER }}](https://github.com/rapidsai/cuspatial/tree/v{{ STABLE_VER }}.0), `cuxfilter` [v{{ STABLE_VER }}](https://github.com/rapidsai/cuxfilter/tree/v{{ STABLE_VER }}.0), `cuSignal` [v{{ STABLE_VER }}](https://github.com/rapidsai/cusignal/tree/v{{ STABLE_VER }}.0)
@@ -31,7 +31,7 @@ Versions of libraries included in the `{{ STABLE_VER }}` images:
 
 ### Former Version
 
-#### RAPIDS {{ LEGACY_VER }} - {{ site.data.releases.legacy.date }}
+#### RAPIDS {{ LEGACY_VER }} - {{ site.data.releases.legacy.date | date: "%e %B %Y" }}
 
 Versions of libraries included in the `{{ LEGACY_VER }}` images:
 - `cuDF` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cudf/tree/v{{ LEGACY_VER }}.0), `cuML` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cuml/tree/v{{ LEGACY_VER }}.0), `cuGraph` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cugraph/tree/v{{ LEGACY_VER }}.0), `RMM` [v{{ LEGACY_VER }}](https://github.com/rapidsai/RMM/tree/v{{ LEGACY_VER }}.0), `cuSpatial` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cuspatial/tree/v{{ LEGACY_VER }}.0), `cuxfilter` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cuxfilter/tree/v{{ LEGACY_VER }}.0), `cuSignal` [v{{ LEGACY_VER }}](https://github.com/rapidsai/cusignal/tree/v{{ LEGACY_VER }}.0)
