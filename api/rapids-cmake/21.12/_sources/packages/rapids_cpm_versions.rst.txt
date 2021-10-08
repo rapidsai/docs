@@ -54,6 +54,13 @@ as needed.
     An optional boolean value that represents if we should do a shallow git clone
     or not. If no such field exists the default is `git_shallow : true`
 
+``always_download``
+
+    An optional boolean value that represents if we CPM should just download the
+    package ( `CPM_DOWNLOAD_ALL` ) instead of first searching for it on the machine. If no such field
+    exists the default is `false` for default packages, any package that has an override will default
+    to `true`.
+
 rapids-cmake package versions
 #############################
 
