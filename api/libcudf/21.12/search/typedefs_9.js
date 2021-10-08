@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['scalar_5ftype_5ft_3099',['scalar_type_t',['../group__utility__dispatcher.html#ga9446c2558fd01c19f5fb5fa33927586f',1,'cudf']]],
-  ['split_5fblock_3100',['split_block',['https://docs.rapids.ai/api/librmm/21.12/classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#a80561e617cbaf5a13aafe4e76593367f',1,'rmm::mr::detail::stream_ordered_memory_resource::split_block()'],['https://docs.rapids.ai/api/librmm/21.12/classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#a80561e617cbaf5a13aafe4e76593367f',1,'stream_ordered_memory_resource&lt; fixed_size_memory_resource&lt; Upstream &gt;, detail::fixed_size_free_list &gt;::split_block()'],['https://docs.rapids.ai/api/librmm/21.12/classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#a80561e617cbaf5a13aafe4e76593367f',1,'stream_ordered_memory_resource&lt; pool_memory_resource&lt; Upstream &gt;, detail::coalescing_free_list &gt;::split_block()']]]
+  ['remove_3140',['Remove',['../type__list__utilities_8hpp.html#ab683474c55cb56d598697943276ba52b',1,'cudf::test']]],
+  ['removeif_3141',['RemoveIf',['../type__list__utilities_8hpp.html#a981ba33d768a131f2aa1b74f94d533f9',1,'cudf::test']]]
 ];

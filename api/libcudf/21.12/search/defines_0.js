@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['duration_5flimits_3319',['DURATION_LIMITS',['../durations_8hpp.html#aaf959bf7d1e5faeec4a6e8a926c9d931',1,'durations.hpp']]]
+  ['cudf_5fexpect_5fno_5fthrow_3364',['CUDF_EXPECT_NO_THROW',['../cudf__gtest_8hpp.html#a409ab53bda5e7ea869aaf088c553d079',1,'cudf_gtest.hpp']]]
 ];
