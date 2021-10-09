@@ -38,7 +38,13 @@ var searchData=
   ['cstablechecker_61',['CStableChecker',['../structCStableChecker.html',1,'']]],
   ['cugraph_62',['cugraph',['../namespacecugraph.html',1,'']]],
   ['cugraph_5fcc_5ft_63',['cugraph_cc_t',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27',1,'cugraph']]],
-  ['cugraph_5fstrong_64',['CUGRAPH_STRONG',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27a5882369885616cc6ba190202b140ee02',1,'cugraph']]],
-  ['cy_5fmulti_5fedgelists_5ft_65',['cy_multi_edgelists_t',['../structcugraph_1_1cython_1_1cy__multi__edgelists__t.html',1,'cugraph::cython']]],
-  ['ext_5fraft_66',['ext_raft',['../namespacecugraph_1_1ext__raft.html',1,'cugraph']]]
+  ['cugraph_5fdevice_5fbuffer_5f_64',['cugraph_device_buffer_',['../structcugraph__device__buffer__.html',1,'']]],
+  ['cugraph_5ferased_5funique_5fptr_5f_65',['cugraph_erased_unique_ptr_',['../structcugraph__erased__unique__ptr__.html',1,'']]],
+  ['cugraph_5fgraph_5fenvelope_5f_66',['cugraph_graph_envelope_',['../structcugraph__graph__envelope__.html',1,'']]],
+  ['cugraph_5fraft_5fhandle_5f_67',['cugraph_raft_handle_',['../structcugraph__raft__handle__.html',1,'']]],
+  ['cugraph_5frw_5fret_5f_68',['cugraph_rw_ret_',['../structcugraph__rw__ret__.html',1,'']]],
+  ['cugraph_5frw_5fret_5ftuple_5f_69',['cugraph_rw_ret_tuple_',['../structcugraph__rw__ret__tuple__.html',1,'']]],
+  ['cugraph_5fstrong_70',['CUGRAPH_STRONG',['../namespacecugraph.html#a365647c6c8b681e9af24661537ee6e27a5882369885616cc6ba190202b140ee02',1,'cugraph']]],
+  ['cy_5fmulti_5fedgelists_5ft_71',['cy_multi_edgelists_t',['../structcugraph_1_1cython_1_1cy__multi__edgelists__t.html',1,'cugraph::cython']]],
+  ['ext_5fraft_72',['ext_raft',['../namespacecugraph_1_1ext__raft.html',1,'cugraph']]]
 ];
