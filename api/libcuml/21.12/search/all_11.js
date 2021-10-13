@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['q_881',['Q',['../structML_1_1ARIMAOrder.html#aa5fb5918b495472de57b631957dfc76a',1,'ML::ARIMAOrder::Q()'],['../structML_1_1ARIMAOrder.html#a943d8c1b02c091fc739810d6eb09c110',1,'ML::ARIMAOrder::q()']]],
+  ['q_881',['q',['../structML_1_1ARIMAOrder.html#a943d8c1b02c091fc739810d6eb09c110',1,'ML::ARIMAOrder::q()'],['../structML_1_1ARIMAOrder.html#aa5fb5918b495472de57b631957dfc76a',1,'ML::ARIMAOrder::Q()']]],
   ['qn_2ecuh_882',['qn.cuh',['../qn_8cuh.html',1,'']]],
   ['qn_5flinesearch_2ecuh_883',['qn_linesearch.cuh',['../qn__linesearch_8cuh.html',1,'']]],
   ['qn_5fsolvers_2ecuh_884',['qn_solvers.cuh',['../qn__solvers_8cuh.html',1,'']]],
