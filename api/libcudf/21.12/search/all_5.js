@@ -61,7 +61,7 @@ var searchData=
   ['extract_464',['extract',['../group__strings__substring.html#gacf4e25ccb8564696ee03370a2288685a',1,'cudf::strings']]],
   ['extract_5fday_465',['extract_day',['../group__datetime__extract.html#ga21e25feaa24fe8c794b1e5dd33c82ba1',1,'cudf::datetime']]],
   ['extract_5fhour_466',['extract_hour',['../group__datetime__extract.html#gac98e0f4b0c2e86a6138cd1ff5974aa0b',1,'cudf::datetime']]],
-  ['extract_5flist_5felement_467',['extract_list_element',['../group__lists__extract.html#gaecf2f2c5d1d00ce98d71b5e706f64142',1,'cudf::lists']]],
+  ['extract_5flist_5felement_467',['extract_list_element',['../group__lists__extract.html#gaecf2f2c5d1d00ce98d71b5e706f64142',1,'cudf::lists::extract_list_element(lists_column_view const &amp;lists_column, size_type index, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())'],['../group__lists__extract.html#ga95ea2473a5fe36746bae5509c964d862',1,'cudf::lists::extract_list_element(lists_column_view const &amp;lists_column, column_view const &amp;indices, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())']]],
   ['extract_5fminute_468',['extract_minute',['../group__datetime__extract.html#gaef82591f22605becf6b7c142eaba1392',1,'cudf::datetime']]],
   ['extract_5fmonth_469',['extract_month',['../group__datetime__extract.html#ga6aae613da5cd005ba84b929fadaf15a4',1,'cudf::datetime']]],
   ['extract_5fquarter_470',['extract_quarter',['../group__datetime__compute.html#gaeba035849bdafa149573e28c8423c71e',1,'cudf::datetime']]],
