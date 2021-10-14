@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['gamma_355',['gamma',['../structMLCommon_1_1Matrix_1_1KernelParams.html#a668007a78029755b9c69bd110fd1bdf4',1,'MLCommon::Matrix::KernelParams']]],
+  ['gamma_355',['gamma',['../structMLCommon_1_1Matrix_1_1KernelParams.html#a668007a78029755b9c69bd110fd1bdf4',1,'MLCommon::Matrix::KernelParams::gamma()'],['../namespaceML.html#a823912afaa51f58a997564eadb6d9405ad414050e85fc8a16b5fd1f1839bc4b90',1,'ML::GAMMA()']]],
   ['gather_2ecuh_356',['gather.cuh',['../gather_8cuh.html',1,'']]],
   ['gaussian_5fmethod_357',['gaussian_method',['../group__paramsRPROJ.html#ga78f46ff68c6d8146f05aec2e02d817e7',1,'ML::paramsRPROJ']]],
   ['gemm_358',['gemm',['../structML_1_1SimpleDenseMat.html#a41e53df6d0efdbf7d16e28b1cd6b3722',1,'ML::SimpleDenseMat']]],
