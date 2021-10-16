@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['libcugraph_738',['libcugraph',['../index.html',1,'']]]
+  ['libcugraph_748',['libcugraph',['../index.html',1,'']]]
 ];
