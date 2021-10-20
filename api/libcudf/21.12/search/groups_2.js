@@ -1,16 +1,16 @@
 var searchData=
 [
-  ['column_20and_20table_3392',['Column and Table',['../group__column__apis.html',1,'']]],
-  ['column_3393',['Column',['../group__column__classes.html',1,'']]],
-  ['copying_3394',['Copying',['../group__column__copy.html',1,'']]],
-  ['concatenating_3395',['Concatenating',['../group__copy__concatenate.html',1,'']]],
-  ['classes_3396',['Classes',['../group__cudf__classes.html',1,'']]],
-  ['compute_20day_3397',['Compute Day',['../group__datetime__compute.html',1,'']]],
-  ['combining_3398',['Combining',['../group__lists__combine.html',1,'']]],
-  ['counting_3399',['Counting',['../group__lists__elements.html',1,'']]],
-  ['case_3400',['Case',['../group__strings__case.html',1,'']]],
-  ['combining_3401',['Combining',['../group__strings__combine.html',1,'']]],
-  ['converting_3402',['Converting',['../group__strings__convert.html',1,'']]],
-  ['copying_3403',['Copying',['../group__strings__copy.html',1,'']]],
-  ['character_20types_3404',['Character Types',['../group__strings__types.html',1,'']]]
+  ['column_20and_20table_3422',['Column and Table',['../group__column__apis.html',1,'']]],
+  ['column_3423',['Column',['../group__column__classes.html',1,'']]],
+  ['copying_3424',['Copying',['../group__column__copy.html',1,'']]],
+  ['concatenating_3425',['Concatenating',['../group__copy__concatenate.html',1,'']]],
+  ['classes_3426',['Classes',['../group__cudf__classes.html',1,'']]],
+  ['compute_20day_3427',['Compute Day',['../group__datetime__compute.html',1,'']]],
+  ['combining_3428',['Combining',['../group__lists__combine.html',1,'']]],
+  ['counting_3429',['Counting',['../group__lists__elements.html',1,'']]],
+  ['case_3430',['Case',['../group__strings__case.html',1,'']]],
+  ['combining_3431',['Combining',['../group__strings__combine.html',1,'']]],
+  ['converting_3432',['Converting',['../group__strings__convert.html',1,'']]],
+  ['copying_3433',['Copying',['../group__strings__copy.html',1,'']]],
+  ['character_20types_3434',['Character Types',['../group__strings__types.html',1,'']]]
 ];

@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['datetime_3405',['DateTime',['../group__datetime__apis.html',1,'']]],
-  ['dictionary_3406',['Dictionary',['../group__dictionary__apis.html',1,'']]],
-  ['dictionary_3407',['Dictionary',['../group__dictionary__classes.html',1,'']]],
-  ['dlpack_3408',['DLPack',['../group__interop__dlpack.html',1,'']]],
-  ['datasources_3409',['Datasources',['../group__io__datasources.html',1,'']]]
+  ['datetime_3435',['DateTime',['../group__datetime__apis.html',1,'']]],
+  ['dictionary_3436',['Dictionary',['../group__dictionary__apis.html',1,'']]],
+  ['dictionary_3437',['Dictionary',['../group__dictionary__classes.html',1,'']]],
+  ['dlpack_3438',['DLPack',['../group__interop__dlpack.html',1,'']]],
+  ['datasources_3439',['Datasources',['../group__io__datasources.html',1,'']]]
 ];
