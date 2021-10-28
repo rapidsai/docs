@@ -1162,6 +1162,40 @@
     <name>rmm::exec_policy</name>
     <filename>classrmm_1_1exec__policy.html</filename>
   </compound>
+  <compound kind="class">
+    <name>rmm::mr::failure_callback_resource_adaptor</name>
+    <filename>classrmm_1_1mr_1_1failure__callback__resource__adaptor.html</filename>
+    <templarg></templarg>
+    <base>rmm::mr::device_memory_resource</base>
+    <member kind="function">
+      <type></type>
+      <name>failure_callback_resource_adaptor</name>
+      <anchorfile>classrmm_1_1mr_1_1failure__callback__resource__adaptor.html</anchorfile>
+      <anchor>a55cdc070d37d3319421a83134a5a1723</anchor>
+      <arglist>(Upstream *upstream, failure_callback_t callback, void *callback_arg)</arglist>
+    </member>
+    <member kind="function">
+      <type>Upstream *</type>
+      <name>get_upstream</name>
+      <anchorfile>classrmm_1_1mr_1_1failure__callback__resource__adaptor.html</anchorfile>
+      <anchor>a4e22684dd9033294c3597c3ee62a7f3d</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>supports_streams</name>
+      <anchorfile>classrmm_1_1mr_1_1failure__callback__resource__adaptor.html</anchorfile>
+      <anchor>a1d635c019b8848f8abfecc5226e67053</anchor>
+      <arglist>() const noexcept override</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>supports_get_mem_info</name>
+      <anchorfile>classrmm_1_1mr_1_1failure__callback__resource__adaptor.html</anchorfile>
+      <anchor>aee6570bf95f4cad1d7d988f2a9eb5861</anchor>
+      <arglist>() const noexcept override</arglist>
+    </member>
+  </compound>
   <compound kind="struct">
     <name>rmm::mr::detail::fixed_size_free_list</name>
     <filename>structrmm_1_1mr_1_1detail_1_1fixed__size__free__list.html</filename>
@@ -1876,6 +1910,11 @@
     <name>rmm::mr::new_delete_resource</name>
     <filename>classrmm_1_1mr_1_1new__delete__resource.html</filename>
     <base>rmm::mr::host_memory_resource</base>
+  </compound>
+  <compound kind="class">
+    <name>rmm::out_of_memory</name>
+    <filename>classrmm_1_1out__of__memory.html</filename>
+    <base>rmm::bad_alloc</base>
   </compound>
   <compound kind="class">
     <name>rmm::out_of_range</name>
