@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['quantiles_1183',['Quantiles',['../group__column__quantiles.html',1,'']]],
-  ['quantile_1184',['QUANTILE',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca6e5361905125d531234e50d50bcf5326',1,'cudf::aggregation::QUANTILE()'],['../group__column__quantiles.html#gad309219ccf18eaee72cb7a72b1cf2778',1,'cudf::quantile()']]],
-  ['quantiles_1185',['quantiles',['../group__column__quantiles.html#ga3da34be52bf8791d27731bd9c330be11',1,'cudf']]],
-  ['quantiles_2ehpp_1186',['quantiles.hpp',['../quantiles_8hpp.html',1,'']]],
-  ['quote_5fstyle_1187',['quote_style',['../namespacecudf_1_1io.html#a9b3038122e7e69390b062270cf403007',1,'cudf::io']]],
-  ['quotechar_1188',['quotechar',['../classcudf_1_1io_1_1csv__reader__options__builder.html#a513bc76b53365e78d44fc8362311c2a6',1,'cudf::io::csv_reader_options_builder']]],
-  ['quoting_1189',['quoting',['../classcudf_1_1io_1_1csv__reader__options__builder.html#aaa3dfcc5362623962feb003e75173a11',1,'cudf::io::csv_reader_options_builder']]]
+  ['quantiles_1185',['Quantiles',['../group__column__quantiles.html',1,'']]],
+  ['quantile_1186',['QUANTILE',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca6e5361905125d531234e50d50bcf5326',1,'cudf::aggregation::QUANTILE()'],['../group__column__quantiles.html#gad309219ccf18eaee72cb7a72b1cf2778',1,'cudf::quantile()']]],
+  ['quantiles_1187',['quantiles',['../group__column__quantiles.html#ga3da34be52bf8791d27731bd9c330be11',1,'cudf']]],
+  ['quantiles_2ehpp_1188',['quantiles.hpp',['../quantiles_8hpp.html',1,'']]],
+  ['quote_5fstyle_1189',['quote_style',['../namespacecudf_1_1io.html#a9b3038122e7e69390b062270cf403007',1,'cudf::io']]],
+  ['quotechar_1190',['quotechar',['../classcudf_1_1io_1_1csv__reader__options__builder.html#a513bc76b53365e78d44fc8362311c2a6',1,'cudf::io::csv_reader_options_builder']]],
+  ['quoting_1191',['quoting',['../classcudf_1_1io_1_1csv__reader__options__builder.html#aaa3dfcc5362623962feb003e75173a11',1,'cudf::io::csv_reader_options_builder']]]
 ];
