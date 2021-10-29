@@ -21,7 +21,7 @@ var searchData=
   ['degree_261',['degree',['../structMLCommon_1_1Matrix_1_1KernelParams.html#afc77b409d55d652eb2bbde4c19d3c64b',1,'MLCommon::Matrix::KernelParams']]],
   ['delete_5frf_5fmetadata_262',['delete_rf_metadata',['../namespaceML.html#a47bd45d133f5b3bb3748a6e5d1c61c91',1,'ML']]],
   ['deltas_263',['deltas',['../classML_1_1HDBSCAN_1_1Common_1_1robust__single__linkage__output.html#a4766e3e18558d0ac747a9b2b634ac41f',1,'ML::HDBSCAN::Common::robust_single_linkage_output']]],
-  ['dense_264',['DENSE',['../namespaceML_1_1fil.html#a2260584f7152bb5497b528729b6bd216a6683473ca298c337218785d7863b495d',1,'ML::fil::DENSE()'],['../group__paramsRPROJ.html#gga134c8dc1d94a4ee420679aec61849e2bad1e6d312a4b10fe213eac82ffb1cdd72',1,'ML::dense()']]],
+  ['dense_264',['dense',['../group__paramsRPROJ.html#gga134c8dc1d94a4ee420679aec61849e2bad1e6d312a4b10fe213eac82ffb1cdd72',1,'ML::dense()'],['../namespaceML_1_1fil.html#a2260584f7152bb5497b528729b6bd216a6683473ca298c337218785d7863b495d',1,'ML::fil::DENSE()']]],
   ['dense_2ehpp_265',['dense.hpp',['../dense_8hpp.html',1,'']]],
   ['dense_5fdata_266',['dense_data',['../group__paramsRPROJ.html#ga76140bd1e094ded7ffdd688f9a6af267',1,'ML::rand_mat']]],
   ['dense_5foutput_267',['dense_output',['../group__paramsRPROJ.html#gaa209e560b1e2eb75a3724631060b0717',1,'ML::paramsRPROJ']]],
