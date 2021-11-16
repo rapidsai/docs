@@ -78,35 +78,37 @@ $(function() {
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&nbsp;<span class="comment"> * limitations under the License.</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&nbsp;<span class="comment"> */</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&nbsp; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&nbsp;<span class="preprocessor">#include &lt;limits.h&gt;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&nbsp;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&nbsp;<span class="preprocessor">#include &lt;numeric&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="comment">// Implements https://tools.ietf.org/html/draft-eastlake-fnv-17.html</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp;<span class="comment">// Algorithm is public domain, non-cryptographic strength and no patents or rights to patent.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp;<span class="comment">// If input elements are not 8-bit, such a computation does not match</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp;<span class="comment">// the FNV spec.</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> It&gt;</div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="fnv__hash_8h.html#ae801efb95a1312c072e074ba941102c7">   26</a></span>&nbsp;<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> <a class="code" href="fnv__hash_8h.html#ae801efb95a1312c072e074ba941102c7">fowler_noll_vo_fingerprint64</a>(It begin, It end)</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp;{</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp;  static_assert(<span class="keyword">sizeof</span>(*begin) == 1, <span class="stringliteral">"FNV deals with byte-sized (octet) input arrays only"</span>);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp;  <span class="keywordflow">return</span> std::accumulate(</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp;    begin, end, 14695981039346656037ull, [](<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span>&amp; fingerprint, <span class="keyword">auto</span> x) {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp;      <span class="keywordflow">return</span> (fingerprint * 0x100000001b3ull) ^ x;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp;    });</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp;}</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp;<span class="comment">// xor-folded fingerprint64 to ensure first bits are affected by other input bits</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;<span class="comment">// should give a 1% collision probability within a 10'000 hash set</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> It&gt;</div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="fnv__hash_8h.html#ad65c28794b35760999586c916c1c0a78">   38</a></span>&nbsp;uint32_t <a class="code" href="fnv__hash_8h.html#ad65c28794b35760999586c916c1c0a78">fowler_noll_vo_fingerprint64_32</a>(It begin, It end)</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;{</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;  <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> fp64 = <a class="code" href="fnv__hash_8h.html#ae801efb95a1312c072e074ba941102c7">fowler_noll_vo_fingerprint64</a>(begin, end);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;  <span class="keywordflow">return</span> (fp64 &amp; UINT_MAX) ^ (fp64 &gt;&gt; 32);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;}</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&nbsp;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&nbsp; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&nbsp;<span class="preprocessor">#include &lt;limits.h&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="preprocessor">#include &lt;numeric&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp;<span class="comment">// Implements https://tools.ietf.org/html/draft-eastlake-fnv-17.html</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp;<span class="comment">// Algorithm is public domain, non-cryptographic strength and no patents or rights to patent.</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp;<span class="comment">// If input elements are not 8-bit, such a computation does not match</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp;<span class="comment">// the FNV spec.</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> It&gt;</div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="fnv__hash_8h.html#ae801efb95a1312c072e074ba941102c7">   28</a></span>&nbsp;<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> <a class="code" href="fnv__hash_8h.html#ae801efb95a1312c072e074ba941102c7">fowler_noll_vo_fingerprint64</a>(It begin, It end)</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp;{</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp;  static_assert(<span class="keyword">sizeof</span>(*begin) == 1, <span class="stringliteral">"FNV deals with byte-sized (octet) input arrays only"</span>);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp;  <span class="keywordflow">return</span> std::accumulate(</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp;    begin, end, 14695981039346656037ull, [](<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span>&amp; fingerprint, <span class="keyword">auto</span> x) {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp;      <span class="keywordflow">return</span> (fingerprint * 0x100000001b3ull) ^ x;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;    });</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp;}</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;<span class="comment">// xor-folded fingerprint64 to ensure first bits are affected by other input bits</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;<span class="comment">// should give a 1% collision probability within a 10'000 hash set</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> It&gt;</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="fnv__hash_8h.html#ad65c28794b35760999586c916c1c0a78">   40</a></span>&nbsp;uint32_t <a class="code" href="fnv__hash_8h.html#ad65c28794b35760999586c916c1c0a78">fowler_noll_vo_fingerprint64_32</a>(It begin, It end)</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;{</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;  <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> fp64 = <a class="code" href="fnv__hash_8h.html#ae801efb95a1312c072e074ba941102c7">fowler_noll_vo_fingerprint64</a>(begin, end);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;  <span class="keywordflow">return</span> (fp64 &amp; UINT_MAX) ^ (fp64 &gt;&gt; 32);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;}</div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="afnv__hash_8h_html_ad65c28794b35760999586c916c1c0a78"><div class="ttname"><a href="fnv__hash_8h.html#ad65c28794b35760999586c916c1c0a78">fowler_noll_vo_fingerprint64_32</a></div><div class="ttdeci">uint32_t fowler_noll_vo_fingerprint64_32(It begin, It end)</div><div class="ttdef"><b>Definition:</b> fnv_hash.h:38</div></div>
-<div class="ttc" id="afnv__hash_8h_html_ae801efb95a1312c072e074ba941102c7"><div class="ttname"><a href="fnv__hash_8h.html#ae801efb95a1312c072e074ba941102c7">fowler_noll_vo_fingerprint64</a></div><div class="ttdeci">unsigned long long fowler_noll_vo_fingerprint64(It begin, It end)</div><div class="ttdef"><b>Definition:</b> fnv_hash.h:26</div></div>
+<div class="ttc" id="afnv__hash_8h_html_ad65c28794b35760999586c916c1c0a78"><div class="ttname"><a href="fnv__hash_8h.html#ad65c28794b35760999586c916c1c0a78">fowler_noll_vo_fingerprint64_32</a></div><div class="ttdeci">uint32_t fowler_noll_vo_fingerprint64_32(It begin, It end)</div><div class="ttdef"><b>Definition:</b> fnv_hash.h:40</div></div>
+<div class="ttc" id="afnv__hash_8h_html_ae801efb95a1312c072e074ba941102c7"><div class="ttname"><a href="fnv__hash_8h.html#ae801efb95a1312c072e074ba941102c7">fowler_noll_vo_fingerprint64</a></div><div class="ttdeci">unsigned long long fowler_noll_vo_fingerprint64(It begin, It end)</div><div class="ttdef"><b>Definition:</b> fnv_hash.h:28</div></div>
 <!-- start footer part -->
 <hr class="footer"><address class="footer"><small>
 Generated by&nbsp;<a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"></a> 1.8.20
