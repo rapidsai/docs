@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['id_5fto_5ftype_3185',['id_to_type',['../group__utility__dispatcher.html#gad7e12b8accf60e7c0e500294e1ee8536',1,'cudf']]],
-  ['integraltypes_3186',['IntegralTypes',['../type__lists_8hpp.html#a4eeedc997aa56c63248a21d6025c73da',1,'cudf::test']]],
-  ['integraltypesnotbool_3187',['IntegralTypesNotBool',['../type__lists_8hpp.html#a255113828c85719c95ba6d69e5700872',1,'cudf::test']]]
+  ['gettype_3203',['GetType',['../type__list__utilities_8hpp.html#afd069722f69b38e1c0aa0a0d0b9d291a',1,'cudf::test']]]
 ];

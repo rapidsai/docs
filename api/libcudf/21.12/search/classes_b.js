@@ -1,15 +1,15 @@
 var searchData=
 [
-  ['limiting_5fresource_5fadaptor_1894',['limiting_resource_adaptor',['https://docs.rapids.ai/api/librmm/21.12/classrmm_1_1mr_1_1limiting__resource__adaptor.html',1,'rmm::mr']]],
-  ['list_5fdevice_5fview_1895',['list_device_view',['../classcudf_1_1list__device__view.html',1,'cudf']]],
-  ['list_5fscalar_1896',['list_scalar',['../classcudf_1_1list__scalar.html',1,'cudf']]],
-  ['list_5fsize_5ffunctor_1897',['list_size_functor',['../structcudf_1_1list__size__functor.html',1,'cudf']]],
-  ['list_5fview_1898',['list_view',['../classcudf_1_1list__view.html',1,'cudf']]],
-  ['lists_5fcolumn_5fdevice_5fview_1899',['lists_column_device_view',['../classcudf_1_1detail_1_1lists__column__device__view.html',1,'cudf::detail']]],
-  ['lists_5fcolumn_5fview_1900',['lists_column_view',['../classcudf_1_1lists__column__view.html',1,'cudf']]],
-  ['lists_5fcolumn_5fwrapper_1901',['lists_column_wrapper',['../classcudf_1_1test_1_1lists__column__wrapper.html',1,'cudf::test']]],
-  ['literal_1902',['literal',['../classcudf_1_1ast_1_1literal.html',1,'cudf::ast']]],
-  ['logger_5fwrapper_1903',['logger_wrapper',['https://docs.rapids.ai/api/librmm/21.12/structrmm_1_1detail_1_1logger__wrapper.html',1,'rmm::detail']]],
-  ['logging_5fresource_5fadaptor_1904',['logging_resource_adaptor',['https://docs.rapids.ai/api/librmm/21.12/classrmm_1_1mr_1_1logging__resource__adaptor.html',1,'rmm::mr']]],
-  ['logic_5ferror_1905',['logic_error',['https://docs.rapids.ai/api/librmm/21.12/structrmm_1_1logic__error.html',1,'rmm::logic_error'],['../structcudf_1_1logic__error.html',1,'cudf::logic_error']]]
+  ['limiting_5fresource_5fadaptor_1905',['limiting_resource_adaptor',['https://docs.rapids.ai/api/librmm/21.12/classrmm_1_1mr_1_1limiting__resource__adaptor.html',1,'rmm::mr']]],
+  ['list_5fdevice_5fview_1906',['list_device_view',['../classcudf_1_1list__device__view.html',1,'cudf']]],
+  ['list_5fscalar_1907',['list_scalar',['../classcudf_1_1list__scalar.html',1,'cudf']]],
+  ['list_5fsize_5ffunctor_1908',['list_size_functor',['../structcudf_1_1list__size__functor.html',1,'cudf']]],
+  ['list_5fview_1909',['list_view',['../classcudf_1_1list__view.html',1,'cudf']]],
+  ['lists_5fcolumn_5fdevice_5fview_1910',['lists_column_device_view',['../classcudf_1_1detail_1_1lists__column__device__view.html',1,'cudf::detail']]],
+  ['lists_5fcolumn_5fview_1911',['lists_column_view',['../classcudf_1_1lists__column__view.html',1,'cudf']]],
+  ['lists_5fcolumn_5fwrapper_1912',['lists_column_wrapper',['../classcudf_1_1test_1_1lists__column__wrapper.html',1,'cudf::test']]],
+  ['literal_1913',['literal',['../classcudf_1_1ast_1_1literal.html',1,'cudf::ast']]],
+  ['logger_5fwrapper_1914',['logger_wrapper',['https://docs.rapids.ai/api/librmm/21.12/structrmm_1_1detail_1_1logger__wrapper.html',1,'rmm::detail']]],
+  ['logging_5fresource_5fadaptor_1915',['logging_resource_adaptor',['https://docs.rapids.ai/api/librmm/21.12/classrmm_1_1mr_1_1logging__resource__adaptor.html',1,'rmm::mr']]],
+  ['logic_5ferror_1916',['logic_error',['https://docs.rapids.ai/api/librmm/21.12/structrmm_1_1logic__error.html',1,'rmm::logic_error'],['../structcudf_1_1logic__error.html',1,'cudf::logic_error']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kind_3215',['Kind',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24c',1,'cudf::aggregation']]]
+  ['kind_3234',['Kind',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24c',1,'cudf::aggregation']]]
 ];
