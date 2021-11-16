@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['split_5fblock_366',['split_block',['../classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#a80561e617cbaf5a13aafe4e76593367f',1,'rmm::mr::detail::stream_ordered_memory_resource']]]
+  ['exception_5ftype_367',['exception_type',['../classrmm_1_1mr_1_1failure__callback__resource__adaptor.html#a2d86b79da7c4cde69f6a034695a706d2',1,'rmm::mr::failure_callback_resource_adaptor']]]
 ];

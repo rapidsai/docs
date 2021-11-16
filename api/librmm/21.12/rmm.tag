@@ -956,6 +956,20 @@
       <anchor>a34979514a931225e7c14c65472323c1b</anchor>
       <arglist>() const noexcept</arglist>
     </member>
+    <member kind="function">
+      <type>cuda_stream_view</type>
+      <name>stream</name>
+      <anchorfile>classrmm_1_1device__scalar.html</anchorfile>
+      <anchor>a9b916972e531620f677c699a34e844f8</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_stream</name>
+      <anchorfile>classrmm_1_1device__scalar.html</anchorfile>
+      <anchor>a7c928d83526e627da219daefa7c81a5c</anchor>
+      <arglist>(cuda_stream_view stream) noexcept</arglist>
+    </member>
   </compound>
   <compound kind="class">
     <name>rmm::device_uvector</name>
@@ -1157,6 +1171,20 @@
       <anchor>ab816bd74178d12d004a6bac4b1b43a34</anchor>
       <arglist>() const noexcept</arglist>
     </member>
+    <member kind="function">
+      <type>cuda_stream_view</type>
+      <name>stream</name>
+      <anchorfile>classrmm_1_1device__uvector.html</anchorfile>
+      <anchor>ac465ec96d9c64eab0a2a63ee6f5f7c03</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_stream</name>
+      <anchorfile>classrmm_1_1device__uvector.html</anchorfile>
+      <anchor>a5f636c840032261036eaa5450b9faab8</anchor>
+      <arglist>(cuda_stream_view stream) noexcept</arglist>
+    </member>
   </compound>
   <compound kind="class">
     <name>rmm::exec_policy</name>
@@ -1166,33 +1194,41 @@
     <name>rmm::mr::failure_callback_resource_adaptor</name>
     <filename>classrmm_1_1mr_1_1failure__callback__resource__adaptor.html</filename>
     <templarg></templarg>
+    <templarg></templarg>
     <base>rmm::mr::device_memory_resource</base>
+    <member kind="typedef">
+      <type>ExceptionType</type>
+      <name>exception_type</name>
+      <anchorfile>classrmm_1_1mr_1_1failure__callback__resource__adaptor.html</anchorfile>
+      <anchor>a2d86b79da7c4cde69f6a034695a706d2</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="function">
       <type></type>
       <name>failure_callback_resource_adaptor</name>
       <anchorfile>classrmm_1_1mr_1_1failure__callback__resource__adaptor.html</anchorfile>
-      <anchor>a55cdc070d37d3319421a83134a5a1723</anchor>
+      <anchor>aaa83b42d30bf9da69c28b97f60cff719</anchor>
       <arglist>(Upstream *upstream, failure_callback_t callback, void *callback_arg)</arglist>
     </member>
     <member kind="function">
       <type>Upstream *</type>
       <name>get_upstream</name>
       <anchorfile>classrmm_1_1mr_1_1failure__callback__resource__adaptor.html</anchorfile>
-      <anchor>a4e22684dd9033294c3597c3ee62a7f3d</anchor>
+      <anchor>a25793685284caf12e586c6b516833ba3</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>supports_streams</name>
       <anchorfile>classrmm_1_1mr_1_1failure__callback__resource__adaptor.html</anchorfile>
-      <anchor>a1d635c019b8848f8abfecc5226e67053</anchor>
+      <anchor>afea4c23b0c2cfa2fd35e35f14327bb44</anchor>
       <arglist>() const noexcept override</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>supports_get_mem_info</name>
       <anchorfile>classrmm_1_1mr_1_1failure__callback__resource__adaptor.html</anchorfile>
-      <anchor>aee6570bf95f4cad1d7d988f2a9eb5861</anchor>
+      <anchor>aed372555999607312ac71bedb9bd7640</anchor>
       <arglist>() const noexcept override</arglist>
     </member>
   </compound>
