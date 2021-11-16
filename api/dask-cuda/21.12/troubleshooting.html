@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en"><head>
-  <meta charset="utf-8">
+  <meta charset="utf-8"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
+
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Search &mdash; dask-cuda 0+untagged.1.g7f00ee2 documentation</title>
+  <title>Troubleshooting &mdash; dask-cuda 0+untagged.1.g7f00ee2 documentation</title>
       <link href="_static/pygments.css" rel="stylesheet" type="text/css">
       <link href="_static/css/theme.css" rel="stylesheet" type="text/css">
-    
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,10 +15,10 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
-    <script src="_static/searchtools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link href="genindex.html" rel="index" title="Index">
-    <link href="#" rel="search" title="Search"> 
+    <link href="search.html" rel="search" title="Search">
+    <link href="api.html" rel="next" title="API">
+    <link href="quickstart.html" rel="prev" title="Quickstart"> 
 <link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
 
 <body class="wy-body-for-nav"> 
@@ -29,7 +29,7 @@
             
               
 <div role="search">
-  <form action="#" class="wy-form" id="rtd-search-form" method="get">
+  <form action="search.html" class="wy-form" id="rtd-search-form" method="get">
     <input name="q" placeholder="Search docs" type="text">
     <input name="check_keywords" type="hidden" value="yes">
     <input name="area" type="hidden" value="default">
@@ -37,10 +37,13 @@
 </div>
         </div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
               <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Troubleshooting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#wrong-device-indexing">Wrong Device Indexing</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Additional Features</span></p>
@@ -69,8 +72,9 @@
           <div aria-label="Page navigation" role="navigation">
   <ul class="wy-breadcrumbs">
       <li><a class="icon icon-home" href="index.html"></a> &raquo;</li>
-      <li>Search</li>
+      <li>Troubleshooting</li>
       <li class="wy-breadcrumbs-aside">
+            <a href="_sources/troubleshooting.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr>
@@ -78,22 +82,41 @@
           <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
            <div itemprop="articleBody">
              
-  <noscript>
-  <div class="admonition warning" id="fallback">
-    <p class="last">
-      Please activate JavaScript to enable the search functionality.
-    </p>
-  </div>
-  </noscript>
+  <section id="troubleshooting">
+<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline"></a></h1>
+<p>This is a list of common issues encountered with Dask-CUDA and various systems.</p>
+<section id="wrong-device-indexing">
+<h2>Wrong Device Indexing<a class="headerlink" href="#wrong-device-indexing" title="Permalink to this headline"></a></h2>
+<p>It&rsquo;s common to rely on the device indexing presented by <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> when creating workers, and that is the default
+in Dask-CUDA.  In most cases, <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> provides a one-to-one mapping with <code class="docutils literal notranslate"><span class="pre">CUDA_VISIBLE_DEVICES</span></code>, but in some
+systems the ordering may not match. While, <code class="docutils literal notranslate"><span class="pre">CUDA_VISIBLE_DEVICES</span></code> indexes GPUs by their PCI Bus ID, <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code>
+orders by fastest GPUs.  Issues are commonly seen in
+<a class="reference external" href="https://www.nvidia.com/en-us/data-center/dgx-station-a100/">DGX Station A100</a> that contains 4 A100 GPUs, plus a
+Display GPU, but the Display GPU may not be the last GPU according to the PCI Bus ID. To correct that and ensure the
+mapping according to the PCI Bus ID, it&rsquo;s necessary to set the <code class="docutils literal notranslate"><span class="pre">CUDA_DEVICE_ORDER=PCI_BUS_ID</span></code> environment variable
+when starting the Python process:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">CUDA_DEVICE_ORDER</span><span class="o">=</span>PCI_BUS_ID python
+$ <span class="nv">CUDA_DEVICE_ORDER</span><span class="o">=</span>PCI_BUS_ID ipython
+$ <span class="nv">CUDA_DEVICE_ORDER</span><span class="o">=</span>PCI_BUS_ID jupyter lab
+$ <span class="nv">CUDA_DEVICE_ORDER</span><span class="o">=</span>PCI_BUS_ID dask-cuda-worker ...
+</pre></div>
+</div>
+<p>For the DGX Station A100, the display GPU is commonly the fourth in the PCI Bus ID ordering, thus one needs to use GPUs
+0, 1, 2 and 4 for Dask-CUDA:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dask_cuda</span> <span class="kn">import</span> <span class="n">LocalCUDACluster</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCUDACluster</span><span class="p">(</span><span class="n">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</section>
 
-  
-  <div id="search-results">
-  
-  </div>
 
            </div>
           </div>
-          <footer>
+          <footer><div aria-label="Footer" class="rst-footer-buttons" role="navigation">
+        <a accesskey="p" class="btn btn-neutral float-left" href="quickstart.html" rel="prev" title="Quickstart"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a accesskey="n" class="btn btn-neutral float-right" href="api.html" rel="next" title="API">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+    </div>
 
   <hr>
 
@@ -115,14 +138,7 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-  <script>
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script id="searchindexloader"></script>
-   
-
+  </script> 
 
 
 <script defer id="rapids-selector-js" src="/assets/js/custom.js"></script></body></html>
