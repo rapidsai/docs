@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['umapparams_1341',['UMAPParams',['../classML_1_1UMAPParams.html',1,'ML']]]
+  ['umapparams_1369',['UMAPParams',['../classML_1_1UMAPParams.html',1,'ML']]]
 ];
