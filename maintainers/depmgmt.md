@@ -135,3 +135,5 @@ conda install "your-pkg=1.0.0"
 ```
 
 With this method, dependency changes can be tested inside a PR. However, this should only be used as a temporary test, and not a permanent change. Once it is confirmed that the change works, the new dependency should be updated or added to the `integration` repository.
+
+**Important**: Please note that the `conda remove --force...` command does NOT work with `mamba remove --force...`. See [mamba-org/mamba#412](https://github.com/mamba-org/mamba/issues/412).
