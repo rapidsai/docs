@@ -53,5 +53,5 @@ Below is a table of the possible statuses for the _Label Checker_ and their corr
 | ![](/assets/images/label-checker/missing_cat.png)                                                               | Add **one** label from `category label` list        |
 | ![](/assets/images/label-checker/missing_breaking.png)                                                          | Add **one** label from `breaking label` list        |
 | ![](/assets/images/label-checker/many_breaking.png)<br>**OR**<br>![](/assets/images/label-checker/many_cat.png) | Ensure only **one** label from each list is applied |
-| ![](/assets/images/label-checker/do_not_merge.png)                                                              | Remove the `5 - DO NOT MERGE` label                 |
+| ![](/assets/images/label-checker/do_not_merge.png)                                                              | Remove the `DO NOT MERGE` label                 |
 | ![](/assets/images/label-checker/correct.png)                                                                   | ✅ None, all labels correctly applied               |
