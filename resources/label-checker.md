@@ -41,7 +41,7 @@ In order for the _Label Checker_ check to pass, pull requests must include **one
   - `breaking`
   - `non-breaking`
 
-Additionally, the _Label Checker_ check will **fail** when the pull request includes the `5 - DO NOT MERGE` label.
+Additionally, the _Label Checker_ check will **fail** when the pull request includes any label which contains the string `DO NOT MERGE` (case insensitive).
 
 ### _Label Checker_ Statuses
 
