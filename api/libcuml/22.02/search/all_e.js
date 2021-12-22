@@ -50,6 +50,5 @@ var searchData=
   ['numdim_798',['NumDim',['../classML_1_1Tensor.html#af9b77f0d6f5c82f9e841401ae5e55faea152a8a4e1106c3cb7c39c4965ba0157b',1,'ML::Tensor']]],
   ['numelements_799',['numElements',['../classML_1_1Tensor.html#a96486f6f89a7836453adf18aaf3704db',1,'ML::Tensor']]],
   ['numoutputs_800',['numOutputs',['../structML_1_1DT_1_1Input.html#ad7896fab36dfeb5106ded69c4e094361',1,'ML::DT::Input']]],
-  ['nvtx_2ecu_801',['nvtx.cu',['../nvtx_8cu.html',1,'']]],
-  ['nvtx_2ehpp_802',['nvtx.hpp',['../nvtx_8hpp.html',1,'']]]
+  ['nvtx_2ehpp_801',['nvtx.hpp',['../nvtx_8hpp.html',1,'']]]
 ];
