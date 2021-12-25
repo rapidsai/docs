@@ -434,50 +434,8 @@ $(function() {
 <div class="line"><a name="l00539"></a><span class="lineno">  539</span>&nbsp;  uint32_t _seed{DEFAULT_HASH_SEED};</div>
 <div class="line"><a name="l00540"></a><span class="lineno">  540</span>&nbsp;};</div>
 <div class="line"><a name="l00541"></a><span class="lineno">  541</span>&nbsp; </div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>&gt; <span class="keyword">class </span>hash_function, <span class="keyword">typename</span> Nullate&gt;</div>
-<div class="line"><a name="l00550"></a><span class="lineno"><a class="line" href="classcudf_1_1row__hasher__initial__values.html">  550</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classcudf_1_1row__hasher__initial__values.html">row_hasher_initial_values</a> {</div>
-<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&nbsp; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&nbsp;  <a class="code" href="classcudf_1_1row__hasher__initial__values.html">row_hasher_initial_values</a>() = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&nbsp;  <a class="code" href="classcudf_1_1row__hasher__initial__values.html">row_hasher_initial_values</a>(Nullate has_nulls, <a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a> t, hash_value_type* initial_hash)</div>
-<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&nbsp;    : _table{t}, _initial_hash(initial_hash), _has_nulls{has_nulls}</div>
-<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&nbsp;  {</div>
-<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&nbsp;  }</div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&nbsp; </div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&nbsp;  __device__ <span class="keyword">auto</span> operator()(size_type row_index)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&nbsp;<span class="keyword">  </span>{</div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&nbsp;    <span class="keyword">auto</span> hash_combiner = [](hash_value_type lhs, hash_value_type rhs) {</div>
-<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&nbsp;      <span class="keywordflow">return</span> hash_function&lt;hash_value_type&gt;{}.hash_combine(lhs, rhs);</div>
-<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&nbsp;    };</div>
-<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&nbsp; </div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&nbsp;    <span class="comment">// Hashes an element in a column and combines with an initial value</span></div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&nbsp;    <span class="keyword">auto</span> hasher = [=](size_type column_index) {</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&nbsp;      <span class="keyword">auto</span> hash_value = cudf::type_dispatcher&lt;dispatch_storage_type&gt;(</div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&nbsp;        _table.column(column_index).<a class="code" href="classcudf_1_1detail_1_1column__device__view__base.html#a59b995bc2a9054f0d107ac828c10ef9b">type</a>(),</div>
-<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&nbsp;        <a class="code" href="classcudf_1_1element__hasher.html">element_hasher&lt;hash_function, Nullate&gt;</a>{_has_nulls},</div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&nbsp;        _table.column(column_index),</div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&nbsp;        row_index);</div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&nbsp; </div>
-<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&nbsp;      <span class="keywordflow">return</span> hash_combiner(_initial_hash[column_index], hash_value);</div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&nbsp;    };</div>
-<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&nbsp; </div>
-<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&nbsp;    <span class="comment">// Hash each element and combine all the hash values together</span></div>
-<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&nbsp;    <span class="keywordflow">return</span> thrust::transform_reduce(thrust::seq,</div>
-<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&nbsp;                                    thrust::make_counting_iterator(0),</div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&nbsp;                                    thrust::make_counting_iterator(_table.num_columns()),</div>
-<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&nbsp;                                    hasher,</div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&nbsp;                                    hash_value_type{0},</div>
-<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&nbsp;                                    hash_combiner);</div>
-<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&nbsp;  }</div>
-<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&nbsp; </div>
-<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&nbsp; <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&nbsp;  <a class="code" href="classcudf_1_1table__device__view.html">table_device_view</a> _table;</div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&nbsp;  hash_value_type* _initial_hash;</div>
-<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&nbsp;  Nullate _has_nulls;</div>
-<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&nbsp;};</div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&nbsp; </div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&nbsp;}  <span class="comment">// namespace cudf</span></div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&nbsp;}  <span class="comment">// namespace cudf</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasscudf_1_1row__hasher__initial__values_html"><div class="ttname"><a href="classcudf_1_1row__hasher__initial__values.html">cudf::row_hasher_initial_values</a></div><div class="ttdoc">Computes the hash value of a row in the given table, combined with an initial hash value for each col...</div><div class="ttdef"><b>Definition:</b> <a href="row__operators_8cuh_source.html#l00550">row_operators.cuh:550</a></div></div>
 <div class="ttc" id="aclasscudf_1_1row__lexicographic__comparator_html"><div class="ttname"><a href="classcudf_1_1row__lexicographic__comparator.html">cudf::row_lexicographic_comparator</a></div><div class="ttdoc">Computes whether one row is lexicographically less than another row.</div><div class="ttdef"><b>Definition:</b> <a href="row__operators_8cuh_source.html#l00352">row_operators.cuh:352</a></div></div>
 <div class="ttc" id="aclasscudf_1_1table__device__view_html"><div class="ttname"><a href="classcudf_1_1table__device__view.html">cudf::table_device_view</a></div><div class="ttdef"><b>Definition:</b> <a href="table__device__view_8cuh_source.html#l00082">table_device_view.cuh:82</a></div></div>
 <div class="ttc" id="aclasscudf_1_1column__device__view_html"><div class="ttname"><a href="classcudf_1_1column__device__view.html">cudf::column_device_view</a></div><div class="ttdoc">An immutable, non-owning view of device data as a column of elements that is trivially copyable and u...</div><div class="ttdef"><b>Definition:</b> <a href="column__device__view_8cuh_source.html#l00308">column_device_view.cuh:308</a></div></div>

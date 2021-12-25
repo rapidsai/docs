@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['yes_2165',['YES',['../structcudf_1_1nullate_1_1YES.html',1,'cudf::nullate']]]
+  ['yes_2163',['YES',['../structcudf_1_1nullate_1_1YES.html',1,'cudf::nullate']]]
 ];
