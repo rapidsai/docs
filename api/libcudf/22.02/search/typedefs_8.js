@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['listtypes_3285',['ListTypes',['../type__lists_8hpp.html#afe8ff492a9fb6cbab15f3ff4ddc9f090',1,'cudf::test']]]
+  ['listtypes_3287',['ListTypes',['../type__lists_8hpp.html#afe8ff492a9fb6cbab15f3ff4ddc9f090',1,'cudf::test']]]
 ];
