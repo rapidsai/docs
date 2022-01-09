@@ -3902,11 +3902,13 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="cudf.DataFrame.reset_index">
 <span class="sig-prename descclassname"><span class="pre">DataFrame.</span></span><span class="sig-name descname"><span class="pre">reset_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_fill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cudf.DataFrame.reset_index" title="Permalink to this definition">&para;</a></dt>
-<dd><p>Reset the index.</p>
-<p>Reset the index of the DataFrame, and use the default one instead.</p>
+<dd><p>Reset the index of the DataFrame, or a level of it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
+<dt><strong>level</strong><span class="classifier">int, str, tuple, or list, default None</span></dt><dd><p>Only remove the given levels from the index. Removes all levels by
+default.</p>
+</dd>
 <dt><strong>drop</strong><span class="classifier">bool, default False</span></dt><dd><p>Do not try to insert index into dataframe columns. This resets
 the index to the default integer index.</p>
 </dd>
@@ -3946,6 +3948,34 @@ the index to the default integer index.</p>
 <span class="go">1    bird      24.0</span>
 <span class="go">2  mammal      80.5</span>
 <span class="go">3  mammal      &lt;NA&gt;</span>
+</pre></div>
+</div>
+<p>You can also use <code class="docutils literal notranslate"><span class="pre">reset_index</span></code> with MultiIndex.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">index</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_tuples</span><span class="p">([(</span><span class="s1">'bird'</span><span class="p">,</span> <span class="s1">'falcon'</span><span class="p">),</span>
+<span class="gp">... </span>                                    <span class="p">(</span><span class="s1">'bird'</span><span class="p">,</span> <span class="s1">'parrot'</span><span class="p">),</span>
+<span class="gp">... </span>                                    <span class="p">(</span><span class="s1">'mammal'</span><span class="p">,</span> <span class="s1">'lion'</span><span class="p">),</span>
+<span class="gp">... </span>                                    <span class="p">(</span><span class="s1">'mammal'</span><span class="p">,</span> <span class="s1">'monkey'</span><span class="p">)],</span>
+<span class="gp">... </span>                                    <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">'class'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([(</span><span class="mf">389.0</span><span class="p">,</span> <span class="s1">'fly'</span><span class="p">),</span>
+<span class="gp">... </span>                     <span class="p">(</span> <span class="mf">24.0</span><span class="p">,</span> <span class="s1">'fly'</span><span class="p">),</span>
+<span class="gp">... </span>                     <span class="p">(</span> <span class="mf">80.5</span><span class="p">,</span> <span class="s1">'run'</span><span class="p">),</span>
+<span class="gp">... </span>                     <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">'jump'</span><span class="p">)],</span>
+<span class="gp">... </span>                     <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+<span class="gp">... </span>                     <span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s1">'speed'</span><span class="p">,</span> <span class="s1">'type'</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
+<span class="go">               speed  type</span>
+<span class="go">class  name</span>
+<span class="go">bird   falcon  389.0   fly</span>
+<span class="go">       parrot   24.0   fly</span>
+<span class="go">mammal lion     80.5   run</span>
+<span class="go">       monkey   &lt;NA&gt;  jump</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">'class'</span><span class="p">)</span>
+<span class="go">         class  speed  type</span>
+<span class="go">name</span>
+<span class="go">falcon    bird  389.0   fly</span>
+<span class="go">parrot    bird   24.0   fly</span>
+<span class="go">lion    mammal   80.5   run</span>
+<span class="go">monkey  mammal   &lt;NA&gt;  jump</span>
 </pre></div>
 </div>
 </dd></dl>
