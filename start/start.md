@@ -23,7 +23,7 @@ Handy PDF reference guide for handling GPU Data Frames (GDF) with cuDF.
 {: .mb-7 }
 
 ### 10 Minutes to cuDF
-#### **[cuDF Post](/api/cudf/stable/10min.html){: target="_blank"}**
+#### **[cuDF Post](/api/cudf/stable/user_guide/10min.html){: target="_blank"}**
 Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is geared mainly for new users.
 {: .mb-7 }
 
