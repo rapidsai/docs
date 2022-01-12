@@ -22,19 +22,14 @@ Contains a configurator tool to help you choose between the various methods for 
 Handy PDF reference guide for handling GPU Data Frames (GDF) with cuDF.
 {: .mb-7 }
 
-### 10 Minutes to cuDF
-#### **[cuDF Post](/api/cudf/stable/10min.html){: target="_blank"}**
+### 10 Minutes to cuDF and Dask-cuDF
+#### **[cuDF Post](/api/cudf/stable/user_guide/10min.html){: target="_blank"}**
 Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is geared mainly for new users.
 {: .mb-7 }
 
-### Using RAPIDS + XGBoost4J-Spark
-#### **[Github Repo](https://github.com/rapidsai/spark-examples){: target="_blank"}**
-Getting started guide and source code for XGBoost4J-Spark, along with notebooks and examples.
-{: .mb-7 }
-
-### Multi-GPU with Dask-cuDF
-#### **[Dask-cuDF Post](/api/cudf/stable/dask-cudf.html){: target="_blank"}**
-Overview of using Dask for Multi-GPU cuDF solutions, on both a single machine or multiple GPUs across many machines in a cluster.
+### RAPIDS Spark Examples
+#### **[Github Repo](https://github.com/NVIDIA/spark-rapids-examples){: target="_blank"}**
+A repo for Spark related utilities and examples using the Rapids Accelerator, including ETL, ML/DL, etc.
 {: .mb-7 }
 
 ### Our Collection of Example NoteBooks
