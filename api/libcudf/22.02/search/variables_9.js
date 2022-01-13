@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['reserved_5fsize_3240',['reserved_size',['https://docs.rapids.ai/api/librmm/22.02/classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#aa7ca12862921fb184159b304b7afae4c',1,'rmm::mr::detail::arena::global_arena']]],
-  ['results_3241',['results',['../structcudf_1_1groupby_1_1aggregation__result.html#a1d0e11864ac37b44b2b19051fca616fe',1,'cudf::groupby::aggregation_result']]]
+  ['ptr_3257',['ptr',['https://docs.rapids.ai/api/librmm/22.02/structrmm_1_1mr_1_1detail_1_1block__base.html#a72c4e6db5cfe26694b7592b362ce3f9f',1,'rmm::mr::detail::block_base']]]
 ];

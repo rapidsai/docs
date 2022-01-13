@@ -3906,8 +3906,9 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>path</strong><span class="classifier">str</span></dt><dd><p>File path or Root Directory path. Will be used as Root Directory path
-while writing a partitioned dataset.</p>
+<dt><strong>path</strong><span class="classifier">str or list of str</span></dt><dd><p>File path or Root Directory path. Will be used as Root Directory path
+while writing a partitioned dataset. Use list of str with partition_offsets
+to write parts of the dataframe to different files.</p>
 </dd>
 <dt><strong>compression</strong><span class="classifier">{&lsquo;snappy&rsquo;, None}, default &lsquo;snappy&rsquo;</span></dt><dd><p>Name of the compression to use. Use <code class="docutils literal notranslate"><span class="pre">None</span></code> for no compression.</p>
 </dd>
@@ -3926,6 +3927,16 @@ will be written to different directories, but all files will
 have this name.  If nothing is specified, a random uuid4 hex string
 will be used for each file.</p>
 </dd>
+<dt><strong>partition_offsets</strong><span class="classifier">list, optional, default None</span></dt><dd><p>Offsets to partition the dataframe by. Should be used when path is list
+of str. Should be a list of integers of size <code class="docutils literal notranslate"><span class="pre">len(path)</span> <span class="pre">+</span> <span class="pre">1</span></code></p>
+</dd>
+<dt><strong>statistics</strong><span class="classifier">{&lsquo;ROWGROUP&rsquo;, &lsquo;PAGE&rsquo;, &lsquo;NONE&rsquo;}, default &lsquo;ROWGROUP&rsquo;</span></dt><dd><p>Level at which column statistics should be included in file.</p>
+</dd>
+<dt><strong>metadata_file_path</strong><span class="classifier">str, optional, default None</span></dt><dd><p>If specified, this function will return a binary blob containing the footer
+metadata of the written parquet file. The returned blob will have the
+<code class="docutils literal notranslate"><span class="pre">chunk.file_path</span></code> field set to the <code class="docutils literal notranslate"><span class="pre">metadata_file_path</span></code> for each chunk.
+When using with <code class="docutils literal notranslate"><span class="pre">partition_offsets</span></code>, should be same size as <code class="docutils literal notranslate"><span class="pre">len(path)</span></code></p>
+</dd>
 <dt><strong>int96_timestamps</strong><span class="classifier">bool, default False</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, write timestamps in int96 format. This will convert
 timestamps from timestamp[ns], timestamp[ms], timestamp[s], and
 timestamp[us] to the int96 format, which is the number of Julian
@@ -3937,6 +3948,9 @@ If None, 13369344 (128MB) will be used.</p>
 </dd>
 <dt><strong>row_group_size_rows: integer or None, default None</strong></dt><dd><p>Maximum number of rows of each stripe of the output.
 If None, 1000000 will be used.</p>
+</dd>
+<dt><strong>**kwargs</strong></dt><dd><p>To request metadata binary blob when using with <code class="docutils literal notranslate"><span class="pre">partition_cols</span></code>, Pass
+<code class="docutils literal notranslate"><span class="pre">return_metadata=True</span></code> instead of specifying <code class="docutils literal notranslate"><span class="pre">metadata_file_path</span></code></p>
 </dd>
 </dl>
 </dd>

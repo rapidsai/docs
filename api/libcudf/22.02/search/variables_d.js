@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['value_3249',['value',['../structcudf_1_1nullate_1_1DYNAMIC.html#a383e80d051b47e14a3e919cc45703798',1,'cudf::nullate::DYNAMIC']]],
-  ['values_3250',['values',['../structcudf_1_1groupby_1_1aggregation__request.html#abe1f7fdbefc846b52fc73e3ef7919d0c',1,'cudf::groupby::aggregation_request::values()'],['../structcudf_1_1groupby_1_1scan__request.html#a1954c5a8e5bf4e9e084c9af78977e1c6',1,'cudf::groupby::scan_request::values()']]]
+  ['unknown_5fstring_5flength_3264',['UNKNOWN_STRING_LENGTH',['../namespacecudf.html#a775815a70256b42cf85f3f2c19401b2e',1,'cudf']]],
+  ['user_5fdata_3265',['user_data',['../structcudf_1_1io_1_1table__metadata.html#aeb297cb3944fe8f8ca1950d985fe3f53',1,'cudf::io::table_metadata']]]
 ];
