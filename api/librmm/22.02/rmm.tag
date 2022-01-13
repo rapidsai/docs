@@ -106,15 +106,22 @@
       <type>void *</type>
       <name>allocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html</anchorfile>
-      <anchor>a3a9cf415216f0b50104b34572e72a0bf</anchor>
-      <arglist>(std::size_t bytes)</arglist>
+      <anchor>ad65c2e0f33737a49a14ff618ca6fa528</anchor>
+      <arglist>(std::size_t size)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
+      <type>bool</type>
       <name>deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html</anchorfile>
-      <anchor>a6801450ea2996802f129d6e248767637</anchor>
-      <arglist>(void *ptr, std::size_t bytes, cuda_stream_view stream)</arglist>
+      <anchor>ab1346c0e4056215e46dd1f669711ba2f</anchor>
+      <arglist>(void *ptr, std::size_t size, cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>deallocate</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html</anchorfile>
+      <anchor>a5237e7e1e736d0f6e470914187393d26</anchor>
+      <arglist>(void *ptr, std::size_t size)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -125,10 +132,10 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>dump_memory_log</name>
+      <name>defragment</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1arena.html</anchorfile>
-      <anchor>a0dc5be70b1664ebf34809594f6cab56f</anchor>
-      <arglist>(std::shared_ptr&lt; spdlog::logger &gt; const &amp;logger) const</arglist>
+      <anchor>af62bbb515fd810603d46852291bffa22</anchor>
+      <arglist>()</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -145,8 +152,8 @@
       <type></type>
       <name>arena_memory_resource</name>
       <anchorfile>classrmm_1_1mr_1_1arena__memory__resource.html</anchorfile>
-      <anchor>a09e1952158f170f47e1b42aa2dac9d6a</anchor>
-      <arglist>(Upstream *upstream_mr, std::size_t initial_size=global_arena::default_initial_size, std::size_t maximum_size=global_arena::default_maximum_size, bool dump_log_on_failure=false)</arglist>
+      <anchor>a3e398b8ae879b95ba1a78b346fa105c0</anchor>
+      <arglist>(Upstream *upstream_mr, std::optional&lt; std::size_t &gt; arena_size=std::nullopt, bool dump_log_on_failure=false)</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
@@ -225,54 +232,13 @@
   <compound kind="class">
     <name>rmm::mr::detail::arena::block</name>
     <filename>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>block</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>af0924fe6108bce7f2221b806a97a8450</anchor>
-      <arglist>()=default</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>block</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>a0772c988a344aeca7d5a3ff1c6ee9bca</anchor>
-      <arglist>(char *pointer, std::size_t size)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>block</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>a0c1694622727eb07b79089551ce6a8c7</anchor>
-      <arglist>(void *pointer, std::size_t size)</arglist>
-    </member>
-    <member kind="function">
-      <type>void *</type>
-      <name>pointer</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>afbdb96737c2f813bf758a762543214a9</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>std::size_t</type>
-      <name>size</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>a0b1b32a7a18fc0e142ba278826bf7125</anchor>
-      <arglist>() const</arglist>
-    </member>
+    <base>rmm::mr::detail::arena::byte_span</base>
     <member kind="function">
       <type>bool</type>
-      <name>is_valid</name>
+      <name>fits</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>abfaef96467aabf64f7fd82811f767646</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_superblock</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>ac45a0299e74e768af8a6adcf6ab5492c</anchor>
-      <arglist>() const</arglist>
+      <anchor>a5c5b223322005db7d414f0bfdba2551f</anchor>
+      <arglist>(std::size_t bytes) const</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
@@ -282,18 +248,11 @@
       <arglist>(block const &amp;blk) const</arglist>
     </member>
     <member kind="function">
-      <type>bool</type>
-      <name>fits</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>adcafdd2fac8a6563c050be44ac821366</anchor>
-      <arglist>(std::size_t size) const</arglist>
-    </member>
-    <member kind="function">
       <type>std::pair&lt; block, block &gt;</type>
       <name>split</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>a216ac711db427946cb0210d78f54f921</anchor>
-      <arglist>(std::size_t size) const</arglist>
+      <anchor>aac16b2414587cf7340b0eb2b66f6fdca</anchor>
+      <arglist>(std::size_t bytes) const</arglist>
     </member>
     <member kind="function">
       <type>block</type>
@@ -303,11 +262,18 @@
       <arglist>(block const &amp;blk) const</arglist>
     </member>
     <member kind="function">
-      <type>bool</type>
-      <name>operator&lt;</name>
+      <type></type>
+      <name>byte_span</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>a92b1c1e9e3259b775b98450af548cb3e</anchor>
-      <arglist>(block const &amp;blk) const</arglist>
+      <anchor>af3f67e8fbbb614924d8aa698b0fd1691</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>byte_span</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
+      <anchor>ad85c3457cbaf4613c42c780db9bd28e1</anchor>
+      <arglist>(void *pointer, std::size_t size)</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -394,6 +360,59 @@
       <anchorfile>structrmm_1_1mr_1_1detail_1_1block__base.html</anchorfile>
       <anchor>a72c4e6db5cfe26694b7592b362ce3f9f</anchor>
       <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>rmm::mr::detail::arena::byte_span</name>
+    <filename>classrmm_1_1mr_1_1detail_1_1arena_1_1byte__span.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>byte_span</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1byte__span.html</anchorfile>
+      <anchor>af3f67e8fbbb614924d8aa698b0fd1691</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>byte_span</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1byte__span.html</anchorfile>
+      <anchor>ad85c3457cbaf4613c42c780db9bd28e1</anchor>
+      <arglist>(void *pointer, std::size_t size)</arglist>
+    </member>
+    <member kind="function">
+      <type>char *</type>
+      <name>pointer</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1byte__span.html</anchorfile>
+      <anchor>a7ccf80e8a5e8afebefde91627fe0282e</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>std::size_t</type>
+      <name>size</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1byte__span.html</anchorfile>
+      <anchor>aecc991df54b1018c6681900f4a372cab</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>char *</type>
+      <name>end</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1byte__span.html</anchorfile>
+      <anchor>a6f0dfec99f4c6db1cc3f62098eed73e5</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>is_valid</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1byte__span.html</anchorfile>
+      <anchor>a0b39c4311a2a2cd0eec908b4e3778afe</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>operator&lt;</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1byte__span.html</anchorfile>
+      <anchor>a02eda99646752132369e671bdc92d09a</anchor>
+      <arglist>(byte_span const &amp;span) const</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -1685,8 +1704,8 @@
       <type></type>
       <name>global_arena</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
-      <anchor>a3adf37bcf129f2c4ea78384ffe8d3fe6</anchor>
-      <arglist>(Upstream *upstream_mr, std::size_t initial_size, std::size_t maximum_size)</arglist>
+      <anchor>a310cda339b94b65f737385e3b8aba976</anchor>
+      <arglist>(Upstream *upstream_mr, std::optional&lt; std::size_t &gt; arena_size)</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -1696,25 +1715,53 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>block</type>
+      <type>bool</type>
+      <name>handles</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
+      <anchor>aaa96059e3e8ce16586c27229cd4243cf</anchor>
+      <arglist>(std::size_t size) const</arglist>
+    </member>
+    <member kind="function">
+      <type>superblock</type>
+      <name>acquire</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
+      <anchor>a8b1e901d7c1fbaff649f18d14dab0f28</anchor>
+      <arglist>(std::size_t size)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>release</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
+      <anchor>a9be140e0b78e0625b297f5dc79c3a8b3</anchor>
+      <arglist>(superblock &amp;&amp;sblk)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>release</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
+      <anchor>abf2d3557e8a1966b05b6b9ff7335a504</anchor>
+      <arglist>(std::set&lt; superblock &gt; &amp;superblocks)</arglist>
+    </member>
+    <member kind="function">
+      <type>void *</type>
       <name>allocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
-      <anchor>a4daf92d526f65fd05478410ce0e8ba72</anchor>
-      <arglist>(std::size_t bytes)</arglist>
+      <anchor>a7d001d9da8a02a18227061b8f6ccaacb</anchor>
+      <arglist>(std::size_t size)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
+      <type>bool</type>
       <name>deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
-      <anchor>a9fbac37a802b3dc5b49caf9f9b602f9c</anchor>
-      <arglist>(block const &amp;blk)</arglist>
+      <anchor>a6422e1e307f30909ab7f23e6ca4bfaee</anchor>
+      <arglist>(void *ptr, std::size_t size, cuda_stream_view stream)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
+      <type>bool</type>
       <name>deallocate</name>
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
-      <anchor>a1927ecc632589a7ada324082e2d056da</anchor>
-      <arglist>(std::set&lt; block &gt; const &amp;free_blocks)</arglist>
+      <anchor>a36ab31c91fa7f6f329838b4c4c40b123</anchor>
+      <arglist>(void *ptr, std::size_t bytes)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -1722,27 +1769,6 @@
       <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
       <anchor>a40b2e0848aa2af6e8317f985ee3819c6</anchor>
       <arglist>(std::shared_ptr&lt; spdlog::logger &gt; const &amp;logger) const</arglist>
-    </member>
-    <member kind="variable" static="yes">
-      <type>static constexpr std::size_t</type>
-      <name>default_initial_size</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
-      <anchor>a21deaed7471c49faf3de1433ac6b4401</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" static="yes">
-      <type>static constexpr std::size_t</type>
-      <name>default_maximum_size</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
-      <anchor>a829283bd76a5e81912380a369bd4d6e5</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" static="yes">
-      <type>static constexpr std::size_t</type>
-      <name>reserved_size</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html</anchorfile>
-      <anchor>aa7ca12862921fb184159b304b7afae4c</anchor>
-      <arglist></arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -2372,6 +2398,116 @@
       <anchorfile>classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html</anchorfile>
       <anchor>a0b45555ae4ead99f9fc578cf05e1c82f</anchor>
       <arglist>(void *ptr, std::size_t size, cuda_stream_view stream) override</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>rmm::mr::detail::arena::superblock</name>
+    <filename>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</filename>
+    <base>rmm::mr::detail::arena::byte_span</base>
+    <member kind="function">
+      <type></type>
+      <name>superblock</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>a726e6385bbee8ae6fbee2b754457e3af</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>superblock</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>a8ea197d2d11c3756d31fe0bd3793169e</anchor>
+      <arglist>(void *pointer, std::size_t size)</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>empty</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>a13607a394c16e31c0d6e64fc4fde1a32</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>std::size_t</type>
+      <name>free_blocks</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>a69eb1f1b6ba688ed68c8ffc5ba701f02</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>contains</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>a66c134206808a456bf4adb9c8d0960c7</anchor>
+      <arglist>(block const &amp;blk) const</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>fits</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>aac9d73a1c95d883104400bb7f04dc12f</anchor>
+      <arglist>(std::size_t bytes) const</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>is_contiguous_before</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>a1585e6f315485a8780977869267e79f0</anchor>
+      <arglist>(superblock const &amp;sblk) const</arglist>
+    </member>
+    <member kind="function">
+      <type>std::pair&lt; superblock, superblock &gt;</type>
+      <name>split</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>afdcf390e824ace6527fad552fdab9469</anchor>
+      <arglist>(std::size_t bytes) const</arglist>
+    </member>
+    <member kind="function">
+      <type>superblock</type>
+      <name>merge</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>a011bb2dd81e98782defb82a7a0a005c1</anchor>
+      <arglist>(superblock const &amp;sblk) const</arglist>
+    </member>
+    <member kind="function">
+      <type>block</type>
+      <name>first_fit</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>a951c1423919ea2df0f090efb1728a9bc</anchor>
+      <arglist>(std::size_t size)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>coalesce</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>abc8f2a426d13a535c507fe45cbc64e51</anchor>
+      <arglist>(block const &amp;blk)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::size_t</type>
+      <name>total_free_size</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>a3be5a28aebf5f9f964af822cb703d0aa</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>std::size_t</type>
+      <name>max_free_size</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>a01cf0929b1f25190b3225d55e268e599</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr std::size_t</type>
+      <name>minimum_size</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>a0e108c13832fd80c06f310cd13ec62f8</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr std::size_t</type>
+      <name>maximum_size</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html</anchorfile>
+      <anchor>a7c771ecdb84087baa923722ea36b3aea</anchor>
+      <arglist></arglist>
     </member>
   </compound>
   <compound kind="class">
