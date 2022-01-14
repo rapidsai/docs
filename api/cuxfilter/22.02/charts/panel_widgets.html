@@ -652,7 +652,7 @@ if (window.Jupyter !== undefined) {
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}, 'shim': {}});
+      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
       
       require(["deck.gl"], function(deck) {
 	window.deck = deck
@@ -660,6 +660,10 @@ if (window.Jupyter !== undefined) {
       
       require(["mapbox-gl"], function(mapboxgl) {
 	window.mapboxgl = mapboxgl
+      })
+      
+      require(["gridstack"], function(GridStack) {
+	window.GridStack = GridStack
       })
       
     }
@@ -671,6 +675,12 @@ if (window.Jupyter !== undefined) {
     }
     if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }
+    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
@@ -709,12 +719,15 @@ if (window.Jupyter !== undefined) {
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
   var inline_js = [
     function(Bokeh) {
       inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
+    function(Bokeh) {
+      inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
     },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
@@ -1079,12 +1092,12 @@ if (window.Jupyter !== undefined) {
 
 
 
-  <div class="bk-root" data-root-id="1002" id="bec5b241-572a-4da4-940e-f3a6da11d04c"></div>
+  <div class="bk-root" data-root-id="1002" id="173d7297-e654-4df4-94b4-e71ba82a1cb5"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"faa78d40-8e57-4295-a269-0ff5696841cc":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"client_comm_id":"e5c2c3295f17460286460a1860be2904","comm_id":"8cb2c9b2249947ceb5de2c86480a7d44","plot_id":"1002"},"id":"1006","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1004"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00106","sizing_mode":"stretch_width"},"id":"1003","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1003"},{"id":"1005"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00107","sizing_mode":"stretch_both","width":400},"id":"1002","type":"panel.models.layout.Card"},{"attributes":{"reload":false},"id":"1007","type":"panel.models.location.Location"},{"attributes":{"end":4,"margin":[5,10,5,10],"start":0,"step":0.1,"value":[0,4]},"id":"1005","type":"RangeSlider"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML00108","sizing_mode":"stretch_width","text":"key_range_slider"},"id":"1004","type":"panel.models.markup.HTML"}],"root_ids":["1002","1006","1007"]},"title":"Bokeh Application","version":"2.3.3"}};
-    var render_items = [{"docid":"faa78d40-8e57-4295-a269-0ff5696841cc","root_ids":["1002"],"roots":{"1002":"bec5b241-572a-4da4-940e-f3a6da11d04c"}}];
+    var docs_json = {"d9bf4a54-ba2e-492b-8322-6852701dfe52":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1003"},{"id":"1005"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01561","sizing_mode":"scale_width","width":400},"id":"1002","type":"panel.models.layout.Card"},{"attributes":{"end":4,"margin":[5,10,5,10],"start":0,"step":0.1,"value":[0,4]},"id":"1005","type":"RangeSlider"},{"attributes":{"reload":false},"id":"1007","type":"panel.models.location.Location"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01562","sizing_mode":"stretch_width","text":"key_range_slider"},"id":"1004","type":"panel.models.markup.HTML"},{"attributes":{"children":[{"id":"1004"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01560","sizing_mode":"stretch_width"},"id":"1003","type":"Row"},{"attributes":{"client_comm_id":"c9c95a3cea5a48098e8b6cba83424e61","comm_id":"3e35b6841bea4958a07453c606a3842a","plot_id":"1002"},"id":"1006","type":"panel.models.comm_manager.CommManager"}],"root_ids":["1002","1006","1007"]},"title":"Bokeh Application","version":"2.3.3"}};
+    var render_items = [{"docid":"d9bf4a54-ba2e-492b-8322-6852701dfe52","root_ids":["1002"],"roots":{"1002":"173d7297-e654-4df4-94b4-e71ba82a1cb5"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -1225,7 +1238,7 @@ DateRangeSlider documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}, 'shim': {}});
+      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
       
       require(["deck.gl"], function(deck) {
 	window.deck = deck
@@ -1233,6 +1246,10 @@ DateRangeSlider documentation for more info</p>
       
       require(["mapbox-gl"], function(mapboxgl) {
 	window.mapboxgl = mapboxgl
+      })
+      
+      require(["gridstack"], function(GridStack) {
+	window.GridStack = GridStack
       })
       
     }
@@ -1244,6 +1261,12 @@ DateRangeSlider documentation for more info</p>
     }
     if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }
+    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
@@ -1282,12 +1305,15 @@ DateRangeSlider documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
   var inline_js = [
     function(Bokeh) {
       inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
+    function(Bokeh) {
+      inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
     },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
@@ -1652,12 +1678,12 @@ if (window.Jupyter !== undefined) {
 
 
 
-  <div class="bk-root" data-root-id="1008" id="9fada66f-8954-4d16-b53e-12cb9628c600"></div>
+  <div class="bk-root" data-root-id="1008" id="7b8d3732-07cd-49a7-87ec-b92114d07f21"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"f14ab67a-f022-4b98-9c5d-dac76cf0c7cf":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"children":[{"id":"1010"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00118","sizing_mode":"stretch_width"},"id":"1009","type":"Row"},{"attributes":{"client_comm_id":"8804841842484c048ca98b039063315b","comm_id":"d3ae9e4fc608462e857380ca111d6c4d","plot_id":"1008"},"id":"1012","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1009"},{"id":"1011"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00119","sizing_mode":"stretch_both","width":400},"id":"1008","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML00120","sizing_mode":"stretch_width","text":"time_date_range_slider"},"id":"1010","type":"panel.models.markup.HTML"},{"attributes":{"end":1582156800000.0,"margin":[5,10,5,10],"sizing_mode":"scale_width","start":1577836800000.0,"value":[1577836800000.0,1582156800000.0],"width":400},"id":"1011","type":"DateRangeSlider"}],"root_ids":["1008","1012"]},"title":"Bokeh Application","version":"2.3.3"}};
-    var render_items = [{"docid":"f14ab67a-f022-4b98-9c5d-dac76cf0c7cf","root_ids":["1008"],"roots":{"1008":"9fada66f-8954-4d16-b53e-12cb9628c600"}}];
+    var docs_json = {"0029ce33-2ace-45bf-9237-beafc25edc79":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"end":1582156800000.0,"margin":[5,10,5,10],"sizing_mode":"scale_width","start":1577836800000.0,"value":[1577836800000.0,1582156800000.0],"width":400},"id":"1011","type":"DateRangeSlider"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1009"},{"id":"1011"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01573","sizing_mode":"scale_width","width":400},"id":"1008","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01574","sizing_mode":"stretch_width","text":"time_date_range_slider"},"id":"1010","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"971a24c6c94848d3878e54694dc6be77","comm_id":"d2caa4f76c4a4bc8a8738b2a3a1f9e68","plot_id":"1008"},"id":"1012","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1010"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01572","sizing_mode":"stretch_width"},"id":"1009","type":"Row"}],"root_ids":["1008","1012"]},"title":"Bokeh Application","version":"2.3.3"}};
+    var render_items = [{"docid":"0029ce33-2ace-45bf-9237-beafc25edc79","root_ids":["1008"],"roots":{"1008":"7b8d3732-07cd-49a7-87ec-b92114d07f21"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -1796,7 +1822,7 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}, 'shim': {}});
+      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
       
       require(["deck.gl"], function(deck) {
 	window.deck = deck
@@ -1804,6 +1830,10 @@ documentation for more info</p>
       
       require(["mapbox-gl"], function(mapboxgl) {
 	window.mapboxgl = mapboxgl
+      })
+      
+      require(["gridstack"], function(GridStack) {
+	window.GridStack = GridStack
       })
       
     }
@@ -1815,6 +1845,12 @@ documentation for more info</p>
     }
     if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }
+    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
@@ -1853,12 +1889,15 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
   var inline_js = [
     function(Bokeh) {
       inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
+    function(Bokeh) {
+      inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
     },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
@@ -2223,12 +2262,12 @@ if (window.Jupyter !== undefined) {
 
 
 
-  <div class="bk-root" data-root-id="1013" id="1e24fcf6-add7-45b3-8a40-f1547e3af2b2"></div>
+  <div class="bk-root" data-root-id="1013" id="f25257d0-f67c-4367-8f0a-94093108040c"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"f17d41a6-d963-47ee-8fd8-85bf57085bc1":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML00131","sizing_mode":"stretch_width","text":"key_float_slider"},"id":"1015","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"fde21e0c70364e0db77ad68aea76c804","comm_id":"3f51cbc4866d4a788889c2c08997dfb7","plot_id":"1013"},"id":"1017","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1015"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00129","sizing_mode":"stretch_width"},"id":"1014","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1014"},{"id":"1016"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00130","sizing_mode":"stretch_both","width":400},"id":"1013","type":"panel.models.layout.Card"},{"attributes":{"end":2.0,"height":40,"margin":[5,10,5,10],"sizing_mode":"fixed","start":0.0,"step":0.5,"value":0.0,"width":400},"id":"1016","type":"Slider"}],"root_ids":["1013","1017"]},"title":"Bokeh Application","version":"2.3.3"}};
-    var render_items = [{"docid":"f17d41a6-d963-47ee-8fd8-85bf57085bc1","root_ids":["1013"],"roots":{"1013":"1e24fcf6-add7-45b3-8a40-f1547e3af2b2"}}];
+    var docs_json = {"86e0d654-f4aa-436f-901a-2682423fad14":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"end":2.0,"height":40,"margin":[5,10,5,10],"sizing_mode":"fixed","start":0.0,"step":0.5,"value":0.0,"width":400},"id":"1016","type":"Slider"},{"attributes":{"client_comm_id":"63f6c371ca8a47458e6b0a554ee06db6","comm_id":"f7b7872792004b8095026fd0a224ea74","plot_id":"1013"},"id":"1017","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01585","sizing_mode":"stretch_width","text":"key_float_slider"},"id":"1015","type":"panel.models.markup.HTML"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1014"},{"id":"1016"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01584","sizing_mode":"scale_width","width":400},"id":"1013","type":"panel.models.layout.Card"},{"attributes":{"children":[{"id":"1015"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01583","sizing_mode":"stretch_width"},"id":"1014","type":"Row"}],"root_ids":["1013","1017"]},"title":"Bokeh Application","version":"2.3.3"}};
+    var render_items = [{"docid":"86e0d654-f4aa-436f-901a-2682423fad14","root_ids":["1013"],"roots":{"1013":"f25257d0-f67c-4367-8f0a-94093108040c"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -2368,7 +2407,7 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}, 'shim': {}});
+      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
       
       require(["deck.gl"], function(deck) {
 	window.deck = deck
@@ -2376,6 +2415,10 @@ documentation for more info</p>
       
       require(["mapbox-gl"], function(mapboxgl) {
 	window.mapboxgl = mapboxgl
+      })
+      
+      require(["gridstack"], function(GridStack) {
+	window.GridStack = GridStack
       })
       
     }
@@ -2387,6 +2430,12 @@ documentation for more info</p>
     }
     if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }
+    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
@@ -2425,12 +2474,15 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
   var inline_js = [
     function(Bokeh) {
       inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
+    function(Bokeh) {
+      inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
     },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
@@ -2795,12 +2847,12 @@ if (window.Jupyter !== undefined) {
 
 
 
-  <div class="bk-root" data-root-id="1018" id="e517d4cf-27c5-4de1-8260-0d70be51a909"></div>
+  <div class="bk-root" data-root-id="1018" id="edcb8e8e-38dd-4743-8069-1c5e3a812984"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"09a20d0c-9629-46a5-9891-3061f9153aef":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"end":14,"height":40,"margin":[5,10,5,10],"sizing_mode":"fixed","start":10,"value":10,"width":400},"id":"1021","type":"Slider"},{"attributes":{"children":[{"id":"1020"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00140","sizing_mode":"stretch_width"},"id":"1019","type":"Row"},{"attributes":{"client_comm_id":"f9b14592fadb438f800be59c8a7c6e5b","comm_id":"ae2d93b314dc4d769f92545949fbe4c5","plot_id":"1018"},"id":"1022","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1019"},{"id":"1021"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00141","sizing_mode":"stretch_both","width":400},"id":"1018","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML00142","sizing_mode":"stretch_width","text":"val_int_slider"},"id":"1020","type":"panel.models.markup.HTML"}],"root_ids":["1018","1022"]},"title":"Bokeh Application","version":"2.3.3"}};
-    var render_items = [{"docid":"09a20d0c-9629-46a5-9891-3061f9153aef","root_ids":["1018"],"roots":{"1018":"e517d4cf-27c5-4de1-8260-0d70be51a909"}}];
+    var docs_json = {"40e84732-de22-4198-9da0-f60ecf907d58":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"client_comm_id":"27714ee5756c40898255e303b7b1f5e7","comm_id":"4051c9dfdb31411289fcc7ec2bce6499","plot_id":"1018"},"id":"1022","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01596","sizing_mode":"stretch_width","text":"val_int_slider"},"id":"1020","type":"panel.models.markup.HTML"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1019"},{"id":"1021"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01595","sizing_mode":"scale_width","width":400},"id":"1018","type":"panel.models.layout.Card"},{"attributes":{"end":14,"height":40,"margin":[5,10,5,10],"sizing_mode":"fixed","start":10,"value":10,"width":400},"id":"1021","type":"Slider"},{"attributes":{"children":[{"id":"1020"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01594","sizing_mode":"stretch_width"},"id":"1019","type":"Row"}],"root_ids":["1018","1022"]},"title":"Bokeh Application","version":"2.3.3"}};
+    var render_items = [{"docid":"40e84732-de22-4198-9da0-f60ecf907d58","root_ids":["1018"],"roots":{"1018":"edcb8e8e-38dd-4743-8069-1c5e3a812984"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -2937,7 +2989,7 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}, 'shim': {}});
+      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
       
       require(["deck.gl"], function(deck) {
 	window.deck = deck
@@ -2945,6 +2997,10 @@ documentation for more info</p>
       
       require(["mapbox-gl"], function(mapboxgl) {
 	window.mapboxgl = mapboxgl
+      })
+      
+      require(["gridstack"], function(GridStack) {
+	window.GridStack = GridStack
       })
       
     }
@@ -2956,6 +3012,12 @@ documentation for more info</p>
     }
     if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }
+    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
@@ -2994,12 +3056,15 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
   var inline_js = [
     function(Bokeh) {
       inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
+    function(Bokeh) {
+      inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
     },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
@@ -3364,12 +3429,12 @@ if (window.Jupyter !== undefined) {
 
 
 
-  <div class="bk-root" data-root-id="1023" id="824f5da6-9607-40b5-adcd-10c2b0db5da3"></div>
+  <div class="bk-root" data-root-id="1023" id="ad96721c-db12-46cb-b743-109c8e603118"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"2d82a963-f44a-4178-85b9-f09c6530e92e":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1024"},{"id":"1026"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00152","sizing_mode":"stretch_both","width":400},"id":"1023","type":"panel.models.layout.Card"},{"attributes":{"children":[{"id":"1025"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00151","sizing_mode":"stretch_width"},"id":"1024","type":"Row"},{"attributes":{"height":50,"margin":[5,10,5,10],"options":["10.0","11.0","12.0","13.0","14.0",""],"sizing_mode":"fixed","width":400},"id":"1026","type":"Select"},{"attributes":{"client_comm_id":"92cf53774c364e8da95ac5fdff9dd610","comm_id":"192e22ed2e1749369463658b50ebfa5a","plot_id":"1023"},"id":"1027","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML00153","sizing_mode":"stretch_width","text":"val_dropdown"},"id":"1025","type":"panel.models.markup.HTML"}],"root_ids":["1023","1027"]},"title":"Bokeh Application","version":"2.3.3"}};
-    var render_items = [{"docid":"2d82a963-f44a-4178-85b9-f09c6530e92e","root_ids":["1023"],"roots":{"1023":"824f5da6-9607-40b5-adcd-10c2b0db5da3"}}];
+    var docs_json = {"99001913-6a26-4969-9322-a0b0dd0468d5":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"children":[{"id":"1025"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01605","sizing_mode":"stretch_width"},"id":"1024","type":"Row"},{"attributes":{"height":50,"margin":[5,10,5,10],"options":["10.0","11.0","12.0","13.0","14.0",""],"sizing_mode":"fixed","width":400},"id":"1026","type":"Select"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1024"},{"id":"1026"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01606","sizing_mode":"scale_width","width":400},"id":"1023","type":"panel.models.layout.Card"},{"attributes":{"client_comm_id":"2d0b9cd45e5c40e78e0bee83b7c189c8","comm_id":"8f2e0c6faca1400f88ec55b78669a1c5","plot_id":"1023"},"id":"1027","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01607","sizing_mode":"stretch_width","text":"val_dropdown"},"id":"1025","type":"panel.models.markup.HTML"}],"root_ids":["1023","1027"]},"title":"Bokeh Application","version":"2.3.3"}};
+    var render_items = [{"docid":"99001913-6a26-4969-9322-a0b0dd0468d5","root_ids":["1023"],"roots":{"1023":"ad96721c-db12-46cb-b743-109c8e603118"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -3506,7 +3571,7 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}, 'shim': {}});
+      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
       
       require(["deck.gl"], function(deck) {
 	window.deck = deck
@@ -3514,6 +3579,10 @@ documentation for more info</p>
       
       require(["mapbox-gl"], function(mapboxgl) {
 	window.mapboxgl = mapboxgl
+      })
+      
+      require(["gridstack"], function(GridStack) {
+	window.GridStack = GridStack
       })
       
     }
@@ -3525,6 +3594,12 @@ documentation for more info</p>
     }
     if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }
+    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
@@ -3563,12 +3638,15 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
   var inline_js = [
     function(Bokeh) {
       inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
+    function(Bokeh) {
+      inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
     },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
@@ -3933,12 +4011,12 @@ if (window.Jupyter !== undefined) {
 
 
 
-  <div class="bk-root" data-root-id="1028" id="ed9433e3-92fc-4fdc-abfe-1e84220e37c0"></div>
+  <div class="bk-root" data-root-id="1028" id="90ea110c-445f-41dc-b885-c529b21aca00"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"703b56da-14ea-4619-9e10-77bb042b9f49":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"height":200,"margin":[5,10,5,10],"options":["10.0","11.0","12.0","13.0","14.0",""],"sizing_mode":"fixed","value":[""],"width":400},"id":"1031","type":"MultiSelect"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1029"},{"id":"1031"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00163","sizing_mode":"stretch_both","width":400},"id":"1028","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML00164","sizing_mode":"stretch_width","text":"val_multi_select"},"id":"1030","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"164f7e8235c148ee9dbd27f435caead8","comm_id":"43458a63285e47e185e15684b0d2897d","plot_id":"1028"},"id":"1032","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1030"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00162","sizing_mode":"stretch_width"},"id":"1029","type":"Row"}],"root_ids":["1028","1032"]},"title":"Bokeh Application","version":"2.3.3"}};
-    var render_items = [{"docid":"703b56da-14ea-4619-9e10-77bb042b9f49","root_ids":["1028"],"roots":{"1028":"ed9433e3-92fc-4fdc-abfe-1e84220e37c0"}}];
+    var docs_json = {"65b5a766-4c3b-4bab-8bd4-d54b9355d9a0":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"height":200,"margin":[5,10,5,10],"options":["10.0","11.0","12.0","13.0","14.0",""],"sizing_mode":"fixed","value":[""],"width":400},"id":"1031","type":"MultiSelect"},{"attributes":{"client_comm_id":"79cf442cc0174323ab21fabf5fa1b1e4","comm_id":"c1bc95afc2d74956861a37c2c0c91ae6","plot_id":"1028"},"id":"1032","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1029"},{"id":"1031"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01617","sizing_mode":"scale_width","width":400},"id":"1028","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01618","sizing_mode":"stretch_width","text":"val_multi_select"},"id":"1030","type":"panel.models.markup.HTML"},{"attributes":{"children":[{"id":"1030"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01616","sizing_mode":"stretch_width"},"id":"1029","type":"Row"}],"root_ids":["1028","1032"]},"title":"Bokeh Application","version":"2.3.3"}};
+    var render_items = [{"docid":"65b5a766-4c3b-4bab-8bd4-d54b9355d9a0","root_ids":["1028"],"roots":{"1028":"90ea110c-445f-41dc-b885-c529b21aca00"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -4090,7 +4168,7 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}, 'shim': {}});
+      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
       
       require(["deck.gl"], function(deck) {
 	window.deck = deck
@@ -4098,6 +4176,10 @@ documentation for more info</p>
       
       require(["mapbox-gl"], function(mapboxgl) {
 	window.mapboxgl = mapboxgl
+      })
+      
+      require(["gridstack"], function(GridStack) {
+	window.GridStack = GridStack
       })
       
     }
@@ -4109,6 +4191,12 @@ documentation for more info</p>
     }
     if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }
+    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
@@ -4147,12 +4235,15 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
   var inline_js = [
     function(Bokeh) {
       inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
+    function(Bokeh) {
+      inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
     },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
@@ -4517,12 +4608,12 @@ if (window.Jupyter !== undefined) {
 
 
 
-  <div class="bk-root" data-root-id="1033" id="245fd5af-fa99-4435-820a-ab398ebc6464"></div>
+  <div class="bk-root" data-root-id="1033" id="c887e48a-0e42-4acb-ae7e-96a3f869638a"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"d54e949f-90f2-49e4-b51e-5c64a0e1029d":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"css_classes":["indicator"],"margin":[5,10,5,10],"sizing_mode":"stretch_both","text":"&lt;div style=&quot;font-size: 18pt; color: black&quot;&gt;12%&lt;/div&gt;"},"id":"1036","type":"panel.models.markup.HTML"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML00175","sizing_mode":"stretch_width","text":"val"},"id":"1035","type":"panel.models.markup.HTML"},{"attributes":{"children":[{"id":"1035"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00173","sizing_mode":"stretch_width"},"id":"1034","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1034"},{"id":"1036"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00174","sizing_mode":"stretch_both"},"id":"1033","type":"panel.models.layout.Card"},{"attributes":{"client_comm_id":"e7c5b1ee59d34bb8ac27307e07649379","comm_id":"778a56d807314af2bc17aa4ae82f4c27","plot_id":"1033"},"id":"1037","type":"panel.models.comm_manager.CommManager"}],"root_ids":["1033","1037"]},"title":"Bokeh Application","version":"2.3.3"}};
-    var render_items = [{"docid":"d54e949f-90f2-49e4-b51e-5c64a0e1029d","root_ids":["1033"],"roots":{"1033":"245fd5af-fa99-4435-820a-ab398ebc6464"}}];
+    var docs_json = {"b3feb412-e2e1-4d9f-bab4-fff30bbc1b0b":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"children":[{"id":"1035"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01627","sizing_mode":"stretch_width"},"id":"1034","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1034"},{"id":"1036"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01628","sizing_mode":"scale_width"},"id":"1033","type":"panel.models.layout.Card"},{"attributes":{"client_comm_id":"23f6029db1384dd39e19ae519419072e","comm_id":"c0b04b4a8dbe492f91b5467cb82b7b5e","plot_id":"1033"},"id":"1037","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01629","sizing_mode":"stretch_width","text":"val"},"id":"1035","type":"panel.models.markup.HTML"},{"attributes":{"css_classes":["indicator"],"margin":[5,10,5,10],"sizing_mode":"stretch_both","text":"&lt;div style=&quot;font-size: 18pt; color: black&quot;&gt;12%&lt;/div&gt;"},"id":"1036","type":"panel.models.markup.HTML"}],"root_ids":["1033","1037"]},"title":"Bokeh Application","version":"2.3.3"}};
+    var render_items = [{"docid":"b3feb412-e2e1-4d9f-bab4-fff30bbc1b0b","root_ids":["1033"],"roots":{"1033":"c887e48a-0e42-4acb-ae7e-96a3f869638a"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -4639,7 +4730,7 @@ if (window.Jupyter !== undefined) {
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}, 'shim': {}});
+      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
       
       require(["deck.gl"], function(deck) {
 	window.deck = deck
@@ -4647,6 +4738,10 @@ if (window.Jupyter !== undefined) {
       
       require(["mapbox-gl"], function(mapboxgl) {
 	window.mapboxgl = mapboxgl
+      })
+      
+      require(["gridstack"], function(GridStack) {
+	window.GridStack = GridStack
       })
       
     }
@@ -4658,6 +4753,12 @@ if (window.Jupyter !== undefined) {
     }
     if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }
+    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
@@ -4696,12 +4797,15 @@ if (window.Jupyter !== undefined) {
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
   var inline_js = [
     function(Bokeh) {
       inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
+    function(Bokeh) {
+      inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
     },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
@@ -5066,12 +5170,12 @@ if (window.Jupyter !== undefined) {
 
 
 
-  <div class="bk-root" data-root-id="1038" id="c9ea877c-dab5-4271-8d27-5f2df35e839b"></div>
+  <div class="bk-root" data-root-id="1038" id="ab926812-5965-452d-9d63-e6d0e6b4b7cf"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"e041eb74-08e5-4b81-936b-d1c5bc116914":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML00186","sizing_mode":"stretch_width","text":"custom eval expr"},"id":"1040","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"eea83d8b3a5e4dbf884c210e1ae1629f","comm_id":"67c47e2fcc67476c9101fc2f80cf8986","plot_id":"1038"},"id":"1042","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1039"},{"id":"1041"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00185","sizing_mode":"stretch_both"},"id":"1038","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["indicator"],"margin":[5,10,5,10],"sizing_mode":"stretch_both","text":"&lt;div style=&quot;font-size: 20pt; color: black&quot;&gt;26,000&lt;/div&gt;"},"id":"1041","type":"panel.models.markup.HTML"},{"attributes":{"children":[{"id":"1040"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00184","sizing_mode":"stretch_width"},"id":"1039","type":"Row"}],"root_ids":["1038","1042"]},"title":"Bokeh Application","version":"2.3.3"}};
-    var render_items = [{"docid":"e041eb74-08e5-4b81-936b-d1c5bc116914","root_ids":["1038"],"roots":{"1038":"c9ea877c-dab5-4271-8d27-5f2df35e839b"}}];
+    var docs_json = {"8c8a971e-4011-41e3-87a5-224d25894f83":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01640","sizing_mode":"stretch_width","text":"custom eval expr"},"id":"1040","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"2450e473230048e0b6510f617d751d1e","comm_id":"57838e83df474ef6a4f5fffd6a64b509","plot_id":"1038"},"id":"1042","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1040"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01638","sizing_mode":"stretch_width"},"id":"1039","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1039"},{"id":"1041"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01639","sizing_mode":"scale_width"},"id":"1038","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["indicator"],"margin":[5,10,5,10],"sizing_mode":"stretch_both","text":"&lt;div style=&quot;font-size: 20pt; color: black&quot;&gt;26,000&lt;/div&gt;"},"id":"1041","type":"panel.models.markup.HTML"}],"root_ids":["1038","1042"]},"title":"Bokeh Application","version":"2.3.3"}};
+    var render_items = [{"docid":"8c8a971e-4011-41e3-87a5-224d25894f83","root_ids":["1038"],"roots":{"1038":"ab926812-5965-452d-9d63-e6d0e6b4b7cf"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
@@ -5222,7 +5326,7 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min'}, 'shim': {}});
+      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
       
       require(["deck.gl"], function(deck) {
 	window.deck = deck
@@ -5230,6 +5334,10 @@ documentation for more info</p>
       
       require(["mapbox-gl"], function(mapboxgl) {
 	window.mapboxgl = mapboxgl
+      })
+      
+      require(["gridstack"], function(GridStack) {
+	window.GridStack = GridStack
       })
       
     }
@@ -5241,6 +5349,12 @@ documentation for more info</p>
     }
     if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
       var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }
+    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
@@ -5279,12 +5393,15 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
+  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
+  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.1/dist/css/markdown.css"];
   var inline_js = [
     function(Bokeh) {
       inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\")\n    }\n    ");
+    },
+    function(Bokeh) {
+      inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
     },
     function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
@@ -5649,12 +5766,12 @@ if (window.Jupyter !== undefined) {
 
 
 
-  <div class="bk-root" data-root-id="1043" id="da1e8cfc-a3c1-4daa-be5a-606f8d9d9f8c"></div>
+  <div class="bk-root" data-root-id="1043" id="2c4e1648-8cd6-4259-bcfe-e688cd72629e"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"3dcbc645-ebd6-45bc-82ac-a001850de806":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"children":[{"id":"1045"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row00197","sizing_mode":"stretch_width"},"id":"1044","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1044"},{"id":"1046"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card00198","sizing_mode":"stretch_both"},"id":"1043","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["markdown"],"margin":[5,5,5,5],"name":"Markdown00190","text":"&lt;h1&gt;H1&lt;/h1&gt;\n&lt;h2&gt;H2&lt;/h2&gt;\n&lt;h3&gt;H3&lt;/h3&gt;\n&lt;h4&gt;H4&lt;/h4&gt;\n&lt;h5&gt;H5&lt;/h5&gt;\n&lt;h6&gt;H6&lt;/h6&gt;\n&lt;h3&gt;Emphasis&lt;/h3&gt;\n&lt;p&gt;Emphasis, aka italics, with &lt;em&gt;asterisks&lt;/em&gt; or &lt;em&gt;underscores&lt;/em&gt;.&lt;/p&gt;"},"id":"1046","type":"panel.models.markup.HTML"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML00199","sizing_mode":"stretch_width","text":"Test Markdown title"},"id":"1045","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"787646b815da4716ab49a1e66537b4c5","comm_id":"c7a28708813344b898addc6462d0f6ee","plot_id":"1043"},"id":"1047","type":"panel.models.comm_manager.CommManager"}],"root_ids":["1043","1047"]},"title":"Bokeh Application","version":"2.3.3"}};
-    var render_items = [{"docid":"3dcbc645-ebd6-45bc-82ac-a001850de806","root_ids":["1043"],"roots":{"1043":"da1e8cfc-a3c1-4daa-be5a-606f8d9d9f8c"}}];
+    var docs_json = {"dfffb2f7-5a9f-4bae-89e0-c132ed085d63":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01653","sizing_mode":"stretch_width","text":"Test Markdown title"},"id":"1045","type":"panel.models.markup.HTML"},{"attributes":{"children":[{"id":"1045"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01651","sizing_mode":"stretch_width"},"id":"1044","type":"Row"},{"attributes":{"css_classes":["markdown"],"margin":[5,5,5,5],"name":"Markdown01644","text":"&lt;h1&gt;H1&lt;/h1&gt;\n&lt;h2&gt;H2&lt;/h2&gt;\n&lt;h3&gt;H3&lt;/h3&gt;\n&lt;h4&gt;H4&lt;/h4&gt;\n&lt;h5&gt;H5&lt;/h5&gt;\n&lt;h6&gt;H6&lt;/h6&gt;\n&lt;h3&gt;Emphasis&lt;/h3&gt;\n&lt;p&gt;Emphasis, aka italics, with &lt;em&gt;asterisks&lt;/em&gt; or &lt;em&gt;underscores&lt;/em&gt;.&lt;/p&gt;"},"id":"1046","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"2d920eb6bb6d4cb8abfa0345b5104cbf","comm_id":"59f44ba1342a4690ab3dd133295c6886","plot_id":"1043"},"id":"1047","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1044"},{"id":"1046"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01652","sizing_mode":"scale_width"},"id":"1043","type":"panel.models.layout.Card"}],"root_ids":["1043","1047"]},"title":"Bokeh Application","version":"2.3.3"}};
+    var render_items = [{"docid":"dfffb2f7-5a9f-4bae-89e0-c132ed085d63","root_ids":["1043"],"roots":{"1043":"2c4e1648-8cd6-4259-bcfe-e688cd72629e"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
   }
   if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
