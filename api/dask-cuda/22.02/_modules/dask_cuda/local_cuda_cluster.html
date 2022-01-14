@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en"><head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>dask_cuda.local_cuda_cluster &mdash; dask-cuda 0+untagged.1.g172e449 documentation</title>
+  <title>dask_cuda.local_cuda_cluster &mdash; dask-cuda 0+untagged.1.g4fd5f64 documentation</title>
       <link href="../../_static/pygments.css" rel="stylesheet" type="text/css">
       <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css">
   <!--[if lt IE 9]>
@@ -197,6 +197,16 @@
 
 <span class="sd">        .. note::</span>
 <span class="sd">            This size is a per-worker configuration, and not cluster-wide.</span>
+<span class="sd">    rmm_maximum_pool_size : int, str or None, default None</span>
+<span class="sd">        When ``rmm_pool_size`` is set, this argument indicates</span>
+<span class="sd">        the maximum pool size.</span>
+<span class="sd">        Can be an integer (bytes), string (like ``"5GB"`` or ``"5000M"``) or ``None``.</span>
+<span class="sd">        By default, the total available memory on the GPU is used.</span>
+<span class="sd">        ``rmm_pool_size`` must be specified to use RMM pool and</span>
+<span class="sd">        to set the maximum pool size.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            This size is a per-worker configuration, and not cluster-wide.</span>
 <span class="sd">    rmm_managed_memory : bool, default False</span>
 <span class="sd">        Initialize each worker with RMM and set it to use managed memory. If disabled,</span>
 <span class="sd">        RMM may still be used by specifying ``rmm_pool_size``.</span>
@@ -274,6 +284,7 @@
         <span class="n">enable_rdmacm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">ucx_net_devices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">rmm_pool_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rmm_maximum_pool_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">rmm_managed_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">rmm_async</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">rmm_log_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -308,6 +319,7 @@
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">rmm_pool_size</span> <span class="o">=</span> <span class="n">rmm_pool_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rmm_maximum_pool_size</span> <span class="o">=</span> <span class="n">rmm_maximum_pool_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rmm_managed_memory</span> <span class="o">=</span> <span class="n">rmm_managed_memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rmm_async</span> <span class="o">=</span> <span class="n">rmm_async</span>
         <span class="k">if</span> <span class="n">rmm_pool_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">rmm_managed_memory</span><span class="p">:</span>
@@ -326,6 +338,8 @@
                 <span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rmm_pool_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">rmm_pool_size</span> <span class="o">=</span> <span class="n">parse_bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rmm_pool_size</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rmm_maximum_pool_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">rmm_maximum_pool_size</span> <span class="o">=</span> <span class="n">parse_bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rmm_maximum_pool_size</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">enable_nvlink</span><span class="p">:</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
@@ -475,6 +489,7 @@
                     <span class="p">),</span>
                     <span class="n">RMMSetup</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">rmm_pool_size</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">rmm_maximum_pool_size</span><span class="p">,</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">rmm_managed_memory</span><span class="p">,</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">rmm_async</span><span class="p">,</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">rmm_log_directory</span><span class="p">,</span>
