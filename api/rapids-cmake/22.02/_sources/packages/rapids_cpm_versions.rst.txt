@@ -53,14 +53,27 @@ as needed.
 ``git_shallow``
 
     An optional boolean value that represents if we should do a shallow git clone
-    or not. If no such field exists the default is `git_shallow : true`
+    or not.
+
+    If no such field exists the default is `false`.
+
+``exclude_from_all``
+
+    An optional boolean value that represents the CMake `EXCLUDE_FROM_ALL` property.
+    If this is set to `true`, and the project is built from source all targets of that
+    project will be excluded from the `ALL` build rule. This means that any target
+    that isn't used by the consuming project will not be compiled. This is useful
+    when a project generates multiple targets that aren't required and the cost
+    of building them isn't desired.
+
+    If no such field exists the default is `false`.
 
 ``always_download``
 
-    An optional boolean value that represents if we CPM should just download the
-    package ( `CPM_DOWNLOAD_ALL` ) instead of first searching for it on the machine. If no such field
-    exists the default is `false` for default packages, any package that has an override will default
-    to `true`.
+    An optional boolean value that represents if CPM should just download the
+    package ( `CPM_DOWNLOAD_ALL` ) instead of first searching for it on the machine.
+
+    If no such field exists the default is `false` for default packages, and `true` for any package that has an override.
 
 rapids-cmake package versions
 #############################
