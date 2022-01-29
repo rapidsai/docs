@@ -4,8 +4,8 @@ pipeline {
     stage("Build") {
       steps {
         sh "echo 'hello, world'"
-        sh "sleep 20s"
-        sh "exit 1"
+        sh "sleep 10s"
+        sh "exit 0"
       }
     }
   }
