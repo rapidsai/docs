@@ -40,5 +40,5 @@ var searchData=
   ['getsizeinbytes_1955',['getSizeInBytes',['../classML_1_1Tensor.html#a33ea4439d210be07e5b840e40346e5c8',1,'ML::Tensor']]],
   ['getstride_1956',['getStride',['../classML_1_1Tensor.html#ac6118b9747b43469d93d12f9188aa005',1,'ML::Tensor']]],
   ['getthresholdtype_1957',['GetThresholdType',['../classML_1_1Explainer_1_1TreePathInfo.html#a14bb83e33968dd0af6410ea508dfcaf1',1,'ML::Explainer::TreePathInfo']]],
-  ['gpu_5ftreeshap_1958',['gpu_treeshap',['../namespaceML_1_1Explainer.html#a97ecda581f330f58df92e56e60d2be00',1,'ML::Explainer']]]
+  ['gpu_5ftreeshap_1958',['gpu_treeshap',['../namespaceML_1_1Explainer.html#a6a1d10ed540b5dd1c9a69a2b1295da8b',1,'ML::Explainer']]]
 ];
