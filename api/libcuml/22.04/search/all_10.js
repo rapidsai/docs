@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['p_830',['p',['../structML_1_1ARIMAOrder.html#a1294c0c2729a50b5f44b21f1b2b63a02',1,'ML::ARIMAOrder::p()'],['../structML_1_1ARIMAOrder.html#a201baecf93423c247300bd2729c22fd2',1,'ML::ARIMAOrder::P()']]],
+  ['p_830',['P',['../structML_1_1ARIMAOrder.html#a201baecf93423c247300bd2729c22fd2',1,'ML::ARIMAOrder::P()'],['../structML_1_1ARIMAOrder.html#a1294c0c2729a50b5f44b21f1b2b63a02',1,'ML::ARIMAOrder::p()']]],
   ['p_5fbatches_831',['P_batches',['../structML_1_1ARIMAMemory.html#a5c7341326986dcac1accbe03af98ef81',1,'ML::ARIMAMemory']]],
   ['p_5fcrossover_832',['p_crossover',['../structcuml_1_1genetic_1_1param.html#a429a025dfbd7fe2bacdb03e3f0d1f99f',1,'cuml::genetic::param']]],
   ['p_5fdense_833',['P_dense',['../structML_1_1ARIMAMemory.html#a9b4f352692247319dca6c68131e4e387',1,'ML::ARIMAMemory']]],
@@ -71,7 +71,7 @@ var searchData=
   ['pcatransform_898',['pcaTransform',['../namespaceML.html#a9930aa036bcf52cf182f000ce355cdcd',1,'ML::pcaTransform(raft::handle_t &amp;handle, float *input, float *components, float *trans_input, float *singular_vals, float *mu, const paramsPCA &amp;prms)'],['../namespaceML.html#ac37aa9b10bb7445d9b3523dae260e681',1,'ML::pcaTransform(raft::handle_t &amp;handle, double *input, double *components, double *trans_input, double *singular_vals, double *mu, const paramsPCA &amp;prms)']]],
   ['pearson_899',['pearson',['../namespacecuml_1_1genetic.html#a76647c78ee5b868872dbbe108a2cf8a9abb0d62b4f0c05e6513f1feca8d6696c6',1,'cuml::genetic']]],
   ['penalized_5fintercept_900',['penalized_intercept',['../structML_1_1SVM_1_1LinearSVMParams.html#acda10b12917384c23db371f856f1e6b1',1,'ML::SVM::LinearSVMParams']]],
-  ['penalty_901',['penalty',['../structML_1_1SVM_1_1LinearSVMParams.html#a0d87a96d8a863dd1634d7a6cb7ad5ae9',1,'ML::SVM::LinearSVMParams::penalty()'],['../structML_1_1SVM_1_1LinearSVMParams.html#abbd6124e29e9f448836213e127d2324c',1,'ML::SVM::LinearSVMParams::Penalty()'],['../namespaceML.html#a899c5f26e201a81a2c12bb7eed9b015d',1,'ML::penalty()']]],
+  ['penalty_901',['Penalty',['../structML_1_1SVM_1_1LinearSVMParams.html#abbd6124e29e9f448836213e127d2324c',1,'ML::SVM::LinearSVMParams::Penalty()'],['../structML_1_1SVM_1_1LinearSVMParams.html#a0d87a96d8a863dd1634d7a6cb7ad5ae9',1,'ML::SVM::LinearSVMParams::penalty()'],['../namespaceML.html#a899c5f26e201a81a2c12bb7eed9b015d',1,'ML::penalty()']]],
   ['penalty_2ecuh_902',['penalty.cuh',['../penalty_8cuh.html',1,'']]],
   ['permutation_5fshap_2ecu_903',['permutation_shap.cu',['../permutation__shap_8cu.html',1,'']]],
   ['permutation_5fshap_2ehpp_904',['permutation_shap.hpp',['../permutation__shap_8hpp.html',1,'']]],

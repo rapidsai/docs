@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['node_1351',['node',['../structcuml_1_1genetic_1_1node.html',1,'cuml::genetic']]]
+  ['optimparams_1353',['OptimParams',['../structML_1_1OptimParams.html',1,'ML']]]
 ];

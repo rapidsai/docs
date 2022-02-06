@@ -12,8 +12,10 @@ var searchData=
   ['qnpredict_960',['qnPredict',['../group__qnPredict.html#gaed43e5761050b47e2bd34f8b38dbb4cd',1,'ML::GLM::qnPredict(const raft::handle_t &amp;cuml_handle, float *X, bool X_col_major, int N, int D, int C, bool fit_intercept, float *params, int loss_type, float *preds)'],['../group__qnPredict.html#ga9da4c0b0a7f01205746e56435dfda137',1,'ML::GLM::qnPredict(const raft::handle_t &amp;cuml_handle, double *X, bool X_col_major, int N, int D, int C, bool fit_intercept, double *params, int loss_type, double *preds)']]],
   ['qnpredictsparse_961',['qnPredictSparse',['../group__qnPredictSparse.html#ga488affded7fc365d08418e877ca3f81e',1,'ML::GLM::qnPredictSparse(const raft::handle_t &amp;cuml_handle, float *X_values, int *X_cols, int *X_row_ids, int X_nnz, int N, int D, int C, bool fit_intercept, float *params, int loss_type, float *preds)'],['../group__qnPredictSparse.html#ga12e10a5d100494f5325d0502e679bebf',1,'ML::GLM::qnPredictSparse(const raft::handle_t &amp;cuml_handle, double *X_values, int *X_cols, int *X_row_ids, int X_nnz, int N, int D, int C, bool fit_intercept, double *params, int loss_type, double *preds)']]],
   ['qr_962',['QR',['../namespaceML.html#a9a3879adb63715cec17550171436f6aba66c35cd8077f7e1db5faefbc048a646a',1,'ML']]],
-  ['quantiles_963',['quantiles',['../structML_1_1DT_1_1Input.html#ad2e02b8038ebf41ef797a6373bcf7437',1,'ML::DT::Input']]],
+  ['quantiles_963',['Quantiles',['../structML_1_1DT_1_1Quantiles.html',1,'ML::DT']]],
   ['quantiles_2ecu_964',['quantiles.cu',['../quantiles_8cu.html',1,'']]],
   ['quantiles_2ecuh_965',['quantiles.cuh',['../quantiles_8cuh.html',1,'']]],
-  ['queryvalue_966',['QueryValue',['../structSparseTreeNode.html#a25746e2b9e88e67344ea51edcbf9f5ed',1,'SparseTreeNode']]]
+  ['quantiles_2eh_966',['quantiles.h',['../quantiles_8h.html',1,'']]],
+  ['quantiles_5farray_967',['quantiles_array',['../structML_1_1DT_1_1Quantiles.html#a176557a609e0ebe0102d0ce5457d1122',1,'ML::DT::Quantiles']]],
+  ['queryvalue_968',['QueryValue',['../structSparseTreeNode.html#a25746e2b9e88e67344ea51edcbf9f5ed',1,'SparseTreeNode']]]
 ];
