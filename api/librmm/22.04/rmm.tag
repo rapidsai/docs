@@ -792,6 +792,13 @@
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
+      <type>std::int64_t</type>
+      <name>ssize</name>
+      <anchorfile>classrmm_1_1device__buffer.html</anchorfile>
+      <anchor>ad826d49e5662bedb6b0d0aa77a572adc</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
       <type>bool</type>
       <name>is_empty</name>
       <anchorfile>classrmm_1_1device__buffer.html</anchorfile>
@@ -1153,6 +1160,13 @@
       <name>size</name>
       <anchorfile>classrmm_1_1device__uvector.html</anchorfile>
       <anchor>a4d87b3421b2c9608115709351fa0b693</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>std::int64_t</type>
+      <name>ssize</name>
+      <anchorfile>classrmm_1_1device__uvector.html</anchorfile>
+      <anchor>a74b290c5a719459c9415cc4012671ffe</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">

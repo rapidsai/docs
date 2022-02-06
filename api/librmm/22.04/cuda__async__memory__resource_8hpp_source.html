@@ -56,7 +56,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&nbsp;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&nbsp;<span class="comment"> * Copyright (c) 2021, NVIDIA CORPORATION.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&nbsp;<span class="comment"> * Copyright (c) 2021-2022, NVIDIA CORPORATION.</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&nbsp;<span class="comment"> *</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&nbsp;<span class="comment"> * Licensed under the Apache License, Version 2.0 (the "License");</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&nbsp;<span class="comment"> * you may not use this file except in compliance with the License.</span></div>
@@ -186,17 +186,22 @@ $(function() {
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&nbsp; </div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&nbsp;  [[nodiscard]] <span class="keywordtype">bool</span> do_is_equal(device_memory_resource <span class="keyword">const</span>&amp; other) <span class="keyword">const</span> noexcept <span class="keyword">override</span></div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&nbsp;  {</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&nbsp;    <span class="keywordflow">return</span> <span class="keyword">dynamic_cast&lt;</span><a class="code" href="classrmm_1_1mr_1_1cuda__async__memory__resource.html#afc896f1fbf993cd68918a3c4779421f2">cuda_async_memory_resource</a> const*<span class="keyword">&gt;</span>(&amp;other) != <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&nbsp;  }</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&nbsp; </div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&nbsp;  [[nodiscard]] std::pair&lt;std::size_t, std::size_t&gt; do_get_mem_info(</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&nbsp;    <a class="code" href="classrmm_1_1cuda__stream__view.html">rmm::cuda_stream_view</a>)<span class="keyword"> const override</span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&nbsp;<span class="keyword">  </span>{</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&nbsp;    <span class="keywordflow">return</span> std::make_pair(0, 0);</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&nbsp;  }</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&nbsp;};</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&nbsp; </div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&nbsp;}  <span class="comment">// namespace rmm::mr</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span>* async_mr = <span class="keyword">dynamic_cast&lt;</span><a class="code" href="classrmm_1_1mr_1_1cuda__async__memory__resource.html#afc896f1fbf993cd68918a3c4779421f2">cuda_async_memory_resource</a> const*<span class="keyword">&gt;</span>(&amp;other);</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&nbsp;<span class="preprocessor">#ifdef RMM_CUDA_MALLOC_ASYNC_SUPPORT</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&nbsp;    <span class="keywordflow">return</span> (async_mr != <span class="keyword">nullptr</span>) &amp;&amp; (this-&gt;pool_handle() == async_mr-&gt;pool_handle());</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&nbsp;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&nbsp;    <span class="keywordflow">return</span> async_mr != <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&nbsp;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&nbsp;  }</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&nbsp; </div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&nbsp;  [[nodiscard]] std::pair&lt;std::size_t, std::size_t&gt; do_get_mem_info(</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&nbsp;    <a class="code" href="classrmm_1_1cuda__stream__view.html">rmm::cuda_stream_view</a>)<span class="keyword"> const override</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&nbsp;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&nbsp;    <span class="keywordflow">return</span> std::make_pair(0, 0);</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&nbsp;  }</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&nbsp;};</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&nbsp; </div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&nbsp;}  <span class="comment">// namespace rmm::mr</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassrmm_1_1mr_1_1cuda__async__memory__resource_html"><div class="ttname"><a href="classrmm_1_1mr_1_1cuda__async__memory__resource.html">rmm::mr::cuda_async_memory_resource</a></div><div class="ttdoc">device_memory_resource derived class that uses cudaMallocAsync/cudaFreeAsync for allocation/deallocat...</div><div class="ttdef"><b>Definition:</b> cuda_async_memory_resource.hpp:43</div></div>
 <div class="ttc" id="aclassrmm_1_1cuda__stream__view_html"><div class="ttname"><a href="classrmm_1_1cuda__stream__view.html">rmm::cuda_stream_view</a></div><div class="ttdoc">Strongly-typed non-owning wrapper for CUDA streams with default constructor.</div><div class="ttdef"><b>Definition:</b> cuda_stream_view.hpp:34</div></div>
