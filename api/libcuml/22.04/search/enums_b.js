@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['task_5fcategory_2541',['task_category',['../namespaceML.html#af60801cb5c9adac3f6f5bd4bd43aa2f7',1,'ML']]],
-  ['thresholdtypeenum_2542',['ThresholdTypeEnum',['../classML_1_1Explainer_1_1TreePathInfo.html#ae6e0baae73a863631eb4e005bc9330ef',1,'ML::Explainer::TreePathInfo']]],
-  ['transformer_5ft_2543',['transformer_t',['../namespacecuml_1_1genetic.html#a983fa2445e848becbdd431eda7b45c94',1,'cuml::genetic']]],
-  ['tsne_5falgorithm_2544',['TSNE_ALGORITHM',['../namespaceML.html#aacbc7e98d26a8d5e8b51055651d423e2',1,'ML']]],
-  ['type_2545',['type',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77',1,'cuml::genetic::node']]]
+  ['seasonaltype_2553',['SeasonalType',['../namespaceML.html#a8d55de18185e36dd8f8a6d735e6a91e6',1,'ML']]],
+  ['solver_2554',['solver',['../namespaceML.html#a7324898185a2fc9a9145f9bad555049b',1,'ML']]],
+  ['storage_5forder_2555',['STORAGE_ORDER',['../namespaceML.html#ad2244eba7d9251930ae2519d556f18ea',1,'ML']]],
+  ['storage_5ftype_5ft_2556',['storage_type_t',['../namespaceML_1_1fil.html#a2260584f7152bb5497b528729b6bd216',1,'ML::fil']]],
+  ['svmtype_2557',['SvmType',['../namespaceML_1_1SVM.html#a94b5c3bf8c9646f2443ebc5bb7433e00',1,'ML::SVM']]]
 ];

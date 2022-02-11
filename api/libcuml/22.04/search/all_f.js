@@ -19,7 +19,7 @@ var searchData=
   ['optim_5fmin_5ferror_5fdiff_818',['OPTIM_MIN_ERROR_DIFF',['../namespaceML.html#a85e691126b37f5e1dc834841cad1479ca01a4b4daad43785b0587346034b10ef5',1,'ML']]],
   ['optim_5fmin_5fgrad_5fnorm_819',['OPTIM_MIN_GRAD_NORM',['../namespaceML.html#a85e691126b37f5e1dc834841cad1479ca6c4ee736abd198cfc853b82b1e3a1fcc',1,'ML']]],
   ['optim_5fmin_5fparam_5fdiff_820',['OPTIM_MIN_PARAM_DIFF',['../namespaceML.html#a85e691126b37f5e1dc834841cad1479ca80e3d3c81590a148d565b7ddb78ef590',1,'ML']]],
-  ['optimal_821',['optimal',['../namespaceML_1_1Solver.html#aaa9be19819040d2acf6491379f3ee906',1,'ML::Solver::optimal()'],['../namespaceML.html#a1adf3fea9cf9cde96ecf353b43818079a5ccc94f0f9ce653134966e2377c71ca1',1,'ML::OPTIMAL()']]],
+  ['optimal_821',['OPTIMAL',['../namespaceML.html#a1adf3fea9cf9cde96ecf353b43818079a5ccc94f0f9ce653134966e2377c71ca1',1,'ML::OPTIMAL()'],['../namespaceML_1_1Solver.html#aaa9be19819040d2acf6491379f3ee906',1,'ML::Solver::optimal()']]],
   ['optimcriterion_822',['OptimCriterion',['../namespaceML.html#a85e691126b37f5e1dc834841cad1479c',1,'ML']]],
   ['optimize_2ecuh_823',['optimize.cuh',['../optimize_8cuh.html',1,'']]],
   ['optimize_5fbatch_5fkernel_2ecuh_824',['optimize_batch_kernel.cuh',['../optimize__batch__kernel_8cuh.html',1,'']]],

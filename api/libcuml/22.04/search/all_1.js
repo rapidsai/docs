@@ -51,7 +51,7 @@ var searchData=
   ['assign_5fgemm_57',['assign_gemm',['../structML_1_1SimpleDenseMat.html#a34cb8005a18dbf9d69ae43354cb7606f',1,'ML::SimpleDenseMat']]],
   ['assign_5fgemv_58',['assign_gemv',['../structML_1_1SimpleVec.html#aa338c87d5f530e9b19c886fab2626729',1,'ML::SimpleVec']]],
   ['assign_5fternary_59',['assign_ternary',['../structML_1_1SimpleDenseMat.html#ab94727777e38496c2a3b3b5519a244a8',1,'ML::SimpleDenseMat']]],
-  ['assign_5funary_60',['assign_unary',['../structML_1_1SimpleDenseMat.html#a90b8b30dbd76c689f29b03d7415a1cbb',1,'ML::SimpleDenseMat']]],
+  ['assign_5funary_60',['assign_unary',['../structML_1_1SimpleDenseMat.html#a571757d677df3f432bd05980b83fc036',1,'ML::SimpleDenseMat']]],
   ['atan_61',['atan',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77a6d86bcdc87773d8bb8527c65ed349b97',1,'cuml::genetic::node']]],
   ['atan2_62',['atan2',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77acf36371cf609a42d24265c46488c3e6d',1,'cuml::genetic::node']]],
   ['atanh_63',['atanh',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77a03d734a4901930676367606890a5db51',1,'cuml::genetic::node']]],

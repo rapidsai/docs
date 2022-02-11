@@ -65,7 +65,7 @@ var searchData=
   ['glm_5fsvm_2ecuh_441',['glm_svm.cuh',['../glm__svm_8cuh.html',1,'']]],
   ['gpu_5fid_442',['gpu_id',['../classML_1_1params.html#a05cb72c607b73ea5ef7afafd0d997487',1,'ML::params']]],
   ['gpu_5ftreeshap_443',['gpu_treeshap',['../namespaceML_1_1Explainer.html#a6a1d10ed540b5dd1c9a69a2b1295da8b',1,'ML::Explainer']]],
-  ['grad_5ftol_444',['grad_tol',['../structML_1_1SVM_1_1LinearSVMParams.html#ad174cca47c98115ce5f6205c61e04008',1,'ML::SVM::LinearSVMParams']]],
+  ['grad_5ftol_444',['grad_tol',['../structqn__params.html#a6d610b5fd232d2e9afb402ef9ed5e399',1,'qn_params::grad_tol()'],['../structML_1_1SVM_1_1LinearSVMParams.html#ad174cca47c98115ce5f6205c61e04008',1,'ML::SVM::LinearSVMParams::grad_tol()']]],
   ['grammatrix_2ecuh_445',['grammatrix.cuh',['../grammatrix_8cuh.html',1,'']]],
   ['graphbaseddimredcallback_446',['GraphBasedDimRedCallback',['../classML_1_1Internals_1_1GraphBasedDimRedCallback.html',1,'ML::Internals']]],
   ['grid_5fsync_2ecuh_447',['grid_sync.cuh',['../grid__sync_8cuh.html',1,'']]],
