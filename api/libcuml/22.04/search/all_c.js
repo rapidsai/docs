@@ -50,6 +50,5 @@ var searchData=
   ['loss_622',['Loss',['../structML_1_1SVM_1_1LinearSVMParams.html#a11db6515f9c42dc07033fe9f1e717c50',1,'ML::SVM::LinearSVMParams::Loss()'],['../structqn__params.html#ab1457cfa2cb058bce22f52767685fa77',1,'qn_params::loss()'],['../structML_1_1SVM_1_1LinearSVMParams.html#ae0f2abf9c59e6657bb9ef5cfdd651f6c',1,'ML::SVM::LinearSVMParams::loss()']]],
   ['loss_5ffunct_623',['loss_funct',['../namespaceML.html#a67da49ce109878bcdbb29a8777d28de1',1,'ML']]],
   ['low_5fmemory_624',['low_memory',['../structcuml_1_1genetic_1_1param.html#a279df0738686eb824014136d805f49b4',1,'cuml::genetic::param']]],
-  ['lr_5ftype_625',['lr_type',['../namespaceML.html#a1adf3fea9cf9cde96ecf353b43818079',1,'ML']]],
-  ['lstsq_2ecuh_626',['lstsq.cuh',['../lstsq_8cuh.html',1,'']]]
+  ['lr_5ftype_625',['lr_type',['../namespaceML.html#a1adf3fea9cf9cde96ecf353b43818079',1,'ML']]]
 ];
