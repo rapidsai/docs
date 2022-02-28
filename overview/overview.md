@@ -8,7 +8,7 @@ permalink: overview
 # Release Overview
 {: .no_toc}
 
-We strive to release an update to the RAPIDS data science framework about every 2 months. Much can change between releases, so we like to consolidate the latest overview of our libraries, benchmarks, and updates in a release deck. Find the latest version below in both .pdf and .pptx format. 
+We strive to release an update to the RAPIDS data science framework every 2 months. Much can change between releases, so we like to consolidate the latest overview of our libraries, benchmarks, and updates in a release deck. Find the latest version below in both .pdf and .pptx format. 
 {: .fs-6 .fw-300 }
 
 ## Latest Version
