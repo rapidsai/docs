@@ -8,14 +8,14 @@ permalink: overview
 # Release Overview
 {: .no_toc}
 
-We strive to release an update to the RAPIDS data science framework about every 6 weeks. Much can change between releases, so we like to consolidate the latest overview of our libraries, benchmarks, and updates in a release deck. Find the latest version below in both .pdf and .pptx format. 
+We strive to release an update to the RAPIDS data science framework about every 2 months. Much can change between releases, so we like to consolidate the latest overview of our libraries, benchmarks, and updates in a release deck. Find the latest version below in both .pdf and .pptx format. 
 {: .fs-6 .fw-300 }
 
 ## Latest Version
 
 Download the latest version of the RAPIDS release deck.
 
-### v21.12 Release | Dec 2021
+### v22.02 Release | Feb 2022
 
 #### Download **[pdf](/overview/latest.pdf){: target="_blank"}** | **[pptx](/overview/latest.pptx){: target="_blank"}**
 {: .mb-10 .mt-0 }
@@ -25,6 +25,11 @@ Download the latest version of the RAPIDS release deck.
 
 Download current and previous versions of the RAPIDS release decks.
 {: .mt-0 }
+
+### v22.02 Release | Feb 2022
+
+#### Download **[pdf](/overview/RAPIDS 22.02 Release Deck.pdf){: target="_blank"}** | **[pptx](/overview/RAPIDS 22.02 Release Deck.pptx){: target="_blank"}** 
+{: .mb-7 .mt-0 }
 
 ### v21.12 Release | Dec 2021
 
