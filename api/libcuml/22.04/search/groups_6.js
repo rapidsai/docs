@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['to_20make_20predictions_20with_20a_20fitted_20ordinary_20least_20squares_20and_20ridge_2668',['to make predictions with a fitted ordinary least squares and ridge',['../group__glmPredict.html',1,'']]],
-  ['training_20methods_2669',['Training methods',['../group__HoltWinterFit.html',1,'']]]
+  ['to_20make_20predictions_20with_20a_20fitted_20ordinary_20least_20squares_20and_20ridge_2626',['to make predictions with a fitted ordinary least squares and ridge',['../group__glmPredict.html',1,'']]],
+  ['training_20methods_2627',['Training methods',['../group__HoltWinterFit.html',1,'']]]
 ];
