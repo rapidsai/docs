@@ -496,6 +496,13 @@
       <anchor>a403025ec8d405306db6c7ad0119a4627</anchor>
       <arglist>() const noexcept override</arglist>
     </member>
+    <member kind="function" static="yes">
+      <type>static bool</type>
+      <name>is_supported</name>
+      <anchorfile>classrmm_1_1mr_1_1cuda__async__memory__resource.html</anchorfile>
+      <anchor>a616995f9ba4d31a74298b991dc07e050</anchor>
+      <arglist>()</arglist>
+    </member>
   </compound>
   <compound kind="struct">
     <name>rmm::cuda_device_id</name>
