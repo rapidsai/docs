@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['remove_2972',['Remove',['../type__list__utilities_8hpp.html#ab683474c55cb56d598697943276ba52b',1,'cudf::test']]],
-  ['removeif_2973',['RemoveIf',['../type__list__utilities_8hpp.html#a981ba33d768a131f2aa1b74f94d533f9',1,'cudf::test']]]
+  ['no_5fstatistics_3348',['no_statistics',['../namespacecudf_1_1io.html#a9f776ed5167dffd65625471a7bdb3996',1,'cudf::io']]],
+  ['numerictypes_3349',['NumericTypes',['../type__lists_8hpp.html#a82034b5f07ef26a398b8b60a31416798',1,'cudf::test']]]
 ];

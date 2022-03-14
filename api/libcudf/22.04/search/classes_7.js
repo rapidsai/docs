@@ -1,14 +1,15 @@
 var searchData=
 [
-  ['has_5fatomic_5fsupport_5fimpl_1731',['has_atomic_support_impl',['../structcudf_1_1has__atomic__support__impl.html',1,'cudf']]],
-  ['has_5fcommon_5ftype_5fimpl_1732',['has_common_type_impl',['../structcudf_1_1detail_1_1has__common__type__impl.html',1,'cudf::detail']]],
-  ['has_5fcommon_5ftype_5fimpl_3c_20void_5ft_3c_20std_3a_3acommon_5ftype_5ft_3c_20ts_2e_2e_2e_20_3e_20_3e_2c_20ts_2e_2e_2e_20_3e_1733',['has_common_type_impl&lt; void_t&lt; std::common_type_t&lt; Ts... &gt; &gt;, Ts... &gt;',['../structcudf_1_1detail_1_1has__common__type__impl_3_01void__t_3_01std_1_1common__type__t_3_01Ts_8_f443150c65c84270c66c280b59a30b84.html',1,'cudf::detail']]],
-  ['has_5felement_5faccessor_5fimpl_1734',['has_element_accessor_impl',['../structcudf_1_1detail_1_1column__device__view__base_1_1has__element__accessor__impl.html',1,'cudf::detail::column_device_view_base']]],
-  ['has_5felement_5faccessor_5fimpl_3c_20c_2c_20t_2c_20void_5ft_3c_20decltype_28std_3a_3adeclval_3c_20c_20_3e_28_29_2etemplate_20element_3c_20t_20_3e_28std_3a_3adeclval_3c_20size_5ftype_20_3e_28_29_29_29_3e_20_3e_1735',['has_element_accessor_impl&lt; C, T, void_t&lt; decltype(std::declval&lt; C &gt;().template element&lt; T &gt;(std::declval&lt; size_type &gt;()))&gt; &gt;',['../structcudf_1_1detail_1_1column__device__view__base_1_1has__element__accessor__impl_3_01C_00_01T_8cabacf7e39f50703218e273f298f71c.html',1,'cudf::detail::column_device_view_base']]],
-  ['hash_5fjoin_1736',['hash_join',['../classcudf_1_1hash__join.html',1,'cudf']]],
-  ['hashed_5fvocabulary_1737',['hashed_vocabulary',['../structnvtext_1_1hashed__vocabulary.html',1,'nvtext']]],
-  ['helpgroupdetails_1738',['HelpGroupDetails',['../structcxxopts_1_1HelpGroupDetails.html',1,'cxxopts']]],
-  ['helpoptiondetails_1739',['HelpOptionDetails',['../structcxxopts_1_1HelpOptionDetails.html',1,'cxxopts']]],
-  ['host_5fbuffer_1740',['host_buffer',['../structcudf_1_1io_1_1host__buffer.html',1,'cudf::io']]],
-  ['host_5fspan_1741',['host_span',['../structcudf_1_1host__span.html',1,'cudf']]]
+  ['has_5fatomic_5fsupport_5fimpl_1945',['has_atomic_support_impl',['../structcudf_1_1has__atomic__support__impl.html',1,'cudf']]],
+  ['has_5fcommon_5ftype_5fimpl_1946',['has_common_type_impl',['../structcudf_1_1detail_1_1has__common__type__impl.html',1,'cudf::detail']]],
+  ['has_5fcommon_5ftype_5fimpl_3c_20void_5ft_3c_20std_3a_3acommon_5ftype_5ft_3c_20ts_2e_2e_2e_20_3e_20_3e_2c_20ts_2e_2e_2e_20_3e_1947',['has_common_type_impl&lt; void_t&lt; std::common_type_t&lt; Ts... &gt; &gt;, Ts... &gt;',['../structcudf_1_1detail_1_1has__common__type__impl_3_01void__t_3_01std_1_1common__type__t_3_01Ts_8_f443150c65c84270c66c280b59a30b84.html',1,'cudf::detail']]],
+  ['has_5felement_5faccessor_5fimpl_1948',['has_element_accessor_impl',['../structcudf_1_1detail_1_1column__device__view__base_1_1has__element__accessor__impl.html',1,'cudf::detail::column_device_view_base']]],
+  ['has_5felement_5faccessor_5fimpl_3c_20c_2c_20t_2c_20void_5ft_3c_20decltype_28std_3a_3adeclval_3c_20c_20_3e_28_29_2etemplate_20element_3c_20t_20_3e_28std_3a_3adeclval_3c_20size_5ftype_20_3e_28_29_29_29_3e_20_3e_1949',['has_element_accessor_impl&lt; C, T, void_t&lt; decltype(std::declval&lt; C &gt;().template element&lt; T &gt;(std::declval&lt; size_type &gt;()))&gt; &gt;',['../structcudf_1_1detail_1_1column__device__view__base_1_1has__element__accessor__impl_3_01C_00_01T_8cabacf7e39f50703218e273f298f71c.html',1,'cudf::detail::column_device_view_base']]],
+  ['hash_5fjoin_1950',['hash_join',['../classcudf_1_1hash__join.html',1,'cudf']]],
+  ['hashed_5fvocabulary_1951',['hashed_vocabulary',['../structnvtext_1_1hashed__vocabulary.html',1,'nvtext']]],
+  ['helpgroupdetails_1952',['HelpGroupDetails',['../structcxxopts_1_1HelpGroupDetails.html',1,'cxxopts']]],
+  ['helpoptiondetails_1953',['HelpOptionDetails',['../structcxxopts_1_1HelpOptionDetails.html',1,'cxxopts']]],
+  ['host_5fbuffer_1954',['host_buffer',['../structcudf_1_1io_1_1host__buffer.html',1,'cudf::io']]],
+  ['host_5fmemory_5fresource_1955',['host_memory_resource',['https://docs.rapids.ai/api/librmm/22.04/classrmm_1_1mr_1_1host__memory__resource.html',1,'rmm::mr']]],
+  ['host_5fspan_1956',['host_span',['../structcudf_1_1host__span.html',1,'cudf']]]
 ];

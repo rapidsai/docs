@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['unknown_5fstring_5flength_2930',['UNKNOWN_STRING_LENGTH',['../namespacecudf.html#a775815a70256b42cf85f3f2c19401b2e',1,'cudf']]],
-  ['user_5fdata_2931',['user_data',['../structcudf_1_1io_1_1table__metadata.html#aeb297cb3944fe8f8ca1950d985fe3f53',1,'cudf::io::table_metadata']]]
+  ['schema_5finfo_3302',['schema_info',['../structcudf_1_1io_1_1table__metadata.html#aca88d41ea923a24e060dbd4165d7bccb',1,'cudf::io::table_metadata']]],
+  ['sequence_5flength_3303',['sequence_length',['../structnvtext_1_1tokenizer__result.html#a09a5e713c18852fde26b0eeec2632c78',1,'nvtext::tokenizer_result']]]
 ];
