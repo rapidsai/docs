@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en"><head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>dask_cuda.initialize &mdash; dask-cuda 0+untagged.1.g48c4929 documentation</title>
+  <title>dask_cuda.initialize &mdash; dask-cuda 0+untagged.1.g0bed313 documentation</title>
       <link href="../../_static/pygments.css" rel="stylesheet" type="text/css">
       <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css">
   <!--[if lt IE 9]>
@@ -151,8 +151,6 @@
     <span class="n">enable_infiniband</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">enable_nvlink</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">enable_rdmacm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">net_devices</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
-    <span class="n">cuda_device_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">"""Create CUDA context and initialize UCX-Py, depending on user parameters.</span>
 
@@ -197,28 +195,12 @@
 <span class="sd">    enable_rdmacm : bool, default None</span>
 <span class="sd">        Set environment variables to enable UCX RDMA connection manager support,</span>
 <span class="sd">        requires ``enable_infiniband=True``.</span>
-<span class="sd">    net_devices : str or callable, default ""</span>
-<span class="sd">        Interface(s) used by workers for UCX communication. Can be a string (like</span>
-<span class="sd">        ``"eth0"`` for NVLink, ``"mlx5_0:1"``/``"ib0"`` for InfiniBand, or ``""`` to use</span>
-<span class="sd">        all available devices), or a callable function that takes the index of the</span>
-<span class="sd">        current GPU to return an interface name (like</span>
-<span class="sd">        ``lambda dev: "mlx5_%d:1" % (dev // 2)``).</span>
-
-<span class="sd">        .. note::</span>
-<span class="sd">            If ``net_devices`` is callable, a GPU index must be supplied through</span>
-<span class="sd">            ``cuda_device_index``.</span>
-<span class="sd">    cuda_device_index : int or None, default None</span>
-<span class="sd">        Index of the current GPU, which must be specified for ``net_devices`` if</span>
-<span class="sd">        it is callable. Can be an integer or ``None`` if ``net_devices`` is not</span>
-<span class="sd">        callable.</span>
 <span class="sd">    """</span>
     <span class="n">ucx_config</span> <span class="o">=</span> <span class="n">get_ucx_config</span><span class="p">(</span>
         <span class="n">enable_tcp_over_ucx</span><span class="o">=</span><span class="n">enable_tcp_over_ucx</span><span class="p">,</span>
         <span class="n">enable_infiniband</span><span class="o">=</span><span class="n">enable_infiniband</span><span class="p">,</span>
         <span class="n">enable_nvlink</span><span class="o">=</span><span class="n">enable_nvlink</span><span class="p">,</span>
         <span class="n">enable_rdmacm</span><span class="o">=</span><span class="n">enable_rdmacm</span><span class="p">,</span>
-        <span class="n">net_devices</span><span class="o">=</span><span class="n">net_devices</span><span class="p">,</span>
-        <span class="n">cuda_device_index</span><span class="o">=</span><span class="n">cuda_device_index</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">dask</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">({</span><span class="s2">"distributed.comm.ucx"</span><span class="p">:</span> <span class="n">ucx_config</span><span class="p">})</span>
 
@@ -252,13 +234,6 @@
     <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">help</span><span class="o">=</span><span class="s2">"Enable RDMA connection manager, currently requires InfiniBand enabled."</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
-    <span class="s2">"--net-devices"</span><span class="p">,</span>
-    <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-    <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">help</span><span class="o">=</span><span class="s2">"Network interface to establish UCX connection, "</span>
-    <span class="s2">"usually the Ethernet interface, like 'eth0' or 'enp1s0f0'"</span><span class="p">,</span>
-<span class="p">)</span>
 <span class="k">def</span> <span class="nf">dask_setup</span><span class="p">(</span>
     <span class="n">service</span><span class="p">,</span>
     <span class="n">create_cuda_context</span><span class="p">,</span>
@@ -266,7 +241,6 @@
     <span class="n">enable_infiniband</span><span class="p">,</span>
     <span class="n">enable_nvlink</span><span class="p">,</span>
     <span class="n">enable_rdmacm</span><span class="p">,</span>
-    <span class="n">net_devices</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="n">create_cuda_context</span><span class="p">:</span>
         <span class="n">_create_cuda_context</span><span class="p">()</span>
