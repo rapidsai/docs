@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['flatten_5fdendrogram_743',['flatten_dendrogram',['../namespacecugraph.html#a42db40269afe962c9edd2937ecae051d',1,'cugraph']]],
-  ['force_5fatlas2_744',['force_atlas2',['../namespacecugraph.html#ad32a4d3984264ce62bf617164930fa4d',1,'cugraph']]]
+  ['flatten_5fdendrogram_763',['flatten_dendrogram',['../namespacecugraph.html#a42db40269afe962c9edd2937ecae051d',1,'cugraph']]],
+  ['force_5fatlas2_764',['force_atlas2',['../namespacecugraph.html#ad32a4d3984264ce62bf617164930fa4d',1,'cugraph']]]
 ];
