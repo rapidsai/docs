@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['read_49',['read',['../classkvikio_1_1FileHandle.html#a9b5085624eedc597f62bfa44b3e759b1',1,'kvikio::FileHandle']]],
-  ['reset_50',['reset',['../classkvikio_1_1third__party_1_1thread__pool.html#a6a6a3fa1cc5800e525f15b9e73f77475',1,'kvikio::third_party::thread_pool']]]
+  ['parallelize_5floop_47',['parallelize_loop',['../classkvikio_1_1third__party_1_1thread__pool.html#af087386271a3cca7446880d9f9223bbd',1,'kvikio::third_party::thread_pool']]],
+  ['pread_48',['pread',['../classkvikio_1_1FileHandle.html#ac0ec436aa7055adb279aca2e8ee354b0',1,'kvikio::FileHandle']]],
+  ['push_5ftask_49',['push_task',['../classkvikio_1_1third__party_1_1thread__pool.html#a9762205a5edd34b0e55f0eab713fb309',1,'kvikio::third_party::thread_pool::push_task(const F &amp;task)'],['../classkvikio_1_1third__party_1_1thread__pool.html#a4b43f7fe72465af23d3bc16080125eb2',1,'kvikio::third_party::thread_pool::push_task(const F &amp;task, const A &amp;... args)']]],
+  ['pwrite_50',['pwrite',['../classkvikio_1_1FileHandle.html#a296e98792708d5277592695acbac4778',1,'kvikio::FileHandle']]]
 ];
