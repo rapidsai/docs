@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['sleep_5fduration_21',['sleep_duration',['../classkvikio_1_1third__party_1_1thread__pool.html#a6af73bd6ec2dfffeb505d9c4477f81e4',1,'kvikio::third_party::thread_pool']]],
-  ['submit_22',['submit',['../classkvikio_1_1third__party_1_1thread__pool.html#a0b2ba0f58d323373f7063b9d33d2e422',1,'kvikio::third_party::thread_pool::submit(const F &amp;task, const A &amp;... args)'],['../classkvikio_1_1third__party_1_1thread__pool.html#ac3b338701f15b6d313447427d1420e5b',1,'kvikio::third_party::thread_pool::submit(const F &amp;task, const A &amp;... args)']]]
+  ['read_20',['read',['../classkvikio_1_1FileHandle.html#a9b5085624eedc597f62bfa44b3e759b1',1,'kvikio::FileHandle']]],
+  ['reset_21',['reset',['../classkvikio_1_1third__party_1_1thread__pool.html#a6a6a3fa1cc5800e525f15b9e73f77475',1,'kvikio::third_party::thread_pool']]]
 ];
