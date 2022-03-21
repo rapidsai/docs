@@ -176,15 +176,214 @@
 <h1>API<a class="headerlink" href="#api" title="Permalink to this headline">&para;</a></h1>
 <section id="cufile">
 <h2>CuFile<a class="headerlink" href="#cufile" title="Permalink to this headline">&para;</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="kvikio.cufile.CuFile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">kvikio.cufile.</span></span><span class="sig-name descname"><span class="pre">CuFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'r'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kvikio.cufile.CuFile" title="Permalink to this definition">&para;</a></dt>
+<dd><p>File handle for GPUDirect Storage (GDS)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="kvikio.cufile.CuFile.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kvikio.cufile.CuFile.close" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Deregister the file and close the file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kvikio.cufile.CuFile.fileno">
+<span class="sig-name descname"><span class="pre">fileno</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#kvikio.cufile.CuFile.fileno" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Get the file descripter of the open file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kvikio.cufile.CuFile.open_flags">
+<span class="sig-name descname"><span class="pre">open_flags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#kvikio.cufile.CuFile.open_flags" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Get the flags of the file descripter (see open(2))</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kvikio.cufile.CuFile.pread">
+<span class="sig-name descname"><span class="pre">pread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ntasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><a class="reference internal" href="#kvikio.cufile.IOFuture" title="kvikio.cufile.IOFuture"><span class="pre">kvikio.cufile.IOFuture</span></a></span></span><a class="headerlink" href="#kvikio.cufile.CuFile.pread" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Reads specified bytes from the file into the device memory in parallel</p>
+<p><cite>pread</cite> reads the data from a specified file at a specified offset and size
+bytes into the GPU memory by using GDS functionality. The API works correctly
+for unaligned offsets and any data size, although the performance might not
+match the performance of aligned reads.</p>
+<p><cite>pread</cite> is non-blocking and returns a <cite>IOFuture</cite> that can be waited upon. It
+creates <cite>ntasks</cite> for the KvikIO thread pool to execute.</p>
+<dl class="simple">
+<dt>buf: buffer-like or array-like</dt><dd><p>Device buffer to read into.</p>
+</dd>
+<dt>size: int</dt><dd><p>Size in bytes to read.</p>
+</dd>
+<dt>file_offset: int, optional</dt><dd><p>Offset in the file to read from.</p>
+</dd>
+<dt>ntasks: int, default=kvikio.thread_pool.get_num_threads()</dt><dd><p>Number of tasks to use.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>IOFuture</dt><dd><p>Future that on completion returns the size of bytes that were successfully
+read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kvikio.cufile.CuFile.pwrite">
+<span class="sig-name descname"><span class="pre">pwrite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ntasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><a class="reference internal" href="#kvikio.cufile.IOFuture" title="kvikio.cufile.IOFuture"><span class="pre">kvikio.cufile.IOFuture</span></a></span></span><a class="headerlink" href="#kvikio.cufile.CuFile.pwrite" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Writes specified bytes from the device memory into the file in parallel</p>
+<p><cite>pwrite</cite> writes the data from the GPU memory to the file at a specified
+offset and size bytes by using GDS functionality. The API works correctly
+for unaligned offset and data sizes, although the performance is not on-par
+with aligned writes.</p>
+<p><cite>pwrite</cite> is non-blocking and returns a <cite>IOFuture</cite> that can be waited upon. It
+creates <cite>ntasks</cite> for the KvikIO thread pool to execute.</p>
+<dl class="simple">
+<dt>buf: buffer-like or array-like</dt><dd><p>Device buffer to write to.</p>
+</dd>
+<dt>size: int</dt><dd><p>Size in bytes to read.</p>
+</dd>
+<dt>file_offset: int, optional</dt><dd><p>Offset in the file to write from.</p>
+</dd>
+<dt>ntasks: int, default=kvikio.thread_pool.get_num_threads()</dt><dd><p>Number of tasks to use.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>IOFuture</dt><dd><p>Future that on completion returns the size of bytes that were successfully
+written.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kvikio.cufile.CuFile.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ntasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#kvikio.cufile.CuFile.read" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Reads specified bytes from the file into the device memory in parallel</p>
+<p>This is a blocking version of <cite>.pread</cite>.</p>
+<dl class="simple">
+<dt>buf: buffer-like or array-like</dt><dd><p>Device buffer to read into.</p>
+</dd>
+<dt>size: int</dt><dd><p>Size in bytes to read.</p>
+</dd>
+<dt>file_offset: int, optional</dt><dd><p>Offset in the file to read from.</p>
+</dd>
+<dt>ntasks: int, default=kvikio.thread_pool.get_num_threads()</dt><dd><p>Number of tasks to use.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>int</dt><dd><p>The size of bytes that were successfully read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kvikio.cufile.CuFile.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ntasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#kvikio.cufile.CuFile.write" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Writes specified bytes from the device memory into the file in parallel</p>
+<p>This is a blocking version of <cite>.pwrite</cite>.</p>
+<dl class="simple">
+<dt>buf: buffer-like or array-like</dt><dd><p>Device buffer to write to.</p>
+</dd>
+<dt>size: int</dt><dd><p>Size in bytes to read.</p>
+</dd>
+<dt>file_offset: int, optional</dt><dd><p>Offset in the file to write from.</p>
+</dd>
+<dt>ntasks: int, default=kvikio.thread_pool.get_num_threads()</dt><dd><p>Number of tasks to use.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>int</dt><dd><p>The size of bytes that were successfully written.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="kvikio.cufile.IOFuture">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">kvikio.cufile.</span></span><span class="sig-name descname"><span class="pre">IOFuture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kvikio.cufile.IOFuture" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Future for CuFile IO</p>
+<p>This class shouldn&rsquo;t be used directly, instead non-blocking IO operations such
+as <cite>CuFile.pread</cite> and <cite>CuFile.pwrite</cite> returns an instance of this class. Use
+<cite>.get()</cite> to wait on the completion of the IO operation and retrieve the result.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="kvikio.cufile.IOFuture.done">
+<span class="sig-name descname"><span class="pre">done</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#kvikio.cufile.IOFuture.done" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Return True if the future is done.</p>
+<dl class="simple">
+<dt>bool</dt><dd><p>Whether the future is done or not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kvikio.cufile.IOFuture.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#kvikio.cufile.IOFuture.get" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Retrieve the result of the IO operation that created this future</p>
+<p>This call blocks until the IO operation finishes.</p>
+<dl class="simple">
+<dt>int</dt><dd><p>The size of bytes that were read or written successfully.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="zarr">
 <h2>Zarr<a class="headerlink" href="#zarr" title="Permalink to this headline">&para;</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="kvikio.zarr.GDSStore">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">kvikio.zarr.</span></span><span class="sig-name descname"><span class="pre">GDSStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension_separator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kvikio.zarr.GDSStore" title="Permalink to this definition">&para;</a></dt>
+<dd><p>GPUDirect Storage (GDS) class using directories and files.</p>
+<p>This class works like <cite>zarr.storage.DirectoryStore</cite> but use GPU
+buffers and will use GDS when applicable.
+The store supports both CPU and GPU buffers but when reading, GPU
+buffers are returned always.</p>
+<p>TODO: Write metadata to disk in order to perserve the item types such that
+GPU items are read as GPU device buffers and CPU items are read as bytes.</p>
+</dd></dl>
+
 </section>
 <section id="thread-pool">
 <h2>Thread pool<a class="headerlink" href="#thread-pool" title="Permalink to this headline">&para;</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="kvikio.thread_pool.get_num_threads">
+<span class="sig-prename descclassname"><span class="pre">kvikio.thread_pool.</span></span><span class="sig-name descname"><span class="pre">get_num_threads</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#kvikio.thread_pool.get_num_threads" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Get the number of threads of the thread pool.</p>
+<dl class="simple">
+<dt>nthreads: int</dt><dd><p>The number of threads in the current thread pool.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kvikio.thread_pool.reset_num_threads">
+<span class="sig-prename descclassname"><span class="pre">kvikio.thread_pool.</span></span><span class="sig-name descname"><span class="pre">reset_num_threads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nthread</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kvikio.thread_pool.reset_num_threads" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Reset the number of threads in the default thread pool.</p>
+<p>Waits for all currently running tasks to be completed, then destroys all threads
+in the pool and creates a new thread pool with the new number of threads. Any
+tasks that were waiting in the queue before the pool was reset will then be
+executed by the new threads. If the pool was paused before resetting it, the new
+pool will be paused as well.</p>
+<dl class="simple">
+<dt>nthread<span class="classifier">int</span></dt><dd><p>The number of threads to use. The default value can be specified by setting
+the <cite>KVIKIO_NTHREADS</cite> environment variable. If not set, the default value
+is 1.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">&para;</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="kvikio.config.get_global_compat_mode">
+<span class="sig-prename descclassname"><span class="pre">kvikio.config.</span></span><span class="sig-name descname"><span class="pre">get_global_compat_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#kvikio.config.get_global_compat_mode" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Check if KvikIO is running in compatibility mode.</p>
+<dl class="simple">
+<dt>bool</dt><dd><p>Whether KvikIO is running in compatibility mode or not.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 
