@@ -2,7 +2,7 @@ var searchData=
 [
   ['sample_5fneighbors_5fadjacency_5flist_338',['sample_neighbors_adjacency_list',['../namespacecugraph.html#afb3b72d6db04cd2bfafa6a949dbae17d',1,'cugraph']]],
   ['sample_5fneighbors_5fedgelist_339',['sample_neighbors_edgelist',['../namespacecugraph.html#a7751e0e55286d8361e3b053980c381fa',1,'cugraph']]],
-  ['sampler_5ft_340',['sampler_t',['../structcugraph_1_1detail_1_1node2vec__selector__t_1_1sampler__t.html',1,'cugraph::detail::node2vec_selector_t&lt; graph_type, real_t &gt;::sampler_t'],['../structcugraph_1_1detail_1_1uniform__selector__t_1_1sampler__t.html',1,'cugraph::detail::uniform_selector_t&lt; graph_type, real_t &gt;::sampler_t'],['../structcugraph_1_1detail_1_1biased__selector__t_1_1sampler__t.html',1,'cugraph::detail::biased_selector_t&lt; graph_type, real_t &gt;::sampler_t']]],
+  ['sampler_5ft_340',['sampler_t',['../structcugraph_1_1detail_1_1node2vec__selector__t_1_1sampler__t.html',1,'cugraph::detail::node2vec_selector_t&lt; graph_type, real_t &gt;::sampler_t'],['../structcugraph_1_1detail_1_1biased__selector__t_1_1sampler__t.html',1,'cugraph::detail::biased_selector_t&lt; graph_type, real_t &gt;::sampler_t'],['../structcugraph_1_1detail_1_1uniform__selector__t_1_1sampler__t.html',1,'cugraph::detail::uniform_selector_t&lt; graph_type, real_t &gt;::sampler_t']]],
   ['sampling_5fparams_5ft_341',['sampling_params_t',['../structcugraph_1_1sampling__params__t.html',1,'cugraph']]],
   ['scc_5fdata_342',['SCC_Data',['../structSCC__Data.html',1,'']]],
   ['scramble_5fvertex_5fids_343',['scramble_vertex_ids',['../namespacecugraph.html#af138b768b2b98f7c72d74fca7135f6be',1,'cugraph']]],
