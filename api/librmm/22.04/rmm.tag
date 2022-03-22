@@ -496,13 +496,6 @@
       <anchor>a403025ec8d405306db6c7ad0119a4627</anchor>
       <arglist>() const noexcept override</arglist>
     </member>
-    <member kind="function" static="yes">
-      <type>static bool</type>
-      <name>is_supported</name>
-      <anchorfile>classrmm_1_1mr_1_1cuda__async__memory__resource.html</anchorfile>
-      <anchor>a616995f9ba4d31a74298b991dc07e050</anchor>
-      <arglist>()</arglist>
-    </member>
   </compound>
   <compound kind="struct">
     <name>rmm::cuda_device_id</name>
@@ -1204,6 +1197,10 @@
       <anchor>a5f636c840032261036eaa5450b9faab8</anchor>
       <arglist>(cuda_stream_view stream) noexcept</arglist>
     </member>
+  </compound>
+  <compound kind="struct">
+    <name>rmm::detail::dynamic_load_runtime</name>
+    <filename>structrmm_1_1detail_1_1dynamic__load__runtime.html</filename>
   </compound>
   <compound kind="class">
     <name>rmm::exec_policy</name>
@@ -2181,13 +2178,13 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>rmm::mr::stream_allocator_adaptor::rebind</name>
-    <filename>structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html</filename>
+    <name>rmm::mr::thrust_allocator::rebind</name>
+    <filename>structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html</filename>
     <templarg></templarg>
   </compound>
   <compound kind="struct">
-    <name>rmm::mr::thrust_allocator::rebind</name>
-    <filename>structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html</filename>
+    <name>rmm::mr::stream_allocator_adaptor::rebind</name>
+    <filename>structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html</filename>
     <templarg></templarg>
   </compound>
   <compound kind="class">

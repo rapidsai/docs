@@ -12,5 +12,6 @@ var searchData=
   ['do_5fallocate_49',['do_allocate',['../classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#ac8545c712c41a34a27159531e069c7f6',1,'rmm::mr::detail::stream_ordered_memory_resource']]],
   ['do_5fdeallocate_50',['do_deallocate',['../classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#a0b45555ae4ead99f9fc578cf05e1c82f',1,'rmm::mr::detail::stream_ordered_memory_resource']]],
   ['do_5fget_5fmem_5finfo_51',['do_get_mem_info',['../classrmm_1_1mr_1_1fixed__size__memory__resource.html#a366918431b3b9f5867e5d8fd7186f35a',1,'rmm::mr::fixed_size_memory_resource::do_get_mem_info()'],['../classrmm_1_1mr_1_1pool__memory__resource.html#a5cac2b0ee64cf7458934f6d7393c40a3',1,'rmm::mr::pool_memory_resource::do_get_mem_info()']]],
-  ['dump_5fmemory_5flog_52',['dump_memory_log',['../classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a40b2e0848aa2af6e8317f985ee3819c6',1,'rmm::mr::detail::arena::global_arena']]]
+  ['dump_5fmemory_5flog_52',['dump_memory_log',['../classrmm_1_1mr_1_1detail_1_1arena_1_1global__arena.html#a40b2e0848aa2af6e8317f985ee3819c6',1,'rmm::mr::detail::arena::global_arena']]],
+  ['dynamic_5fload_5fruntime_53',['dynamic_load_runtime',['../structrmm_1_1detail_1_1dynamic__load__runtime.html',1,'rmm::detail']]]
 ];
