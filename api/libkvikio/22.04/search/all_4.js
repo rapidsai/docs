@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['libkvikio_12',['libkvikio',['../index.html',1,'']]]
+  ['libkvikio_11',['libkvikio',['../index.html',1,'']]]
 ];
