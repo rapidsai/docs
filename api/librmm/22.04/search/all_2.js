@@ -15,10 +15,11 @@ var searchData=
   ['crtp_3c_20pool_5fmemory_5fresource_3c_20upstream_20_3e_20_3e_31',['crtp&lt; pool_memory_resource&lt; Upstream &gt; &gt;',['../structrmm_1_1mr_1_1detail_1_1crtp.html',1,'rmm::mr::detail']]],
   ['crtp_3c_20poolresource_20_3e_32',['crtp&lt; PoolResource &gt;',['../structrmm_1_1mr_1_1detail_1_1crtp.html',1,'rmm::mr::detail']]],
   ['cuda_5fasync_5fmemory_5fresource_33',['cuda_async_memory_resource',['../classrmm_1_1mr_1_1cuda__async__memory__resource.html',1,'rmm::mr::cuda_async_memory_resource'],['../classrmm_1_1mr_1_1cuda__async__memory__resource.html#afc896f1fbf993cd68918a3c4779421f2',1,'rmm::mr::cuda_async_memory_resource::cuda_async_memory_resource()']]],
-  ['cuda_5fdevice_5fid_34',['cuda_device_id',['../structrmm_1_1cuda__device__id.html',1,'rmm::cuda_device_id'],['../structrmm_1_1cuda__device__id.html#a14112045da5f196178f1d841543cc6d4',1,'rmm::cuda_device_id::cuda_device_id()']]],
-  ['cuda_5ferror_35',['cuda_error',['../structrmm_1_1cuda__error.html',1,'rmm']]],
-  ['cuda_5fmemory_5fresource_36',['cuda_memory_resource',['../classrmm_1_1mr_1_1cuda__memory__resource.html',1,'rmm::mr']]],
-  ['cuda_5fstream_37',['cuda_stream',['../classrmm_1_1cuda__stream.html',1,'rmm::cuda_stream'],['../classrmm_1_1cuda__stream.html#ac932f583a6b7c4a25baaa3481ea18506',1,'rmm::cuda_stream::cuda_stream(cuda_stream &amp;&amp;)=default'],['../classrmm_1_1cuda__stream.html#a6c804b70001045b587624e7d1fbc0205',1,'rmm::cuda_stream::cuda_stream()']]],
-  ['cuda_5fstream_5fpool_38',['cuda_stream_pool',['../classrmm_1_1cuda__stream__pool.html',1,'rmm::cuda_stream_pool'],['../classrmm_1_1cuda__stream__pool.html#a66368ae209bb22184472475fbe90cef2',1,'rmm::cuda_stream_pool::cuda_stream_pool()']]],
-  ['cuda_5fstream_5fview_39',['cuda_stream_view',['../classrmm_1_1cuda__stream__view.html',1,'rmm::cuda_stream_view'],['../classrmm_1_1cuda__stream__view.html#a4ae6cba0b4329610296d2dc97a0eba91',1,'rmm::cuda_stream_view::cuda_stream_view()']]]
+  ['cuda_5fasync_5fview_5fmemory_5fresource_34',['cuda_async_view_memory_resource',['../classrmm_1_1mr_1_1cuda__async__view__memory__resource.html',1,'rmm::mr']]],
+  ['cuda_5fdevice_5fid_35',['cuda_device_id',['../structrmm_1_1cuda__device__id.html',1,'rmm::cuda_device_id'],['../structrmm_1_1cuda__device__id.html#a14112045da5f196178f1d841543cc6d4',1,'rmm::cuda_device_id::cuda_device_id()']]],
+  ['cuda_5ferror_36',['cuda_error',['../structrmm_1_1cuda__error.html',1,'rmm']]],
+  ['cuda_5fmemory_5fresource_37',['cuda_memory_resource',['../classrmm_1_1mr_1_1cuda__memory__resource.html',1,'rmm::mr']]],
+  ['cuda_5fstream_38',['cuda_stream',['../classrmm_1_1cuda__stream.html',1,'rmm::cuda_stream'],['../classrmm_1_1cuda__stream.html#ac932f583a6b7c4a25baaa3481ea18506',1,'rmm::cuda_stream::cuda_stream(cuda_stream &amp;&amp;)=default'],['../classrmm_1_1cuda__stream.html#a6c804b70001045b587624e7d1fbc0205',1,'rmm::cuda_stream::cuda_stream()']]],
+  ['cuda_5fstream_5fpool_39',['cuda_stream_pool',['../classrmm_1_1cuda__stream__pool.html',1,'rmm::cuda_stream_pool'],['../classrmm_1_1cuda__stream__pool.html#a66368ae209bb22184472475fbe90cef2',1,'rmm::cuda_stream_pool::cuda_stream_pool()']]],
+  ['cuda_5fstream_5fview_40',['cuda_stream_view',['../classrmm_1_1cuda__stream__view.html',1,'rmm::cuda_stream_view'],['../classrmm_1_1cuda__stream__view.html#a4ae6cba0b4329610296d2dc97a0eba91',1,'rmm::cuda_stream_view::cuda_stream_view()']]]
 ];

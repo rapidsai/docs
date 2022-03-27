@@ -497,6 +497,25 @@
       <arglist>() const noexcept override</arglist>
     </member>
   </compound>
+  <compound kind="class">
+    <name>rmm::mr::cuda_async_view_memory_resource</name>
+    <filename>classrmm_1_1mr_1_1cuda__async__view__memory__resource.html</filename>
+    <base>rmm::mr::device_memory_resource</base>
+    <member kind="function">
+      <type>bool</type>
+      <name>supports_streams</name>
+      <anchorfile>classrmm_1_1mr_1_1cuda__async__view__memory__resource.html</anchorfile>
+      <anchor>a2f0fb6740357df359ed25ca012ef708c</anchor>
+      <arglist>() const noexcept override</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>supports_get_mem_info</name>
+      <anchorfile>classrmm_1_1mr_1_1cuda__async__view__memory__resource.html</anchorfile>
+      <anchor>a4ec3645eb9c5c8cd60c5b8932b39b932</anchor>
+      <arglist>() const noexcept override</arglist>
+    </member>
+  </compound>
   <compound kind="struct">
     <name>rmm::cuda_device_id</name>
     <filename>structrmm_1_1cuda__device__id.html</filename>
@@ -2178,13 +2197,13 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>rmm::mr::thrust_allocator::rebind</name>
-    <filename>structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html</filename>
+    <name>rmm::mr::stream_allocator_adaptor::rebind</name>
+    <filename>structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html</filename>
     <templarg></templarg>
   </compound>
   <compound kind="struct">
-    <name>rmm::mr::stream_allocator_adaptor::rebind</name>
-    <filename>structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html</filename>
+    <name>rmm::mr::thrust_allocator::rebind</name>
+    <filename>structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html</filename>
     <templarg></templarg>
   </compound>
   <compound kind="class">
