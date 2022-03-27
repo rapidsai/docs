@@ -632,27 +632,28 @@ $(function() {
 <div class="line"><a name="l00598"></a><span class="lineno">  598</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t, <span class="keyword">typename</span> edge_t&gt;</div>
 <div class="line"><a name="l00599"></a><span class="lineno">  599</span>&nbsp;std::unique_ptr&lt;renum_tuple_t&lt;vertex_t, edge_t&gt;&gt; call_renumber(</div>
 <div class="line"><a name="l00600"></a><span class="lineno">  600</span>&nbsp;  raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
-<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&nbsp;  vertex_t* shuffled_edgelist_major_vertices <span class="comment">/* [INOUT] */</span>,</div>
-<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&nbsp;  vertex_t* shuffled_edgelist_minor_vertices <span class="comment">/* [INOUT] */</span>,</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&nbsp;  vertex_t* shuffled_edgelist_src_vertices <span class="comment">/* [INOUT] */</span>,</div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&nbsp;  vertex_t* shuffled_edgelist_dst_vertices <span class="comment">/* [INOUT] */</span>,</div>
 <div class="line"><a name="l00603"></a><span class="lineno">  603</span>&nbsp;  std::vector&lt;edge_t&gt; <span class="keyword">const</span>&amp; edge_counts,</div>
-<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&nbsp;  <span class="keywordtype">bool</span> do_expensive_check,</div>
-<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&nbsp;  <span class="keywordtype">bool</span> multi_gpu);</div>
-<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&nbsp; </div>
-<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&nbsp;<span class="comment">// Helper for setting up subcommunicators, typically called as part of the</span></div>
-<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&nbsp;<span class="comment">// user-initiated comms initialization in Python.</span></div>
-<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&nbsp;<span class="comment">//</span></div>
-<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&nbsp;<span class="comment">// raft::handle_t&amp; handle</span></div>
-<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&nbsp;<span class="comment">//   Raft handle for which the new subcommunicators will be created. The</span></div>
-<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&nbsp;<span class="comment">//   subcommunicators will then be accessible from the handle passed to the</span></div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&nbsp;<span class="comment">//   parallel processes.</span></div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&nbsp;<span class="comment">//</span></div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&nbsp;<span class="comment">// size_t row_comm_size</span></div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&nbsp;<span class="comment">//   Number of items in a partition row (ie. pcols), needed for creating the</span></div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&nbsp;<span class="comment">//   appropriate number of subcommunicator instances.</span></div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&nbsp;<span class="keywordtype">void</span> init_subcomms(raft::handle_t&amp; handle, <span class="keywordtype">size_t</span> row_comm_size);</div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&nbsp; </div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&nbsp;}  <span class="comment">// namespace cython</span></div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&nbsp;}  <span class="comment">// namespace cugraph</span></div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&nbsp;  <span class="keywordtype">bool</span> store_transposed,</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&nbsp;  <span class="keywordtype">bool</span> do_expensive_check,</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&nbsp;  <span class="keywordtype">bool</span> multi_gpu);</div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&nbsp; </div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&nbsp;<span class="comment">// Helper for setting up subcommunicators, typically called as part of the</span></div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&nbsp;<span class="comment">// user-initiated comms initialization in Python.</span></div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&nbsp;<span class="comment">//</span></div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&nbsp;<span class="comment">// raft::handle_t&amp; handle</span></div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&nbsp;<span class="comment">//   Raft handle for which the new subcommunicators will be created. The</span></div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&nbsp;<span class="comment">//   subcommunicators will then be accessible from the handle passed to the</span></div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&nbsp;<span class="comment">//   parallel processes.</span></div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&nbsp;<span class="comment">//</span></div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&nbsp;<span class="comment">// size_t row_comm_size</span></div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&nbsp;<span class="comment">//   Number of items in a partition row (ie. pcols), needed for creating the</span></div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&nbsp;<span class="comment">//   appropriate number of subcommunicator instances.</span></div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&nbsp;<span class="keywordtype">void</span> init_subcomms(raft::handle_t&amp; handle, <span class="keywordtype">size_t</span> row_comm_size);</div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&nbsp; </div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&nbsp;}  <span class="comment">// namespace cython</span></div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&nbsp;}  <span class="comment">// namespace cugraph</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="astructcugraph_1_1cython_1_1graph__container__t_html"><div class="ttname"><a href="structcugraph_1_1cython_1_1graph__container__t.html">cugraph::cython::graph_container_t</a></div><div class="ttdef"><b>Definition:</b> cython.hpp:61</div></div>
 <div class="ttc" id="aclasscugraph_1_1partition__t_html"><div class="ttname"><a href="classcugraph_1_1partition__t.html">cugraph::partition_t</a></div><div class="ttdoc">store vertex partitioning map</div><div class="ttdef"><b>Definition:</b> graph_view.hpp:71</div></div>
