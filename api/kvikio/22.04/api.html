@@ -139,13 +139,8 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#thread-pool">
-   Thread pool
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#configuration">
-   Configuration
+  <a class="reference internal nav-link" href="#defaults">
+   Defaults
   </a>
  </li>
 </ul>
@@ -212,7 +207,7 @@ creates <cite>ntasks</cite> for the KvikIO thread pool to execute.</p>
 </dd>
 <dt>file_offset: int, optional</dt><dd><p>Offset in the file to read from.</p>
 </dd>
-<dt>ntasks: int, default=kvikio.thread_pool.get_num_threads()</dt><dd><p>Number of tasks to use.</p>
+<dt>ntasks: int, default=kvikio.defaults.get_num_threads()</dt><dd><p>Number of tasks to use.</p>
 </dd>
 </dl>
 <dl class="simple">
@@ -239,7 +234,7 @@ creates <cite>ntasks</cite> for the KvikIO thread pool to execute.</p>
 </dd>
 <dt>file_offset: int, optional</dt><dd><p>Offset in the file to write from.</p>
 </dd>
-<dt>ntasks: int, default=kvikio.thread_pool.get_num_threads()</dt><dd><p>Number of tasks to use.</p>
+<dt>ntasks: int, default=kvikio.defaults.get_num_threads()</dt><dd><p>Number of tasks to use.</p>
 </dd>
 </dl>
 <dl class="simple">
@@ -303,7 +298,7 @@ written.</p>
 </dd>
 <dt>file_offset: int, optional</dt><dd><p>Offset in the file to read from.</p>
 </dd>
-<dt>ntasks: int, default=kvikio.thread_pool.get_num_threads()</dt><dd><p>Number of tasks to use.</p>
+<dt>ntasks: int, default=kvikio.defaults.get_num_threads()</dt><dd><p>Number of tasks to use.</p>
 </dd>
 </dl>
 <dl class="simple">
@@ -324,7 +319,7 @@ written.</p>
 </dd>
 <dt>file_offset: int, optional</dt><dd><p>Offset in the file to write from.</p>
 </dd>
-<dt>ntasks: int, default=kvikio.thread_pool.get_num_threads()</dt><dd><p>Number of tasks to use.</p>
+<dt>ntasks: int, default=kvikio.defaults.get_num_threads()</dt><dd><p>Number of tasks to use.</p>
 </dd>
 </dl>
 <dl class="simple">
@@ -381,12 +376,49 @@ GPU items are read as GPU device buffers and CPU items are read as bytes.</p>
 </dd></dl>
 
 </section>
-<section id="thread-pool">
-<h2>Thread pool<a class="headerlink" href="#thread-pool" title="Permalink to this headline">#</a></h2>
+<section id="defaults">
+<h2>Defaults<a class="headerlink" href="#defaults" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="kvikio.thread_pool.get_num_threads">
-<span class="sig-prename descclassname"><span class="pre">kvikio.thread_pool.</span></span><span class="sig-name descname"><span class="pre">get_num_threads</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#kvikio.thread_pool.get_num_threads" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="kvikio.defaults.compat_mode">
+<span class="sig-prename descclassname"><span class="pre">kvikio.defaults.</span></span><span class="sig-name descname"><span class="pre">compat_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#kvikio.defaults.compat_mode" title="Permalink to this definition">#</a></dt>
+<dd><p>Check if KvikIO is running in compatibility mode.</p>
+<p>Notice, this is not the same as the compatibility mode in cuFile. That is,
+cuFile can run in compatibility mode while KvikIO is not.</p>
+<p>When KvikIO is running in compatibility mode, it doesn&rsquo;t load <cite>libcufile.so</cite>.
+Instead, reads and writes are done using POSIX.</p>
+<p>Set the environment variable <cite>KVIKIO_COMPAT_MODE</cite> to enable/disable compatibility
+mode. By default, compatibility mode is enabled:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>when <cite>libcufile</cite> cannot be found</p></li>
+<li><p>when running in Windows Subsystem for Linux (WSL)</p></li>
+<li><p>when <cite>/run/udev</cite> isn&rsquo;t readable, which typically happens when running inside
+a docker image not launched with <cite>&ndash;volume /run/udev:/run/udev:ro</cite></p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>bool</dt><dd><p>Whether KvikIO is running in compatibility mode or not.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kvikio.defaults.compat_mode_reset">
+<span class="sig-prename descclassname"><span class="pre">kvikio.defaults.</span></span><span class="sig-name descname"><span class="pre">compat_mode_reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kvikio.defaults.compat_mode_reset" title="Permalink to this definition">#</a></dt>
+<dd><p>Reset the compatibility mode.</p>
+<p>Use this function to enable/disable compatibility mode explicitly.</p>
+<dl class="simple">
+<dt>enable<span class="classifier">bool</span></dt><dd><p>Set to True to enable and False to disable compatibility mode</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kvikio.defaults.get_num_threads">
+<span class="sig-prename descclassname"><span class="pre">kvikio.defaults.</span></span><span class="sig-name descname"><span class="pre">get_num_threads</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#kvikio.defaults.get_num_threads" title="Permalink to this definition">#</a></dt>
 <dd><p>Get the number of threads of the thread pool.</p>
+<p>Set the default value using <cite>reset_num_threads()</cite> or by setting the
+<cite>KVIKIO_NTHREADS</cite> environment variable. If not set, the default value is 1.</p>
 <dl class="simple">
 <dt>nthreads: int</dt><dd><p>The number of threads in the current thread pool.</p>
 </dd>
@@ -394,8 +426,8 @@ GPU items are read as GPU device buffers and CPU items are read as bytes.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="kvikio.thread_pool.reset_num_threads">
-<span class="sig-prename descclassname"><span class="pre">kvikio.thread_pool.</span></span><span class="sig-name descname"><span class="pre">reset_num_threads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nthread</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kvikio.thread_pool.reset_num_threads" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="kvikio.defaults.reset_num_threads">
+<span class="sig-prename descclassname"><span class="pre">kvikio.defaults.</span></span><span class="sig-name descname"><span class="pre">reset_num_threads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nthreads</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kvikio.defaults.reset_num_threads" title="Permalink to this definition">#</a></dt>
 <dd><p>Reset the number of threads in the default thread pool.</p>
 <p>Waits for all currently running tasks to be completed, then destroys all threads
 in the pool and creates a new thread pool with the new number of threads. Any
@@ -403,22 +435,7 @@ tasks that were waiting in the queue before the pool was reset will then be
 executed by the new threads. If the pool was paused before resetting it, the new
 pool will be paused as well.</p>
 <dl class="simple">
-<dt>nthread<span class="classifier">int</span></dt><dd><p>The number of threads to use. The default value can be specified by setting
-the <cite>KVIKIO_NTHREADS</cite> environment variable. If not set, the default value
-is 1.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-<section id="configuration">
-<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="kvikio.config.get_global_compat_mode">
-<span class="sig-prename descclassname"><span class="pre">kvikio.config.</span></span><span class="sig-name descname"><span class="pre">get_global_compat_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#kvikio.config.get_global_compat_mode" title="Permalink to this definition">#</a></dt>
-<dd><p>Check if KvikIO is running in compatibility mode.</p>
-<dl class="simple">
-<dt>bool</dt><dd><p>Whether KvikIO is running in compatibility mode or not.</p>
+<dt>nthreads<span class="classifier">int</span></dt><dd><p>The number of threads to use.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -460,7 +477,7 @@ is 1.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.4.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
 </p>
     </div>
     
