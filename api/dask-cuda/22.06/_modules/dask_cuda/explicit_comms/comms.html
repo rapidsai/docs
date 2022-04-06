@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en"><head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>dask_cuda.explicit_comms.comms &mdash; dask-cuda 22.06.00a0+g61d2f3a documentation</title>
+      <link href="../../../_static/pygments.css" rel="stylesheet" type="text/css">
+      <link href="../../../_static/css/theme.css" rel="stylesheet" type="text/css">
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link href="../../../genindex.html" rel="index" title="Index">
+    <link href="../../../search.html" rel="search" title="Search"> 
+<link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"><div id="rapids-jtd-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">dask-cuda</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/nightly/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libkvikio/nightly">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/raft/nightly">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (22.06)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/dask-cuda/nightly/api.html">nightly (22.06)</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">stable (22.02)</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/legacy/api.html">legacy (21.12)</a></div></div></div>
+            
+              
+<div role="search">
+  <form action="../../../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text">
+    <input name="check_keywords" type="hidden" value="yes">
+    <input name="area" type="hidden" value="default">
+  </form>
+</div>
+        </div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../ucx.html">UCX Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../explicit_comms.html">Explicit-comms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../spilling.html">Spilling from device</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/worker_count.html">Controlling number of workers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ucx.html">Enabling UCX communication</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../../../index.html">dask-cuda</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div aria-label="Page navigation" role="navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a class="icon icon-home" href="../../../index.html"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>dask_cuda.explicit_comms.comms</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for dask_cuda.explicit_comms.comms</h1><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">concurrent.futures</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">distributed.comm</span>
+<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">default_client</span><span class="p">,</span> <span class="n">get_worker</span>
+<span class="kn">from</span> <span class="nn">distributed.comm.addressing</span> <span class="kn">import</span> <span class="n">parse_address</span><span class="p">,</span> <span class="n">parse_host_port</span><span class="p">,</span> <span class="n">unparse_address</span>
+
+<span class="n">_default_comms</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">get_multi_lock_or_null_context</span><span class="p">(</span><span class="n">multi_lock_context</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""Return either a MultiLock or a NULL context</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    multi_lock_context: bool</span>
+<span class="sd">        If True return MultiLock context else return a NULL context that</span>
+<span class="sd">        doesn't do anything</span>
+
+<span class="sd">    *args, **kwargs:</span>
+<span class="sd">        Arguments parsed to the MultiLock creation</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    context: context</span>
+<span class="sd">        Either `MultiLock(*args, **kwargs)` or a NULL context</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">multi_lock_context</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">MultiLock</span>
+
+        <span class="k">return</span> <span class="n">MultiLock</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">nullcontext</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">default_comms</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Client</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"CommsContext"</span><span class="p">:</span>
+    <span class="sd">"""Return the default comms object</span>
+
+<span class="sd">    Creates a new default comms object if no one exist.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    client: Client, optional</span>
+<span class="sd">        If no default comm object exists, create the new comm on `client`</span>
+<span class="sd">        are returned.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    comms: CommsContext</span>
+<span class="sd">        The default comms object</span>
+<span class="sd">    """</span>
+    <span class="k">global</span> <span class="n">_default_comms</span>
+    <span class="k">if</span> <span class="n">_default_comms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_default_comms</span> <span class="o">=</span> <span class="n">CommsContext</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_default_comms</span>
+
+
+<span class="k">def</span> <span class="nf">worker_state</span><span class="p">(</span><span class="n">sessionId</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">"""Retrieve the state(s) of the current worker</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sessionId: int, optional</span>
+<span class="sd">        Worker session state ID. If None, all states of the worker</span>
+<span class="sd">        are returned.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    state: dict</span>
+<span class="sd">        Either a single state dict or a dict of state dict</span>
+<span class="sd">    """</span>
+    <span class="n">worker</span> <span class="o">=</span> <span class="n">get_worker</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="s2">"_explicit_comm_state"</span><span class="p">):</span>
+        <span class="n">worker</span><span class="o">.</span><span class="n">_explicit_comm_state</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">sessionId</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sessionId</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">worker</span><span class="o">.</span><span class="n">_explicit_comm_state</span><span class="p">:</span>
+            <span class="n">worker</span><span class="o">.</span><span class="n">_explicit_comm_state</span><span class="p">[</span><span class="n">sessionId</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">"ts"</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
+                <span class="s2">"eps"</span><span class="p">:</span> <span class="p">{},</span>
+                <span class="s2">"loop"</span><span class="p">:</span> <span class="n">worker</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">asyncio_loop</span><span class="p">,</span>
+                <span class="s2">"worker"</span><span class="p">:</span> <span class="n">worker</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="k">return</span> <span class="n">worker</span><span class="o">.</span><span class="n">_explicit_comm_state</span><span class="p">[</span><span class="n">sessionId</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">worker</span><span class="o">.</span><span class="n">_explicit_comm_state</span>
+
+
+<span class="k">def</span> <span class="nf">_run_coroutine_on_worker</span><span class="p">(</span><span class="n">sessionId</span><span class="p">,</span> <span class="n">coroutine</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">session_state</span> <span class="o">=</span> <span class="n">worker_state</span><span class="p">(</span><span class="n">sessionId</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_run</span><span class="p">():</span>
+        <span class="n">future</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">run_coroutine_threadsafe</span><span class="p">(</span>
+            <span class="n">coroutine</span><span class="p">(</span><span class="n">session_state</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">),</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"loop"</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">_run</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_create_listeners</span><span class="p">(</span><span class="n">session_state</span><span class="p">,</span> <span class="n">nworkers</span><span class="p">,</span> <span class="n">rank</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"loop"</span><span class="p">]</span> <span class="ow">is</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="s2">"nworkers"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">session_state</span>
+    <span class="n">session_state</span><span class="p">[</span><span class="s2">"nworkers"</span><span class="p">]</span> <span class="o">=</span> <span class="n">nworkers</span>
+    <span class="k">assert</span> <span class="s2">"rank"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">session_state</span>
+    <span class="n">session_state</span><span class="p">[</span><span class="s2">"rank"</span><span class="p">]</span> <span class="o">=</span> <span class="n">rank</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">server_handler</span><span class="p">(</span><span class="n">ep</span><span class="p">):</span>
+        <span class="n">peer_rank</span> <span class="o">=</span> <span class="k">await</span> <span class="n">ep</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">session_state</span><span class="p">[</span><span class="s2">"eps"</span><span class="p">][</span><span class="n">peer_rank</span><span class="p">]</span> <span class="o">=</span> <span class="n">ep</span>
+
+    <span class="c1"># We listen on the same protocol and address as the worker address</span>
+    <span class="n">protocol</span><span class="p">,</span> <span class="n">address</span> <span class="o">=</span> <span class="n">parse_address</span><span class="p">(</span><span class="n">session_state</span><span class="p">[</span><span class="s2">"worker"</span><span class="p">]</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+    <span class="n">address</span> <span class="o">=</span> <span class="n">parse_host_port</span><span class="p">(</span><span class="n">address</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">address</span> <span class="o">=</span> <span class="n">unparse_address</span><span class="p">(</span><span class="n">protocol</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>
+
+    <span class="n">session_state</span><span class="p">[</span><span class="s2">"lf"</span><span class="p">]</span> <span class="o">=</span> <span class="n">distributed</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">server_handler</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"lf"</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"lf"</span><span class="p">]</span><span class="o">.</span><span class="n">listen_address</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_create_endpoints</span><span class="p">(</span><span class="n">session_state</span><span class="p">,</span> <span class="n">peers</span><span class="p">):</span>
+    <span class="sd">"""Each worker creates a UCX endpoint to all workers with greater rank"""</span>
+    <span class="k">assert</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"loop"</span><span class="p">]</span> <span class="ow">is</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+
+    <span class="n">myrank</span> <span class="o">=</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"rank"</span><span class="p">]</span>
+    <span class="n">peers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">peers</span><span class="p">))</span>
+
+    <span class="c1"># Create endpoints to workers with a greater rank than my rank</span>
+    <span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="n">address</span> <span class="ow">in</span> <span class="n">peers</span><span class="p">[</span><span class="n">myrank</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]:</span>
+        <span class="n">ep</span> <span class="o">=</span> <span class="k">await</span> <span class="n">distributed</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">ep</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">session_state</span><span class="p">[</span><span class="s2">"rank"</span><span class="p">])</span>
+        <span class="n">session_state</span><span class="p">[</span><span class="s2">"eps"</span><span class="p">][</span><span class="n">rank</span><span class="p">]</span> <span class="o">=</span> <span class="n">ep</span>
+
+    <span class="c1"># Block until all endpoints has been created</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">session_state</span><span class="p">[</span><span class="s2">"eps"</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"nworkers"</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_stop_ucp_listeners</span><span class="p">(</span><span class="n">session_state</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">session_state</span><span class="p">[</span><span class="s2">"eps"</span><span class="p">])</span> <span class="o">==</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"nworkers"</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"loop"</span><span class="p">]</span> <span class="ow">is</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+    <span class="n">session_state</span><span class="p">[</span><span class="s2">"lf"</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+    <span class="k">del</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"lf"</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="CommsContext"><a class="viewcode-back" href="../../../api.html#dask_cuda.explicit_comms.comms.CommsContext">[docs]</a><span class="k">class</span> <span class="nc">CommsContext</span><span class="p">:</span>
+    <span class="sd">"""Communication handler for explicit communication</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    client: Client, optional</span>
+<span class="sd">        Specify client to use for communication. If None, use the default client.</span>
+<span class="sd">    """</span>
+
+    <span class="n">client</span><span class="p">:</span> <span class="n">Client</span>
+    <span class="n">sessionId</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">worker_addresses</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Client</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span> <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_client</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessionId</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">int</span>
+
+        <span class="c1"># Get address of all workers (not Nanny addresses)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">worker_addresses</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># Make all workers listen and get all listen addresses</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">worker_direct_addresses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="n">address</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">worker_addresses</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">worker_direct_addresses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+                    <span class="n">address</span><span class="p">,</span>
+                    <span class="n">_create_listeners</span><span class="p">,</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">worker_addresses</span><span class="p">),</span>
+                    <span class="n">rank</span><span class="p">,</span>
+                    <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Each worker creates an endpoint to all workers with greater rank</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">_create_endpoints</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_direct_addresses</span><span class="p">)</span>
+
+        <span class="c1"># At this point all workers should have a rank and endpoints to</span>
+        <span class="c1"># all other workers thus we can now stop the listening.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">_stop_ucp_listeners</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CommsContext.submit"><a class="viewcode-back" href="../../../api.html#dask_cuda.explicit_comms.comms.CommsContext.submit">[docs]</a>    <span class="k">def</span> <span class="nf">submit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">,</span> <span class="n">coroutine</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">"""Run a coroutine on a single worker</span>
+
+<span class="sd">        The coroutine is given the worker's state dict as the first argument</span>
+<span class="sd">        and *args as the following arguments.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        worker: str</span>
+<span class="sd">            Worker to run the `coroutine`</span>
+<span class="sd">        coroutine: coroutine</span>
+<span class="sd">            The function to run on the worker</span>
+<span class="sd">        *args:</span>
+<span class="sd">            Arguments for `coroutine`</span>
+<span class="sd">        wait: boolean, optional</span>
+<span class="sd">            If True, waits for the coroutine to finished before returning.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ret: object or Future</span>
+<span class="sd">            If wait=True, the result of `coroutine`</span>
+<span class="sd">            If wait=False, Future that can be waited on later.</span>
+<span class="sd">        """</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+            <span class="n">_run_coroutine_on_worker</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sessionId</span><span class="p">,</span>
+            <span class="n">coroutine</span><span class="p">,</span>
+            <span class="n">args</span><span class="p">,</span>
+            <span class="n">workers</span><span class="o">=</span><span class="p">[</span><span class="n">worker</span><span class="p">],</span>
+            <span class="n">pure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">if</span> <span class="n">wait</span> <span class="k">else</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="CommsContext.run"><a class="viewcode-back" href="../../../api.html#dask_cuda.explicit_comms.comms.CommsContext.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coroutine</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lock_workers</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">"""Run a coroutine on multiple workers</span>
+
+<span class="sd">        The coroutine is given the worker's state dict as the first argument</span>
+<span class="sd">        and *args as the following arguments.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        coroutine: coroutine</span>
+<span class="sd">            The function to run on each worker</span>
+<span class="sd">        *args:</span>
+<span class="sd">            Arguments for `coroutine`</span>
+<span class="sd">        workers: list, optional</span>
+<span class="sd">            List of workers. Default is all workers</span>
+<span class="sd">        lock_workers: bool, optional</span>
+<span class="sd">            Use distributed.MultiLock to get exclusive access to the workers. Use</span>
+<span class="sd">            this flag to support parallel runs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ret: list</span>
+<span class="sd">            List of the output from each worker</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">workers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">workers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_addresses</span>
+
+        <span class="k">with</span> <span class="n">get_multi_lock_or_null_context</span><span class="p">(</span><span class="n">lock_workers</span><span class="p">,</span> <span class="n">workers</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">worker</span> <span class="ow">in</span> <span class="n">workers</span><span class="p">:</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+                        <span class="n">_run_coroutine_on_worker</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">sessionId</span><span class="p">,</span>
+                        <span class="n">coroutine</span><span class="p">,</span>
+                        <span class="n">args</span><span class="p">,</span>
+                        <span class="n">workers</span><span class="o">=</span><span class="p">[</span><span class="n">worker</span><span class="p">],</span>
+                        <span class="n">pure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr>
+
+  <div role="contentinfo">
+    <p>&copy; Copyright 2020-2022, NVIDIA.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script></body></html>

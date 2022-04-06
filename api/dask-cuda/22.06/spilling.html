@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en"><head>
+  <meta charset="utf-8"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
+
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Spilling from device &mdash; dask-cuda 22.06.00a0+g61d2f3a documentation</title>
+      <link href="_static/pygments.css" rel="stylesheet" type="text/css">
+      <link href="_static/css/theme.css" rel="stylesheet" type="text/css">
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link href="genindex.html" rel="index" title="Index">
+    <link href="search.html" rel="search" title="Search">
+    <link href="examples/worker_count.html" rel="next" title="Controlling number of workers">
+    <link href="explicit_comms.html" rel="prev" title="Explicit-comms"> 
+<link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"><div id="rapids-jtd-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">dask-cuda</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/nightly/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libkvikio/nightly">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/raft/nightly">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (22.06)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/dask-cuda/nightly/api.html">nightly (22.06)</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">stable (22.02)</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/legacy/api.html">legacy (21.12)</a></div></div></div>
+            
+              
+<div role="search">
+  <form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text">
+    <input name="check_keywords" type="hidden" value="yes">
+    <input name="area" type="hidden" value="default">
+  </form>
+</div>
+        </div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Features</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ucx.html">UCX Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit_comms.html">Explicit-comms</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Spilling from device</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#jit-unspill">JIT-Unspill</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#limitations">Limitations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/worker_count.html">Controlling number of workers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ucx.html">Enabling UCX communication</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="index.html">dask-cuda</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div aria-label="Page navigation" role="navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a class="icon icon-home" href="index.html"></a> &raquo;</li>
+      <li>Spilling from device</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/spilling.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+             
+  <section id="spilling-from-device">
+<h1>Spilling from device<a class="headerlink" href="#spilling-from-device" title="Permalink to this headline"></a></h1>
+<p>By default, Dask-CUDA enables spilling from GPU to host memory when a GPU reaches a memory utilization of 80%.
+This can be changed to suit the needs of a workload, or disabled altogether, by explicitly setting <code class="docutils literal notranslate"><span class="pre">device_memory_limit</span></code>.
+This parameter accepts an integer or string memory size, or a float representing a percentage of the GPU&rsquo;s total memory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_cuda</span> <span class="kn">import</span> <span class="n">LocalCUDACluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCUDACluster</span><span class="p">(</span><span class="n">device_memory_limit</span><span class="o">=</span><span class="mi">50000</span><span class="p">)</span>  <span class="c1"># spilling after 50000 bytes</span>
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCUDACluster</span><span class="p">(</span><span class="n">device_memory_limit</span><span class="o">=</span><span class="s2">"5GB"</span><span class="p">)</span>  <span class="c1"># spilling after 5 GB</span>
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCUDACluster</span><span class="p">(</span><span class="n">device_memory_limit</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>    <span class="c1"># spilling after 30% memory utilization</span>
+</pre></div>
+</div>
+<p>Memory spilling can be disabled by setting <code class="docutils literal notranslate"><span class="pre">device_memory_limit</span></code> to 0:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCUDACluster</span><span class="p">(</span><span class="n">device_memory_limit</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># spilling disabled</span>
+</pre></div>
+</div>
+<p>The same applies for <code class="docutils literal notranslate"><span class="pre">dask-cuda-worker</span></code>, and spilling can be controlled by setting <code class="docutils literal notranslate"><span class="pre">--device-memory-limit</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ dask-scheduler
+distributed.scheduler - INFO -   Scheduler at:  tcp://127.0.0.1:8786
+
+$ dask-cuda-worker --device-memory-limit 50000
+$ dask-cuda-worker --device-memory-limit 5GB
+$ dask-cuda-worker --device-memory-limit 0.3
+$ dask-cuda-worker --device-memory-limit 0
+</pre></div>
+</div>
+<section id="jit-unspill">
+<h2>JIT-Unspill<a class="headerlink" href="#jit-unspill" title="Permalink to this headline"></a></h2>
+<p>The regular spilling in Dask and Dask-CUDA has some significate issues. Instead of tracking individual objects, it tracks task outputs.
+This means that a task returning a collection of CUDA objects will either spill all of the CUDA objects or none of them.
+Other issues includes <em>object duplication</em>, <em>wrong spilling order</em>, and <em>non-tracking of sharing device buffers</em>
+(see: <a class="reference external" href="https://github.com/dask/distributed/issues/4568#issuecomment-805049321">https://github.com/dask/distributed/issues/4568#issuecomment-805049321</a>).</p>
+<p>In order to address all of these issues, Dask-CUDA introduces JIT-Unspilling, which can improve performance and memory usage significantly.
+For workloads that require significant spilling
+(such as large joins on infrastructure with less available memory than data) we have often
+seen greater than 50% improvement (i.e., something taking 300 seconds might take only 110 seconds). For workloads that do not,
+we would not expect to see much difference.</p>
+<p>In order to enable JIT-Unspilling use the <code class="docutils literal notranslate"><span class="pre">jit_unspill</span></code> argument:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import dask&ZeroWidthSpace;
+&gt;&gt;&gt; from distributed import Client&ZeroWidthSpace;
+&gt;&gt;&gt; from dask_cuda import LocalCUDACluster&ZeroWidthSpace;
+
+&gt;&gt;&gt; cluster = LocalCUDACluster(n_workers=10, device_memory_limit="1GB", jit_unspill=True)&ZeroWidthSpace;
+&gt;&gt;&gt; client = Client(cluster)&ZeroWidthSpace;
+
+&gt;&gt;&gt; with dask.config.set(jit_unspill=True):&ZeroWidthSpace;
+...   cluster = LocalCUDACluster(n_workers=10, device_memory_limit="1GB")&ZeroWidthSpace;
+...   client = Client(cluster)
+</pre></div>
+</div>
+<p>Or set the worker argument <code class="docutils literal notranslate"><span class="pre">--enable-jit-unspill&ZeroWidthSpace;</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ dask-scheduler
+distributed.scheduler - INFO - Scheduler at:  tcp://127.0.0.1:8786
+
+$ dask-cuda-worker --enable-jit-unspill&ZeroWidthSpace;
+</pre></div>
+</div>
+<p>Or environment variable <code class="docutils literal notranslate"><span class="pre">DASK_JIT_UNSPILL=True</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ dask-scheduler
+distributed.scheduler - INFO -   Scheduler at:  tcp://127.0.0.1:8786
+
+$ DASK_JIT_UNSPILL=True dask-cuda-worker&ZeroWidthSpace;
+</pre></div>
+</div>
+<section id="limitations">
+<h3>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline"></a></h3>
+<p>JIT-Unspill wraps CUDA objects, such as <code class="docutils literal notranslate"><span class="pre">cudf.Dataframe</span></code>, in a <code class="docutils literal notranslate"><span class="pre">ProxyObject</span></code>.
+Objects proxied by an instance of <code class="docutils literal notranslate"><span class="pre">ProxyObject</span></code> will be JIT-deserialized when
+accessed. The instance behaves as the proxied object and can be accessed/used
+just like the proxied object.</p>
+<p>ProxyObject has some limitations and doesn&rsquo;t mimic the proxied object perfectly.
+Most noticeable, type checking using <code class="docutils literal notranslate"><span class="pre">instance()</span></code> works as expected but direct
+type checking doesn&rsquo;t:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dask_cuda.proxy_object</span> <span class="kn">import</span> <span class="n">asproxy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">asproxy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span> <span class="nb">type</span><span class="p">(</span><span class="n">asproxy</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="ow">is</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Thus, if encountering problems remember that it is always possible to use <code class="docutils literal notranslate"><span class="pre">unproxy()</span></code>
+to access the proxied object directly, or set <code class="docutils literal notranslate"><span class="pre">DASK_JIT_UNSPILL_COMPATIBILITY_MODE=True</span></code>
+to enable compatibility mode, which automatically calls <code class="docutils literal notranslate"><span class="pre">unproxy()</span></code> on all function inputs.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div aria-label="Footer" class="rst-footer-buttons" role="navigation">
+        <a accesskey="p" class="btn btn-neutral float-left" href="explicit_comms.html" rel="prev" title="Explicit-comms"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a accesskey="n" class="btn btn-neutral float-right" href="examples/worker_count.html" rel="next" title="Controlling number of workers">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+    <p>&copy; Copyright 2020-2022, NVIDIA.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script></body></html>
