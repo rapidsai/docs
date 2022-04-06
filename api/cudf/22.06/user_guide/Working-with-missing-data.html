@@ -1,0 +1,3219 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
+
+    <title>Working with missing data &mdash; cudf 22.06.00 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link href="../_static/vendor/fontawesome/5.13.0/css/all.min.css" rel="stylesheet">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2">
+
+    <link href="../_static/pygments.css" rel="stylesheet" type="text/css">
+    <link href="../_static/copybutton.css" rel="stylesheet" type="text/css">
+    <link href="../_static/params.css" rel="stylesheet" type="text/css">
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf" rel="preload">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="../genindex.html" rel="index" title="Index">
+    <link href="../search.html" rel="search" title="Search">
+    <link href="../basics/index.html" rel="next" title="Basics">
+    <link href="guide-to-udfs.html" rel="prev" title="Overview of User Defined Functions with cuDF">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="None" name="docsearch:language">
+    
+
+    <!-- Google Analytics -->
+    
+  <link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+  <body data-offset="60" data-spy="scroll" data-target="#bd-toc-nav">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../index.html">
+  <img alt="logo" class="logo" src="../_static/RAPIDS-logo-purple.png">
+</a>
+
+
+    
+  </div>
+
+  <button aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar-collapsible" data-toggle="collapse" type="button">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div class="collapse navbar-collapse" id="navbar-collapsible">
+    <div class="ml-auto" id="navbar-center">
+      
+      <div class="navbar-center-item">
+        <ul class="navbar-nav" id="navbar-main-elements">
+    <li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../basics/index.html">
+  Basics
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../api_docs/index.html">
+  API reference
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul aria-label="Icon Links" class="navbar-nav" id="navbar-icon-links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/rapidsai/cudf" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><div id="rapids-pydata-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">cudf</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/nightly/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libkvikio/nightly">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/raft/nightly">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (22.06)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/nightly/index.html">nightly (22.06)</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">stable (22.02)</a><a class="rapids-selector__menu-item" href="/api/cudf/legacy/index.html">legacy (21.12)</a></div></div></div>
+              <div class="sidebar-start-items"><form action="../search.html" class="bd-search d-flex align-items-center" method="get">
+  <i class="icon fas fa-search"></i>
+  <input aria-label="Search the docs ..." autocomplete="off" class="form-control" id="search-input" name="q" placeholder="Search the docs ..." type="search">
+</form><nav aria-label="Main navigation" class="bd-links" id="bd-docs-nav">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="10min.html">
+   10 Minutes to cuDF and Dask-cuDF
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="10min-cudf-cupy.html">
+   10 Minutes to cuDF and CuPy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="guide-to-udfs.html">
+   Overview of User Defined Functions with cuDF
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Working with missing data
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#How-to-Detect-missing-values">
+   How to Detect missing values
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Float-dtypes-and-missing-data">
+   Float dtypes and missing data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Datetimes">
+   Datetimes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Calculations-with-missing-data">
+   Calculations with missing data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Sum/product-of-Null/nans">
+   Sum/product of Null/nans
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#NA-values-in-GroupBy">
+   NA values in GroupBy
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Inserting-missing-data">
+   Inserting missing data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Filling-missing-values:-fillna">
+   Filling missing values: fillna
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Filling-with-cudf-Object">
+   Filling with cudf Object
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Dropping-axis-labels-with-missing-data:-dropna">
+   Dropping axis labels with missing data: dropna
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Replacing-generic-values">
+   Replacing generic values
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#String/regular-expression-replacement">
+   String/regular expression replacement
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Numeric-replacement">
+   Numeric replacement
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="Working-with-missing-data">
+<h1>Working with missing data<a class="headerlink" href="#Working-with-missing-data" title="Permalink to this headline">#</a></h1>
+<p>In this section, we will discuss missing (also referred to as <code class="docutils literal notranslate"><span class="pre">NA</span></code>) values in cudf. cudf supports having missing values in all dtypes. These missing values are represented by <code class="docutils literal notranslate"><span class="pre">&lt;NA&gt;</span></code>. These values are also referenced as &ldquo;null values&rdquo;.</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#How-to-Detect-missing-values">How to Detect missing values</a></p></li>
+<li><p><a class="reference external" href="#Float-dtypes-and-missing-data">Float dtypes and missing data</a></p></li>
+<li><p><a class="reference external" href="#Datetimes">Datetimes</a></p></li>
+<li><p><a class="reference external" href="#Calculations-with-missing-data">Calculations with missing data</a></p></li>
+<li><p><a class="reference external" href="#Sum/product-of-Null/nans">Sum/product of Null/nans</a></p></li>
+<li><p><a class="reference external" href="#NA-values-in-GroupBy">NA values in GroupBy</a></p></li>
+<li><p><a class="reference external" href="#Inserting-missing-data">Inserting missing data</a></p></li>
+<li><p><a class="reference external" href="#Filling-missing-values:-fillna">Filling missing values: fillna</a></p></li>
+<li><p><a class="reference external" href="#Filling-with-cudf-Object">Filling with cudf Object</a></p></li>
+<li><p><a class="reference external" href="#Dropping-axis-labels-with-missing-data:-dropna">Dropping axis labels with missing data: dropna</a></p></li>
+<li><p><a class="reference external" href="#Replacing-generic-values">Replacing generic values</a></p></li>
+<li><p><a class="reference external" href="#String/regular-expression-replacement">String/regular expression replacement</a></p></li>
+<li><p><a class="reference external" href="#Numeric-replacement">Numeric replacement</a></p></li>
+</ol>
+<section id="How-to-Detect-missing-values">
+<h2>How to Detect missing values<a class="headerlink" href="#How-to-Detect-missing-values" title="Permalink to this headline">#</a></h2>
+<p>To detect missing values, you can use <code class="docutils literal notranslate"><span class="pre">isna()</span></code> and <code class="docutils literal notranslate"><span class="pre">notna()</span></code> functions.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="s1">'b'</span><span class="p">:[</span><span class="mf">0.1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mf">17.17</span><span class="p">]})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>&lt;NA&gt;</td>
+      <td>2.3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>17.17</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>True</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0     True
+1     True
+2    False
+3     True
+Name: a, dtype: bool
+</pre></div></div>
+</div>
+<p>One has to be mindful that in Python (and NumPy), the nan&rsquo;s don&rsquo;t compare equal, but None&rsquo;s do. Note that cudf/NumPy uses the fact that <code class="docutils literal notranslate"><span class="pre">np.nan</span> <span class="pre">!=</span> <span class="pre">np.nan</span></code>, and treats <code class="docutils literal notranslate"><span class="pre">None</span></code> like <code class="docutils literal notranslate"><span class="pre">np.nan</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kc">None</span> <span class="o">==</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>True
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>False
+</pre></div></div>
+</div>
+<p>So as compared to above, a scalar equality comparison versus a None/np.nan doesn&rsquo;t provide useful information.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'b'</span><span class="p">]</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    False
+1    False
+2    False
+3    False
+Name: b, dtype: bool
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    &lt;NA&gt;
+1       1
+2       2
+dtype: int64
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">==</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    False
+1    False
+2    False
+dtype: bool
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span> <span class="n">nan_as_null</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    1.0
+1    2.0
+2    NaN
+dtype: float64
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    False
+1    False
+2    False
+dtype: bool
+</pre></div></div>
+</div>
+</section>
+<section id="Float-dtypes-and-missing-data">
+<h2>Float dtypes and missing data<a class="headerlink" href="#Float-dtypes-and-missing-data" title="Permalink to this headline">#</a></h2>
+<p>Because <code class="docutils literal notranslate"><span class="pre">NaN</span></code> is a float, a column of integers with even one missing values is cast to floating-point dtype. However this doesn&rsquo;t happen by default.</p>
+<p>By default if a <code class="docutils literal notranslate"><span class="pre">NaN</span></code> value is passed to <code class="docutils literal notranslate"><span class="pre">Series</span></code> constructor, it is treated as <code class="docutils literal notranslate"><span class="pre">&lt;NA&gt;</span></code> value.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0       1
+1       2
+2    &lt;NA&gt;
+dtype: int64
+</pre></div></div>
+</div>
+<p>Hence to consider a <code class="docutils literal notranslate"><span class="pre">NaN</span></code> as <code class="docutils literal notranslate"><span class="pre">NaN</span></code> you will have to pass <code class="docutils literal notranslate"><span class="pre">nan_as_null=False</span></code> parameter into <code class="docutils literal notranslate"><span class="pre">Series</span></code> constructor.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span> <span class="n">nan_as_null</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    1.0
+1    2.0
+2    NaN
+dtype: float64
+</pre></div></div>
+</div>
+</section>
+<section id="Datetimes">
+<h2>Datetimes<a class="headerlink" href="#Datetimes" title="Permalink to this headline">#</a></h2>
+<p>For <code class="docutils literal notranslate"><span class="pre">datetime64</span></code> types, cudf doesn&rsquo;t support having <code class="docutils literal notranslate"><span class="pre">NaT</span></code> values. Instead these values which are specific to numpy and pandas are considered as null values(<code class="docutils literal notranslate"><span class="pre">&lt;NA&gt;</span></code>) in cudf. The actual underlying value of <code class="docutils literal notranslate"><span class="pre">NaT</span></code> is <code class="docutils literal notranslate"><span class="pre">min(int64)</span></code> and cudf retains the underlying value when converting a cudf object to pandas object.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">datetime_series</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s2">"20120101"</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">NaT</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s2">"20120101"</span><span class="p">)])</span>
+<span class="n">datetime_series</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    2012-01-01 00:00:00.000000
+1                          &lt;NA&gt;
+2    2012-01-01 00:00:00.000000
+dtype: datetime64[us]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">datetime_series</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0   2012-01-01
+1          NaT
+2   2012-01-01
+dtype: datetime64[ns]
+</pre></div></div>
+</div>
+<p>any operations on rows having <code class="docutils literal notranslate"><span class="pre">&lt;NA&gt;</span></code> values in <code class="docutils literal notranslate"><span class="pre">datetime</span></code> column will result in <code class="docutils literal notranslate"><span class="pre">&lt;NA&gt;</span></code> value at the same location in resulting column:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">datetime_series</span> <span class="o">-</span> <span class="n">datetime_series</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    0 days 00:00:00
+1               &lt;NA&gt;
+2    0 days 00:00:00
+dtype: timedelta64[us]
+</pre></div></div>
+</div>
+</section>
+<section id="Calculations-with-missing-data">
+<h2>Calculations with missing data<a class="headerlink" href="#Calculations-with-missing-data" title="Permalink to this headline">#</a></h2>
+<p>Null values propagate naturally through arithmetic operations between pandas objects.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="s1">'b'</span><span class="p">:</span><span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">nan_as_null</span><span class="o">=</span><span class="kc">False</span><span class="p">)})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df2</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="s1">'b'</span><span class="p">:</span><span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">0.23</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">])})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;NA&gt;</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>3.2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>&lt;NA&gt;</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df2</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>0.23</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>11</td>
+      <td>22.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>3.2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>34</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>10</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span> <span class="o">+</span> <span class="n">df2</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;NA&gt;</td>
+      <td>24.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4</td>
+      <td>6.4</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>37</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>&lt;NA&gt;</td>
+      <td>2.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>While summing the data along a series, <code class="docutils literal notranslate"><span class="pre">NA</span></code> values will be treated as <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0       1
+1    &lt;NA&gt;
+2       2
+3       3
+4    &lt;NA&gt;
+Name: a, dtype: int64
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>6
+</pre></div></div>
+</div>
+<p>Since <code class="docutils literal notranslate"><span class="pre">NA</span></code> values are treated as <code class="docutils literal notranslate"><span class="pre">0</span></code>, the mean would result to 2 in this case <code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">+</span> <span class="pre">0</span> <span class="pre">+</span> <span class="pre">2</span> <span class="pre">+</span> <span class="pre">3</span> <span class="pre">+</span> <span class="pre">0)/5</span> <span class="pre">=</span> <span class="pre">2</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>2.0
+</pre></div></div>
+</div>
+<p>To preserve <code class="docutils literal notranslate"><span class="pre">NA</span></code> values in the above calculations, <code class="docutils literal notranslate"><span class="pre">sum</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">mean</span></code> support <code class="docutils literal notranslate"><span class="pre">skipna</span></code> parameter. By default it&rsquo;s value is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, we can change it to <code class="docutils literal notranslate"><span class="pre">False</span></code> to preserve <code class="docutils literal notranslate"><span class="pre">NA</span></code> values.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">skipna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>nan
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">skipna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>nan
+</pre></div></div>
+</div>
+<p>Cumulative methods like <code class="docutils literal notranslate"><span class="pre">cumsum</span></code> and <code class="docutils literal notranslate"><span class="pre">cumprod</span></code> ignore <code class="docutils literal notranslate"><span class="pre">NA</span></code> values by default.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0       1
+1    &lt;NA&gt;
+2       3
+3       6
+4    &lt;NA&gt;
+Name: a, dtype: int64
+</pre></div></div>
+</div>
+<p>To preserve <code class="docutils literal notranslate"><span class="pre">NA</span></code> values in cumulative methods, provide <code class="docutils literal notranslate"><span class="pre">skipna=False</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">skipna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0       1
+1    &lt;NA&gt;
+2    &lt;NA&gt;
+3    &lt;NA&gt;
+4    &lt;NA&gt;
+Name: a, dtype: int64
+</pre></div></div>
+</div>
+</section>
+<section id="Sum/product-of-Null/nans">
+<h2>Sum/product of Null/nans<a class="headerlink" href="#Sum/product-of-Null/nans" title="Permalink to this headline">#</a></h2>
+<p>The sum of an empty or all-NA Series of a DataFrame is 0.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span> <span class="n">nan_as_null</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0.0
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span> <span class="n">nan_as_null</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">skipna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>nan
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'float64'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0.0
+</pre></div></div>
+</div>
+<p>The product of an empty or all-NA Series of a DataFrame is 1.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span> <span class="n">nan_as_null</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">prod</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>1.0
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span> <span class="n">nan_as_null</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">skipna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>nan
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'float64'</span><span class="p">)</span><span class="o">.</span><span class="n">prod</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>1.0
+</pre></div></div>
+</div>
+</section>
+<section id="NA-values-in-GroupBy">
+<h2>NA values in GroupBy<a class="headerlink" href="#NA-values-in-GroupBy" title="Permalink to this headline">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">NA</span></code> groups in GroupBy are automatically excluded. For example:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;NA&gt;</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>3.2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>&lt;NA&gt;</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'a'</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>b</th>
+    </tr>
+    <tr>
+      <th>a</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>3.2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>It is also possible to include <code class="docutils literal notranslate"><span class="pre">NA</span></code> in groups by passing <code class="docutils literal notranslate"><span class="pre">dropna=False</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>b</th>
+    </tr>
+    <tr>
+      <th>a</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>3.2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>&lt;NA&gt;</th>
+      <td>1.5</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Inserting-missing-data">
+<h2>Inserting missing data<a class="headerlink" href="#Inserting-missing-data" title="Permalink to this headline">#</a></h2>
+<p>All dtypes support insertion of missing value by assignment. Any specific location in series can made null by assigning it to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">series</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">series</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    1
+1    2
+2    3
+3    4
+dtype: int64
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">series</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">series</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0       1
+1       2
+2    &lt;NA&gt;
+3       4
+dtype: int64
+</pre></div></div>
+</div>
+</section>
+<section id="Filling-missing-values:-fillna">
+<h2>Filling missing values: fillna<a class="headerlink" href="#Filling-missing-values:-fillna" title="Permalink to this headline">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">fillna()</span></code> can fill in <code class="docutils literal notranslate"><span class="pre">NA</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values with non-NA data.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;NA&gt;</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>3.2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>&lt;NA&gt;</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="p">[</span><span class="s1">'b'</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    10.0
+1     2.0
+2     3.2
+3     0.1
+4     1.0
+Name: b, dtype: float64
+</pre></div></div>
+</div>
+</section>
+<section id="Filling-with-cudf-Object">
+<h2>Filling with cudf Object<a class="headerlink" href="#Filling-with-cudf-Object" title="Permalink to this headline">#</a></h2>
+<p>You can also fillna using a dict or Series that is alignable. The labels of the dict or index of the Series must match the columns of the frame you wish to fill. The use case of this is to fill a DataFrame with the mean of that column.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
+<span class="n">dff</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">'ABC'</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dff</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dff</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dff</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dff</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+      <th>C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.771245</td>
+      <td>0.051024</td>
+      <td>1.199239</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-1.168041</td>
+      <td>0.702664</td>
+      <td>-0.270806</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-1.467009</td>
+      <td>-0.143080</td>
+      <td>-0.806151</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NaN</td>
+      <td>-0.610798</td>
+      <td>-0.272895</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.396784</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-0.439343</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>1.093102</td>
+      <td>-0.764758</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.003098</td>
+      <td>-0.722648</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>-0.095899</td>
+      <td>-1.285156</td>
+      <td>-0.300566</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.109465</td>
+      <td>2.497843</td>
+      <td>-1.199856</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dff</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">dff</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+      <th>C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.771245</td>
+      <td>0.051024</td>
+      <td>1.199239</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-1.168041</td>
+      <td>0.702664</td>
+      <td>-0.270806</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-1.467009</td>
+      <td>-0.143080</td>
+      <td>-0.806151</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.149173</td>
+      <td>-0.610798</td>
+      <td>-0.272895</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.149173</td>
+      <td>-0.034364</td>
+      <td>1.396784</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-0.439343</td>
+      <td>-0.034364</td>
+      <td>-0.036322</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>1.093102</td>
+      <td>-0.764758</td>
+      <td>-0.036322</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.003098</td>
+      <td>-0.722648</td>
+      <td>-0.036322</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>-0.095899</td>
+      <td>-1.285156</td>
+      <td>-0.300566</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.109465</td>
+      <td>2.497843</td>
+      <td>-1.199856</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dff</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">dff</span><span class="o">.</span><span class="n">mean</span><span class="p">()[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+      <th>C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.771245</td>
+      <td>0.051024</td>
+      <td>1.199239</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-1.168041</td>
+      <td>0.702664</td>
+      <td>-0.270806</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-1.467009</td>
+      <td>-0.143080</td>
+      <td>-0.806151</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NaN</td>
+      <td>-0.610798</td>
+      <td>-0.272895</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>NaN</td>
+      <td>-0.034364</td>
+      <td>1.396784</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-0.439343</td>
+      <td>-0.034364</td>
+      <td>-0.036322</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>1.093102</td>
+      <td>-0.764758</td>
+      <td>-0.036322</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.003098</td>
+      <td>-0.722648</td>
+      <td>-0.036322</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>-0.095899</td>
+      <td>-1.285156</td>
+      <td>-0.300566</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.109465</td>
+      <td>2.497843</td>
+      <td>-1.199856</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Dropping-axis-labels-with-missing-data:-dropna">
+<h2>Dropping axis labels with missing data: dropna<a class="headerlink" href="#Dropping-axis-labels-with-missing-data:-dropna" title="Permalink to this headline">#</a></h2>
+<p>Missing data can be excluded using <code class="docutils literal notranslate"><span class="pre">dropna()</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;NA&gt;</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>3.2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>&lt;NA&gt;</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>3.2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>0.1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+    </tr>
+    <tr>
+      <th>1</th>
+    </tr>
+    <tr>
+      <th>2</th>
+    </tr>
+    <tr>
+      <th>3</th>
+    </tr>
+    <tr>
+      <th>4</th>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>An equivalent <code class="docutils literal notranslate"><span class="pre">dropna()</span></code> is available for Series.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    1
+2    2
+3    3
+Name: a, dtype: int64
+</pre></div></div>
+</div>
+</section>
+<section id="Replacing-generic-values">
+<h2>Replacing generic values<a class="headerlink" href="#Replacing-generic-values" title="Permalink to this headline">#</a></h2>
+<p>Often times we want to replace arbitrary values with other values.</p>
+<p><code class="docutils literal notranslate"><span class="pre">replace()</span></code> in Series and <code class="docutils literal notranslate"><span class="pre">replace()</span></code> in DataFrame provides an efficient yet flexible way to perform such replacements.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">series</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">series</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    0.0
+1    1.0
+2    2.0
+3    3.0
+4    4.0
+dtype: float64
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">series</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    5.0
+1    1.0
+2    2.0
+3    3.0
+4    4.0
+dtype: float64
+</pre></div></div>
+</div>
+<p>We can also replace any value with a <code class="docutils literal notranslate"><span class="pre">&lt;NA&gt;</span></code> value.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">series</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    &lt;NA&gt;
+1     1.0
+2     2.0
+3     3.0
+4     4.0
+dtype: float64
+</pre></div></div>
+</div>
+<p>You can replace a list of values by a list of other values:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[62]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">series</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[62]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    4.0
+1    3.0
+2    2.0
+3    1.0
+4    0.0
+dtype: float64
+</pre></div></div>
+</div>
+<p>You can also specify a mapping dict:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[63]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">series</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="mi">0</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="mi">100</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[63]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0     10.0
+1    100.0
+2      2.0
+3      3.0
+4      4.0
+dtype: float64
+</pre></div></div>
+</div>
+<p>For a DataFrame, you can specify individual values by column:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"a"</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="s2">"b"</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[65]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[65]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>9</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[66]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">"a"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span> <span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[66]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>100</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>9</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="String/regular-expression-replacement">
+<h2>String/regular expression replacement<a class="headerlink" href="#String/regular-expression-replacement" title="Permalink to this headline">#</a></h2>
+<p>cudf supports replacing string values using <code class="docutils literal notranslate"><span class="pre">replace</span></code> API:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[67]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)),</span> <span class="s2">"b"</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="s2">"ab.."</span><span class="p">),</span> <span class="s2">"c"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"d"</span><span class="p">]}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[68]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[69]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[69]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>a</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>b</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>.</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>.</td>
+      <td>d</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[70]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"."</span><span class="p">,</span> <span class="s2">"A Dot"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[70]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>a</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>b</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>A Dot</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>A Dot</td>
+      <td>d</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[71]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="s2">"."</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">],</span> <span class="p">[</span><span class="s2">"A Dot"</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[71]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>a</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>A Dot</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>A Dot</td>
+      <td>d</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Replace a few different values (list -&gt; list):</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[72]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"."</span><span class="p">],</span> <span class="p">[</span><span class="s2">"b"</span><span class="p">,</span> <span class="s2">"--"</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[72]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>b</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>b</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>--</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>--</td>
+      <td>d</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Only search in column &lsquo;b&rsquo; (dict -&gt; dict):</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[73]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">"b"</span><span class="p">:</span> <span class="s2">"."</span><span class="p">},</span> <span class="p">{</span><span class="s2">"b"</span><span class="p">:</span> <span class="s2">"replacement value"</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[73]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>a</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>b</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>replacement value</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>replacement value</td>
+      <td>d</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Numeric-replacement">
+<h2>Numeric replacement<a class="headerlink" href="#Numeric-replacement" title="Permalink to this headline">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">replace()</span></code> can also be used similar to <code class="docutils literal notranslate"><span class="pre">fillna()</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[74]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[75]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.5</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[76]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[76]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.123160746</td>
+      <td>1.09464783</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.68137677</td>
+      <td>-0.357346253</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1.173285961</td>
+      <td>-0.968616065</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.147922362</td>
+      <td>-0.154880098</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Replacing more than one value is possible by passing a list.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[77]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df00</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[78]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">df00</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[78]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>5.000000</td>
+      <td>5.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5.000000</td>
+      <td>5.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.123161</td>
+      <td>1.094648</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>5.000000</td>
+      <td>5.000000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.000000</td>
+      <td>5.000000</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.681377</td>
+      <td>-0.357346</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>5.000000</td>
+      <td>5.000000</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>5.000000</td>
+      <td>5.000000</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1.173286</td>
+      <td>-0.968616</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.147922</td>
+      <td>-0.154880</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>You can also operate on the DataFrame in place:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[79]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[80]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[80]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.123160746</td>
+      <td>1.09464783</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.68137677</td>
+      <td>-0.357346253</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1.173285961</td>
+      <td>-0.968616065</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.147922362</td>
+      <td>-0.154880098</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev" href="guide-to-udfs.html" id="prev-link" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Overview of User Defined Functions with cuDF</p>
+        </div>
+    </a>
+    <a class="right-next" href="../basics/index.html" id="next-link" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Basics</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2018-2021, NVIDIA.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script></body></html>
