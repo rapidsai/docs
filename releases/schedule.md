@@ -32,6 +32,18 @@ The current release schedule is posted on the [RAPIDS Maintainers Docs]({% link 
 
 Historical list of completed releases
 
+### Release v22.04 Schedule
+
+Phase | Start | End | Duration
+-- | -- | -- | --
+Development (cuDF/RMM) | Wed, Jan 12 | Wed, Mar 16 | 44 days
+Development (others) | Thu, Jan 20 | Wed, Mar 23 | 44 days
+[Burn Down]({% link releases/process.md %}#burn-down) (cuDF/RMM) | Thu, Mar 17 | Wed, Mar 23 | 5 days
+[Burn Down]({% link releases/process.md %}#burn-down) (others) | Thu, Mar 24 | Wed, Mar 30 | 5 days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM) | Thu, Mar 24 | Wed, Mar 30 | 5 days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | Thu, Mar 31 | Tue, Apr 5 | 4 days
+[Release]({% link releases/process.md %}#releasing) | Wed, Apr 6 | Thu, Apr 7 | 2 days
+
 ### Release v22.02 Schedule
 
 Phase | Start | End | Duration
