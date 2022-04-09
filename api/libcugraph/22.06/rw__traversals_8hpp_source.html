@@ -233,10 +233,10 @@ $(function() {
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&nbsp; </div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&nbsp;  <a class="code" href="structcugraph_1_1detail_1_1uniform__selector__t.html">uniform_selector_t</a>(raft::handle_t <span class="keyword">const</span>&amp; handle, graph_type <span class="keyword">const</span>&amp; graph, real_t tag)</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&nbsp;    : d_cache_out_degs_(graph.compute_out_degrees(handle)),</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&nbsp;      sampler_{graph.get_matrix_partition_view().get_offsets(),</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&nbsp;               graph.get_matrix_partition_view().get_indices(),</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&nbsp;               graph.get_matrix_partition_view().get_weights()</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&nbsp;                 ? *(graph.get_matrix_partition_view().get_weights())</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&nbsp;      sampler_{graph.local_edge_partition_view().offsets(),</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&nbsp;               graph.local_edge_partition_view().indices(),</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&nbsp;               graph.local_edge_partition_view().weights()</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&nbsp;                 ? *(graph.local_edge_partition_view().weights())</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&nbsp;                 : <span class="keyword">static_cast&lt;</span>weight_t*<span class="keyword">&gt;</span>(<span class="keyword">nullptr</span>),</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&nbsp;               d_cache_out_degs_.data()}</div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&nbsp;  {</div>
@@ -275,12 +275,12 @@ $(function() {
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&nbsp;    <span class="keyword">auto</span> <span class="keyword">const</span>&amp; graph_view =</div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&nbsp;      <span class="keyword">static_cast&lt;</span><a class="code" href="classcugraph_1_1graph__view__t.html">graph_view_t&lt;vertex_t, edge_t, weight_t, false, false&gt;</a> const&amp;<span class="keyword">&gt;</span>(graph_v);</div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&nbsp; </div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&nbsp;    <span class="keyword">auto</span> opt_weights = graph_view.get_matrix_partition_view().get_weights();</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&nbsp;    <span class="keyword">auto</span> opt_weights = graph_view.local_edge_partition_view().weights();</div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&nbsp;    CUGRAPH_EXPECTS(opt_weights.has_value(), <span class="stringliteral">"Cannot aggregate weights of un-weighted graph."</span>);</div>
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&nbsp; </div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&nbsp;    <span class="keywordtype">size_t</span> num_vertices = d_aggregate_weights_.size();</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&nbsp; </div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&nbsp;    edge_t <span class="keyword">const</span>* offsets = graph_view.get_matrix_partition_view().get_offsets();</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&nbsp;    edge_t <span class="keyword">const</span>* offsets = graph_view.local_edge_partition_view().offsets();</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&nbsp; </div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&nbsp;    weight_t <span class="keyword">const</span>* values = *opt_weights;</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&nbsp; </div>
@@ -401,11 +401,11 @@ $(function() {
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&nbsp;  <span class="keyword">using</span> <a class="code" href="structcugraph_1_1detail_1_1biased__selector__t_1_1sampler__t.html">sampler_type</a> = <a class="code" href="structcugraph_1_1detail_1_1biased__selector__t_1_1sampler__t.html">sampler_t</a>;</div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&nbsp; </div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&nbsp;  <a class="code" href="structcugraph_1_1detail_1_1biased__selector__t.html">biased_selector_t</a>(raft::handle_t <span class="keyword">const</span>&amp; handle, graph_type <span class="keyword">const</span>&amp; graph, real_t tag)</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&nbsp;    : sum_calculator_(handle, graph.get_number_of_vertices()),</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&nbsp;      sampler_{graph.get_matrix_partition_view().get_offsets(),</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&nbsp;               graph.get_matrix_partition_view().get_indices(),</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&nbsp;               graph.get_matrix_partition_view().get_weights()</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&nbsp;                 ? *(graph.get_matrix_partition_view().get_weights())</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&nbsp;    : sum_calculator_(handle, graph.number_of_vertices()),</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&nbsp;      sampler_{graph.local_edge_partition_view().offsets(),</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&nbsp;               graph.local_edge_partition_view().indices(),</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&nbsp;               graph.local_edge_partition_view().weights()</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&nbsp;                 ? *(graph.local_edge_partition_view().weights())</div>
 <div class="line"><a name="l00352"></a><span class="lineno">  352</span>&nbsp;                 : <span class="keyword">static_cast&lt;</span>weight_t*<span class="keyword">&gt;</span>(<span class="keyword">nullptr</span>),</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&nbsp;               sum_calculator_.get_aggregated_weights().data()}</div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&nbsp;  {</div>
@@ -633,10 +633,10 @@ $(function() {
 <div class="line"><a name="l00576"></a><span class="lineno">  576</span>&nbsp;                      edge_t num_paths = 0)</div>
 <div class="line"><a name="l00577"></a><span class="lineno">  577</span>&nbsp;    : max_out_degree_(num_paths &gt; 0 ? graph.compute_max_out_degree(handle) : 0),</div>
 <div class="line"><a name="l00578"></a><span class="lineno">  578</span>&nbsp;      d_coalesced_alpha_{max_out_degree_ * num_paths, handle.get_stream()},</div>
-<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&nbsp;      sampler_{graph.get_matrix_partition_view().get_offsets(),</div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&nbsp;               graph.get_matrix_partition_view().get_indices(),</div>
-<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&nbsp;               graph.get_matrix_partition_view().get_weights()</div>
-<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&nbsp;                 ? *(graph.get_matrix_partition_view().get_weights())</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&nbsp;      sampler_{graph.local_edge_partition_view().offsets(),</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&nbsp;               graph.local_edge_partition_view().indices(),</div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&nbsp;               graph.local_edge_partition_view().weights()</div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&nbsp;                 ? *(graph.local_edge_partition_view().weights())</div>
 <div class="line"><a name="l00583"></a><span class="lineno">  583</span>&nbsp;                 : <span class="keyword">static_cast&lt;</span>weight_t*<span class="keyword">&gt;</span>(<span class="keyword">nullptr</span>),</div>
 <div class="line"><a name="l00584"></a><span class="lineno">  584</span>&nbsp;               p,</div>
 <div class="line"><a name="l00585"></a><span class="lineno">  585</span>&nbsp;               q,</div>
@@ -841,7 +841,7 @@ $(function() {
 <div class="ttc" id="astructcugraph_1_1detail_1_1random__walker__t_html"><div class="ttname"><a href="structcugraph_1_1detail_1_1random__walker__t.html">cugraph::detail::random_walker_t</a></div><div class="ttdoc">Class abstracting the RW initialization, stepping, and stopping functionality The outline of the algo...</div><div class="ttdef"><b>Definition:</b> random_walks.cuh:343</div></div>
 <div class="ttc" id="astructcugraph_1_1detail_1_1horizontal__traversal__t_html"><div class="ttname"><a href="structcugraph_1_1detail_1_1horizontal__traversal__t.html">cugraph::detail::horizontal_traversal_t</a></div><div class="ttdef"><b>Definition:</b> rw_traversals.hpp:683</div></div>
 <div class="ttc" id="astructcugraph_1_1visitors_1_1graph__envelope__t_1_1base__graph__t_html"><div class="ttname"><a href="structcugraph_1_1visitors_1_1graph__envelope__t_1_1base__graph__t.html">cugraph::visitors::graph_envelope_t::base_graph_t</a></div><div class="ttdef"><b>Definition:</b> graph_envelope.hpp:62</div></div>
-<div class="ttc" id="aclasscugraph_1_1graph__view__t_html"><div class="ttname"><a href="classcugraph_1_1graph__view__t.html">cugraph::graph_view_t</a></div><div class="ttdef"><b>Definition:</b> graph_view.hpp:342</div></div>
+<div class="ttc" id="aclasscugraph_1_1graph__view__t_html"><div class="ttname"><a href="classcugraph_1_1graph__view__t.html">cugraph::graph_view_t</a></div><div class="ttdef"><b>Definition:</b> graph_view.hpp:352</div></div>
 <div class="ttc" id="astructcugraph_1_1detail_1_1node2vec__selector__t_html"><div class="ttname"><a href="structcugraph_1_1detail_1_1node2vec__selector__t.html">cugraph::detail::node2vec_selector_t</a></div><div class="ttdef"><b>Definition:</b> rw_traversals.hpp:377</div></div>
 <div class="ttc" id="anamespacecugraph_html"><div class="ttname"><a href="namespacecugraph.html">cugraph</a></div><div class="ttdoc">Katz Centrality implementation.</div><div class="ttdef"><b>Definition:</b> abstract_functor.hpp:22</div></div>
 <div class="ttc" id="astructcugraph_1_1visitors_1_1return__t_html"><div class="ttname"><a href="structcugraph_1_1visitors_1_1return__t.html">cugraph::visitors::return_t</a></div><div class="ttdef"><b>Definition:</b> ret_terased.hpp:28</div></div>
