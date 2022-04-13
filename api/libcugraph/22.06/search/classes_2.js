@@ -28,7 +28,7 @@ var searchData=
   ['cugraph_5ferased_5funique_5fptr_5f_460',['cugraph_erased_unique_ptr_',['../structcugraph__erased__unique__ptr__.html',1,'']]],
   ['cugraph_5ferror_5f_461',['cugraph_error_',['../structcugraph__error__.html',1,'']]],
   ['cugraph_5ferror_5ft_462',['cugraph_error_t',['../structcugraph_1_1c__api_1_1cugraph__error__t.html',1,'cugraph::c_api']]],
-  ['cugraph_5fextract_5fpaths_5fresult_5ft_463',['cugraph_extract_paths_result_t',['../structcugraph_1_1c__api_1_1cugraph__extract__paths__result__t.html',1,'cugraph::c_api::cugraph_extract_paths_result_t'],['../structcugraph__extract__paths__result__t.html',1,'cugraph_extract_paths_result_t']]],
+  ['cugraph_5fextract_5fpaths_5fresult_5ft_463',['cugraph_extract_paths_result_t',['../structcugraph__extract__paths__result__t.html',1,'cugraph_extract_paths_result_t'],['../structcugraph_1_1c__api_1_1cugraph__extract__paths__result__t.html',1,'cugraph::c_api::cugraph_extract_paths_result_t']]],
   ['cugraph_5fgraph_5fenvelope_5f_464',['cugraph_graph_envelope_',['../structcugraph__graph__envelope__.html',1,'']]],
   ['cugraph_5fgraph_5fproperties_5ft_465',['cugraph_graph_properties_t',['../structcugraph__graph__properties__t.html',1,'']]],
   ['cugraph_5fgraph_5ft_466',['cugraph_graph_t',['../structcugraph__graph__t.html',1,'cugraph_graph_t'],['../structcugraph_1_1c__api_1_1cugraph__graph__t.html',1,'cugraph::c_api::cugraph_graph_t']]],
@@ -39,10 +39,10 @@ var searchData=
   ['cugraph_5fresource_5fhandle_5ft_471',['cugraph_resource_handle_t',['../structcugraph_1_1c__api_1_1cugraph__resource__handle__t.html',1,'cugraph::c_api']]],
   ['cugraph_5frw_5fret_5f_472',['cugraph_rw_ret_',['../structcugraph__rw__ret__.html',1,'']]],
   ['cugraph_5frw_5fret_5ftuple_5f_473',['cugraph_rw_ret_tuple_',['../structcugraph__rw__ret__tuple__.html',1,'']]],
-  ['cugraph_5fsample_5fresult_5ft_474',['cugraph_sample_result_t',['../structcugraph_1_1c__api_1_1cugraph__sample__result__t.html',1,'cugraph::c_api::cugraph_sample_result_t'],['../structcugraph__sample__result__t.html',1,'cugraph_sample_result_t']]],
-  ['cugraph_5ftype_5ferased_5fdevice_5farray_5ft_475',['cugraph_type_erased_device_array_t',['../structcugraph_1_1c__api_1_1cugraph__type__erased__device__array__t.html',1,'cugraph::c_api::cugraph_type_erased_device_array_t'],['../structcugraph__type__erased__device__array__t.html',1,'cugraph_type_erased_device_array_t']]],
+  ['cugraph_5fsample_5fresult_5ft_474',['cugraph_sample_result_t',['../structcugraph__sample__result__t.html',1,'cugraph_sample_result_t'],['../structcugraph_1_1c__api_1_1cugraph__sample__result__t.html',1,'cugraph::c_api::cugraph_sample_result_t']]],
+  ['cugraph_5ftype_5ferased_5fdevice_5farray_5ft_475',['cugraph_type_erased_device_array_t',['../structcugraph__type__erased__device__array__t.html',1,'cugraph_type_erased_device_array_t'],['../structcugraph_1_1c__api_1_1cugraph__type__erased__device__array__t.html',1,'cugraph::c_api::cugraph_type_erased_device_array_t']]],
   ['cugraph_5ftype_5ferased_5fdevice_5farray_5fview_5ft_476',['cugraph_type_erased_device_array_view_t',['../structcugraph_1_1c__api_1_1cugraph__type__erased__device__array__view__t.html',1,'cugraph::c_api::cugraph_type_erased_device_array_view_t'],['../structcugraph__type__erased__device__array__view__t.html',1,'cugraph_type_erased_device_array_view_t']]],
   ['cugraph_5ftype_5ferased_5fhost_5farray_5ft_477',['cugraph_type_erased_host_array_t',['../structcugraph_1_1c__api_1_1cugraph__type__erased__host__array__t.html',1,'cugraph::c_api::cugraph_type_erased_host_array_t'],['../structcugraph__type__erased__host__array__t.html',1,'cugraph_type_erased_host_array_t']]],
-  ['cugraph_5ftype_5ferased_5fhost_5farray_5fview_5ft_478',['cugraph_type_erased_host_array_view_t',['../structcugraph_1_1c__api_1_1cugraph__type__erased__host__array__view__t.html',1,'cugraph::c_api::cugraph_type_erased_host_array_view_t'],['../structcugraph__type__erased__host__array__view__t.html',1,'cugraph_type_erased_host_array_view_t']]],
+  ['cugraph_5ftype_5ferased_5fhost_5farray_5fview_5ft_478',['cugraph_type_erased_host_array_view_t',['../structcugraph__type__erased__host__array__view__t.html',1,'cugraph_type_erased_host_array_view_t'],['../structcugraph_1_1c__api_1_1cugraph__type__erased__host__array__view__t.html',1,'cugraph::c_api::cugraph_type_erased_host_array_view_t']]],
   ['cy_5fmulti_5fedgelists_5ft_479',['cy_multi_edgelists_t',['../structcugraph_1_1cython_1_1cy__multi__edgelists__t.html',1,'cugraph::cython']]]
 ];
