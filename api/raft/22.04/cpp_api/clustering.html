@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en"><head>
+  <meta charset="utf-8"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
+
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Clustering &mdash; raft 22.02.00 documentation</title>
+      <link href="../_static/pygments.css" rel="stylesheet" type="text/css">
+      <link href="../_static/css/theme.css" rel="stylesheet" type="text/css">
+      <link href="../_static/copybutton.css" rel="stylesheet" type="text/css">
+      <link href="../_static/infoboxes.css" rel="stylesheet" type="text/css">
+      <link href="../_static/params.css" rel="stylesheet" type="text/css">
+      <link href="../_static/references.css" rel="stylesheet" type="text/css">
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="../_static/example_mod.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link href="../genindex.html" rel="index" title="Index">
+    <link href="../search.html" rel="search" title="Search">
+    <link href="linalg.html" rel="next" title="Linear Algebra">
+    <link href="core.html" rel="prev" title="Core"> 
+<link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"><div id="rapids-jtd-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">raft</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/stable/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libkvikio/stable">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/raft/stable">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">stable (22.04)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/raft/nightly">nightly (22.06)</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/raft/stable">stable (22.04)</a></div></div></div>
+            
+              
+<div role="search">
+  <form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text">
+    <input name="check_keywords" type="hidden" value="yes">
+    <input name="area" type="hidden" value="default">
+  </form>
+</div>
+        </div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cpp_api.html">RAFT C++ API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="core.html">Core</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#k-means">K-Means</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spectral">Spectral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hierarchical">Hierarchical</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="linalg.html">Linear Algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix.html">Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random.html">Random</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spatial.html">Spatial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sparse.html">Sparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stats.html">Stats</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../pyraft_api.html">PyRAFT API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pylibraft_api.html">PyLibRAFT API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../index.html">raft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div aria-label="Page navigation" role="navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a class="icon icon-home" href="../index.html"></a> &raquo;</li>
+          <li><a href="../cpp_api.html">RAFT C++ API Reference</a> &raquo;</li>
+      <li>Clustering</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cpp_api/clustering.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+             
+  <section id="clustering">
+<h1>Clustering<a class="headerlink" href="#clustering" title="Permalink to this headline">&para;</a></h1>
+<p>This page provides C++ class references for the publicly-exposed elements of the clustering package.</p>
+<section id="k-means">
+<h2>K-Means<a class="headerlink" href="#k-means" title="Permalink to this headline">&para;</a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4raft7clusterE">
+<span id="_CPPv3N4raft7clusterE"></span><span id="_CPPv2N4raft7clusterE"></span><span id="raft::cluster"></span><span class="target" id="namespaceraft_1_1cluster"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">cluster</span></span></span><a class="headerlink" href="#_CPPv4N4raft7clusterE" title="Permalink to this definition">&para;</a><br></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="namespaceraft_1_1cluster_1afc1098269ada641e85ab5264f3569e87"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">index_type_t,</span> <span class="pre">typename</span> <span class="pre">value_type_t&gt;</span> <span class="pre">int</span> <span class="pre">kmeans</span> <span class="pre">(handle_t</span> <span class="pre">const</span> <span class="pre">&amp;handle,</span> <span class="pre">index_type_t</span> <span class="pre">n,</span> <span class="pre">index_type_t</span> <span class="pre">d,</span> <span class="pre">index_type_t</span> <span class="pre">k,</span> <span class="pre">value_type_t</span> <span class="pre">tol,</span> <span class="pre">index_type_t</span> <span class="pre">maxiter,</span> <span class="pre">const</span> <span class="pre">value_type_t</span> <span class="pre">*__restrict__</span> <span class="pre">obs,</span> <span class="pre">index_type_t</span> <span class="pre">*__restrict__</span> <span class="pre">codes,</span> <span class="pre">value_type_t</span> <span class="pre">&amp;residual,</span> <span class="pre">index_type_t</span> <span class="pre">&amp;iters,</span> <span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span> <span class="pre">seed=123456)</span></span></dt>
+<dd><p>Find clusters with k-means algorithm. Initial centroids are chosen with k-means++ algorithm. Empty clusters are reinitialized by choosing new centroids with k-means++ algorithm. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index_type_t</strong> &ndash; the type of data used for indexing. </p></li>
+<li><p><strong>value_type_t</strong> &ndash; the type of data used for weights, distances. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>handle</strong> &ndash; the raft handle. </p></li>
+<li><p><strong>n</strong> &ndash; Number of observation vectors. </p></li>
+<li><p><strong>d</strong> &ndash; Dimension of observation vectors. </p></li>
+<li><p><strong>k</strong> &ndash; Number of clusters. </p></li>
+<li><p><strong>tol</strong> &ndash; Tolerance for convergence. k-means stops when the change in residual divided by n is less than tol. </p></li>
+<li><p><strong>maxiter</strong> &ndash; Maximum number of k-means iterations. </p></li>
+<li><p><strong>obs</strong> &ndash; (Input, device memory, d*n entries) Observation matrix. Matrix is stored column-major and each column is an observation vector. Matrix dimensions are d x n. </p></li>
+<li><p><strong>codes</strong> &ndash; (Output, device memory, n entries) Cluster assignments. </p></li>
+<li><p><strong>residual</strong> &ndash; On exit, residual sum of squares (sum of squares of distances between observation vectors and centroids). </p></li>
+<li><p><strong>iters</strong> &ndash; on exit, number of k-means iterations. </p></li>
+<li><p><strong>seed</strong> &ndash; random seed to be used. </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>error flag </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="spectral">
+<h2>Spectral<a class="headerlink" href="#spectral" title="Permalink to this headline">&para;</a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4raft8spectralE">
+<span id="_CPPv3N4raft8spectralE"></span><span id="_CPPv2N4raft8spectralE"></span><span id="raft::spectral"></span><span class="target" id="namespaceraft_1_1spectral"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">spectral</span></span></span><a class="headerlink" href="#_CPPv4N4raft8spectralE" title="Permalink to this definition">&para;</a><br></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="namespaceraft_1_1spectral_1adb1dec8369735bb9464d6f19cb6d4df9"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">vertex_t,</span> <span class="pre">typename</span> <span class="pre">weight_t,</span> <span class="pre">typename</span> <span class="pre">EigenSolver,</span> <span class="pre">typename</span> <span class="pre">ClusterSolver&gt;</span> <span class="pre">std::tuple&lt;</span> <span class="pre">vertex_t,</span> <span class="pre">weight_t,</span> <span class="pre">vertex_t</span> <span class="pre">&gt;</span> <span class="pre">modularity_maximization</span> <span class="pre">(handle_t</span> <span class="pre">const</span> <span class="pre">&amp;handle,</span> <span class="pre">matrix::sparse_matrix_t&lt;</span> <span class="pre">vertex_t,</span> <span class="pre">weight_t</span> <span class="pre">&gt;</span> <span class="pre">const</span> <span class="pre">&amp;csr_m,</span> <span class="pre">EigenSolver</span> <span class="pre">const</span> <span class="pre">&amp;eigen_solver,</span> <span class="pre">ClusterSolver</span> <span class="pre">const</span> <span class="pre">&amp;cluster_solver,</span> <span class="pre">vertex_t</span> <span class="pre">*__restrict__</span> <span class="pre">clusters,</span> <span class="pre">weight_t</span> <span class="pre">*eigVals,</span> <span class="pre">weight_t</span> <span class="pre">*eigVecs)</span></span></dt>
+<dd><p>Compute partition for a weighted undirected graph. This partition attempts to minimize the cost function: Cost = <span class="math notranslate nohighlight">\(sum_i\)</span> (Edges cut by ith partition)/(Vertices in ith partition)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> &ndash; raft handle for managing expensive resources </p></li>
+<li><p><strong>csr_m</strong> &ndash; Weighted graph in CSR format </p></li>
+<li><p><strong>eigen_solver</strong> &ndash; Eigensolver implementation </p></li>
+<li><p><strong>cluster_solver</strong> &ndash; Cluster solver implementation </p></li>
+<li><p><strong>clusters</strong> &ndash; (Output, device memory, n entries) Partition assignments. </p></li>
+<li><p><strong>eigVals</strong> &ndash; Output eigenvalue array pointer on device </p></li>
+<li><p><strong>eigVecs</strong> &ndash; Output eigenvector array pointer on device </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>statistics: number of eigensolver iterations, . </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="namespaceraft_1_1spectral_1a5adee68d6758d0487e93c7674f3eff1c"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">vertex_t,</span> <span class="pre">typename</span> <span class="pre">weight_t&gt;</span> <span class="pre">void</span> <span class="pre">analyzeModularity</span> <span class="pre">(handle_t</span> <span class="pre">const</span> <span class="pre">&amp;handle,</span> <span class="pre">matrix::sparse_matrix_t&lt;</span> <span class="pre">vertex_t,</span> <span class="pre">weight_t</span> <span class="pre">&gt;</span> <span class="pre">const</span> <span class="pre">&amp;csr_m,</span> <span class="pre">vertex_t</span> <span class="pre">nClusters,</span> <span class="pre">vertex_t</span> <span class="pre">const</span> <span class="pre">*__restrict__</span> <span class="pre">clusters,</span> <span class="pre">weight_t</span> <span class="pre">&amp;modularity)</span></span></dt>
+<dd><p>Compute modularity. </p>
+<p>This function determines the modularity based on a graph and cluster assignments </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> &ndash; raft handle for managing expensive resources </p></li>
+<li><p><strong>csr_m</strong> &ndash; Weighted graph in CSR format </p></li>
+<li><p><strong>nClusters</strong> &ndash; Number of clusters. </p></li>
+<li><p><strong>clusters</strong> &ndash; (Input, device memory, n entries) Cluster assignments. </p></li>
+<li><p><strong>modularity</strong> &ndash; On exit, modularity </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="namespaceraft_1_1spectral_1a44769b21c4e2c6822d45e119a44bdc64"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">vertex_t,</span> <span class="pre">typename</span> <span class="pre">weight_t,</span> <span class="pre">typename</span> <span class="pre">EigenSolver,</span> <span class="pre">typename</span> <span class="pre">ClusterSolver&gt;</span> <span class="pre">std::tuple&lt;</span> <span class="pre">vertex_t,</span> <span class="pre">weight_t,</span> <span class="pre">vertex_t</span> <span class="pre">&gt;</span> <span class="pre">partition</span> <span class="pre">(handle_t</span> <span class="pre">const</span> <span class="pre">&amp;handle,</span> <span class="pre">matrix::sparse_matrix_t&lt;</span> <span class="pre">vertex_t,</span> <span class="pre">weight_t</span> <span class="pre">&gt;</span> <span class="pre">const</span> <span class="pre">&amp;csr_m,</span> <span class="pre">EigenSolver</span> <span class="pre">const</span> <span class="pre">&amp;eigen_solver,</span> <span class="pre">ClusterSolver</span> <span class="pre">const</span> <span class="pre">&amp;cluster_solver,</span> <span class="pre">vertex_t</span> <span class="pre">*__restrict__</span> <span class="pre">clusters,</span> <span class="pre">weight_t</span> <span class="pre">*eigVals,</span> <span class="pre">weight_t</span> <span class="pre">*eigVecs)</span></span></dt>
+<dd><p>Compute spectral graph partition. </p>
+<p>Compute partition for a weighted undirected graph. This partition attempts to minimize the cost function: Cost = <span class="math notranslate nohighlight">\(sum_i\)</span> (Edges cut by ith partition)/(Vertices in ith partition)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> &ndash; raft handle for managing expensive resources </p></li>
+<li><p><strong>csr_m</strong> &ndash; Weighted graph in CSR format </p></li>
+<li><p><strong>eigen_solver</strong> &ndash; Eigensolver implementation </p></li>
+<li><p><strong>cluster_solver</strong> &ndash; Cluster solver implementation </p></li>
+<li><p><strong>clusters</strong> &ndash; (Output, device memory, n entries) Partition assignments. </p></li>
+<li><p><strong>eigVals</strong> &ndash; Output eigenvalue array pointer on device </p></li>
+<li><p><strong>eigVecs</strong> &ndash; Output eigenvector array pointer on device </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>statistics: number of eigensolver iterations, . </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="namespaceraft_1_1spectral_1a690dff7974fea4eb1a83e47eaaefa67e"></span><span class="sig-name descname"><span class="pre">template&lt;typename</span> <span class="pre">vertex_t,</span> <span class="pre">typename</span> <span class="pre">weight_t&gt;</span> <span class="pre">void</span> <span class="pre">analyzePartition</span> <span class="pre">(handle_t</span> <span class="pre">const</span> <span class="pre">&amp;handle,</span> <span class="pre">matrix::sparse_matrix_t&lt;</span> <span class="pre">vertex_t,</span> <span class="pre">weight_t</span> <span class="pre">&gt;</span> <span class="pre">const</span> <span class="pre">&amp;csr_m,</span> <span class="pre">vertex_t</span> <span class="pre">nClusters,</span> <span class="pre">const</span> <span class="pre">vertex_t</span> <span class="pre">*__restrict__</span> <span class="pre">clusters,</span> <span class="pre">weight_t</span> <span class="pre">&amp;edgeCut,</span> <span class="pre">weight_t</span> <span class="pre">&amp;cost)</span></span></dt>
+<dd><p>Compute cost function for partition. </p>
+<p>This function determines the edges cut by a partition and a cost function: Cost = <span class="math notranslate nohighlight">\(sum_i\)</span> (Edges cut by ith partition)/(Vertices in ith partition) Graph is assumed to be weighted and undirected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> &ndash; raft handle for managing expensive resources </p></li>
+<li><p><strong>csr_m</strong> &ndash; Weighted graph in CSR format </p></li>
+<li><p><strong>nClusters</strong> &ndash; Number of partitions. </p></li>
+<li><p><strong>clusters</strong> &ndash; (Input, device memory, n entries) Partition assignments. </p></li>
+<li><p><strong>edgeCut</strong> &ndash; On exit, weight of edges cut by partition. </p></li>
+<li><p><strong>cost</strong> &ndash; On exit, partition cost function. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I000EN4raft8spectral23cluster_solver_config_tE">
+<span id="_CPPv3I000EN4raft8spectral23cluster_solver_config_tE"></span><span id="_CPPv2I000EN4raft8spectral23cluster_solver_config_tE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index_type_t</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_type_t</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size_type_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000EN4raft8spectral23cluster_solver_config_tE" title="raft::spectral::cluster_solver_config_t::index_type_t"><span class="n"><span class="pre">index_type_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="structraft_1_1spectral_1_1cluster__solver__config__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cluster_solver_config_t</span></span></span><a class="headerlink" href="#_CPPv4I000EN4raft8spectral23cluster_solver_config_tE" title="Permalink to this definition">&para;</a><br></dt>
+<dd><div class="docutils container">
+<em>#include &lt;cluster_solvers.hpp&gt;</em></div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I000EN4raft8spectral21eigen_solver_config_tE">
+<span id="_CPPv3I000EN4raft8spectral21eigen_solver_config_tE"></span><span id="_CPPv2I000EN4raft8spectral21eigen_solver_config_tE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index_type_t</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_type_t</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size_type_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000EN4raft8spectral21eigen_solver_config_tE" title="raft::spectral::eigen_solver_config_t::index_type_t"><span class="n"><span class="pre">index_type_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="structraft_1_1spectral_1_1eigen__solver__config__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eigen_solver_config_t</span></span></span><a class="headerlink" href="#_CPPv4I000EN4raft8spectral21eigen_solver_config_tE" title="Permalink to this definition">&para;</a><br></dt>
+<dd><div class="docutils container">
+<em>#include &lt;eigen_solvers.hpp&gt;</em></div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I000EN4raft8spectral15kmeans_solver_tE">
+<span id="_CPPv3I000EN4raft8spectral15kmeans_solver_tE"></span><span id="_CPPv2I000EN4raft8spectral15kmeans_solver_tE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index_type_t</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_type_t</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size_type_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000EN4raft8spectral15kmeans_solver_tE" title="raft::spectral::kmeans_solver_t::index_type_t"><span class="n"><span class="pre">index_type_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="structraft_1_1spectral_1_1kmeans__solver__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kmeans_solver_t</span></span></span><a class="headerlink" href="#_CPPv4I000EN4raft8spectral15kmeans_solver_tE" title="Permalink to this definition">&para;</a><br></dt>
+<dd><div class="docutils container">
+<em>#include &lt;cluster_solvers.hpp&gt;</em></div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I000EN4raft8spectral16lanczos_solver_tE">
+<span id="_CPPv3I000EN4raft8spectral16lanczos_solver_tE"></span><span id="_CPPv2I000EN4raft8spectral16lanczos_solver_tE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index_type_t</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_type_t</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size_type_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I000EN4raft8spectral16lanczos_solver_tE" title="raft::spectral::lanczos_solver_t::index_type_t"><span class="n"><span class="pre">index_type_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="structraft_1_1spectral_1_1lanczos__solver__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lanczos_solver_t</span></span></span><a class="headerlink" href="#_CPPv4I000EN4raft8spectral16lanczos_solver_tE" title="Permalink to this definition">&para;</a><br></dt>
+<dd><div class="docutils container">
+<em>#include &lt;eigen_solvers.hpp&gt;</em></div>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4raft8spectral6matrixE">
+<span id="_CPPv3N4raft8spectral6matrixE"></span><span id="_CPPv2N4raft8spectral6matrixE"></span><span id="raft::spectral::matrix"></span><span class="target" id="namespaceraft_1_1spectral_1_1matrix"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">matrix</span></span></span><a class="headerlink" href="#_CPPv4N4raft8spectral6matrixE" title="Permalink to this definition">&para;</a><br></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-typedefs">Typedefs</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4raft8spectral6matrix9size_typeE">
+<span id="_CPPv3N4raft8spectral6matrix9size_typeE"></span><span id="_CPPv2N4raft8spectral6matrix9size_typeE"></span><span class="target" id="namespaceraft_1_1spectral_1_1matrix_1a9f4facad6578b24a7d6868df5ccf61b6"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><a class="headerlink" href="#_CPPv4N4raft8spectral6matrix9size_typeE" title="Permalink to this definition">&para;</a><br></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4raft8spectral6matrix15sparse_mv_alg_tE">
+<span id="_CPPv3N4raft8spectral6matrix15sparse_mv_alg_tE"></span><span id="_CPPv2N4raft8spectral6matrix15sparse_mv_alg_tE"></span><span class="target" id="namespaceraft_1_1spectral_1_1matrix_1a2ffba155688e4a1aa94c86994110a3a0"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sparse_mv_alg_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">sparse_mv_alg_t</span></span><a class="headerlink" href="#_CPPv4N4raft8spectral6matrix15sparse_mv_alg_tE" title="Permalink to this definition">&para;</a><br></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN4raft8spectral6matrix13vector_view_tE">
+<span id="_CPPv3I0EN4raft8spectral6matrix13vector_view_tE"></span><span id="_CPPv2I0EN4raft8spectral6matrix13vector_view_tE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_type</span></span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1_1spectral_1_1matrix_1ac68d5563ea39c8b2ed47664ce3fb8888"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vector_view_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector_view_t</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN4raft8spectral6matrix13vector_view_tE" title="raft::spectral::matrix::vector_view_t::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I0EN4raft8spectral6matrix13vector_view_tE" title="Permalink to this definition">&para;</a><br></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN4raft8spectral6matrix8vector_tE">
+<span id="_CPPv3I0EN4raft8spectral6matrix8vector_tE"></span><span id="_CPPv2I0EN4raft8spectral6matrix8vector_tE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_type</span></span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1_1spectral_1_1matrix_1a012c5393268667bca56c8bda6f39bd2b"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vector_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector_t</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN4raft8spectral6matrix8vector_tE" title="raft::spectral::matrix::vector_t::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I0EN4raft8spectral6matrix8vector_tE" title="Permalink to this definition">&para;</a><br></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN4raft8spectral6matrix15sparse_matrix_tE">
+<span id="_CPPv3I00EN4raft8spectral6matrix15sparse_matrix_tE"></span><span id="_CPPv2I00EN4raft8spectral6matrix15sparse_matrix_tE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index_type</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_type</span></span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1_1spectral_1_1matrix_1a26e181405de67717ba1f65464403a194"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sparse_matrix_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">sparse_matrix_t</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN4raft8spectral6matrix15sparse_matrix_tE" title="raft::spectral::matrix::sparse_matrix_t::index_type"><span class="n"><span class="pre">index_type</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4raft8spectral6matrix15sparse_matrix_tE" title="raft::spectral::matrix::sparse_matrix_t::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN4raft8spectral6matrix15sparse_matrix_tE" title="Permalink to this definition">&para;</a><br></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN4raft8spectral6matrix18laplacian_matrix_tE">
+<span id="_CPPv3I00EN4raft8spectral6matrix18laplacian_matrix_tE"></span><span id="_CPPv2I00EN4raft8spectral6matrix18laplacian_matrix_tE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index_type</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_type</span></span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1_1spectral_1_1matrix_1ab65379bec8c0de6a68805aa62a957c54"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">laplacian_matrix_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">laplacian_matrix_t</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN4raft8spectral6matrix18laplacian_matrix_tE" title="raft::spectral::matrix::laplacian_matrix_t::index_type"><span class="n"><span class="pre">index_type</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4raft8spectral6matrix18laplacian_matrix_tE" title="raft::spectral::matrix::laplacian_matrix_t::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN4raft8spectral6matrix18laplacian_matrix_tE" title="Permalink to this definition">&para;</a><br></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN4raft8spectral6matrix19modularity_matrix_tE">
+<span id="_CPPv3I00EN4raft8spectral6matrix19modularity_matrix_tE"></span><span id="_CPPv2I00EN4raft8spectral6matrix19modularity_matrix_tE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index_type</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_type</span></span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1_1spectral_1_1matrix_1a3b2fa5652c21239066b0d67f2ba3b97e"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modularity_matrix_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">modularity_matrix_t</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN4raft8spectral6matrix19modularity_matrix_tE" title="raft::spectral::matrix::modularity_matrix_t::index_type"><span class="n"><span class="pre">index_type</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4raft8spectral6matrix19modularity_matrix_tE" title="raft::spectral::matrix::modularity_matrix_t::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN4raft8spectral6matrix19modularity_matrix_tE" title="Permalink to this definition">&para;</a><br></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="hierarchical">
+<h2>Hierarchical<a class="headerlink" href="#hierarchical" title="Permalink to this headline">&para;</a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4raft9hierarchyE">
+<span id="_CPPv3N4raft9hierarchyE"></span><span id="_CPPv2N4raft9hierarchyE"></span><span id="raft::hierarchy"></span><span class="target" id="namespaceraft_1_1hierarchy"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">hierarchy</span></span></span><a class="headerlink" href="#_CPPv4N4raft9hierarchyE" title="Permalink to this definition">&para;</a><br></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00_15LinkageDistanceEN4raft9hierarchy14single_linkageEvRKN4raft8handle_tEPK7value_t6size_t6size_tN4raft8distance12DistanceTypeEP14linkage_outputI9value_idx7value_tEi6size_t">
+<span id="_CPPv3I00_15LinkageDistanceEN4raft9hierarchy14single_linkageERKN4raft8handle_tEPK7value_t6size_t6size_tN4raft8distance12DistanceTypeEP14linkage_outputI9value_idx7value_tEi6size_t"></span><span id="_CPPv2I00_15LinkageDistanceEN4raft9hierarchy14single_linkageERKN4raft8handle_tEPK7value_t6size_t6size_tN4raft8distance12DistanceTypeEP14linkage_outputI9value_idx7value_tEi6size_t"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_idx</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_t</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">LinkageDistance</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dist_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">LinkageDistance</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">KNN_GRAPH</span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1_1hierarchy_1a1d71889b3637b456df0b62e57925cbf8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">single_linkage</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="core.html#_CPPv4N4raft8handle_tE" title="raft::handle_t"><span class="n"><span class="pre">handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">handle</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00_15LinkageDistanceEN4raft9hierarchy14single_linkageEvRKN4raft8handle_tEPK7value_t6size_t6size_tN4raft8distance12DistanceTypeEP14linkage_outputI9value_idx7value_tEi6size_t" title="raft::hierarchy::single_linkage::value_t"><span class="n"><span class="pre">value_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">X</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="spatial.html#_CPPv4N4raft8distanceE" title="raft::distance"><span class="n"><span class="pre">distance</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="spatial.html#_CPPv4N4raft8distance12DistanceTypeE" title="raft::distance::DistanceType"><span class="n"><span class="pre">DistanceType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">metric</span></span>, <span class="n"><span class="pre">linkage_output</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00_15LinkageDistanceEN4raft9hierarchy14single_linkageEvRKN4raft8handle_tEPK7value_t6size_t6size_tN4raft8distance12DistanceTypeEP14linkage_outputI9value_idx7value_tEi6size_t" title="raft::hierarchy::single_linkage::value_idx"><span class="n"><span class="pre">value_idx</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00_15LinkageDistanceEN4raft9hierarchy14single_linkageEvRKN4raft8handle_tEPK7value_t6size_t6size_tN4raft8distance12DistanceTypeEP14linkage_outputI9value_idx7value_tEi6size_t" title="raft::hierarchy::single_linkage::value_t"><span class="n"><span class="pre">value_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n_clusters</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00_15LinkageDistanceEN4raft9hierarchy14single_linkageEvRKN4raft8handle_tEPK7value_t6size_t6size_tN4raft8distance12DistanceTypeEP14linkage_outputI9value_idx7value_tEi6size_t" title="Permalink to this definition">&para;</a><br></dt>
+<dd><p>Single-linkage clustering, capable of constructing a KNN graph to scale the algorithm beyond the n^2 memory consumption of implementations that use the fully-connected graph of pairwise distances by connecting a knn graph when k is not large enough to connect it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value_idx</strong> &ndash; </p></li>
+<li><p><strong>value_t</strong> &ndash; </p></li>
+<li><p><strong>dist_type</strong> &ndash; method to use for constructing connectivities graph </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>handle</strong> &ndash; <strong>[in]</strong> raft handle </p></li>
+<li><p><strong>X</strong> &ndash; <strong>[in]</strong> dense input matrix in row-major layout </p></li>
+<li><p><strong>m</strong> &ndash; <strong>[in]</strong> number of rows in X </p></li>
+<li><p><strong>n</strong> &ndash; <strong>[in]</strong> number of columns in X </p></li>
+<li><p><strong>metric</strong> &ndash; <strong>[in]</strong> distance metrix to use when constructing connectivities graph </p></li>
+<li><p><strong>out</strong> &ndash; <strong>[out]</strong> struct containing output dendrogram and cluster assignments </p></li>
+<li><p><strong>c</strong> &ndash; <strong>[in]</strong> a constant used when constructing connectivities from knn graph. Allows the indirect control of k. The algorithm will set <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">=</span> <span class="pre">log(n)</span> <span class="pre">+</span> <span class="pre">c</span></code> </p></li>
+<li><p><strong>n_clusters</strong> &ndash; <strong>[in]</strong> number of clusters to assign data samples </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div aria-label="Footer" class="rst-footer-buttons" role="navigation">
+        <a accesskey="p" class="btn btn-neutral float-left" href="core.html" rel="prev" title="Core"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a accesskey="n" class="btn btn-neutral float-right" href="linalg.html" rel="next" title="Linear Algebra">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+    <p>&copy; Copyright 2022, nvidia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script></body></html>
