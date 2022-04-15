@@ -1,0 +1,2293 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
+
+    <title>Overview of User Defined Functions with cuDF &mdash; cudf 22.06.00 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link href="../_static/vendor/fontawesome/5.13.0/css/all.min.css" rel="stylesheet">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2">
+
+    <link href="../_static/pygments.css" rel="stylesheet" type="text/css">
+    <link href="../_static/copybutton.css" rel="stylesheet" type="text/css">
+    <link href="../_static/params.css" rel="stylesheet" type="text/css">
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf" rel="preload">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="../genindex.html" rel="index" title="Index">
+    <link href="../search.html" rel="search" title="Search">
+    <link href="Working-with-missing-data.html" rel="next" title="Working with missing data">
+    <link href="10min-cudf-cupy.html" rel="prev" title="10 Minutes to cuDF and CuPy">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="None" name="docsearch:language">
+    
+
+    <!-- Google Analytics -->
+    
+  <link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+  <body data-offset="60" data-spy="scroll" data-target="#bd-toc-nav">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../index.html">
+  <img alt="logo" class="logo" src="../_static/RAPIDS-logo-purple.png">
+</a>
+
+
+    
+  </div>
+
+  <button aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar-collapsible" data-toggle="collapse" type="button">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div class="collapse navbar-collapse" id="navbar-collapsible">
+    <div class="ml-auto" id="navbar-center">
+      
+      <div class="navbar-center-item">
+        <ul class="navbar-nav" id="navbar-main-elements">
+    <li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../basics/index.html">
+  Basics
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../api_docs/index.html">
+  API reference
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul aria-label="Icon Links" class="navbar-nav" id="navbar-icon-links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/rapidsai/cudf" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><div id="rapids-pydata-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">cudf</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/stable/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libkvikio/stable">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/raft/stable">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (22.06)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/nightly/index.html">nightly (22.06)</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">stable (22.04)</a><a class="rapids-selector__menu-item" href="/api/cudf/legacy/index.html">legacy (22.02)</a></div></div></div>
+              <div class="sidebar-start-items"><form action="../search.html" class="bd-search d-flex align-items-center" method="get">
+  <i class="icon fas fa-search"></i>
+  <input aria-label="Search the docs ..." autocomplete="off" class="form-control" id="search-input" name="q" placeholder="Search the docs ..." type="search">
+</form><nav aria-label="Main navigation" class="bd-links" id="bd-docs-nav">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="10min.html">
+   10 Minutes to cuDF and Dask-cuDF
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="10min-cudf-cupy.html">
+   10 Minutes to cuDF and CuPy
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Overview of User Defined Functions with cuDF
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Working-with-missing-data.html">
+   Working with missing data
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Overview of User Defined Functions with cuDF
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Series-UDFs">
+     Series UDFs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cudf.Series.apply">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     cudf.Series.apply
+    </span>
+   </code>
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#DataFrame-UDFs">
+     DataFrame UDFs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cudf.DataFrame.apply">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     cudf.DataFrame.apply
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Numba-kernels-for-DataFrames">
+   Numba kernels for DataFrames
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Null-Handling-in-apply_rows-and-apply_chunks">
+     Null Handling in
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       apply_rows
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       apply_chunks
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Rolling-Window-UDFs">
+     Rolling Window UDFs
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#GroupBy-DataFrame-UDFs">
+     GroupBy DataFrame UDFs
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Numba-Kernels-on-CuPy-Arrays">
+     Numba Kernels on CuPy Arrays
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Caveats">
+     Caveats
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Summary">
+     Summary
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="Overview-of-User-Defined-Functions-with-cuDF">
+<h1>Overview of User Defined Functions with cuDF<a class="headerlink" href="#Overview-of-User-Defined-Functions-with-cuDF" title="Permalink to this headline">#</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="kn">from</span> <span class="nn">cudf.datasets</span> <span class="kn">import</span> <span class="n">randomdata</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+<p>Like many tabular data processing APIs, cuDF provides a range of composable, DataFrame style operators. While out of the box functions are flexible and useful, it is sometimes necessary to write custom code, or user-defined functions (UDFs), that can be applied to rows, columns, and other groupings of the cells making up the DataFrame.</p>
+<p>In conjunction with the broader GPU PyData ecosystem, cuDF provides interfaces to run UDFs on a variety of data structures. Currently, we can only execute UDFs on numeric, boolean, datetime, and timedelta typed data (support for strings is being planned). This guide covers writing and executing UDFs on the following data structures:</p>
+<ul class="simple">
+<li><p>Series</p></li>
+<li><p>DataFrame</p></li>
+<li><p>Rolling Windows Series</p></li>
+<li><p>Groupby DataFrames</p></li>
+<li><p>CuPy NDArrays</p></li>
+<li><p>Numba DeviceNDArrays</p></li>
+</ul>
+<p>It also demonstrates cuDF&rsquo;s default null handling behavior, and how to write UDFs that can interact with null values.</p>
+<section id="Series-UDFs">
+<h2>Series UDFs<a class="headerlink" href="#Series-UDFs" title="Permalink to this headline">#</a></h2>
+<p>You can execute UDFs on Series in two ways:</p>
+<ul class="simple">
+<li><p>Writing a standard python function and using <code class="docutils literal notranslate"><span class="pre">cudf.Series.apply</span></code></p></li>
+<li><p>Writing a Numba kernel and using Numba&rsquo;s <code class="docutils literal notranslate"><span class="pre">forall</span></code> syntax</p></li>
+</ul>
+<p>Using <code class="docutils literal notranslate"><span class="pre">apply</span></code> or is simpler, but writing a Numba kernel offers the flexibility to build more complex functions (we&rsquo;ll be writing only simple kernels in this guide).</p>
+</section>
+</section>
+<section id="cudf.Series.apply">
+<h1><code class="docutils literal notranslate"><span class="pre">cudf.Series.apply</span></code><a class="headerlink" href="#cudf.Series.apply" title="Permalink to this headline">#</a></h1>
+<p>cuDF provides a similar API to <code class="docutils literal notranslate"><span class="pre">pandas.Series.apply</span></code> for applying scalar UDFs to series objects. Here is a very basic example.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a cuDF series</span>
+<span class="n">sr</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>UDFs destined for <code class="docutils literal notranslate"><span class="pre">cudf.Series.apply</span></code> might look something like this:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define a scalar function</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">cudf.Series.apply</span></code> is called like <code class="docutils literal notranslate"><span class="pre">pd.Series.apply</span></code> and returns a new <code class="docutils literal notranslate"><span class="pre">Series</span></code> object:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sr</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    2
+1    3
+2    4
+dtype: int64
+</pre></div></div>
+</div>
+<p>In addition, <code class="docutils literal notranslate"><span class="pre">cudf.Series.apply</span></code> supports <code class="docutils literal notranslate"><span class="pre">args=</span></code> just like pandas, allowing you to write UDFs that accept an arbitrary number of scalar arguments. Here is an example of such a function and it&rsquo;s API call in both pandas and cuDF:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">const</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">const</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># cuDF apply</span>
+<span class="n">sr</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="mi">42</span><span class="p">,))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    43
+1    44
+2    45
+dtype: int64
+</pre></div></div>
+</div>
+<p>As a final note, <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> is not yet supported.</p>
+<p>The null value <code class="docutils literal notranslate"><span class="pre">NA</span></code> an propagates through unary and binary operations. Thus, <code class="docutils literal notranslate"><span class="pre">NA</span> <span class="pre">+</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">abs(NA)</span></code>, and <code class="docutils literal notranslate"><span class="pre">NA</span> <span class="pre">==</span> <span class="pre">NA</span></code> all return <code class="docutils literal notranslate"><span class="pre">NA</span></code>. To make this concrete, let&rsquo;s look at the same example from above, this time using nullable data:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a cuDF series with nulls</span>
+<span class="n">sr</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">cudf</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">sr</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0       1
+1    &lt;NA&gt;
+2       3
+dtype: int64
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># redefine the same function from above</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># cuDF result</span>
+<span class="n">sr</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0       2
+1    &lt;NA&gt;
+2       4
+dtype: int64
+</pre></div></div>
+</div>
+<p>Often however you want explicit null handling behavior inside the function. cuDF exposes this capability the same way as pandas, by interacting directly with the <code class="docutils literal notranslate"><span class="pre">NA</span></code> singleton object. Here&rsquo;s an example of a function with explicit null handling:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f_null_sensitive</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="c1"># do something if the input is null</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="n">cudf</span><span class="o">.</span><span class="n">NA</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">42</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># cuDF result</span>
+<span class="n">sr</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f_null_sensitive</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0     2
+1    42
+2     4
+dtype: int64
+</pre></div></div>
+</div>
+<p>In addition, <code class="docutils literal notranslate"><span class="pre">cudf.NA</span></code> can be returned from a function directly or conditionally. This capability should allow you to implement custom null handling in a wide variety of cases.</p>
+<p>In addition to the Series.apply() method for performing custom operations, you can also pass Series objects directly into <a class="reference external" href="https://numba.pydata.org/numba-doc/latest/cuda/kernels.html">CUDA kernels written with Numba</a>. Note that this section requires basic CUDA knowledge. Refer to <a class="reference external" href="https://numba.pydata.org/numba-doc/latest/cuda/index.html">numba&rsquo;s CUDA documentation</a> for details.</p>
+<p>The easiest way to write a Numba kernel is to use <code class="docutils literal notranslate"><span class="pre">cuda.grid(1)</span></code> to manage thread indices, and then leverage Numba&rsquo;s <code class="docutils literal notranslate"><span class="pre">forall</span></code> method to configure the kernel for us. Below, define a basic multiplication kernel as an example and use <code class="docutils literal notranslate"><span class="pre">@cuda.jit</span></code> to compile it.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">randomdata</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">dtypes</span><span class="o">=</span><span class="p">{</span><span class="s1">'a'</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">:</span><span class="nb">int</span><span class="p">},</span> <span class="n">seed</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">cuda</span>
+
+<span class="nd">@cuda</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="n">in_col</span><span class="p">,</span> <span class="n">out_col</span><span class="p">,</span> <span class="n">multiplier</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">in_col</span><span class="o">.</span><span class="n">size</span><span class="p">:</span> <span class="c1"># boundary guard</span>
+        <span class="n">out_col</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_col</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">multiplier</span>
+</pre></div>
+</div>
+</div>
+<p>This kernel will take an input array, multiply it by a configurable value (supplied at runtime), and store the result in an output array. Notice that we wrapped our logic in an <code class="docutils literal notranslate"><span class="pre">if</span></code> statement. Because we can launch more threads than the size of our array, we need to make sure that we don&rsquo;t use threads with an index that would be out of bounds. Leaving this out can result in undefined behavior.</p>
+<p>To execute our kernel, must pre-allocate an output array and leverage the <code class="docutils literal notranslate"><span class="pre">forall</span></code> method mentioned above. First, we create a Series of all <code class="docutils literal notranslate"><span class="pre">0.0</span></code> in our DataFrame, since we want <code class="docutils literal notranslate"><span class="pre">float64</span></code> output. Next, we run the kernel with <code class="docutils literal notranslate"><span class="pre">forall</span></code>. <code class="docutils literal notranslate"><span class="pre">forall</span></code> requires us to specify our desired number of tasks, so we&rsquo;ll supply in the length of our Series (which we store in <code class="docutils literal notranslate"><span class="pre">size</span></code>). The <a class="reference external" href="https://numba.pydata.org/numba-doc/dev/cuda/cuda_array_interface.html">**cuda_array_interface**</a> is what
+allows us to directly call our Numba kernel on our Series.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'a'</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'e'</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">multiply</span><span class="o">.</span><span class="n">forall</span><span class="p">(</span><span class="n">size</span><span class="p">)(</span><span class="n">df</span><span class="p">[</span><span class="s1">'a'</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">'e'</span><span class="p">],</span> <span class="mf">10.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>After calling our kernel, our DataFrame is now populated with the result.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>e</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>963</td>
+      <td>1005</td>
+      <td>997</td>
+      <td>9630.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>977</td>
+      <td>1026</td>
+      <td>980</td>
+      <td>9770.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1048</td>
+      <td>1026</td>
+      <td>1019</td>
+      <td>10480.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1078</td>
+      <td>960</td>
+      <td>985</td>
+      <td>10780.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>979</td>
+      <td>982</td>
+      <td>1011</td>
+      <td>9790.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>This API allows a you to theoretically write arbitrary kernel logic, potentially accessing and using elements of the series at arbitrary indices and use them on cuDF data structures. Advanced developers with some CUDA experience can often use this capability to implement iterative transformations, or spot treat problem areas of a data pipeline with a custom kernel that does the same job faster.</p>
+<section id="DataFrame-UDFs">
+<h2>DataFrame UDFs<a class="headerlink" href="#DataFrame-UDFs" title="Permalink to this headline">#</a></h2>
+<p>Like <code class="docutils literal notranslate"><span class="pre">cudf.Series</span></code>, there are multiple ways of using UDFs on dataframes, which essentially amount to UDFs that expect multiple columns as input:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cudf.DataFrame.apply</span></code>, which functions like <code class="docutils literal notranslate"><span class="pre">pd.DataFrame.apply</span></code> and expects a row udf</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cudf.DataFrame.apply_rows</span></code>, which is a thin wrapper around numba and expects a numba kernel</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cudf.DataFrame.apply_chunks</span></code>, which is similar to <code class="docutils literal notranslate"><span class="pre">cudf.DataFrame.apply_rows</span></code> but offers lower level control.</p></li>
+</ul>
+</section>
+</section>
+<section id="cudf.DataFrame.apply">
+<h1><code class="docutils literal notranslate"><span class="pre">cudf.DataFrame.apply</span></code><a class="headerlink" href="#cudf.DataFrame.apply" title="Permalink to this headline">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">cudf.DataFrame.apply</span></code> is the main entrypoint for UDFs that expect multiple columns as input and produce a single output column. Functions intended to be consumed by this API are written in terms of a &ldquo;row&rdquo; argument. The &ldquo;row&rdquo; is considered to be like a dictionary and contains all of the column values at a certain <code class="docutils literal notranslate"><span class="pre">iloc</span></code> in a <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>. The function can access these values by key within the function, the keys being the column names corresponding to the desired value. Below is an example
+function that would be used to add column <code class="docutils literal notranslate"><span class="pre">A</span></code> and column <code class="docutils literal notranslate"><span class="pre">B</span></code> together inside a UDF.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">row</span><span class="p">[</span><span class="s1">'A'</span><span class="p">]</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s1">'B'</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>Let&rsquo;s create some very basic toy data containing at least one null.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">'A'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
+    <span class="s1">'B'</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="n">cudf</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>6</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Finally call the function as you would in pandas - by using a lambda function to map the UDF onto &ldquo;rows&rdquo; of the DataFrame:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0       5
+1    &lt;NA&gt;
+2       9
+dtype: int64
+</pre></div></div>
+</div>
+<p>The same function should produce the same result as pandas:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(</span><span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0       5
+1    &lt;NA&gt;
+2       9
+dtype: object
+</pre></div></div>
+</div>
+<p>Notice that Pandas returns <code class="docutils literal notranslate"><span class="pre">object</span></code> dtype - see notes on this in the caveats section.</p>
+<p>Like <code class="docutils literal notranslate"><span class="pre">cudf.Series.apply</span></code>, these functions support generalized null handling. Here&rsquo;s a function that conditionally returns a different value if a certain input is null:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="n">cudf</span><span class="o">.</span><span class="n">NA</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">cudf</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="mi">3</span><span class="p">]})</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    2
+1    0
+2    4
+dtype: int64
+</pre></div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">cudf.NA</span></code> can also be directly returned from a function resulting in data that has the the correct nulls in the end, just as if it were run in Pandas. For the following data, the last row fulfills the condition that <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">3</span> <span class="pre">&gt;</span> <span class="pre">3</span></code> and returns <code class="docutils literal notranslate"><span class="pre">NA</span></code> for that row:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">'b'</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cudf</span><span class="o">.</span><span class="n">NA</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">'a'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+    <span class="s1">'b'</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0       3
+1       3
+2    &lt;NA&gt;
+dtype: int64
+</pre></div></div>
+</div>
+<p>Mixed types are allowed, but will return the common type, rather than object as in Pandas. Here&rsquo;s a null aware op between an int and a float column:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+     <span class="k">return</span> <span class="n">row</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s1">'b'</span><span class="p">]</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">'a'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+    <span class="s1">'b'</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">cudf</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="mf">3.14</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>3.14</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0     1.5
+1    &lt;NA&gt;
+2    6.14
+dtype: float64
+</pre></div></div>
+</div>
+<p>Functions may also return scalar values, however the result will be promoted to a safe type regardless of the data. This means even if you have a function like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.5</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>And your data is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>You will get floats in the final data even though a float is never returned. This is because Numba ultimately needs to produce one function that can handle any data, which means if there&rsquo;s any possibility a float could result, you must always assume it will happen. Here&rsquo;s an example of a function that returns a scalar in some cases:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span>
+    <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.5</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">'a'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    1.5
+1    1.5
+2    5.0
+dtype: float64
+</pre></div></div>
+</div>
+<p>Any number of columns and many arithmetic operators are supported, allowing for complex UDFs:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">row</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">'b'</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">'c'</span><span class="p">]</span> <span class="o">/</span> <span class="n">row</span><span class="p">[</span><span class="s1">'d'</span><span class="p">]))</span> <span class="o">%</span> <span class="n">row</span><span class="p">[</span><span class="s1">'e'</span><span class="p">]</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">'a'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+    <span class="s1">'b'</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+    <span class="s1">'c'</span><span class="p">:</span> <span class="p">[</span><span class="n">cudf</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="s1">'d'</span><span class="p">:</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+    <span class="s1">'e'</span><span class="p">:</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>e</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>4</td>
+      <td>&lt;NA&gt;</td>
+      <td>8</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>5</td>
+      <td>4</td>
+      <td>7</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>6</td>
+      <td>4</td>
+      <td>8</td>
+      <td>6</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0           &lt;NA&gt;
+1    2.428571429
+2            8.5
+dtype: float64
+</pre></div></div>
+</div>
+</section>
+<section id="Numba-kernels-for-DataFrames">
+<h1>Numba kernels for DataFrames<a class="headerlink" href="#Numba-kernels-for-DataFrames" title="Permalink to this headline">#</a></h1>
+<p>We could apply a UDF on a DataFrame like we did above with <code class="docutils literal notranslate"><span class="pre">forall</span></code>. We&rsquo;d need to write a kernel that expects multiple inputs, and pass multiple Series as arguments when we execute our kernel. Because this is fairly common and can be difficult to manage, cuDF provides two APIs to streamline this: <code class="docutils literal notranslate"><span class="pre">apply_rows</span></code> and <code class="docutils literal notranslate"><span class="pre">apply_chunks</span></code>. Below, we walk through an example of using <code class="docutils literal notranslate"><span class="pre">apply_rows</span></code>. <code class="docutils literal notranslate"><span class="pre">apply_chunks</span></code> works in a similar way, but also offers more control over low-level kernel behavior.</p>
+<p>Now that we have two numeric columns in our DataFrame, let&rsquo;s write a kernel that uses both of them.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">conditional_add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">e</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span>
+</pre></div>
+</div>
+</div>
+<p>Notice that we need to <code class="docutils literal notranslate"><span class="pre">enumerate</span></code> through our <code class="docutils literal notranslate"><span class="pre">zipped</span></code> function arguments (which either match or are mapped to our input column names). We can pass this kernel to <code class="docutils literal notranslate"><span class="pre">apply_rows</span></code>. We&rsquo;ll need to specify a few arguments: - incols - A list of names of input columns that match the function arguments. Or, a dictionary mapping input column names to their corresponding function arguments such as <code class="docutils literal notranslate"><span class="pre">{'col1':</span> <span class="pre">'arg1'}</span></code>. - outcols - A dictionary defining our output column names and their data types.
+These names must match our function arguments. - kwargs (optional) - We can optionally pass keyword arguments as a dictionary. Since we don&rsquo;t need any, we pass an empty one.</p>
+<p>While it looks like our function is looping sequentially through our columns, it actually executes in parallel in multiple threads on the GPU. This parallelism is the heart of GPU-accelerated computing. With that background, we&rsquo;re ready to use our UDF.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply_rows</span><span class="p">(</span><span class="n">conditional_add</span><span class="p">,</span>
+                   <span class="n">incols</span><span class="o">=</span><span class="p">{</span><span class="s1">'a'</span><span class="p">:</span><span class="s1">'x'</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">:</span><span class="s1">'y'</span><span class="p">},</span>
+                   <span class="n">outcols</span><span class="o">=</span><span class="p">{</span><span class="s1">'out'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">},</span>
+                   <span class="n">kwargs</span><span class="o">=</span><span class="p">{}</span>
+                  <span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>e</th>
+      <th>out</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>4</td>
+      <td>&lt;NA&gt;</td>
+      <td>8</td>
+      <td>7</td>
+      <td>8.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>5</td>
+      <td>4</td>
+      <td>7</td>
+      <td>1</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>6</td>
+      <td>4</td>
+      <td>8</td>
+      <td>6</td>
+      <td>9.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>As expected, we see our conditional addition worked. At this point, we&rsquo;ve successfully executed UDFs on the core data structures of cuDF.</p>
+<section id="Null-Handling-in-apply_rows-and-apply_chunks">
+<h2>Null Handling in <code class="docutils literal notranslate"><span class="pre">apply_rows</span></code> and <code class="docutils literal notranslate"><span class="pre">apply_chunks</span></code><a class="headerlink" href="#Null-Handling-in-apply_rows-and-apply_chunks" title="Permalink to this headline">#</a></h2>
+<p>By default, DataFrame methods for applying UDFs like <code class="docutils literal notranslate"><span class="pre">apply_rows</span></code> will handle nulls pessimistically (all rows with a null value will be removed from the output if they are used in the kernel). Exploring how not handling not pessimistically can lead to undefined behavior is outside the scope of this guide. Suffice it to say, pessimistic null handling is the safe and consistent approach. You can see an example below.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gpu_add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)):</span>
+        <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">randomdata</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">dtypes</span><span class="o">=</span><span class="p">{</span><span class="s1">'a'</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">:</span><span class="nb">int</span><span class="p">},</span> <span class="n">seed</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>963</td>
+      <td>1005</td>
+      <td>997</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>977</td>
+      <td>1026</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>&lt;NA&gt;</td>
+      <td>1026</td>
+      <td>1019</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1078</td>
+      <td>&lt;NA&gt;</td>
+      <td>985</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>979</td>
+      <td>982</td>
+      <td>1011</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>In the dataframe above, there are three null values. Each column has a null in a different row. When we use our UDF with <code class="docutils literal notranslate"><span class="pre">apply_rows</span></code>, our output should have two nulls due to pessimistic null handling (because we&rsquo;re not using column <code class="docutils literal notranslate"><span class="pre">c</span></code>, the null value there does not matter to us).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply_rows</span><span class="p">(</span><span class="n">gpu_add</span><span class="p">,</span>
+              <span class="n">incols</span><span class="o">=</span><span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">],</span>
+              <span class="n">outcols</span><span class="o">=</span><span class="p">{</span><span class="s1">'out'</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">},</span>
+              <span class="n">kwargs</span><span class="o">=</span><span class="p">{})</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>out</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>963</td>
+      <td>1005</td>
+      <td>997</td>
+      <td>1968.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>977</td>
+      <td>1026</td>
+      <td>&lt;NA&gt;</td>
+      <td>2003.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>&lt;NA&gt;</td>
+      <td>1026</td>
+      <td>1019</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1078</td>
+      <td>&lt;NA&gt;</td>
+      <td>985</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>979</td>
+      <td>982</td>
+      <td>1011</td>
+      <td>1961.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>As expected, we end up with two nulls in our output. The null values from the columns we used propogated to our output, but the null from the column we ignored did not.</p>
+</section>
+<section id="Rolling-Window-UDFs">
+<h2>Rolling Window UDFs<a class="headerlink" href="#Rolling-Window-UDFs" title="Permalink to this headline">#</a></h2>
+<p>For time-series data, we may need to operate on a small &ldquo;window&rdquo; of our column at a time, processing each portion independently. We could slide (&ldquo;roll&rdquo;) this window over the entire column to answer questions like &ldquo;What is the 3-day moving average of a stock price over the past year?&rdquo;</p>
+<p>We can apply more complex functions to rolling windows to <code class="docutils literal notranslate"><span class="pre">rolling</span></code> Series and DataFrames using <code class="docutils literal notranslate"><span class="pre">apply</span></code>. This example is adapted from cuDF&rsquo;s <a class="reference external" href="https://docs.rapids.ai/api/cudf/stable/api_docs/api/cudf.DataFrame.rolling.html">API documentation</a>. First, we&rsquo;ll create an example Series and then create a <code class="docutils literal notranslate"><span class="pre">rolling</span></code> object from the Series.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ser</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">16</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">81</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'float64'</span><span class="p">)</span>
+<span class="n">ser</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0    16.0
+1    25.0
+2    36.0
+3    49.0
+4    64.0
+5    81.0
+dtype: float64
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rolling</span> <span class="o">=</span> <span class="n">ser</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">rolling</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>Rolling [window=3,min_periods=3,center=False]
+</pre></div></div>
+</div>
+<p>Next, we&rsquo;ll define a function to use on our rolling windows. We created this one to highlight how you can include things like loops, mathematical functions, and conditionals. Rolling window UDFs do not yet support null values.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+
+<span class="k">def</span> <span class="nf">example_func</span><span class="p">(</span><span class="n">window</span><span class="p">):</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">window</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">100</span>
+    <span class="k">return</span> <span class="n">b</span>
+</pre></div>
+</div>
+</div>
+<p>We can execute the function by passing it to <code class="docutils literal notranslate"><span class="pre">apply</span></code>. With <code class="docutils literal notranslate"><span class="pre">window=3</span></code>, <code class="docutils literal notranslate"><span class="pre">min_periods=3</span></code>, and <code class="docutils literal notranslate"><span class="pre">center=False</span></code>, our first two values are <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rolling</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">example_func</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0     &lt;NA&gt;
+1     &lt;NA&gt;
+2      6.0
+3      7.0
+4    100.0
+5      9.0
+dtype: float64
+</pre></div></div>
+</div>
+<p>We can apply this function to every column in a DataFrame, too.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df2</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="n">df2</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">55</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'float64'</span><span class="p">)</span>
+<span class="n">df2</span><span class="p">[</span><span class="s1">'b'</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">55</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'float64'</span><span class="p">)</span>
+<span class="n">df2</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>55.0</td>
+      <td>55.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>56.0</td>
+      <td>56.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>57.0</td>
+      <td>57.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>58.0</td>
+      <td>58.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>59.0</td>
+      <td>59.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rolling</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">rolling</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">example_func</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7.549834435</td>
+      <td>7.549834435</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7.615773106</td>
+      <td>7.615773106</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>7.681145748</td>
+      <td>7.681145748</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>7.745966692</td>
+      <td>7.745966692</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>7.810249676</td>
+      <td>7.810249676</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7.874007874</td>
+      <td>7.874007874</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>7.937253933</td>
+      <td>7.937253933</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>100.0</td>
+      <td>100.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="GroupBy-DataFrame-UDFs">
+<h2>GroupBy DataFrame UDFs<a class="headerlink" href="#GroupBy-DataFrame-UDFs" title="Permalink to this headline">#</a></h2>
+<p>We can also apply UDFs to grouped DataFrames using <code class="docutils literal notranslate"><span class="pre">apply_grouped</span></code>. This example is also drawn and adapted from the RAPIDS <a href="#id1"><span class="problematic" id="id2">`API documentation &lt;&gt;`__</span></a>.</p>
+<p>First, we&rsquo;ll group our DataFrame based on column <code class="docutils literal notranslate"><span class="pre">b</span></code>, which is either True or False. Note that we currently need to pass <code class="docutils literal notranslate"><span class="pre">method="cudf"</span></code> to use UDFs with GroupBy objects.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">randomdata</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">dtypes</span><span class="o">=</span><span class="p">{</span><span class="s1">'a'</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">:</span> <span class="nb">float</span><span class="p">},</span> <span class="n">seed</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>e</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-0.691674</td>
+      <td>True</td>
+      <td>Dan</td>
+      <td>-0.958380</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.480099</td>
+      <td>False</td>
+      <td>Bob</td>
+      <td>-0.729580</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.473370</td>
+      <td>True</td>
+      <td>Xavier</td>
+      <td>-0.767454</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.067479</td>
+      <td>True</td>
+      <td>Alice</td>
+      <td>-0.380205</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.970850</td>
+      <td>False</td>
+      <td>Sarah</td>
+      <td>0.342905</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grouped</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">'b'</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>Next we&rsquo;ll define a function to apply to each group independently. In this case, we&rsquo;ll take the rolling average of column <code class="docutils literal notranslate"><span class="pre">e</span></code>, and call that new column <code class="docutils literal notranslate"><span class="pre">rolling_avg_e</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rolling_avg</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">rolling_avg_e</span><span class="p">):</span>
+    <span class="n">win_size</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cuda</span><span class="o">.</span><span class="n">threadIdx</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">cuda</span><span class="o">.</span><span class="n">blockDim</span><span class="o">.</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">win_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># If there is not enough data to fill the window,</span>
+            <span class="c1"># take the average to be NaN</span>
+            <span class="n">rolling_avg_e</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">win_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="n">e</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">rolling_avg_e</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">total</span> <span class="o">/</span> <span class="n">win_size</span>
+</pre></div>
+</div>
+</div>
+<p>We can execute this with a very similar API to <code class="docutils literal notranslate"><span class="pre">apply_rows</span></code>. This time, though, it&rsquo;s going to execute independently for each group.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">grouped</span><span class="o">.</span><span class="n">apply_grouped</span><span class="p">(</span><span class="n">rolling_avg</span><span class="p">,</span>
+                               <span class="n">incols</span><span class="o">=</span><span class="p">[</span><span class="s1">'e'</span><span class="p">],</span>
+                               <span class="n">outcols</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">rolling_avg_e</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+<span class="n">results</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>e</th>
+      <th>rolling_avg_e</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>0.480099</td>
+      <td>False</td>
+      <td>Bob</td>
+      <td>-0.729580</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.970850</td>
+      <td>False</td>
+      <td>Sarah</td>
+      <td>0.342905</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.801430</td>
+      <td>False</td>
+      <td>Sarah</td>
+      <td>0.632337</td>
+      <td>0.081887</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-0.933157</td>
+      <td>False</td>
+      <td>Quinn</td>
+      <td>-0.420826</td>
+      <td>0.184805</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>-0.691674</td>
+      <td>True</td>
+      <td>Dan</td>
+      <td>-0.958380</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.473370</td>
+      <td>True</td>
+      <td>Xavier</td>
+      <td>-0.767454</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.067479</td>
+      <td>True</td>
+      <td>Alice</td>
+      <td>-0.380205</td>
+      <td>-0.702013</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.837494</td>
+      <td>True</td>
+      <td>Wendy</td>
+      <td>-0.057540</td>
+      <td>-0.401733</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.913899</td>
+      <td>True</td>
+      <td>Ursula</td>
+      <td>0.466252</td>
+      <td>0.009502</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>-0.725581</td>
+      <td>True</td>
+      <td>George</td>
+      <td>0.405245</td>
+      <td>0.271319</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Notice how, with a window size of three in the kernel, the first two values in each group for our output column are null.</p>
+</section>
+<section id="Numba-Kernels-on-CuPy-Arrays">
+<h2>Numba Kernels on CuPy Arrays<a class="headerlink" href="#Numba-Kernels-on-CuPy-Arrays" title="Permalink to this headline">#</a></h2>
+<p>We can also execute Numba kernels on CuPy NDArrays, again thanks to the <code class="docutils literal notranslate"><span class="pre">__cuda_array_interface__</span></code>. We can even run the same UDF on the Series and the CuPy array. First, we define a Series and then create a CuPy array from that Series.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">arr</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>array([ 1.,  2.,  3.,  4., 10.])
+</pre></div></div>
+</div>
+<p>Next, we define a UDF and execute it on our Series. We need to allocate a Series of the same size for our output, which we&rsquo;ll call <code class="docutils literal notranslate"><span class="pre">out</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cudf.utils</span> <span class="kn">import</span> <span class="n">cudautils</span>
+
+<span class="nd">@cuda</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span> <span class="nf">multiply_by_5</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'int32'</span><span class="p">))</span>
+<span class="n">multiply_by_5</span><span class="o">.</span><span class="n">forall</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])(</span><span class="n">s</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+<span class="n">out</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>0     5
+1    10
+2    15
+3    20
+4    50
+dtype: int32
+</pre></div></div>
+</div>
+<p>Finally, we execute the same function on our array. We allocate an empty array <code class="docutils literal notranslate"><span class="pre">out</span></code> to store our results.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+<span class="n">multiply_by_5</span><span class="o">.</span><span class="n">forall</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">size</span><span class="p">)(</span><span class="n">arr</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+<span class="n">out</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>array([ 5., 10., 15., 20., 50.])
+</pre></div></div>
+</div>
+</section>
+<section id="Caveats">
+<h2>Caveats<a class="headerlink" href="#Caveats" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Only numeric nondecimal scalar types are currently supported as of yet, but strings and structured types are in planning. Attempting to use this API with those types will throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p></li>
+<li><p>We do not yet fully support all arithmetic operators. Certain ops like bitwise operations are not currently implemented, but planned in future releases. If an operator is needed, a github issue should be raised so that it can be properly prioritized and implemented.</p></li>
+</ul>
+</section>
+<section id="Summary">
+<h2>Summary<a class="headerlink" href="#Summary" title="Permalink to this headline">#</a></h2>
+<p>This guide has covered a lot of content. At this point, you should hopefully feel comfortable writing UDFs (with or without null values) that operate on</p>
+<ul class="simple">
+<li><p>Series</p></li>
+<li><p>DataFrame</p></li>
+<li><p>Rolling Windows</p></li>
+<li><p>GroupBy DataFrames</p></li>
+<li><p>CuPy NDArrays</p></li>
+<li><p>Numba DeviceNDArrays</p></li>
+<li><p>Generalized NA UDFs</p></li>
+</ul>
+<p>For more information please see the <a class="reference external" href="https://docs.rapids.ai/api/cudf/nightly/">cuDF</a>, <a class="reference external" href="https://numba.pydata.org/numba-doc/dev/cuda/index.html">Numba.cuda</a>, and <a class="reference external" href="https://docs-cupy.chainer.org/en/stable/">CuPy</a> documentation.</p>
+</section>
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev" href="10min-cudf-cupy.html" id="prev-link" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">10 Minutes to cuDF and CuPy</p>
+        </div>
+    </a>
+    <a class="right-next" href="Working-with-missing-data.html" id="next-link" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Working with missing data</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2018-2021, NVIDIA.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script></body></html>

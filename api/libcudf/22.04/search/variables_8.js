@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['results_2924',['results',['../structcudf_1_1groupby_1_1aggregation__result.html#a1d0e11864ac37b44b2b19051fca616fe',1,'cudf::groupby::aggregation_result']]]
+  ['nrows_5ftensor_3336',['nrows_tensor',['../structnvtext_1_1tokenizer__result.html#a133ae69969b03d70f715c1ad793355a5',1,'nvtext::tokenizer_result']]]
 ];
