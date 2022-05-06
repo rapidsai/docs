@@ -24,6 +24,8 @@ with open(RELEASES_PATH) as fp:
     }
 
 SCRIPT_TAG_ID = "rapids-selector-js"
+PIXEL_SRC_TAG_ID = "rapids-selector-pixel-src"
+PIXEL_INVOCATION_TAG_ID = "rapids-selector-pixel-invocation"
 STYLE_TAG_ID = "rapids-selector-css"
 FA_TAG_ID = "rapids-fa-tag"
 
@@ -99,7 +101,9 @@ def create_version_options():
     for version_name, version_path in [
         (_, path) for _, path in LIB_PATH_DICT[doc_lib].items() if path is not None
     ]:
-        if (doc_is_extra_legacy and version_name == "legacy") or (doc_is_extra_nightly and version_name == "nightly"):
+        if (doc_is_extra_legacy and version_name == "legacy") or (
+            doc_is_extra_nightly and version_name == "nightly"
+        ):
             version_number_str = doc_version["number"]
         else:
             version_number_str = VERSIONS_DICT[version_name]
@@ -178,6 +182,25 @@ def create_script_tag(soup):
     return script_tag
 
 
+def create_pixel_tags(soup):
+    """
+    Creates and returns the pixel script tags
+    """
+
+    head_tag = soup.new_tag(
+        "script",
+        id=PIXEL_SRC_TAG_ID,
+        src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js",
+    )
+    body_tag = soup.new_tag(
+        "script",
+        type="text/javascript",
+        id=PIXEL_INVOCATION_TAG_ID,
+    )
+    body_tag.string = "_satellite.pageBottom();"
+    return [head_tag, body_tag]
+
+
 def create_css_link_tag(soup):
     """
     Creates and returns a link tag that points to custom.css
@@ -218,7 +241,9 @@ def delete_existing_elements(soup):
         doxygen_title_area,
         f"#{SCRIPT_TAG_ID}",
         f"#{STYLE_TAG_ID}",
-        f"#{FA_TAG_ID}"
+        f"#{FA_TAG_ID}",
+        f"#{PIXEL_SRC_TAG_ID}",
+        f"#{PIXEL_INVOCATION_TAG_ID}",
     ]:
         delete_element(soup, element)
 
@@ -230,8 +255,8 @@ def is_sphinx_or_doxygen(soup):
     that is used for inserting the library/version selectors to the doc.
     """
     # Sphinx Themes
-    jtd_identifier = ".wy-side-nav-search" # Just-the-docs theme
-    pydata_identifier = ".bd-sidebar" # Pydata theme
+    jtd_identifier = ".wy-side-nav-search"  # Just-the-docs theme
+    pydata_identifier = ".bd-sidebar"  # Pydata theme
 
     # Doxygen
     doxygen_identifier = "#titlearea"
@@ -272,6 +297,7 @@ def main():
     version_selector = create_selector(soup, create_version_options())
     container = soup.new_tag("div", id=f"rapids-{doc_type}-container")
     script_tag = create_script_tag(soup)
+    [pix_head_tag, pix_body_tag] = create_pixel_tags(soup)
     style_tab = create_css_link_tag(soup)
 
     # Append elements to container
@@ -282,6 +308,8 @@ def main():
     # Insert new elements
     reference_el.insert(0, container)
     soup.body.append(script_tag)
+    soup.body.append(pix_body_tag)
+    soup.head.append(pix_head_tag)
     soup.head.append(style_tab)
 
     with open(FILEPATH, "w") as fp:
