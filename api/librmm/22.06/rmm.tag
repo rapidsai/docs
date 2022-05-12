@@ -419,6 +419,18 @@
     <name>rmm::detail::bytes</name>
     <filename>structrmm_1_1detail_1_1bytes.html</filename>
   </compound>
+  <compound kind="class">
+    <name>rmm::mr::callback_memory_resource</name>
+    <filename>classrmm_1_1mr_1_1callback__memory__resource.html</filename>
+    <base>rmm::mr::device_memory_resource</base>
+    <member kind="function">
+      <type></type>
+      <name>callback_memory_resource</name>
+      <anchorfile>classrmm_1_1mr_1_1callback__memory__resource.html</anchorfile>
+      <anchor>a721d9ba9645d52300f5ade9fa2765cb5</anchor>
+      <arglist>(allocate_callback_t allocate_callback, deallocate_callback_t deallocate_callback, void *allocate_callback_arg=nullptr, void *deallocate_callback_arg=nullptr) noexcept</arglist>
+    </member>
+  </compound>
   <compound kind="struct">
     <name>rmm::mr::detail::coalescing_free_list</name>
     <filename>structrmm_1_1mr_1_1detail_1_1coalescing__free__list.html</filename>
@@ -2197,13 +2209,13 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>rmm::mr::stream_allocator_adaptor::rebind</name>
-    <filename>structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html</filename>
+    <name>rmm::mr::thrust_allocator::rebind</name>
+    <filename>structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html</filename>
     <templarg></templarg>
   </compound>
   <compound kind="struct">
-    <name>rmm::mr::thrust_allocator::rebind</name>
-    <filename>structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html</filename>
+    <name>rmm::mr::stream_allocator_adaptor::rebind</name>
+    <filename>structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html</filename>
     <templarg></templarg>
   </compound>
   <compound kind="class">

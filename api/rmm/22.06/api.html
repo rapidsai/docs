@@ -332,6 +332,12 @@ bin to create.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rmm.mr.BinningMemoryResource.add_bin" title="rmm.mr.BinningMemoryResource.add_bin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_bin</span></code></a>(self,&nbsp;size_t&nbsp;allocation_size,&nbsp;...)</p></td>
 <td><p>Adds a bin of the specified maximum allocation size to this memory resource.</p></td>
 </tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">allocate</span></code>(self,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deallocate</span></code>(self,&nbsp;uintptr_t&nbsp;ptr,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_upstream</span></code>(self)</p></td>
 <td><p></p></td>
 </tr>
@@ -367,6 +373,66 @@ smaller bin size will use this fixed-size memory resource.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="rmm.mr.CallbackMemoryResource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rmm.mr.</span></span><span class="sig-name descname"><span class="pre">CallbackMemoryResource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">allocate_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deallocate_func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.CallbackMemoryResource" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rmm.mr.DeviceMemoryResource" title="rmm._lib.memory_resource.DeviceMemoryResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.DeviceMemoryResource</span></code></a></p>
+<p>A memory resource that uses the user-provided callables to do
+memory allocation and deallocation.</p>
+<p><code class="docutils literal notranslate"><span class="pre">CallbackMemoryResource</span></code> should really only be used for
+debugging memory issues, as there is a significant performance
+penalty associated with using a Python function for each memory
+allocation and deallocation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>allocate_func: callable</strong></dt><dd><p>The allocation function must accept a single integer argument,
+representing the number of bytes to allocate, and return an
+integer representing the pointer to the allocated memory.</p>
+</dd>
+<dt><strong>deallocate_func: callable</strong></dt><dd><p>The deallocation function must accept two arguments, an integer
+representing the pointer to the memory to free, and a second
+integer representing the number of bytes to free.</p>
+</dd>
+<dt><strong>Examples</strong></dt><dd></dd>
+<dt><strong>&mdash;&mdash;-</strong></dt><dd></dd>
+<dt><strong>&gt;&gt;&gt; import rmm</strong></dt><dd></dd>
+<dt><strong>&gt;&gt;&gt; base_mr = rmm.mr.CudaMemoryResource()</strong></dt><dd></dd>
+<dt><strong>&gt;&gt;&gt; def allocate_func(size):</strong></dt><dd></dd>
+<dt><strong>&hellip;     print(f&rdquo;Allocating {size} bytes&rdquo;)</strong></dt><dd></dd>
+<dt><strong>&hellip;     return base_mr.allocate(size)</strong></dt><dd></dd>
+<dt><strong>&hellip;</strong></dt><dd></dd>
+<dt><strong>&gt;&gt;&gt; def deallocate_func(ptr, size):</strong></dt><dd></dd>
+<dt><strong>&hellip;     print(f&rdquo;Deallocating {size} bytes&rdquo;)</strong></dt><dd></dd>
+<dt><strong>&hellip;     return base_mr.deallocate(ptr, size)</strong></dt><dd></dd>
+<dt><strong>&hellip;</strong></dt><dd></dd>
+<dt><strong>&gt;&gt;&gt; rmm.mr.set_current_device_resource(</strong></dt><dd><p>rmm.mr.CallbackMemoryResource(allocate_func, deallocate_func)</p>
+</dd>
+<dt><strong>)</strong></dt><dd></dd>
+<dt><strong>&gt;&gt;&gt; dbuf = rmm.DeviceBuffer(size=256)</strong></dt><dd></dd>
+<dt><strong>Allocating 256 bytes</strong></dt><dd></dd>
+<dt><strong>&gt;&gt;&gt; del dbuf</strong></dt><dd></dd>
+<dt><strong>Deallocating 256 bytes</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">allocate</span></code>(self,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deallocate</span></code>(self,&nbsp;uintptr_t&nbsp;ptr,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="rmm.mr.CudaAsyncMemoryResource">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rmm.mr.</span></span><span class="sig-name descname"><span class="pre">CudaAsyncMemoryResource</span></span><a class="headerlink" href="#rmm.mr.CudaAsyncMemoryResource" title="Permalink to this definition">&para;</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#rmm.mr.DeviceMemoryResource" title="rmm._lib.memory_resource.DeviceMemoryResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.DeviceMemoryResource</span></code></a></p>
@@ -385,6 +451,21 @@ next synchronization point.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">allocate</span></code>(self,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deallocate</span></code>(self,&nbsp;uintptr_t&nbsp;ptr,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="py class">
@@ -392,12 +473,52 @@ next synchronization point.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rmm.mr.</span></span><span class="sig-name descname"><span class="pre">CudaMemoryResource</span></span><a class="headerlink" href="#rmm.mr.CudaMemoryResource" title="Permalink to this definition">&para;</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#rmm.mr.DeviceMemoryResource" title="rmm._lib.memory_resource.DeviceMemoryResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.DeviceMemoryResource</span></code></a></p>
 <p>Memory resource that uses cudaMalloc/Free for allocation/deallocation</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">allocate</span></code>(self,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deallocate</span></code>(self,&nbsp;uintptr_t&nbsp;ptr,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="rmm.mr.DeviceMemoryResource">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rmm.mr.</span></span><span class="sig-name descname"><span class="pre">DeviceMemoryResource</span></span><a class="headerlink" href="#rmm.mr.DeviceMemoryResource" title="Permalink to this definition">&para;</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rmm.mr.DeviceMemoryResource.allocate" title="rmm.mr.DeviceMemoryResource.allocate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">allocate</span></code></a>(self,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rmm.mr.DeviceMemoryResource.deallocate" title="rmm.mr.DeviceMemoryResource.deallocate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deallocate</span></code></a>(self,&nbsp;uintptr_t&nbsp;ptr,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="rmm.mr.DeviceMemoryResource.allocate">
+<span class="sig-name descname"><span class="pre">allocate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_t</span> <span class="pre">nbytes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.DeviceMemoryResource.allocate" title="Permalink to this definition">&para;</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rmm.mr.DeviceMemoryResource.deallocate">
+<span class="sig-name descname"><span class="pre">deallocate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uintptr_t</span> <span class="pre">ptr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_t</span> <span class="pre">nbytes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.mr.DeviceMemoryResource.deallocate" title="Permalink to this definition">&para;</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -427,6 +548,12 @@ next synchronization point.</p>
 <col style="width: 90%">
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">allocate</span></code>(self,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deallocate</span></code>(self,&nbsp;uintptr_t&nbsp;ptr,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_upstream</span></code>(self)</p></td>
 <td><p></p></td>
 </tr>
@@ -469,6 +596,12 @@ block_size.</p>
 <col style="width: 90%">
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">allocate</span></code>(self,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deallocate</span></code>(self,&nbsp;uintptr_t&nbsp;ptr,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_upstream</span></code>(self)</p></td>
 <td><p></p></td>
 </tr>
@@ -504,6 +637,12 @@ performed by an upstream memory resource.</p>
 <col style="width: 90%">
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">allocate</span></code>(self,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deallocate</span></code>(self,&nbsp;uintptr_t&nbsp;ptr,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rmm.mr.LoggingResourceAdaptor.flush" title="rmm.mr.LoggingResourceAdaptor.flush"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flush</span></code></a>(self)</p></td>
 <td><p></p></td>
 </tr>
@@ -533,6 +672,21 @@ performed by an upstream memory resource.</p>
 <dd><p>Bases: <a class="reference internal" href="#rmm.mr.DeviceMemoryResource" title="rmm._lib.memory_resource.DeviceMemoryResource"><code class="xref py py-class docutils literal notranslate"><span class="pre">rmm._lib.memory_resource.DeviceMemoryResource</span></code></a></p>
 <p>Memory resource that uses cudaMallocManaged/Free for
 allocation/deallocation.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">allocate</span></code>(self,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deallocate</span></code>(self,&nbsp;uintptr_t&nbsp;ptr,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="py class">
@@ -567,6 +721,12 @@ on the device is used.</p>
 <col style="width: 90%">
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">allocate</span></code>(self,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deallocate</span></code>(self,&nbsp;uintptr_t&nbsp;ptr,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_upstream</span></code>(self)</p></td>
 <td><p></p></td>
 </tr>
@@ -611,6 +771,12 @@ Includes the ability to query these statistics at any time.</p>
 <col style="width: 90%">
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">allocate</span></code>(self,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deallocate</span></code>(self,&nbsp;uintptr_t&nbsp;ptr,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_upstream</span></code>(self)</p></td>
 <td><p></p></td>
 </tr>
@@ -662,6 +828,12 @@ query all outstanding allocations with the stack trace, if desired.</p>
 <col style="width: 90%">
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">allocate</span></code>(self,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deallocate</span></code>(self,&nbsp;uintptr_t&nbsp;ptr,&nbsp;size_t&nbsp;nbytes)</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rmm.mr.TrackingResourceAdaptor.get_allocated_bytes" title="rmm.mr.TrackingResourceAdaptor.get_allocated_bytes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_allocated_bytes</span></code></a>(self)</p></td>
 <td><p>Query the number of bytes that have been allocated.</p></td>
 </tr>
