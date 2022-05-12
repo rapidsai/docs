@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en"><head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>dask_cuda.initialize &mdash; dask-cuda 22.06.00a0+g952e130 documentation</title>
+  <title>dask_cuda.initialize &mdash; dask-cuda 22.06.00a0+g7de73c7 documentation</title>
       <link href="../../_static/pygments.css" rel="stylesheet" type="text/css">
       <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css">
   <!--[if lt IE 9]>
@@ -78,7 +78,6 @@
              
   <h1>Source code for dask_cuda.initialize</h1><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">click</span>
 <span class="kn">import</span> <span class="nn">numba.cuda</span>
@@ -119,28 +118,17 @@
         <span class="p">)</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="n">has_cuda_context</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">distributed</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">ucx</span><span class="o">.</span><span class="n">cuda_context_created</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"A CUDA context for device </span><span class="si">{</span><span class="n">ctx</span><span class="si">}</span><span class="s2"> already exists on process ID "</span>
-                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span><span class="si">}</span><span class="s2">. This is often the result of a CUDA-enabled library "</span>
-                <span class="s2">"calling a CUDA runtime function before Dask-CUDA can spawn worker "</span>
-                <span class="s2">"processes. Please make sure any such function calls don't happen at "</span>
-                <span class="s2">"import time or in the global scope of a program."</span>
-            <span class="p">)</span>
+            <span class="n">distributed</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">ucx</span><span class="o">.</span><span class="n">_warn_existing_cuda_context</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
 
         <span class="n">_create_cuda_context_handler</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">distributed</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">ucx</span><span class="o">.</span><span class="n">cuda_context_created</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="n">ctx</span> <span class="o">=</span> <span class="n">has_cuda_context</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">ctx</span> <span class="o">!=</span> <span class="n">cuda_visible_device</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"Worker with process ID </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span><span class="si">}</span><span class="s2"> should have a CUDA context "</span>
-                    <span class="sa">f</span><span class="s2">"assigned to device </span><span class="si">{</span><span class="n">cuda_visible_device</span><span class="si">}</span><span class="s2">, but instead the CUDA "</span>
-                    <span class="sa">f</span><span class="s2">"context is on device </span><span class="si">{</span><span class="n">ctx</span><span class="si">}</span><span class="s2">. This is often the result of a "</span>
-                    <span class="s2">"CUDA-enabled library calling a CUDA runtime function before "</span>
-                    <span class="s2">"Dask-CUDA can spawn worker processes. Please make sure any such "</span>
-                    <span class="s2">"function calls don't happen at import time or in the global scope "</span>
-                    <span class="s2">"of a program."</span>
+                <span class="n">distributed</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">ucx</span><span class="o">.</span><span class="n">_warn_cuda_context_wrong_device</span><span class="p">(</span>
+                    <span class="n">cuda_visible_device</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>
                 <span class="p">)</span>
+
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Unable to start CUDA Context"</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 

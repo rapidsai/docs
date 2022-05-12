@@ -3,7 +3,7 @@
   <meta charset="utf-8"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
 
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>UCX Integration &mdash; dask-cuda 22.06.00a0+g952e130 documentation</title>
+  <title>UCX Integration &mdash; dask-cuda 22.06.00a0+g7de73c7 documentation</title>
       <link href="_static/pygments.css" rel="stylesheet" type="text/css">
       <link href="_static/css/theme.css" rel="stylesheet" type="text/css">
   <!--[if lt IE 9]>
@@ -105,6 +105,14 @@ NVIDIA provides comparison charts for both <a class="reference external" href="h
 <p>When using UCX, each NVLink and InfiniBand memory buffer must create a mapping between each unique pair of processes they are transferred across; this can be quite costly, potentially in the range of hundreds of milliseconds per mapping.
 For this reason, it is strongly recommended to use <a class="reference external" href="https://github.com/rapidsai/rmm">RAPIDS Memory Manager (RMM)</a> to allocate a memory pool that is only prone to a single mapping operation, which all subsequent transfers may rely upon.
 A memory pool also prevents the Dask scheduler from deserializing CUDA data, which will cause a crash.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Dask-CUDA must create worker CUDA contexts during cluster initialization, and properly ordering that task is critical for correct UCX configuration.
+If a CUDA context already exists for this process at the time of cluster initialization, unexpected behavior can occur.
+To avoid this, it is advised to initialize any UCX-enabled clusters before doing operations that would result in a CUDA context being created.
+Depending on the library, even an import can force CUDA context creation.</p>
+<p>For some RAPIDS libraries (e.g. cuDF), setting <code class="docutils literal notranslate"><span class="pre">RAPIDS_NO_INITIALIZE=1</span></code> at runtime will delay or disable their CUDA context creation, allowing for improved compatibility with UCX-enabled clusters and preventing runtime warnings.</p>
+</div>
 </section>
 <section id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline"></a></h2>
