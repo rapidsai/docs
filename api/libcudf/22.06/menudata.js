@@ -159,6 +159,7 @@ var menudata={children:[
 {text:"d",url:"functions_vars.html#index_d"},
 {text:"k",url:"functions_vars.html#index_k"},
 {text:"n",url:"functions_vars.html#index_n"},
+{text:"p",url:"functions_vars.html#index_p"},
 {text:"r",url:"functions_vars.html#index_r"},
 {text:"s",url:"functions_vars.html#index_s"},
 {text:"t",url:"functions_vars.html#index_t"},
@@ -170,7 +171,6 @@ var menudata={children:[
 {text:"Enumerator",url:"functions_eval.html",children:[
 {text:"a",url:"functions_eval.html#index_a"},
 {text:"c",url:"functions_eval.html#index_c"},
-{text:"d",url:"functions_eval.html#index_d"},
 {text:"l",url:"functions_eval.html#index_l"},
 {text:"m",url:"functions_eval.html#index_m"},
 {text:"n",url:"functions_eval.html#index_n"},
