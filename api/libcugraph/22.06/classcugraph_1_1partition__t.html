@@ -66,9 +66,9 @@ $(function() {
 <table class="memberdecls">
 <tbody><tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a790cf103e23b0f71af9940ef1f70d0d5"><td align="right" class="memItemLeft" valign="top"><a id="a790cf103e23b0f71af9940ef1f70d0d5"></a>
-&nbsp;</td><td class="memItemRight" valign="bottom"><b>partition_t</b> (std::vector&lt; vertex_t &gt; const &amp;vertex_partition_offsets, int row_comm_size, int col_comm_size, int row_comm_rank, int col_comm_rank)</td></tr>
-<tr class="separator:a790cf103e23b0f71af9940ef1f70d0d5"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
+<tr class="memitem:a31d38aada08219d17815971036516cc4"><td align="right" class="memItemLeft" valign="top"><a id="a31d38aada08219d17815971036516cc4"></a>
+&nbsp;</td><td class="memItemRight" valign="bottom"><b>partition_t</b> (std::vector&lt; vertex_t &gt; const &amp;vertex_partition_range_offsets, int row_comm_size, int col_comm_size, int row_comm_rank, int col_comm_rank)</td></tr>
+<tr class="separator:a31d38aada08219d17815971036516cc4"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
 <tr class="memitem:a0dfe16a5a4b9082fe0219f6c9a882a2b"><td align="right" class="memItemLeft" valign="top"><a id="a0dfe16a5a4b9082fe0219f6c9a882a2b"></a>
 int&nbsp;</td><td class="memItemRight" valign="bottom"><b>row_comm_size</b> () const</td></tr>
 <tr class="separator:a0dfe16a5a4b9082fe0219f6c9a882a2b"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
@@ -78,9 +78,9 @@ int&nbsp;</td><td class="memItemRight" valign="bottom"><b>col_comm_size</b> () c
 <tr class="memitem:ab0dad8567169744140cdc3267fcda074"><td align="right" class="memItemLeft" valign="top"><a id="ab0dad8567169744140cdc3267fcda074"></a>
 int&nbsp;</td><td class="memItemRight" valign="bottom"><b>comm_rank</b> () const</td></tr>
 <tr class="separator:ab0dad8567169744140cdc3267fcda074"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
-<tr class="memitem:a50fe7d98d05c4b47c2366815defdbe83"><td align="right" class="memItemLeft" valign="top"><a id="a50fe7d98d05c4b47c2366815defdbe83"></a>
-std::vector&lt; vertex_t &gt; const  &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><b>vertex_partition_offsets</b> () const</td></tr>
-<tr class="separator:a50fe7d98d05c4b47c2366815defdbe83"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
+<tr class="memitem:ae8a3cfa47e151139dcfdcbfb18bfb690"><td align="right" class="memItemLeft" valign="top"><a id="ae8a3cfa47e151139dcfdcbfb18bfb690"></a>
+std::vector&lt; vertex_t &gt; const  &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><b>vertex_partition_range_offsets</b> () const</td></tr>
+<tr class="separator:ae8a3cfa47e151139dcfdcbfb18bfb690"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
 <tr class="memitem:ad1f7189fd1a704d82f97e43dfb8f662f"><td align="right" class="memItemLeft" valign="top"><a id="ad1f7189fd1a704d82f97e43dfb8f662f"></a>
 std::vector&lt; vertex_t &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><b>vertex_partition_range_lasts</b> () const</td></tr>
 <tr class="separator:ad1f7189fd1a704d82f97e43dfb8f662f"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
@@ -148,7 +148,7 @@ class cugraph::partition_t&lt; vertex_t &gt;</h3>
 <p>We need to partition 1D vertex array and the 2D edge matrix (major = source if not transposed, destination if transposed).</p>
 <p>An 1D vertex array of size V is divided to P linear partitions; each partition has the size close to V / P.</p>
 <p>The 2D edge matrix is first horizontally partitioned to P slabs, then each slab will be further vertically partitioned to P_row rectangles. One GPU will be responsible col_comm_size rectangular partitions.</p>
-<p>To be more specific, a GPU with (col_comm_rank, row_comm_rank) will be responsible for col_comm_size rectangular partitions [a_i,b_i) by [c,d) where a_i = vertex_partition_offsets[row_comm_size * i + row_comm_rank] and b_i = vertex_partition_offsets[row_comm_size * i + row_comm_rank + 1]. c is vertex_partition_offsets[row_comm_size * col_comm_rank] and d = vertex_partition_offsests[row_comm_size * (col_comm_rank + 1)].</p>
+<p>To be more specific, a GPU with (col_comm_rank, row_comm_rank) will be responsible for col_comm_size rectangular partitions [a_i,b_i) by [c,d) where a_i = vertex_partition_range_offsets[row_comm_size * i + row_comm_rank] and b_i = vertex_partition_range_offsets[row_comm_size * i + row_comm_rank + 1]. c is vertex_partition_range_offsets[row_comm_size * col_comm_rank] and d = vertex_partition_range_offsets[row_comm_size * (col_comm_rank + 1)]. Here, vertex_partition_range_offsets (size = P + 1) stores the 1D partitioning of the vertex ID range [0, # vertices). The first P values store the beginning (inclusive) of each GPU partition. The last value marks the end (exclusive) of the last GPU partition (which coincides with # vertices).</p>
 <p>See E. G. Boman et. al., &ldquo;Scalable matrix computations on large scale-free graphs using 2D graph partitioning&rdquo;, 2013 for additional detail.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">

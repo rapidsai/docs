@@ -316,7 +316,7 @@ $(function() {
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&nbsp;  <span class="comment">//</span></div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&nbsp;  std::unique_ptr&lt;std::vector&lt;vertex_t&gt;&gt; get_partition_offsets_wrap(<span class="keywordtype">void</span>)  <span class="comment">// const</span></div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&nbsp;  {</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&nbsp;    <span class="keywordflow">return</span> std::make_unique&lt;std::vector&lt;vertex_t&gt;&gt;(part_.vertex_partition_offsets());</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&nbsp;    <span class="keywordflow">return</span> std::make_unique&lt;std::vector&lt;vertex_t&gt;&gt;(part_.vertex_partition_range_offsets());</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&nbsp;  }</div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&nbsp; </div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&nbsp;  std::pair&lt;vertex_t, vertex_t&gt; get_part_local_vertex_range()<span class="keyword"> const</span></div>
@@ -628,38 +628,39 @@ $(function() {
 <div class="line"><a name="l00594"></a><span class="lineno">  594</span>&nbsp;    edgelist_major_vertices,  <span class="comment">// [IN / OUT]: groupby_gpu_id_and_shuffle_values() sorts in-place</span></div>
 <div class="line"><a name="l00595"></a><span class="lineno">  595</span>&nbsp;  vertex_t* edgelist_minor_vertices,  <span class="comment">// [IN / OUT]</span></div>
 <div class="line"><a name="l00596"></a><span class="lineno">  596</span>&nbsp;  weight_t* edgelist_weights,         <span class="comment">// [IN / OUT]</span></div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&nbsp;  edge_t num_edgelist_edges);</div>
-<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&nbsp; </div>
-<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&nbsp;<span class="comment">// Wrapper for calling renumber_edeglist() inplace:</span></div>
-<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&nbsp;<span class="comment">//</span></div>
-<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t, <span class="keyword">typename</span> edge_t&gt;</div>
-<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&nbsp;std::unique_ptr&lt;renum_tuple_t&lt;vertex_t, edge_t&gt;&gt; call_renumber(</div>
-<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&nbsp;  raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
-<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&nbsp;  vertex_t* shuffled_edgelist_src_vertices <span class="comment">/* [INOUT] */</span>,</div>
-<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&nbsp;  vertex_t* shuffled_edgelist_dst_vertices <span class="comment">/* [INOUT] */</span>,</div>
-<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&nbsp;  std::vector&lt;edge_t&gt; <span class="keyword">const</span>&amp; edge_counts,</div>
-<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&nbsp;  <span class="keywordtype">bool</span> store_transposed,</div>
-<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&nbsp;  <span class="keywordtype">bool</span> do_expensive_check,</div>
-<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&nbsp;  <span class="keywordtype">bool</span> multi_gpu);</div>
-<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&nbsp; </div>
-<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&nbsp;<span class="comment">// Helper for setting up subcommunicators, typically called as part of the</span></div>
-<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&nbsp;<span class="comment">// user-initiated comms initialization in Python.</span></div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&nbsp;<span class="comment">//</span></div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&nbsp;<span class="comment">// raft::handle_t&amp; handle</span></div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&nbsp;<span class="comment">//   Raft handle for which the new subcommunicators will be created. The</span></div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&nbsp;<span class="comment">//   subcommunicators will then be accessible from the handle passed to the</span></div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&nbsp;<span class="comment">//   parallel processes.</span></div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&nbsp;<span class="comment">//</span></div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&nbsp;<span class="comment">// size_t row_comm_size</span></div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&nbsp;<span class="comment">//   Number of items in a partition row (ie. pcols), needed for creating the</span></div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&nbsp;<span class="comment">//   appropriate number of subcommunicator instances.</span></div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&nbsp;<span class="keywordtype">void</span> init_subcomms(raft::handle_t&amp; handle, <span class="keywordtype">size_t</span> row_comm_size);</div>
-<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&nbsp; </div>
-<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&nbsp;}  <span class="comment">// namespace cython</span></div>
-<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&nbsp;}  <span class="comment">// namespace cugraph</span></div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&nbsp;  edge_t num_edgelist_edges,</div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&nbsp;  <span class="keywordtype">bool</span> is_weighted);</div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&nbsp; </div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&nbsp;<span class="comment">// Wrapper for calling renumber_edgelist() inplace:</span></div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&nbsp;<span class="comment">//</span></div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t, <span class="keyword">typename</span> edge_t&gt;</div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&nbsp;std::unique_ptr&lt;renum_tuple_t&lt;vertex_t, edge_t&gt;&gt; call_renumber(</div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&nbsp;  raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&nbsp;  vertex_t* shuffled_edgelist_src_vertices <span class="comment">/* [INOUT] */</span>,</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&nbsp;  vertex_t* shuffled_edgelist_dst_vertices <span class="comment">/* [INOUT] */</span>,</div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&nbsp;  std::vector&lt;edge_t&gt; <span class="keyword">const</span>&amp; edge_counts,</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&nbsp;  <span class="keywordtype">bool</span> store_transposed,</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&nbsp;  <span class="keywordtype">bool</span> do_expensive_check,</div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&nbsp;  <span class="keywordtype">bool</span> multi_gpu);</div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&nbsp; </div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&nbsp;<span class="comment">// Helper for setting up subcommunicators, typically called as part of the</span></div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&nbsp;<span class="comment">// user-initiated comms initialization in Python.</span></div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&nbsp;<span class="comment">//</span></div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&nbsp;<span class="comment">// raft::handle_t&amp; handle</span></div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&nbsp;<span class="comment">//   Raft handle for which the new subcommunicators will be created. The</span></div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&nbsp;<span class="comment">//   subcommunicators will then be accessible from the handle passed to the</span></div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&nbsp;<span class="comment">//   parallel processes.</span></div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&nbsp;<span class="comment">//</span></div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&nbsp;<span class="comment">// size_t row_comm_size</span></div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&nbsp;<span class="comment">//   Number of items in a partition row (ie. pcols), needed for creating the</span></div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&nbsp;<span class="comment">//   appropriate number of subcommunicator instances.</span></div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&nbsp;<span class="keywordtype">void</span> init_subcomms(raft::handle_t&amp; handle, <span class="keywordtype">size_t</span> row_comm_size);</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&nbsp; </div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&nbsp;}  <span class="comment">// namespace cython</span></div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&nbsp;}  <span class="comment">// namespace cugraph</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="astructcugraph_1_1cython_1_1graph__container__t_html"><div class="ttname"><a href="structcugraph_1_1cython_1_1graph__container__t.html">cugraph::cython::graph_container_t</a></div><div class="ttdef"><b>Definition:</b> cython.hpp:61</div></div>
-<div class="ttc" id="aclasscugraph_1_1partition__t_html"><div class="ttname"><a href="classcugraph_1_1partition__t.html">cugraph::partition_t</a></div><div class="ttdoc">store vertex partitioning map</div><div class="ttdef"><b>Definition:</b> graph_view.hpp:73</div></div>
+<div class="ttc" id="aclasscugraph_1_1partition__t_html"><div class="ttname"><a href="classcugraph_1_1partition__t.html">cugraph::partition_t</a></div><div class="ttdoc">store vertex partitioning map</div><div class="ttdef"><b>Definition:</b> graph_view.hpp:77</div></div>
 <div class="ttc" id="astructcugraph_1_1cython_1_1graph__generator__t_html"><div class="ttname"><a href="structcugraph_1_1cython_1_1graph__generator__t.html">cugraph::cython::graph_generator_t</a></div><div class="ttdef"><b>Definition:</b> cython.hpp:221</div></div>
 <div class="ttc" id="astructcugraph_1_1cython_1_1random__walk__coo__t_html"><div class="ttname"><a href="structcugraph_1_1cython_1_1random__walk__coo__t.html">cugraph::cython::random_walk_coo_t</a></div><div class="ttdef"><b>Definition:</b> cython.hpp:230</div></div>
 <div class="ttc" id="anamespacecugraph_html_af138b768b2b98f7c72d74fca7135f6be"><div class="ttname"><a href="namespacecugraph.html#af138b768b2b98f7c72d74fca7135f6be">cugraph::scramble_vertex_ids</a></div><div class="ttdeci">void scramble_vertex_ids(raft::handle_t const &amp;handle, rmm::device_uvector&lt; vertex_t &gt; &amp;d_src_v, rmm::device_uvector&lt; vertex_t &gt; &amp;d_dst_v, vertex_t vertex_id_offset, uint64_t seed)</div><div class="ttdoc">scramble vertex ids in a graph</div><div class="ttdef"><b>Definition:</b> generator_tools.cu:63</div></div>
@@ -670,8 +671,8 @@ $(function() {
 <div class="ttc" id="astructcugraph_1_1cython_1_1renum__tuple__t_html"><div class="ttname"><a href="structcugraph_1_1cython_1_1renum__tuple__t.html">cugraph::cython::renum_tuple_t</a></div><div class="ttdef"><b>Definition:</b> cython.hpp:251</div></div>
 <div class="ttc" id="astructcugraph_1_1cython_1_1random__walk__ret__t_html"><div class="ttname"><a href="structcugraph_1_1cython_1_1random__walk__ret__t.html">cugraph::cython::random_walk_ret_t</a></div><div class="ttdef"><b>Definition:</b> cython.hpp:205</div></div>
 <div class="ttc" id="astructcugraph_1_1cython_1_1major__minor__weights__t_html"><div class="ttname"><a href="structcugraph_1_1cython_1_1major__minor__weights__t.html">cugraph::cython::major_minor_weights_t</a></div><div class="ttdef"><b>Definition:</b> cython.hpp:155</div></div>
-<div class="ttc" id="anamespacecugraph_html_a9942a275444c2e0b96d90feec4ab6e90"><div class="ttname"><a href="namespacecugraph.html#a9942a275444c2e0b96d90feec4ab6e90">cugraph::katz_centrality</a></div><div class="ttdeci">void katz_centrality(raft::handle_t const &amp;handle, graph_view_t&lt; vertex_t, edge_t, weight_t, true, multi_gpu &gt; const &amp;graph_view, result_t const *betas, result_t *katz_centralities, result_t alpha, result_t beta, result_t epsilon, size_t max_iterations, bool has_initial_guess, bool normalize, bool do_expensive_check)</div><div class="ttdoc">Compute Katz Centrality scores.</div><div class="ttdef"><b>Definition:</b> katz_centrality_impl.cuh:175</div></div>
-<div class="ttc" id="anamespacecugraph_html_a7d8670fded63928475f245d51e797903"><div class="ttname"><a href="namespacecugraph.html#a7d8670fded63928475f245d51e797903">cugraph::pagerank</a></div><div class="ttdeci">void pagerank(raft::handle_t const &amp;handle, graph_view_t&lt; vertex_t, edge_t, weight_t, true, multi_gpu &gt; const &amp;graph_view, std::optional&lt; weight_t const * &gt; precomputed_vertex_out_weight_sums, std::optional&lt; vertex_t const * &gt; personalization_vertices, std::optional&lt; result_t const * &gt; personalization_values, std::optional&lt; vertex_t &gt; personalization_vector_size, result_t *pageranks, result_t alpha, result_t epsilon, size_t max_iterations, bool has_initial_guess, bool do_expensive_check)</div><div class="ttdoc">Compute PageRank scores.</div><div class="ttdef"><b>Definition:</b> pagerank_impl.cuh:285</div></div>
+<div class="ttc" id="anamespacecugraph_html_a9942a275444c2e0b96d90feec4ab6e90"><div class="ttname"><a href="namespacecugraph.html#a9942a275444c2e0b96d90feec4ab6e90">cugraph::katz_centrality</a></div><div class="ttdeci">void katz_centrality(raft::handle_t const &amp;handle, graph_view_t&lt; vertex_t, edge_t, weight_t, true, multi_gpu &gt; const &amp;graph_view, result_t const *betas, result_t *katz_centralities, result_t alpha, result_t beta, result_t epsilon, size_t max_iterations, bool has_initial_guess, bool normalize, bool do_expensive_check)</div><div class="ttdoc">Compute Katz Centrality scores.</div><div class="ttdef"><b>Definition:</b> katz_centrality_impl.cuh:177</div></div>
+<div class="ttc" id="anamespacecugraph_html_a7d8670fded63928475f245d51e797903"><div class="ttname"><a href="namespacecugraph.html#a7d8670fded63928475f245d51e797903">cugraph::pagerank</a></div><div class="ttdeci">void pagerank(raft::handle_t const &amp;handle, graph_view_t&lt; vertex_t, edge_t, weight_t, true, multi_gpu &gt; const &amp;graph_view, std::optional&lt; weight_t const * &gt; precomputed_vertex_out_weight_sums, std::optional&lt; vertex_t const * &gt; personalization_vertices, std::optional&lt; result_t const * &gt; personalization_values, std::optional&lt; vertex_t &gt; personalization_vector_size, result_t *pageranks, result_t alpha, result_t epsilon, size_t max_iterations, bool has_initial_guess, bool do_expensive_check)</div><div class="ttdoc">Compute PageRank scores.</div><div class="ttdef"><b>Definition:</b> pagerank_impl.cuh:296</div></div>
 <!-- start footer part -->
 <hr class="footer"><address class="footer"><small>
 Generated by&nbsp;<a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"></a> 1.8.20
