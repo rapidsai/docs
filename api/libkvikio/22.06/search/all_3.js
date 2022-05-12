@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['get_5ftasks_5fqueued_10',['get_tasks_queued',['../classkvikio_1_1third__party_1_1thread__pool.html#a842885f0819d8a5bce21de47005ef332',1,'kvikio::third_party::thread_pool']]],
-  ['get_5ftasks_5frunning_11',['get_tasks_running',['../classkvikio_1_1third__party_1_1thread__pool.html#a0756f02c84842aa8d30df415b6ddb96f',1,'kvikio::third_party::thread_pool']]],
-  ['get_5ftasks_5ftotal_12',['get_tasks_total',['../classkvikio_1_1third__party_1_1thread__pool.html#aeccb1aef2e53ae2b0af4b1e0e000e50c',1,'kvikio::third_party::thread_pool']]],
-  ['get_5fthread_5fcount_13',['get_thread_count',['../classkvikio_1_1third__party_1_1thread__pool.html#adc522954243bde3f79f77b7a1c654933',1,'kvikio::third_party::thread_pool']]]
+  ['fd_9',['fd',['../classkvikio_1_1FileHandle.html#abb8c1e9948530e5d1bc758a0965a5a78',1,'kvikio::FileHandle']]],
+  ['fd_5fopen_5fflags_10',['fd_open_flags',['../classkvikio_1_1FileHandle.html#a5a52c487cb509def7d72fa963686a1e6',1,'kvikio::FileHandle']]],
+  ['filehandle_11',['FileHandle',['../classkvikio_1_1FileHandle.html',1,'kvikio::FileHandle'],['../classkvikio_1_1FileHandle.html#a5b0b90095e1ea00f560fd2801730be04',1,'kvikio::FileHandle::FileHandle(const std::string &amp;file_path, const std::string &amp;flags=&quot;r&quot;, mode_t mode=m644, bool compat_mode=defaults::compat_mode())'],['../classkvikio_1_1FileHandle.html#a202035ea55beeec118b59bd8afcf2aa7',1,'kvikio::FileHandle::FileHandle(const FileHandle &amp;)=delete']]]
 ];

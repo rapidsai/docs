@@ -103,58 +103,44 @@ $(function() {
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;    <span class="keywordflow">return</span> op(devPtr_base, size, file_offset, devPtr_offset);</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;  };</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;  std::vector&lt;std::future&lt;std::size_t&gt;&gt; tasks;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;  <span class="keywordflow">if</span> (task_size &gt;= size || page_size &gt;= size) {  <span class="comment">// Single-task guard</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;    tasks.push_back(</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;      <a class="code" href="classkvikio_1_1defaults.html#acfbf944856dea2b4194082de10b72202">defaults::thread_pool</a>().submit(task, devPtr_base, size, file_offset, devPtr_offset));</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp;  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;    <span class="comment">// We have an upper bound of the total number of tasks</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;    tasks.reserve(size / task_size + 2);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp;    <span class="comment">// 1) Submit a task for the unaligned range from the start to the first page boundary</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp;    {</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp;      <span class="keyword">const</span> std::size_t unaligned_range = file_offset % page_size;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp;      assert(unaligned_range &lt; size);  <span class="comment">// This is true because of the single-task guard above.</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp;      <span class="keywordflow">if</span> (unaligned_range &gt; 0) {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp;        tasks.push_back(<a class="code" href="classkvikio_1_1defaults.html#acfbf944856dea2b4194082de10b72202">defaults::thread_pool</a>().submit(</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp;          task, devPtr_base, unaligned_range, file_offset, devPtr_offset));</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp;        file_offset += unaligned_range;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;        devPtr_offset += unaligned_range;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;        size -= unaligned_range;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;      }</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;      assert(file_offset % page_size == 0);  <span class="comment">// `file_offset` is now aligned</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;    }</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;    <span class="comment">// 2) Submit tasks for the aligned range from the first page boundary to the last page boundary</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp;    {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;      <span class="keywordflow">while</span> (size &gt;= task_size) {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;        tasks.push_back(</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp;          <a class="code" href="classkvikio_1_1defaults.html#acfbf944856dea2b4194082de10b72202">defaults::thread_pool</a>().submit(task, devPtr_base, task_size, file_offset, devPtr_offset));</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;        file_offset += task_size;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;        devPtr_offset += task_size;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;        size -= task_size;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp;      }</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;    }</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;    <span class="comment">// 3) Submit a task for the remainder range from the last page boundary to the end</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;    <span class="keywordflow">if</span> (size &gt; 0) {</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp;      tasks.push_back(</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp;        <a class="code" href="classkvikio_1_1defaults.html#acfbf944856dea2b4194082de10b72202">defaults::thread_pool</a>().submit(task, devPtr_base, size, file_offset, devPtr_offset));</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&nbsp;    }</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&nbsp;  }</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&nbsp; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp;  <span class="comment">// Finally, we sum the result of all tasks.</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp;  <span class="keyword">auto</span> gather_tasks = [](std::vector&lt;std::future&lt;std::size_t&gt;&gt;&amp;&amp; tasks) -&gt; std::size_t {</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp;    std::size_t ret = 0;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp;    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; task : tasks) {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&nbsp;      ret += task.get();</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp;    }</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&nbsp;    <span class="keywordflow">return</span> ret;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&nbsp;  };</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp;  <span class="keywordflow">return</span> std::async(std::launch::deferred, gather_tasks, std::move(tasks));</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp;}</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&nbsp; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&nbsp;}  <span class="comment">// namespace kvikio</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;  <span class="comment">// Single-task guard</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;  <span class="keywordflow">if</span> (task_size &gt;= size || page_size &gt;= size) {</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;    <span class="keywordflow">return</span> <a class="code" href="classkvikio_1_1defaults.html#acfbf944856dea2b4194082de10b72202">defaults::thread_pool</a>().<a class="code" href="classkvikio_1_1third__party_1_1thread__pool.html#a0b2ba0f58d323373f7063b9d33d2e422">submit</a>(task, devPtr_base, size, file_offset, devPtr_offset);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;  }</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;  <span class="comment">// We know an upper bound of the total number of tasks</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;  std::vector&lt;std::future&lt;std::size_t&gt;&gt; tasks;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp;  tasks.reserve(size / task_size + 2);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp;  <span class="comment">// 1) Submit `task_size` sized tasks</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp;  <span class="keywordflow">while</span> (size &gt;= task_size) {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp;    tasks.push_back(</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp;      <a class="code" href="classkvikio_1_1defaults.html#acfbf944856dea2b4194082de10b72202">defaults::thread_pool</a>().submit(task, devPtr_base, task_size, file_offset, devPtr_offset));</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp;    file_offset += task_size;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp;    devPtr_offset += task_size;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp;    size -= task_size;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;  }</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;  <span class="comment">// 2) Submit a task for the remainder</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;  <span class="keywordflow">if</span> (size &gt; 0) {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;    tasks.push_back(</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;      <a class="code" href="classkvikio_1_1defaults.html#acfbf944856dea2b4194082de10b72202">defaults::thread_pool</a>().submit(task, devPtr_base, size, file_offset, devPtr_offset));</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;  }</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;  <span class="comment">// Finally, we sum the result of all tasks.</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;  <span class="keyword">auto</span> gather_tasks = [](std::vector&lt;std::future&lt;std::size_t&gt;&gt;&amp;&amp; tasks) -&gt; std::size_t {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp;    std::size_t ret = 0;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; task : tasks) {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;      ret += task.get();</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;    }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp;    <span class="keywordflow">return</span> ret;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;  };</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;  <span class="keywordflow">return</span> std::async(std::launch::deferred, gather_tasks, std::move(tasks));</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;}</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp;}  <span class="comment">// namespace kvikio</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasskvikio_1_1defaults_html_acfbf944856dea2b4194082de10b72202"><div class="ttname"><a href="classkvikio_1_1defaults.html#acfbf944856dea2b4194082de10b72202">kvikio::defaults::thread_pool</a></div><div class="ttdeci">static kvikio::third_party::thread_pool &amp; thread_pool()</div><div class="ttdoc">Get the default thread pool.</div><div class="ttdef"><b>Definition:</b> <a href="defaults_8hpp_source.html#l00156">defaults.hpp:156</a></div></div>
+<div class="ttc" id="aclasskvikio_1_1defaults_html_acfbf944856dea2b4194082de10b72202"><div class="ttname"><a href="classkvikio_1_1defaults.html#acfbf944856dea2b4194082de10b72202">kvikio::defaults::thread_pool</a></div><div class="ttdeci">static kvikio::third_party::thread_pool &amp; thread_pool()</div><div class="ttdoc">Get the default thread pool.</div><div class="ttdef"><b>Definition:</b> <a href="defaults_8hpp_source.html#l00160">defaults.hpp:160</a></div></div>
+<div class="ttc" id="aclasskvikio_1_1third__party_1_1thread__pool_html_a0b2ba0f58d323373f7063b9d33d2e422"><div class="ttname"><a href="classkvikio_1_1third__party_1_1thread__pool.html#a0b2ba0f58d323373f7063b9d33d2e422">kvikio::third_party::thread_pool::submit</a></div><div class="ttdeci">std::future&lt; bool &gt; submit(const F &amp;task, const A &amp;... args)</div><div class="ttdoc">Submit a function with zero or more arguments and no return value into the task queue,...</div><div class="ttdef"><b>Definition:</b> <a href="thread__pool_8hpp_source.html#l00260">thread_pool.hpp:260</a></div></div>
 <!-- start footer part -->
 <hr class="footer"><address class="footer"><small>
 Generated by&nbsp;<a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"></a> 1.8.20
