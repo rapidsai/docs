@@ -103,7 +103,7 @@ $(function() {
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;<span class="keyword">class </span>DriverInitializer {</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;  <span class="comment">// Optional, if not used cuFiles opens the driver automatically</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;  DriverInitializer() { CUFILE_TRY(cuFileAPI::instance()-&gt;DriverOpen()); }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;  DriverInitializer() { CUFILE_TRY(cuFileAPI::instance().DriverOpen()); }</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp; </div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;  DriverInitializer(DriverInitializer <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>;</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;  DriverInitializer&amp; operator=(DriverInitializer <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>;</div>
@@ -113,7 +113,7 @@ $(function() {
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;  ~DriverInitializer()</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;  {</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;    <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;      CUFILE_TRY(cuFileAPI::instance()-&gt;DriverClose());</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;      CUFILE_TRY(cuFileAPI::instance().DriverClose());</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> CUfileException&amp; e) {</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;      std::cerr &lt;&lt; <span class="stringliteral">"Unable to close GDS file driver: "</span>;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;      std::cerr &lt;&lt; e.what();</div>
@@ -133,7 +133,7 @@ $(function() {
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;  {</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;    <span class="keywordflow">if</span> (_initialized) { <span class="keywordflow">return</span>; }</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;    _initialized = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;    CUFILE_TRY(cuFileAPI::instance()-&gt;DriverGetProperties(&amp;_props));</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;    CUFILE_TRY(cuFileAPI::instance().DriverGetProperties(&amp;_props));</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;  }</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp; </div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp; <span class="keyword">public</span>:</div>
@@ -178,14 +178,14 @@ $(function() {
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&nbsp;  <span class="keywordtype">void</span> set_nvfs_poll_mode(<span class="keywordtype">bool</span> enable)</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&nbsp;  {</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&nbsp;    lazy_init();</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&nbsp;    CUFILE_TRY(cuFileAPI::instance()-&gt;DriverSetPollMode(enable, get_nvfs_poll_thresh_size()));</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&nbsp;    CUFILE_TRY(cuFileAPI::instance().DriverSetPollMode(enable, get_nvfs_poll_thresh_size()));</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&nbsp;    detail::set_driver_flag(_props.nvfs.dcontrolflags, CU_FILE_USE_POLL_MODE, enable);</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&nbsp;  }</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&nbsp; </div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&nbsp;  <span class="keywordtype">void</span> set_nvfs_poll_thresh_size(std::size_t size_in_kb)</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&nbsp;  {</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&nbsp;    lazy_init();</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp;    CUFILE_TRY(cuFileAPI::instance()-&gt;DriverSetPollMode(get_nvfs_poll_mode(), size_in_kb));</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp;    CUFILE_TRY(cuFileAPI::instance().DriverSetPollMode(get_nvfs_poll_mode(), size_in_kb));</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp;    _props.nvfs.poll_thresh_size = size_in_kb;</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp;  }</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&nbsp; </div>
@@ -211,7 +211,7 @@ $(function() {
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&nbsp;  <span class="keywordtype">void</span> set_max_device_cache_size(std::size_t size_in_kb)</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&nbsp;  {</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&nbsp;    lazy_init();</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&nbsp;    CUFILE_TRY(cuFileAPI::instance()-&gt;DriverSetMaxCacheSize(size_in_kb));</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&nbsp;    CUFILE_TRY(cuFileAPI::instance().DriverSetMaxCacheSize(size_in_kb));</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&nbsp;    _props.max_device_cache_size = size_in_kb;</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&nbsp;  }</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&nbsp; </div>
@@ -230,7 +230,7 @@ $(function() {
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&nbsp;  <span class="keywordtype">void</span> set_max_pinned_memory_size(std::size_t size_in_kb)</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&nbsp;  {</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&nbsp;    lazy_init();</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&nbsp;    CUFILE_TRY(cuFileAPI::instance()-&gt;DriverSetMaxPinnedMemSize(size_in_kb));</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&nbsp;    CUFILE_TRY(cuFileAPI::instance().DriverSetMaxPinnedMemSize(size_in_kb));</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&nbsp;    _props.max_device_pinned_mem_size = size_in_kb;</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&nbsp;  }</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&nbsp;};</div>
@@ -314,7 +314,7 @@ $(function() {
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&nbsp;}  <span class="comment">// namespace kvikio</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="astructkvikio_1_1DriverInitializer_html"><div class="ttname"><a href="structkvikio_1_1DriverInitializer.html">kvikio::DriverInitializer</a></div><div class="ttdef"><b>Definition:</b> <a href="driver_8hpp_source.html#l00181">driver.hpp:181</a></div></div>
-<div class="ttc" id="astructkvikio_1_1CUfileException_html"><div class="ttname"><a href="structkvikio_1_1CUfileException.html">kvikio::CUfileException</a></div><div class="ttdef"><b>Definition:</b> <a href="error_8hpp_source.html#l00027">error.hpp:27</a></div></div>
+<div class="ttc" id="astructkvikio_1_1CUfileException_html"><div class="ttname"><a href="structkvikio_1_1CUfileException.html">kvikio::CUfileException</a></div><div class="ttdef"><b>Definition:</b> <a href="error_8hpp_source.html#l00026">error.hpp:26</a></div></div>
 <div class="ttc" id="astructkvikio_1_1DriverProperties_html"><div class="ttname"><a href="structkvikio_1_1DriverProperties.html">kvikio::DriverProperties</a></div><div class="ttdef"><b>Definition:</b> <a href="driver_8hpp_source.html#l00184">driver.hpp:184</a></div></div>
 <!-- start footer part -->
 <hr class="footer"><address class="footer"><small>

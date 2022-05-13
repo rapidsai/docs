@@ -76,81 +76,77 @@ $(function() {
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&nbsp;<span class="preprocessor">#include &lt;exception&gt;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&nbsp;<span class="preprocessor">#include &lt;system_error&gt;</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="preprocessor">#include &lt;cuda.h&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp;<span class="preprocessor">#include &lt;kvikio/shim/cufile_h_wrapper.hpp&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp;<span class="keyword">namespace </span>kvikio {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp; </div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="structkvikio_1_1CUfileException.html">   27</a></span>&nbsp;<span class="keyword">struct </span><a class="code" href="structkvikio_1_1CUfileException.html">CUfileException</a> : <span class="keyword">public</span> std::runtime_error {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp;  <span class="keyword">using</span> std::runtime_error::runtime_error;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp;};</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp;<span class="preprocessor">#define KVIKIO_STRINGIFY_DETAIL(x) #x</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp;<span class="preprocessor">#define KVIKIO_STRINGIFY(x)        KVIKIO_STRINGIFY_DETAIL(x)</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;<span class="preprocessor">#ifdef KVIKIO_CUFILE_EXIST</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp;<span class="preprocessor">#ifndef CUFILE_TRY</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;<span class="preprocessor">#define CUFILE_TRY(...)                                         \</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;<span class="preprocessor">  GET_CUFILE_TRY_MACRO(__VA_ARGS__, CUFILE_TRY_2, CUFILE_TRY_1) \</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;<span class="preprocessor">  (__VA_ARGS__)</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;<span class="preprocessor">#define GET_CUFILE_TRY_MACRO(_1, _2, NAME, ...) NAME</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;<span class="preprocessor">#define CUFILE_TRY_2(_call, _exception_type)                                                      \</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;<span class="preprocessor">  do {                                                                                            \</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;<span class="preprocessor">    CUfileError_t const error = (_call);                                                          \</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;<span class="preprocessor">    if (error.err != CU_FILE_SUCCESS) {                                                           \</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;<span class="preprocessor">      if (error.err == CU_FILE_CUDA_DRIVER_ERROR) {                                               \</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;<span class="preprocessor">        if (error.cu_err != CUDA_SUCCESS) {                                                       \</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;<span class="preprocessor">          const char* err_name;                                                                   \</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;<span class="preprocessor">          const char* err_str;                                                                    \</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;<span class="preprocessor">          CUresult err_name_status = cuGetErrorName(error.cu_err, &amp;err_name);                     \</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp;<span class="preprocessor">          CUresult err_str_status  = cuGetErrorString(error.cu_err, &amp;err_str);                    \</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;<span class="preprocessor">          if (err_name_status == CUDA_ERROR_INVALID_VALUE) { err_name = "unknown"; }              \</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;<span class="preprocessor">          if (err_str_status == CUDA_ERROR_INVALID_VALUE) { err_str = "unknown"; }                \</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;<span class="preprocessor">          </span><span class="comment">/*NOLINTNEXTLINE(bugprone-macro-parentheses)*/</span><span class="preprocessor">                                          \</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;<span class="preprocessor">          throw _exception_type{std::string{"CUDA error at: "} + __FILE__ + ":" +                 \</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;<span class="preprocessor">                                KVIKIO_STRINGIFY(__LINE__) + ": " + std::string(err_name) + "(" + \</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;<span class="preprocessor">                                std::string(err_str) + ")"};                                      \</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;<span class="preprocessor">        }                                                                                         \</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;<span class="preprocessor">      } else {                                                                                    \</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;<span class="preprocessor">        </span><span class="comment">/*NOLINTNEXTLINE(bugprone-macro-parentheses)*/</span><span class="preprocessor">                                            \</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;<span class="preprocessor">        throw _exception_type{std::string{"cuFile error at: "} + __FILE__ + ":" +                 \</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;<span class="preprocessor">                              KVIKIO_STRINGIFY(__LINE__) + ": " +                                 \</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;<span class="preprocessor">                              cufileop_status_error(error.err)};                                  \</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;<span class="preprocessor">      }                                                                                           \</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp;<span class="preprocessor">    }                                                                                             \</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;<span class="preprocessor">  } while (0)</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;<span class="preprocessor">#define CUFILE_TRY_1(_call) CUFILE_TRY_2(_call, CUfileException)</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp;<span class="preprocessor">#ifndef CUDA_DRIVER_TRY</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp;<span class="preprocessor">#define CUDA_DRIVER_TRY(...)                                                   \</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp;<span class="preprocessor">  GET_CUDA_DRIVER_TRY_MACRO(__VA_ARGS__, CUDA_DRIVER_TRY_2, CUDA_DRIVER_TRY_1) \</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp;<span class="preprocessor">  (__VA_ARGS__)</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp;<span class="preprocessor">#define GET_CUDA_DRIVER_TRY_MACRO(_1, _2, NAME, ...) NAME</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp;<span class="preprocessor">#define CUDA_DRIVER_TRY_2(_call, _exception_type)                                             \</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;<span class="preprocessor">  do {                                                                                        \</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;<span class="preprocessor">    CUresult const error = (_call);                                                           \</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;<span class="preprocessor">    if (error != CUDA_SUCCESS) {                                                              \</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;<span class="preprocessor">      const char* err_name;                                                                   \</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;<span class="preprocessor">      const char* err_str;                                                                    \</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;<span class="preprocessor">      CUresult err_name_status = cuGetErrorName(error, &amp;err_name);                            \</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp;<span class="preprocessor">      CUresult err_str_status  = cuGetErrorString(error, &amp;err_str);                           \</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;<span class="preprocessor">      if (err_name_status == CUDA_ERROR_INVALID_VALUE) { err_name = "unknown"; }              \</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;<span class="preprocessor">      if (err_str_status == CUDA_ERROR_INVALID_VALUE) { err_str = "unknown"; }                \</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp;<span class="preprocessor">      </span><span class="comment">/*NOLINTNEXTLINE(bugprone-macro-parentheses)*/</span><span class="preprocessor">                                          \</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;<span class="preprocessor">      throw _exception_type{std::string{"CUDA error at: "} + __FILE__ + ":" +                 \</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;<span class="preprocessor">                            KVIKIO_STRINGIFY(__LINE__) + ": " + std::string(err_name) + "(" + \</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;<span class="preprocessor">                            std::string(err_str) + ")"};                                      \</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp;<span class="preprocessor">    }                                                                                         \</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;<span class="preprocessor">  } while (0)</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;<span class="preprocessor">#define CUDA_DRIVER_TRY_1(_call) CUDA_DRIVER_TRY_2(_call, CUfileException)</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp;}  <span class="comment">// namespace kvikio</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="preprocessor">#include &lt;kvikio/shim/cuda.hpp&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp;<span class="preprocessor">#include &lt;kvikio/shim/cufile_h_wrapper.hpp&gt;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp;<span class="keyword">namespace </span>kvikio {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp; </div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="structkvikio_1_1CUfileException.html">   26</a></span>&nbsp;<span class="keyword">struct </span><a class="code" href="structkvikio_1_1CUfileException.html">CUfileException</a> : <span class="keyword">public</span> std::runtime_error {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp;  <span class="keyword">using</span> std::runtime_error::runtime_error;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp;};</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp;<span class="preprocessor">#ifdef KVIKIO_CUFILE_EXIST</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp;<span class="preprocessor">#ifndef CUFILE_TRY</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp;<span class="preprocessor">#define CUFILE_TRY(...)                                         \</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp;<span class="preprocessor">  GET_CUFILE_TRY_MACRO(__VA_ARGS__, CUFILE_TRY_2, CUFILE_TRY_1) \</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;<span class="preprocessor">  (__VA_ARGS__)</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp;<span class="preprocessor">#define GET_CUFILE_TRY_MACRO(_1, _2, NAME, ...) NAME</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;<span class="preprocessor">#define CUFILE_TRY_2(_call, _exception_type)                                                      \</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;<span class="preprocessor">  do {                                                                                            \</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;<span class="preprocessor">    CUfileError_t const error = (_call);                                                          \</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;<span class="preprocessor">    if (error.err != CU_FILE_SUCCESS) {                                                           \</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;<span class="preprocessor">      if (error.err == CU_FILE_CUDA_DRIVER_ERROR) {                                               \</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;<span class="preprocessor">        if (error.cu_err != CUDA_SUCCESS) {                                                       \</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;<span class="preprocessor">          const char* err_name;                                                                   \</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;<span class="preprocessor">          const char* err_str;                                                                    \</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;<span class="preprocessor">          CUresult err_name_status = cudaAPI::instance().GetErrorName(error.cu_err, &amp;err_name);   \</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;<span class="preprocessor">          CUresult err_str_status  = cudaAPI::instance().GetErrorString(error.cu_err, &amp;err_str);  \</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;<span class="preprocessor">          if (err_name_status == CUDA_ERROR_INVALID_VALUE) { err_name = "unknown"; }              \</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;<span class="preprocessor">          if (err_str_status == CUDA_ERROR_INVALID_VALUE) { err_str = "unknown"; }                \</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;<span class="preprocessor">          </span><span class="comment">/*NOLINTNEXTLINE(bugprone-macro-parentheses)*/</span><span class="preprocessor">                                          \</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp;<span class="preprocessor">          throw _exception_type{std::string{"CUDA error at: "} + __FILE__ + ":" +                 \</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;<span class="preprocessor">                                KVIKIO_STRINGIFY(__LINE__) + ": " + std::string(err_name) + "(" + \</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;<span class="preprocessor">                                std::string(err_str) + ")"};                                      \</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;<span class="preprocessor">        }                                                                                         \</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;<span class="preprocessor">      } else {                                                                                    \</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;<span class="preprocessor">        </span><span class="comment">/*NOLINTNEXTLINE(bugprone-macro-parentheses)*/</span><span class="preprocessor">                                            \</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;<span class="preprocessor">        throw _exception_type{std::string{"cuFile error at: "} + __FILE__ + ":" +                 \</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;<span class="preprocessor">                              KVIKIO_STRINGIFY(__LINE__) + ": " +                                 \</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;<span class="preprocessor">                              cufileop_status_error(error.err)};                                  \</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;<span class="preprocessor">      }                                                                                           \</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;<span class="preprocessor">    }                                                                                             \</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;<span class="preprocessor">  } while (0)</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;<span class="preprocessor">#define CUFILE_TRY_1(_call) CUFILE_TRY_2(_call, CUfileException)</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;<span class="preprocessor">#ifndef CUDA_DRIVER_TRY</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp;<span class="preprocessor">#define CUDA_DRIVER_TRY(...)                                                   \</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp;<span class="preprocessor">  GET_CUDA_DRIVER_TRY_MACRO(__VA_ARGS__, CUDA_DRIVER_TRY_2, CUDA_DRIVER_TRY_1) \</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp;<span class="preprocessor">  (__VA_ARGS__)</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp;<span class="preprocessor">#define GET_CUDA_DRIVER_TRY_MACRO(_1, _2, NAME, ...) NAME</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp;<span class="preprocessor">#define CUDA_DRIVER_TRY_2(_call, _exception_type)                                             \</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp;<span class="preprocessor">  do {                                                                                        \</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp;<span class="preprocessor">    CUresult const error = (_call);                                                           \</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp;<span class="preprocessor">    if (error != CUDA_SUCCESS) {                                                              \</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp;<span class="preprocessor">      const char* err_name;                                                                   \</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;<span class="preprocessor">      const char* err_str;                                                                    \</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;<span class="preprocessor">      CUresult err_name_status = cudaAPI::instance().GetErrorName(error, &amp;err_name);          \</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;<span class="preprocessor">      CUresult err_str_status  = cudaAPI::instance().GetErrorString(error, &amp;err_str);         \</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;<span class="preprocessor">      if (err_name_status == CUDA_ERROR_INVALID_VALUE) { err_name = "unknown"; }              \</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;<span class="preprocessor">      if (err_str_status == CUDA_ERROR_INVALID_VALUE) { err_str = "unknown"; }                \</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;<span class="preprocessor">      </span><span class="comment">/*NOLINTNEXTLINE(bugprone-macro-parentheses)*/</span><span class="preprocessor">                                          \</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp;<span class="preprocessor">      throw _exception_type{std::string{"CUDA error at: "} + __FILE__ + ":" +                 \</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;<span class="preprocessor">                            KVIKIO_STRINGIFY(__LINE__) + ": " + std::string(err_name) + "(" + \</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;<span class="preprocessor">                            std::string(err_str) + ")"};                                      \</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp;<span class="preprocessor">    }                                                                                         \</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;<span class="preprocessor">  } while (0)</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;<span class="preprocessor">#define CUDA_DRIVER_TRY_1(_call) CUDA_DRIVER_TRY_2(_call, CUfileException)</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;}  <span class="comment">// namespace kvikio</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="astructkvikio_1_1CUfileException_html"><div class="ttname"><a href="structkvikio_1_1CUfileException.html">kvikio::CUfileException</a></div><div class="ttdef"><b>Definition:</b> <a href="error_8hpp_source.html#l00027">error.hpp:27</a></div></div>
+<div class="ttc" id="astructkvikio_1_1CUfileException_html"><div class="ttname"><a href="structkvikio_1_1CUfileException.html">kvikio::CUfileException</a></div><div class="ttdef"><b>Definition:</b> <a href="error_8hpp_source.html#l00026">error.hpp:26</a></div></div>
 <!-- start footer part -->
 <hr class="footer"><address class="footer"><small>
 Generated by&nbsp;<a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"></a> 1.8.20
