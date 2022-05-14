@@ -60,7 +60,7 @@ var searchData=
   ['mangle_5fdupe_5fcols_2939',['mangle_dupe_cols',['../classcudf_1_1io_1_1csv__reader__options__builder.html#a9387d2c3e30a8e3fa8ea1ccacf9bfe0b',1,'cudf::io::csv_reader_options_builder']]],
   ['mask_5fto_5fbools_2940',['mask_to_bools',['../group__transformation__transform.html#gae27f8f8e480e0025ab43975869bef5c1',1,'cudf']]],
   ['match_5fdictionaries_2941',['match_dictionaries',['../group__dictionary__update.html#ga87592c760ded334ec8007b3adc396c5e',1,'cudf::dictionary']]],
-  ['matches_5fre_2942',['matches_re',['../group__strings__contains.html#gaac24c1ecc6cd5ff9a11b640c6f28a62e',1,'cudf::strings']]],
+  ['matches_5fre_2942',['matches_re',['../group__strings__contains.html#ga40856a39189e7ec86d25c11d874f5c3a',1,'cudf::strings']]],
   ['max_2943',['max',['../classcudf_1_1string__view.html#acf3b4ed335f55b6acb8ab33b470032aa',1,'cudf::string_view']]],
   ['max_5fbegin_2944',['max_begin',['../classcudf_1_1tdigest_1_1tdigest__column__view.html#af8240be40c5e16bfac4dfb5366e1370c',1,'cudf::tdigest::tdigest_column_view']]],
   ['max_5ffree_5fsize_2945',['max_free_size',['https://docs.rapids.ai/api/librmm/22.06/classrmm_1_1mr_1_1detail_1_1arena_1_1superblock.html#a01cf0929b1f25190b3225d55e268e599',1,'rmm::mr::detail::arena::superblock']]],
