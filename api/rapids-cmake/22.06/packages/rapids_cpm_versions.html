@@ -150,6 +150,39 @@ of building them isn&rsquo;t desired.</p>
 package ( <cite>CPM_DOWNLOAD_ALL</cite> ) instead of first searching for it on the machine.</p>
 <p>If no such field exists the default is <cite>false</cite> for default packages, and <cite>true</cite> for any package that has an override.</p>
 </div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">proprietary_binary</span></code></p>
+<blockquote>
+<div><p>An optional dictionary of cpu architecture and operating system keys to url values that represents a download for a pre-built proprietary version of the library.
+If a matching key exists the binary will be used instead of the specified git url and tag.
+To determine the correct key, CMake will query for a key that matches the lower case value of <cite>&lt;arch&gt;-&lt;os&gt;</cite> where <cite>arch</cite> maps to <span class="target" id="index-0-variable:CMAKE_SYSTEM_PROCESSOR"></span><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_SYSTEM_PROCESSOR</span></code> and <cite>os</cite> maps to <span class="target" id="index-0-variable:CMAKE_SYSTEM_NAME"></span><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_SYSTEM_NAME</span></code>.</p>
+<p>If no such key exists the request to use a <cite>proprietary_binary</cite> will be ignored.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">"proprietary_binary"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"aarch64-linux"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;url&gt;"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"x86_64-linux"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;url&gt;"</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>As this represents a proprietary binary only the following packages support this command:</dt><dd><ul class="simple">
+<li><p>nvcomp</p></li>
+</ul>
+</dd>
+</dl>
+<p>Due to requirements of proprietary binaries, explicit opt-in by the user on usage is required.
+Therefore for this binary to be used the caller must call the associated <cite>rapids_cpm</cite> command
+with the <cite>USE_PROPRIETARY_BLOB</cite> set to <cite>ON</cite>.</p>
+<dl class="simple">
+<dt>Supports the following placeholders:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">${rapids-cmake-version}</span></code> will be evaluated to &lsquo;major.minor&rsquo; of the current rapids-cmake cal-ver value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${version}</span></code> will be evaluated to the contents of the <code class="docutils literal notranslate"><span class="pre">version</span></code> field.</p></li>
+</ul>
+</dd>
+</dl>
+<p>If this field exists in the default package, the value will be ignored when an override file
+entry exists for the package. This ensures that the git url or <cite>proprietary_binary</cite> entry in the override will be used.</p>
+</div></blockquote>
 </section>
 </section>
 <section id="rapids-cmake-package-versions">
@@ -166,6 +199,14 @@ package ( <cite>CPM_DOWNLOAD_ALL</cite> ) instead of first searching for it on t
 <span class="w">      </span><span class="nt">"git_shallow"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
 <span class="w">      </span><span class="nt">"git_url"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://github.com/NVIDIA/nvbench.git"</span><span class="p">,</span><span class="w"></span>
 <span class="w">      </span><span class="nt">"git_tag"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"a72f248af6323915419e03c0d7d56a35c9b4819a"</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"nvcomp"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">"version"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2.3"</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">"git_url"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://github.com/NVIDIA/nvcomp.git"</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">"git_tag"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"v2.2.0"</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">"proprietary_binary"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">"x86_64-linux"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"http://developer.download.nvidia.com/compute/nvcomp/${version}/local_installers/nvcomp_${version}_Linux_CUDA_11.x.tgz"</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
 <span class="w">    </span><span class="p">},</span><span class="w"></span>
 <span class="w">    </span><span class="nt">"rmm"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">      </span><span class="nt">"version"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"${rapids-cmake-version}"</span><span class="p">,</span><span class="w"></span>

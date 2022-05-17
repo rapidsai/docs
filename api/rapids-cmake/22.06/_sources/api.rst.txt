@@ -47,6 +47,7 @@ package uses :ref:`can be found here. <cpm_versions>`
    /packages/rapids_cpm_gtest
    /packages/rapids_cpm_libcudacxx
    /packages/rapids_cpm_nvbench
+   /packages/rapids_cpm_nvcomp
    /packages/rapids_cpm_rmm
    /packages/rapids_cpm_spdlog
    /packages/rapids_cpm_thrust
