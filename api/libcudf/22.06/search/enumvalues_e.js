@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['pmod_3425',['PMOD',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcaaf5a744d55583fdb1af0f280f12c9ab1',1,'cudf']]],
-  ['pow_3426',['POW',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca17faf4e999b8cee4c36915c1f54ccffe',1,'cudf']]],
-  ['product_3427',['PRODUCT',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca00d1a600db4e6ad4b605d1ea55d32e4e',1,'cudf::aggregation']]],
-  ['ptx_3428',['PTX',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca41e9f3ddf699f79662c7304406431856',1,'cudf::aggregation']]],
-  ['pymod_3429',['PYMOD',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca36aaf571a1008bd43f47509344cd13ad',1,'cudf']]]
+  ['pmod_3435',['PMOD',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcaaf5a744d55583fdb1af0f280f12c9ab1',1,'cudf']]],
+  ['pow_3436',['POW',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca17faf4e999b8cee4c36915c1f54ccffe',1,'cudf']]],
+  ['product_3437',['PRODUCT',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca00d1a600db4e6ad4b605d1ea55d32e4e',1,'cudf::aggregation']]],
+  ['ptx_3438',['PTX',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca41e9f3ddf699f79662c7304406431856',1,'cudf::aggregation']]],
+  ['pymod_3439',['PYMOD',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca36aaf571a1008bd43f47509344cd13ad',1,'cudf']]]
 ];
