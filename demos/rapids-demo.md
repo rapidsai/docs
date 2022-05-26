@@ -14,7 +14,7 @@ redirect_from: "containers/rapids-demo" # redirect from old page to ensure exist
 
 # RAPIDS Demo Container
 
-Get started with our preconfigured RAPIDS demo container, featuring several demo notebooks using cuDF, cuML, cuGraph, Dask, and XGBoost
+Get started with our pre-configured RAPIDS demo container, featuring several demo notebooks using cuDF, cuML, cuGraph, Dask, and XGBoost
 {: .fs-6 .fw-300 }
 
 1. TOC
@@ -26,7 +26,7 @@ Get started with our preconfigured RAPIDS demo container, featuring several demo
 
 Versions of libraries included in the `{{ STABLE_VER }}` images:
 - `cuDF` [v{{ STABLE_VER }}](https://github.com/rapidsai/cudf/tree/v{{ STABLE_VER }}.0), `cuML` [v{{ STABLE_VER }}](https://github.com/rapidsai/cuml/tree/v{{ STABLE_VER }}.0), `cuGraph` [v{{ STABLE_VER }}](https://github.com/rapidsai/cugraph/tree/v{{ STABLE_VER }}.0), `RMM` [v{{ STABLE_VER }}](https://github.com/rapidsai/RMM/tree/v{{ STABLE_VER }}.0), `cuSpatial` [v{{ STABLE_VER }}](https://github.com/rapidsai/cuspatial/tree/v{{ STABLE_VER }}.0), `cuxfilter` [v{{ STABLE_VER }}](https://github.com/rapidsai/cuxfilter/tree/v{{ STABLE_VER }}.0), `cuSignal` [v{{ STABLE_VER }}](https://github.com/rapidsai/cusignal/tree/v{{ STABLE_VER }}.0)
-- `blazingsql` [branch](https://github.com/BlazingDB/blazingsql/tree/branch--{{ STABLE_VER }}), `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-{{ STABLE_VER }}-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-{{ STABLE_VER }})
+- `Dask SQL` [branch](https://github.com/dask-contrib/dask-sql), `xgboost` [branch](https://github.com/rapidsai/xgboost/tree/rapids-{{ STABLE_VER }}-release), `dask-xgboost` [branch](https://github.com/rapidsai/dask-xgboost/tree/dask-cudf) `dask-cuda` [branch](https://github.com/rapidsai/dask-cuda/tree/branch-{{ STABLE_VER }})
 
 
 ### Former Version
@@ -112,7 +112,6 @@ Notebooks can be found in the following directories within the {{ STABLE_VER }} 
 * `/rapids/notebooks/cusignal` - cuSignal demo notebooks
 * `/rapids/notebooks/cuxfilter` - cuXfilter demo notebooks
 * `/rapids/notebooks/xgboost` - XGBoost demo notebooks
-* `/blazing/Welcome_to_BlazingSQL_Notebooks` - BlazingSQL demo notebooks
 
 For a full description of each notebook, see the [README](https://github.com/rapidsai/notebooks/blob/branch-{{ STABLE_VER }}/README.md) in the notebooks repository.
 
