@@ -11,7 +11,7 @@ var searchData=
   ['get_5fdepth_1877',['get_depth',['../namespacecuml_1_1genetic.html#a953d8920b7f546c1d930300f8b00a36d',1,'cuml::genetic']]],
   ['get_5fdevice_1878',['get_device',['../namespaceML.html#ae9e9f22920ecd0dd7ab05981dd3a0cac',1,'ML']]],
   ['get_5ffitness_1879',['get_fitness',['../namespacecuml_1_1genetic.html#a0eb7ceade6f29b0e1d375fd68fdc6b4f',1,'cuml::genetic']]],
-  ['get_5fgraph_1880',['get_graph',['../namespaceML_1_1UMAP.html#aeb4c15312a9be20cdfd06f671c74726d',1,'ML::UMAP']]],
+  ['get_5fgraph_1880',['get_graph',['../namespaceML_1_1UMAP.html#a3efad90d8ad6602ab97646869c37267b',1,'ML::UMAP']]],
   ['get_5fhandle_1881',['get_handle',['../classML_1_1HDBSCAN_1_1Common_1_1robust__single__linkage__output.html#a0658c5930697f4576fbda7b1efe7ff72',1,'ML::HDBSCAN::Common::robust_single_linkage_output']]],
   ['get_5flabels_1882',['get_labels',['../classML_1_1HDBSCAN_1_1Common_1_1robust__single__linkage__output.html#a99a86cd7a75fcfa5aabf62908274a4c5',1,'ML::HDBSCAN::Common::robust_single_linkage_output']]],
   ['get_5flambdas_1883',['get_lambdas',['../classML_1_1HDBSCAN_1_1Common_1_1CondensedHierarchy.html#a44b08bbdd3622ecbe61384b3551c7c8b',1,'ML::HDBSCAN::Common::CondensedHierarchy']]],
