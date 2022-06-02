@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['schema_5finfo_3179',['schema_info',['../structcudf_1_1io_1_1table__metadata.html#aca88d41ea923a24e060dbd4165d7bccb',1,'cudf::io::table_metadata']]],
-  ['sequence_5flength_3180',['sequence_length',['../structnvtext_1_1tokenizer__result.html#a09a5e713c18852fde26b0eeec2632c78',1,'nvtext::tokenizer_result']]]
+  ['per_5ffile_5fuser_5fdata_3208',['per_file_user_data',['../structcudf_1_1io_1_1table__metadata.html#a0cded90e8fe468cf2837a46451a98787',1,'cudf::io::table_metadata']]],
+  ['ptr_3209',['ptr',['https://docs.rapids.ai/api/librmm/22.06/structrmm_1_1mr_1_1detail_1_1block__base.html#a72c4e6db5cfe26694b7592b362ce3f9f',1,'rmm::mr::detail::block_base']]]
 ];

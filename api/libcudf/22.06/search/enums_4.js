@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['hash_5fid_3252',['hash_id',['../group__column__hash.html#gaced8b9d129825edd13d76e912e4413c3',1,'cudf']]]
+  ['filter_5ftype_3288',['filter_type',['../group__strings__modify.html#ga9641be68cf161f3e42888a73be40f264',1,'cudf::strings']]],
+  ['flip_5fendianness_3289',['flip_endianness',['../group__column__reshape.html#ga1fd286bca11d008f7945aaa6ecbab2e0',1,'cudf']]]
 ];

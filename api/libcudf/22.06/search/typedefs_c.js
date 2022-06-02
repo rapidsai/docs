@@ -1,12 +1,7 @@
 var searchData=
 [
-  ['timestamp_5fd_3233',['timestamp_D',['../group__timestamp__classes.html#ga4658424aa55596e2f3b6b42a9260f736',1,'cudf']]],
-  ['timestamp_5fh_3234',['timestamp_h',['../group__timestamp__classes.html#ga8b55dd23383d1c37b7bdc0274ded9191',1,'cudf']]],
-  ['timestamp_5fm_3235',['timestamp_m',['../group__timestamp__classes.html#ga52883e4379d120186e9750158f1458b9',1,'cudf']]],
-  ['timestamp_5fms_3236',['timestamp_ms',['../group__timestamp__classes.html#ga24fdf63531f7998ef3122a5d0885e949',1,'cudf']]],
-  ['timestamp_5fns_3237',['timestamp_ns',['../group__timestamp__classes.html#gae2aef2b10c32caf1889ef2a6575b531a',1,'cudf']]],
-  ['timestamp_5fs_3238',['timestamp_s',['../group__timestamp__classes.html#ga44668df4b32894904fb68f13a5f0fdab',1,'cudf']]],
-  ['timestamp_5fus_3239',['timestamp_us',['../group__timestamp__classes.html#gabc5dd6cc3229f57af772e06f8c0bd828',1,'cudf']]],
-  ['timestamptypes_3240',['TimestampTypes',['../type__lists_8hpp.html#a7e4c9ba95a6daa7e51d00e123c583759',1,'cudf::test']]],
-  ['transform_3241',['Transform',['../type__list__utilities_8hpp.html#afc5541e096aafd209c32503601a7e296',1,'cudf::test']]]
+  ['scalar_5ftype_5ft_3264',['scalar_type_t',['../group__utility__dispatcher.html#ga9446c2558fd01c19f5fb5fa33927586f',1,'cudf']]],
+  ['size_5ftype_3265',['size_type',['../group__utility__types.html#ga0aff16b2db009d92300befaca11827e9',1,'cudf']]],
+  ['split_5fblock_3266',['split_block',['https://docs.rapids.ai/api/librmm/22.06/classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#a80561e617cbaf5a13aafe4e76593367f',1,'rmm::mr::detail::stream_ordered_memory_resource::split_block()'],['https://docs.rapids.ai/api/librmm/22.06/classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#a80561e617cbaf5a13aafe4e76593367f',1,'stream_ordered_memory_resource&lt; fixed_size_memory_resource&lt; Upstream &gt;, detail::fixed_size_free_list &gt;::split_block()'],['https://docs.rapids.ai/api/librmm/22.06/classrmm_1_1mr_1_1detail_1_1stream__ordered__memory__resource.html#a80561e617cbaf5a13aafe4e76593367f',1,'stream_ordered_memory_resource&lt; pool_memory_resource&lt; Upstream &gt;, detail::coalescing_free_list &gt;::split_block()']]],
+  ['stringtypes_3267',['StringTypes',['../type__lists_8hpp.html#ae9310c81d2d10328ca41f7586bff9ae3',1,'cudf::test']]]
 ];

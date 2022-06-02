@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['results_3178',['results',['../structcudf_1_1groupby_1_1aggregation__result.html#a1d0e11864ac37b44b2b19051fca616fe',1,'cudf::groupby::aggregation_result']]]
+  ['ordering_3207',['ordering',['../structcudf_1_1order__info.html#a9d65c4dcaf22ea6c4cfe38e3423b61e0',1,'cudf::order_info']]]
 ];

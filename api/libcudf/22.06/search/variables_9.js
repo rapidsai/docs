@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['per_5ffile_5fuser_5fdata_3176',['per_file_user_data',['../structcudf_1_1io_1_1table__metadata.html#a0cded90e8fe468cf2837a46451a98787',1,'cudf::io::table_metadata']]],
-  ['ptr_3177',['ptr',['https://docs.rapids.ai/api/librmm/22.06/structrmm_1_1mr_1_1detail_1_1block__base.html#a72c4e6db5cfe26694b7592b362ce3f9f',1,'rmm::mr::detail::block_base']]]
+  ['nrows_5ftensor_3205',['nrows_tensor',['../structnvtext_1_1tokenizer__result.html#a133ae69969b03d70f715c1ad793355a5',1,'nvtext::tokenizer_result']]],
+  ['null_5fordering_3206',['null_ordering',['../structcudf_1_1order__info.html#ac353a559760476f49ba375631f75f0ab',1,'cudf::order_info']]]
 ];

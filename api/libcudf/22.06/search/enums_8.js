@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['mask_5fallocation_5fpolicy_3258',['mask_allocation_policy',['../group__column__copy.html#ga267e03474dcfd85242d2fdc6e5846ec6',1,'cudf']]],
-  ['mask_5fstate_3259',['mask_state',['../group__utility__types.html#ga4daf20c000ab374d76f4d56f0ddb7b26',1,'cudf']]]
+  ['letter_5ftype_3295',['letter_type',['../group__nvtext__stemmer.html#gaf1eda0cbe6388c24e342142e665bfd65',1,'nvtext']]]
 ];

@@ -1,16 +1,16 @@
 var searchData=
 [
-  ['case_5ftypes_3320',['CASE_TYPES',['../group__strings__types.html#ggacdc71043841f369de3cc8dd827a0eea1a229325ffb1070e5111f3200c2c4e585b',1,'cudf::strings']]],
-  ['cbrt_3321',['CBRT',['../group__transformation__unaryops.html#gga030e62f30b296602f398e70d1ca657c4a2bda33a56a02768cfc002866aa4fb63a',1,'cudf']]],
-  ['ceil_3322',['CEIL',['../group__transformation__unaryops.html#gga030e62f30b296602f398e70d1ca657c4a5bdce8e6d9dc3efbbd31e90a8a181dff',1,'cudf']]],
-  ['collect_5flist_3323',['COLLECT_LIST',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24cacda9e1244533f85aa96a34118735dfda',1,'cudf::aggregation']]],
-  ['collect_5fset_3324',['COLLECT_SET',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca8a82336f87e3a3620f94d605e8d1b9bf',1,'cudf::aggregation']]],
-  ['consonant_3325',['CONSONANT',['../group__nvtext__stemmer.html#ggaf1eda0cbe6388c24e342142e665bfd65a23e93c01d11f56ab07fdb39dbdb0fdb9',1,'nvtext']]],
-  ['correlation_3326',['CORRELATION',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca6ac99d56bac359e4e8efdfd462ec4440',1,'cudf::aggregation']]],
-  ['cos_3327',['COS',['../group__transformation__unaryops.html#gga030e62f30b296602f398e70d1ca657c4aef23ef1d426ae1a73a7eed399cef707d',1,'cudf']]],
-  ['cosh_3328',['COSH',['../group__transformation__unaryops.html#gga030e62f30b296602f398e70d1ca657c4ac8766c03013c3464d6bfd8e3c11b867d',1,'cudf']]],
-  ['count_5fall_3329',['COUNT_ALL',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24caf6567d6f079a08d7b8cd5794d5b49658',1,'cudf::aggregation']]],
-  ['count_5fvalid_3330',['COUNT_VALID',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24cad2df505a15b682fdae1fc914b4219024',1,'cudf::aggregation']]],
-  ['covariance_3331',['COVARIANCE',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca6fc2c9fc7f719339663730c4d5733d43',1,'cudf::aggregation']]],
-  ['cuda_3332',['CUDA',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca9e19b5026270492a8cfb65a21ee36a27',1,'cudf::aggregation']]]
+  ['case_5ftypes_3358',['CASE_TYPES',['../group__strings__types.html#ggacdc71043841f369de3cc8dd827a0eea1a229325ffb1070e5111f3200c2c4e585b',1,'cudf::strings']]],
+  ['cbrt_3359',['CBRT',['../group__transformation__unaryops.html#gga030e62f30b296602f398e70d1ca657c4a2bda33a56a02768cfc002866aa4fb63a',1,'cudf']]],
+  ['ceil_3360',['CEIL',['../group__transformation__unaryops.html#gga030e62f30b296602f398e70d1ca657c4a5bdce8e6d9dc3efbbd31e90a8a181dff',1,'cudf']]],
+  ['collect_5flist_3361',['COLLECT_LIST',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24cacda9e1244533f85aa96a34118735dfda',1,'cudf::aggregation']]],
+  ['collect_5fset_3362',['COLLECT_SET',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca8a82336f87e3a3620f94d605e8d1b9bf',1,'cudf::aggregation']]],
+  ['consonant_3363',['CONSONANT',['../group__nvtext__stemmer.html#ggaf1eda0cbe6388c24e342142e665bfd65a23e93c01d11f56ab07fdb39dbdb0fdb9',1,'nvtext']]],
+  ['correlation_3364',['CORRELATION',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca6ac99d56bac359e4e8efdfd462ec4440',1,'cudf::aggregation']]],
+  ['cos_3365',['COS',['../group__transformation__unaryops.html#gga030e62f30b296602f398e70d1ca657c4aef23ef1d426ae1a73a7eed399cef707d',1,'cudf']]],
+  ['cosh_3366',['COSH',['../group__transformation__unaryops.html#gga030e62f30b296602f398e70d1ca657c4ac8766c03013c3464d6bfd8e3c11b867d',1,'cudf']]],
+  ['count_5fall_3367',['COUNT_ALL',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24caf6567d6f079a08d7b8cd5794d5b49658',1,'cudf::aggregation']]],
+  ['count_5fvalid_3368',['COUNT_VALID',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24cad2df505a15b682fdae1fc914b4219024',1,'cudf::aggregation']]],
+  ['covariance_3369',['COVARIANCE',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca6fc2c9fc7f719339663730c4d5733d43',1,'cudf::aggregation']]],
+  ['cuda_3370',['CUDA',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca9e19b5026270492a8cfb65a21ee36a27',1,'cudf::aggregation']]]
 ];

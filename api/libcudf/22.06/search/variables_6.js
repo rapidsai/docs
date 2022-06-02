@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kind_3172',['kind',['../classcudf_1_1aggregation.html#af30ac280d80bf088cc1d8e6b98514764',1,'cudf::aggregation']]]
+  ['is_5fsorted_3201',['is_sorted',['../structcudf_1_1order__info.html#acaffa8efa8300a464ad9ce9abdd3e8ac',1,'cudf::order_info']]]
 ];

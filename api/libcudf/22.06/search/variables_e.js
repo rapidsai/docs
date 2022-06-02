@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['value_3186',['value',['../structcudf_1_1nullate_1_1DYNAMIC.html#a383e80d051b47e14a3e919cc45703798',1,'cudf::nullate::DYNAMIC']]],
-  ['values_3187',['values',['../structcudf_1_1groupby_1_1aggregation__request.html#abe1f7fdbefc846b52fc73e3ef7919d0c',1,'cudf::groupby::aggregation_request::values()'],['../structcudf_1_1groupby_1_1scan__request.html#a1954c5a8e5bf4e9e084c9af78977e1c6',1,'cudf::groupby::scan_request::values()']]]
+  ['tensor_5fattention_5fmask_3213',['tensor_attention_mask',['../structnvtext_1_1tokenizer__result.html#ac055b2cf5b74a76c4b0e7cfd875d9da3',1,'nvtext::tokenizer_result']]],
+  ['tensor_5fmetadata_3214',['tensor_metadata',['../structnvtext_1_1tokenizer__result.html#aaae9539ffa571f2adf5130af8421b760',1,'nvtext::tokenizer_result']]],
+  ['tensor_5ftoken_5fids_3215',['tensor_token_ids',['../structnvtext_1_1tokenizer__result.html#a23c1491bbabce7cdb8ed76d8e26e06a2',1,'nvtext::tokenizer_result']]]
 ];

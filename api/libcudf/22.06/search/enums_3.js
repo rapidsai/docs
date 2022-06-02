@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['filter_5ftype_3250',['filter_type',['../group__strings__modify.html#ga9641be68cf161f3e42888a73be40f264',1,'cudf::strings']]],
-  ['flip_5fendianness_3251',['flip_endianness',['../group__column__reshape.html#ga1fd286bca11d008f7945aaa6ecbab2e0',1,'cudf']]]
+  ['duplicate_5ffind_5foption_3286',['duplicate_find_option',['../group__lists__contains.html#gabc759fd5641585c3acfaea7e6a6a5981',1,'cudf::lists']]],
+  ['duplicate_5fkeep_5foption_3287',['duplicate_keep_option',['../group__reorder__compact.html#ga69091647ea1f9c9d4cdcf7c8876bea3a',1,'cudf']]]
 ];
