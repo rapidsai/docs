@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
+
+    <title>Spatial Indexing &mdash; cuspatial 22.06.00 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link href="../_static/vendor/fontawesome/5.13.0/css/all.min.css" rel="stylesheet">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2">
+
+    <link href="../_static/pygments.css" rel="stylesheet" type="text/css">
+    <link href="../_static/params.css" rel="stylesheet" type="text/css">
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf" rel="preload">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link href="../genindex.html" rel="index" title="Index">
+    <link href="../search.html" rel="search" title="Search">
+    <link href="trajectory.html" rel="next" title="Trajectory">
+    <link href="gis.html" rel="prev" title="GIS">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="None" name="docsearch:language">
+    
+
+    <!-- Google Analytics -->
+    
+  <script id="rapids-selector-pixel-src" src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+  <body data-offset="60" data-spy="scroll" data-target="#bd-toc-nav">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../index.html">
+<p class="title">cuspatial</p>
+</a>
+
+    
+  </div>
+
+  <button aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar-collapsible" data-toggle="collapse" type="button">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div class="collapse navbar-collapse" id="navbar-collapsible">
+    <div class="ml-auto" id="navbar-center">
+      
+      <div class="navbar-center-item">
+        <ul class="navbar-nav" id="navbar-main-elements">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="gis.html">
+  GIS
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="current reference internal nav-link" href="#">
+  Spatial Indexing
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="trajectory.html">
+  Trajectory
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="geopandas_compatibility.html">
+  GeoPandas Compatibility
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="io.html">
+  IO
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="internals.html">
+  Internals
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul aria-label="Icon Links" class="navbar-nav" id="navbar-icon-links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/rapidsai/cuspatial" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><div id="rapids-pydata-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">cuspatial</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cuspatial/stable/api.html">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/stable/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libcuspatial/nightly">libcuspatial</a><a class="rapids-selector__menu-item" href="/api/libkvikio/stable">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/raft/stable">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (22.06)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cuspatial/nightly">nightly (22.06)</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable/api.html">stable (22.04)</a><a class="rapids-selector__menu-item" href="/api/cuspatial/legacy/api.html">legacy (22.02)</a></div></div></div>
+              <div class="sidebar-start-items"><form action="../search.html" class="bd-search d-flex align-items-center" method="get">
+  <i class="icon fas fa-search"></i>
+  <input aria-label="Search the docs ..." autocomplete="off" class="form-control" id="search-input" name="q" placeholder="Search the docs ..." type="search">
+</form><nav aria-label="Main navigation" class="bd-links" id="bd-docs-nav">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+
+<nav id="bd-toc-nav">
+    
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="spatial-indexing">
+<h1>Spatial Indexing<a class="headerlink" href="#spatial-indexing" title="Permalink to this headline">#</a></h1>
+<p>Spatial indexing functions provide GPU-accelerated point-in-polygon and spatial join operations.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="cuspatial.quadtree_point_in_polygon">
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">quadtree_point_in_polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poly_quad_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quadtree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ring_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_points_y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.quadtree_point_in_polygon" title="Permalink to this definition">#</a></dt>
+<dd><p>Test whether the specified points are inside any of the specified
+polygons.</p>
+<p>Uses the table of (polygon, quadrant) pairs returned by
+<code class="docutils literal notranslate"><span class="pre">cuspatial.join_quadtree_and_bounding_boxes</span></code> to ensure only the points
+in the same quadrant as each polygon are tested for intersection.</p>
+<p>This pre-filtering can dramatically reduce number of points tested per
+polygon, enabling faster intersection-testing at the expense of extra
+memory allocated to store the quadtree and sorted point_indices.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>poly_quad_pairs: cudf.DataFrame</strong></dt><dd><p>Table of (polygon, quadrant) index pairs returned by
+<code class="docutils literal notranslate"><span class="pre">cuspatial.join_quadtree_and_bounding_boxes</span></code>.</p>
+</dd>
+<dt><strong>quadtree</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>A complete quadtree for a given area-of-interest bounding box.</p>
+</dd>
+<dt><strong>point_indices</strong><span class="classifier">cudf.Series</span></dt><dd><p>Sorted point indices returned by <code class="docutils literal notranslate"><span class="pre">cuspatial.quadtree_on_points</span></code></p>
+</dd>
+<dt><strong>points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>x-coordinates of points used to construct the quadtree.</p>
+</dd>
+<dt><strong>points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>y-coordinates of points used to construct the quadtree.</p>
+</dd>
+<dt><strong>poly_offsets</strong><span class="classifier">cudf.Series</span></dt><dd><p>Begin index of the first ring in each polygon.</p>
+</dd>
+<dt><strong>ring_offsets</strong><span class="classifier">cudf.Series</span></dt><dd><p>Begin index of the first point in each ring.</p>
+</dd>
+<dt><strong>poly_points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>Polygon point x-coodinates.</p>
+</dd>
+<dt><strong>poly_points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>Polygon point y-coodinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Indices for each intersecting point and polygon pair.</p>
+<dl class="simple">
+<dt>polygon_index<span class="classifier">cudf.Series</span></dt><dd><p>Indices of each polygon with which a point intersected.</p>
+</dd>
+<dt>point_index<span class="classifier">cudf.Series</span></dt><dd><p>Indices of each point that intersects with a polygon.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cuspatial.quadtree_point_to_nearest_polyline">
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">quadtree_point_to_nearest_polyline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poly_quad_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quadtree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_points_y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.quadtree_point_to_nearest_polyline" title="Permalink to this definition">#</a></dt>
+<dd><p>Finds the nearest polyline to each point in a quadrant, and computes
+the distances between each point and polyline.</p>
+<p>Uses the table of (polyline, quadrant) pairs returned by
+<code class="docutils literal notranslate"><span class="pre">cuspatial.join_quadtree_and_bounding_boxes</span></code> to ensure distances are
+computed only for the points in the same quadrant as each polyline.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>poly_quad_pairs: cudf.DataFrame</strong></dt><dd><p>Table of (polyline, quadrant) index pairs returned by
+<code class="docutils literal notranslate"><span class="pre">cuspatial.join_quadtree_and_bounding_boxes</span></code>.</p>
+</dd>
+<dt><strong>quadtree</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>A complete quadtree for a given area-of-interest bounding box.</p>
+</dd>
+<dt><strong>point_indices</strong><span class="classifier">cudf.Series</span></dt><dd><p>Sorted point indices returned by <code class="docutils literal notranslate"><span class="pre">cuspatial.quadtree_on_points</span></code></p>
+</dd>
+<dt><strong>points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>x-coordinates of points used to construct the quadtree.</p>
+</dd>
+<dt><strong>points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>y-coordinates of points used to construct the quadtree.</p>
+</dd>
+<dt><strong>poly_offsets</strong><span class="classifier">cudf.Series</span></dt><dd><p>Begin index of the first point in each polyline.</p>
+</dd>
+<dt><strong>poly_points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>Polyline point x-coodinates.</p>
+</dd>
+<dt><strong>poly_points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>Polyline point y-coodinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Indices for each point and its nearest polyline, and the distance
+between the two.</p>
+<dl class="simple">
+<dt>point_index<span class="classifier">cudf.Series</span></dt><dd><p>Indices of each point that intersects with a polyline.</p>
+</dd>
+<dt>polyline_index<span class="classifier">cudf.Series</span></dt><dd><p>Indices of each polyline with which a point intersected.</p>
+</dd>
+<dt>distance<span class="classifier">cudf.Series</span></dt><dd><p>Distances between each point and its nearest polyline.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cuspatial.point_in_polygon">
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">point_in_polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_points_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_ring_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_points_y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.point_in_polygon" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute from a set of points and a set of polygons which points fall
+within which polygons. Note that <cite>polygons_(x,y)</cite> must be specified as
+closed polygons: the first and last coordinate of each polygon must be
+the same.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>test_points_x</strong></dt><dd><p>x-coordinate of test points</p>
+</dd>
+<dt><strong>test_points_y</strong></dt><dd><p>y-coordinate of test points</p>
+</dd>
+<dt><strong>poly_offsets</strong></dt><dd><p>beginning index of the first ring in each polygon</p>
+</dd>
+<dt><strong>poly_ring_offsets</strong></dt><dd><p>beginning index of the first point in each ring</p>
+</dd>
+<dt><strong>poly_points_x</strong></dt><dd><p>x closed-coordinate of polygon points</p>
+</dd>
+<dt><strong>poly_points_y</strong></dt><dd><p>y closed-coordinate of polygon points</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>A DataFrame of boolean values indicating whether each point falls
+within each polygon.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Test whether 3 points fall within either of two polygons</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">point_in_polygon</span><span class="p">(</span>
+<span class="go">    [0, -8, 6.0],                             # test_points_x</span>
+<span class="go">    [0, -8, 6.0],                             # test_points_y</span>
+<span class="go">    cudf.Series([0, 1], index=['nyc', 'hudson river']), # poly_offsets</span>
+<span class="go">    [0, 3],                                   # ring_offsets</span>
+<span class="go">    [-10, 5, 5, -10, 0, 10, 10, 0],           # poly_points_x</span>
+<span class="go">    [-10, -10, 5, 5, 0, 0, 10, 10],           # poly_points_y</span>
+<span class="go">)</span>
+<span class="go"># The result of point_in_polygon is a DataFrame of Boolean</span>
+<span class="go"># values indicating whether each point (rows) falls within</span>
+<span class="go"># each polygon (columns).</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="go">            nyc            hudson river</span>
+<span class="go">0          True          True</span>
+<span class="go">1          True         False</span>
+<span class="go">2         False          True</span>
+<span class="go"># Point 0: (0, 0) falls in both polygons</span>
+<span class="go"># Point 1: (-8, -8) falls in the first polygon</span>
+<span class="go"># Point 2: (6.0, 6.0) falls in the second polygon</span>
+</pre></div>
+</div>
+<p>note
+input Series x and y will not be index aligned, but computed as
+sequential arrays.</p>
+<p>note
+poly_ring_offsets must contain only the rings that make up the polygons
+indexed by poly_offsets. If there are rings in poly_ring_offsets that
+are not part of the polygons in poly_offsets, results are likely to be
+incorrect and behavior is undefined.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cuspatial.polygon_bounding_boxes">
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">polygon_bounding_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poly_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ring_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.polygon_bounding_boxes" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the minimum bounding-boxes for a set of polygons.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>poly_offsets</strong></dt><dd><p>Begin indices of the first ring in each polygon (i.e. prefix-sum)</p>
+</dd>
+<dt><strong>ring_offsets</strong></dt><dd><p>Begin indices of the first point in each ring (i.e. prefix-sum)</p>
+</dd>
+<dt><strong>xs</strong></dt><dd><p>Polygon point x-coordinates</p>
+</dd>
+<dt><strong>ys</strong></dt><dd><p>Polygon point y-coordinates</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>minimum bounding boxes for each polygon</p>
+<dl class="simple">
+<dt>x_min<span class="classifier">cudf.Series</span></dt><dd><p>the minimum x-coordinate of each bounding box</p>
+</dd>
+<dt>y_min<span class="classifier">cudf.Series</span></dt><dd><p>the minimum y-coordinate of each bounding box</p>
+</dd>
+<dt>x_max<span class="classifier">cudf.Series</span></dt><dd><p>the maximum x-coordinate of each bounding box</p>
+</dd>
+<dt>y_max<span class="classifier">cudf.Series</span></dt><dd><p>the maximum y-coordinate of each bounding box</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cuspatial.polyline_bounding_boxes">
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">polyline_bounding_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poly_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expansion_radius</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.polyline_bounding_boxes" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the minimum bounding-boxes for a set of polylines.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>poly_offsets</strong></dt><dd><p>Begin indices of the first ring in each polyline (i.e. prefix-sum)</p>
+</dd>
+<dt><strong>xs</strong></dt><dd><p>Polyline point x-coordinates</p>
+</dd>
+<dt><strong>ys</strong></dt><dd><p>Polyline point y-coordinates</p>
+</dd>
+<dt><strong>expansion_radius</strong></dt><dd><p>radius of each polyline point</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>minimum bounding boxes for each polyline</p>
+<dl class="simple">
+<dt>x_min<span class="classifier">cudf.Series</span></dt><dd><p>the minimum x-coordinate of each bounding box</p>
+</dd>
+<dt>y_min<span class="classifier">cudf.Series</span></dt><dd><p>the minimum y-coordinate of each bounding box</p>
+</dd>
+<dt>x_max<span class="classifier">cudf.Series</span></dt><dd><p>the maximum x-coordinate of each bounding box</p>
+</dd>
+<dt>y_max<span class="classifier">cudf.Series</span></dt><dd><p>the maximum y-coordinate of each bounding box</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cuspatial.quadtree_on_points">
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">quadtree_on_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.quadtree_on_points" title="Permalink to this definition">#</a></dt>
+<dd><dl class="simple">
+<dt>Construct a quadtree from a set of points for a given area-of-interest</dt><dd><p>bounding box.</p>
+</dd>
+</dl>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>xs</strong></dt><dd><p>Column of x-coordinates for each point</p>
+</dd>
+<dt><strong>ys</strong></dt><dd><p>Column of y-coordinates for each point</p>
+</dd>
+<dt><strong>x_min</strong></dt><dd><p>The lower-left x-coordinate of the area of interest bounding box</p>
+</dd>
+<dt><strong>x_max</strong></dt><dd><p>The upper-right x-coordinate of the area of interest bounding box</p>
+</dd>
+<dt><strong>y_min</strong></dt><dd><p>The lower-left y-coordinate of the area of interest bounding box</p>
+</dd>
+<dt><strong>y_max</strong></dt><dd><p>The upper-right y-coordinate of the area of interest bounding box</p>
+</dd>
+<dt><strong>scale</strong></dt><dd><p>Scale to apply to each point&rsquo;s distance from <code class="docutils literal notranslate"><span class="pre">(x_min,</span> <span class="pre">y_min)</span></code></p>
+</dd>
+<dt><strong>max_depth</strong></dt><dd><p>Maximum quadtree depth</p>
+</dd>
+<dt><strong>min_size</strong></dt><dd><p>Minimum number of points for a non-leaf quadtree node</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>result</strong><span class="classifier">tuple (cudf.Series, cudf.DataFrame)</span></dt><dd><dl>
+<dt>keys_to_points<span class="classifier">cudf.Series(dtype=np.int32)</span></dt><dd><p>A column of sorted keys to original point indices</p>
+</dd>
+<dt>quadtree<span class="classifier">cudf.DataFrame</span></dt><dd><p>A complete quadtree for the set of input points</p>
+<dl>
+<dt>key<span class="classifier">cudf.Series(dtype=np.int32)</span></dt><dd><p>An int32 column of quadrant keys</p>
+</dd>
+<dt>level<span class="classifier">cudf.Series(dtype=np.int8)</span></dt><dd><p>An int8 column of quadtree levels</p>
+</dd>
+<dt>is_quad<span class="classifier">cudf.Series(dtype=np.bool_)</span></dt><dd><p>A boolean column indicating whether the node is a quad or leaf</p>
+</dd>
+<dt>length<span class="classifier">cudf.Series(dtype=np.int32)</span></dt><dd><p>If this is a non-leaf quadrant (i.e. <code class="docutils literal notranslate"><span class="pre">is_quad</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>),
+this column&rsquo;s value is the number of children in the non-leaf
+quadrant.</p>
+<p>Otherwise this column&rsquo;s value is the number of points
+contained in the leaf quadrant.</p>
+</dd>
+<dt>offset<span class="classifier">cudf.Series(dtype=np.int32)</span></dt><dd><p>If this is a non-leaf quadrant (i.e. <code class="docutils literal notranslate"><span class="pre">is_quad</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>),
+this column&rsquo;s value is the position of the non-leaf quadrant&rsquo;s
+first child.</p>
+<p>Otherwise this column&rsquo;s value is the position of the leaf
+quadrant&rsquo;s first point.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Swaps <code class="docutils literal notranslate"><span class="pre">min_x</span></code> and <code class="docutils literal notranslate"><span class="pre">max_x</span></code> if <code class="docutils literal notranslate"><span class="pre">min_x</span> <span class="pre">&gt;</span> <span class="pre">max_x</span></code></p></li>
+<li><p>Swaps <code class="docutils literal notranslate"><span class="pre">min_y</span></code> and <code class="docutils literal notranslate"><span class="pre">max_y</span></code> if <code class="docutils literal notranslate"><span class="pre">min_y</span> <span class="pre">&gt;</span> <span class="pre">max_y</span></code></p></li>
+</ul>
+<p class="rubric">Examples</p>
+<p>An example of selecting the <code class="docutils literal notranslate"><span class="pre">min_size</span></code> and <code class="docutils literal notranslate"><span class="pre">scale</span></code> based on input:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">points</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="go">        "x": cudf.Series(np.random.normal(size=120)) * 500,</span>
+<span class="go">        "y": cudf.Series(np.random.normal(size=120)) * 500,</span>
+<span class="go">    })</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">max_depth</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">min_size</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">min_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">,</span> <span class="n">max_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="s2">"x"</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+<span class="go">                                  points["y"].min(),</span>
+<span class="go">                                  points["x"].max(),</span>
+<span class="go">                                  points["y"].max())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scale</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_x</span> <span class="o">-</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span><span class="p">)</span> <span class="o">//</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">max_depth</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span>
+<span class="go">        "min_size:   " + str(min_size) + "\n"</span>
+<span class="go">        "num_points: " + str(len(points)) + "\n"</span>
+<span class="go">        "min_x:      " + str(min_x) + "\n"</span>
+<span class="go">        "max_x:      " + str(max_x) + "\n"</span>
+<span class="go">        "min_y:      " + str(min_y) + "\n"</span>
+<span class="go">        "max_y:      " + str(max_y) + "\n"</span>
+<span class="go">        "scale:      " + str(scale) + "\n"</span>
+<span class="go">    )</span>
+<span class="go">min_size:   50</span>
+<span class="go">num_points: 120</span>
+<span class="go">min_x:      -1577.4949079170394</span>
+<span class="go">max_x:      1435.877311993804</span>
+<span class="go">min_y:      -1412.7015761122134</span>
+<span class="go">max_y:      1492.572387431971</span>
+<span class="go">scale:      301.0</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">key_to_point</span><span class="p">,</span> <span class="n">quadtree</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">quadtree_on_points</span><span class="p">(</span>
+<span class="go">        points["x"],</span>
+<span class="go">        points["y"],</span>
+<span class="go">        min_x,</span>
+<span class="go">        max_x,</span>
+<span class="go">        min_y,</span>
+<span class="go">        max_y,</span>
+<span class="go">        scale, max_depth, min_size</span>
+<span class="go">    )</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">quadtree</span><span class="p">)</span>
+<span class="go">    key  level  is_quad  length  offset</span>
+<span class="go">0     0      0    False      15       0</span>
+<span class="go">1     1      0    False      27      15</span>
+<span class="go">2     2      0    False      12      42</span>
+<span class="go">3     3      0     True       4       8</span>
+<span class="go">4     4      0    False       5     106</span>
+<span class="go">5     6      0    False       6     111</span>
+<span class="go">6     9      0    False       2     117</span>
+<span class="go">7    12      0    False       1     119</span>
+<span class="go">8    12      1    False      22      54</span>
+<span class="go">9    13      1    False      18      76</span>
+<span class="go">10   14      1    False       9      94</span>
+<span class="go">11   15      1    False       3     103</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">key_to_point</span><span class="p">)</span>
+<span class="go">0       63</span>
+<span class="go">1       20</span>
+<span class="go">2       33</span>
+<span class="go">3       66</span>
+<span class="go">4       19</span>
+<span class="go">    ...</span>
+<span class="go">115    113</span>
+<span class="go">116      3</span>
+<span class="go">117     78</span>
+<span class="go">118     98</span>
+<span class="go">119     24</span>
+<span class="go">Length: 120, dtype: int32</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cuspatial.join_quadtree_and_bounding_boxes">
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">join_quadtree_and_bounding_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quadtree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_bounding_boxes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.join_quadtree_and_bounding_boxes" title="Permalink to this definition">#</a></dt>
+<dd><p>Search a quadtree for polygon or polyline bounding box intersections.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>quadtree</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>A complete quadtree for a given area-of-interest bounding box.</p>
+</dd>
+<dt><strong>poly_bounding_boxes</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Minimum bounding boxes for a set of polygons or polylines</p>
+</dd>
+<dt><strong>x_min</strong></dt><dd><p>The lower-left x-coordinate of the area of interest bounding box</p>
+</dd>
+<dt><strong>x_max</strong></dt><dd><p>The upper-right x-coordinate of the area of interest bounding box</p>
+</dd>
+<dt><strong>min_y</strong></dt><dd><p>The lower-left y-coordinate of the area of interest bounding box</p>
+</dd>
+<dt><strong>max_y</strong></dt><dd><p>The upper-right y-coordinate of the area of interest bounding box</p>
+</dd>
+<dt><strong>scale</strong></dt><dd><p>Scale to apply to each point&rsquo;s distance from <code class="docutils literal notranslate"><span class="pre">(x_min,</span> <span class="pre">y_min)</span></code></p>
+</dd>
+<dt><strong>max_depth</strong></dt><dd><p>Maximum quadtree depth at which to stop testing for intersections</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Indices for each intersecting bounding box and leaf quadrant.</p>
+<dl class="simple">
+<dt>poly_offset<span class="classifier">cudf.Series</span></dt><dd><p>Indices for each poly bbox that intersects with the quadtree.</p>
+</dd>
+<dt>quad_offset<span class="classifier">cudf.Series</span></dt><dd><p>Indices for each leaf quadrant intersecting with a poly bbox.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Swaps <code class="docutils literal notranslate"><span class="pre">min_x</span></code> and <code class="docutils literal notranslate"><span class="pre">max_x</span></code> if <code class="docutils literal notranslate"><span class="pre">min_x</span> <span class="pre">&gt;</span> <span class="pre">max_x</span></code></p></li>
+<li><p>Swaps <code class="docutils literal notranslate"><span class="pre">min_y</span></code> and <code class="docutils literal notranslate"><span class="pre">max_y</span></code> if <code class="docutils literal notranslate"><span class="pre">min_y</span> <span class="pre">&gt;</span> <span class="pre">max_y</span></code></p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cuspatial.points_in_spatial_window">
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">points_in_spatial_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.points_in_spatial_window" title="Permalink to this definition">#</a></dt>
+<dd><p>Return only the subset of coordinates that fall within a
+rectangular window.</p>
+<p>A point <cite>(x, y)</cite> is inside the query window if and only if
+<code class="docutils literal notranslate"><span class="pre">min_x</span> <span class="pre">&lt;</span> <span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">max_x</span> <span class="pre">AND</span> <span class="pre">min_y</span> <span class="pre">&lt;</span> <span class="pre">y</span> <span class="pre">&lt;</span> <span class="pre">max_y</span></code></p>
+<p>The window is specified by minimum and maximum x and y
+coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>min_x</strong></dt><dd><p>lower x-coordinate of the query window</p>
+</dd>
+<dt><strong>max_x</strong></dt><dd><p>upper x-coordinate of the query window</p>
+</dd>
+<dt><strong>min_y</strong></dt><dd><p>lower y-coordinate of the query window</p>
+</dd>
+<dt><strong>max_y</strong></dt><dd><p>upper y-coordinate of the query window</p>
+</dd>
+<dt><strong>xs</strong></dt><dd><p>column of x-coordinates that may fall within the window</p>
+</dd>
+<dt><strong>ys</strong></dt><dd><p>column of y-coordinates that may fall within the window</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>subset of <cite>(x, y)</cite> pairs above that fall within the window</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Swaps <code class="docutils literal notranslate"><span class="pre">min_x</span></code> and <code class="docutils literal notranslate"><span class="pre">max_x</span></code> if <code class="docutils literal notranslate"><span class="pre">min_x</span> <span class="pre">&gt;</span> <span class="pre">max_x</span></code></p></li>
+<li><p>Swaps <code class="docutils literal notranslate"><span class="pre">min_y</span></code> and <code class="docutils literal notranslate"><span class="pre">max_y</span></code> if <code class="docutils literal notranslate"><span class="pre">min_y</span> <span class="pre">&gt;</span> <span class="pre">max_y</span></code></p></li>
+</ul>
+</dd></dl>
+
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev" href="gis.html" id="prev-link" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">GIS</p>
+        </div>
+    </a>
+    <a class="right-next" href="trajectory.html" id="next-link" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Trajectory</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2019-2022, NVIDIA.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script><script id="rapids-selector-pixel-invocation" type="text/javascript">_satellite.pageBottom();</script></body></html>
