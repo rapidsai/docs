@@ -487,12 +487,23 @@
     <name>rmm::mr::cuda_async_memory_resource</name>
     <filename>classrmm_1_1mr_1_1cuda__async__memory__resource.html</filename>
     <base>rmm::mr::device_memory_resource</base>
+    <member kind="enumeration">
+      <type></type>
+      <name>allocation_handle_type</name>
+      <anchorfile>classrmm_1_1mr_1_1cuda__async__memory__resource.html</anchorfile>
+      <anchor>a1c7b108a007542d70bc7078cf0307b85</anchor>
+      <arglist></arglist>
+      <enumvalue file="classrmm_1_1mr_1_1cuda__async__memory__resource.html" anchor="a1c7b108a007542d70bc7078cf0307b85a334c4a4c42fdb79d7ebc3e73b517e6f8">none</enumvalue>
+      <enumvalue file="classrmm_1_1mr_1_1cuda__async__memory__resource.html" anchor="a1c7b108a007542d70bc7078cf0307b85a9edf15eedc33844b49f362208f03662d">posix_file_descriptor</enumvalue>
+      <enumvalue file="classrmm_1_1mr_1_1cuda__async__memory__resource.html" anchor="a1c7b108a007542d70bc7078cf0307b85a9c4f88f706dedde3bc0ebb66e34963e5">win32</enumvalue>
+      <enumvalue file="classrmm_1_1mr_1_1cuda__async__memory__resource.html" anchor="a1c7b108a007542d70bc7078cf0307b85a4426c2ea8be6b50a6286de6a0974bafe">win32_kmt</enumvalue>
+    </member>
     <member kind="function">
       <type></type>
       <name>cuda_async_memory_resource</name>
       <anchorfile>classrmm_1_1mr_1_1cuda__async__memory__resource.html</anchorfile>
-      <anchor>afc896f1fbf993cd68918a3c4779421f2</anchor>
-      <arglist>(thrust::optional&lt; std::size_t &gt; initial_pool_size={}, thrust::optional&lt; std::size_t &gt; release_threshold={})</arglist>
+      <anchor>afc99afc7f2c345db73ffb02149b5d4e6</anchor>
+      <arglist>(thrust::optional&lt; std::size_t &gt; initial_pool_size={}, thrust::optional&lt; std::size_t &gt; release_threshold={}, thrust::optional&lt; allocation_handle_type &gt; export_handle_type={})</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
