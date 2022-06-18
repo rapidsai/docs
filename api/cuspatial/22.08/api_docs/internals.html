@@ -1,0 +1,699 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Internals &#8212; cuspatial 22.08.00 documentation</title>
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/params.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="IO" href="io.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="None">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">cuspatial 22.08.00 documentation</p>
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class=" collapse navbar-collapse">
+    <div id="navbar-center" class="ml-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="gis.html">
+  GIS
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="spatial_indexing.html">
+  Spatial Indexing
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="trajectory.html">
+  Trajectory
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="geopandas_compatibility.html">
+  GeoPandas Compatibility
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="io.html">
+  IO
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="current reference internal nav-link" href="#">
+  Internals
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/rapidsai/cuspatial" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#geoarrow-format">
+   GeoArrow Format
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#examples">
+     Examples
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#geoarrow-internal-apis">
+     GeoArrow Internal APIs
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+    </div>
+    
+    <div class="toc-item">
+      
+    </div>
+    
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <section id="internals">
+<h1>Internals<a class="headerlink" href="#internals" title="Permalink to this headline">#</a></h1>
+<p>This page includes information to help users understand the internal
+data structure of cuspatial.</p>
+<section id="geoarrow-format">
+<h2>GeoArrow Format<a class="headerlink" href="#geoarrow-format" title="Permalink to this headline">#</a></h2>
+<p>Geospatial data is context rich; aside from just a set of
+numbers representing coordinates, they together represent certain geometry
+that requires grouping. For example, given 5 points in a plane,
+they could be 5 separate points, 2 line segments, a single linestring,
+or a pentagon. Many geometry libraries stores the points in
+arrays of geometric objects, commonly known as “Array of Structure” (AoS).
+AoS is not efficient for accelerated computing on parallel devices such
+as GPU. Therefore, GeoArrow format was introduced to store geodata in
+densely packed format, commonly known as “Structure of Arrays” (SoA).</p>
+<p>The GeoArrow format specifies a tabular data format for geometry
+information. Supported types include <cite>Point</cite>, <cite>MultiPoint</cite>, <cite>LineString</cite>,
+<cite>MultiLineString</cite>, <cite>Polygon</cite>, and <cite>MultiPolygon</cite>. In order to store
+these coordinate types in a strictly tabular fashion, columns are
+created for Points, MultiPoints, LineStrings, and Polygons.
+MultiLines and MultiPolygons are stored in the same data structure
+as LineStrings and Polygons.</p>
+<p>GeoArrow format packs complex geometry types into 14 single-column Arrow
+tables. See <a class="reference internal" href="#cuspatial.GeoArrowBuffers" title="cuspatial.GeoArrowBuffers"><code class="xref py py-func docutils literal notranslate"><span class="pre">GeoArrowBuffers</span></code></a> docstring
+for the complete list of keys for the columns.</p>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">#</a></h3>
+<p>The <cite>Point</cite> geometry is the simplest. N points are stored in a length 2*N
+buffer with interleaved x,y coordinates. An optional z buffer of length N
+can be used.</p>
+<p>A <cite>Multipoint</cite> is a group of points, and is the second simplest GeoArrow
+geometry type. It is identical to points, with the addition of a
+<code class="docutils literal notranslate"><span class="pre">multipoints_offsets</span></code> buffer. The offsets buffer stores N+1 indices. The
+first multipoint offset is specified by 0, which is always stored in
+<code class="docutils literal notranslate"><span class="pre">offsets[0]</span></code>. The second offset is stored in <code class="docutils literal notranslate"><span class="pre">offsets[1]</span></code>, and so on.
+The number of points in multipoint <code class="docutils literal notranslate"><span class="pre">i</span></code> is the difference between
+<code class="docutils literal notranslate"><span class="pre">offsets[i+1]</span></code> and <code class="docutils literal notranslate"><span class="pre">offsets[i]</span></code>.</p>
+<p>Consider:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">buffers</span> <span class="o">=</span> <span class="n">GeoArrowBuffers</span><span class="p">({</span>
+    <span class="s2">&quot;multipoints_xy&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="s2">&quot;multipoints_offsets&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">18</span><span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>which encodes the following GeoPandas Series:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">series</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span>
+    <span class="n">MultiPoint</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+    <span class="n">MultiPoint</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+    <span class="n">MultiPoint</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<p><cite>LineString</cite> geometry is more complicated than multipoints because the
+format allows for the use of <cite>LineString</cite> and <cite>MultiLineString</cite> in the same
+buffer, via the <code class="docutils literal notranslate"><span class="pre">mlines</span></code> buffer. The <code class="docutils literal notranslate"><span class="pre">mlines</span></code> buffer stores 2M indices, where M
+is the number of <cite>MultiLineString</cite> s. The starting and ending <strong>Linestring offset</strong> of the <cite>i</cite> th
+<cite>MultiLineString</cite> is stored at <code class="docutils literal notranslate"><span class="pre">mlines[2*i]</span></code> and <code class="docutils literal notranslate"><span class="pre">mlines[2*i+1]</span></code> respectively.</p>
+<p>Consider:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">buffers</span> <span class="o">=</span> <span class="n">GeoArrowBuffers</span><span class="p">({</span>
+    <span class="s2">&quot;lines_xy&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="s2">&quot;lines_offsets&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
+    <span class="s2">&quot;mlines&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>Which encodes a GeoPandas Series:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">series</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span>
+    <span class="n">LineString</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+    <span class="n">MultiLineString</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+                    <span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+    <span class="p">)</span>
+    <span class="n">LineString</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+    <span class="n">LineString</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">mlines</span></code> has 2 entries, and therefore there is 1
+<cite>MultiLineString</cite> in <code class="docutils literal notranslate"><span class="pre">buffers</span></code>. It consists of 2
+<cite>LineStrings</cite>: the second and third <cite>LineString</cite> in the defined by
+<code class="docutils literal notranslate"><span class="pre">lines_offsets</span></code>.</p>
+<p>Polygon geometry includes <cite>mpolygons</cite> for MultiPolygons similar to the
+LineString geometry. Polygons are encoded using the same format as
+<a class="reference external" href="https://en.wikipedia.org/wiki/Shapefile">Shapefile</a> ,
+with left-wound external rings and right-wound internal rings.</p>
+</section>
+<section id="geoarrow-internal-apis">
+<h3>GeoArrow Internal APIs<a class="headerlink" href="#geoarrow-internal-apis" title="Permalink to this headline">#</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="cuspatial.GeoArrowBuffers">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">GeoArrowBuffers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">data:</span> <span class="pre">typing.Union[dict,</span> <span class="pre">cuspatial.geometry.geoarrowbuffers.T],</span> <span class="pre">data_locale:</span> <span class="pre">object</span> <span class="pre">=</span> <span class="pre">&lt;module</span> <span class="pre">'cudf'</span> <span class="pre">from</span> <span class="pre">'/opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/__init__.py'&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.GeoArrowBuffers" title="Permalink to this definition">#</a></dt>
+<dd><p>A GPU GeoArrowBuffers object.</p>
+<p>GeoArrowBuffers are constructed from a dict of host buffers with
+accepted keys:</p>
+<ul class="simple">
+<li><p>points_xy</p></li>
+<li><p>points_z</p></li>
+<li><p>multipoints_xy</p></li>
+<li><p>multipoints_z</p></li>
+<li><p>multipoints_offsets</p></li>
+<li><p>lines_xy</p></li>
+<li><p>lines_z</p></li>
+<li><p>lines_offsets</p></li>
+<li><p>mlines</p></li>
+<li><p>polygons_xy</p></li>
+<li><p>polygons_z</p></li>
+<li><p>polygons_polygons</p></li>
+<li><p>polygons_rings</p></li>
+<li><p>mpolygons</p></li>
+</ul>
+<p>There are no correlations in length between any of the above columns.
+Accepted host buffer object types include python list and any type that
+implements numpy’s <cite>__array__interface__</cite> protocol.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">A dict or a GeoArrowBuffers object.</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Legacy cuspatial algorithms depend on separated x and y columns. Access
+them with the <cite>.x</cite> and <cite>.y</cite> properties.</p>
+<p class="rubric">Examples</p>
+<p>GeoArrowBuffers accept a dict as argument. Valid keys are in the bullet
+list above. Valid values are any datatype that implements numpy’s
+<cite>__array_interface__</cite>. Any or all of the four basic geometry types is
+supported as argument:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">buffers</span> <span class="o">=</span> <span class="n">GeoArrowBuffers</span><span class="p">({</span>
+    <span class="s2">&quot;points_xy&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="s2">&quot;multipoints_xy&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="s2">&quot;multipoints_offsets&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">18</span><span class="p">],</span>
+    <span class="s2">&quot;lines_xy&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+         <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="s2">&quot;lines_offsets&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
+    <span class="s2">&quot;mlines&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+    <span class="s2">&quot;polygons_xy&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+         <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="s2">&quot;polygons_polygons&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="s2">&quot;polygons_rings&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="s2">&quot;mpolygons&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>or another GeoArrowBuffers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">buffers2</span> <span class="o">=</span> <span class="n">GeoArrowBuffers</span><span class="p">(</span><span class="n">buffers</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#cuspatial.GeoArrowBuffers.lines" title="cuspatial.GeoArrowBuffers.lines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lines</span></code></a></dt><dd><p>Contains the coordinates column, an offsets column, and a mlines column.</p>
+</dd>
+<dt><a class="reference internal" href="#cuspatial.GeoArrowBuffers.multipoints" title="cuspatial.GeoArrowBuffers.multipoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">multipoints</span></code></a></dt><dd><p>Similar to the Points column with the addition of an offsets column.</p>
+</dd>
+<dt><a class="reference internal" href="#cuspatial.GeoArrowBuffers.points" title="cuspatial.GeoArrowBuffers.points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">points</span></code></a></dt><dd><p>A simple numeric column.</p>
+</dd>
+<dt><a class="reference internal" href="#cuspatial.GeoArrowBuffers.polygons" title="cuspatial.GeoArrowBuffers.polygons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">polygons</span></code></a></dt><dd><p>Contains the coordinates column, a rings column specifying the beginning and end of every polygon, a polygons column specifying the beginning, or exterior, ring of each polygon and the end ring.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cuspatial.GeoArrowBuffers.copy" title="cuspatial.GeoArrowBuffers.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a>([deep])</p></td>
+<td><p>Create a copy of all of the GPU-backed data structures in this GeoArrowBuffers.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cuspatial.GeoArrowBuffers.to_host" title="cuspatial.GeoArrowBuffers.to_host"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_host</span></code></a>()</p></td>
+<td><p>Return a copy of GeoArrowBuffers backed by host data structures.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="cuspatial.GeoArrowBuffers.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.GeoArrowBuffers.copy" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a copy of all of the GPU-backed data structures in this
+GeoArrowBuffers.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="cuspatial.GeoArrowBuffers.lines">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lines</span></span><a class="headerlink" href="#cuspatial.GeoArrowBuffers.lines" title="Permalink to this definition">#</a></dt>
+<dd><p>Contains the coordinates column, an offsets column,
+and a mlines column.
+The mlines column is optional. The mlines column stores
+the indices of the offsets that indicate the beginning and end of each
+MultiLineString segment. The absence of an <cite>mlines</cite> column indicates
+there are no <cite>MultiLineStrings</cite> in the data source,
+only <cite>LineString</cite> s.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="cuspatial.GeoArrowBuffers.multipoints">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">multipoints</span></span><a class="headerlink" href="#cuspatial.GeoArrowBuffers.multipoints" title="Permalink to this definition">#</a></dt>
+<dd><p>Similar to the Points column with the addition of an offsets column.
+The offsets column stores the comparable sizes and coordinates of each
+MultiPoint in the GeoArrowBuffers.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="cuspatial.GeoArrowBuffers.points">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">points</span></span><a class="headerlink" href="#cuspatial.GeoArrowBuffers.points" title="Permalink to this definition">#</a></dt>
+<dd><p>A simple numeric column. x and y coordinates are interleaved such that
+even coordinates are x axis and odd coordinates are y axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="cuspatial.GeoArrowBuffers.polygons">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">polygons</span></span><a class="headerlink" href="#cuspatial.GeoArrowBuffers.polygons" title="Permalink to this definition">#</a></dt>
+<dd><p>Contains the coordinates column, a rings column specifying
+the beginning and end of every polygon, a polygons column specifying
+the beginning, or exterior, ring of each polygon and the end ring.
+All rings after the first ring are interior rings.  Finally a
+mpolygons column stores the offsets of the polygons that should be
+grouped into MultiPolygons.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cuspatial.GeoArrowBuffers.to_host">
+<span class="sig-name descname"><span class="pre">to_host</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.GeoArrowBuffers.to_host" title="Permalink to this definition">#</a></dt>
+<dd><p>Return a copy of GeoArrowBuffers backed by host data structures.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cuspatial.geometry.geocolumn.GeoMeta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cuspatial.geometry.geocolumn.</span></span><span class="sig-name descname"><span class="pre">GeoMeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cuspatial.GeoArrowBuffers" title="cuspatial.geometry.geoarrowbuffers.GeoArrowBuffers"><span class="pre">cuspatial.geometry.geoarrowbuffers.GeoArrowBuffers</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.geometry.geocolumn.GeoMeta" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates input_types and input_lengths for GeoColumns that are created
+using native GeoArrowBuffers. These will be used to convert to GeoPandas
+GeoSeries if necessary.</p>
+<p class="rubric">Methods</p>
+<table class="table">
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 56%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>copy</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cuspatial.geometry.geocolumn.GeoColumn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cuspatial.geometry.geocolumn.</span></span><span class="sig-name descname"><span class="pre">GeoColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cuspatial.GeoArrowBuffers" title="cuspatial.geometry.geoarrowbuffers.GeoArrowBuffers"><span class="pre">cuspatial.geometry.geoarrowbuffers.GeoArrowBuffers</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cuspatial.geometry.geocolumn.GeoMeta" title="cuspatial.geometry.geocolumn.GeoMeta"><span class="pre">cuspatial.geometry.geocolumn.GeoMeta</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.rapids.ai/api/cudf/stable/api_docs/api/cudf.Index.html#cudf.Index" title="(in cudf v22.04)"><span class="pre">cudf.core.index.Index</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.geometry.geocolumn.GeoColumn" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">A GeoArrowBuffers object</span></dt><dd></dd>
+<dt><strong>meta</strong><span class="classifier">A GeoMeta object (optional)</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The GeoColumn class subclasses <cite>NumericalColumn</cite>. Combined with
+<cite>_copy_type_metadata</cite>, this assures support for existing cudf algorithms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#cuspatial.geometry.geocolumn.GeoColumn.iloc" title="cuspatial.geometry.geocolumn.GeoColumn.iloc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iloc</span></code></a></dt><dd><p>Return the i-th row of the GeoSeries.</p>
+</dd>
+<dt><strong>lines</strong></dt><dd></dd>
+<dt><a class="reference internal" href="#cuspatial.geometry.geocolumn.GeoColumn.loc" title="cuspatial.geometry.geocolumn.GeoColumn.loc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loc</span></code></a></dt><dd><p>Not currently supported.</p>
+</dd>
+<dt><strong>multipoints</strong></dt><dd></dd>
+<dt><strong>points</strong></dt><dd></dd>
+<dt><strong>polygons</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cuspatial.geometry.geocolumn.GeoColumn.copy" title="cuspatial.geometry.geocolumn.GeoColumn.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a>([deep])</p></td>
+<td><p>Create a copy of all of the GPU-backed data structures in this GeoColumn.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cuspatial.geometry.geocolumn.GeoColumn.max" title="cuspatial.geometry.geocolumn.GeoColumn.max"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max</span></code></a>([skipna, min_count])</p></td>
+<td><p>Compute max of column values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cuspatial.geometry.geocolumn.GeoColumn.min" title="cuspatial.geometry.geocolumn.GeoColumn.min"><code class="xref py py-obj docutils literal notranslate"><span class="pre">min</span></code></a>([skipna, min_count])</p></td>
+<td><p>Compute min of column values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cuspatial.geometry.geocolumn.GeoColumn.product" title="cuspatial.geometry.geocolumn.GeoColumn.product"><code class="xref py py-obj docutils literal notranslate"><span class="pre">product</span></code></a>([skipna, min_count])</p></td>
+<td><p>Compute product of column values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cuspatial.geometry.geocolumn.GeoColumn.sum" title="cuspatial.geometry.geocolumn.GeoColumn.sum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sum</span></code></a>([skipna, min_count])</p></td>
+<td><p>Compute sum of column values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cuspatial.geometry.geocolumn.GeoColumn.sum_of_squares" title="cuspatial.geometry.geocolumn.GeoColumn.sum_of_squares"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sum_of_squares</span></code></a>([skipna, min_count])</p></td>
+<td><p>Compute sum_of_squares of column values.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="table">
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 48%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>cummax</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>cummin</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>cumprod</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>cumsum</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>to_host</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="cuspatial.geometry.geocolumn.GeoColumn.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.geometry.geocolumn.GeoColumn.copy" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a copy of all of the GPU-backed data structures in this
+GeoColumn.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="cuspatial.geometry.geocolumn.GeoColumn.iloc">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">iloc</span></span><a class="headerlink" href="#cuspatial.geometry.geocolumn.GeoColumn.iloc" title="Permalink to this definition">#</a></dt>
+<dd><p>Return the i-th row of the GeoSeries.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="cuspatial.geometry.geocolumn.GeoColumn.loc">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">loc</span></span><a class="headerlink" href="#cuspatial.geometry.geocolumn.GeoColumn.loc" title="Permalink to this definition">#</a></dt>
+<dd><p>Not currently supported.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cuspatial.geometry.geocolumn.GeoColumn.max">
+<span class="sig-name descname"><span class="pre">max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skipna</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.geometry.geocolumn.GeoColumn.max" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute max of column values.</p>
+<dl class="simple">
+<dt>skipna<span class="classifier">bool</span></dt><dd><p>Whether or not na values must be skipped.</p>
+</dd>
+<dt>min_count<span class="classifier">int, default 0</span></dt><dd><p>The minimum number of entries for the reduction, otherwise the
+reduction returns NaN.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cuspatial.geometry.geocolumn.GeoColumn.min">
+<span class="sig-name descname"><span class="pre">min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skipna</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.geometry.geocolumn.GeoColumn.min" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute min of column values.</p>
+<dl class="simple">
+<dt>skipna<span class="classifier">bool</span></dt><dd><p>Whether or not na values must be skipped.</p>
+</dd>
+<dt>min_count<span class="classifier">int, default 0</span></dt><dd><p>The minimum number of entries for the reduction, otherwise the
+reduction returns NaN.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cuspatial.geometry.geocolumn.GeoColumn.product">
+<span class="sig-name descname"><span class="pre">product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skipna</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.geometry.geocolumn.GeoColumn.product" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute product of column values.</p>
+<dl class="simple">
+<dt>skipna<span class="classifier">bool</span></dt><dd><p>Whether or not na values must be skipped.</p>
+</dd>
+<dt>min_count<span class="classifier">int, default 0</span></dt><dd><p>The minimum number of entries for the reduction, otherwise the
+reduction returns NaN.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cuspatial.geometry.geocolumn.GeoColumn.sum">
+<span class="sig-name descname"><span class="pre">sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skipna</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.geometry.geocolumn.GeoColumn.sum" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute sum of column values.</p>
+<dl class="simple">
+<dt>skipna<span class="classifier">bool</span></dt><dd><p>Whether or not na values must be skipped.</p>
+</dd>
+<dt>min_count<span class="classifier">int, default 0</span></dt><dd><p>The minimum number of entries for the reduction, otherwise the
+reduction returns NaN.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cuspatial.geometry.geocolumn.GeoColumn.sum_of_squares">
+<span class="sig-name descname"><span class="pre">sum_of_squares</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skipna</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.geometry.geocolumn.GeoColumn.sum_of_squares" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute sum_of_squares of column values.</p>
+<dl class="simple">
+<dt>skipna<span class="classifier">bool</span></dt><dd><p>Whether or not na values must be skipped.</p>
+</dd>
+<dt>min_count<span class="classifier">int, default 0</span></dt><dd><p>The minimum number of entries for the reduction, otherwise the
+reduction returns NaN.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+              </article>
+              
+
+              
+              <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="io.html" title="previous page">
+      <i class="fas fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">IO</p>
+      </div>
+  </a>
+</div>
+              </footer>
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright 2019-2022, NVIDIA.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>
