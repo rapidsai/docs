@@ -11483,6 +11483,13 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
+      <type>CUDF_HOST_DEVICE bool</type>
+      <name>get_missing_fields_as_nulls</name>
+      <anchorfile>classcudf_1_1strings_1_1get__json__object__options.html</anchorfile>
+      <anchor>ac01e6b0eba0ebc86f2f65e470801831d</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
       <type>void</type>
       <name>set_allow_single_quotes</name>
       <anchorfile>classcudf_1_1strings_1_1get__json__object__options.html</anchorfile>
@@ -11495,6 +11502,13 @@
       <anchorfile>classcudf_1_1strings_1_1get__json__object__options.html</anchorfile>
       <anchor>a30688fc2786074069616627a6319f336</anchor>
       <arglist>(bool _strip_quotes_from_single_strings)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_missing_fields_as_nulls</name>
+      <anchorfile>classcudf_1_1strings_1_1get__json__object__options.html</anchorfile>
+      <anchor>abc5fcd315c118ee3129bbcf9c8660c2c</anchor>
+      <arglist>(bool _missing_fields_as_nulls)</arglist>
     </member>
   </compound>
   <compound kind="class">

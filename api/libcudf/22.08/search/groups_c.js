@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['nvtext_3823',['NVText',['../group__nvtext__apis.html',1,'']]],
-  ['ngrams_3824',['NGrams',['../group__nvtext__ngrams.html',1,'']]],
-  ['normalizing_3825',['Normalizing',['../group__nvtext__normalize.html',1,'']]]
+  ['nvtext_3827',['NVText',['../group__nvtext__apis.html',1,'']]],
+  ['ngrams_3828',['NGrams',['../group__nvtext__ngrams.html',1,'']]],
+  ['normalizing_3829',['Normalizing',['../group__nvtext__normalize.html',1,'']]]
 ];
