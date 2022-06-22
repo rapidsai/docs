@@ -7,6 +7,7 @@ On release day, the following changes need to be made to the site:
 - **Update [releases/schedule.md](releases/schedule.md)**: Update release schedule
 - **Remove old docs** - Use [rm_old_docs.sh](/rm_old_docs.sh) script to remove previous legacy docs
 - **Update symlinks and re-customize docs**:
+  - First, run `pip install customization/requirements.txt`
   - Run codeblock below (from project's root directory) to update all symlinks and re-customize docs to reflect new RAPIDS versions.
 
 ```sh
