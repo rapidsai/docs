@@ -55,7 +55,7 @@ package uses :ref:`can be found here. <cpm_versions>`
    /command/rapids_cpm_package_override
 
 Cython
-****
+******
 
 The `rapids_cython` functions allow projects to easily build cython modules using
 `scikit-build <https://scikit-build.readthedocs.io/en/latest/>`_.
