@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
@@ -36,6 +36,7 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
@@ -48,7 +49,7 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="prev" title="Developer Guide" href="index.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="docsearch:language" content="None">
+<meta name="docsearch:language" content="en">
   </head>
   
   
@@ -258,7 +259,7 @@
               <article class="bd-article" role="main">
                 
   <section id="library-design">
-<h1>Library Design<a class="headerlink" href="#library-design" title="Permalink to this headline">#</a></h1>
+<h1>Library Design<a class="headerlink" href="#library-design" title="Permalink to this heading">#</a></h1>
 <p>The cuDF library is a GPU-accelerated, <a class="reference external" href="https://pandas.pydata.org/">Pandas-like</a> DataFrame library.
 Under the hood, all of cuDF’s functionality relies on the CUDA-accelerated <code class="docutils literal notranslate"><span class="pre">libcudf</span></code> C++ library.
 Thus, cuDF’s internals are designed to efficiently and robustly map pandas APIs to <code class="docutils literal notranslate"><span class="pre">libcudf</span></code> functions.</p>
@@ -276,7 +277,7 @@ Thus, cuDF’s internals are designed to efficiently and robustly map pandas API
 <p>In this document we will review each of these layers, their roles, and the requisite tradeoffs.
 Finally we tie these pieces together to provide a more holistic view of the project.</p>
 <section id="the-frame-layer">
-<h2>The Frame layer<a class="headerlink" href="#the-frame-layer" title="Permalink to this headline">#</a></h2>
+<h2>The Frame layer<a class="headerlink" href="#the-frame-layer" title="Permalink to this heading">#</a></h2>
 <img alt="../_images/frame_class_diagram.png" src="../_images/frame_class_diagram.png" />
 <p>This class diagram shows the relationship between the principal components of the Frame layer:
 All classes in the Frame layer inherit from one or both of the two base classes in this layer: <code class="docutils literal notranslate"><span class="pre">Frame</span></code> and <code class="docutils literal notranslate"><span class="pre">BaseIndex</span></code>.
@@ -290,7 +291,7 @@ Most other index classes consist of a single column of a given type, e.g. string
 As a result, using a single abstract parent provides the flexibility we need to support these different types.</p>
 <p>With those preliminaries out of the way, let’s dive in a little bit deeper.</p>
 <section id="frames">
-<h3>Frames<a class="headerlink" href="#frames" title="Permalink to this headline">#</a></h3>
+<h3>Frames<a class="headerlink" href="#frames" title="Permalink to this heading">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">Frame</span></code> exposes numerous methods common to all pandas data structures.
 Any methods that have the same API across <code class="docutils literal notranslate"><span class="pre">Series</span></code>, <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>, and <code class="docutils literal notranslate"><span class="pre">Index</span></code> should be defined here.
 Additionally any (internal) methods that could be used to share code between those classes may also be defined here.</p>
@@ -305,7 +306,7 @@ While <code class="docutils literal notranslate"><span class="pre">IndexedFrame<
 It adds some simple APIs provided by all 1D pandas objects, and it flattens outputs where needed.</p>
 </section>
 <section id="indexes">
-<h3>Indexes<a class="headerlink" href="#indexes" title="Permalink to this headline">#</a></h3>
+<h3>Indexes<a class="headerlink" href="#indexes" title="Permalink to this heading">#</a></h3>
 <p>While we’ve highlighted some exceptional cases of Indexes before, let’s start with the base cases here first.
 <code class="docutils literal notranslate"><span class="pre">BaseIndex</span></code> is intended to be a pure abstract class, i.e. all of its methods should simply raise <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>.
 In practice, <code class="docutils literal notranslate"><span class="pre">BaseIndex</span></code> does have concrete implementations of a small set of methods.
@@ -338,7 +339,7 @@ This class should contain no implementations since it is simply a factory for ot
 </section>
 </section>
 <section id="the-column-layer">
-<h2>The Column layer<a class="headerlink" href="#the-column-layer" title="Permalink to this headline">#</a></h2>
+<h2>The Column layer<a class="headerlink" href="#the-column-layer" title="Permalink to this heading">#</a></h2>
 <p>The next layer in the cuDF stack is the Column layer.
 This layer forms the glue between pandas-like APIs and our underlying data layouts.
 The principal objects in the Column layer are the <code class="docutils literal notranslate"><span class="pre">ColumnAccessor</span></code> and the various <code class="docutils literal notranslate"><span class="pre">Column</span></code> classes.
@@ -346,14 +347,14 @@ The <code class="docutils literal notranslate"><span class="pre">Column</span></
 A <code class="docutils literal notranslate"><span class="pre">ColumnAccessor</span></code> is a dictionary-like interface to a sequence of <code class="docutils literal notranslate"><span class="pre">Column</span></code>s.
 A <code class="docutils literal notranslate"><span class="pre">Frame</span></code> owns a <code class="docutils literal notranslate"><span class="pre">ColumnAccessor</span></code>.</p>
 <section id="columnaccessor">
-<h3>ColumnAccessor<a class="headerlink" href="#columnaccessor" title="Permalink to this headline">#</a></h3>
+<h3>ColumnAccessor<a class="headerlink" href="#columnaccessor" title="Permalink to this heading">#</a></h3>
 <p>The primary purpose of the <code class="docutils literal notranslate"><span class="pre">ColumnAccessor</span></code> is to encapsulate pandas column selection semantics.
 Columns may be selected or inserted by index or by label, and label-based selections are as flexible as pandas is.
 For instance, Columns may be selected hierarchically (using tuples) or via wildcards.
 <code class="docutils literal notranslate"><span class="pre">ColumnAccessor</span></code>s also support the <code class="docutils literal notranslate"><span class="pre">MultiIndex</span></code> columns that can result from operations like groupbys.</p>
 </section>
 <section id="columns">
-<h3>Columns<a class="headerlink" href="#columns" title="Permalink to this headline">#</a></h3>
+<h3>Columns<a class="headerlink" href="#columns" title="Permalink to this heading">#</a></h3>
 <p>Under the hood, cuDF is built around the <a class="reference external" href="https://arrow.apache.org">Apache Arrow Format</a>.
 This data format is both conducive to high-performance algorithms and suitable for data interchange between libraries.
 The <code class="docutils literal notranslate"><span class="pre">Column</span></code> class encapsulates our implementation of this data format.
@@ -406,7 +407,7 @@ bytes)</p></li>
 </ol>
 </section>
 <section id="data-types">
-<h3>Data types<a class="headerlink" href="#data-types" title="Permalink to this headline">#</a></h3>
+<h3>Data types<a class="headerlink" href="#data-types" title="Permalink to this heading">#</a></h3>
 <p>cuDF uses <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.dtypes.html">dtypes</a> to represent different types of data.
 Since efficient GPU algorithms require preexisting knowledge of data layouts,
 cuDF does not support the arbitrary <code class="docutils literal notranslate"><span class="pre">object</span></code> dtype, but instead defines a few custom types for common use-cases:</p>
@@ -421,7 +422,7 @@ cuDF does not support the arbitrary <code class="docutils literal notranslate"><
 For instance, all numerical types (floats and ints of different widths) are all managed using <code class="docutils literal notranslate"><span class="pre">NumericalColumn</span></code>.</p>
 </section>
 <section id="buffer">
-<h3>Buffer<a class="headerlink" href="#buffer" title="Permalink to this headline">#</a></h3>
+<h3>Buffer<a class="headerlink" href="#buffer" title="Permalink to this heading">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">Column</span></code>s are in turn composed of one or more <code class="docutils literal notranslate"><span class="pre">Buffer</span></code>s.
 A <code class="docutils literal notranslate"><span class="pre">Buffer</span></code> represents a single, contiguous, device memory allocation owned by another object.
 A <code class="docutils literal notranslate"><span class="pre">Buffer</span></code> constructed from a preexisting device memory allocation (such as a CuPy array) will view that memory.
@@ -432,7 +433,7 @@ You can read more about device memory allocation with RMM <a class="reference ex
 </section>
 </section>
 <section id="the-cython-layer">
-<h2>The Cython layer<a class="headerlink" href="#the-cython-layer" title="Permalink to this headline">#</a></h2>
+<h2>The Cython layer<a class="headerlink" href="#the-cython-layer" title="Permalink to this heading">#</a></h2>
 <p>The lowest level of cuDF is its interaction with <code class="docutils literal notranslate"><span class="pre">libcudf</span></code> via Cython.
 The Cython layer is composed of two components: C++ bindings and Cython wrappers.
 The first component consists of <a class="reference external" href="https://cython.readthedocs.io/en/latest/src/tutorial/pxd_files.html"><code class="docutils literal notranslate"><span class="pre">.pxd</span></code> files</a>,
@@ -450,7 +451,7 @@ By the time code reaches this layer, all questions of pandas compatibility shoul
 These functions should be as close to trivial wrappers around <code class="docutils literal notranslate"><span class="pre">libcudf</span></code> APIs as possible.</p>
 </section>
 <section id="putting-it-all-together">
-<h2>Putting It All Together<a class="headerlink" href="#putting-it-all-together" title="Permalink to this headline">#</a></h2>
+<h2>Putting It All Together<a class="headerlink" href="#putting-it-all-together" title="Permalink to this heading">#</a></h2>
 <p>To this point, our discussion has assumed that all cuDF functions follow a strictly linear descent through these layers.
 However, it should be clear that in many cases this approach is not appropriate.
 Many common <code class="docutils literal notranslate"><span class="pre">Frame</span></code> operations do not operate on individual columns but on the <code class="docutils literal notranslate"><span class="pre">Frame</span></code> as a whole.
@@ -508,7 +509,7 @@ However, for performance reasons they frequently access internal attributes and 
   
   <div class="footer-item">
     <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
 </p>
   </div>
   
