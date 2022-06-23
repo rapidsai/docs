@@ -34,6 +34,6 @@ var searchData=
   ['extract_5fbfs_5fpaths_159',['extract_bfs_paths',['../namespacecugraph.html#a9dc29cc93342ec5e630aa8ab056b4229',1,'cugraph']]],
   ['extract_5fego_160',['extract_ego',['../namespacecugraph.html#a73675c501c55f4633b34da4475c9c5ed',1,'cugraph']]],
   ['extract_5fif_5fe_161',['extract_if_e',['../namespacecugraph.html#af18e3f85a1e26ce73f4cd15714e605f8',1,'cugraph']]],
-  ['extract_5finduced_5fsubgraphs_162',['extract_induced_subgraphs',['../namespacecugraph.html#a8cbce977abb844bc1b2b64c010958c2a',1,'cugraph']]],
+  ['extract_5finduced_5fsubgraphs_162',['extract_induced_subgraphs',['../namespacecugraph.html#a53b895c6b014c3935ba7a6166b02af22',1,'cugraph']]],
   ['extract_5fpaths_5ffunctor_163',['extract_paths_functor',['../structcugraph_1_1c__api_1_1extract__paths__functor.html',1,'cugraph::c_api']]]
 ];
