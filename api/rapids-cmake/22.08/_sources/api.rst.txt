@@ -31,7 +31,7 @@ tracking of these dependencies for correct export support.
    /command/rapids_cpm_init
    /command/rapids_cpm_find
 
-CPM Pre-Configured Pacakges
+CPM Pre-Configured Packages
 ***************************
 
 These `rapids_cpm` functions allow projects to easily find or build common
