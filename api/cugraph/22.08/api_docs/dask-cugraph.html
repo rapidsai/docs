@@ -1176,32 +1176,55 @@
 </section>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">wait</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dask_cudf</span>
+<span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
 <span class="kn">from</span> <span class="nn">dask_cuda</span> <span class="kn">import</span> <span class="n">LocalCUDACluster</span>
-<span class="kn">import</span> <span class="nn">cugraph.dask.comms.comms</span> <span class="k">as</span> <span class="nn">Comms</span>
-<span class="kn">import</span> <span class="nn">cugraph.dask</span> <span class="k">as</span> <span class="nn">dask_cugraph</span>
 
+<span class="kn">import</span> <span class="nn">cugraph</span>
+<span class="kn">import</span> <span class="nn">cugraph.dask</span> <span class="k">as</span> <span class="nn">dask_cugraph</span>
+<span class="kn">import</span> <span class="nn">cugraph.dask.comms.comms</span> <span class="k">as</span> <span class="nn">Comms</span>
+<span class="kn">from</span> <span class="nn">cugraph.generators.rmat</span> <span class="kn">import</span> <span class="n">rmat</span>
+
+<span class="n">input_data_path</span> <span class="o">=</span> <span class="s2">&quot;input_data.csv&quot;</span>
+
+<span class="c1"># cluster initialization</span>
 <span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCUDACluster</span><span class="p">()</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
 <span class="n">Comms</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">p2p</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># Helper function to set the reader chunk size to automatically get one partition per GPU</span>
+<span class="c1"># helper function to generate random input data</span>
+<span class="n">input_data</span> <span class="o">=</span> <span class="n">rmat</span><span class="p">(</span>
+    <span class="n">scale</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">num_edges</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+    <span class="n">a</span><span class="o">=</span><span class="mf">0.30</span><span class="p">,</span>
+    <span class="n">b</span><span class="o">=</span><span class="mf">0.65</span><span class="p">,</span>
+    <span class="n">c</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">456</span><span class="p">,</span>
+    <span class="n">clip_and_flip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">scramble_vertex_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">create_using</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">input_data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># helper function to set the reader chunk size to automatically get one partition per GPU</span>
 <span class="n">chunksize</span> <span class="o">=</span> <span class="n">dask_cugraph</span><span class="o">.</span><span class="n">get_chunksize</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">)</span>
 
-<span class="c1"># Multi-GPU CSV reader</span>
-<span class="n">e_list</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">,</span>
-        <span class="n">chunksize</span> <span class="o">=</span> <span class="n">chunksize</span><span class="p">,</span>
-        <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span>
-        <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="s1">&#39;dst&#39;</span><span class="p">],</span>
-        <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;int32&#39;</span><span class="p">,</span> <span class="s1">&#39;int32&#39;</span><span class="p">])</span>
+<span class="c1"># multi-GPU CSV reader</span>
+<span class="n">e_list</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="n">input_data_path</span><span class="p">,</span>
+    <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
+    <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="s1">&#39;dst&#39;</span><span class="p">],</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;int32&#39;</span><span class="p">,</span> <span class="s1">&#39;int32&#39;</span><span class="p">],</span>
+<span class="p">)</span>
 
-<span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># create graph from input data</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
 <span class="n">G</span><span class="o">.</span><span class="n">from_dask_cudf_edgelist</span><span class="p">(</span><span class="n">e_list</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">&#39;dst&#39;</span><span class="p">)</span>
 
-<span class="c1"># now run PageRank</span>
+<span class="c1"># run PageRank</span>
 <span class="n">pr_df</span> <span class="o">=</span> <span class="n">dask_cugraph</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
 
-<span class="c1"># All done, clean up</span>
+<span class="c1"># cluster clean up</span>
 <span class="n">Comms</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
 <span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 <span class="n">cluster</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
