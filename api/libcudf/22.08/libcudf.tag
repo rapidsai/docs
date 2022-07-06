@@ -581,7 +581,29 @@
     <filename>char__types_8hpp.html</filename>
     <includes id="column_8hpp" name="column.hpp" local="no" imported="no">cudf/column/column.hpp</includes>
     <includes id="scalar_8hpp" name="scalar.hpp" local="no" imported="no">cudf/scalar/scalar.hpp</includes>
+    <includes id="char__types__enum_8hpp" name="char_types_enum.hpp" local="no" imported="no">cudf/strings/char_types/char_types_enum.hpp</includes>
     <includes id="strings__column__view_8hpp" name="strings_column_view.hpp" local="no" imported="no">cudf/strings/strings_column_view.hpp</includes>
+    <namespace>cudf</namespace>
+    <namespace>cudf::strings</namespace>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>all_characters_of_type</name>
+      <anchorfile>group__strings__types.html</anchorfile>
+      <anchor>ga77deff73ce80b38908d5b035a9cc3a07</anchor>
+      <arglist>(strings_column_view const &amp;strings, string_character_types types, string_character_types verify_types=string_character_types::ALL_TYPES, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>filter_characters_of_type</name>
+      <anchorfile>group__strings__types.html</anchorfile>
+      <anchor>ga5c6289fb83d3d1da5449ef2ba82985c8</anchor>
+      <arglist>(strings_column_view const &amp;strings, string_character_types types_to_remove, string_scalar const &amp;replacement=string_scalar(&quot;&quot;), string_character_types types_to_keep=string_character_types::ALL_TYPES, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>char_types_enum.hpp</name>
+    <path>/rapids/cudf/cpp/include/cudf/strings/char_types/</path>
+    <filename>char__types__enum_8hpp.html</filename>
     <namespace>cudf</namespace>
     <namespace>cudf::strings</namespace>
     <member kind="enumeration">
@@ -652,32 +674,18 @@
       <arglist></arglist>
     </member>
     <member kind="function">
-      <type>string_character_types</type>
+      <type>constexpr string_character_types</type>
       <name>operator|</name>
       <anchorfile>group__strings__types.html</anchorfile>
-      <anchor>ga15dae9eef4c4616ffdc6711b8a8244f6</anchor>
+      <anchor>ga64fc63aea95eceaa0290d351242644ae</anchor>
       <arglist>(string_character_types lhs, string_character_types rhs)</arglist>
     </member>
     <member kind="function">
-      <type>string_character_types &amp;</type>
+      <type>constexpr string_character_types &amp;</type>
       <name>operator|=</name>
       <anchorfile>group__strings__types.html</anchorfile>
-      <anchor>gab5013a5b428092810b9af777652e864f</anchor>
+      <anchor>ga28486417c4bf467424a9b11c9b8be1db</anchor>
       <arglist>(string_character_types &amp;lhs, string_character_types rhs)</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>all_characters_of_type</name>
-      <anchorfile>group__strings__types.html</anchorfile>
-      <anchor>ga77deff73ce80b38908d5b035a9cc3a07</anchor>
-      <arglist>(strings_column_view const &amp;strings, string_character_types types, string_character_types verify_types=string_character_types::ALL_TYPES, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>filter_characters_of_type</name>
-      <anchorfile>group__strings__types.html</anchorfile>
-      <anchor>ga5c6289fb83d3d1da5449ef2ba82985c8</anchor>
-      <arglist>(strings_column_view const &amp;strings, string_character_types types_to_remove, string_scalar const &amp;replacement=string_scalar(&quot;&quot;), string_character_types types_to_keep=string_character_types::ALL_TYPES, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -21619,20 +21627,6 @@
       <arglist>(strings_column_view const &amp;strings, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>string_character_types</type>
-      <name>operator|</name>
-      <anchorfile>group__strings__types.html</anchorfile>
-      <anchor>ga15dae9eef4c4616ffdc6711b8a8244f6</anchor>
-      <arglist>(string_character_types lhs, string_character_types rhs)</arglist>
-    </member>
-    <member kind="function">
-      <type>string_character_types &amp;</type>
-      <name>operator|=</name>
-      <anchorfile>group__strings__types.html</anchorfile>
-      <anchor>gab5013a5b428092810b9af777652e864f</anchor>
-      <arglist>(string_character_types &amp;lhs, string_character_types rhs)</arglist>
-    </member>
-    <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>all_characters_of_type</name>
       <anchorfile>group__strings__types.html</anchorfile>
@@ -21645,6 +21639,20 @@
       <anchorfile>group__strings__types.html</anchorfile>
       <anchor>ga5c6289fb83d3d1da5449ef2ba82985c8</anchor>
       <arglist>(strings_column_view const &amp;strings, string_character_types types_to_remove, string_scalar const &amp;replacement=string_scalar(&quot;&quot;), string_character_types types_to_keep=string_character_types::ALL_TYPES, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr string_character_types</type>
+      <name>operator|</name>
+      <anchorfile>group__strings__types.html</anchorfile>
+      <anchor>ga64fc63aea95eceaa0290d351242644ae</anchor>
+      <arglist>(string_character_types lhs, string_character_types rhs)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr string_character_types &amp;</type>
+      <name>operator|=</name>
+      <anchorfile>group__strings__types.html</anchorfile>
+      <anchor>ga28486417c4bf467424a9b11c9b8be1db</anchor>
+      <arglist>(string_character_types &amp;lhs, string_character_types rhs)</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -25390,6 +25398,7 @@
     <title>Character Types</title>
     <filename>group__strings__types.html</filename>
     <file>char_types.hpp</file>
+    <file>char_types_enum.hpp</file>
     <member kind="enumeration">
       <type></type>
       <name>string_character_types</name>
@@ -25458,20 +25467,6 @@
       <arglist></arglist>
     </member>
     <member kind="function">
-      <type>string_character_types</type>
-      <name>operator|</name>
-      <anchorfile>group__strings__types.html</anchorfile>
-      <anchor>ga15dae9eef4c4616ffdc6711b8a8244f6</anchor>
-      <arglist>(string_character_types lhs, string_character_types rhs)</arglist>
-    </member>
-    <member kind="function">
-      <type>string_character_types &amp;</type>
-      <name>operator|=</name>
-      <anchorfile>group__strings__types.html</anchorfile>
-      <anchor>gab5013a5b428092810b9af777652e864f</anchor>
-      <arglist>(string_character_types &amp;lhs, string_character_types rhs)</arglist>
-    </member>
-    <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>all_characters_of_type</name>
       <anchorfile>group__strings__types.html</anchorfile>
@@ -25484,6 +25479,20 @@
       <anchorfile>group__strings__types.html</anchorfile>
       <anchor>ga5c6289fb83d3d1da5449ef2ba82985c8</anchor>
       <arglist>(strings_column_view const &amp;strings, string_character_types types_to_remove, string_scalar const &amp;replacement=string_scalar(&quot;&quot;), string_character_types types_to_keep=string_character_types::ALL_TYPES, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr string_character_types</type>
+      <name>operator|</name>
+      <anchorfile>group__strings__types.html</anchorfile>
+      <anchor>ga64fc63aea95eceaa0290d351242644ae</anchor>
+      <arglist>(string_character_types lhs, string_character_types rhs)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr string_character_types &amp;</type>
+      <name>operator|=</name>
+      <anchorfile>group__strings__types.html</anchorfile>
+      <anchor>ga28486417c4bf467424a9b11c9b8be1db</anchor>
+      <arglist>(string_character_types &amp;lhs, string_character_types rhs)</arglist>
     </member>
   </compound>
   <compound kind="group">
