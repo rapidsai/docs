@@ -7,7 +7,7 @@ var indexSectionsWithContent =
   4: "deios",
   5: "c",
   6: "cn",
-  7: "cu",
+  7: "clstu",
   8: "dl"
 };
 
