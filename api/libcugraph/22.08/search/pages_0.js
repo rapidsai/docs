@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['deprecated_20list_988',['Deprecated List',['../deprecated.html',1,'']]]
+  ['libcugraph_985',['libcugraph',['../index.html',1,'']]]
 ];

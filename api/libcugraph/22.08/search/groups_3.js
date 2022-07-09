@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['traversal_20algorithms_986',['Traversal Algorithms',['../group__traversal.html',1,'']]]
+  ['traversal_20algorithms_983',['Traversal Algorithms',['../group__traversal.html',1,'']]]
 ];
