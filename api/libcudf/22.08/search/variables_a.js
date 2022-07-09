@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['keys_3362',['keys',['../structcudf_1_1groupby_1_1groupby_1_1groups.html#a1e2bd7b5cda63cbde54172c7b9e373ef',1,'cudf::groupby::groupby::groups']]],
-  ['keys_5fcolumn_5findex_3363',['keys_column_index',['../classcudf_1_1dictionary__column__view.html#a4d3442f0c83b5f0e0c2e361e6a3d4967',1,'cudf::dictionary_column_view']]],
-  ['kind_3364',['kind',['../classcudf_1_1aggregation.html#af30ac280d80bf088cc1d8e6b98514764',1,'cudf::aggregation']]]
+  ['keys_3366',['keys',['../structcudf_1_1groupby_1_1groupby_1_1groups.html#a1e2bd7b5cda63cbde54172c7b9e373ef',1,'cudf::groupby::groupby::groups']]],
+  ['keys_5fcolumn_5findex_3367',['keys_column_index',['../classcudf_1_1dictionary__column__view.html#a4d3442f0c83b5f0e0c2e361e6a3d4967',1,'cudf::dictionary_column_view']]],
+  ['kind_3368',['kind',['../classcudf_1_1aggregation.html#af30ac280d80bf088cc1d8e6b98514764',1,'cudf::aggregation']]]
 ];

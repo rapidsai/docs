@@ -417,6 +417,20 @@
       <anchor>ga065bbc22dc02e3f4dd04a904c094acca</anchor>
       <arglist>(binary_operator op, cudf::data_type const &amp;lhs, cudf::data_type const &amp;rhs)</arglist>
     </member>
+    <member kind="function">
+      <type>std::pair&lt; rmm::device_buffer, size_type &gt;</type>
+      <name>scalar_col_valid_mask_and</name>
+      <anchorfile>binaryop_8hpp.html</anchorfile>
+      <anchor>a12ea1fe20b89f34cb554c81fc6510f4f</anchor>
+      <arglist>(column_view const &amp;col, scalar const &amp;s, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>apply_sorting_struct_binary_op</name>
+      <anchorfile>binaryop_8hpp.html</anchorfile>
+      <anchor>acfab8cbab25db4bf4b572c7c6e4719fb</anchor>
+      <arglist>(mutable_column_view &amp;out, column_view const &amp;lhs, column_view const &amp;rhs, bool is_lhs_scalar, bool is_rhs_scalar, binary_operator op, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+    </member>
   </compound>
   <compound kind="file">
     <name>bit.hpp</name>
@@ -4461,13 +4475,6 @@
       <name>char_utf8</name>
       <anchorfile>namespacecudf.html</anchorfile>
       <anchor>a0b75348b715cc23b1a6f8b5cf03589cc</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>constexpr cudf::size_type</type>
-      <name>UNKNOWN_STRING_LENGTH</name>
-      <anchorfile>namespacecudf.html</anchorfile>
-      <anchor>a775815a70256b42cf85f3f2c19401b2e</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -16261,6 +16268,13 @@
       <anchor>acf3b4ed335f55b6acb8ab33b470032aa</anchor>
       <arglist>()</arglist>
     </member>
+    <member kind="variable" static="yes">
+      <type>static cudf::size_type const</type>
+      <name>npos</name>
+      <anchorfile>classcudf_1_1string__view.html</anchorfile>
+      <anchor>af82def2c002ead69ab37568c20b5c539</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="class">
     <name>cudf::strings_column_view</name>
@@ -20919,13 +20933,6 @@
       <anchorfile>group__dictionary__classes.html</anchorfile>
       <anchor>ga9498addb2103d4eb7ef489f6065b368d</anchor>
       <arglist>(dictionary_wrapper&lt; Integer &gt; const &amp;lhs, dictionary_wrapper&lt; Integer &gt; const &amp;rhs)</arglist>
-    </member>
-    <member kind="variable">
-      <type>constexpr cudf::size_type</type>
-      <name>UNKNOWN_STRING_LENGTH</name>
-      <anchorfile>namespacecudf.html</anchorfile>
-      <anchor>a775815a70256b42cf85f3f2c19401b2e</anchor>
-      <arglist></arglist>
     </member>
     <member kind="variable">
       <type>constexpr std::size_t</type>
