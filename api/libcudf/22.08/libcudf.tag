@@ -21426,6 +21426,13 @@
       <anchor>a4d98640c8ed25e6e2cd83d0f16ad6cb6</anchor>
       <arglist>(lists_column_view const &amp;input, lists_column_view const &amp;boolean_mask, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>distinct</name>
+      <anchorfile>namespacecudf_1_1lists.html</anchorfile>
+      <anchor>a806da666596c7c0a9d84e768bfabadc9</anchor>
+      <arglist>(lists_column_view const &amp;input, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
   </compound>
   <compound kind="namespace">
     <name>cudf::strings</name>
