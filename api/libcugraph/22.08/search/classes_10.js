@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['sampler_5ft_761',['sampler_t',['../structcugraph_1_1detail_1_1original_1_1uniform__selector__t_1_1sampler__t.html',1,'cugraph::detail::original::uniform_selector_t&lt; graph_type, real_t &gt;::sampler_t'],['../structcugraph_1_1detail_1_1original_1_1biased__selector__t_1_1sampler__t.html',1,'cugraph::detail::original::biased_selector_t&lt; graph_type, real_t &gt;::sampler_t'],['../structcugraph_1_1detail_1_1original_1_1node2vec__selector__t_1_1sampler__t.html',1,'cugraph::detail::original::node2vec_selector_t&lt; graph_type, real_t &gt;::sampler_t']]],
+  ['sampler_5ft_761',['sampler_t',['../structcugraph_1_1detail_1_1original_1_1biased__selector__t_1_1sampler__t.html',1,'cugraph::detail::original::biased_selector_t&lt; graph_type, real_t &gt;::sampler_t'],['../structcugraph_1_1detail_1_1original_1_1uniform__selector__t_1_1sampler__t.html',1,'cugraph::detail::original::uniform_selector_t&lt; graph_type, real_t &gt;::sampler_t'],['../structcugraph_1_1detail_1_1original_1_1node2vec__selector__t_1_1sampler__t.html',1,'cugraph::detail::original::node2vec_selector_t&lt; graph_type, real_t &gt;::sampler_t']]],
   ['sampling_5fparams_5ft_762',['sampling_params_t',['../structcugraph_1_1sampling__params__t.html',1,'cugraph']]],
   ['scc_5fdata_763',['SCC_Data',['../structSCC__Data.html',1,'']]],
   ['search_5fand_5fincrement_5fdegree_5ft_764',['search_and_increment_degree_t',['../structcugraph_1_1detail_1_1search__and__increment__degree__t.html',1,'cugraph::detail']]],

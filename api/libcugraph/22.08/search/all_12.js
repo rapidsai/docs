@@ -2,7 +2,7 @@ var searchData=
 [
   ['sample_5fneighbors_5fadjacency_5flist_398',['sample_neighbors_adjacency_list',['../namespacecugraph.html#afd5b253f2f4e4059ad549b1df511ff3d',1,'cugraph']]],
   ['sample_5fneighbors_5fedgelist_399',['sample_neighbors_edgelist',['../namespacecugraph.html#a09da01b6c3ceb4238fd825a00eb5d9b9',1,'cugraph']]],
-  ['sampler_5ft_400',['sampler_t',['../structcugraph_1_1detail_1_1original_1_1uniform__selector__t_1_1sampler__t.html',1,'cugraph::detail::original::uniform_selector_t&lt; graph_type, real_t &gt;::sampler_t'],['../structcugraph_1_1detail_1_1original_1_1biased__selector__t_1_1sampler__t.html',1,'cugraph::detail::original::biased_selector_t&lt; graph_type, real_t &gt;::sampler_t'],['../structcugraph_1_1detail_1_1original_1_1node2vec__selector__t_1_1sampler__t.html',1,'cugraph::detail::original::node2vec_selector_t&lt; graph_type, real_t &gt;::sampler_t']]],
+  ['sampler_5ft_400',['sampler_t',['../structcugraph_1_1detail_1_1original_1_1biased__selector__t_1_1sampler__t.html',1,'cugraph::detail::original::biased_selector_t&lt; graph_type, real_t &gt;::sampler_t'],['../structcugraph_1_1detail_1_1original_1_1uniform__selector__t_1_1sampler__t.html',1,'cugraph::detail::original::uniform_selector_t&lt; graph_type, real_t &gt;::sampler_t'],['../structcugraph_1_1detail_1_1original_1_1node2vec__selector__t_1_1sampler__t.html',1,'cugraph::detail::original::node2vec_selector_t&lt; graph_type, real_t &gt;::sampler_t']]],
   ['sampling_20algorithms_401',['Sampling algorithms',['../group__sampling.html',1,'']]],
   ['sampling_5fparams_5ft_402',['sampling_params_t',['../structcugraph_1_1sampling__params__t.html',1,'cugraph']]],
   ['scc_5fdata_403',['SCC_Data',['../structSCC__Data.html',1,'']]],
