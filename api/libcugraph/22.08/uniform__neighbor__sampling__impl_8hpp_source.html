@@ -84,175 +84,183 @@ $(function() {
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp;<span class="preprocessor">#include &lt;rmm/device_uvector.hpp&gt;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp;<span class="preprocessor">#include &lt;cugraph-ops/graph/sampling.hpp&gt;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp;<span class="preprocessor">#include &lt;thrust/optional.h&gt;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp;<span class="preprocessor">#ifndef NO_CUGRAPH_OPS</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp;<span class="preprocessor">#include &lt;cugraph-ops/graph/sampling.hpp&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp;<span class="preprocessor">#include &lt;limits&gt;</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;<span class="preprocessor">#include &lt;numeric&gt;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;<span class="preprocessor">#include &lt;type_traits&gt;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;<span class="keyword">namespace </span><a class="code" href="namespacecugraph.html">cugraph</a> {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;<span class="keyword">namespace </span>detail {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> graph_view_t&gt;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;std::tuple&lt;rmm::device_uvector&lt;typename graph_view_t::vertex_type&gt;,</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;           rmm::device_uvector&lt;typename graph_view_t::vertex_type&gt;,</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;           rmm::device_uvector&lt;typename graph_view_t::weight_type&gt;,</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;           rmm::device_uvector&lt;typename graph_view_t::edge_type&gt;&gt;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;uniform_nbr_sample_impl(</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp;  raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;  graph_view_t <span class="keyword">const</span>&amp; graph_view,</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;  rmm::device_uvector&lt;typename graph_view_t::vertex_type&gt;&amp; d_in,</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;  raft::host_span&lt;const int&gt; h_fan_out,</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;  rmm::device_uvector&lt;typename graph_view_t::edge_type&gt; <span class="keyword">const</span>&amp; global_out_degrees,</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;  rmm::device_uvector&lt;typename graph_view_t::edge_type&gt; <span class="keyword">const</span>&amp; global_degree_offsets,</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;  <span class="keywordtype">bool</span> with_replacement,</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;  uint64_t seed)</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;{</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;  <span class="keyword">using</span> vertex_t = <span class="keyword">typename</span> graph_view_t::vertex_type;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;  <span class="keyword">using</span> edge_t   = <span class="keyword">typename</span> graph_view_t::edge_type;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;  <span class="keyword">using</span> weight_t = <span class="keyword">typename</span> graph_view_t::weight_type;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;  <span class="keyword">namespace </span>cugraph_ops = cugraph::ops::gnn::graph;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;<span class="preprocessor">#include &lt;thrust/optional.h&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;<span class="preprocessor">#include &lt;limits&gt;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;<span class="preprocessor">#include &lt;numeric&gt;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;<span class="preprocessor">#include &lt;type_traits&gt;</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;<span class="keyword">namespace </span><a class="code" href="namespacecugraph.html">cugraph</a> {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;<span class="keyword">namespace </span>detail {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> graph_view_t&gt;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;std::tuple&lt;rmm::device_uvector&lt;typename graph_view_t::vertex_type&gt;,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;           rmm::device_uvector&lt;typename graph_view_t::vertex_type&gt;,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;           rmm::device_uvector&lt;typename graph_view_t::weight_type&gt;,</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp;           rmm::device_uvector&lt;typename graph_view_t::edge_type&gt;&gt;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;uniform_nbr_sample_impl(</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;  raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;  graph_view_t <span class="keyword">const</span>&amp; graph_view,</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;  rmm::device_uvector&lt;typename graph_view_t::vertex_type&gt;&amp; d_in,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;  raft::host_span&lt;const int&gt; h_fan_out,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;  rmm::device_uvector&lt;typename graph_view_t::edge_type&gt; <span class="keyword">const</span>&amp; global_out_degrees,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;  rmm::device_uvector&lt;typename graph_view_t::edge_type&gt; <span class="keyword">const</span>&amp; global_degree_offsets,</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;  <span class="keywordtype">bool</span> with_replacement,</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;  uint64_t seed)</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;{</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;  <span class="keyword">using</span> vertex_t = <span class="keyword">typename</span> graph_view_t::vertex_type;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;  <span class="keyword">using</span> edge_t   = <span class="keyword">typename</span> graph_view_t::edge_type;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;  <span class="keyword">using</span> weight_t = <span class="keyword">typename</span> graph_view_t::weight_type;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;  CUGRAPH_EXPECTS(h_fan_out.size() &gt; 0,</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;                  <span class="stringliteral">"Invalid input argument: number of levels must be non-zero."</span>);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp;  rmm::device_uvector&lt;vertex_t&gt; d_result_src(0, handle.get_stream());</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp;  rmm::device_uvector&lt;vertex_t&gt; d_result_dst(0, handle.get_stream());</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp;  <span class="keyword">auto</span> d_result_indices =</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp;    thrust::make_optional(rmm::device_uvector&lt;weight_t&gt;(0, handle.get_stream()));</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp;  <span class="keywordtype">size_t</span> level{0};</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp;  <span class="keywordtype">size_t</span> row_comm_size{1};</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;  <span class="keywordflow">if</span> constexpr (graph_view_t::is_multi_gpu) {</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;    <span class="keyword">auto</span>&amp; row_comm = handle.get_subcomm(<a class="code" href="structcugraph_1_1partition__2d_1_1key__naming__t.html">cugraph::partition_2d::key_naming_t</a>().row_name());</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;    seed += row_comm.get_rank();</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;    row_comm_size = row_comm.get_size();</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;  }</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp;  <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp;&amp; k_level : h_fan_out) {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;    <span class="comment">// prep step for extracting out-degs(sources):</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;    <span class="keywordflow">if</span> constexpr (graph_view_t::is_multi_gpu) {</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp;      d_in = shuffle_int_vertices_by_gpu_id(</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;        handle, std::move(d_in), graph_view.vertex_partition_range_lasts());</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;      d_in = allgather_active_majors(handle, std::move(d_in));</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;    }</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;    rmm::device_uvector&lt;vertex_t&gt; d_out_src(0, handle.get_stream());</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;    rmm::device_uvector&lt;vertex_t&gt; d_out_dst(0, handle.get_stream());</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;    <span class="keyword">auto</span> d_out_indices = std::make_optional(rmm::device_uvector&lt;weight_t&gt;(0, handle.get_stream()));</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp;    <span class="keywordflow">if</span> (k_level != 0) {</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&nbsp;      <span class="comment">// extract out-degs(sources):</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&nbsp;      <span class="keyword">auto</span>&amp;&amp; d_out_degs =</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&nbsp;        get_active_major_global_degrees(handle, graph_view, d_in, global_out_degrees);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp;      <span class="comment">// eliminate 0 degree vertices</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp;      std::tie(d_in, d_out_degs) =</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp;        cugraph::detail::filter_degree_0_vertices(handle, std::move(d_in), std::move(d_out_degs));</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&nbsp; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp;      <span class="comment">// segmented-random-generation of indices:</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&nbsp;      rmm::device_uvector&lt;edge_t&gt; d_rnd_indices(d_in.size() * k_level, handle.get_stream());</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;<span class="preprocessor">#ifdef NO_CUGRAPH_OPS</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;  CUGRAPH_FAIL(</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp;    <span class="stringliteral">"uniform_nbr_sampl_impl not supported in this configuration, built with NO_CUGRAPH_OPS"</span>);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp;  <span class="keyword">namespace </span>cugraph_ops = cugraph::ops::gnn::graph;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp;  CUGRAPH_EXPECTS(h_fan_out.size() &gt; 0,</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp;                  <span class="stringliteral">"Invalid input argument: number of levels must be non-zero."</span>);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp;  rmm::device_uvector&lt;vertex_t&gt; d_result_src(0, handle.get_stream());</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;  rmm::device_uvector&lt;vertex_t&gt; d_result_dst(0, handle.get_stream());</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;  <span class="keyword">auto</span> d_result_indices =</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;    thrust::make_optional(rmm::device_uvector&lt;weight_t&gt;(0, handle.get_stream()));</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;  <span class="keywordtype">size_t</span> level{0};</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;  <span class="keywordtype">size_t</span> row_comm_size{1};</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;  <span class="keywordflow">if</span> constexpr (graph_view_t::is_multi_gpu) {</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;    <span class="keyword">auto</span>&amp; row_comm = handle.get_subcomm(<a class="code" href="structcugraph_1_1partition__2d_1_1key__naming__t.html">cugraph::partition_2d::key_naming_t</a>().row_name());</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp;    seed += row_comm.get_rank();</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;    row_comm_size = row_comm.get_size();</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;  }</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp;  <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp;&amp; k_level : h_fan_out) {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;    <span class="comment">// prep step for extracting out-degs(sources):</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;    <span class="keywordflow">if</span> constexpr (graph_view_t::is_multi_gpu) {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;      d_in = shuffle_int_vertices_by_gpu_id(</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp;        handle, std::move(d_in), graph_view.vertex_partition_range_lasts());</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp;      d_in = allgather_active_majors(handle, std::move(d_in));</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&nbsp;    }</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&nbsp; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&nbsp;    rmm::device_uvector&lt;vertex_t&gt; d_out_src(0, handle.get_stream());</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp;    rmm::device_uvector&lt;vertex_t&gt; d_out_dst(0, handle.get_stream());</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp;    <span class="keyword">auto</span> d_out_indices = std::make_optional(rmm::device_uvector&lt;weight_t&gt;(0, handle.get_stream()));</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp;    <span class="keywordflow">if</span> (k_level != 0) {</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&nbsp;      <span class="comment">// extract out-degs(sources):</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp;      <span class="keyword">auto</span>&amp;&amp; d_out_degs =</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&nbsp;        get_active_major_global_degrees(handle, graph_view, d_in, global_out_degrees);</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&nbsp; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp;      raft::random::RngState rng_state(seed);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp;      seed += d_rnd_indices.size() * row_comm_size;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&nbsp; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&nbsp;      <span class="keywordflow">if</span> (d_rnd_indices.size() &gt; 0) {</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&nbsp;        <span class="comment">// FIXME: This cugraph_ops function does not handle 0 inputs properly</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&nbsp;        cugraph_ops::get_sampling_index(d_rnd_indices.data(),</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&nbsp;                                        rng_state,</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp;                                        d_out_degs.data(),</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp;                                        <span class="keyword">static_cast&lt;</span>edge_t<span class="keyword">&gt;</span>(d_out_degs.size()),</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp;                                        <span class="keyword">static_cast&lt;</span>int32_t<span class="keyword">&gt;</span>(k_level),</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&nbsp;                                        with_replacement,</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&nbsp;                                        handle.get_stream());</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&nbsp;      }</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&nbsp; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&nbsp;      std::tie(d_out_src, d_out_dst, d_out_indices) =</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&nbsp;        gather_local_edges(handle,</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&nbsp;                           graph_view,</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&nbsp;                           d_in,</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&nbsp;                           std::move(d_rnd_indices),</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&nbsp;                           <span class="keyword">static_cast&lt;</span>edge_t<span class="keyword">&gt;</span>(k_level),</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&nbsp;                           global_degree_offsets);</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&nbsp;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&nbsp;      std::tie(d_out_src, d_out_dst, d_out_indices) =</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&nbsp;        gather_one_hop_edgelist(handle, graph_view, d_in);</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&nbsp;    }</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp;    <span class="comment">// resize accumulators:</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp;    <span class="keyword">auto</span> old_sz = d_result_dst.size();</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&nbsp;    <span class="keyword">auto</span> add_sz = d_out_dst.size();</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&nbsp;    <span class="keyword">auto</span> new_sz = old_sz + add_sz;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&nbsp; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&nbsp;    d_result_src.resize(new_sz, handle.get_stream());</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&nbsp;    d_result_dst.resize(new_sz, handle.get_stream());</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&nbsp;    d_result_indices-&gt;resize(new_sz, handle.get_stream());</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&nbsp; </div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&nbsp;    raft::copy(</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&nbsp;      d_result_src.begin() + old_sz, d_out_src.begin(), d_out_src.size(), handle.get_stream());</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&nbsp;    raft::copy(</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&nbsp;      d_result_dst.begin() + old_sz, d_out_dst.begin(), d_out_dst.size(), handle.get_stream());</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&nbsp;    raft::copy(d_result_indices-&gt;begin() + old_sz,</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&nbsp;               d_out_indices-&gt;begin(),</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&nbsp;               d_out_indices-&gt;size(),</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&nbsp;               handle.get_stream());</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&nbsp; </div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&nbsp;    d_in = std::move(d_out_dst);</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&nbsp; </div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&nbsp;    ++level;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&nbsp;  }</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&nbsp; </div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&nbsp;  <span class="keywordflow">return</span> count_and_remove_duplicates&lt;vertex_t, edge_t, weight_t&gt;(</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&nbsp;    handle, std::move(d_result_src), std::move(d_result_dst), std::move(*d_result_indices));</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&nbsp;}</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&nbsp;}  <span class="comment">// namespace detail</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&nbsp; </div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t,</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&nbsp;          <span class="keyword">typename</span> edge_t,</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&nbsp;          <span class="keyword">typename</span> weight_t,</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&nbsp;          <span class="keywordtype">bool</span> store_transposed,</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&nbsp;          <span class="keywordtype">bool</span> multi_gpu&gt;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&nbsp;std::tuple&lt;rmm::device_uvector&lt;vertex_t&gt;,</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&nbsp;           rmm::device_uvector&lt;vertex_t&gt;,</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&nbsp;           rmm::device_uvector&lt;weight_t&gt;,</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&nbsp;           rmm::device_uvector&lt;edge_t&gt;&gt;</div>
-<div class="line"><a name="l00168"></a><span class="lineno"><a class="line" href="namespacecugraph.html#ab335b5152a7f973af866b6fe347d0e84">  168</a></span>&nbsp;<a class="code" href="namespacecugraph.html#ab335b5152a7f973af866b6fe347d0e84">uniform_nbr_sample</a>(</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&nbsp;  raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&nbsp;  <a class="code" href="classcugraph_1_1graph__view__t.html">graph_view_t&lt;vertex_t, edge_t, weight_t, store_transposed, multi_gpu&gt;</a> <span class="keyword">const</span>&amp; graph_view,</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&nbsp;  raft::device_span&lt;vertex_t&gt; starting_vertices,</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&nbsp;  raft::host_span&lt;const int&gt; fan_out,</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&nbsp;  <span class="keywordtype">bool</span> with_replacement,</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&nbsp;  uint64_t seed)</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&nbsp;{</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&nbsp;  rmm::device_uvector&lt;vertex_t&gt; d_start_vs(starting_vertices.size(), handle.get_stream());</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&nbsp;  raft::copy(</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&nbsp;    d_start_vs.data(), starting_vertices.data(), starting_vertices.size(), handle.get_stream());</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&nbsp; </div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&nbsp;  <span class="comment">// preamble step for out-degree info:</span></div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&nbsp;  <span class="comment">//</span></div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&nbsp;  <span class="keyword">auto</span>&amp;&amp; [global_degree_offsets, global_out_degrees] =</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&nbsp;    detail::get_global_degree_information(handle, graph_view);</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&nbsp; </div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&nbsp;  <span class="keywordflow">return</span> detail::uniform_nbr_sample_impl(handle,</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&nbsp;                                         graph_view,</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&nbsp;                                         d_start_vs,</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&nbsp;                                         fan_out,</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&nbsp;                                         global_out_degrees,</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&nbsp;                                         global_degree_offsets,</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&nbsp;                                         with_replacement,</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&nbsp;                                         seed);</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&nbsp;}</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&nbsp; </div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&nbsp;}  <span class="comment">// namespace cugraph</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp;      <span class="comment">// eliminate 0 degree vertices</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp;      std::tie(d_in, d_out_degs) =</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&nbsp;        cugraph::detail::filter_degree_0_vertices(handle, std::move(d_in), std::move(d_out_degs));</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&nbsp; </div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&nbsp;      <span class="comment">// segmented-random-generation of indices:</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&nbsp;      rmm::device_uvector&lt;edge_t&gt; d_rnd_indices(d_in.size() * k_level, handle.get_stream());</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&nbsp; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp;      raft::random::RngState rng_state(seed);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp;      seed += d_rnd_indices.size() * row_comm_size;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&nbsp;      <span class="keywordflow">if</span> (d_rnd_indices.size() &gt; 0) {</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&nbsp;        <span class="comment">// FIXME: This cugraph_ops function does not handle 0 inputs properly</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&nbsp;        cugraph_ops::get_sampling_index(d_rnd_indices.data(),</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&nbsp;                                        rng_state,</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&nbsp;                                        d_out_degs.data(),</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&nbsp;                                        <span class="keyword">static_cast&lt;</span>edge_t<span class="keyword">&gt;</span>(d_out_degs.size()),</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&nbsp;                                        <span class="keyword">static_cast&lt;</span>int32_t<span class="keyword">&gt;</span>(k_level),</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&nbsp;                                        with_replacement,</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&nbsp;                                        handle.get_stream());</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&nbsp;      }</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&nbsp; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&nbsp;      std::tie(d_out_src, d_out_dst, d_out_indices) =</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&nbsp;        gather_local_edges(handle,</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&nbsp;                           graph_view,</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&nbsp;                           d_in,</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp;                           std::move(d_rnd_indices),</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp;                           <span class="keyword">static_cast&lt;</span>edge_t<span class="keyword">&gt;</span>(k_level),</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp;                           global_degree_offsets);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&nbsp;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&nbsp;      std::tie(d_out_src, d_out_dst, d_out_indices) =</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&nbsp;        gather_one_hop_edgelist(handle, graph_view, d_in);</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&nbsp;    }</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&nbsp; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&nbsp;    <span class="comment">// resize accumulators:</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&nbsp;    <span class="keyword">auto</span> old_sz = d_result_dst.size();</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&nbsp;    <span class="keyword">auto</span> add_sz = d_out_dst.size();</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&nbsp;    <span class="keyword">auto</span> new_sz = old_sz + add_sz;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&nbsp; </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&nbsp;    d_result_src.resize(new_sz, handle.get_stream());</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&nbsp;    d_result_dst.resize(new_sz, handle.get_stream());</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&nbsp;    d_result_indices-&gt;resize(new_sz, handle.get_stream());</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&nbsp; </div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&nbsp;    raft::copy(</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&nbsp;      d_result_src.begin() + old_sz, d_out_src.begin(), d_out_src.size(), handle.get_stream());</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&nbsp;    raft::copy(</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&nbsp;      d_result_dst.begin() + old_sz, d_out_dst.begin(), d_out_dst.size(), handle.get_stream());</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&nbsp;    raft::copy(d_result_indices-&gt;begin() + old_sz,</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&nbsp;               d_out_indices-&gt;begin(),</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&nbsp;               d_out_indices-&gt;size(),</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&nbsp;               handle.get_stream());</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&nbsp; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&nbsp;    d_in = std::move(d_out_dst);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&nbsp; </div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&nbsp;    ++level;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&nbsp;  }</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&nbsp; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&nbsp;  <span class="keywordflow">return</span> count_and_remove_duplicates&lt;vertex_t, edge_t, weight_t&gt;(</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&nbsp;    handle, std::move(d_result_src), std::move(d_result_dst), std::move(*d_result_indices));</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&nbsp;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&nbsp;}</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&nbsp;}  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&nbsp; </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t,</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&nbsp;          <span class="keyword">typename</span> edge_t,</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&nbsp;          <span class="keyword">typename</span> weight_t,</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&nbsp;          <span class="keywordtype">bool</span> store_transposed,</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&nbsp;          <span class="keywordtype">bool</span> multi_gpu&gt;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&nbsp;std::tuple&lt;rmm::device_uvector&lt;vertex_t&gt;,</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&nbsp;           rmm::device_uvector&lt;vertex_t&gt;,</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&nbsp;           rmm::device_uvector&lt;weight_t&gt;,</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&nbsp;           rmm::device_uvector&lt;edge_t&gt;&gt;</div>
+<div class="line"><a name="l00176"></a><span class="lineno"><a class="line" href="namespacecugraph.html#ab335b5152a7f973af866b6fe347d0e84">  176</a></span>&nbsp;<a class="code" href="namespacecugraph.html#ab335b5152a7f973af866b6fe347d0e84">uniform_nbr_sample</a>(</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&nbsp;  raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&nbsp;  <a class="code" href="classcugraph_1_1graph__view__t.html">graph_view_t&lt;vertex_t, edge_t, weight_t, store_transposed, multi_gpu&gt;</a> <span class="keyword">const</span>&amp; graph_view,</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&nbsp;  raft::device_span&lt;vertex_t&gt; starting_vertices,</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&nbsp;  raft::host_span&lt;const int&gt; fan_out,</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&nbsp;  <span class="keywordtype">bool</span> with_replacement,</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&nbsp;  uint64_t seed)</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&nbsp;{</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&nbsp;  rmm::device_uvector&lt;vertex_t&gt; d_start_vs(starting_vertices.size(), handle.get_stream());</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&nbsp;  raft::copy(</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&nbsp;    d_start_vs.data(), starting_vertices.data(), starting_vertices.size(), handle.get_stream());</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&nbsp; </div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&nbsp;  <span class="comment">// preamble step for out-degree info:</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&nbsp;  <span class="comment">//</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&nbsp;  <span class="keyword">auto</span>&amp;&amp; [global_degree_offsets, global_out_degrees] =</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&nbsp;    detail::get_global_degree_information(handle, graph_view);</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&nbsp; </div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&nbsp;  <span class="keywordflow">return</span> detail::uniform_nbr_sample_impl(handle,</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&nbsp;                                         graph_view,</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&nbsp;                                         d_start_vs,</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&nbsp;                                         fan_out,</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&nbsp;                                         global_out_degrees,</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&nbsp;                                         global_degree_offsets,</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&nbsp;                                         with_replacement,</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&nbsp;                                         seed);</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&nbsp;}</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&nbsp; </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&nbsp;}  <span class="comment">// namespace cugraph</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasscugraph_1_1graph__view__t_html"><div class="ttname"><a href="classcugraph_1_1graph__view__t.html">cugraph::graph_view_t</a></div><div class="ttdef"><b>Definition:</b> graph_view.hpp:391</div></div>
-<div class="ttc" id="anamespacecugraph_html_ab335b5152a7f973af866b6fe347d0e84"><div class="ttname"><a href="namespacecugraph.html#ab335b5152a7f973af866b6fe347d0e84">cugraph::uniform_nbr_sample</a></div><div class="ttdeci">std::tuple&lt; rmm::device_uvector&lt; vertex_t &gt;, rmm::device_uvector&lt; vertex_t &gt;, rmm::device_uvector&lt; weight_t &gt;, rmm::device_uvector&lt; edge_t &gt; &gt; uniform_nbr_sample(raft::handle_t const &amp;handle, graph_view_t&lt; vertex_t, edge_t, weight_t, store_transposed, multi_gpu &gt; const &amp;graph_view, raft::device_span&lt; vertex_t &gt; starting_vertices, raft::host_span&lt; const int &gt; fan_out, bool with_replacement, uint64_t seed)</div><div class="ttdoc">Uniform Neighborhood Sampling.</div><div class="ttdef"><b>Definition:</b> uniform_neighbor_sampling_impl.hpp:168</div></div>
+<div class="ttc" id="anamespacecugraph_html_ab335b5152a7f973af866b6fe347d0e84"><div class="ttname"><a href="namespacecugraph.html#ab335b5152a7f973af866b6fe347d0e84">cugraph::uniform_nbr_sample</a></div><div class="ttdeci">std::tuple&lt; rmm::device_uvector&lt; vertex_t &gt;, rmm::device_uvector&lt; vertex_t &gt;, rmm::device_uvector&lt; weight_t &gt;, rmm::device_uvector&lt; edge_t &gt; &gt; uniform_nbr_sample(raft::handle_t const &amp;handle, graph_view_t&lt; vertex_t, edge_t, weight_t, store_transposed, multi_gpu &gt; const &amp;graph_view, raft::device_span&lt; vertex_t &gt; starting_vertices, raft::host_span&lt; const int &gt; fan_out, bool with_replacement, uint64_t seed)</div><div class="ttdoc">Uniform Neighborhood Sampling.</div><div class="ttdef"><b>Definition:</b> uniform_neighbor_sampling_impl.hpp:176</div></div>
 <div class="ttc" id="anamespacecugraph_html"><div class="ttname"><a href="namespacecugraph.html">cugraph</a></div><div class="ttdoc">Set of classes abstracting the type-erasure, templates, and template constraints to client code that ...</div><div class="ttdef"><b>Definition:</b> abstract_functor.hpp:22</div></div>
 <div class="ttc" id="astructcugraph_1_1partition__2d_1_1key__naming__t_html"><div class="ttname"><a href="structcugraph_1_1partition__2d_1_1key__naming__t.html">cugraph::partition_2d::key_naming_t</a></div><div class="ttdef"><b>Definition:</b> partition_manager.hpp:34</div></div>
 <!-- start footer part -->
