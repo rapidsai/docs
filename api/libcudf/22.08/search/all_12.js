@@ -26,7 +26,7 @@ var searchData=
   ['read_5fraw_5forc_5fstatistics_1328',['read_raw_orc_statistics',['../group__io__readers.html#ga8045a73a80008301deb2c8d08ece0c14',1,'cudf::io']]],
   ['readnextmessage_1329',['ReadNextMessage',['../classCudaMessageReader.html#acd8d2f543a4c7e6bef2dcc4e1c318eb3',1,'CudaMessageReader']]],
   ['rebind_1330',['rebind',['https://docs.rapids.ai/api/librmm/22.08/structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html',1,'rmm::mr::thrust_allocator::rebind&lt; class &gt;'],['https://docs.rapids.ai/api/librmm/22.08/structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html',1,'rmm::mr::stream_allocator_adaptor::rebind&lt; class &gt;']]],
-  ['reduce_1331',['reduce',['../group__aggregation__reduction.html#gaabf4fa288981643cca147633bdf58035',1,'cudf']]],
+  ['reduce_1331',['reduce',['../group__aggregation__reduction.html#gaabf4fa288981643cca147633bdf58035',1,'cudf::reduce(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())'],['../group__aggregation__reduction.html#gac3c645be6677e326bea98fe901665d50',1,'cudf::reduce(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, std::optional&lt; std::reference_wrapper&lt; scalar const &gt;&gt; init, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())']]],
   ['reduce_5faggregation_1332',['reduce_aggregation',['../classcudf_1_1reduce__aggregation.html',1,'cudf']]],
   ['reduction_2ehpp_1333',['reduction.hpp',['../reduction_8hpp.html',1,'']]],
   ['reference_1334',['reference',['../classcudf_1_1detail_1_1span__base.html#aa6986fc5b58efff9bafbf0d1582a5021',1,'cudf::detail::span_base']]],

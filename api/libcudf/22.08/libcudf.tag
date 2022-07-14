@@ -3522,11 +3522,25 @@
       <arglist>(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
+      <type>std::unique_ptr&lt; scalar &gt;</type>
+      <name>reduce</name>
+      <anchorfile>group__aggregation__reduction.html</anchorfile>
+      <anchor>gac3c645be6677e326bea98fe901665d50</anchor>
+      <arglist>(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, std::optional&lt; std::reference_wrapper&lt; scalar const &gt;&gt; init, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>segmented_reduce</name>
       <anchorfile>group__aggregation__reduction.html</anchorfile>
       <anchor>gae36b126703c20e1836f5eb02adaa965d</anchor>
       <arglist>(column_view const &amp;segmented_values, device_span&lt; size_type const &gt; offsets, segmented_reduce_aggregation const &amp;agg, data_type output_dtype, null_policy null_handling, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>segmented_reduce</name>
+      <anchorfile>group__aggregation__reduction.html</anchorfile>
+      <anchor>gaade4393b8cd1fa9ddfec0f3f1e7f63cf</anchor>
+      <arglist>(column_view const &amp;segmented_values, device_span&lt; size_type const &gt; offsets, segmented_reduce_aggregation const &amp;agg, data_type output_dtype, null_policy null_handling, std::optional&lt; std::reference_wrapper&lt; scalar const &gt;&gt; init, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -19843,11 +19857,25 @@
       <arglist>(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
+      <type>std::unique_ptr&lt; scalar &gt;</type>
+      <name>reduce</name>
+      <anchorfile>group__aggregation__reduction.html</anchorfile>
+      <anchor>gac3c645be6677e326bea98fe901665d50</anchor>
+      <arglist>(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, std::optional&lt; std::reference_wrapper&lt; scalar const &gt;&gt; init, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>segmented_reduce</name>
       <anchorfile>group__aggregation__reduction.html</anchorfile>
       <anchor>gae36b126703c20e1836f5eb02adaa965d</anchor>
       <arglist>(column_view const &amp;segmented_values, device_span&lt; size_type const &gt; offsets, segmented_reduce_aggregation const &amp;agg, data_type output_dtype, null_policy null_handling, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>segmented_reduce</name>
+      <anchorfile>group__aggregation__reduction.html</anchorfile>
+      <anchor>gaade4393b8cd1fa9ddfec0f3f1e7f63cf</anchor>
+      <arglist>(column_view const &amp;segmented_values, device_span&lt; size_type const &gt; offsets, segmented_reduce_aggregation const &amp;agg, data_type output_dtype, null_policy null_handling, std::optional&lt; std::reference_wrapper&lt; scalar const &gt;&gt; init, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -24410,11 +24438,25 @@
       <arglist>(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
+      <type>std::unique_ptr&lt; scalar &gt;</type>
+      <name>reduce</name>
+      <anchorfile>group__aggregation__reduction.html</anchorfile>
+      <anchor>gac3c645be6677e326bea98fe901665d50</anchor>
+      <arglist>(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, std::optional&lt; std::reference_wrapper&lt; scalar const &gt;&gt; init, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>segmented_reduce</name>
       <anchorfile>group__aggregation__reduction.html</anchorfile>
       <anchor>gae36b126703c20e1836f5eb02adaa965d</anchor>
       <arglist>(column_view const &amp;segmented_values, device_span&lt; size_type const &gt; offsets, segmented_reduce_aggregation const &amp;agg, data_type output_dtype, null_policy null_handling, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>segmented_reduce</name>
+      <anchorfile>group__aggregation__reduction.html</anchorfile>
+      <anchor>gaade4393b8cd1fa9ddfec0f3f1e7f63cf</anchor>
+      <arglist>(column_view const &amp;segmented_values, device_span&lt; size_type const &gt; offsets, segmented_reduce_aggregation const &amp;agg, data_type output_dtype, null_policy null_handling, std::optional&lt; std::reference_wrapper&lt; scalar const &gt;&gt; init, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
