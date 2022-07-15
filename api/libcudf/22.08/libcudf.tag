@@ -4667,6 +4667,13 @@
       <arglist>(table_view const &amp;input)</arglist>
     </member>
     <member kind="function">
+      <type>std::vector&lt; column_view &gt;</type>
+      <name>get_nullable_columns</name>
+      <anchorfile>namespacecudf.html</anchorfile>
+      <anchor>a1688bb7b38cd35ff65baad766314a41b</anchor>
+      <arglist>(table_view const &amp;table)</arglist>
+    </member>
+    <member kind="function">
       <type>bool</type>
       <name>have_same_types</name>
       <anchorfile>namespacecudf.html</anchorfile>
@@ -20408,6 +20415,13 @@
       <anchorfile>namespacecudf.html</anchorfile>
       <anchor>a6e88bcc8b11230b602d828b692636c55</anchor>
       <arglist>(table_view const &amp;input)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::vector&lt; column_view &gt;</type>
+      <name>get_nullable_columns</name>
+      <anchorfile>namespacecudf.html</anchorfile>
+      <anchor>a1688bb7b38cd35ff65baad766314a41b</anchor>
+      <arglist>(table_view const &amp;table)</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
