@@ -1,16 +1,16 @@
 var searchData=
 [
-  ['pagerank_358',['pagerank',['../namespacecugraph.html#a7d8670fded63928475f245d51e797903',1,'cugraph']]],
-  ['pair_5fto_5fbinary_5fpartition_5fid_5ft_359',['pair_to_binary_partition_id_t',['../structcugraph_1_1detail_1_1pair__to__binary__partition__id__t.html',1,'cugraph::detail']]],
-  ['partition_5ft_360',['partition_t',['../classcugraph_1_1partition__t.html',1,'cugraph']]],
-  ['per_5fv_5ftransform_5freduce_5fdst_5fkey_5faggregated_5foutgoing_5fe_361',['per_v_transform_reduce_dst_key_aggregated_outgoing_e',['../namespacecugraph.html#a0811dffc32d48b6b948ba3b6c974b49d',1,'cugraph']]],
-  ['per_5fv_5ftransform_5freduce_5fincoming_5fe_362',['per_v_transform_reduce_incoming_e',['../namespacecugraph.html#afe2e5b181bb7992f1c6c3425936f8e62',1,'cugraph']]],
-  ['per_5fv_5ftransform_5freduce_5foutgoing_5fe_363',['per_v_transform_reduce_outgoing_e',['../namespacecugraph.html#a2cf0615480752ade1ea7c1fd7f5447ce',1,'cugraph']]],
-  ['permutation_5ffunctor_364',['permutation_functor',['../structcugraph_1_1detail_1_1permutation__functor.html',1,'cugraph::detail']]],
-  ['pick_5fmin_5fdegree_5ft_365',['pick_min_degree_t',['../structcugraph_1_1detail_1_1pick__min__degree__t.html',1,'cugraph::detail']]],
-  ['plus_366',['plus',['../structcugraph_1_1reduce__op_1_1plus.html',1,'cugraph::reduce_op']]],
-  ['property_5fop_367',['property_op',['../structcugraph_1_1property__op.html',1,'cugraph']]],
-  ['property_5fop_3c_20t_2c_20thrust_3a_3aplus_20_3e_368',['property_op&lt; T, thrust::plus &gt;',['../structcugraph_1_1property__op.html',1,'cugraph']]],
-  ['property_5fop_3c_20thrust_3a_3atuple_3c_20args_2e_2e_2e_20_3e_2c_20op_20_3e_369',['property_op&lt; thrust::tuple&lt; Args... &gt;, Op &gt;',['../structcugraph_1_1property__op_3_01thrust_1_1tuple_3_01Args_8_8_8_01_4_00_01Op_01_4.html',1,'cugraph']]],
-  ['property_5fop_3c_20value_5ftype_2c_20thrust_3a_3aplus_20_3e_370',['property_op&lt; value_type, thrust::plus &gt;',['../structcugraph_1_1property__op.html',1,'cugraph']]]
+  ['pagerank_360',['pagerank',['../namespacecugraph.html#a7d8670fded63928475f245d51e797903',1,'cugraph']]],
+  ['pair_5fto_5fbinary_5fpartition_5fid_5ft_361',['pair_to_binary_partition_id_t',['../structcugraph_1_1detail_1_1pair__to__binary__partition__id__t.html',1,'cugraph::detail']]],
+  ['partition_5ft_362',['partition_t',['../classcugraph_1_1partition__t.html',1,'cugraph']]],
+  ['per_5fv_5ftransform_5freduce_5fdst_5fkey_5faggregated_5foutgoing_5fe_363',['per_v_transform_reduce_dst_key_aggregated_outgoing_e',['../namespacecugraph.html#a0811dffc32d48b6b948ba3b6c974b49d',1,'cugraph']]],
+  ['per_5fv_5ftransform_5freduce_5fincoming_5fe_364',['per_v_transform_reduce_incoming_e',['../namespacecugraph.html#afe2e5b181bb7992f1c6c3425936f8e62',1,'cugraph']]],
+  ['per_5fv_5ftransform_5freduce_5foutgoing_5fe_365',['per_v_transform_reduce_outgoing_e',['../namespacecugraph.html#a2cf0615480752ade1ea7c1fd7f5447ce',1,'cugraph']]],
+  ['permutation_5ffunctor_366',['permutation_functor',['../structcugraph_1_1detail_1_1permutation__functor.html',1,'cugraph::detail']]],
+  ['pick_5fmin_5fdegree_5ft_367',['pick_min_degree_t',['../structcugraph_1_1detail_1_1pick__min__degree__t.html',1,'cugraph::detail']]],
+  ['plus_368',['plus',['../structcugraph_1_1reduce__op_1_1plus.html',1,'cugraph::reduce_op']]],
+  ['property_5fop_369',['property_op',['../structcugraph_1_1property__op.html',1,'cugraph']]],
+  ['property_5fop_3c_20t_2c_20thrust_3a_3aplus_20_3e_370',['property_op&lt; T, thrust::plus &gt;',['../structcugraph_1_1property__op.html',1,'cugraph']]],
+  ['property_5fop_3c_20thrust_3a_3atuple_3c_20args_2e_2e_2e_20_3e_2c_20op_20_3e_371',['property_op&lt; thrust::tuple&lt; Args... &gt;, Op &gt;',['../structcugraph_1_1property__op_3_01thrust_1_1tuple_3_01Args_8_8_8_01_4_00_01Op_01_4.html',1,'cugraph']]],
+  ['property_5fop_3c_20value_5ftype_2c_20thrust_3a_3aplus_20_3e_372',['property_op&lt; value_type, thrust::plus &gt;',['../structcugraph_1_1property__op.html',1,'cugraph']]]
 ];
