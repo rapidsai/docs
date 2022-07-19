@@ -351,6 +351,7 @@
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edcaaf5a744d55583fdb1af0f280f12c9ab1">PMOD</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edca36aaf571a1008bd43f47509344cd13ad">PYMOD</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edca17faf4e999b8cee4c36915c1f54ccffe">POW</enumvalue>
+      <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edcad41167c344e1771b57cbbf5df6633a90">INT_POW</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edca21fb6e241507492d75c488a9c65d12fe">LOG_BASE</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edcaf8d5f387d3ac8f7084ae44566b32acb2">ATAN2</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edcab11947742cdeb1e9d0b493239416e885">SHIFT_LEFT</enumvalue>
@@ -18384,6 +18385,7 @@
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edcaaf5a744d55583fdb1af0f280f12c9ab1">PMOD</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edca36aaf571a1008bd43f47509344cd13ad">PYMOD</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edca17faf4e999b8cee4c36915c1f54ccffe">POW</enumvalue>
+      <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edcad41167c344e1771b57cbbf5df6633a90">INT_POW</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edca21fb6e241507492d75c488a9c65d12fe">LOG_BASE</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edcaf8d5f387d3ac8f7084ae44566b32acb2">ATAN2</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edcab11947742cdeb1e9d0b493239416e885">SHIFT_LEFT</enumvalue>
@@ -24699,6 +24701,7 @@
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edcaaf5a744d55583fdb1af0f280f12c9ab1">PMOD</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edca36aaf571a1008bd43f47509344cd13ad">PYMOD</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edca17faf4e999b8cee4c36915c1f54ccffe">POW</enumvalue>
+      <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edcad41167c344e1771b57cbbf5df6633a90">INT_POW</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edca21fb6e241507492d75c488a9c65d12fe">LOG_BASE</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edcaf8d5f387d3ac8f7084ae44566b32acb2">ATAN2</enumvalue>
       <enumvalue file="group__transformation__binaryops.html" anchor="gga00ed76601b6db662550f6826cfd99edcab11947742cdeb1e9d0b493239416e885">SHIFT_LEFT</enumvalue>

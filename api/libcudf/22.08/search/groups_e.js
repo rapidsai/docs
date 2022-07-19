@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quantiles_3841',['Quantiles',['../group__column__quantiles.html',1,'']]]
+  ['quantiles_3843',['Quantiles',['../group__column__quantiles.html',1,'']]]
 ];

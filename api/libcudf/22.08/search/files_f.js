@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quantiles_2ehpp_2213',['quantiles.hpp',['../quantiles_8hpp.html',1,'']]]
+  ['quantiles_2ehpp_2214',['quantiles.hpp',['../quantiles_8hpp.html',1,'']]]
 ];
