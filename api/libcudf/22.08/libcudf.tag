@@ -2816,25 +2816,11 @@
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>inner_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>ga732393714ffa745550b6337f77abde2a</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;, std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt; &gt;</type>
       <name>left_join</name>
       <anchorfile>group__column__join.html</anchorfile>
       <anchor>gaaaa890f40b28e6974c44ec8ed6da8621</anchor>
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>left_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>gaf64f07de5b36fa42142b1057cd621d84</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;, std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt; &gt;</type>
@@ -2844,13 +2830,6 @@
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>full_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>ga72e6530a4edee4e353b8f5cbdab99813</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
       <type>std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;</type>
       <name>left_semi_join</name>
       <anchorfile>group__column__join.html</anchorfile>
@@ -2858,25 +2837,11 @@
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>left_semi_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>gaefe0ccca650f0e61a2a02b6aa3679ecd</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
       <type>std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;</type>
       <name>left_anti_join</name>
       <anchorfile>group__column__join.html</anchorfile>
       <anchor>ga6067d4dd5851b2c9f7ebe616e52fae24</anchor>
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>left_anti_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>ga5e1f49189fa6e380d45719ce8370ff04</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; cudf::table &gt;</type>
@@ -19509,25 +19474,11 @@
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>inner_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>ga732393714ffa745550b6337f77abde2a</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;, std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt; &gt;</type>
       <name>left_join</name>
       <anchorfile>group__column__join.html</anchorfile>
       <anchor>gaaaa890f40b28e6974c44ec8ed6da8621</anchor>
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>left_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>gaf64f07de5b36fa42142b1057cd621d84</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;, std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt; &gt;</type>
@@ -19537,13 +19488,6 @@
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>full_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>ga72e6530a4edee4e353b8f5cbdab99813</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
       <type>std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;</type>
       <name>left_semi_join</name>
       <anchorfile>group__column__join.html</anchorfile>
@@ -19551,25 +19495,11 @@
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>left_semi_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>gaefe0ccca650f0e61a2a02b6aa3679ecd</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
       <type>std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;</type>
       <name>left_anti_join</name>
       <anchorfile>group__column__join.html</anchorfile>
       <anchor>ga6067d4dd5851b2c9f7ebe616e52fae24</anchor>
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>left_anti_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>ga5e1f49189fa6e380d45719ce8370ff04</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; cudf::table &gt;</type>
@@ -23934,25 +23864,11 @@
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>inner_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>ga732393714ffa745550b6337f77abde2a</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;, std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt; &gt;</type>
       <name>left_join</name>
       <anchorfile>group__column__join.html</anchorfile>
       <anchor>gaaaa890f40b28e6974c44ec8ed6da8621</anchor>
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>left_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>gaf64f07de5b36fa42142b1057cd621d84</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;, std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt; &gt;</type>
@@ -23962,13 +23878,6 @@
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>full_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>ga72e6530a4edee4e353b8f5cbdab99813</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
       <type>std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;</type>
       <name>left_semi_join</name>
       <anchorfile>group__column__join.html</anchorfile>
@@ -23976,25 +23885,11 @@
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>left_semi_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>gaefe0ccca650f0e61a2a02b6aa3679ecd</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
       <type>std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;</type>
       <name>left_anti_join</name>
       <anchorfile>group__column__join.html</anchorfile>
       <anchor>ga6067d4dd5851b2c9f7ebe616e52fae24</anchor>
       <arglist>(cudf::table_view const &amp;left_keys, cudf::table_view const &amp;right_keys, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; cudf::table &gt;</type>
-      <name>left_anti_join</name>
-      <anchorfile>group__column__join.html</anchorfile>
-      <anchor>ga5e1f49189fa6e380d45719ce8370ff04</anchor>
-      <arglist>(cudf::table_view const &amp;left, cudf::table_view const &amp;right, std::vector&lt; cudf::size_type &gt; const &amp;left_on, std::vector&lt; cudf::size_type &gt; const &amp;right_on, null_equality compare_nulls=null_equality::EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; cudf::table &gt;</type>
