@@ -248,10 +248,10 @@ def delete_existing_elements(soup):
         delete_element(soup, element)
 
 
-def is_sphinx_or_doxygen(soup):
+def get_theme_info(soup):
     """
-    Identifies whether a given document is a Sphinx or Doxygen document
-    by parsing the HTML. Returns a string identifier and reference element
+    Determines what theme a given HTML file is using or exits if it's
+    not able to be determined. Returns a string identifier and reference element
     that is used for inserting the library/version selectors to the doc.
     """
     # Sphinx Themes
@@ -270,7 +270,11 @@ def is_sphinx_or_doxygen(soup):
     if soup.select(pydata_identifier):
         return "pydata", soup.select(pydata_identifier)[0]
 
-    raise Exception(f"Couldn't identify {FILEPATH} as either Doxygen or Sphinx")
+    print(
+        f"Couldn't identify {FILEPATH} as a supported theme type. Skipping file.",
+        file=sys.stderr,
+    )
+    exit(0)
 
 
 def main():
@@ -282,7 +286,7 @@ def main():
     with open(FILEPATH) as fp:
         soup = BeautifulSoup(fp, "html5lib")
 
-    doc_type, reference_el = is_sphinx_or_doxygen(soup)
+    doc_type, reference_el = get_theme_info(soup)
 
     # Delete any existing added/unnecessary elements
     delete_existing_elements(soup)
