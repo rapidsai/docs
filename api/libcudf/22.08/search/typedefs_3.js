@@ -1,18 +1,18 @@
 var searchData=
 [
-  ['date_5fstatistics_3442',['date_statistics',['../namespacecudf_1_1io.html#a7db6680f79f2ca2f8fab3ca6e349582d',1,'cudf::io']]],
-  ['decimal128_3443',['decimal128',['../group__fixed__point__classes.html#ga9f2da6ca14cb6371184004c5aac343a0',1,'numeric']]],
-  ['decimal32_3444',['decimal32',['../group__fixed__point__classes.html#ga74f28c0e58f5105d5a67b658d839ffa0',1,'numeric']]],
-  ['decimal64_3445',['decimal64',['../group__fixed__point__classes.html#ga85be3b2e76e27778378832af34cf88a5',1,'numeric']]],
-  ['device_5fstorage_5ftype_5ft_3446',['device_storage_type_t',['../group__utility__dispatcher.html#ga7811a3ca2cd4f1c558093dbbdda53b30',1,'cudf']]],
-  ['dictionary32_3447',['dictionary32',['../group__dictionary__classes.html#ga9f61b43ec5ca88c8a4ad40e09b4d58f6',1,'cudf']]],
-  ['difference_5ftype_3448',['difference_type',['../classcudf_1_1detail_1_1span__base.html#a7a28a324767cba3faf224bafd8455b42',1,'cudf::detail::span_base']]],
-  ['duration_5fd_3449',['duration_D',['../group__timestamp__classes.html#ga6a45112033b50dfa4988d71a0817131c',1,'cudf']]],
-  ['duration_5fh_3450',['duration_h',['../group__timestamp__classes.html#gaac9f5a62b5d8bc39e808918f94cbc9ff',1,'cudf']]],
-  ['duration_5fm_3451',['duration_m',['../group__timestamp__classes.html#ga02e8e6d4f16f2007e5994dd26adf6171',1,'cudf']]],
-  ['duration_5fms_3452',['duration_ms',['../group__timestamp__classes.html#ga70b6b95d45de41529211d95531fa3f86',1,'cudf']]],
-  ['duration_5fns_3453',['duration_ns',['../group__timestamp__classes.html#ga4efdb8225ec7e415ab3c660c066aa3ee',1,'cudf']]],
-  ['duration_5fs_3454',['duration_s',['../group__timestamp__classes.html#gae344db373c1568bd20e914cb74426519',1,'cudf']]],
-  ['duration_5fus_3455',['duration_us',['../group__timestamp__classes.html#gab8e261e3e2a11e8464efb2a251c107d7',1,'cudf']]],
-  ['durationtypes_3456',['DurationTypes',['../type__lists_8hpp.html#afa4decf17f7c5e8c7e808d2cf29c5975',1,'cudf::test']]]
+  ['date_5fstatistics_3431',['date_statistics',['../namespacecudf_1_1io.html#a7db6680f79f2ca2f8fab3ca6e349582d',1,'cudf::io']]],
+  ['decimal128_3432',['decimal128',['../group__fixed__point__classes.html#ga9f2da6ca14cb6371184004c5aac343a0',1,'numeric']]],
+  ['decimal32_3433',['decimal32',['../group__fixed__point__classes.html#ga74f28c0e58f5105d5a67b658d839ffa0',1,'numeric']]],
+  ['decimal64_3434',['decimal64',['../group__fixed__point__classes.html#ga85be3b2e76e27778378832af34cf88a5',1,'numeric']]],
+  ['device_5fstorage_5ftype_5ft_3435',['device_storage_type_t',['../group__utility__dispatcher.html#ga7811a3ca2cd4f1c558093dbbdda53b30',1,'cudf']]],
+  ['dictionary32_3436',['dictionary32',['../group__dictionary__classes.html#ga9f61b43ec5ca88c8a4ad40e09b4d58f6',1,'cudf']]],
+  ['difference_5ftype_3437',['difference_type',['../classcudf_1_1detail_1_1span__base.html#a7a28a324767cba3faf224bafd8455b42',1,'cudf::detail::span_base']]],
+  ['duration_5fd_3438',['duration_D',['../group__timestamp__classes.html#ga6a45112033b50dfa4988d71a0817131c',1,'cudf']]],
+  ['duration_5fh_3439',['duration_h',['../group__timestamp__classes.html#gaac9f5a62b5d8bc39e808918f94cbc9ff',1,'cudf']]],
+  ['duration_5fm_3440',['duration_m',['../group__timestamp__classes.html#ga02e8e6d4f16f2007e5994dd26adf6171',1,'cudf']]],
+  ['duration_5fms_3441',['duration_ms',['../group__timestamp__classes.html#ga70b6b95d45de41529211d95531fa3f86',1,'cudf']]],
+  ['duration_5fns_3442',['duration_ns',['../group__timestamp__classes.html#ga4efdb8225ec7e415ab3c660c066aa3ee',1,'cudf']]],
+  ['duration_5fs_3443',['duration_s',['../group__timestamp__classes.html#gae344db373c1568bd20e914cb74426519',1,'cudf']]],
+  ['duration_5fus_3444',['duration_us',['../group__timestamp__classes.html#gab8e261e3e2a11e8464efb2a251c107d7',1,'cudf']]],
+  ['durationtypes_3445',['DurationTypes',['../type__lists_8hpp.html#afa4decf17f7c5e8c7e808d2cf29c5975',1,'cudf::test']]]
 ];

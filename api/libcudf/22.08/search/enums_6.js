@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['inclusive_3524',['inclusive',['../group__label__bins.html#gabadbffbcb403fac1ff712330ea10f2b3',1,'cudf']]],
-  ['interpolation_3525',['interpolation',['../group__utility__types.html#ga9cd17c1cdf028ead9a4783f605276ab3',1,'cudf']]],
-  ['io_5ftype_3526',['io_type',['../namespacecudf_1_1io.html#a4a5909c7c1b3aef5e86d1f92e1b1d69d',1,'cudf::io']]]
+  ['inclusive_3513',['inclusive',['../group__label__bins.html#gabadbffbcb403fac1ff712330ea10f2b3',1,'cudf']]],
+  ['interpolation_3514',['interpolation',['../group__utility__types.html#ga9cd17c1cdf028ead9a4783f605276ab3',1,'cudf']]],
+  ['io_5ftype_3515',['io_type',['../namespacecudf_1_1io.html#a4a5909c7c1b3aef5e86d1f92e1b1d69d',1,'cudf::io']]]
 ];

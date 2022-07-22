@@ -2032,30 +2032,6 @@
     <filename>doxygen__groups_8h.html</filename>
   </compound>
   <compound kind="file">
-    <name>drop_list_duplicates.hpp</name>
-    <path>/rapids/cudf/cpp/include/cudf/lists/</path>
-    <filename>drop__list__duplicates_8hpp.html</filename>
-    <includes id="column_8hpp" name="column.hpp" local="no" imported="no">cudf/column/column.hpp</includes>
-    <includes id="lists__column__view_8hpp" name="lists_column_view.hpp" local="no" imported="no">cudf/lists/lists_column_view.hpp</includes>
-    <includes id="stream__compaction_8hpp" name="stream_compaction.hpp" local="no" imported="no">cudf/stream_compaction.hpp</includes>
-    <namespace>cudf</namespace>
-    <namespace>cudf::lists</namespace>
-    <member kind="function">
-      <type>std::pair&lt; std::unique_ptr&lt; column &gt;, std::unique_ptr&lt; column &gt; &gt;</type>
-      <name>drop_list_duplicates</name>
-      <anchorfile>group__lists__drop__duplicates.html</anchorfile>
-      <anchor>gaf4166990d394ec48cd6954b151bbdcb7</anchor>
-      <arglist>(lists_column_view const &amp;keys, lists_column_view const &amp;values, duplicate_keep_option keep_option=duplicate_keep_option::KEEP_FIRST, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::UNEQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>drop_list_duplicates</name>
-      <anchorfile>group__lists__drop__duplicates.html</anchorfile>
-      <anchor>gafc810d6f1cdb17319b0d3ffab5f2ad7f</anchor>
-      <arglist>(lists_column_view const &amp;input, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::UNEQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-  </compound>
-  <compound kind="file">
     <name>durations.hpp</name>
     <path>/rapids/cudf/cpp/include/cudf/wrappers/</path>
     <filename>durations_8hpp.html</filename>
@@ -9662,31 +9638,6 @@
     </member>
   </compound>
   <compound kind="class">
-    <name>CudaMessageReader</name>
-    <filename>classCudaMessageReader.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>CudaMessageReader</name>
-      <anchorfile>classCudaMessageReader.html</anchorfile>
-      <anchor>a46fb49eba01debe7f93ba4706ce706d3</anchor>
-      <arglist>(arrow::cuda::CudaBufferReader *stream, arrow::io::BufferReader *schema)</arglist>
-    </member>
-    <member kind="function">
-      <type>arrow::Result&lt; std::unique_ptr&lt; arrow::ipc::Message &gt; &gt;</type>
-      <name>ReadNextMessage</name>
-      <anchorfile>classCudaMessageReader.html</anchorfile>
-      <anchor>acd8d2f543a4c7e6bef2dcc4e1c318eb3</anchor>
-      <arglist>() override</arglist>
-    </member>
-    <member kind="function" static="yes">
-      <type>static std::unique_ptr&lt; arrow::ipc::MessageReader &gt;</type>
-      <name>Open</name>
-      <anchorfile>classCudaMessageReader.html</anchorfile>
-      <anchor>ae2573c00d0cc8655d4f2cc737985e669</anchor>
-      <arglist>(arrow::cuda::CudaBufferReader *stream, arrow::io::BufferReader *schema)</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
     <name>cudf::io::text::data_chunk_reader</name>
     <filename>classcudf_1_1io_1_1text_1_1data__chunk__reader.html</filename>
     <member kind="function" virtualness="pure">
@@ -13971,6 +13922,39 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>cudf::list_device_view::pair_rep_accessor</name>
+    <filename>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</filename>
+    <templarg></templarg>
+    <member kind="typedef">
+      <type>device_storage_type_t&lt; T &gt;</type>
+      <name>rep_type</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>a86137f06ce1c5f85bcc056b3b510de2a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>CUDF_HOST_DEVICE</type>
+      <name>pair_rep_accessor</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>ac1a536b6750af8049c148cee8296eb46</anchor>
+      <arglist>(list_device_view const &amp;_list)</arglist>
+    </member>
+    <member kind="function">
+      <type>thrust::pair&lt; rep_type, bool &gt;</type>
+      <name>operator()</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>acc82443ba86c3f670083a5cbec86af88</anchor>
+      <arglist>(cudf::size_type i) const</arglist>
+    </member>
+    <member kind="variable">
+      <type>list_device_view const  &amp;</type>
+      <name>list</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>a5a12a570f271728cdb4bca54c62cd6f2</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>cudf::detail::pair_rep_accessor</name>
     <filename>structcudf_1_1detail_1_1pair__rep__accessor.html</filename>
     <templarg></templarg>
@@ -14001,39 +13985,6 @@
       <name>col</name>
       <anchorfile>structcudf_1_1detail_1_1pair__rep__accessor.html</anchorfile>
       <anchor>a59cd69e90ab4b57bc905fc60282f2479</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
-    <name>cudf::list_device_view::pair_rep_accessor</name>
-    <filename>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</filename>
-    <templarg></templarg>
-    <member kind="typedef">
-      <type>device_storage_type_t&lt; T &gt;</type>
-      <name>rep_type</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>a86137f06ce1c5f85bcc056b3b510de2a</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="function">
-      <type>CUDF_HOST_DEVICE</type>
-      <name>pair_rep_accessor</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>ac1a536b6750af8049c148cee8296eb46</anchor>
-      <arglist>(list_device_view const &amp;_list)</arglist>
-    </member>
-    <member kind="function">
-      <type>thrust::pair&lt; rep_type, bool &gt;</type>
-      <name>operator()</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>acc82443ba86c3f670083a5cbec86af88</anchor>
-      <arglist>(cudf::size_type i) const</arglist>
-    </member>
-    <member kind="variable">
-      <type>list_device_view const  &amp;</type>
-      <name>list</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>a5a12a570f271728cdb4bca54c62cd6f2</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -14655,38 +14606,6 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>cudf::experimental::row::lexicographic::preprocessed_table</name>
-    <filename>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</filename>
-    <member kind="typedef">
-      <type>std::invoke_result_t&lt; decltype(table_device_view::create), table_view, rmm::cuda_stream_view &gt;</type>
-      <name>table_device_view_owner</name>
-      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
-      <anchor>a97a458d753e0a883a421e2b32bc73ab1</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="function" static="yes">
-      <type>static std::shared_ptr&lt; preprocessed_table &gt;</type>
-      <name>create</name>
-      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
-      <anchor>adf82787431bb2d0dc608fdd527435cdf</anchor>
-      <arglist>(table_view const &amp;table, host_span&lt; order const &gt; column_order, host_span&lt; null_order const &gt; null_precedence, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="friend" protection="private">
-      <type>friend class</type>
-      <name>self_comparator</name>
-      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
-      <anchor>a745e9b8d7da1d6d9b182ca09b3c09f4c</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="friend" protection="private">
-      <type>friend class</type>
-      <name>two_table_comparator</name>
-      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
-      <anchor>a806631930baf594ec533ccc30fe6069d</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
     <name>cudf::experimental::row::equality::preprocessed_table</name>
     <filename>structcudf_1_1experimental_1_1row_1_1equality_1_1preprocessed__table.html</filename>
     <member kind="function" static="yes">
@@ -14715,6 +14634,38 @@
       <name>hash::row_hasher</name>
       <anchorfile>structcudf_1_1experimental_1_1row_1_1equality_1_1preprocessed__table.html</anchorfile>
       <anchor>aba4b2ca772e0808dc9d4c86871ec463e</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>cudf::experimental::row::lexicographic::preprocessed_table</name>
+    <filename>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</filename>
+    <member kind="typedef">
+      <type>std::invoke_result_t&lt; decltype(table_device_view::create), table_view, rmm::cuda_stream_view &gt;</type>
+      <name>table_device_view_owner</name>
+      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
+      <anchor>a97a458d753e0a883a421e2b32bc73ab1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static std::shared_ptr&lt; preprocessed_table &gt;</type>
+      <name>create</name>
+      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
+      <anchor>adf82787431bb2d0dc608fdd527435cdf</anchor>
+      <arglist>(table_view const &amp;table, host_span&lt; order const &gt; column_order, host_span&lt; null_order const &gt; null_precedence, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="friend" protection="private">
+      <type>friend class</type>
+      <name>self_comparator</name>
+      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
+      <anchor>a745e9b8d7da1d6d9b182ca09b3c09f4c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="friend" protection="private">
+      <type>friend class</type>
+      <name>two_table_comparator</name>
+      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
+      <anchor>a806631930baf594ec533ccc30fe6069d</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -14856,6 +14807,31 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>cudf::experimental::row::hash::row_hasher</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
+      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>device_row_hasher&lt; hash_function, Nullate &gt;</type>
+      <name>device_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a6dea0b31eeef4f26bae03c9bc5544bca</anchor>
+      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::row_hasher</name>
     <filename>classcudf_1_1row__hasher.html</filename>
     <templarg>hash_function</templarg>
@@ -14880,31 +14856,6 @@
       <anchorfile>classcudf_1_1row__hasher.html</anchorfile>
       <anchor>ab370aeff347da4c228ccd917af8b52be</anchor>
       <arglist>(size_type row_index) const</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>cudf::experimental::row::hash::row_hasher</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
-      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>device_row_hasher&lt; hash_function, Nullate &gt;</type>
-      <name>device_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a6dea0b31eeef4f26bae03c9bc5544bca</anchor>
-      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -21331,20 +21282,6 @@
       <arglist>(lists_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>std::pair&lt; std::unique_ptr&lt; column &gt;, std::unique_ptr&lt; column &gt; &gt;</type>
-      <name>drop_list_duplicates</name>
-      <anchorfile>group__lists__drop__duplicates.html</anchorfile>
-      <anchor>gaf4166990d394ec48cd6954b151bbdcb7</anchor>
-      <arglist>(lists_column_view const &amp;keys, lists_column_view const &amp;values, duplicate_keep_option keep_option=duplicate_keep_option::KEEP_FIRST, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::UNEQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>drop_list_duplicates</name>
-      <anchorfile>group__lists__drop__duplicates.html</anchorfile>
-      <anchor>gafc810d6f1cdb17319b0d3ffab5f2ad7f</anchor>
-      <arglist>(lists_column_view const &amp;input, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::UNEQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>extract_list_element</name>
       <anchorfile>group__lists__extract.html</anchorfile>
@@ -26597,21 +26534,6 @@
     <name>lists_drop_duplicates</name>
     <title>Filtering</title>
     <filename>group__lists__drop__duplicates.html</filename>
-    <file>drop_list_duplicates.hpp</file>
-    <member kind="function">
-      <type>std::pair&lt; std::unique_ptr&lt; column &gt;, std::unique_ptr&lt; column &gt; &gt;</type>
-      <name>drop_list_duplicates</name>
-      <anchorfile>group__lists__drop__duplicates.html</anchorfile>
-      <anchor>gaf4166990d394ec48cd6954b151bbdcb7</anchor>
-      <arglist>(lists_column_view const &amp;keys, lists_column_view const &amp;values, duplicate_keep_option keep_option=duplicate_keep_option::KEEP_FIRST, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::UNEQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>drop_list_duplicates</name>
-      <anchorfile>group__lists__drop__duplicates.html</anchorfile>
-      <anchor>gafc810d6f1cdb17319b0d3ffab5f2ad7f</anchor>
-      <arglist>(lists_column_view const &amp;input, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::UNEQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
   </compound>
   <compound kind="group">
     <name>lists_sort</name>
