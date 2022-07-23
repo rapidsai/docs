@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['cugraph_828',['cugraph',['../namespacecugraph.html',1,'']]],
-  ['ext_5fraft_829',['ext_raft',['../namespacecugraph_1_1ext__raft.html',1,'cugraph']]]
+  ['cugraph_835',['cugraph',['../namespacecugraph.html',1,'']]],
+  ['ext_5fraft_836',['ext_raft',['../namespacecugraph_1_1ext__raft.html',1,'cugraph']]]
 ];

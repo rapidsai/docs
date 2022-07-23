@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['pagerank_938',['pagerank',['../namespacecugraph.html#a7d8670fded63928475f245d51e797903',1,'cugraph']]],
-  ['per_5fv_5ftransform_5freduce_5fdst_5fkey_5faggregated_5foutgoing_5fe_939',['per_v_transform_reduce_dst_key_aggregated_outgoing_e',['../namespacecugraph.html#a0811dffc32d48b6b948ba3b6c974b49d',1,'cugraph']]],
-  ['per_5fv_5ftransform_5freduce_5fincoming_5fe_940',['per_v_transform_reduce_incoming_e',['../namespacecugraph.html#afe2e5b181bb7992f1c6c3425936f8e62',1,'cugraph']]],
-  ['per_5fv_5ftransform_5freduce_5foutgoing_5fe_941',['per_v_transform_reduce_outgoing_e',['../namespacecugraph.html#a2cf0615480752ade1ea7c1fd7f5447ce',1,'cugraph']]]
+  ['overlap_948',['overlap',['../namespacecugraph.html#abf404506c99fd8a5550cb78f0123eaa8',1,'cugraph']]],
+  ['overlap_5flist_949',['overlap_list',['../namespacecugraph.html#aa97e1cab7d65f1ae28b588c45dce0e06',1,'cugraph']]]
 ];

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['_7eexception_976',['~Exception',['../classMLCommon_1_1Exception.html#a0ea1770ce8f42395bd046c8ed4f2c187',1,'MLCommon::Exception']]]
+  ['weakly_5fconnected_5fcomponents_987',['weakly_connected_components',['../namespacecugraph.html#a8a74317d58e73cb48b1240070e9a1c44',1,'cugraph']]],
+  ['what_988',['what',['../classMLCommon_1_1Exception.html#ab0fbec35530d6998ae97b429579d8f17',1,'MLCommon::Exception']]]
 ];

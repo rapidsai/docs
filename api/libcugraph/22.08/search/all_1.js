@@ -8,7 +8,8 @@ var searchData=
   ['bfs_5ffunctor_16',['bfs_functor',['../structcugraph_1_1c__api_1_1bfs__functor.html',1,'cugraph::c_api']]],
   ['bfsstep_17',['BFSStep',['../structcugraph_1_1mg_1_1detail_1_1BFSStep.html',1,'cugraph::mg::detail']]],
   ['bfsstepnodist_18',['BFSStepNoDist',['../structcugraph_1_1mg_1_1detail_1_1BFSStepNoDist.html',1,'cugraph::mg::detail']]],
-  ['biased_5fselector_5ft_19',['biased_selector_t',['../structcugraph_1_1detail_1_1original_1_1biased__selector__t.html',1,'cugraph::detail::original']]],
-  ['bitwiseand_20',['BitwiseAnd',['../structcugraph_1_1detail_1_1traversal_1_1BitwiseAnd.html',1,'cugraph::detail::traversal']]],
-  ['bitwiseor_21',['BitwiseOr',['../structcugraph_1_1detail_1_1traversal_1_1BitwiseOr.html',1,'cugraph::detail::traversal']]]
+  ['biased_5frandom_5fwalks_19',['biased_random_walks',['../namespacecugraph.html#aba297f01aebc768538818c0ffe7236a2',1,'cugraph']]],
+  ['biased_5fselector_5ft_20',['biased_selector_t',['../structcugraph_1_1detail_1_1original_1_1biased__selector__t.html',1,'cugraph::detail::original']]],
+  ['bitwiseand_21',['BitwiseAnd',['../structcugraph_1_1detail_1_1traversal_1_1BitwiseAnd.html',1,'cugraph::detail::traversal']]],
+  ['bitwiseor_22',['BitwiseOr',['../structcugraph_1_1detail_1_1traversal_1_1BitwiseOr.html',1,'cugraph::detail::traversal']]]
 ];

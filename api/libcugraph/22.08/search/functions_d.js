@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['overlap_936',['overlap',['../namespacecugraph.html#abf404506c99fd8a5550cb78f0123eaa8',1,'cugraph']]],
-  ['overlap_5flist_937',['overlap_list',['../namespacecugraph.html#aa97e1cab7d65f1ae28b588c45dce0e06',1,'cugraph']]]
+  ['node2vec_5frandom_5fwalks_947',['node2vec_random_walks',['../namespacecugraph.html#ae97a04254175094f14c3925c16263bc1',1,'cugraph']]]
 ];
