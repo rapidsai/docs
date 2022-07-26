@@ -36,7 +36,7 @@ var searchData=
   ['always_47',['ALWAYS',['../group__column__copy.html#gga267e03474dcfd85242d2fdc6e5846ec6af3fc827ade4b968e50406496907ef962',1,'cudf']]],
   ['any_48',['ANY',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24cac9fd0b78d433f898b7dfd108eaedf65f',1,'cudf::aggregation']]],
   ['append_49',['Append',['../type__list__utilities_8hpp.html#aeff002c62007e471b275864579beb7f3',1,'cudf::test']]],
-  ['apply_5fboolean_5fmask_50',['apply_boolean_mask',['../namespacecudf_1_1lists.html#a4d98640c8ed25e6e2cd83d0f16ad6cb6',1,'cudf::lists::apply_boolean_mask()'],['../group__reorder__compact.html#ga97d53fa661beb3217c01a0fb117a2ac1',1,'cudf::apply_boolean_mask()']]],
+  ['apply_5fboolean_5fmask_50',['apply_boolean_mask',['../group__lists__filtering.html#ga4d98640c8ed25e6e2cd83d0f16ad6cb6',1,'cudf::lists::apply_boolean_mask()'],['../group__reorder__compact.html#ga97d53fa661beb3217c01a0fb117a2ac1',1,'cudf::apply_boolean_mask()']]],
   ['apply_5fsorting_5fstruct_5fbinary_5fop_51',['apply_sorting_struct_binary_op',['../binaryop_8hpp.html#acfab8cbab25db4bf4b572c7c6e4719fb',1,'cudf::binops::compiled::detail']]],
   ['arccos_52',['ARCCOS',['../group__transformation__unaryops.html#gga030e62f30b296602f398e70d1ca657c4a7358c3fa47a9b546fe7ecbc961e82338',1,'cudf']]],
   ['arccosh_53',['ARCCOSH',['../group__transformation__unaryops.html#gga030e62f30b296602f398e70d1ca657c4ad3242488948e86c0277590cd15cad984',1,'cudf']]],

@@ -80,8 +80,8 @@ var searchData=
   ['front_5felement_594',['front_element',['https://docs.rapids.ai/api/librmm/22.08/classrmm_1_1device__uvector.html#ad285a44374bd43da16ed5b6464b4020b',1,'rmm::device_uvector']]],
   ['full_5fjoin_595',['full_join',['../classcudf_1_1hash__join.html#a3ecd4b9d9ee3c7b93722e37ba8952a48',1,'cudf::hash_join::full_join()'],['../group__column__join.html#ga95f2240887494510f67e1e2e62eed6ce',1,'cudf::full_join()']]],
   ['full_5fjoin_5fsize_596',['full_join_size',['../classcudf_1_1hash__join.html#a49485737febf451e9d82a4437cb070e8',1,'cudf::hash_join']]],
-  ['filtering_597',['Filtering',['../group__lists__drop__duplicates.html',1,'']]],
-  ['filling_598',['Filling',['../group__lists__filling.html',1,'']]],
+  ['filling_597',['Filling',['../group__lists__filling.html',1,'']]],
+  ['filtering_598',['Filtering',['../group__lists__filtering.html',1,'']]],
   ['factories_599',['Factories',['../group__scalar__factories.html',1,'']]],
   ['finding_600',['Finding',['../group__strings__find.html',1,'']]],
   ['filling_601',['Filling',['../group__transformation__fill.html',1,'']]]

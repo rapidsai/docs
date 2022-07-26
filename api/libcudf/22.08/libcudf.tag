@@ -4289,6 +4289,29 @@
     </member>
   </compound>
   <compound kind="file">
+    <name>lists/stream_compaction.hpp</name>
+    <path>/rapids/cudf/cpp/include/cudf/lists/</path>
+    <filename>lists_2stream__compaction_8hpp.html</filename>
+    <includes id="column_8hpp" name="column.hpp" local="no" imported="no">cudf/column/column.hpp</includes>
+    <includes id="lists__column__view_8hpp" name="lists_column_view.hpp" local="no" imported="no">cudf/lists/lists_column_view.hpp</includes>
+    <namespace>cudf</namespace>
+    <namespace>cudf::lists</namespace>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>apply_boolean_mask</name>
+      <anchorfile>group__lists__filtering.html</anchorfile>
+      <anchor>ga4d98640c8ed25e6e2cd83d0f16ad6cb6</anchor>
+      <arglist>(lists_column_view const &amp;input, lists_column_view const &amp;boolean_mask, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>distinct</name>
+      <anchorfile>group__lists__filtering.html</anchorfile>
+      <anchor>ga806da666596c7c0a9d84e768bfabadc9</anchor>
+      <arglist>(lists_column_view const &amp;input, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+  </compound>
+  <compound kind="file">
     <name>stream_compaction.hpp</name>
     <path>/rapids/cudf/cpp/include/cudf/</path>
     <filename>stream__compaction_8hpp.html</filename>
@@ -21333,15 +21356,15 @@
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>apply_boolean_mask</name>
-      <anchorfile>namespacecudf_1_1lists.html</anchorfile>
-      <anchor>a4d98640c8ed25e6e2cd83d0f16ad6cb6</anchor>
+      <anchorfile>group__lists__filtering.html</anchorfile>
+      <anchor>ga4d98640c8ed25e6e2cd83d0f16ad6cb6</anchor>
       <arglist>(lists_column_view const &amp;input, lists_column_view const &amp;boolean_mask, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>distinct</name>
-      <anchorfile>namespacecudf_1_1lists.html</anchorfile>
-      <anchor>a806da666596c7c0a9d84e768bfabadc9</anchor>
+      <anchorfile>group__lists__filtering.html</anchorfile>
+      <anchor>ga806da666596c7c0a9d84e768bfabadc9</anchor>
       <arglist>(lists_column_view const &amp;input, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
@@ -26382,7 +26405,7 @@
     <subgroup>lists_contains</subgroup>
     <subgroup>lists_gather</subgroup>
     <subgroup>lists_elements</subgroup>
-    <subgroup>lists_drop_duplicates</subgroup>
+    <subgroup>lists_filtering</subgroup>
     <subgroup>lists_sort</subgroup>
   </compound>
   <compound kind="group">
@@ -26531,9 +26554,24 @@
     </member>
   </compound>
   <compound kind="group">
-    <name>lists_drop_duplicates</name>
+    <name>lists_filtering</name>
     <title>Filtering</title>
-    <filename>group__lists__drop__duplicates.html</filename>
+    <filename>group__lists__filtering.html</filename>
+    <file>lists/stream_compaction.hpp</file>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>apply_boolean_mask</name>
+      <anchorfile>group__lists__filtering.html</anchorfile>
+      <anchor>ga4d98640c8ed25e6e2cd83d0f16ad6cb6</anchor>
+      <arglist>(lists_column_view const &amp;input, lists_column_view const &amp;boolean_mask, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>distinct</name>
+      <anchorfile>group__lists__filtering.html</anchorfile>
+      <anchor>ga806da666596c7c0a9d84e768bfabadc9</anchor>
+      <arglist>(lists_column_view const &amp;input, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
   </compound>
   <compound kind="group">
     <name>lists_sort</name>

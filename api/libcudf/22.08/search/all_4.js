@@ -74,7 +74,7 @@ var searchData=
   ['dispatch_5fstorage_5ftype_398',['dispatch_storage_type',['../structcudf_1_1dispatch__storage__type.html',1,'cudf']]],
   ['dispatch_5fvoid_5fif_5fnested_399',['dispatch_void_if_nested',['../structcudf_1_1experimental_1_1dispatch__void__if__nested.html',1,'cudf::experimental']]],
   ['distance_400',['distance',['../group__utility__types.html#ga4211fc2c58997473ebae90b522492e39',1,'cudf']]],
-  ['distinct_401',['distinct',['../namespacecudf_1_1lists.html#a806da666596c7c0a9d84e768bfabadc9',1,'cudf::lists::distinct()'],['../group__reorder__compact.html#ga7d4ccfe4fd1f8be7448bcb620fe87068',1,'cudf::distinct()']]],
+  ['distinct_401',['distinct',['../group__lists__filtering.html#ga806da666596c7c0a9d84e768bfabadc9',1,'cudf::lists::distinct()'],['../group__reorder__compact.html#ga7d4ccfe4fd1f8be7448bcb620fe87068',1,'cudf::distinct()']]],
   ['distinct_5fcount_402',['distinct_count',['../group__reorder__compact.html#gab6e12738145f070878194502d8d5a1c9',1,'cudf::distinct_count(column_view const &amp;input, null_policy null_handling, nan_policy nan_handling)'],['../group__reorder__compact.html#gad861920389b600bb3310ecb22e307316',1,'cudf::distinct_count(table_view const &amp;input, null_equality nulls_equal=null_equality::EQUAL)']]],
   ['div_403',['DIV',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca29bbf66f7f8529ec47e394fb5a36c646',1,'cudf']]],
   ['division_5foverflow_404',['division_overflow',['../group__fixed__point__classes.html#ga6c5efc50f674b549eaa19ff93fcc5294',1,'numeric']]],
