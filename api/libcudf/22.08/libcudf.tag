@@ -4065,6 +4065,44 @@
     </member>
   </compound>
   <compound kind="file">
+    <name>set_operations.hpp</name>
+    <path>/rapids/cudf/cpp/include/cudf/lists/</path>
+    <filename>set__operations_8hpp.html</filename>
+    <includes id="column_8hpp" name="column.hpp" local="no" imported="no">cudf/column/column.hpp</includes>
+    <includes id="lists__column__view_8hpp" name="lists_column_view.hpp" local="no" imported="no">cudf/lists/lists_column_view.hpp</includes>
+    <includes id="types_8hpp" name="types.hpp" local="no" imported="no">cudf/types.hpp</includes>
+    <namespace>cudf</namespace>
+    <namespace>cudf::lists</namespace>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>have_overlap</name>
+      <anchorfile>group__set__operations.html</anchorfile>
+      <anchor>gabf5748b2a6badcff31a52f993bcb938f</anchor>
+      <arglist>(lists_column_view const &amp;lhs, lists_column_view const &amp;rhs, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>intersect_distinct</name>
+      <anchorfile>group__set__operations.html</anchorfile>
+      <anchor>gaa2c2c6039dda1e3aa221cd6556a66db4</anchor>
+      <arglist>(lists_column_view const &amp;lhs, lists_column_view const &amp;rhs, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>union_distinct</name>
+      <anchorfile>group__set__operations.html</anchorfile>
+      <anchor>ga2e5e33cb5e5d120a8b33536819614e07</anchor>
+      <arglist>(lists_column_view const &amp;lhs, lists_column_view const &amp;rhs, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>difference_distinct</name>
+      <anchorfile>group__set__operations.html</anchorfile>
+      <anchor>gaa0510c67a7a963f90d4f6d858bdc116e</anchor>
+      <arglist>(lists_column_view const &amp;lhs, lists_column_view const &amp;rhs, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+  </compound>
+  <compound kind="file">
     <name>lists/sorting.hpp</name>
     <path>/rapids/cudf/cpp/include/cudf/lists/</path>
     <filename>lists_2sorting_8hpp.html</filename>
@@ -5683,6 +5721,12 @@
       <name>STATISTICS_PAGE</name>
       <anchorfile>namespacecudf_1_1io.html</anchorfile>
       <anchor>ac52511ff52b01cf3c0d778bfaa5a5089acc5300394fed7d51595a8682f873f878</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>STATISTICS_COLUMN</name>
+      <anchorfile>namespacecudf_1_1io.html</anchorfile>
+      <anchor>ac52511ff52b01cf3c0d778bfaa5a5089a8dc9105a0a9b500299af0583ac00ab4b</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -21100,6 +21144,12 @@
       <anchor>ac52511ff52b01cf3c0d778bfaa5a5089acc5300394fed7d51595a8682f873f878</anchor>
       <arglist></arglist>
     </member>
+    <member kind="enumvalue">
+      <name>STATISTICS_COLUMN</name>
+      <anchorfile>namespacecudf_1_1io.html</anchorfile>
+      <anchor>ac52511ff52b01cf3c0d778bfaa5a5089a8dc9105a0a9b500299af0583ac00ab4b</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="function">
       <type>table_with_metadata</type>
       <name>read_avro</name>
@@ -21338,6 +21388,34 @@
       <anchorfile>group__lists__gather.html</anchorfile>
       <anchor>ga3aab124c7f68a4c26fde104069633e75</anchor>
       <arglist>(lists_column_view const &amp;source_column, lists_column_view const &amp;gather_map_list, out_of_bounds_policy bounds_policy=out_of_bounds_policy::DONT_CHECK, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>have_overlap</name>
+      <anchorfile>group__set__operations.html</anchorfile>
+      <anchor>gabf5748b2a6badcff31a52f993bcb938f</anchor>
+      <arglist>(lists_column_view const &amp;lhs, lists_column_view const &amp;rhs, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>intersect_distinct</name>
+      <anchorfile>group__set__operations.html</anchorfile>
+      <anchor>gaa2c2c6039dda1e3aa221cd6556a66db4</anchor>
+      <arglist>(lists_column_view const &amp;lhs, lists_column_view const &amp;rhs, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>union_distinct</name>
+      <anchorfile>group__set__operations.html</anchorfile>
+      <anchor>ga2e5e33cb5e5d120a8b33536819614e07</anchor>
+      <arglist>(lists_column_view const &amp;lhs, lists_column_view const &amp;rhs, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>difference_distinct</name>
+      <anchorfile>group__set__operations.html</anchorfile>
+      <anchor>gaa0510c67a7a963f90d4f6d858bdc116e</anchor>
+      <arglist>(lists_column_view const &amp;lhs, lists_column_view const &amp;rhs, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -26407,6 +26485,7 @@
     <subgroup>lists_elements</subgroup>
     <subgroup>lists_filtering</subgroup>
     <subgroup>lists_sort</subgroup>
+    <subgroup>set_operations</subgroup>
   </compound>
   <compound kind="group">
     <name>lists_combine</name>
@@ -26591,6 +26670,40 @@
       <anchorfile>group__lists__sort.html</anchorfile>
       <anchor>gaf6b57ec3845b3e25899a1c225fdd06f9</anchor>
       <arglist>(lists_column_view const &amp;source_column, order column_order, null_order null_precedence, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>set_operations</name>
+    <title>Set Operations</title>
+    <filename>group__set__operations.html</filename>
+    <file>set_operations.hpp</file>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>have_overlap</name>
+      <anchorfile>group__set__operations.html</anchorfile>
+      <anchor>gabf5748b2a6badcff31a52f993bcb938f</anchor>
+      <arglist>(lists_column_view const &amp;lhs, lists_column_view const &amp;rhs, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>intersect_distinct</name>
+      <anchorfile>group__set__operations.html</anchorfile>
+      <anchor>gaa2c2c6039dda1e3aa221cd6556a66db4</anchor>
+      <arglist>(lists_column_view const &amp;lhs, lists_column_view const &amp;rhs, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>union_distinct</name>
+      <anchorfile>group__set__operations.html</anchorfile>
+      <anchor>ga2e5e33cb5e5d120a8b33536819614e07</anchor>
+      <arglist>(lists_column_view const &amp;lhs, lists_column_view const &amp;rhs, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>difference_distinct</name>
+      <anchorfile>group__set__operations.html</anchorfile>
+      <anchor>gaa0510c67a7a963f90d4f6d858bdc116e</anchor>
+      <arglist>(lists_column_view const &amp;lhs, lists_column_view const &amp;rhs, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="group">
