@@ -10604,6 +10604,13 @@
       <arglist>(column_device_view const &amp;col, size_type row_index) const noexcept</arglist>
     </member>
     <member kind="variable">
+      <type>Nullate</type>
+      <name>_check_nulls</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1element__hasher.html</anchorfile>
+      <anchor>a9f902e72da8542cb61b37dc61d7e0e26</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
       <type>uint32_t</type>
       <name>_seed</name>
       <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1element__hasher.html</anchorfile>
@@ -10615,13 +10622,6 @@
       <name>_null_hash</name>
       <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1element__hasher.html</anchorfile>
       <anchor>ae72258e96bfc41e7af588b758b87e868</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>Nullate</type>
-      <name>_check_nulls</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1element__hasher.html</anchorfile>
-      <anchor>a9f902e72da8542cb61b37dc61d7e0e26</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -10677,6 +10677,13 @@
       <arglist>(column_device_view const &amp;col, size_type row_index) const noexcept</arglist>
     </member>
     <member kind="variable">
+      <type>Nullate</type>
+      <name>_check_nulls</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1element__hasher.html</anchorfile>
+      <anchor>a9f902e72da8542cb61b37dc61d7e0e26</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
       <type>uint32_t</type>
       <name>_seed</name>
       <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1element__hasher.html</anchorfile>
@@ -10688,13 +10695,6 @@
       <name>_null_hash</name>
       <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1element__hasher.html</anchorfile>
       <anchor>ae72258e96bfc41e7af588b758b87e868</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>Nullate</type>
-      <name>_check_nulls</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1element__hasher.html</anchorfile>
-      <anchor>a9f902e72da8542cb61b37dc61d7e0e26</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -14891,10 +14891,10 @@
       <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
     </member>
     <member kind="function">
-      <type>device_row_hasher&lt; hash_function, Nullate &gt;</type>
+      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
       <name>device_hasher</name>
       <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a6dea0b31eeef4f26bae03c9bc5544bca</anchor>
+      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
       <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
     </member>
   </compound>
