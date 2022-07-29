@@ -109,6 +109,7 @@ document.addEventListener("click", function(e) {
 
 function update_switch_theme_button() {
     current_theme = document.documentElement.dataset.mode;
+    if (!current_theme) return;
     if (current_theme == "light") {
         document.getElementById("theme-switch").title = "Switch to auto theme";
     } else if (current_theme == "auto") {
