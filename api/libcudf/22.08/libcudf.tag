@@ -8053,6 +8053,13 @@
     </member>
     <member kind="function">
       <type>column_in_metadata &amp;</type>
+      <name>set_output_as_binary</name>
+      <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
+      <anchor>a77c3c5152c1d21628ef6bb5ebb7e9bd2</anchor>
+      <arglist>(bool binary)</arglist>
+    </member>
+    <member kind="function">
+      <type>column_in_metadata &amp;</type>
       <name>child</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
       <anchor>a1ea40b8e90e4bb4a195e687022fa5296</anchor>
@@ -8133,6 +8140,13 @@
       <name>num_children</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
       <anchor>a55a6d987ef0be58e4799f8d064860d5f</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>is_enabled_output_as_binary</name>
+      <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
+      <anchor>af315ea3f7888e3b91a4bbcf14fa3b86d</anchor>
       <arglist>() const</arglist>
     </member>
   </compound>
@@ -14126,6 +14140,13 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
+      <type>std::optional&lt; std::vector&lt; bool &gt; &gt;</type>
+      <name>get_convert_binary_to_strings</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
+      <anchor>a59b2ac6f6a89ff42bcce0553c6d61998</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
       <type>size_type</type>
       <name>get_skip_rows</name>
       <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
@@ -14187,6 +14208,13 @@
       <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
       <anchor>aa8abdba80cfb5ad78a201c1a3384c5ce</anchor>
       <arglist>(bool val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_convert_binary_to_strings</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
+      <anchor>aa732e08de141478d8c6cde0c090deb6b</anchor>
+      <arglist>(std::vector&lt; bool &gt; val)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -14261,6 +14289,13 @@
       <anchorfile>classcudf_1_1io_1_1parquet__reader__options__builder.html</anchorfile>
       <anchor>a9f03dd48ce5c12f8ee195e5bf7155e85</anchor>
       <arglist>(bool val)</arglist>
+    </member>
+    <member kind="function">
+      <type>parquet_reader_options_builder &amp;</type>
+      <name>convert_binary_to_strings</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__reader__options__builder.html</anchorfile>
+      <anchor>a9050c9f2c4aa5f255c5e9cb5e36ca73a</anchor>
+      <arglist>(std::vector&lt; bool &gt; val)</arglist>
     </member>
     <member kind="function">
       <type>parquet_reader_options_builder &amp;</type>
