@@ -4,7 +4,7 @@
 <meta content="IE=9" http-equiv="X-UA-Compatible">
 <meta content="Doxygen 1.8.20" name="generator">
 <meta content="width=device-width, initial-scale=1" name="viewport">
-<title>libcuspatial: cubic_spline.hpp Source File</title>
+<title>libcuspatial: point_distance.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css">
 <script src="jquery.js" type="text/javascript"></script>
 <script src="dynsections.js" type="text/javascript"></script>
@@ -47,16 +47,16 @@ $(function() {
 
 <div class="navpath" id="nav-path">
   <ul>
-<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1a8f1aac7c46b6885200243257cf6668.html">cuspatial</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1a8f1aac7c46b6885200243257cf6668.html">cuspatial</a></li><li class="navelem"><a class="el" href="dir_bd670b458c91343272dbd48063c6c588.html">distance</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">cubic_spline.hpp</div>  </div>
+<div class="title">point_distance.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="cubic__spline_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&nbsp;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&nbsp;<span class="comment"> * Copyright (c) 2020-2022, NVIDIA CORPORATION.</span></div>
+<a href="point__distance_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&nbsp;<span class="comment">/*</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&nbsp;<span class="comment"> * Copyright (c) 2022, NVIDIA CORPORATION.</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&nbsp;<span class="comment"> *</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&nbsp;<span class="comment"> * Licensed under the Apache License, Version 2.0 (the "License");</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&nbsp;<span class="comment"> * you may not use this file except in compliance with the License.</span></div>
@@ -73,35 +73,20 @@ $(function() {
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&nbsp; </div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&nbsp;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&nbsp; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&nbsp;<span class="preprocessor">#include &lt;cudf/column/column.hpp&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp;<span class="preprocessor">#include &lt;cudf/table/table.hpp&gt;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="preprocessor">#include &lt;cudf/types.hpp&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&nbsp;<span class="preprocessor">#include &lt;cudf/column/column_view.hpp&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="keyword">namespace </span>cuspatial {</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp;<span class="preprocessor">#include &lt;rmm/mr/device/per_device_resource.hpp&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp;<span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp;<span class="keyword">namespace </span>cuspatial {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp; </div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="group__cubic__spline.html#ga6558968d3fd40ee734b066037dc60fa5">   61</a></span>&nbsp;std::unique_ptr&lt;cudf::column&gt; <a class="code" href="group__cubic__spline.html#ga6558968d3fd40ee734b066037dc60fa5">cubicspline_interpolate</a>(</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;  cudf::column_view <span class="keyword">const</span>&amp; query_points,</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp;  cudf::column_view <span class="keyword">const</span>&amp; spline_ids,</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;  cudf::column_view <span class="keyword">const</span>&amp; offsets,</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;  cudf::column_view <span class="keyword">const</span>&amp; source_points,</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp;  cudf::table_view <span class="keyword">const</span>&amp; coefficients,</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp;  rmm::mr::device_memory_resource* mr = rmm::mr::get_current_device_resource());</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp; </div>
-<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="group__cubic__spline.html#ga807d4d0bc2ea9cc952b23a17408988be">   88</a></span>&nbsp;std::unique_ptr&lt;cudf::table&gt; <a class="code" href="group__cubic__spline.html#ga807d4d0bc2ea9cc952b23a17408988be">cubicspline_coefficients</a>(</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;  cudf::column_view <span class="keyword">const</span>&amp; t,</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;  cudf::column_view <span class="keyword">const</span>&amp; y,</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;  cudf::column_view <span class="keyword">const</span>&amp; ids,</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp;  cudf::column_view <span class="keyword">const</span>&amp; offsets,</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp;  rmm::mr::device_memory_resource* mr = rmm::mr::get_current_device_resource());</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&nbsp; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp;}  <span class="comment">// namespace cuspatial</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="group__distance.html#ga5409b45e42f6972cc7e58852f04597d8">   34</a></span>&nbsp;std::unique_ptr&lt;cudf::column&gt; <a class="code" href="group__distance.html#ga5409b45e42f6972cc7e58852f04597d8">pairwise_point_distance</a>(</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp;  cudf::column_view <span class="keyword">const</span>&amp; points1_x,</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;  cudf::column_view <span class="keyword">const</span>&amp; points1_y,</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;  cudf::column_view <span class="keyword">const</span>&amp; points2_x,</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;  cudf::column_view <span class="keyword">const</span>&amp; points2_y,</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;  rmm::mr::device_memory_resource* mr = rmm::mr::get_current_device_resource());</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;}  <span class="comment">// namespace cuspatial</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="agroup__cubic__spline_html_ga807d4d0bc2ea9cc952b23a17408988be"><div class="ttname"><a href="group__cubic__spline.html#ga807d4d0bc2ea9cc952b23a17408988be">cuspatial::cubicspline_coefficients</a></div><div class="ttdeci">std::unique_ptr&lt; cudf::table &gt; cubicspline_coefficients(cudf::column_view const &amp;t, cudf::column_view const &amp;y, cudf::column_view const &amp;ids, cudf::column_view const &amp;offsets, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</div><div class="ttdoc">Compute cubic interpolations of a set of points based on their ids and a coefficient matrix.</div></div>
-<div class="ttc" id="agroup__cubic__spline_html_ga6558968d3fd40ee734b066037dc60fa5"><div class="ttname"><a href="group__cubic__spline.html#ga6558968d3fd40ee734b066037dc60fa5">cuspatial::cubicspline_interpolate</a></div><div class="ttdeci">std::unique_ptr&lt; cudf::column &gt; cubicspline_interpolate(cudf::column_view const &amp;query_points, cudf::column_view const &amp;spline_ids, cudf::column_view const &amp;offsets, cudf::column_view const &amp;source_points, cudf::table_view const &amp;coefficients, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</div><div class="ttdoc">Create a table of cubic spline coefficients from columns of coordinates.</div></div>
+<div class="ttc" id="agroup__distance_html_ga5409b45e42f6972cc7e58852f04597d8"><div class="ttname"><a href="group__distance.html#ga5409b45e42f6972cc7e58852f04597d8">cuspatial::pairwise_point_distance</a></div><div class="ttdeci">std::unique_ptr&lt; cudf::column &gt; pairwise_point_distance(cudf::column_view const &amp;points1_x, cudf::column_view const &amp;points1_y, cudf::column_view const &amp;points2_x, cudf::column_view const &amp;points2_y, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</div><div class="ttdoc">Compute pairwise point-to-point Cartesian distance.</div></div>
 <!-- Copyright (c) 2022, NVIDIA CORPORATION. -->
 <script src="https://docs.rapids.ai/assets/js/custom.js"></script>
 <link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet">
