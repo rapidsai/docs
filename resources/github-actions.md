@@ -46,6 +46,8 @@ Additional specifications:
 
 The GPU labeled runners are backed by lab machines and have the GPUs specified in the table below installed.
 
+**IMPORTANT**: GPU jobs have two requirements: 1) They **must** run in a container (i.e. `nvidia/cuda:11.5.0-base-ubuntu18.04`) and 2) They must set the {% raw %}`NVIDIA_VISIBLE_DEVICES: ${{ env.NVIDIA_VISIBLE_DEVICES }}`{% endraw %} container environment variable. If these requirements aren't met, the GitHub Actions job will fail. See the _Usage_ section below for an example.
+
 | Label Combination                | GPU                    | Driver Version | # of GPUs |
 | -------------------------------- | ---------------------- | -------------- | --------- |
 | `[linux, amd64, gpu-v100-495-1]` | `Tesla-V100-PCIE-32GB` | `495`          | `1`       |
@@ -67,6 +69,10 @@ jobs:
         run: echo "hello"
   job2_gpu:
     runs-on: [self-hosted, linux, amd64, gpu-v100-495-1]
+    container: # GPU jobs must run in a container
+      image: nvidia/cuda:11.5.0-base-ubuntu18.04
+      env:
+        NVIDIA_VISIBLE_DEVICES: {% raw %}${{ env.NVIDIA_VISIBLE_DEVICES }}{% endraw %} # GPU jobs must set this container env variable
     steps:
       - name: hello
         run: |
