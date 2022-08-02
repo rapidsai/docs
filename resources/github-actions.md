@@ -26,7 +26,7 @@ The RAPIDS Ops team provides a set of self-hosted runners that can be used in Gi
 
 ### CPU Label Combinations
 
-The CPU labels are backed by various EC2 instances and do not have any GPUs installed.
+The CPU labeled runners are backed by various EC2 instances and do not have any GPUs installed.
 
 | Label Combination       | EC2 Machine Type            |
 | ----------------------- | --------------------------- |
@@ -42,6 +42,14 @@ Additional specifications:
 1. [https://aws.amazon.com/ec2/instance-types/m5/](https://aws.amazon.com/ec2/instance-types/m5/)
 2. [https://aws.amazon.com/ec2/instance-types/m6g/](https://aws.amazon.com/ec2/instance-types/m6g/)
 
+### GPU Label Combinations
+
+The GPU labeled runners are backed by lab machines and have the GPUs specified in the table below installed.
+
+| Label Combination                | GPU                    | Driver Version | # of GPUs |
+| -------------------------------- | ---------------------- | -------------- | --------- |
+| `[linux, amd64, gpu-v100-495-1]` | `Tesla-V100-PCIE-32GB` | `495`          | `1`       |
+
 ## Usage
 
 The code snippet below shows how the labels above may be utilized in a GitHub Action workflow.
@@ -52,11 +60,18 @@ The code snippet below shows how the labels above may be utilized in a GitHub Ac
 name: Test Self Hosted Runners
 on: push
 jobs:
-  self_hosted:
+  job1_cpu:
     runs-on: [self-hosted, linux, amd64, cpu8]
     steps:
       - name: hello
         run: echo "hello"
+  job2_gpu:
+    runs-on: [self-hosted, linux, amd64, gpu-v100-495-1]
+    steps:
+      - name: hello
+        run: |
+          echo "hello"
+          nvidia-smi
 ```
 
 For additional details, see the official GitHub Action documentation page here: [https://docs.github.com/en/actions/hosting-your-own-runners/using-self-hosted-runners-in-a-workflow](https://docs.github.com/en/actions/hosting-your-own-runners/using-self-hosted-runners-in-a-workflow)
