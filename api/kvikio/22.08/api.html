@@ -214,17 +214,16 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="kvikio.cufile.CuFile.pread">
 <span class="sig-name descname"><span class="pre">pread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><a class="reference internal" href="#kvikio.cufile.IOFuture" title="kvikio.cufile.IOFuture"><span class="pre">IOFuture</span></a></span></span><a class="headerlink" href="#kvikio.cufile.CuFile.pread" title="Permalink to this definition">#</a></dt>
-<dd><p>Reads specified bytes from the file into the device memory in parallel</p>
+<dd><p>Reads specified bytes from the file into device or host memory in parallel</p>
 <p><cite>pread</cite> reads the data from a specified file at a specified offset and size
-bytes into the GPU memory by using GDS functionality. The API works correctly
-for unaligned offsets and any data size, although the performance might not
-match the performance of aligned reads. See additional details in the
-notes below.</p>
+bytes into <cite>buf</cite>. The API works correctly for unaligned offsets and any data
+size, although the performance might not match the performance of aligned reads.
+See additional details in the notes below.</p>
 <p><cite>pread</cite> is non-blocking and returns a <cite>IOFuture</cite> that can be waited upon. It
 partitions the operation into tasks of size <cite>task_size</cite> for execution in the
 default thread pool.</p>
 <dl class="simple">
-<dt>buf: buffer-like or array-like</dt><dd><p>Device buffer to read into.</p>
+<dt>buf: buffer-like or array-like</dt><dd><p>Device or host buffer to read into.</p>
 </dd>
 <dt>size: int, optional</dt><dd><p>Size in bytes to read.</p>
 </dd>
@@ -238,28 +237,28 @@ default thread pool.</p>
 read.</p>
 </dd>
 </dl>
-<p>cuFile can only make use of GPUDirect Storage for reads that are
-aligned to a page boundary. The GPU page size used by cuFile is 4kB, so
-all reads must be at an offset that is a multiple of 4096 bytes. If the
-desired <cite>file_offset</cite> is not a multiple of 4096 it is likely desirable
-to round down to the nearest multiple of 4096 and discard any undesired
-bytes from the resulting data. Similarly, it is optimal for <cite>size</cite> to
-be a multiple of 4096 bytes.</p>
+<p>KvikIO can only make use of GDS for reads that are aligned to a page boundary.
+For unaligned reads, KvikIO has to split the reads into aligned and unaligned
+parts. The GPU page size is 4kB, so all reads should be at an offset that is a
+multiple of 4096 bytes. If the desired <cite>file_offset</cite> is not a multiple of 4096,
+it is likely desirable to round down to the nearest multiple of 4096 and discard
+any undesired bytes from the resulting data. Similarly, it is optimal for <cite>size</cite>
+to be a multiple of 4096 bytes. When GDS isn&rsquo;t used, this is less critical.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="kvikio.cufile.CuFile.pwrite">
 <span class="sig-name descname"><span class="pre">pwrite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><a class="reference internal" href="#kvikio.cufile.IOFuture" title="kvikio.cufile.IOFuture"><span class="pre">IOFuture</span></a></span></span><a class="headerlink" href="#kvikio.cufile.CuFile.pwrite" title="Permalink to this definition">#</a></dt>
-<dd><p>Writes specified bytes from the device memory into the file in parallel</p>
-<p><cite>pwrite</cite> writes the data from the GPU memory to the file at a specified
-offset and size bytes by using GDS functionality. The API works correctly
-for unaligned offset and data sizes, although the performance is not on-par
-with aligned writes. See additional details in the notes below.</p>
+<dd><p>Writes specified bytes from device or host memory into the file in parallel</p>
+<p><cite>pwrite</cite> writes the data from <cite>buf</cite> to the file at a specified offset and size.
+The API works correctly for unaligned offset and data sizes, although the
+performance is not on-par with aligned writes. See additional details in the
+notes below.</p>
 <p><cite>pwrite</cite> is non-blocking and returns a <cite>IOFuture</cite> that can be waited upon. It
 partitions the operation into tasks of size <cite>task_size</cite> for execution in the
 default thread pool.</p>
 <dl class="simple">
-<dt>buf: buffer-like or array-like</dt><dd><p>Device buffer to write to.</p>
+<dt>buf: buffer-like or array-like</dt><dd><p>Device or host buffer to write to.</p>
 </dd>
 <dt>size: int, optional</dt><dd><p>Size in bytes to write.</p>
 </dd>
@@ -273,20 +272,21 @@ default thread pool.</p>
 written.</p>
 </dd>
 </dl>
-<p>cuFile can only make use of GPUDirect Storage for writes that are
-aligned to a page boundary. The GPU page size used by cuFile is 4kB, so
-all reads must be at an offset that is a multiple of 4096 bytes. If the
-desired <cite>file_offset</cite> is not a multiple of 4096 it is likely desirable
-to round down to the nearest multiple of 4096 and discard any undesired
-bytes from the resulting data. Similarly, it is optimal for <cite>size</cite> to
-be a multiple of 4096 bytes.</p>
+<p>KvikIO can only make use of GDS for writes that are aligned to a page boundary.
+For unaligned writes, KvikIO has to split the writes into aligned and unaligned
+parts. The GPU page size is 4kB, so all writes should be at an offset that is a
+multiple of 4096 bytes. If the desired <cite>file_offset</cite> is not a multiple of 4096,
+it is likely desirable to round down to the nearest multiple of 4096 and discard
+any undesired bytes from the resulting data. Similarly, it is optimal for <cite>size</cite>
+to be a multiple of 4096 bytes. When GDS isn&rsquo;t used, this is less critical.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="kvikio.cufile.CuFile.raw_read">
 <span class="sig-name descname"><span class="pre">raw_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#kvikio.cufile.CuFile.raw_read" title="Permalink to this definition">#</a></dt>
 <dd><p>Reads specified bytes from the file into the device memory</p>
-<p>This is a low-level version of <cite>.read</cite> that doesn&rsquo;t use threads.</p>
+<p>This is a low-level version of <cite>.read</cite> that doesn&rsquo;t use threads and
+does not support host memory.</p>
 <dl class="simple">
 <dt>buf: buffer-like or array-like</dt><dd><p>Device buffer to read into.</p>
 </dd>
@@ -301,20 +301,21 @@ be a multiple of 4096 bytes.</p>
 <dt>int</dt><dd><p>The size of bytes that were successfully read.</p>
 </dd>
 </dl>
-<p>cuFile can only make use of GPUDirect Storage for reads that are
-aligned to a page boundary. The GPU page size used by cuFile is 4kB, so
-all reads must be at an offset that is a multiple of 4096 bytes. If the
-desired <cite>file_offset</cite> is not a multiple of 4096 it is likely desirable
-to round down to the nearest multiple of 4096 and discard any undesired
-bytes from the resulting data. Similarly, it is optimal for <cite>size</cite> to
-be a multiple of 4096 bytes.</p>
+<p>KvikIO can only make use of GDS for reads that are aligned to a page boundary.
+For unaligned reads, KvikIO has to split the reads into aligned and unaligned
+parts. The GPU page size is 4kB, so all reads should be at an offset that is a
+multiple of 4096 bytes. If the desired <cite>file_offset</cite> is not a multiple of 4096,
+it is likely desirable to round down to the nearest multiple of 4096 and discard
+any undesired bytes from the resulting data. Similarly, it is optimal for <cite>size</cite>
+to be a multiple of 4096 bytes. When GDS isn&rsquo;t used, this is less critical.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="kvikio.cufile.CuFile.raw_write">
 <span class="sig-name descname"><span class="pre">raw_write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#kvikio.cufile.CuFile.raw_write" title="Permalink to this definition">#</a></dt>
 <dd><p>Writes specified bytes from the device memory into the file</p>
-<p>This is a low-level version of <cite>.write</cite> that doesn&rsquo;t use threads.</p>
+<p>This is a low-level version of <cite>.write</cite> that doesn&rsquo;t use threads and
+does not support host memory.</p>
 <dl class="simple">
 <dt>buf: buffer-like or array-like</dt><dd><p>Device buffer to write to.</p>
 </dd>
@@ -329,13 +330,13 @@ be a multiple of 4096 bytes.</p>
 <dt>int</dt><dd><p>The size of bytes that were successfully written.</p>
 </dd>
 </dl>
-<p>cuFile can only make use of GPUDirect Storage for reads that are
-aligned to a page boundary. The GPU page size used by cuFile is 4kB, so
-all reads must be at an offset that is a multiple of 4096 bytes. If the
-desired <cite>file_offset</cite> is not a multiple of 4096 it is likely desirable
-to round down to the nearest multiple of 4096 and discard any undesired
-bytes from the resulting data. Similarly, it is optimal for <cite>size</cite> to
-be a multiple of 4096 bytes.</p>
+<p>KvikIO can only make use of GDS for writes that are aligned to a page boundary.
+For unaligned writes, KvikIO has to split the writes into aligned and unaligned
+parts. The GPU page size is 4kB, so all writes should be at an offset that is a
+multiple of 4096 bytes. If the desired <cite>file_offset</cite> is not a multiple of 4096,
+it is likely desirable to round down to the nearest multiple of 4096 and discard
+any undesired bytes from the resulting data. Similarly, it is optimal for <cite>size</cite>
+to be a multiple of 4096 bytes. When GDS isn&rsquo;t used, this is less critical.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -357,13 +358,13 @@ be a multiple of 4096 bytes.</p>
 <dt>int</dt><dd><p>The size of bytes that were successfully read.</p>
 </dd>
 </dl>
-<p>cuFile can only make use of GPUDirect Storage for reads that are
-aligned to a page boundary. The GPU page size used by cuFile is 4kB, so
-all reads must be at an offset that is a multiple of 4096 bytes. If the
-desired <cite>file_offset</cite> is not a multiple of 4096 it is likely desirable
-to round down to the nearest multiple of 4096 and discard any undesired
-bytes from the resulting data. Similarly, it is optimal for <cite>size</cite> to
-be a multiple of 4096 bytes.</p>
+<p>KvikIO can only make use of GDS for reads that are aligned to a page boundary.
+For unaligned reads, KvikIO has to split the reads into aligned and unaligned
+parts. The GPU page size is 4kB, so all reads should be at an offset that is a
+multiple of 4096 bytes. If the desired <cite>file_offset</cite> is not a multiple of 4096,
+it is likely desirable to round down to the nearest multiple of 4096 and discard
+any undesired bytes from the resulting data. Similarly, it is optimal for <cite>size</cite>
+to be a multiple of 4096 bytes. When GDS isn&rsquo;t used, this is less critical.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -385,13 +386,13 @@ be a multiple of 4096 bytes.</p>
 <dt>int</dt><dd><p>The size of bytes that were successfully written.</p>
 </dd>
 </dl>
-<p>cuFile can only make use of GPUDirect Storage for writes that are
-aligned to a page boundary. The GPU page size used by cuFile is 4kB, so
-all reads must be at an offset that is a multiple of 4096 bytes. If the
-desired <cite>file_offset</cite> is not a multiple of 4096 it is likely desirable
-to round down to the nearest multiple of 4096 and discard any undesired
-bytes from the resulting data. Similarly, it is optimal for <cite>size</cite> to
-be a multiple of 4096 bytes.</p>
+<p>KvikIO can only make use of GDS for writes that are aligned to a page boundary.
+For unaligned writes, KvikIO has to split the writes into aligned and unaligned
+parts. The GPU page size is 4kB, so all writes should be at an offset that is a
+multiple of 4096 bytes. If the desired <cite>file_offset</cite> is not a multiple of 4096,
+it is likely desirable to round down to the nearest multiple of 4096 and discard
+any undesired bytes from the resulting data. Similarly, it is optimal for <cite>size</cite>
+to be a multiple of 4096 bytes. When GDS isn&rsquo;t used, this is less critical.</p>
 </dd></dl>
 
 </dd></dl>
