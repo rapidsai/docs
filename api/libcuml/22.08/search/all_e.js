@@ -25,7 +25,7 @@ var searchData=
   ['n_5ftheta_758',['n_theta',['../structML_1_1ARIMAOrder.html#aa5294c41eaa05627c4fda11a5e47d0fb',1,'ML::ARIMAOrder']]],
   ['n_5ftrees_759',['n_trees',['../structML_1_1RF__params.html#a9c429c6fadd589d34f6956e28739c9d2',1,'ML::RF_params']]],
   ['naive_760',['NAIVE',['../namespaceML_1_1fil.html#a10afe245e8ff5792ae2d3ea8e51bd57aabb2f16c57b8c0f29362d5a7e1ec98c0b',1,'ML::fil']]],
-  ['naive_2ecuh_761',['naive.cuh',['../dbscan_2adjgraph_2naive_8cuh.html',1,'(Global Namespace)'],['../dbscan_2vertexdeg_2naive_8cuh.html',1,'(Global Namespace)'],['../umap_2fuzzy__simpl__set_2naive_8cuh.html',1,'(Global Namespace)']]],
+  ['naive_2ecuh_761',['naive.cuh',['../naive_8cuh.html',1,'']]],
   ['nclasses_762',['nClasses',['../structML_1_1SVM_1_1LinearSVMModel.html#a1ceca846d083c9b05fc7173471919537',1,'ML::SVM::LinearSVMModel']]],
   ['need_5fdiff_763',['need_diff',['../structML_1_1ARIMAOrder.html#a982ee8cc1c31fc50506163699d3a33ae',1,'ML::ARIMAOrder']]],
   ['neg_764',['neg',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77af24c2c15b9d03797c6874986a8d19516',1,'cuml::genetic::node']]],

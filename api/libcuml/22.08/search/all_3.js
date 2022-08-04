@@ -38,7 +38,7 @@ var searchData=
   ['colors_148',['colors',['../structML_1_1HDBSCAN_1_1FixConnectivitiesRedOp.html#a36adbdbd34adc74fd4842cf91c6798f5',1,'ML::HDBSCAN::FixConnectivitiesRedOp']]],
   ['cols_149',['cols',['../structML_1_1SimpleSparseMat.html#aa1894f0ff1858127309d482bd8d3de76',1,'ML::SimpleSparseMat']]],
   ['columnid_150',['ColumnId',['../structSparseTreeNode.html#af3f8c60a9a9117672f41b41154135372',1,'SparseTreeNode']]],
-  ['common_2ecuh_151',['common.cuh',['../dbscan_2common_8cuh.html',1,'(Global Namespace)'],['../fil_2common_8cuh.html',1,'(Global Namespace)'],['../kmeans_2common_8cuh.html',1,'(Global Namespace)']]],
+  ['common_2ecuh_151',['common.cuh',['../fil_2common_8cuh.html',1,'(Global Namespace)'],['../kmeans_2common_8cuh.html',1,'(Global Namespace)']]],
   ['common_2eh_152',['common.h',['../common_8h.html',1,'']]],
   ['common_2ehpp_153',['common.hpp',['../common_8hpp.html',1,'']]],
   ['compare_5fconcat_5fforest_5fto_5fsubforests_154',['compare_concat_forest_to_subforests',['../namespaceML.html#af142813513ee46988a79fd3dc4ab52a6',1,'ML']]],

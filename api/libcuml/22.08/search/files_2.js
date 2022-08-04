@@ -8,7 +8,7 @@ var searchData=
   ['cd_5fmg_2ecu_1444',['cd_mg.cu',['../cd__mg_8cu.html',1,'']]],
   ['cd_5fmg_2ehpp_1445',['cd_mg.hpp',['../cd__mg_8hpp.html',1,'']]],
   ['classlabels_2ecuh_1446',['classlabels.cuh',['../classlabels_8cuh.html',1,'']]],
-  ['common_2ecuh_1447',['common.cuh',['../dbscan_2common_8cuh.html',1,'(Global Namespace)'],['../fil_2common_8cuh.html',1,'(Global Namespace)'],['../kmeans_2common_8cuh.html',1,'(Global Namespace)']]],
+  ['common_2ecuh_1447',['common.cuh',['../fil_2common_8cuh.html',1,'(Global Namespace)'],['../kmeans_2common_8cuh.html',1,'(Global Namespace)']]],
   ['common_2eh_1448',['common.h',['../common_8h.html',1,'']]],
   ['common_2ehpp_1449',['common.hpp',['../common_8hpp.html',1,'']]],
   ['completeness_5fscore_2ecu_1450',['completeness_score.cu',['../completeness__score_8cu.html',1,'']]],
