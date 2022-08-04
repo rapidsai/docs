@@ -2,7 +2,7 @@
 // while we move around some of this JS to the libraries
 window.customJSLoaded = window.customJSLoaded || false;
 
-(function () {
+document.addEventListener('DOMContentLoaded', function () {
   if (window.customJSLoaded) return;
   var hiddenClassName = "rapids-selector--hidden";
   var selectorContainers = document.querySelectorAll(
@@ -135,4 +135,4 @@ window.customJSLoaded = window.customJSLoaded || false;
     });
   });
   window.customJSLoaded = true;
-})()
+})
