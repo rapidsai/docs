@@ -230,6 +230,35 @@ implementations of this version of the specification.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="rmm.rmm.register_reinitialize_hook">
+<span class="sig-prename descclassname"><span class="pre">rmm.rmm.</span></span><span class="sig-name descname"><span class="pre">register_reinitialize_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.rmm.register_reinitialize_hook" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Add a function to the list of functions (&ldquo;hooks&rdquo;) that will be
+called before <code class="xref py py-func docutils literal notranslate"><span class="pre">reinitialize()</span></code>.</p>
+<p>A user or library may register hooks to perform any necessary
+cleanup before RMM is reinitialized. For example, a library with
+an internal cache of objects that use device memory allocated by
+RMM can register a hook to release those references before RMM is
+reinitialized, thus ensuring that the relevant device memory
+resource can be deallocated.</p>
+<p>Hooks are called in the <em>reverse</em> order they are registered. This
+is useful, for example, when a library registers multiple hooks
+and needs them to run in a specific order for cleanup to be safe.
+Hooks cannot rely on being registered in a particular order
+relative to hooks registered by other packages, since that is
+determined by package import ordering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>func</strong><span class="classifier">callable</span></dt><dd><p>Function to be called before <code class="xref py py-func docutils literal notranslate"><span class="pre">reinitialize()</span></code></p>
+</dd>
+<dt><strong>args, kwargs</strong></dt><dd><p>Positional and keyword arguments to be passed to <cite>func</cite></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="rmm.rmm.reinitialize">
 <span class="sig-prename descclassname"><span class="pre">rmm.rmm.</span></span><span class="sig-name descname"><span class="pre">reinitialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool_allocator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">managed_memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_pool_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_pool_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">devices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logging</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.rmm.reinitialize" title="Permalink to this definition">&para;</a></dt>
 <dd><p>Finalizes and then initializes RMM using the options passed. Using memory
@@ -287,6 +316,15 @@ corresponding to each device.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cupy</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">set_allocator</span><span class="p">(</span><span class="n">rmm</span><span class="o">.</span><span class="n">rmm_cupy_allocator</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rmm.rmm.unregister_reinitialize_hook">
+<span class="sig-prename descclassname"><span class="pre">rmm.rmm.</span></span><span class="sig-name descname"><span class="pre">unregister_reinitialize_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rmm.rmm.unregister_reinitialize_hook" title="Permalink to this definition">&para;</a></dt>
+<dd><p>Remove <cite>func</cite> from list of hooks that will be called before
+<code class="xref py py-func docutils literal notranslate"><span class="pre">reinitialize()</span></code>.</p>
+<p>If <cite>func</cite> was registered more than once, every instance of it will
+be removed from the list of hooks.</p>
 </dd></dl>
 
 </section>
