@@ -125,14 +125,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  $(document).ready(function () {
-    var observer = new MutationObserver(function (mutations) {
-      update_switch_theme_button();
-    })
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme']
-    });
+  var observer = new MutationObserver(function (mutations) {
+    update_switch_theme_button();
+  })
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme']
   });
   window.customJSLoaded = true;
 })
