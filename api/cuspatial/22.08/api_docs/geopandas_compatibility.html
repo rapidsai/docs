@@ -218,13 +218,10 @@
 <col style="width: 90%">
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#cuspatial.GeoDataFrame.groupby" title="cuspatial.GeoDataFrame.groupby"><code class="xref py py-obj docutils literal notranslate"><span class="pre">groupby</span></code></a>(*args,&nbsp;**kwargs)</p></td>
-<td><p>Group DataFrame using a mapper or by a Series of columns.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#cuspatial.GeoDataFrame.to_geopandas" title="cuspatial.GeoDataFrame.to_geopandas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_geopandas</span></code></a>([nullable])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cuspatial.GeoDataFrame.to_geopandas" title="cuspatial.GeoDataFrame.to_geopandas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_geopandas</span></code></a>([nullable])</p></td>
 <td><p>Returns a new GeoPandas GeoDataFrame object from the coordinates in the cuspatial GeoDataFrame.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#cuspatial.GeoDataFrame.to_pandas" title="cuspatial.GeoDataFrame.to_pandas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_pandas</span></code></a>([nullable])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#cuspatial.GeoDataFrame.to_pandas" title="cuspatial.GeoDataFrame.to_pandas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_pandas</span></code></a>([nullable])</p></td>
 <td><p>Calls <cite>self.to_geopandas</cite>, converting GeoSeries columns into GeoPandas columns and cudf.Series columns into pandas.Series columns, and returning a pandas.DataFrame.</p></td>
 </tr>
 </tbody>
@@ -430,95 +427,6 @@ the result will be NA.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="cuspatial.GeoDataFrame.groupby">
-<span class="sig-name descname"><span class="pre">groupby</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.GeoDataFrame.groupby" title="Permalink to this definition">#</a></dt>
-<dd><p>Group DataFrame using a mapper or by a Series of columns.</p>
-<p>A groupby operation involves some combination of splitting the object,
-applying a function, and combining the results. This can be used to
-group large amounts of data and compute operations on these groups.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>by</strong><span class="classifier">mapping, function, label, or list of labels</span></dt><dd><p>Used to determine the groups for the groupby. If by is a
-function, it&rsquo;s called on each value of the object&rsquo;s index.
-If a dict or Series is passed, the Series or dict VALUES will
-be used to determine the groups (the Series&rsquo; values are first
-aligned; see .align() method). If a cupy array is passed, the
-values are used as-is determine the groups. A label or list
-of labels may be passed to group by the columns in self.
-Notice that a tuple is interpreted as a (single) key.</p>
-</dd>
-<dt><strong>level</strong><span class="classifier">int, level name, or sequence of such, default None</span></dt><dd><p>If the axis is a MultiIndex (hierarchical), group by a particular
-level or levels.</p>
-</dd>
-<dt><strong>as_index</strong><span class="classifier">bool, default True</span></dt><dd><p>For aggregated output, return object with group labels as
-the index. Only relevant for DataFrame input.
-as_index=False is effectively &ldquo;SQL-style&rdquo; grouped output.</p>
-</dd>
-<dt><strong>sort</strong><span class="classifier">bool, default False</span></dt><dd><p>Sort result by group key. Differ from Pandas, cudf defaults to
-<code class="docutils literal notranslate"><span class="pre">False</span></code> for better performance. Note this does not influence
-the order of observations within each group. Groupby preserves
-the order of rows within each group.</p>
-</dd>
-<dt><strong>dropna</strong><span class="classifier">bool, optional</span></dt><dd><p>If True (default), do not include the &ldquo;null&rdquo; group.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>DataFrameGroupBy</dt><dd><p>Returns a groupby object that contains information
-about the groups.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cudf</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>    <span class="s1">'Animal'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'Falcon'</span><span class="p">,</span> <span class="s1">'Falcon'</span><span class="p">,</span> <span class="s1">'Parrot'</span><span class="p">,</span> <span class="s1">'Parrot'</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="s1">'Max Speed'</span><span class="p">:</span> <span class="p">[</span><span class="mf">380.</span><span class="p">,</span> <span class="mf">370.</span><span class="p">,</span> <span class="mf">24.</span><span class="p">,</span> <span class="mf">26.</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
-<span class="go">   Animal  Max Speed</span>
-<span class="go">0  Falcon      380.0</span>
-<span class="go">1  Falcon      370.0</span>
-<span class="go">2  Parrot       24.0</span>
-<span class="go">3  Parrot       26.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">'Animal'</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="go">        Max Speed</span>
-<span class="go">Animal</span>
-<span class="go">Falcon      375.0</span>
-<span class="go">Parrot       25.0</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arrays</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">'Falcon'</span><span class="p">,</span> <span class="s1">'Falcon'</span><span class="p">,</span> <span class="s1">'Parrot'</span><span class="p">,</span> <span class="s1">'Parrot'</span><span class="p">],</span>
-<span class="gp">... </span>          <span class="p">[</span><span class="s1">'Captive'</span><span class="p">,</span> <span class="s1">'Wild'</span><span class="p">,</span> <span class="s1">'Captive'</span><span class="p">,</span> <span class="s1">'Wild'</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_arrays</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">(</span><span class="s1">'Animal'</span><span class="p">,</span> <span class="s1">'Type'</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'Max Speed'</span><span class="p">:</span> <span class="p">[</span><span class="mf">390.</span><span class="p">,</span> <span class="mf">350.</span><span class="p">,</span> <span class="mf">30.</span><span class="p">,</span> <span class="mf">20.</span><span class="p">]},</span>
-<span class="gp">... </span>    <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
-<span class="go">                Max Speed</span>
-<span class="go">Animal Type</span>
-<span class="go">Falcon Captive      390.0</span>
-<span class="go">       Wild         350.0</span>
-<span class="go">Parrot Captive       30.0</span>
-<span class="go">       Wild          20.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="go">        Max Speed</span>
-<span class="go">Animal</span>
-<span class="go">Falcon      370.0</span>
-<span class="go">Parrot       25.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"Type"</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="go">        Max Speed</span>
-<span class="go">Type</span>
-<span class="go">Wild         185.0</span>
-<span class="go">Captive      210.0</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="cuspatial.GeoDataFrame.to_geopandas">
 <span class="sig-name descname"><span class="pre">to_geopandas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nullable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.GeoDataFrame.to_geopandas" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns a new GeoPandas GeoDataFrame object from the coordinates in
@@ -551,7 +459,7 @@ returning a pandas.DataFrame.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="cuspatial.GeoSeries">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">GeoSeries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://geopandas.org/en/latest/docs/reference/api/geopandas.GeoSeries.html#geopandas.GeoSeries" title="(in GeoPandas v0.dev+untagged)"><span class="pre">GeoSeries</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.rapids.ai/api/cudf/stable/api_docs/api/cudf.Index.html#cudf.Index" title="(in cudf v22.06)"><span class="pre">Index</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Index.html#pandas.Index" title="(in pandas v1.4.3)"><span class="pre">Index</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_as_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.GeoSeries" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">GeoSeries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://geopandas.org/en/latest/docs/reference/api/geopandas.GeoSeries.html#geopandas.GeoSeries" title="(in GeoPandas v0.dev+untagged)"><span class="pre">GeoSeries</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">T</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v1.4.3)"><span class="pre">Series</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="internals.html#cuspatial.geometry.geocolumn.GeoColumn" title="cuspatial.geometry.geocolumn.GeoColumn"><span class="pre">GeoColumn</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.rapids.ai/api/cudf/stable/api_docs/api/cudf.Index.html#cudf.Index" title="(in cudf v22.06)"><span class="pre">Index</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Index.html#pandas.Index" title="(in pandas v1.4.3)"><span class="pre">Index</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_as_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.GeoSeries" title="Permalink to this definition">#</a></dt>
 <dd><p>cuspatial.GeoSeries enables GPU-backed storage and computation of
 shapely-like objects. Our goal is to give feature parity with GeoPandas.
 At this time, only from_geopandas and to_geopandas are directly supported.
@@ -568,7 +476,11 @@ stored in the <cite>GeoArrowBuffers</cite> object, accessible with the <cite>poi
 <dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
 <dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#cuspatial.GeoSeries.iloc" title="cuspatial.GeoSeries.iloc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iloc</span></code></a></dt><dd><p>Return the i-th row of the GeoSeries.</p>
+</dd>
 <dt><a class="reference internal" href="#cuspatial.GeoSeries.lines" title="cuspatial.GeoSeries.lines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lines</span></code></a></dt><dd><p>Access the <cite>LineArray</cite> of the underlying <cite>GeoArrowBuffers</cite>.</p>
+</dd>
+<dt><a class="reference internal" href="#cuspatial.GeoSeries.loc" title="cuspatial.GeoSeries.loc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loc</span></code></a></dt><dd><p>Not currently supported.</p>
 </dd>
 <dt><a class="reference internal" href="#cuspatial.GeoSeries.multipoints" title="cuspatial.GeoSeries.multipoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">multipoints</span></code></a></dt><dd><p>Access the <cite>MultiPointArray</cite> of the underlying <cite>GeoArrowBuffers</cite>.</p>
 </dd>
@@ -576,6 +488,7 @@ stored in the <cite>GeoArrowBuffers</cite> object, accessible with the <cite>poi
 </dd>
 <dt><a class="reference internal" href="#cuspatial.GeoSeries.polygons" title="cuspatial.GeoSeries.polygons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">polygons</span></code></a></dt><dd><p>Access the <cite>PolygonArray</cite> of the underlying <cite>GeoArrowBuffers</cite>.</p>
 </dd>
+<dt><strong>type</strong></dt><dd></dd>
 </dl>
 </dd>
 </dl>
@@ -586,6 +499,18 @@ stored in the <cite>GeoArrowBuffers</cite> object, accessible with the <cite>poi
 <col style="width: 90%">
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cuspatial.GeoSeries.GeoSeriesILocIndexer" title="cuspatial.GeoSeries.GeoSeriesILocIndexer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GeoSeriesILocIndexer</span></code></a>(sr)</p></td>
+<td><p>Each row of a GeoSeries is one of the six types: Point, MultiPoint, LineString, MultiLineString, Polygon, or MultiPolygon.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cuspatial.GeoSeries.GeoSeriesLocIndexer" title="cuspatial.GeoSeries.GeoSeriesLocIndexer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GeoSeriesLocIndexer</span></code></a>(_sr)</p></td>
+<td><p>Map the index to an integer Series and use that.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cuspatial.GeoSeries.from_arrow" title="cuspatial.GeoSeries.from_arrow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_arrow</span></code></a>()</p></td>
+<td><p>Create from PyArrow Array/ChunkedArray.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cuspatial.GeoSeries.to_arrow" title="cuspatial.GeoSeries.to_arrow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_arrow</span></code></a>()</p></td>
+<td><p>Convert to a PyArrow Array.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#cuspatial.GeoSeries.to_geopandas" title="cuspatial.GeoSeries.to_geopandas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_geopandas</span></code></a>([nullable])</p></td>
 <td><p>Returns a new GeoPandas GeoSeries object from the coordinates in the cuspatial GeoSeries.</p></td>
 </tr>
@@ -594,10 +519,86 @@ stored in the <cite>GeoArrowBuffers</cite> object, accessible with the <cite>poi
 </tr>
 </tbody>
 </table>
+<table class="table">
+<colgroup>
+<col style="width: 68%">
+<col style="width: 32%">
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>GeoColumnAccessor</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>to_shapely</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="cuspatial.GeoSeries.GeoSeriesILocIndexer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GeoSeriesILocIndexer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.GeoSeries.GeoSeriesILocIndexer" title="Permalink to this definition">#</a></dt>
+<dd><p>Each row of a GeoSeries is one of the six types: Point, MultiPoint,
+LineString, MultiLineString, Polygon, or MultiPolygon.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cuspatial.GeoSeries.GeoSeriesLocIndexer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GeoSeriesLocIndexer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_sr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.GeoSeries.GeoSeriesLocIndexer" title="Permalink to this definition">#</a></dt>
+<dd><p>Map the index to an integer Series and use that.</p>
+<p>Warning! This only supports single values as input at this time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cuspatial.GeoSeries.from_arrow">
+<span class="sig-name descname"><span class="pre">from_arrow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.GeoSeries.from_arrow" title="Permalink to this definition">#</a></dt>
+<dd><p>Create from PyArrow Array/ChunkedArray.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>array</strong><span class="classifier">PyArrow Array/ChunkedArray</span></dt><dd><p>PyArrow Object which has to be converted.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>SingleColumnFrame</dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>TypeError for invalid input type.</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyarrow</span> <span class="k">as</span> <span class="nn">pa</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cudf</span><span class="o">.</span><span class="n">Index</span><span class="o">.</span><span class="n">from_arrow</span><span class="p">(</span><span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="kc">None</span><span class="p">]))</span>
+<span class="go">StringIndex(['a' 'b' None], dtype='object')</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="o">.</span><span class="n">from_arrow</span><span class="p">(</span><span class="n">pa</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="kc">None</span><span class="p">]))</span>
+<span class="go">0       a</span>
+<span class="go">1       b</span>
+<span class="go">2    &lt;NA&gt;</span>
+<span class="go">dtype: object</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="cuspatial.GeoSeries.iloc">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">iloc</span></span><a class="headerlink" href="#cuspatial.GeoSeries.iloc" title="Permalink to this definition">#</a></dt>
+<dd><p>Return the i-th row of the GeoSeries.</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="cuspatial.GeoSeries.lines">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lines</span></span><a class="headerlink" href="#cuspatial.GeoSeries.lines" title="Permalink to this definition">#</a></dt>
 <dd><p>Access the <cite>LineArray</cite> of the underlying <cite>GeoArrowBuffers</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="cuspatial.GeoSeries.loc">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">loc</span></span><a class="headerlink" href="#cuspatial.GeoSeries.loc" title="Permalink to this definition">#</a></dt>
+<dd><p>Not currently supported.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -616,6 +617,39 @@ stored in the <cite>GeoArrowBuffers</cite> object, accessible with the <cite>poi
 <dt class="sig sig-object py" id="cuspatial.GeoSeries.polygons">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">polygons</span></span><a class="headerlink" href="#cuspatial.GeoSeries.polygons" title="Permalink to this definition">#</a></dt>
 <dd><p>Access the <cite>PolygonArray</cite> of the underlying <cite>GeoArrowBuffers</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cuspatial.GeoSeries.to_arrow">
+<span class="sig-name descname"><span class="pre">to_arrow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.GeoSeries.to_arrow" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert to a PyArrow Array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>PyArrow Array</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sr</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sr</span><span class="o">.</span><span class="n">to_arrow</span><span class="p">()</span>
+<span class="go">&lt;pyarrow.lib.StringArray object at 0x7f796b0e7600&gt;</span>
+<span class="go">[</span>
+<span class="go">  "a",</span>
+<span class="go">  "b",</span>
+<span class="go">  null</span>
+<span class="go">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ind</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Index</span><span class="p">([</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ind</span><span class="o">.</span><span class="n">to_arrow</span><span class="p">()</span>
+<span class="go">&lt;pyarrow.lib.StringArray object at 0x7f796b0e7750&gt;</span>
+<span class="go">[</span>
+<span class="go">  "a",</span>
+<span class="go">  "b",</span>
+<span class="go">  null</span>
+<span class="go">]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -681,7 +715,7 @@ compatibility with pandas.</p>
   
   <div class="footer-item">
     <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br>
 </p>
   </div>
   
