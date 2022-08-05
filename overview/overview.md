@@ -26,7 +26,7 @@ Download the latest version of the RAPIDS release deck.
 Download current and previous versions of the RAPIDS release decks.
 {: .mt-0 }
 
-### v22.04 Release | June 2022
+### v22.06 Release | June 2022
 
 #### Download **[pdf](/overview/RAPIDS 22.06 Release Deck.pdf){: target="_blank"}** | **[pptx](/overview/RAPIDS 22.06 Release Deck.pptx){: target="_blank"}** 
 {: .mb-7 .mt-0 }
