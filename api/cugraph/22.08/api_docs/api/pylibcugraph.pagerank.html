@@ -33,7 +33,7 @@
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
-    <script src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link href="../../genindex.html" rel="index" title="Index">
     <link href="../../search.html" rel="search" title="Search">
@@ -1149,7 +1149,7 @@
 <h1>pylibcugraph.pagerank<a class="headerlink" href="#pylibcugraph-pagerank" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pylibcugraph.pagerank">
-<span class="sig-prename descclassname"><span class="pre">pylibcugraph.</span></span><span class="sig-name descname"><span class="pre">pagerank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ResourceHandle</span> <span class="pre">resource_handle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_GPUGraph</span> <span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputed_vertex_out_weight_sums</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">epsilon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_t</span> <span class="pre">max_iterations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool_t</span> <span class="pre">has_initial_guess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool_t</span> <span class="pre">do_expensive_check</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/cdc563f/python/cugraph/../../../../../../../../../rapids/cugraph/python/pylibcugraph/pylibcugraph/pagerank.pyx#L1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibcugraph.pagerank" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pylibcugraph.</span></span><span class="sig-name descname"><span class="pre">pagerank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ResourceHandle</span> <span class="pre">resource_handle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_GPUGraph</span> <span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputed_vertex_out_weight_vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputed_vertex_out_weight_sums</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_guess_vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_guess_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double</span> <span class="pre">epsilon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_t</span> <span class="pre">max_iterations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool_t</span> <span class="pre">do_expensive_check</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/f8e4aaa/python/cugraph/../../../../../../../../../rapids/cugraph/python/pylibcugraph/pylibcugraph/pagerank.pyx#L57"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibcugraph.pagerank" title="Permalink to this definition">#</a></dt>
 <dd><p>Find the PageRank score for every vertex in a graph by computing an
 approximation of the Pagerank eigenvector using the power method. The
 number of iterations depends on the properties of the network itself; it
@@ -1161,17 +1161,26 @@ limiting value of 1.</p>
 <dt><strong>resource_handle</strong><span class="classifier">ResourceHandle</span></dt><dd><p>Handle to the underlying device resources needed for referencing data
 and running algorithms.</p>
 </dd>
-<dt><strong>graph</strong><span class="classifier">SGGraph</span></dt><dd><p>The input graph.</p>
+<dt><strong>graph</strong><span class="classifier">SGGraph or MGGraph</span></dt><dd><p>The input graph.</p>
 </dd>
-<dt><strong>precomputed_vertex_out_weight_sums</strong><span class="classifier">None</span></dt><dd><p>This parameter is unsupported in this release and only None is
-accepted.</p>
+<dt><strong>precomputed_vertex_out_weight_vertices: device array type</strong></dt><dd><p>Subset of vertices of graph for precomputed_vertex_out_weight
+(a performance optimization)</p>
 </dd>
-<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>The damping factor alpha represents the probability to follow an
+<dt><strong>precomputed_vertex_out_weight_sums</strong><span class="classifier">device array type</span></dt><dd><p>Corresponding precomputed sum of outgoing vertices weight
+(a performance optimization)</p>
+</dd>
+<dt><strong>initial_guess_vertices</strong><span class="classifier">device array type</span></dt><dd><p>Subset of vertices of graph for initial guess for pagerank values
+(a performance optimization)</p>
+</dd>
+<dt><strong>initial_guess_values</strong><span class="classifier">device array type</span></dt><dd><p>Pagerank values for vertices
+(a performance optimization)</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">double</span></dt><dd><p>The damping factor alpha represents the probability to follow an
 outgoing edge, standard value is 0.85.
 Thus, 1.0-alpha is the probability to &ldquo;teleport&rdquo; to a random vertex.
 Alpha should be greater than 0.0 and strictly lower than 1.0.</p>
 </dd>
-<dt><strong>epsilon</strong><span class="classifier">float</span></dt><dd><p>Set the tolerance the approximation, this parameter should be a small
+<dt><strong>epsilon</strong><span class="classifier">double</span></dt><dd><p>Set the tolerance the approximation, this parameter should be a small
 magnitude value.
 The lower the tolerance the better the approximation. If this value is
 0.0f, cuGraph will use the default value which is 1.0E-5.
@@ -1179,16 +1188,13 @@ Setting too small a tolerance can lead to non-convergence due to
 numerical roundoff. Usually values between 0.01 and 0.00001 are
 acceptable.</p>
 </dd>
-<dt><strong>max_iterations</strong><span class="classifier">int</span></dt><dd><p>The maximum number of iterations before an answer is returned. This can
+<dt><strong>max_iterations</strong><span class="classifier">size_t</span></dt><dd><p>The maximum number of iterations before an answer is returned. This can
 be used to limit the execution time and do an early exit before the
 solver reaches the convergence tolerance.
 If this value is lower or equal to 0 cuGraph will use the default
 value, which is 100.</p>
 </dd>
-<dt><strong>has_initial_guess</strong><span class="classifier">bool</span></dt><dd><p>This parameter is unsupported in this release and only False is
-accepted.</p>
-</dd>
-<dt><strong>do_expensive_check</strong><span class="classifier">bool</span></dt><dd><p>If True, performs more extensive tests on the inputs to ensure
+<dt><strong>do_expensive_check</strong><span class="classifier">bool_t</span></dt><dd><p>If True, performs more extensive tests on the inputs to ensure
 validitity, at the expense of increased run time.</p>
 </dd>
 </dl>
@@ -1215,9 +1221,8 @@ validitity, at the expense of increased run time.</p>
 <span class="gp">... </span>    <span class="n">resource_handle</span><span class="p">,</span> <span class="n">graph_props</span><span class="p">,</span> <span class="n">srcs</span><span class="p">,</span> <span class="n">dsts</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">store_transposed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">renumber</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">do_expensive_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">pageranks</span><span class="p">)</span> <span class="o">=</span> <span class="n">pylibcugraph</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">resource_handle</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.85</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">max_iterations</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">has_initial_guess</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">do_expensive_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">resource_handle</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.85</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">epsilon</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">do_expensive_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vertices</span>
 <span class="go">array([0, 1, 2, 3], dtype=int32)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pageranks</span>

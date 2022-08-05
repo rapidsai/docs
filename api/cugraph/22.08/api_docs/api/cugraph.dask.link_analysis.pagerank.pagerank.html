@@ -33,7 +33,7 @@
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
-    <script src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link href="../../genindex.html" rel="index" title="Index">
     <link href="../../search.html" rel="search" title="Search">
@@ -1149,15 +1149,16 @@
 <h1>cugraph.dask.link_analysis.pagerank.pagerank<a class="headerlink" href="#cugraph-dask-link-analysis-pagerank-pagerank" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="cugraph.dask.link_analysis.pagerank.pagerank">
-<span class="sig-prename descclassname"><span class="pre">cugraph.dask.link_analysis.pagerank.</span></span><span class="sig-name descname"><span class="pre">pagerank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.85</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">personalization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/cdc563f/python/cugraph/dask/link_analysis/pagerank.py#L59"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.dask.link_analysis.pagerank.pagerank" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cugraph.dask.link_analysis.pagerank.</span></span><span class="sig-name descname"><span class="pre">pagerank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.85</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">personalization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputed_vertex_out_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/f8e4aaa/python/cugraph/dask/link_analysis/pagerank.py#L129"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.dask.link_analysis.pagerank.pagerank" title="Permalink to this definition">#</a></dt>
 <dd><p>Find the PageRank values for each vertex in a graph using multiple GPUs.
 cuGraph computes an approximation of the Pagerank using the power method.
 The input graph must contain edge list as  dask-cudf dataframe with
-one partition per GPU.</p>
+one partition per GPU.
+All edges will have an edge_attr value of 1.0 if not provided.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>input_graph</strong><span class="classifier">cugraph.DiGraph</span></dt><dd><p>cuGraph graph descriptor, should contain the connectivity information
+<dt><strong>input_graph</strong><span class="classifier">cugraph.Graph</span></dt><dd><p>cuGraph graph descriptor, should contain the connectivity information
 as dask cudf edge list dataframe(edge weights are not used for this
 algorithm).</p>
 </dd>
@@ -1167,19 +1168,35 @@ Thus, 1.0-alpha is the probability to &ldquo;teleport&rdquo; to a random vertex.
 Alpha should be greater than 0.0 and strictly lower than 1.0.</p>
 </dd>
 <dt><strong>personalization</strong><span class="classifier">cudf.Dataframe, optional (default=None)</span></dt><dd><p>GPU Dataframe containing the personalization information.
-Currently not supported.</p>
+(a performance optimization)
+personalization[&lsquo;vertex&rsquo;] : cudf.Series</p>
+<blockquote>
+<div><p>Subset of vertices of graph for personalization</p>
+</div></blockquote>
 <dl class="simple">
-<dt>personalization[&lsquo;vertex&rsquo;]<span class="classifier">cudf.Series</span></dt><dd><p>Subset of vertices of graph for personalization</p>
-</dd>
 <dt>personalization[&lsquo;values&rsquo;]<span class="classifier">cudf.Series</span></dt><dd><p>Personalization values for vertices</p>
 </dd>
 </dl>
 </dd>
-<dt><strong>max_iter</strong><span class="classifier">int, optional (default=100)</span></dt><dd><p>The maximum number of iterations before an answer is returned.
-If this value is lower or equal to 0 cuGraph will use the default
-value, which is 30.</p>
+<dt><strong>precomputed_vertex_out_weight</strong><span class="classifier">cudf.Dataframe, optional (default=None)</span></dt><dd><p>GPU Dataframe containing the precomputed vertex out weight
+(a performance optimization)
+information.
+precomputed_vertex_out_weight[&lsquo;vertex&rsquo;] : cudf.Series</p>
+<blockquote>
+<div><p>Subset of vertices of graph for precomputed_vertex_out_weight</p>
+</div></blockquote>
+<dl class="simple">
+<dt>precomputed_vertex_out_weight[&lsquo;sums&rsquo;]<span class="classifier">cudf.Series</span></dt><dd><p>Corresponding precomputed sum of outgoing vertices weight</p>
 </dd>
-<dt><strong>tol</strong><span class="classifier">float, optional (default=1.0e-5)</span></dt><dd><p>Set the tolerance the approximation, this parameter should be a small
+</dl>
+</dd>
+<dt><strong>max_iter</strong><span class="classifier">int, optional (default=100)</span></dt><dd><p>The maximum number of iterations before an answer is returned. This can
+be used to limit the execution time and do an early exit before the
+solver reaches the convergence tolerance.
+If this value is lower or equal to 0 cuGraph will use the default
+value, which is 100.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional (default=1e-05)</span></dt><dd><p>Set the tolerance the approximation, this parameter should be a small
 magnitude value.
 The lower the tolerance the better the approximation. If this value is
 0.0f, cuGraph will use the default value which is 1.0E-5.
@@ -1187,7 +1204,16 @@ Setting too small a tolerance can lead to non-convergence due to
 numerical roundoff. Usually values between 0.01 and 0.00001 are
 acceptable.</p>
 </dd>
-<dt><strong>nstart</strong><span class="classifier">not supported</span></dt><dd><p>initial guess for pagerank</p>
+<dt><strong>nstart</strong><span class="classifier">cudf.Dataframe, optional (default=None)</span></dt><dd><p>GPU Dataframe containing the initial guess for pagerank.
+(a performance optimization)
+nstart[&lsquo;vertex&rsquo;] : cudf.Series</p>
+<blockquote>
+<div><p>Subset of vertices of graph for initial guess for pagerank values</p>
+</div></blockquote>
+<dl class="simple">
+<dt>nstart[&lsquo;values&rsquo;]<span class="classifier">cudf.Series</span></dt><dd><p>Pagerank values for vertices</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd>
@@ -1195,6 +1221,15 @@ acceptable.</p>
 <dd class="field-even"><dl>
 <dt><strong>PageRank</strong><span class="classifier">dask_cudf.DataFrame</span></dt><dd><p>GPU data frame containing two dask_cudf.Series of size V: the
 vertex identifiers and the corresponding PageRank values.</p>
+<p>NOTE: if the input cugraph.Graph was created using the renumber=False
+option of any of the from_*_edgelist() methods, pagerank assumes that
+the vertices in the edgelist are contiguous and start from 0.
+If the actual set of vertices in the edgelist is not
+contiguous (has gaps) or does not start from zero, pagerank will assume
+the &ldquo;missing&rdquo; vertices are isolated vertices in the graph, and will
+compute and return pagerank values for each. If this is not the desired
+behavior, ensure the input cugraph.Graph is created from the
+from_*_edgelist() functions with the renumber=True option (the default)</p>
 <dl class="simple">
 <dt>ddf[&lsquo;vertex&rsquo;]<span class="classifier">dask_cudf.Series</span></dt><dd><p>Contains the vertex identifiers</p>
 </dd>
