@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
+
+    <title>Interoperability between cuDF and CuPy &mdash; cudf 22.10.00 documentation</title>
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link href="../_static/vendor/fontawesome/5.13.0/css/all.min.css" rel="stylesheet">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2">
+
+    <link href="../_static/pygments.css" rel="stylesheet" type="text/css">
+    <link href="../_static/copybutton.css" rel="stylesheet" type="text/css">
+    <link href="../_static/mystnb.css" rel="stylesheet" type="text/css">
+    <link href="../_static/togglebutton.css" rel="stylesheet" type="text/css">
+    <link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet" type="text/css">
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695" rel="preload">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link href="../genindex.html" rel="index" title="Index">
+    <link href="../search.html" rel="search" title="Search">
+    <link href="dask-cudf.html" rel="next" title="Multi-GPU with Dask-cuDF">
+    <link href="guide-to-udfs.html" rel="prev" title="Overview of User Defined Functions with cuDF">
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<meta content="en" name="docsearch:language">
+  <script id="rapids-selector-pixel-src" src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+  
+  
+  <body data-default-mode data-offset="180" data-spy="scroll" data-target="#bd-toc-nav">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    <img alt="Logo image" class="logo__image only-light" src="../_static/RAPIDS-logo-purple.png">
+    <img alt="Logo image" class="logo__image only-dark" src="../_static/RAPIDS-logo-purple.png">
+  
+  
+</a>
+    
+  </div>
+
+  <button aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar-collapsible" data-toggle="collapse" type="button">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div class="collapse navbar-collapse" id="navbar-collapsible">
+    <div class="ml-auto" id="navbar-center">
+      
+      <div class="navbar-center-item">
+        <ul class="navbar-nav" id="navbar-main-elements">
+    <li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../api_docs/index.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../developer_guide/index.html">
+  Developer Guide
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <span class="btn btn-sm btn-outline-primary navbar-btn rounded-circle" id="theme-switch">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul aria-label="Icon Links" class="navbar-nav" id="navbar-icon-links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/rapidsai/cudf" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar"><div id="rapids-pydata-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">cudf</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/stable/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libcuspatial/stable">libcuspatial</a><a class="rapids-selector__menu-item" href="/api/libkvikio/stable">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/raft/stable">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (22.10)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/nightly/index.html">nightly (22.10)</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">stable (22.06)</a><a class="rapids-selector__menu-item" href="/api/cudf/legacy/index.html">legacy (22.04)</a></div></div></div>
+  <div class="sidebar-start-items"><form action="../search.html" class="bd-search d-flex align-items-center" method="get">
+  <i class="icon fas fa-search"></i>
+  <input aria-label="Search the docs ..." autocomplete="off" class="form-control" id="search-input" name="q" placeholder="Search the docs ..." type="search">
+</form><nav aria-label="Main navigation" class="bd-links" id="bd-docs-nav">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="10min.html">
+   10 Minutes to cuDF and Dask-cuDF
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pandas-comparison.html">
+   Comparison of cuDF and Pandas
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="data-types.html">
+   Supported Data Types
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="io.html">
+   Input / Output
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="missing-data.html">
+   Working with missing data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="groupby.html">
+   GroupBy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="guide-to-udfs.html">
+   Overview of User Defined Functions with cuDF
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Interoperability between cuDF and CuPy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="dask-cudf.html">
+   Multi-GPU with Dask-cuDF
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="options.html">
+   Options
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="PandasCompat.html">
+   Pandas Compatibility Notes
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#converting-a-cudf-dataframe-to-a-cupy-array">
+   Converting a cuDF DataFrame to a CuPy Array
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#converting-a-cudf-series-to-a-cupy-array">
+   Converting a cuDF Series to a CuPy Array
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#converting-a-cupy-array-to-a-cudf-dataframe">
+   Converting a CuPy Array to a cuDF DataFrame
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#converting-a-cupy-array-to-a-cudf-series">
+   Converting a CuPy Array to a cuDF Series
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#interweaving-cudf-and-cupy-for-smooth-pydata-workflows">
+   Interweaving CuDF and CuPy for Smooth PyData Workflows
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#converting-a-cudf-dataframe-to-a-cupy-sparse-matrix">
+   Converting a cuDF DataFrame to a CuPy Sparse Matrix
+  </a>
+ </li>
+</ul>
+
+</nav>
+    </div>
+    
+    <div class="toc-item">
+      
+    </div>
+    
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <section id="interoperability-between-cudf-and-cupy">
+<h1>Interoperability between cuDF and CuPy<a class="headerlink" href="#interoperability-between-cudf-and-cupy" title="Permalink to this heading">#</a></h1>
+<p>This notebook provides introductory examples of how you can use cuDF and CuPy together to take advantage of CuPy array functionality (such as advanced linear algebra operations).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">timeit</span>
+<span class="kn">from</span> <span class="nn">packaging</span> <span class="kn">import</span> <span class="n">version</span>
+
+<span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
+<span class="kn">import</span> <span class="nn">cudf</span>
+
+<span class="k">if</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">"10.0.0"</span><span class="p">):</span>
+    <span class="n">cupy_from_dlpack</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">from_dlpack</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">cupy_from_dlpack</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">fromDlpack</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="converting-a-cudf-dataframe-to-a-cupy-array">
+<h2>Converting a cuDF DataFrame to a CuPy Array<a class="headerlink" href="#converting-a-cudf-dataframe-to-a-cupy-array" title="Permalink to this heading">#</a></h2>
+<p>If we want to convert a cuDF DataFrame to a CuPy ndarray, There are multiple ways to do it:</p>
+<ol class="arabic simple">
+<li><p>We can use the <a class="reference external" href="https://github.com/dmlc/dlpack">dlpack</a> interface.</p></li>
+<li><p>We can also use <code class="docutils literal notranslate"><span class="pre">DataFrame.values</span></code>.</p></li>
+<li><p>We can also convert via the <a class="reference external" href="https://numba.pydata.org/numba-doc/dev/cuda/cuda_array_interface.html">CUDA array interface</a> by using cuDF&rsquo;s <code class="docutils literal notranslate"><span class="pre">as_gpu_matrix</span></code> and CuPy&rsquo;s <code class="docutils literal notranslate"><span class="pre">asarray</span></code> functionality.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nelem</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span><span class="nb">range</span><span class="p">(</span><span class="n">nelem</span><span class="p">),</span>
+                     <span class="s1">'b'</span><span class="p">:</span><span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">nelem</span> <span class="o">+</span> <span class="mi">500</span><span class="p">),</span>
+                     <span class="s1">'c'</span><span class="p">:</span><span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nelem</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">)}</span>
+                   <span class="p">)</span>
+
+<span class="o">%</span><span class="k">timeit</span> arr_cupy = cupy_from_dlpack(df.to_dlpack())
+<span class="o">%</span><span class="k">timeit</span> arr_cupy = df.values
+<span class="o">%</span><span class="k">timeit</span> arr_cupy = df.to_cupy()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>197 &micro;s &plusmn; 775 ns per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>604 &micro;s &plusmn; 4.27 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>604 &micro;s &plusmn; 6.95 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">arr_cupy</span> <span class="o">=</span> <span class="n">cupy_from_dlpack</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">to_dlpack</span><span class="p">())</span>
+<span class="n">arr_cupy</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[    0,   500,  1000],
+       [    1,   501,  1001],
+       [    2,   502,  1002],
+       ...,
+       [ 9997, 10497, 10997],
+       [ 9998, 10498, 10998],
+       [ 9999, 10499, 10999]])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="converting-a-cudf-series-to-a-cupy-array">
+<h2>Converting a cuDF Series to a CuPy Array<a class="headerlink" href="#converting-a-cudf-series-to-a-cupy-array" title="Permalink to this heading">#</a></h2>
+<p>There are also multiple ways to convert a cuDF Series to a CuPy array:</p>
+<ol class="arabic simple">
+<li><p>We can pass the Series to <code class="docutils literal notranslate"><span class="pre">cupy.asarray</span></code> as cuDF Series exposes <a class="reference external" href="https://docs-cupy.chainer.org/en/stable/reference/interoperability.html"><code class="docutils literal notranslate"><span class="pre">__cuda_array_interface__</span></code></a>.</p></li>
+<li><p>We can leverage the dlpack interface <code class="docutils literal notranslate"><span class="pre">to_dlpack()</span></code>.</p></li>
+<li><p>We can also use <code class="docutils literal notranslate"><span class="pre">Series.values</span></code></p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">col</span> <span class="o">=</span> <span class="s1">'a'</span>
+
+<span class="o">%</span><span class="k">timeit</span> cola_cupy = cp.asarray(df[col])
+<span class="o">%</span><span class="k">timeit</span> cola_cupy = cupy_from_dlpack(df[col].to_dlpack())
+<span class="o">%</span><span class="k">timeit</span> cola_cupy = df[col].values
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>91.3 &micro;s &plusmn; 1.05 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 10000 loops each)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>215 &micro;s &plusmn; 604 ns per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>200 &micro;s &plusmn; 1.24 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cola_cupy</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+<span class="n">cola_cupy</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([   0,    1,    2, ..., 9997, 9998, 9999])
+</pre></div>
+</div>
+</div>
+</div>
+<p>From here, we can proceed with normal CuPy workflows, such as reshaping the array, getting the diagonal, or calculating the norm.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshaped_arr</span> <span class="o">=</span> <span class="n">cola_cupy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="n">reshaped_arr</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[   0,    1,    2, ...,  197,  198,  199],
+       [ 200,  201,  202, ...,  397,  398,  399],
+       [ 400,  401,  402, ...,  597,  598,  599],
+       ...,
+       [9400, 9401, 9402, ..., 9597, 9598, 9599],
+       [9600, 9601, 9602, ..., 9797, 9798, 9799],
+       [9800, 9801, 9802, ..., 9997, 9998, 9999]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshaped_arr</span><span class="o">.</span><span class="n">diagonal</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([   0,  201,  402,  603,  804, 1005, 1206, 1407, 1608, 1809, 2010,
+       2211, 2412, 2613, 2814, 3015, 3216, 3417, 3618, 3819, 4020, 4221,
+       4422, 4623, 4824, 5025, 5226, 5427, 5628, 5829, 6030, 6231, 6432,
+       6633, 6834, 7035, 7236, 7437, 7638, 7839, 8040, 8241, 8442, 8643,
+       8844, 9045, 9246, 9447, 9648, 9849])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">reshaped_arr</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array(577306.967739)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="converting-a-cupy-array-to-a-cudf-dataframe">
+<h2>Converting a CuPy Array to a cuDF DataFrame<a class="headerlink" href="#converting-a-cupy-array-to-a-cudf-dataframe" title="Permalink to this heading">#</a></h2>
+<p>We can also convert a CuPy ndarray to a cuDF DataFrame. Like before, there are multiple ways to do it:</p>
+<ol class="arabic simple">
+<li><p><strong>Easiest;</strong> We can directly use the <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> constructor.</p></li>
+<li><p>We can use CUDA array interface with the <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> constructor.</p></li>
+<li><p>We can also use the <a class="reference external" href="https://github.com/dmlc/dlpack">dlpack</a> interface.</p></li>
+</ol>
+<p>For the latter two cases, we&rsquo;ll need to make sure that our CuPy array is Fortran contiguous in memory (if it&rsquo;s not already). We can either transpose the array or simply coerce it to be Fortran contiguous beforehand.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> reshaped_df = cudf.DataFrame(reshaped_arr)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>27.6 ms &plusmn; 131 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 10 loops each)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshaped_df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">reshaped_arr</span><span class="p">)</span>
+<span class="n">reshaped_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>...</th>
+      <th>190</th>
+      <th>191</th>
+      <th>192</th>
+      <th>193</th>
+      <th>194</th>
+      <th>195</th>
+      <th>196</th>
+      <th>197</th>
+      <th>198</th>
+      <th>199</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+      <td>...</td>
+      <td>190</td>
+      <td>191</td>
+      <td>192</td>
+      <td>193</td>
+      <td>194</td>
+      <td>195</td>
+      <td>196</td>
+      <td>197</td>
+      <td>198</td>
+      <td>199</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>200</td>
+      <td>201</td>
+      <td>202</td>
+      <td>203</td>
+      <td>204</td>
+      <td>205</td>
+      <td>206</td>
+      <td>207</td>
+      <td>208</td>
+      <td>209</td>
+      <td>...</td>
+      <td>390</td>
+      <td>391</td>
+      <td>392</td>
+      <td>393</td>
+      <td>394</td>
+      <td>395</td>
+      <td>396</td>
+      <td>397</td>
+      <td>398</td>
+      <td>399</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>400</td>
+      <td>401</td>
+      <td>402</td>
+      <td>403</td>
+      <td>404</td>
+      <td>405</td>
+      <td>406</td>
+      <td>407</td>
+      <td>408</td>
+      <td>409</td>
+      <td>...</td>
+      <td>590</td>
+      <td>591</td>
+      <td>592</td>
+      <td>593</td>
+      <td>594</td>
+      <td>595</td>
+      <td>596</td>
+      <td>597</td>
+      <td>598</td>
+      <td>599</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>600</td>
+      <td>601</td>
+      <td>602</td>
+      <td>603</td>
+      <td>604</td>
+      <td>605</td>
+      <td>606</td>
+      <td>607</td>
+      <td>608</td>
+      <td>609</td>
+      <td>...</td>
+      <td>790</td>
+      <td>791</td>
+      <td>792</td>
+      <td>793</td>
+      <td>794</td>
+      <td>795</td>
+      <td>796</td>
+      <td>797</td>
+      <td>798</td>
+      <td>799</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>800</td>
+      <td>801</td>
+      <td>802</td>
+      <td>803</td>
+      <td>804</td>
+      <td>805</td>
+      <td>806</td>
+      <td>807</td>
+      <td>808</td>
+      <td>809</td>
+      <td>...</td>
+      <td>990</td>
+      <td>991</td>
+      <td>992</td>
+      <td>993</td>
+      <td>994</td>
+      <td>995</td>
+      <td>996</td>
+      <td>997</td>
+      <td>998</td>
+      <td>999</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows &times; 200 columns</p>
+</div></div></div>
+</div>
+<p>We can check whether our array is Fortran contiguous by using cupy.isfortran or looking at the <a class="reference external" href="https://docs-cupy.chainer.org/en/stable/reference/generated/cupy.ndarray.html#cupy.ndarray.flags">flags</a> of the array.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span><span class="o">.</span><span class="n">isfortran</span><span class="p">(</span><span class="n">reshaped_arr</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>False
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this case, we&rsquo;ll need to convert it before going to a cuDF DataFrame. In the next two cells, we create the DataFrame by leveraging dlpack and the CUDA array interface, respectively.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>it
+
+<span class="n">fortran_arr</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">reshaped_arr</span><span class="p">)</span>
+<span class="n">reshaped_df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">fortran_arr</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>11.4 ms &plusmn; 219 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 1 loop each)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>it
+
+<span class="n">fortran_arr</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">reshaped_arr</span><span class="p">)</span>
+<span class="n">reshaped_df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">from_dlpack</span><span class="p">(</span><span class="n">fortran_arr</span><span class="o">.</span><span class="n">toDlpack</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>7.11 ms &plusmn; 94.6 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 100 loops each)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fortran_arr</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asfortranarray</span><span class="p">(</span><span class="n">reshaped_arr</span><span class="p">)</span>
+<span class="n">reshaped_df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">fortran_arr</span><span class="p">)</span>
+<span class="n">reshaped_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>...</th>
+      <th>190</th>
+      <th>191</th>
+      <th>192</th>
+      <th>193</th>
+      <th>194</th>
+      <th>195</th>
+      <th>196</th>
+      <th>197</th>
+      <th>198</th>
+      <th>199</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+      <td>...</td>
+      <td>190</td>
+      <td>191</td>
+      <td>192</td>
+      <td>193</td>
+      <td>194</td>
+      <td>195</td>
+      <td>196</td>
+      <td>197</td>
+      <td>198</td>
+      <td>199</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>200</td>
+      <td>201</td>
+      <td>202</td>
+      <td>203</td>
+      <td>204</td>
+      <td>205</td>
+      <td>206</td>
+      <td>207</td>
+      <td>208</td>
+      <td>209</td>
+      <td>...</td>
+      <td>390</td>
+      <td>391</td>
+      <td>392</td>
+      <td>393</td>
+      <td>394</td>
+      <td>395</td>
+      <td>396</td>
+      <td>397</td>
+      <td>398</td>
+      <td>399</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>400</td>
+      <td>401</td>
+      <td>402</td>
+      <td>403</td>
+      <td>404</td>
+      <td>405</td>
+      <td>406</td>
+      <td>407</td>
+      <td>408</td>
+      <td>409</td>
+      <td>...</td>
+      <td>590</td>
+      <td>591</td>
+      <td>592</td>
+      <td>593</td>
+      <td>594</td>
+      <td>595</td>
+      <td>596</td>
+      <td>597</td>
+      <td>598</td>
+      <td>599</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>600</td>
+      <td>601</td>
+      <td>602</td>
+      <td>603</td>
+      <td>604</td>
+      <td>605</td>
+      <td>606</td>
+      <td>607</td>
+      <td>608</td>
+      <td>609</td>
+      <td>...</td>
+      <td>790</td>
+      <td>791</td>
+      <td>792</td>
+      <td>793</td>
+      <td>794</td>
+      <td>795</td>
+      <td>796</td>
+      <td>797</td>
+      <td>798</td>
+      <td>799</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>800</td>
+      <td>801</td>
+      <td>802</td>
+      <td>803</td>
+      <td>804</td>
+      <td>805</td>
+      <td>806</td>
+      <td>807</td>
+      <td>808</td>
+      <td>809</td>
+      <td>...</td>
+      <td>990</td>
+      <td>991</td>
+      <td>992</td>
+      <td>993</td>
+      <td>994</td>
+      <td>995</td>
+      <td>996</td>
+      <td>997</td>
+      <td>998</td>
+      <td>999</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows &times; 200 columns</p>
+</div></div></div>
+</div>
+</section>
+<section id="converting-a-cupy-array-to-a-cudf-series">
+<h2>Converting a CuPy Array to a cuDF Series<a class="headerlink" href="#converting-a-cupy-array-to-a-cudf-series" title="Permalink to this heading">#</a></h2>
+<p>To convert an array to a Series, we can directly pass the array to the <code class="docutils literal notranslate"><span class="pre">Series</span></code> constructor.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">reshaped_arr</span><span class="o">.</span><span class="n">diagonal</span><span class="p">())</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0      0
+1    201
+2    402
+3    603
+4    804
+dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="interweaving-cudf-and-cupy-for-smooth-pydata-workflows">
+<h2>Interweaving CuDF and CuPy for Smooth PyData Workflows<a class="headerlink" href="#interweaving-cudf-and-cupy-for-smooth-pydata-workflows" title="Permalink to this heading">#</a></h2>
+<p>RAPIDS libraries and the entire GPU PyData ecosystem are developing quickly, but sometimes a one library may not have the functionality you need. One example of this might be taking the row-wise sum (or mean) of a Pandas DataFrame. cuDF&rsquo;s support for row-wise operations isn&rsquo;t mature, so you&rsquo;d need to either transpose the DataFrame or write a UDF and explicitly calculate the sum across each row. Transposing could lead to hundreds of thousands of columns (which cuDF wouldn&rsquo;t perform well with) depending on your data&rsquo;s shape, and writing a UDF can be time intensive.</p>
+<p>By leveraging the interoperability of the GPU PyData ecosystem, this operation becomes very easy. Let&rsquo;s take the row-wise sum of our previously reshaped cuDF DataFrame.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshaped_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>...</th>
+      <th>190</th>
+      <th>191</th>
+      <th>192</th>
+      <th>193</th>
+      <th>194</th>
+      <th>195</th>
+      <th>196</th>
+      <th>197</th>
+      <th>198</th>
+      <th>199</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+      <td>...</td>
+      <td>190</td>
+      <td>191</td>
+      <td>192</td>
+      <td>193</td>
+      <td>194</td>
+      <td>195</td>
+      <td>196</td>
+      <td>197</td>
+      <td>198</td>
+      <td>199</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>200</td>
+      <td>201</td>
+      <td>202</td>
+      <td>203</td>
+      <td>204</td>
+      <td>205</td>
+      <td>206</td>
+      <td>207</td>
+      <td>208</td>
+      <td>209</td>
+      <td>...</td>
+      <td>390</td>
+      <td>391</td>
+      <td>392</td>
+      <td>393</td>
+      <td>394</td>
+      <td>395</td>
+      <td>396</td>
+      <td>397</td>
+      <td>398</td>
+      <td>399</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>400</td>
+      <td>401</td>
+      <td>402</td>
+      <td>403</td>
+      <td>404</td>
+      <td>405</td>
+      <td>406</td>
+      <td>407</td>
+      <td>408</td>
+      <td>409</td>
+      <td>...</td>
+      <td>590</td>
+      <td>591</td>
+      <td>592</td>
+      <td>593</td>
+      <td>594</td>
+      <td>595</td>
+      <td>596</td>
+      <td>597</td>
+      <td>598</td>
+      <td>599</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>600</td>
+      <td>601</td>
+      <td>602</td>
+      <td>603</td>
+      <td>604</td>
+      <td>605</td>
+      <td>606</td>
+      <td>607</td>
+      <td>608</td>
+      <td>609</td>
+      <td>...</td>
+      <td>790</td>
+      <td>791</td>
+      <td>792</td>
+      <td>793</td>
+      <td>794</td>
+      <td>795</td>
+      <td>796</td>
+      <td>797</td>
+      <td>798</td>
+      <td>799</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>800</td>
+      <td>801</td>
+      <td>802</td>
+      <td>803</td>
+      <td>804</td>
+      <td>805</td>
+      <td>806</td>
+      <td>807</td>
+      <td>808</td>
+      <td>809</td>
+      <td>...</td>
+      <td>990</td>
+      <td>991</td>
+      <td>992</td>
+      <td>993</td>
+      <td>994</td>
+      <td>995</td>
+      <td>996</td>
+      <td>997</td>
+      <td>998</td>
+      <td>999</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows &times; 200 columns</p>
+</div></div></div>
+</div>
+<p>We can just transform it into a CuPy array and use the <code class="docutils literal notranslate"><span class="pre">axis</span></code> argument of <code class="docutils literal notranslate"><span class="pre">sum</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_arr</span> <span class="o">=</span> <span class="n">cupy_from_dlpack</span><span class="p">(</span><span class="n">reshaped_df</span><span class="o">.</span><span class="n">to_dlpack</span><span class="p">())</span>
+<span class="n">new_arr</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([  19900,   59900,   99900,  139900,  179900,  219900,  259900,
+        299900,  339900,  379900,  419900,  459900,  499900,  539900,
+        579900,  619900,  659900,  699900,  739900,  779900,  819900,
+        859900,  899900,  939900,  979900, 1019900, 1059900, 1099900,
+       1139900, 1179900, 1219900, 1259900, 1299900, 1339900, 1379900,
+       1419900, 1459900, 1499900, 1539900, 1579900, 1619900, 1659900,
+       1699900, 1739900, 1779900, 1819900, 1859900, 1899900, 1939900,
+       1979900])
+</pre></div>
+</div>
+</div>
+</div>
+<p>With just that single line, we&rsquo;re able to seamlessly move between data structures in this ecosystem, giving us enormous flexibility without sacrificing speed.</p>
+</section>
+<section id="converting-a-cudf-dataframe-to-a-cupy-sparse-matrix">
+<h2>Converting a cuDF DataFrame to a CuPy Sparse Matrix<a class="headerlink" href="#converting-a-cudf-dataframe-to-a-cupy-sparse-matrix" title="Permalink to this heading">#</a></h2>
+<p>We can also convert a DataFrame or Series to a CuPy sparse matrix. We might want to do this if downstream processes expect CuPy sparse matrices as an input.</p>
+<p>The sparse matrix data structure is defined by three dense arrays. We&rsquo;ll define a small helper function for cleanliness.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cudf_to_cupy_sparse_matrix</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sparseformat</span><span class="o">=</span><span class="s1">'column'</span><span class="p">):</span>
+    <span class="sd">"""Converts a cuDF object to a CuPy Sparse Column matrix.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">sparseformat</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">'row'</span><span class="p">,</span> <span class="s1">'column'</span><span class="p">,):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Let's focus on column and row formats for now."</span><span class="p">)</span>
+    
+    <span class="n">_sparse_constructor</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csc_matrix</span>
+    <span class="k">if</span> <span class="n">sparseformat</span> <span class="o">==</span> <span class="s1">'row'</span><span class="p">:</span>
+        <span class="n">_sparse_constructor</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span>
+
+    <span class="k">return</span> <span class="n">_sparse_constructor</span><span class="p">(</span><span class="n">cupy_from_dlpack</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">to_dlpack</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can define a sparsely populated DataFrame to illustrate this conversion to either sparse matrix format.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="n">nelem</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">nonzero</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">nelem</span><span class="p">)</span>
+    <span class="n">arr</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nelem</span><span class="o">-</span><span class="n">nonzero</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">'a'</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">arr</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a0</th>
+      <th>a1</th>
+      <th>a2</th>
+      <th>a3</th>
+      <th>a4</th>
+      <th>a5</th>
+      <th>a6</th>
+      <th>a7</th>
+      <th>a8</th>
+      <th>a9</th>
+      <th>a10</th>
+      <th>a11</th>
+      <th>a12</th>
+      <th>a13</th>
+      <th>a14</th>
+      <th>a15</th>
+      <th>a16</th>
+      <th>a17</th>
+      <th>a18</th>
+      <th>a19</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.000000</td>
+      <td>-1.395829</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>11.966600</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>9.879527</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7.405112</td>
+      <td>8.391402</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>11.752511</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-3.556254</td>
+      <td>0.0</td>
+      <td>11.190321</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>13.603564</td>
+      <td>0.000000</td>
+      <td>2.497858</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>4.900634</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.834524</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>4.457329</td>
+      <td>8.818333</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sparse_data</span> <span class="o">=</span> <span class="n">cudf_to_cupy_sparse_matrix</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sparse_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  (1153, 0)	13.320435256688253
+  (2, 0)	7.405111704116829
+  (898, 0)	0.6615664557986134
+  (4, 0)	1.8345240226377175
+  (772, 0)	4.987932114820473
+  (5, 0)	6.3627894147281205
+  (519, 0)	6.6957315681662415
+  (1159, 0)	10.556575423688104
+  (137, 0)	5.465428206331128
+  (649, 0)	1.5231157046929478
+  (266, 0)	8.754196021490753
+  (396, 0)	3.969572686693427
+  (14, 0)	-0.07277590857942218
+  (15, 0)	-0.20108298146501502
+  (271, 0)	-0.08970443515679771
+  (528, 0)	8.164022279327474
+  (659, 0)	1.6096288216069814
+  (21, 0)	4.17725222510974
+  (149, 0)	13.66905754104027
+  (917, 0)	7.4520828899189
+  (278, 0)	7.622742844750033
+  (920, 0)	-2.287874498283806
+  (410, 0)	-3.8671396684879356
+  (794, 0)	-3.8614052805164247
+  (922, 0)	14.29933015503679
+  :	:
+  (8308, 19)	3.90599916739247
+  (9076, 19)	2.0557294962264576
+  (8821, 19)	4.421562646837006
+  (8310, 19)	2.379545089406424
+  (9462, 19)	-3.5502266377534553
+  (8055, 19)	9.919397814350324
+  (8567, 19)	8.81219563461338
+  (8695, 19)	3.5700305749910752
+  (8312, 19)	4.78492155057745
+  (8568, 19)	4.7954698396744355
+  (9592, 19)	13.89399909048763
+  (8699, 19)	11.481282866283946
+  (9468, 19)	0.23347457479619693
+  (7805, 19)	3.317685185881593
+  (8957, 19)	5.85428792881144
+  (7934, 19)	10.038881345064718
+  (8447, 19)	3.6823761283619207
+  (9087, 19)	1.65366902399056
+  (9215, 19)	8.431202723807209
+  (9698, 19)	8.657422626521933
+  (9958, 19)	0.4225424410615697
+  (9716, 19)	9.329514074506621
+  (9720, 19)	8.849316384381758
+  (9848, 19)	4.422822730274192
+  (9978, 19)	0.8408300926071199
+</pre></div>
+</div>
+</div>
+</div>
+<p>From here, we could continue our workflow with a CuPy sparse matrix.</p>
+<p>For a full list of the functionality built into these libraries, we encourage you to check out the API docs for <a class="reference external" href="https://docs.rapids.ai/api/cudf/nightly/">cuDF</a> and <a class="reference external" href="https://docs-cupy.chainer.org/en/stable/index.html">CuPy</a>.</p>
+</section>
+</section>
+
+
+              </article>
+              
+
+              
+              <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+  <a class="left-prev" href="guide-to-udfs.html" id="prev-link" title="previous page">
+      <i class="fas fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Overview of User Defined Functions with cuDF</p>
+      </div>
+  </a>
+  <a class="right-next" href="dask-cudf.html" id="next-link" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Multi-GPU with Dask-cuDF</p>
+  </div>
+  <i class="fas fa-angle-right"></i>
+  </a>
+</div>
+              </footer>
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright 2018-2021, NVIDIA.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script><script id="rapids-selector-pixel-invocation" type="text/javascript">_satellite.pageBottom();</script></body></html>
