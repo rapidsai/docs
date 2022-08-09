@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en"><head>
+  <meta charset="utf-8"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
+
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>cuxfilter with multi-GPU using dask_cudf &mdash; cuxfilter 22.10.00 documentation</title>
+      <link href="_static/pygments.css" rel="stylesheet" type="text/css">
+      <link href="_static/css/theme.css" rel="stylesheet" type="text/css">
+      <link href="_static/jupyter-sphinx.css" rel="stylesheet" type="text/css">
+      <link href="_static/thebelab.css" rel="stylesheet" type="text/css">
+      <link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet" type="text/css">
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/thebelab-helper.js"></script>
+        <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link href="genindex.html" rel="index" title="Index">
+    <link href="search.html" rel="search" title="Search">
+    <link href="charts/charts.html" rel="next" title="Charts">
+    <link href="10_minutes_to_cuxfilter.html" rel="prev" title="10 minutes to cuxfilter"> 
+<script id="rapids-selector-pixel-src" src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"><div id="rapids-jtd-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">cuxfilter</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable">cuspatial</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/stable/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libcuspatial/stable">libcuspatial</a><a class="rapids-selector__menu-item" href="/api/libkvikio/stable">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/raft/stable">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (22.10)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cuxfilter/nightly">nightly (22.10)</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">stable (22.06)</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/legacy">legacy (22.04)</a></div></div></div>
+            
+              
+<div role="search">
+  <form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text">
+    <input name="check_keywords" type="hidden" value="yes">
+    <input name="area" type="hidden" value="default">
+  </form>
+</div>
+        </div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataframe.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Deploying a multi-user Dashboard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_minutes_to_cuxfilter.html">10 minutes to cuxfilter</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">cuxfilter with multi-GPU using dask_cudf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#when-to-use-cudf-and-dask-cudf">When to use cuDF and Dask-cuDF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cuxfilter-with-dask-cudf">Cuxfilter with Dask-cudf</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="charts/charts.html">Charts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layouts/Layouts.html">Layouts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="themes/Themes.html">Themes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="index.html">cuxfilter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div aria-label="Page navigation" role="navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a class="icon icon-home" href="index.html"></a> &raquo;</li>
+      <li>cuxfilter with multi-GPU using dask_cudf</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Dask-cudf-support.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="cuxfilter-with-multi-gpu-using-dask-cudf">
+<h1>cuxfilter with multi-GPU using dask_cudf<a class="headerlink" href="#cuxfilter-with-multi-gpu-using-dask-cudf" title="Permalink to this heading">&para;</a></h1>
+<p><a class="reference external" href="https://github.com/rapidsai/cudf/tree/main/python/dask_cudf">Dask-cuDF</a> extends Dask where necessary to allow its DataFrame partitions to be processed by cuDF GPU DataFrames as opposed to Pandas DataFrames. For instance, when you call dask_cudf.read_csv(&hellip;), your cluster&rsquo;s GPUs do the work of parsing the CSV file(s) with underlying cudf.read_csv().</p>
+<section id="when-to-use-cudf-and-dask-cudf">
+<h2>When to use cuDF and Dask-cuDF<a class="headerlink" href="#when-to-use-cudf-and-dask-cudf" title="Permalink to this heading">&para;</a></h2>
+<p>If your workflow is fast enough on a single GPU or your data comfortably fits in memory on a single GPU, you would want to use cuDF. If you want to distribute your workflow across multiple GPUs, have more data than you can fit in memory on a single GPU, or want to analyze data spread across many files at once, you would want to use Dask-cuDF.</p>
+<p>A very useful guide to using Dask-cudf can be found <a class="reference external" href="https://docs.rapids.ai/api/cudf/stable/user_guide/10min.html">here</a></p>
+</section>
+<section id="cuxfilter-with-dask-cudf">
+<h2>Cuxfilter with Dask-cudf<a class="headerlink" href="#cuxfilter-with-dask-cudf" title="Permalink to this heading">&para;</a></h2>
+<p>Using cuxfilter with Dask-cudf is a very seamless experience, and passing in a <cite>dask_cudf.DataFrame</cite> object, instead of <cite>cudf.DataFrame</cite> object should just work, without any other modifications. The <cite>dask_cudf.DataFrame</cite> should however be initialized with it&rsquo;s partitions set, before passing it the the <cite>cuxfilter.DataFrame.from_dataframe</cite> function.</p>
+<p>For more information and examples, please visit the cuxfilter repository with <a class="reference external" href="https://github.com/rapidsai/cuxfilter/tree/branch-22.06/notebooks/notebooks/cuxfilter%20with%20dask_cudf">dask_cudf notebooks</a></p>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">Currently Supported Charts</span><a class="headerlink" href="#id1" title="Permalink to this table">&para;</a></caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Library</p></th>
+<th class="head"><p>Chart type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>bokeh</p></td>
+<td><p>bar, line</p></td>
+</tr>
+<tr class="row-odd"><td><p>datashader</p></td>
+<td><p>scatter, scatter_geo, line, stacked_lines, heatmap, graph(note: edge rendering support is limited for now)</p></td>
+</tr>
+<tr class="row-even"><td><p>panel_widgets</p></td>
+<td><p>range_slider, date_range_slider, float_slider, int_slider, drop_down, multi_select, card, number</p></td>
+</tr>
+<tr class="row-odd"><td><p>custom</p></td>
+<td><p>view_dataframe</p></td>
+</tr>
+<tr class="row-even"><td><p>deckgl</p></td>
+<td><p>choropleth(3d and 2d)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div aria-label="Footer" class="rst-footer-buttons" role="navigation">
+        <a accesskey="p" class="btn btn-neutral float-left" href="10_minutes_to_cuxfilter.html" rel="prev" title="10 minutes to cuxfilter"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a accesskey="n" class="btn btn-neutral float-right" href="charts/charts.html" rel="next" title="Charts">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+    <p>&copy; Copyright 2019, NVIDIA.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script><script id="rapids-selector-pixel-invocation" type="text/javascript">_satellite.pageBottom();</script></body></html>
