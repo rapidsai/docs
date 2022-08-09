@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en"><head>
+  <meta charset="utf-8"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
+
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Pickling cuML Models for Persistence &mdash; cuml 22.10.00 documentation</title>
+      <link href="_static/pygments.css" rel="stylesheet" type="text/css">
+      <link href="_static/css/theme.css" rel="stylesheet" type="text/css">
+      <link href="_static/copybutton.css" rel="stylesheet" type="text/css">
+      <link href="_static/infoboxes.css" rel="stylesheet" type="text/css">
+      <link href="_static/references.css" rel="stylesheet" type="text/css">
+      <link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet" type="text/css">
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="_static/example_mod.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link href="genindex.html" rel="index" title="Index">
+    <link href="search.html" rel="search" title="Search">
+    <link href="estimator_intro.html" rel="prev" title="Training and Evaluating Machine Learning Models in cuML"> 
+<script id="rapids-selector-pixel-src" src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"><div id="rapids-jtd-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">cuml</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/stable/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libcuspatial/stable">libcuspatial</a><a class="rapids-selector__menu-item" href="/api/libkvikio/stable">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/raft/stable">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (22.10)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cuml/nightly/api.html">nightly (22.10)</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">stable (22.06)</a><a class="rapids-selector__menu-item" href="/api/cuml/legacy/api.html">legacy (22.04)</a></div></div></div>
+            
+              
+<div role="search">
+  <form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text">
+    <input name="check_keywords" type="hidden" value="yes">
+    <input name="area" type="hidden" value="default">
+  </form>
+</div>
+        </div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api.html">cuML API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cuml_intro.html">Intro and key concepts for cuML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cuml_blogs.html">cuML blogs and other references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimator_intro.html">Training and Evaluating Machine Learning Models in cuML</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Pickling cuML Models for Persistence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Single-GPU-Model-Pickling">Single GPU Model Pickling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Distributed-Model-Pickling">Distributed Model Pickling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Exporting-cuML-Random-Forest-models-for-inferencing-on-machines-without-GPUs">Exporting cuML Random Forest models for inferencing on machines without GPUs</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="index.html">cuml</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div aria-label="Page navigation" role="navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a class="icon icon-home" href="index.html"></a> &raquo;</li>
+      <li>Pickling cuML Models for Persistence</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pickling_cuml_models.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Pickling-cuML-Models-for-Persistence">
+<h1>Pickling cuML Models for Persistence<a class="headerlink" href="#Pickling-cuML-Models-for-Persistence" title="Permalink to this heading">&para;</a></h1>
+<p>This notebook demonstrates simple pickling of both single-GPU and multi-GPU cuML models for persistence</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Single-GPU-Model-Pickling">
+<h2>Single GPU Model Pickling<a class="headerlink" href="#Single-GPU-Model-Pickling" title="Permalink to this heading">&para;</a></h2>
+<p>All single-GPU estimators are pickleable. The following example demonstrates the creation of a synthetic dataset, training, and pickling of the resulting model for storage. Trained single-GPU models can also be used to distribute the inference on a Dask cluster, which the <code class="docutils literal notranslate"><span class="pre">Distributed</span> <span class="pre">Model</span> <span class="pre">Pickling</span></code> section below demonstrates.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cuml.datasets</span> <span class="kn">import</span> <span class="n">make_blobs</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                  <span class="n">n_features</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                  <span class="n">centers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                  <span class="n">cluster_std</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+                  <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cuml.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>KMeans()
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"kmeans_model.pkl"</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">"kmeans_model.pkl"</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">cluster_centers_</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>array([[ 4.6749854 ,  8.213466  , -9.075721  ,  9.568374  ,  8.454808  ,
+        -1.2327975 ,  3.390371  , -7.828242  , -0.84544617,  0.62885725],
+       [-4.243999  ,  5.610707  , -5.669777  , -1.7957243 , -9.255528  ,
+         0.71774375,  4.4435897 , -2.874715  , -5.0900965 ,  9.684122  ],
+       [ 5.2615476 , -4.0487256 ,  4.464928  , -2.9367518 ,  3.5061095 ,
+        -4.0168314 , -3.463885  ,  6.078449  , -6.953326  , -1.004144  ],
+       [-3.008261  ,  4.625961  , -4.4832487 ,  2.228457  ,  1.643532  ,
+        -2.4505196 , -5.258201  , -1.6679403 , -7.9857535 ,  2.8311467 ],
+       [-5.6072407 ,  2.2695985 , -3.7516537 , -1.8182003 , -5.143028  ,
+         7.599363  ,  2.8252366 ,  8.773042  ,  1.6198314 ,  1.1772048 ]],
+      dtype=float32)
+</pre></div></div>
+</div>
+</section>
+<section id="Distributed-Model-Pickling">
+<h2>Distributed Model Pickling<a class="headerlink" href="#Distributed-Model-Pickling" title="Permalink to this heading">&para;</a></h2>
+<p>The distributed estimator wrappers inside of the <code class="docutils literal notranslate"><span class="pre">cuml.dask</span></code> are not intended to be pickled directly. The Dask cuML estimators provide a function <code class="docutils literal notranslate"><span class="pre">get_combined_model()</span></code>, which returns the trained single-GPU model for pickling. The combined model can be used for inference on a single-GPU, and the <code class="docutils literal notranslate"><span class="pre">ParallelPostFit</span></code> wrapper from the <a class="reference external" href="https://ml.dask.org/meta-estimators.html">Dask-ML</a> library can be used to perform distributed inference on a Dask cluster.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="nn">dask_cuda</span> <span class="kn">import</span> <span class="n">LocalCUDACluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCUDACluster</span><span class="p">()</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+<span class="n">client</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>2022-08-09 21:36:34,235 - distributed.preloading - INFO - Creating preload: dask_cuda.initialize
+2022-08-09 21:36:34,235 - distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+    <div style="width: 24px; height: 24px; background-color: #e1e1e1; border: 3px solid #9D9D9D; border-radius: 5px; position: absolute;"> </div>
+    <div style="margin-left: 48px;">
+        <h3 style="margin-bottom: 0px;">Client</h3>
+        <p style="color: #9D9D9D; margin-bottom: 0px;">Client-575f869a-182b-11ed-9040-0242ac110007</p>
+        <table style="width: 100%; text-align: left;">
+
+        <tbody><tr>
+
+            <td style="text-align: left;"><strong>Connection method:</strong> Cluster object</td>
+            <td style="text-align: left;"><strong>Cluster type:</strong> dask_cuda.LocalCUDACluster</td>
+
+        </tr>
+
+
+            <tr>
+                <td style="text-align: left;">
+                    <strong>Dashboard: </strong> <a href="http://127.0.0.1:8787/status" target="_blank">http://127.0.0.1:8787/status</a>
+                </td>
+                <td style="text-align: left;"></td>
+            </tr>
+
+
+        </tbody></table>
+
+
+            <details>
+            <summary style="margin-bottom: 20px;"><h3 style="display: inline;">Cluster Info</h3></summary>
+            <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-mod-trusted jp-OutputArea-output">
+    <div style="width: 24px; height: 24px; background-color: #e1e1e1; border: 3px solid #9D9D9D; border-radius: 5px; position: absolute;">
+    </div>
+    <div style="margin-left: 48px;">
+        <h3 style="margin-bottom: 0px; margin-top: 0px;">LocalCUDACluster</h3>
+        <p style="color: #9D9D9D; margin-bottom: 0px;">bd56acc5</p>
+        <table style="width: 100%; text-align: left;">
+            <tbody><tr>
+                <td style="text-align: left;">
+                    <strong>Dashboard:</strong> <a href="http://127.0.0.1:8787/status" target="_blank">http://127.0.0.1:8787/status</a>
+                </td>
+                <td style="text-align: left;">
+                    <strong>Workers:</strong> 1
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">
+                    <strong>Total threads:</strong> 1
+                </td>
+                <td style="text-align: left;">
+                    <strong>Total memory:</strong> 251.79 GiB
+                </td>
+            </tr>
+
+            <tr>
+    <td style="text-align: left;"><strong>Status:</strong> running</td>
+    <td style="text-align: left;"><strong>Using processes:</strong> True</td>
+</tr>
+
+
+        </tbody></table>
+
+        <details>
+            <summary style="margin-bottom: 20px;">
+                <h3 style="display: inline;">Scheduler Info</h3>
+            </summary>
+
+            <div style>
+    <div>
+        <div style="width: 24px; height: 24px; background-color: #FFF7E5; border: 3px solid #FF6132; border-radius: 5px; position: absolute;"> </div>
+        <div style="margin-left: 48px;">
+            <h3 style="margin-bottom: 0px;">Scheduler</h3>
+            <p style="color: #9D9D9D; margin-bottom: 0px;">Scheduler-786af337-9897-4ca1-a6b6-943d21bfef91</p>
+            <table style="width: 100%; text-align: left;">
+                <tbody><tr>
+                    <td style="text-align: left;">
+                        <strong>Comm:</strong> tcp://127.0.0.1:42967
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>Workers:</strong> 1
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">
+                        <strong>Dashboard:</strong> <a href="http://127.0.0.1:8787/status" target="_blank">http://127.0.0.1:8787/status</a>
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>Total threads:</strong> 1
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">
+                        <strong>Started:</strong> Just now
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>Total memory:</strong> 251.79 GiB
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+    </div>
+
+    <details style="margin-left: 48px;">
+        <summary style="margin-bottom: 20px;">
+            <h3 style="display: inline;">Workers</h3>
+        </summary>
+
+
+        <div style="margin-bottom: 20px;">
+            <div style="width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;"> </div>
+            <div style="margin-left: 48px;">
+            <details>
+                <summary>
+                    <h4 style="margin-bottom: 0px; display: inline;">Worker: 0</h4>
+                </summary>
+                <table style="width: 100%; text-align: left;">
+                    <tbody><tr>
+                        <td style="text-align: left;">
+                            <strong>Comm: </strong> tcp://127.0.0.1:38393
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Total threads: </strong> 1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Dashboard: </strong> <a href="http://127.0.0.1:34405/status" target="_blank">http://127.0.0.1:34405/status</a>
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Memory: </strong> 251.79 GiB
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Nanny: </strong> tcp://127.0.0.1:39741
+                        </td>
+                        <td style="text-align: left;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: left;">
+                            <strong>Local directory: </strong> /tmp/dask-worker-space/worker-ws54_v6y
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>GPU: </strong>Tesla V100-PCIE-32GB
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>GPU memory: </strong> 31.75 GiB
+                        </td>
+                    </tr>
+
+
+
+
+                </tbody></table>
+            </details>
+            </div>
+        </div>
+
+
+    </details>
+</div>
+
+        </details>
+    </div>
+</div>
+            </details>
+
+
+    </div>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cuml.dask.datasets</span> <span class="kn">import</span> <span class="n">make_blobs</span>
+
+<span class="n">n_workers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">scheduler_info</span><span class="p">()[</span><span class="s2">"workers"</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+                  <span class="n">n_features</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                  <span class="n">centers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                  <span class="n">cluster_std</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+                  <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                  <span class="n">n_parts</span><span class="o">=</span><span class="n">n_workers</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">persist</span><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">persist</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cuml.dask.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+
+<span class="n">dist_model</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>2022-08-09 21:36:40,826 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-150dafa4-799d-432d-8e2e-85e934229a1b
+Function:  _get_model_attr
+args:      (KMeansMG(), '_ipython_canary_method_should_not_exist_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _ipython_canary_method_should_not_exist_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:40,846 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-b5871d4b-d32a-4e60-8526-0abdc1b8c865
+Function:  _get_model_attr
+args:      (KMeansMG(), '_ipython_display_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _ipython_display_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:40,858 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-0a274b13-a616-45c8-8a91-711f84d5c0c9
+Function:  _get_model_attr
+args:      (KMeansMG(), '_ipython_canary_method_should_not_exist_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _ipython_canary_method_should_not_exist_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:40,879 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-440d7e92-5c96-4da5-bf83-6875ec620903
+Function:  _get_model_attr
+args:      (KMeansMG(), '_repr_mimebundle_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _repr_mimebundle_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:40,896 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-bacc2795-09cb-4e23-84a4-8af8ff49db46
+Function:  _get_model_attr
+args:      (KMeansMG(), '_ipython_canary_method_should_not_exist_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _ipython_canary_method_should_not_exist_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:40,916 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-9151d1f4-1bad-4960-a08f-aedaa3095b26
+Function:  _get_model_attr
+args:      (KMeansMG(), '_repr_html_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _repr_html_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:40,930 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-f14c73e7-9069-4aea-8ad4-cdeb91cbd011
+Function:  _get_model_attr
+args:      (KMeansMG(), '_ipython_canary_method_should_not_exist_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _ipython_canary_method_should_not_exist_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:40,941 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-435bf844-be54-4f5e-9e16-45d8a9ea271e
+Function:  _get_model_attr
+args:      (KMeansMG(), '_repr_markdown_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _repr_markdown_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:40,955 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-3d2de325-4892-4c00-8bd6-1616a940399f
+Function:  _get_model_attr
+args:      (KMeansMG(), '_ipython_canary_method_should_not_exist_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _ipython_canary_method_should_not_exist_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:40,976 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-ab680310-ddd4-4acc-983a-1522859bd8e1
+Function:  _get_model_attr
+args:      (KMeansMG(), '_repr_svg_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _repr_svg_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:40,989 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-f7f32cb7-17e4-4ec1-a9ef-2376e686beb0
+Function:  _get_model_attr
+args:      (KMeansMG(), '_ipython_canary_method_should_not_exist_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _ipython_canary_method_should_not_exist_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:41,009 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-30bc19de-efea-4409-a5fd-cadfcd9fb34b
+Function:  _get_model_attr
+args:      (KMeansMG(), '_repr_png_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _repr_png_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:41,023 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-d764dd81-2050-4ec1-956e-dac069fc4a75
+Function:  _get_model_attr
+args:      (KMeansMG(), '_ipython_canary_method_should_not_exist_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _ipython_canary_method_should_not_exist_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:41,045 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-13b89428-e002-46cd-ae37-5701a9725f44
+Function:  _get_model_attr
+args:      (KMeansMG(), '_repr_pdf_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _repr_pdf_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:41,065 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-f9f54501-348c-4b4c-8419-43e37c7afe67
+Function:  _get_model_attr
+args:      (KMeansMG(), '_ipython_canary_method_should_not_exist_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _ipython_canary_method_should_not_exist_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:41,079 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-ce03f12d-5a6c-423d-ba40-0c45627c9d4a
+Function:  _get_model_attr
+args:      (KMeansMG(), '_repr_jpeg_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _repr_jpeg_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:41,094 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-a802e6ee-4015-47fe-97ea-82dbd05bea5b
+Function:  _get_model_attr
+args:      (KMeansMG(), '_ipython_canary_method_should_not_exist_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _ipython_canary_method_should_not_exist_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:41,107 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-2626a29c-d6ae-4f94-8efd-de924ea636d1
+Function:  _get_model_attr
+args:      (KMeansMG(), '_repr_latex_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _repr_latex_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:41,120 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-db4fd2a5-7c85-403b-b02d-6591611cf88a
+Function:  _get_model_attr
+args:      (KMeansMG(), '_ipython_canary_method_should_not_exist_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _ipython_canary_method_should_not_exist_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:41,134 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-b704041e-bcfb-40d2-87ee-b974bada31a6
+Function:  _get_model_attr
+args:      (KMeansMG(), '_repr_json_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _repr_json_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:41,162 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-fc9b7b00-3769-4a2d-a742-48ed1906664a
+Function:  _get_model_attr
+args:      (KMeansMG(), '_ipython_canary_method_should_not_exist_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _ipython_canary_method_should_not_exist_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+2022-08-09 21:36:41,182 - distributed.worker - WARNING - Compute Failed
+Key:       _get_model_attr-a12a93fc-a13c-4960-8667-e24675c4f3be
+Function:  _get_model_attr
+args:      (KMeansMG(), '_repr_javascript_')
+kwargs:    {}
+Exception: 'AttributeError("Attribute _repr_javascript_ does not exist on model &lt;class \'cuml.cluster.kmeans_mg.KMeansMG\'&gt;")'
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>&lt;cuml.dask.cluster.kmeans.KMeans at 0x7f402e3d0400&gt;
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="n">single_gpu_model</span> <span class="o">=</span> <span class="n">dist_model</span><span class="o">.</span><span class="n">get_combined_model</span><span class="p">()</span>
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">single_gpu_model</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"kmeans_model.pkl"</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">single_gpu_model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">"kmeans_model.pkl"</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">single_gpu_model</span><span class="o">.</span><span class="n">cluster_centers_</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>array([[-4.6475401e+00, -9.5672169e+00,  6.6923518e+00,  4.4359245e+00,
+         2.1902733e+00,  2.5834751e+00,  5.9448928e-01,  6.2568665e+00,
+        -8.7821646e+00, -4.1232011e-01,  9.8151779e+00,  7.5641570e+00,
+         1.0003009e+01, -5.8680429e+00, -1.2743109e+00, -2.5393455e+00,
+        -1.0847499e+00, -5.2629204e+00, -9.3071022e+00,  4.6179357e+00,
+        -9.7068958e-02, -3.9351208e+00,  6.1767278e+00, -7.4346886e+00,
+         5.6496072e+00, -8.5544844e+00, -7.5265574e+00, -5.5195599e+00,
+         4.8197637e+00,  2.5235438e+00],
+       [ 6.2794294e+00,  9.2293949e+00,  8.3403702e+00,  9.0330496e+00,
+         7.6893487e+00, -9.9538219e-01, -6.2780757e+00,  1.3599335e+00,
+        -6.9744487e+00, -5.9463463e+00,  1.0695117e+00, -8.0422470e-03,
+         2.8183143e+00,  1.8317667e+00, -8.2557344e+00,  3.0514319e+00,
+        -8.4958029e+00,  9.7238493e+00, -7.7455082e+00,  3.4521692e+00,
+        -3.9248333e+00, -4.1106420e+00,  2.6693091e+00,  1.2985631e+00,
+         1.0421573e+00,  5.2490621e+00, -1.6496236e+00,  6.1451659e+00,
+        -6.9103336e+00, -9.6390314e+00],
+       [-2.8796389e+00,  4.4348760e+00, -4.4264812e+00,  2.3959141e+00,
+         1.7286437e+00, -2.4991984e+00, -5.1794524e+00, -1.6771441e+00,
+        -8.1329174e+00,  2.6659226e+00, -4.3131094e+00,  5.5827813e+00,
+        -5.7318306e+00, -1.7427171e+00, -9.3456125e+00,  7.1365565e-01,
+         4.4255495e+00, -2.9118381e+00, -4.9467440e+00,  9.6786413e+00,
+         8.4222746e+00, -6.2710247e+00, -6.3596501e+00,  1.9645509e+00,
+         4.1715999e+00, -9.1683655e+00,  4.6156683e+00,  8.7916498e+00,
+         6.8754416e+00,  2.2288747e+00],
+       [-6.9536948e+00, -9.7635880e+00, -6.5648255e+00, -4.3536150e-01,
+         6.0998106e+00,  3.7550371e+00, -3.9558539e+00,  6.1595516e+00,
+        -1.8599316e+00,  5.0400305e+00, -6.8397546e+00,  1.3435432e+00,
+         8.9749012e+00, -9.9621779e-01,  9.6651936e+00,  9.8009644e+00,
+        -8.6188354e+00,  5.9978366e+00,  2.2295930e+00, -3.6477711e+00,
+         7.0758505e+00, -7.3772259e+00, -5.3214226e+00, -6.9927955e+00,
+        -7.9296317e+00,  6.6705365e+00, -5.5850177e+00,  7.1526051e+00,
+         6.5703220e+00, -8.3389387e+00],
+       [ 4.8136683e+00,  8.3985281e+00, -9.2161245e+00,  9.4185514e+00,
+         8.5280886e+00, -1.0969982e+00,  3.3253179e+00, -7.8064375e+00,
+        -5.9660625e-01,  2.5423867e-01,  5.5004082e+00, -4.1162968e+00,
+         4.2832379e+00, -2.8173411e+00,  3.6207721e+00, -4.1576219e+00,
+        -3.6048708e+00,  6.2125401e+00, -6.9080992e+00, -1.0732133e+00,
+        -5.8362122e+00,  2.2357666e+00, -3.8588791e+00, -1.6835878e+00,
+        -5.3240361e+00,  7.5769200e+00,  2.9358528e+00,  8.5267372e+00,
+         1.5667248e+00,  1.0779673e+00]], dtype=float32)
+</pre></div></div>
+</div>
+</section>
+<section id="Exporting-cuML-Random-Forest-models-for-inferencing-on-machines-without-GPUs">
+<h2>Exporting cuML Random Forest models for inferencing on machines without GPUs<a class="headerlink" href="#Exporting-cuML-Random-Forest-models-for-inferencing-on-machines-without-GPUs" title="Permalink to this heading">&para;</a></h2>
+<p>Starting with cuML version 21.06, you can export cuML Random Forest models and run predictions with them on machines without an NVIDIA GPUs. The <a class="reference external" href="https://github.com/dmlc/treelite">Treelite</a> package defines an efficient exchange format that lets you portably move the cuML Random Forest models to other machines. We will refer to the exchange format as &ldquo;checkpoints.&rdquo;</p>
+<p>Here are the steps to export the model:</p>
+<ol class="arabic simple">
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">to_treelite_checkpoint()</span></code> to obtain the checkpoint file from the cuML Random Forest model.</p></li>
+</ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cuml.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span> <span class="k">as</span> <span class="n">cumlRandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">cumlRandomForestClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">checkpoint_path</span> <span class="o">=</span> <span class="s1">'./checkpoint.tl'</span>
+<span class="c1"># Export cuML RF model as Treelite checkpoint</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">convert_to_treelite_model</span><span class="p">()</span><span class="o">.</span><span class="n">to_treelite_checkpoint</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>/opt/conda/envs/rapids/lib/python3.9/site-packages/cuml/internals/api_decorators.py:794: UserWarning: For reproducible results in Random Forest Classifier or for almost reproducible results in Random Forest Regressor, n_streams=1 is recommended. If n_streams is &gt; 1, results may vary due to stream/thread timing differences, even when random_state is set
+  return func(**kwargs)
+</pre></div></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Copy the generated checkpoint file <code class="docutils literal notranslate"><span class="pre">checkpoint.tl</span></code> to another machine on which you&rsquo;d like to run predictions.</p></li>
+<li><p>On the target machine, install Treelite by running <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">treelite</span></code> or <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">treelite</span></code>. The machine does not need to have an NVIDIA GPUs and does not need to have cuML installed.</p></li>
+<li><p>You can now load the model from the checkpoint, by running the following on the target machine:</p></li>
+</ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">treelite</span>
+
+<span class="c1"># The checkpoint file has been copied over</span>
+<span class="n">checkpoint_path</span> <span class="o">=</span> <span class="s1">'./checkpoint.tl'</span>
+<span class="n">tl_model</span> <span class="o">=</span> <span class="n">treelite</span><span class="o">.</span><span class="n">Model</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">)</span>
+<span class="n">out_prob</span> <span class="o">=</span> <span class="n">treelite</span><span class="o">.</span><span class="n">gtil</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">tl_model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">pred_margin</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out_prob</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>[[1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [0.90789473 0.09210526 0.        ]
+ [0.90789473 0.09210526 0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [0.90789473 0.09210526 0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [1.         0.         0.        ]
+ [0.00789474 0.96374357 0.02836171]
+ [0.00789474 0.96374357 0.02836171]
+ [0.00789474 0.7819892  0.2101161 ]
+ [0.         0.99018145 0.00981859]
+ [0.00789474 0.96374357 0.02836171]
+ [0.00789474 0.975835   0.01627021]
+ [0.00789474 0.96374357 0.02836171]
+ [0.         0.8568481  0.14315192]
+ [0.00789474 0.96374357 0.02836171]
+ [0.         0.99018145 0.00981859]
+ [0.         0.99018145 0.00981859]
+ [0.00789474 0.975835   0.01627021]
+ [0.00789474 0.975835   0.01627021]
+ [0.00789474 0.975835   0.01627021]
+ [0.10789473 0.88228667 0.00981859]
+ [0.00789474 0.96374357 0.02836171]
+ [0.00789474 0.98228663 0.00981859]
+ [0.00789474 0.975835   0.01627021]
+ [0.00789474 0.975835   0.01627021]
+ [0.10789473 0.88228667 0.00981859]
+ [0.         0.25154537 0.7484547 ]
+ [0.00789474 0.975835   0.01627021]
+ [0.00789474 0.7819892  0.2101161 ]
+ [0.00789474 0.975835   0.01627021]
+ [0.00789474 0.96374357 0.02836171]
+ [0.00789474 0.96374357 0.02836171]
+ [0.00789474 0.79310024 0.199005  ]
+ [0.         0.451291   0.54870903]
+ [0.00789474 0.975835   0.01627021]
+ [0.10789473 0.87583506 0.01627021]
+ [0.         0.99018145 0.00981859]
+ [0.         0.99018145 0.00981859]
+ [0.10789473 0.87583506 0.01627021]
+ [0.         0.18708128 0.8129188 ]
+ [0.         0.99018145 0.00981859]
+ [0.00789474 0.975835   0.01627021]
+ [0.00789474 0.96374357 0.02836171]
+ [0.00789474 0.96374357 0.02836171]
+ [0.00789474 0.98228663 0.00981859]
+ [0.         0.99018145 0.00981859]
+ [0.         0.99018145 0.00981859]
+ [0.00789474 0.975835   0.01627021]
+ [0.00789474 0.975835   0.01627021]
+ [0.         0.99018145 0.00981859]
+ [0.00789474 0.98228663 0.00981859]
+ [0.00789474 0.975835   0.01627021]
+ [0.00789474 0.975835   0.01627021]
+ [0.00789474 0.975835   0.01627021]
+ [0.         0.99018145 0.00981859]
+ [0.00789474 0.975835   0.01627021]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.0481924  0.9518076 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.6901814  0.3098186 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.15504913 0.84495085]
+ [0.         0.0481924  0.9518076 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.40701494 0.59298503]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.14688587 0.8531141 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.28718114 0.71281886]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.22427265 0.7757274 ]
+ [0.         0.21316154 0.7868384 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.17874795 0.82125205]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.21682489 0.7831751 ]
+ [0.         0.22515821 0.77484185]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.22427265 0.7757274 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.0481924  0.9518076 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.20179601 0.798204  ]
+ [0.         0.01258634 0.9874137 ]
+ [0.         0.02091968 0.9790803 ]
+ [0.         0.0481924  0.9518076 ]]
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div aria-label="Footer" class="rst-footer-buttons" role="navigation">
+        <a accesskey="p" class="btn btn-neutral float-left" href="estimator_intro.html" rel="prev" title="Training and Evaluating Machine Learning Models in cuML"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+    <p>&copy; Copyright 2020, nvidia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script><script id="rapids-selector-pixel-invocation" type="text/javascript">_satellite.pageBottom();</script></body></html>
