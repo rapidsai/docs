@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['udf_5ftype_3577',['udf_type',['../group__aggregation__factories.html#gad2e43a487f20c968b2474a5cb980527e',1,'cudf']]],
-  ['unary_5foperator_3578',['unary_operator',['../group__transformation__unaryops.html#ga030e62f30b296602f398e70d1ca657c4',1,'cudf']]]
+  ['weak_5fordering_3589',['weak_ordering',['../namespacecudf.html#a6e67b41d81d4d1b414070405496a90bd',1,'cudf']]]
 ];

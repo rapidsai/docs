@@ -3262,25 +3262,16 @@
     <filename>padding_8hpp.html</filename>
     <includes id="column_8hpp" name="column.hpp" local="no" imported="no">cudf/column/column.hpp</includes>
     <includes id="scalar_8hpp" name="scalar.hpp" local="no" imported="no">cudf/scalar/scalar.hpp</includes>
+    <includes id="side__type_8hpp" name="side_type.hpp" local="no" imported="no">cudf/strings/side_type.hpp</includes>
     <includes id="strings__column__view_8hpp" name="strings_column_view.hpp" local="no" imported="no">cudf/strings/strings_column_view.hpp</includes>
     <namespace>cudf</namespace>
     <namespace>cudf::strings</namespace>
-    <member kind="enumeration">
-      <type></type>
-      <name>pad_side</name>
-      <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>gace598ecf9030296eeebfef46251d7d52</anchor>
-      <arglist></arglist>
-      <enumvalue file="group__strings__modify.html" anchor="ggace598ecf9030296eeebfef46251d7d52a684d325a7303f52e64011467ff5c5758">LEFT</enumvalue>
-      <enumvalue file="group__strings__modify.html" anchor="ggace598ecf9030296eeebfef46251d7d52a21507b40c80068eda19865706fdc2403">RIGHT</enumvalue>
-      <enumvalue file="group__strings__modify.html" anchor="ggace598ecf9030296eeebfef46251d7d52a6328e5e3186c227a021ef2ff77e40197">BOTH</enumvalue>
-    </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>pad</name>
       <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>gaaed97748c26f71ebeab20e60a7d08d94</anchor>
-      <arglist>(strings_column_view const &amp;strings, size_type width, pad_side side=cudf::strings::pad_side::RIGHT, std::string_view fill_char=&quot; &quot;, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga52f4e4d2682d2eb6757bd3c565ff3a41</anchor>
+      <arglist>(strings_column_view const &amp;input, size_type width, side_type side=side_type::RIGHT, std::string_view fill_char=&quot; &quot;, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -4102,6 +4093,23 @@
     </member>
   </compound>
   <compound kind="file">
+    <name>side_type.hpp</name>
+    <path>/rapids/cudf/cpp/include/cudf/strings/</path>
+    <filename>side__type_8hpp.html</filename>
+    <namespace>cudf</namespace>
+    <namespace>cudf::strings</namespace>
+    <member kind="enumeration">
+      <type></type>
+      <name>side_type</name>
+      <anchorfile>group__strings__modify.html</anchorfile>
+      <anchor>ga869589e3a64f8815a14c494fd10ece53</anchor>
+      <arglist></arglist>
+      <enumvalue file="group__strings__modify.html" anchor="gga869589e3a64f8815a14c494fd10ece53a684d325a7303f52e64011467ff5c5758">LEFT</enumvalue>
+      <enumvalue file="group__strings__modify.html" anchor="gga869589e3a64f8815a14c494fd10ece53a21507b40c80068eda19865706fdc2403">RIGHT</enumvalue>
+      <enumvalue file="group__strings__modify.html" anchor="gga869589e3a64f8815a14c494fd10ece53a6328e5e3186c227a021ef2ff77e40197">BOTH</enumvalue>
+    </member>
+  </compound>
+  <compound kind="file">
     <name>lists/sorting.hpp</name>
     <path>/rapids/cudf/cpp/include/cudf/lists/</path>
     <filename>lists_2sorting_8hpp.html</filename>
@@ -4509,25 +4517,16 @@
     <filename>strip_8hpp.html</filename>
     <includes id="column_8hpp" name="column.hpp" local="no" imported="no">cudf/column/column.hpp</includes>
     <includes id="scalar_8hpp" name="scalar.hpp" local="no" imported="no">cudf/scalar/scalar.hpp</includes>
+    <includes id="side__type_8hpp" name="side_type.hpp" local="no" imported="no">cudf/strings/side_type.hpp</includes>
     <includes id="strings__column__view_8hpp" name="strings_column_view.hpp" local="no" imported="no">cudf/strings/strings_column_view.hpp</includes>
     <namespace>cudf</namespace>
     <namespace>cudf::strings</namespace>
-    <member kind="enumeration">
-      <type></type>
-      <name>strip_type</name>
-      <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>ga78f0999f58b7b8d02fd3a10fffca446e</anchor>
-      <arglist></arglist>
-      <enumvalue file="group__strings__modify.html" anchor="gga78f0999f58b7b8d02fd3a10fffca446ea684d325a7303f52e64011467ff5c5758">LEFT</enumvalue>
-      <enumvalue file="group__strings__modify.html" anchor="gga78f0999f58b7b8d02fd3a10fffca446ea21507b40c80068eda19865706fdc2403">RIGHT</enumvalue>
-      <enumvalue file="group__strings__modify.html" anchor="gga78f0999f58b7b8d02fd3a10fffca446ea6328e5e3186c227a021ef2ff77e40197">BOTH</enumvalue>
-    </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>strip</name>
       <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>gad5f1ddefaa1f882b8f340d14559127e4</anchor>
-      <arglist>(strings_column_view const &amp;strings, strip_type stype=strip_type::BOTH, string_scalar const &amp;to_strip=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga7ba7677f2dbb160c9007fd1d401174f3</anchor>
+      <arglist>(strings_column_view const &amp;input, side_type side=side_type::BOTH, string_scalar const &amp;to_strip=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -5647,6 +5646,7 @@
     <class kind="class">cudf::io::column_in_metadata</class>
     <class kind="class">cudf::io::table_input_metadata</class>
     <class kind="struct">cudf::io::partition_info</class>
+    <class kind="class">cudf::io::reader_column_schema</class>
     <namespace>cudf</namespace>
     <namespace>cudf::io</namespace>
     <member kind="enumeration">
@@ -13970,6 +13970,32 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>cudf::list_device_view::pair_accessor</name>
+    <filename>structcudf_1_1list__device__view_1_1pair__accessor.html</filename>
+    <templarg></templarg>
+    <member kind="function">
+      <type>CUDF_HOST_DEVICE</type>
+      <name>pair_accessor</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
+      <anchor>a14b2b90c570fd87997eed3cb731393ad</anchor>
+      <arglist>(list_device_view const &amp;_list)</arglist>
+    </member>
+    <member kind="function">
+      <type>thrust::pair&lt; T, bool &gt;</type>
+      <name>operator()</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
+      <anchor>a95483245b84735ba74f8c11f916c86f3</anchor>
+      <arglist>(cudf::size_type i) const</arglist>
+    </member>
+    <member kind="variable">
+      <type>list_device_view const  &amp;</type>
+      <name>list</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
+      <anchor>a1a9ded6b481d0ff1ebcd69d256d6dcd0</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>cudf::detail::pair_accessor</name>
     <filename>structcudf_1_1detail_1_1pair__accessor.html</filename>
     <templarg></templarg>
@@ -13993,32 +14019,6 @@
       <name>col</name>
       <anchorfile>structcudf_1_1detail_1_1pair__accessor.html</anchorfile>
       <anchor>a5c93941a91871e3e4116b7f848b87c7d</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
-    <name>cudf::list_device_view::pair_accessor</name>
-    <filename>structcudf_1_1list__device__view_1_1pair__accessor.html</filename>
-    <templarg></templarg>
-    <member kind="function">
-      <type>CUDF_HOST_DEVICE</type>
-      <name>pair_accessor</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
-      <anchor>a14b2b90c570fd87997eed3cb731393ad</anchor>
-      <arglist>(list_device_view const &amp;_list)</arglist>
-    </member>
-    <member kind="function">
-      <type>thrust::pair&lt; T, bool &gt;</type>
-      <name>operator()</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
-      <anchor>a95483245b84735ba74f8c11f916c86f3</anchor>
-      <arglist>(cudf::size_type i) const</arglist>
-    </member>
-    <member kind="variable">
-      <type>list_device_view const  &amp;</type>
-      <name>list</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
-      <anchor>a1a9ded6b481d0ff1ebcd69d256d6dcd0</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -14160,24 +14160,10 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
-      <type>std::optional&lt; std::vector&lt; bool &gt; &gt;</type>
-      <name>get_convert_binary_to_strings</name>
+      <type>std::optional&lt; std::vector&lt; reader_column_schema &gt; &gt;</type>
+      <name>get_column_schema</name>
       <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
-      <anchor>a59b2ac6f6a89ff42bcce0553c6d61998</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>size_type</type>
-      <name>get_skip_rows</name>
-      <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
-      <anchor>a5ea8020e09b6f0bf2cdd896659cea68e</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>size_type</type>
-      <name>get_num_rows</name>
-      <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
-      <anchor>ad3a5173d708afc5bc9bb30b5b3c931b1</anchor>
+      <anchor>a28b3e2e57032830acc5ad000f3018b7b</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
@@ -14231,24 +14217,10 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>set_convert_binary_to_strings</name>
+      <name>set_column_schema</name>
       <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
-      <anchor>aa732e08de141478d8c6cde0c090deb6b</anchor>
-      <arglist>(std::vector&lt; bool &gt; val)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_skip_rows</name>
-      <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
-      <anchor>a556b3be526ba648aff30f4c715a1d83a</anchor>
-      <arglist>(size_type val)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_num_rows</name>
-      <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
-      <anchor>a88dbd58ecb6fdff7b303d32b2624196c</anchor>
-      <arglist>(size_type val)</arglist>
+      <anchor>acb95dd64482dd114752bdd4d71a42e25</anchor>
+      <arglist>(std::vector&lt; reader_column_schema &gt; val)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -14312,24 +14284,10 @@
     </member>
     <member kind="function">
       <type>parquet_reader_options_builder &amp;</type>
-      <name>convert_binary_to_strings</name>
+      <name>set_column_schema</name>
       <anchorfile>classcudf_1_1io_1_1parquet__reader__options__builder.html</anchorfile>
-      <anchor>a9050c9f2c4aa5f255c5e9cb5e36ca73a</anchor>
-      <arglist>(std::vector&lt; bool &gt; val)</arglist>
-    </member>
-    <member kind="function">
-      <type>parquet_reader_options_builder &amp;</type>
-      <name>skip_rows</name>
-      <anchorfile>classcudf_1_1io_1_1parquet__reader__options__builder.html</anchorfile>
-      <anchor>a23048f446b11202efc817b52b0fc9905</anchor>
-      <arglist>(size_type val)</arglist>
-    </member>
-    <member kind="function">
-      <type>parquet_reader_options_builder &amp;</type>
-      <name>num_rows</name>
-      <anchorfile>classcudf_1_1io_1_1parquet__reader__options__builder.html</anchorfile>
-      <anchor>ae5b062156777bfa0b12881ae15f4f1cb</anchor>
-      <arglist>(size_type val)</arglist>
+      <anchor>ab088fef19df455c357520d6bd72c14ce</anchor>
+      <arglist>(std::vector&lt; reader_column_schema &gt; val)</arglist>
     </member>
     <member kind="function">
       <type>parquet_reader_options_builder &amp;</type>
@@ -14874,6 +14832,66 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>cudf::io::reader_column_schema</name>
+    <filename>classcudf_1_1io_1_1reader__column__schema.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>reader_column_schema</name>
+      <anchorfile>classcudf_1_1io_1_1reader__column__schema.html</anchorfile>
+      <anchor>ae7478e7c79f7205dd5eb8ae4b25a16cc</anchor>
+      <arglist>(size_type number_of_children)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>reader_column_schema</name>
+      <anchorfile>classcudf_1_1io_1_1reader__column__schema.html</anchorfile>
+      <anchor>aa1d7555e3439ca0e2d9edc649fbdfc56</anchor>
+      <arglist>(host_span&lt; reader_column_schema &gt; const &amp;child_span)</arglist>
+    </member>
+    <member kind="function">
+      <type>reader_column_schema &amp;</type>
+      <name>add_child</name>
+      <anchorfile>classcudf_1_1io_1_1reader__column__schema.html</anchorfile>
+      <anchor>ad77e146503bd4c62197121a7b4742786</anchor>
+      <arglist>(reader_column_schema const &amp;child)</arglist>
+    </member>
+    <member kind="function">
+      <type>reader_column_schema &amp;</type>
+      <name>child</name>
+      <anchorfile>classcudf_1_1io_1_1reader__column__schema.html</anchorfile>
+      <anchor>adcb694f13ac2ac8a49066d21cf4c7c0f</anchor>
+      <arglist>(size_type i)</arglist>
+    </member>
+    <member kind="function">
+      <type>reader_column_schema const  &amp;</type>
+      <name>child</name>
+      <anchorfile>classcudf_1_1io_1_1reader__column__schema.html</anchorfile>
+      <anchor>a3128650eb8be63ef745e2747ee7a5d38</anchor>
+      <arglist>(size_type i) const</arglist>
+    </member>
+    <member kind="function">
+      <type>reader_column_schema &amp;</type>
+      <name>set_convert_binary_to_strings</name>
+      <anchorfile>classcudf_1_1io_1_1reader__column__schema.html</anchorfile>
+      <anchor>aa5ecb28e40ddd3af08fc9b10cb4adf99</anchor>
+      <arglist>(bool convert_to_string)</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>is_enabled_convert_binary_to_strings</name>
+      <anchorfile>classcudf_1_1io_1_1reader__column__schema.html</anchorfile>
+      <anchor>a6d8579812308428cbccf62c53f75f7cc</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>get_num_children</name>
+      <anchorfile>classcudf_1_1io_1_1reader__column__schema.html</anchorfile>
+      <anchor>ad07a44ed45451fb0fe1e4f1678c5e677</anchor>
+      <arglist>() const</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::reduce_aggregation</name>
     <filename>classcudf_1_1reduce__aggregation.html</filename>
     <base virtualness="virtual">cudf::aggregation</base>
@@ -14929,31 +14947,6 @@
     </member>
   </compound>
   <compound kind="class">
-    <name>cudf::experimental::row::hash::row_hasher</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
-      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
-      <name>device_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
-      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
     <name>cudf::row_hasher</name>
     <filename>classcudf_1_1row__hasher.html</filename>
     <templarg>hash_function</templarg>
@@ -14978,6 +14971,31 @@
       <anchorfile>classcudf_1_1row__hasher.html</anchorfile>
       <anchor>ab370aeff347da4c228ccd917af8b52be</anchor>
       <arglist>(size_type row_index) const</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>cudf::experimental::row::hash::row_hasher</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
+      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
+      <name>device_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
+      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -21096,6 +21114,7 @@
     <class kind="struct">cudf::io::parsed_orc_statistics</class>
     <class kind="struct">cudf::io::partition_info</class>
     <class kind="struct">cudf::io::raw_orc_statistics</class>
+    <class kind="class">cudf::io::reader_column_schema</class>
     <class kind="struct">cudf::io::sink_info</class>
     <class kind="struct">cudf::io::source_info</class>
     <class kind="struct">cudf::io::string_statistics</class>
@@ -21584,16 +21603,6 @@
     </member>
     <member kind="enumeration">
       <type></type>
-      <name>pad_side</name>
-      <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>gace598ecf9030296eeebfef46251d7d52</anchor>
-      <arglist></arglist>
-      <enumvalue file="group__strings__modify.html" anchor="ggace598ecf9030296eeebfef46251d7d52a684d325a7303f52e64011467ff5c5758">LEFT</enumvalue>
-      <enumvalue file="group__strings__modify.html" anchor="ggace598ecf9030296eeebfef46251d7d52a21507b40c80068eda19865706fdc2403">RIGHT</enumvalue>
-      <enumvalue file="group__strings__modify.html" anchor="ggace598ecf9030296eeebfef46251d7d52a6328e5e3186c227a021ef2ff77e40197">BOTH</enumvalue>
-    </member>
-    <member kind="enumeration">
-      <type></type>
       <name>regex_flags</name>
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>ga341eb616bce8b15119196ad8208ec16d</anchor>
@@ -21617,15 +21626,21 @@
       <anchor>gga341eb616bce8b15119196ad8208ec16da20b3d35a53fddfb5bc6a6dfb7b6594c0</anchor>
       <arglist></arglist>
     </member>
+    <member kind="enumvalue">
+      <name>ASCII</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>gga341eb616bce8b15119196ad8208ec16da467042b90d33829a8ae360d3c5d3c673</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="enumeration">
       <type></type>
-      <name>strip_type</name>
+      <name>side_type</name>
       <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>ga78f0999f58b7b8d02fd3a10fffca446e</anchor>
+      <anchor>ga869589e3a64f8815a14c494fd10ece53</anchor>
       <arglist></arglist>
-      <enumvalue file="group__strings__modify.html" anchor="gga78f0999f58b7b8d02fd3a10fffca446ea684d325a7303f52e64011467ff5c5758">LEFT</enumvalue>
-      <enumvalue file="group__strings__modify.html" anchor="gga78f0999f58b7b8d02fd3a10fffca446ea21507b40c80068eda19865706fdc2403">RIGHT</enumvalue>
-      <enumvalue file="group__strings__modify.html" anchor="gga78f0999f58b7b8d02fd3a10fffca446ea6328e5e3186c227a021ef2ff77e40197">BOTH</enumvalue>
+      <enumvalue file="group__strings__modify.html" anchor="gga869589e3a64f8815a14c494fd10ece53a684d325a7303f52e64011467ff5c5758">LEFT</enumvalue>
+      <enumvalue file="group__strings__modify.html" anchor="gga869589e3a64f8815a14c494fd10ece53a21507b40c80068eda19865706fdc2403">RIGHT</enumvalue>
+      <enumvalue file="group__strings__modify.html" anchor="gga869589e3a64f8815a14c494fd10ece53a6328e5e3186c227a021ef2ff77e40197">BOTH</enumvalue>
     </member>
     <member kind="enumeration">
       <type></type>
@@ -22067,8 +22082,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>pad</name>
       <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>gaaed97748c26f71ebeab20e60a7d08d94</anchor>
-      <arglist>(strings_column_view const &amp;strings, size_type width, pad_side side=cudf::strings::pad_side::RIGHT, std::string_view fill_char=&quot; &quot;, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga52f4e4d2682d2eb6757bd3c565ff3a41</anchor>
+      <arglist>(strings_column_view const &amp;input, size_type width, side_type side=side_type::RIGHT, std::string_view fill_char=&quot; &quot;, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -22089,6 +22104,13 @@
       <name>is_dotall</name>
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>ga817e21004c5c623990d063407794d13d</anchor>
+      <arglist>(regex_flags const f)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>is_ascii</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>gafa1a98e258a2831f917cbb4fefc9ab07</anchor>
       <arglist>(regex_flags const f)</arglist>
     </member>
     <member kind="function">
@@ -22263,8 +22285,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>strip</name>
       <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>gad5f1ddefaa1f882b8f340d14559127e4</anchor>
-      <arglist>(strings_column_view const &amp;strings, strip_type stype=strip_type::BOTH, string_scalar const &amp;to_strip=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga7ba7677f2dbb160c9007fd1d401174f3</anchor>
+      <arglist>(strings_column_view const &amp;input, side_type side=side_type::BOTH, string_scalar const &amp;to_strip=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -25637,6 +25659,12 @@
       <anchor>gga341eb616bce8b15119196ad8208ec16da20b3d35a53fddfb5bc6a6dfb7b6594c0</anchor>
       <arglist></arglist>
     </member>
+    <member kind="enumvalue">
+      <name>ASCII</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>gga341eb616bce8b15119196ad8208ec16da467042b90d33829a8ae360d3c5d3c673</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>contains_re</name>
@@ -25684,6 +25712,13 @@
       <name>is_dotall</name>
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>ga817e21004c5c623990d063407794d13d</anchor>
+      <arglist>(regex_flags const f)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>is_ascii</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>gafa1a98e258a2831f917cbb4fefc9ab07</anchor>
       <arglist>(regex_flags const f)</arglist>
     </member>
   </compound>
@@ -26041,28 +26076,19 @@
     <title>Modifying</title>
     <filename>group__strings__modify.html</filename>
     <file>padding.hpp</file>
+    <file>side_type.hpp</file>
     <file>strip.hpp</file>
     <file>translate.hpp</file>
     <file>wrap.hpp</file>
     <member kind="enumeration">
       <type></type>
-      <name>pad_side</name>
+      <name>side_type</name>
       <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>gace598ecf9030296eeebfef46251d7d52</anchor>
+      <anchor>ga869589e3a64f8815a14c494fd10ece53</anchor>
       <arglist></arglist>
-      <enumvalue file="group__strings__modify.html" anchor="ggace598ecf9030296eeebfef46251d7d52a684d325a7303f52e64011467ff5c5758">LEFT</enumvalue>
-      <enumvalue file="group__strings__modify.html" anchor="ggace598ecf9030296eeebfef46251d7d52a21507b40c80068eda19865706fdc2403">RIGHT</enumvalue>
-      <enumvalue file="group__strings__modify.html" anchor="ggace598ecf9030296eeebfef46251d7d52a6328e5e3186c227a021ef2ff77e40197">BOTH</enumvalue>
-    </member>
-    <member kind="enumeration">
-      <type></type>
-      <name>strip_type</name>
-      <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>ga78f0999f58b7b8d02fd3a10fffca446e</anchor>
-      <arglist></arglist>
-      <enumvalue file="group__strings__modify.html" anchor="gga78f0999f58b7b8d02fd3a10fffca446ea684d325a7303f52e64011467ff5c5758">LEFT</enumvalue>
-      <enumvalue file="group__strings__modify.html" anchor="gga78f0999f58b7b8d02fd3a10fffca446ea21507b40c80068eda19865706fdc2403">RIGHT</enumvalue>
-      <enumvalue file="group__strings__modify.html" anchor="gga78f0999f58b7b8d02fd3a10fffca446ea6328e5e3186c227a021ef2ff77e40197">BOTH</enumvalue>
+      <enumvalue file="group__strings__modify.html" anchor="gga869589e3a64f8815a14c494fd10ece53a684d325a7303f52e64011467ff5c5758">LEFT</enumvalue>
+      <enumvalue file="group__strings__modify.html" anchor="gga869589e3a64f8815a14c494fd10ece53a21507b40c80068eda19865706fdc2403">RIGHT</enumvalue>
+      <enumvalue file="group__strings__modify.html" anchor="gga869589e3a64f8815a14c494fd10ece53a6328e5e3186c227a021ef2ff77e40197">BOTH</enumvalue>
     </member>
     <member kind="enumeration">
       <type></type>
@@ -26077,8 +26103,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>pad</name>
       <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>gaaed97748c26f71ebeab20e60a7d08d94</anchor>
-      <arglist>(strings_column_view const &amp;strings, size_type width, pad_side side=cudf::strings::pad_side::RIGHT, std::string_view fill_char=&quot; &quot;, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga52f4e4d2682d2eb6757bd3c565ff3a41</anchor>
+      <arglist>(strings_column_view const &amp;input, size_type width, side_type side=side_type::RIGHT, std::string_view fill_char=&quot; &quot;, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -26091,8 +26117,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>strip</name>
       <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>gad5f1ddefaa1f882b8f340d14559127e4</anchor>
-      <arglist>(strings_column_view const &amp;strings, strip_type stype=strip_type::BOTH, string_scalar const &amp;to_strip=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga7ba7677f2dbb160c9007fd1d401174f3</anchor>
+      <arglist>(strings_column_view const &amp;input, side_type side=side_type::BOTH, string_scalar const &amp;to_strip=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
