@@ -1,0 +1,682 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Dask Operator &#8212; RAPIDS Deployment Documentation  documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Dask Helm Chart" href="dask-helm-chart.html" />
+    <link rel="prev" title="Dask Kubernetes" href="dask-kubernetes.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../../index.html">
+  <img src="../../_static/RAPIDS-logo-purple.png" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class=" collapse navbar-collapse">
+    <div id="navbar-center" class="ml-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../local.html">
+  Local machine
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../platforms/index.html">
+  Platforms
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../cloud/index.html">
+  Cloud
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../hpc/index.html">
+  HPC
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../index.html">
+  Tools
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/rapidsai/deployment" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tools
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../rapids-docker.html">
+   Docker Images
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="dask-kubernetes.html">
+   Dask Kubernetes
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Dask Operator
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="dask-helm-chart.html">
+   Dask Helm Chart
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="dask-gateway.html">
+   Dask Gateway
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installation">
+   Installation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#configuring-a-rapids-daskcluster">
+   Configuring a RAPIDS
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     DaskCluster
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#example-using-kubectl">
+   Example using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     kubectl
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#manifest-breakdown">
+     Manifest breakdown
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#metadata">
+       Metadata
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#worker">
+       Worker
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#scheduler">
+       Scheduler
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#accessing-your-dask-cluster">
+     Accessing your Dask cluster
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#example-using-kubecluster">
+   Example using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     KubeCluster
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="dask-operator">
+<h1>Dask Operator<a class="headerlink" href="#dask-operator" title="Permalink to this headline">#</a></h1>
+<p>Many libraries in RAPIDS can leverage Dask to scale out computation onto multiple GPUs and multiple nodes.
+<a class="reference external" href="https://kubernetes.dask.org/en/latest/operator.html">Dask has an operator for Kubernetes</a> which allows you to launch Dask clusters as native Kubernetes resources.</p>
+<p>With the operator and associated Custom Resource Definitions (CRDs)
+you can create <code class="docutils literal notranslate"><span class="pre">DaskCluster</span></code>, <code class="docutils literal notranslate"><span class="pre">DaskWorkerGroup</span></code> and <code class="docutils literal notranslate"><span class="pre">DaskJob</span></code> resources that describe your Dask components and the operator will
+create the appropriate Kubernetes resources like <code class="docutils literal notranslate"><span class="pre">Pods</span></code> and <code class="docutils literal notranslate"><span class="pre">Services</span></code> to launch the cluster.</p>
+<div class="mermaid">
+            graph TD
+    DaskJob(DaskJob)
+    DaskCluster(DaskCluster)
+    SchedulerService(Scheduler Service)
+    SchedulerPod(Scheduler Pod)
+    DaskWorkerGroup(DaskWorkerGroup)
+    WorkerPodA(Worker Pod A)
+    WorkerPodB(Worker Pod B)
+    WorkerPodC(Worker Pod C)
+    JobPod(Job Runner Pod)
+
+    DaskJob --&gt; DaskCluster
+    DaskJob --&gt; JobPod
+    DaskCluster --&gt; SchedulerService
+    SchedulerService --&gt; SchedulerPod
+    DaskCluster --&gt; DaskWorkerGroup
+    DaskWorkerGroup --&gt; WorkerPodA
+    DaskWorkerGroup --&gt; WorkerPodB
+    DaskWorkerGroup --&gt; WorkerPodC
+
+    classDef dask stroke:#FDA061,stroke-width:4px
+    classDef dashed stroke-dasharray: 5 5
+    class DaskJob dask
+    class DaskCluster dask
+    class DaskWorkerGroup dask
+    class SchedulerService dashed
+    class SchedulerPod dashed
+    class WorkerPodA dashed
+    class WorkerPodB dashed
+    class WorkerPodC dashed
+    class JobPod dashed
+        </div><section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">#</a></h2>
+<p>Your Kubernetes cluster must have GPU nodes and have <a class="reference external" href="https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html">up to date NVIDIA drivers installed</a>.</p>
+<p>To install the Dask operator follow the <a class="reference external" href="https://kubernetes.dask.org/en/latest/operator_installation.html">instructions in the Dask documentation</a>.</p>
+</section>
+<section id="configuring-a-rapids-daskcluster">
+<h2>Configuring a RAPIDS <code class="docutils literal notranslate"><span class="pre">DaskCluster</span></code><a class="headerlink" href="#configuring-a-rapids-daskcluster" title="Permalink to this headline">#</a></h2>
+<p>To configure the <code class="docutils literal notranslate"><span class="pre">DaskCluster</span></code> resource to run RAPIDS you need to set a few things:</p>
+<ul class="simple">
+<li><p>The container image must contain RAPIDS, the <a class="reference internal" href="../rapids-docker.html"><span class="doc std std-doc">official RAPIDS container images</span></a> are a good choice for this.</p></li>
+<li><p>The Dask workers must be configured with one or more NVIDIA GPU resources.</p></li>
+<li><p>The worker command must be set to <code class="docutils literal notranslate"><span class="pre">dask-cuda-worker</span></code>.</p></li>
+</ul>
+</section>
+<section id="example-using-kubectl">
+<h2>Example using <code class="docutils literal notranslate"><span class="pre">kubectl</span></code><a class="headerlink" href="#example-using-kubectl" title="Permalink to this headline">#</a></h2>
+<p>Here is an example resource manifest for launching a RAPIDS Dask cluster.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># rapids-dask-cluster.yaml</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubernetes.dask.org/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DaskCluster</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rapids-dask-cluster</span><span class="w"></span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">dask.org/cluster-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rapids-dask-cluster</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">worker</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker</span><span class="w"></span>
+<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IfNotPresent&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_JUPYTER</span><span class="w"></span>
+<span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dask-cuda-worker</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--name</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$(DASK_WORKER_NAME)</span><span class="w"></span>
+<span class="w">          </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">nvidia.com/gpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">scheduler</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scheduler</span><span class="w"></span>
+<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IfNotPresent&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_JUPYTER</span><span class="w"></span>
+<span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dask-scheduler</span><span class="w"></span>
+<span class="w">          </span><span class="nt">ports</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tcp-comm</span><span class="w"></span>
+<span class="w">              </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8786</span><span class="w"></span>
+<span class="w">              </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span><span class="w"></span>
+<span class="w">              </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8787</span><span class="w"></span>
+<span class="w">              </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span><span class="w"></span>
+<span class="w">          </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">httpGet</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span><span class="w"></span>
+<span class="w">              </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/health</span><span class="w"></span>
+<span class="w">            </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w"></span>
+<span class="w">            </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">          </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">httpGet</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span><span class="w"></span>
+<span class="w">              </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/health</span><span class="w"></span>
+<span class="w">            </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span><span class="w"></span>
+<span class="w">            </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
+<span class="w">    </span><span class="nt">service</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterIP</span><span class="w"></span>
+<span class="w">      </span><span class="nt">selector</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">dask.org/cluster-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rapids-dask-cluster</span><span class="w"></span>
+<span class="w">        </span><span class="nt">dask.org/component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scheduler</span><span class="w"></span>
+<span class="w">      </span><span class="nt">ports</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tcp-comm</span><span class="w"></span>
+<span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span><span class="w"></span>
+<span class="w">          </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8786</span><span class="w"></span>
+<span class="w">          </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;tcp-comm&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span><span class="w"></span>
+<span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span><span class="w"></span>
+<span class="w">          </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8787</span><span class="w"></span>
+<span class="w">          </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http-dashboard&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>You can create this cluster with <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl apply -f rapids-dask-cluster.yaml
+</pre></div>
+</div>
+<section id="manifest-breakdown">
+<h3>Manifest breakdown<a class="headerlink" href="#manifest-breakdown" title="Permalink to this headline">#</a></h3>
+<p>Let’s break this manifest down section by section.</p>
+<section id="metadata">
+<h4>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">#</a></h4>
+<p>At the top we see the <code class="docutils literal notranslate"><span class="pre">DaskCluster</span></code> resource type and general metadata.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubernetes.dask.org/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DaskCluster</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rapids-dask-cluster</span><span class="w"></span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">dask.org/cluster-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rapids-dask-cluster</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">worker</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># ...</span><span class="w"></span>
+<span class="w">  </span><span class="nt">scheduler</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># ...</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Then inside the <code class="docutils literal notranslate"><span class="pre">spec</span></code> we have <code class="docutils literal notranslate"><span class="pre">worker</span></code> and <code class="docutils literal notranslate"><span class="pre">scheduler</span></code> sections.</p>
+</section>
+<section id="worker">
+<h4>Worker<a class="headerlink" href="#worker" title="Permalink to this headline">#</a></h4>
+<p>The worker contains a <code class="docutils literal notranslate"><span class="pre">replicas</span></code> option to set how many workers you need and a <code class="docutils literal notranslate"><span class="pre">spec</span></code> that describes what each worker pod should look like.
+The spec is a nested <a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/pods/"><code class="docutils literal notranslate"><span class="pre">Pod</span></code> spec</a> that the operator will use when creating new <code class="docutils literal notranslate"><span class="pre">Pod</span></code> resources.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># ...</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">worker</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker</span><span class="w"></span>
+<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IfNotPresent&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_JUPYTER</span><span class="w"></span>
+<span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dask-cuda-worker</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--name</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$(DASK_WORKER_NAME)</span><span class="w"></span>
+<span class="w">          </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">nvidia.com/gpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">scheduler</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># ...</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Inside our pod spec we are configuring one container that uses the <code class="docutils literal notranslate"><span class="pre">rapidsai/rapidsai-core</span></code> container image.
+It also sets the <code class="docutils literal notranslate"><span class="pre">args</span></code> to start the <code class="docutils literal notranslate"><span class="pre">dask-cuda-worker</span></code> and configures one NVIDIA GPU.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We also have to set the environment variable <code class="docutils literal notranslate"><span class="pre">DISABLE_JUPYTER=true</span></code> because the RAPIDS container images will run Jupyter instead of our supplied command.</p>
+</div>
+</section>
+<section id="scheduler">
+<h4>Scheduler<a class="headerlink" href="#scheduler" title="Permalink to this headline">#</a></h4>
+<p>Next we have a <code class="docutils literal notranslate"><span class="pre">scheduler</span></code> section that also contains a <code class="docutils literal notranslate"><span class="pre">spec</span></code> for the scheduler pod and a <code class="docutils literal notranslate"><span class="pre">service</span></code> which will be used by the operator to create a <code class="docutils literal notranslate"><span class="pre">Service</span></code> resource to expose the scheduler.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># ...</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">worker</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># ...</span><span class="w"></span>
+<span class="w">  </span><span class="nt">scheduler</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scheduler</span><span class="w"></span>
+<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IfNotPresent&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_JUPYTER</span><span class="w"></span>
+<span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dask-scheduler</span><span class="w"></span>
+<span class="w">          </span><span class="nt">ports</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tcp-comm</span><span class="w"></span>
+<span class="w">              </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8786</span><span class="w"></span>
+<span class="w">              </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span><span class="w"></span>
+<span class="w">              </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8787</span><span class="w"></span>
+<span class="w">              </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span><span class="w"></span>
+<span class="w">          </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">httpGet</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span><span class="w"></span>
+<span class="w">              </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/health</span><span class="w"></span>
+<span class="w">            </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w"></span>
+<span class="w">            </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">          </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">httpGet</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span><span class="w"></span>
+<span class="w">              </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/health</span><span class="w"></span>
+<span class="w">            </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span><span class="w"></span>
+<span class="w">            </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
+<span class="w">    </span><span class="nt">service</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># ...</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For the scheduler pod we are also setting the <code class="docutils literal notranslate"><span class="pre">rapidsai/rapidsai-core</span></code> container image, mainly to ensure our Dask versions match between
+the scheduler and workers. We also disable Jupyter and ensure that the <code class="docutils literal notranslate"><span class="pre">dask-scheduler</span></code> command is configured.</p>
+<p>Then we configure both the Dask communication port on <code class="docutils literal notranslate"><span class="pre">8786</span></code> and the Dask dashboard on <code class="docutils literal notranslate"><span class="pre">8787</span></code> and add some probes so that Kubernetes can monitor
+the health of the scheduler.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ports must have the <code class="docutils literal notranslate"><span class="pre">tcp-</span></code> and <code class="docutils literal notranslate"><span class="pre">http-</span></code> prefixes if your Kubernetes cluster uses <a class="reference external" href="https://istio.io/">Istio</a> to ensure the <a class="reference external" href="https://www.envoyproxy.io/">Envoy proxy</a> doesn’t mangle the traffic.</p>
+</div>
+<p>Then we configure the <code class="docutils literal notranslate"><span class="pre">Service</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># ...</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">worker</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># ...</span><span class="w"></span>
+<span class="w">  </span><span class="nt">scheduler</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># ...</span><span class="w"></span>
+<span class="w">    </span><span class="nt">service</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterIP</span><span class="w"></span>
+<span class="w">      </span><span class="nt">selector</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">dask.org/cluster-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rapids-dask-cluster</span><span class="w"></span>
+<span class="w">        </span><span class="nt">dask.org/component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scheduler</span><span class="w"></span>
+<span class="w">      </span><span class="nt">ports</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tcp-comm</span><span class="w"></span>
+<span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span><span class="w"></span>
+<span class="w">          </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8786</span><span class="w"></span>
+<span class="w">          </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;tcp-comm&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span><span class="w"></span>
+<span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span><span class="w"></span>
+<span class="w">          </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8787</span><span class="w"></span>
+<span class="w">          </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http-dashboard&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>This example shows using a <code class="docutils literal notranslate"><span class="pre">ClusterIP</span></code> service which will not expose the Dask cluster outside of Kubernetes. If you prefer you could set this to
+<a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer"><code class="docutils literal notranslate"><span class="pre">LoadBalancer</span></code></a> or <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport"><code class="docutils literal notranslate"><span class="pre">NodePort</span></code></a> to make this externally accessible.</p>
+<p>It has a <code class="docutils literal notranslate"><span class="pre">selector</span></code> that matches the scheduler pod and the same ports configured.</p>
+</section>
+</section>
+<section id="accessing-your-dask-cluster">
+<h3>Accessing your Dask cluster<a class="headerlink" href="#accessing-your-dask-cluster" title="Permalink to this headline">#</a></h3>
+<p>Once you have created your <code class="docutils literal notranslate"><span class="pre">DaskCluster</span></code> resource we can use <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> to check the status of all the other resources it created for us.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl get all -l dask.org/cluster-name<span class="o">=</span>rapids-dask-cluster
+<span class="go">NAME                                                             READY   STATUS    RESTARTS   AGE</span>
+<span class="go">pod/rapids-dask-cluster-default-worker-group-worker-0c202b85fd   1/1     Running   0          4m13s</span>
+<span class="go">pod/rapids-dask-cluster-default-worker-group-worker-ff5d376714   1/1     Running   0          4m13s</span>
+<span class="go">pod/rapids-dask-cluster-scheduler                                1/1     Running   0          4m14s</span>
+
+<span class="go">NAME                                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE</span>
+<span class="go">service/rapids-dask-cluster-service   ClusterIP   10.96.223.217   &lt;none&gt;        8786/TCP,8787/TCP   4m13s</span>
+</pre></div>
+</div>
+<p>Here you can see our scheduler pod and two worker pods along with the scheduler service.</p>
+<p>If you have a Python session running within the Kubernetes cluster (like the <a class="reference internal" href="../../platforms/kubernetes.html"><span class="doc std std-doc">example one on the Kubernetes page</span></a>) you should be able
+to connect a Dask distributed client directly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s2">&quot;rapids-dask-cluster-service:8786&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternatively if you are outside of the Kubernetes cluster you can change the <code class="docutils literal notranslate"><span class="pre">Service</span></code> to use <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer"><code class="docutils literal notranslate"><span class="pre">LoadBalancer</span></code></a> or <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport"><code class="docutils literal notranslate"><span class="pre">NodePort</span></code></a> or use <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> to port forward the connection locally.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl port-forward svc/rapids-dask-cluster-service <span class="m">8786</span>:8786
+<span class="go">Forwarding from 127.0.0.1:8786 -&gt; 8786</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s2">&quot;localhost:8786&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="example-using-kubecluster">
+<h2>Example using <code class="docutils literal notranslate"><span class="pre">KubeCluster</span></code><a class="headerlink" href="#example-using-kubecluster" title="Permalink to this headline">#</a></h2>
+<p>In additon to creating clusters via <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> you can also do so from Python with <a class="reference external" href="https://kubernetes.dask.org/en/latest/operator_kubecluster.html#dask_kubernetes.experimental.KubeCluster" title="(in Dask Kubernetes v2021.03.0+99.g03378f2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dask_kubernetes.experimental.KubeCluster</span></code></a>. This class implements the Dask Cluster Manager interface and under the hood creates and manages the <code class="docutils literal notranslate"><span class="pre">DaskCluster</span></code> resource for you.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_kubernetes.experimental</span> <span class="kn">import</span> <span class="n">KubeCluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">KubeCluster</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;rapids-dask&quot;</span><span class="p">,</span>
+                      <span class="n">image</span><span class="o">=</span><span class="s2">&quot;rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9&quot;</span><span class="p">,</span>
+                      <span class="n">n_workers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                      <span class="n">resources</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;nvidia.com/gpu&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">}},</span>
+                      <span class="n">env</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;DISABLE_JUPYTER&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">},</span>
+                      <span class="n">worker_command</span><span class="o">=</span><span class="s2">&quot;dask-cuda-worker&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If we check with <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> we can see the above Python generated the same <code class="docutils literal notranslate"><span class="pre">DaskCluster</span></code> resource as the <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> example above.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl get daskclusters
+<span class="go">NAME                  AGE</span>
+<span class="go">rapids-dask-cluster   3m28s</span>
+
+<span class="gp">$ </span>kubectl get all -l dask.org/cluster-name<span class="o">=</span>rapids-dask-cluster
+<span class="go">NAME                                                             READY   STATUS    RESTARTS   AGE</span>
+<span class="go">pod/rapids-dask-cluster-default-worker-group-worker-07d674589a   1/1     Running   0          3m30s</span>
+<span class="go">pod/rapids-dask-cluster-default-worker-group-worker-a55ed88265   1/1     Running   0          3m30s</span>
+<span class="go">pod/rapids-dask-cluster-default-worker-group-worker-df785ab050   1/1     Running   0          3m30s</span>
+<span class="go">pod/rapids-dask-cluster-scheduler                                1/1     Running   0          3m30s</span>
+
+<span class="go">NAME                                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE</span>
+<span class="go">service/rapids-dask-cluster-service   ClusterIP   10.96.200.202   &lt;none&gt;        8786/TCP,8787/TCP   3m30s</span>
+</pre></div>
+</div>
+<p>With this cluster object in Python we can also connect a client to it directly without needing to know the address as Dask will discover that for us. It also automatically sets up port forwarding if you are outside of the Kubernetes cluster.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This object can also be used to scale the workers up and down.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And to manually close the cluster.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By default the <code class="docutils literal notranslate"><span class="pre">KubeCluster</span></code> command registers an exit hook so when the Python process exits the cluster is deleted automatically. You can disable this by setting <code class="docutils literal notranslate"><span class="pre">KubeCluster(...,</span> <span class="pre">shutdown_on_close=False)</span></code> when launching the cluster.</p>
+<p>This is useful if you have a multi-stage pipeline made up of multiple Python processes and you want your Dask cluster to persist between them.</p>
+<p>You can also connect a <code class="docutils literal notranslate"><span class="pre">KubeCluster</span></code> object to your existing cluster with <code class="docutils literal notranslate"><span class="pre">cluster</span> <span class="pre">=</span> <span class="pre">KubeCluster.from_name(name=&quot;rapids-dask&quot;)</span></code> if you wish to use the cluster or manually call <code class="docutils literal notranslate"><span class="pre">cluster.close()</span></code> in the future.</p>
+</div>
+</section>
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="dask-kubernetes.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Dask Kubernetes</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="dask-helm-chart.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Dask Helm Chart</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2022, NVIDIA.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
