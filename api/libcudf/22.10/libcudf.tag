@@ -5636,6 +5636,7 @@
     <name>io/types.hpp</name>
     <path>/rapids/cudf/cpp/include/cudf/io/</path>
     <filename>io_2types_8hpp.html</filename>
+    <includes id="table_8hpp" name="table.hpp" local="no" imported="no">cudf/table/table.hpp</includes>
     <includes id="types_8hpp" name="types.hpp" local="no" imported="no">cudf/types.hpp</includes>
     <class kind="struct">cudf::io::column_name_info</class>
     <class kind="struct">cudf::io::table_metadata</class>
