@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['major_5fminor_5fweights_5ft_727',['major_minor_weights_t',['../structcugraph_1_1cython_1_1major__minor__weights__t.html',1,'cugraph::cython']]],
-  ['major_5fto_5fgroup_5fidx_5ft_728',['major_to_group_idx_t',['../structcugraph_1_1detail_1_1major__to__group__idx__t.html',1,'cugraph::detail']]],
-  ['map_5findex_5fto_5fpath_5foffset_729',['map_index_to_path_offset',['../structcugraph_1_1detail_1_1map__index__to__path__offset.html',1,'cugraph::detail']]],
-  ['maximum_730',['maximum',['../structcugraph_1_1reduce__op_1_1maximum.html',1,'cugraph::reduce_op']]],
-  ['minimum_731',['minimum',['../structcugraph_1_1reduce__op_1_1minimum.html',1,'cugraph::reduce_op']]],
-  ['minor_5fto_5fkey_5ft_732',['minor_to_key_t',['../structcugraph_1_1detail_1_1minor__to__key__t.html',1,'cugraph::detail']]],
-  ['multiplier_5ft_733',['multiplier_t',['../structcugraph_1_1detail_1_1multiplier__t.html',1,'cugraph::detail']]],
-  ['multiply_5fand_5fadd_5ft_734',['multiply_and_add_t',['../structcugraph_1_1detail_1_1multiply__and__add__t.html',1,'cugraph::detail']]]
+  ['major_5fminor_5fweights_5ft_735',['major_minor_weights_t',['../structcugraph_1_1cython_1_1major__minor__weights__t.html',1,'cugraph::cython']]],
+  ['major_5fto_5fgroup_5fidx_5ft_736',['major_to_group_idx_t',['../structcugraph_1_1detail_1_1major__to__group__idx__t.html',1,'cugraph::detail']]],
+  ['map_5findex_5fto_5fpath_5foffset_737',['map_index_to_path_offset',['../structcugraph_1_1detail_1_1map__index__to__path__offset.html',1,'cugraph::detail']]],
+  ['maximum_738',['maximum',['../structcugraph_1_1reduce__op_1_1maximum.html',1,'cugraph::reduce_op']]],
+  ['minimum_739',['minimum',['../structcugraph_1_1reduce__op_1_1minimum.html',1,'cugraph::reduce_op']]],
+  ['minor_5fto_5fkey_5ft_740',['minor_to_key_t',['../structcugraph_1_1detail_1_1minor__to__key__t.html',1,'cugraph::detail']]],
+  ['multiplier_5ft_741',['multiplier_t',['../structcugraph_1_1detail_1_1multiplier__t.html',1,'cugraph::detail']]],
+  ['multiply_5fand_5fadd_5ft_742',['multiply_and_add_t',['../structcugraph_1_1detail_1_1multiply__and__add__t.html',1,'cugraph::detail']]]
 ];

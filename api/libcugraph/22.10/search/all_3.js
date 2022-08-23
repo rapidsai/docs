@@ -39,7 +39,5 @@ var searchData=
   ['dmaptype_3c_20dtypes_3a_3afloat64_20_3e_180',['DMapType&lt; DTypes::FLOAT64 &gt;',['../structcugraph_1_1visitors_1_1DMapType_3_01DTypes_1_1FLOAT64_01_4.html',1,'cugraph::visitors']]],
   ['dmaptype_3c_20dtypes_3a_3aint32_20_3e_181',['DMapType&lt; DTypes::INT32 &gt;',['../structcugraph_1_1visitors_1_1DMapType_3_01DTypes_1_1INT32_01_4.html',1,'cugraph::visitors']]],
   ['dmaptype_3c_20dtypes_3a_3aint64_20_3e_182',['DMapType&lt; DTypes::INT64 &gt;',['../structcugraph_1_1visitors_1_1DMapType_3_01DTypes_1_1INT64_01_4.html',1,'cugraph::visitors']]],
-  ['dst_5findices_183',['dst_indices',['../classcugraph_1_1legacy_1_1GraphCOOView.html#a9369b2b264219eed85dd5d067c307a73',1,'cugraph::legacy::GraphCOOView']]],
-  ['dummy_5fproperty_5fdevice_5fview_5ft_184',['dummy_property_device_view_t',['../classcugraph_1_1dummy__property__device__view__t.html',1,'cugraph']]],
-  ['dummy_5fproperty_5ft_185',['dummy_property_t',['../classcugraph_1_1dummy__property__t.html',1,'cugraph']]]
+  ['dst_5findices_183',['dst_indices',['../classcugraph_1_1legacy_1_1GraphCOOView.html#a9369b2b264219eed85dd5d067c307a73',1,'cugraph::legacy::GraphCOOView']]]
 ];
