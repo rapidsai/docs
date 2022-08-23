@@ -12,14 +12,8 @@ The RAPIDS data science framework is a collection of libraries for running end-t
 {: .fs-6 .fw-300 }
 
 ### Installation Tool
-#### **[Rapids.AI](https://rapids.ai/start.html#get-rapids){: target="_blank"}**
+#### **[RAPIDS.AI](https://rapids.ai/start.html#get-rapids){: target="_blank"}**
 Contains a configurator tool to help you choose between the various methods for installing RAPIDS.
-{: .mb-7 }
-
-
-### GDF CheatSheet
-#### **[PDF Download](https://rapids.ai/assets/files/cheatsheet.pdf){: target="_blank"}**
-Handy PDF reference guide for handling GPU Data Frames (GDF) with cuDF.
 {: .mb-7 }
 
 ### 10 Minutes to cuDF and Dask-cuDF
@@ -28,16 +22,16 @@ Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is
 {: .mb-7 }
 
 ### RAPIDS Spark Examples
-#### **[Github Repo](https://github.com/NVIDIA/spark-rapids-examples){: target="_blank"}**
-A repo for Spark related utilities and examples using the Rapids Accelerator, including ETL, ML/DL, etc.
+#### **[GitHub Repo](https://github.com/NVIDIA/spark-rapids-examples){: target="_blank"}**
+A repo for Spark related utilities and examples using the RAPIDS Accelerator, including ETL, ML/DL, etc.
 {: .mb-7 }
 
-### Our Collection of Example NoteBooks
-#### **[Github Repo](https://github.com/rapidsai/notebooks){: target="_blank"}**
-A Github repository with our introductory examples of XGBoost, cuML demos, cuGraph demos, and more.
+### Our Collection of Example Notebooks
+#### **[GitHub Repo](https://github.com/rapidsai/notebooks){: target="_blank"}**
+A GitHub repository with our introductory examples of XGBoost, cuML demos, cuGraph demos, and more.
 {: .mb-7 }
 
-### Our Extended Collection of Example NoteBooks
-#### **[Github Repo](https://github.com/rapidsai/notebooks-contrib){: target="_blank"}**
-A Github repository with examples of XGBoost, cuML demos, cuGraph demos, and more.
+### Our Extended Collection of Example Notebooks
+#### **[GitHub Repo](https://github.com/rapidsai/notebooks-contrib){: target="_blank"}**
+A GitHub repository with examples of XGBoost, cuML demos, cuGraph demos, and more.
 {: .mb-7 }
