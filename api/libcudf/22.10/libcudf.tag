@@ -3347,6 +3347,13 @@
       <anchor>gafbbcfd26df7ebdfc7a72e3977332edc7</anchor>
       <arglist></arglist>
     </member>
+    <member kind="variable">
+      <type>constexpr size_type</type>
+      <name>default_column_index_truncate_length</name>
+      <anchorfile>group__io__readers.html</anchorfile>
+      <anchor>ga110f54b1f85956173feba8e6f6ae207c</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="file">
     <name>partition.hpp</name>
@@ -7281,6 +7288,13 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
+      <type>auto</type>
+      <name>get_column_index_truncate_length</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options.html</anchorfile>
+      <anchor>a1ece26e7497a5a5487844cb631a0df7c</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
       <type>void</type>
       <name>set_metadata</name>
       <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options.html</anchorfile>
@@ -7342,6 +7356,13 @@
       <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options.html</anchorfile>
       <anchor>a5f40150f0070433f64d00d0da8e66796</anchor>
       <arglist>(size_type size_rows)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_column_index_truncate_length</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options.html</anchorfile>
+      <anchor>a1d19c10b520714bbbf0fd0794ee3c96a</anchor>
+      <arglist>(size_type size_bytes)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>static chunked_parquet_writer_options_builder</type>
@@ -7429,6 +7450,13 @@
       <name>max_page_size_rows</name>
       <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options__builder.html</anchorfile>
       <anchor>a3f453da86b5f0da3b70734eac0e8ec01</anchor>
+      <arglist>(size_type val)</arglist>
+    </member>
+    <member kind="function">
+      <type>chunked_parquet_writer_options_builder &amp;</type>
+      <name>column_index_truncate_length</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options__builder.html</anchorfile>
+      <anchor>ae76dcbdd4ff71efab976d7bfe31988ea</anchor>
       <arglist>(size_type val)</arglist>
     </member>
     <member kind="function">
@@ -12303,6 +12331,13 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
+      <type>size_type</type>
+      <name>row_index</name>
+      <anchorfile>classcudf_1_1list__device__view.html</anchorfile>
+      <anchor>a3875c83bbd529d4015860d1583e2eee1</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
       <type>lists_column_device_view const  &amp;</type>
       <name>get_column</name>
       <anchorfile>classcudf_1_1list__device__view.html</anchorfile>
@@ -14414,6 +14449,13 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
+      <type>auto</type>
+      <name>get_column_index_truncate_length</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__writer__options.html</anchorfile>
+      <anchor>a75cfe72e25411aec669ac79084a94b68</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
       <type>void</type>
       <name>set_partitions</name>
       <anchorfile>classcudf_1_1io_1_1parquet__writer__options.html</anchorfile>
@@ -14489,6 +14531,13 @@
       <anchorfile>classcudf_1_1io_1_1parquet__writer__options.html</anchorfile>
       <anchor>a7a7241d2c296adae619f306780be640a</anchor>
       <arglist>(size_type size_rows)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_column_index_truncate_length</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__writer__options.html</anchorfile>
+      <anchor>a3b4492323be051030ef433c40c86087a</anchor>
+      <arglist>(size_type size_bytes)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>static parquet_writer_options_builder</type>
@@ -14590,6 +14639,13 @@
       <name>max_page_size_rows</name>
       <anchorfile>classcudf_1_1io_1_1parquet__writer__options__builder.html</anchorfile>
       <anchor>a772cde35f265ee53d4f003a7898392e3</anchor>
+      <arglist>(size_type val)</arglist>
+    </member>
+    <member kind="function">
+      <type>parquet_writer_options_builder &amp;</type>
+      <name>column_index_truncate_length</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__writer__options__builder.html</anchorfile>
+      <anchor>a7c132ad7e481c85953885ec461805325</anchor>
       <arglist>(size_type val)</arglist>
     </member>
     <member kind="function">
@@ -21343,6 +21399,13 @@
       <anchor>gafbbcfd26df7ebdfc7a72e3977332edc7</anchor>
       <arglist></arglist>
     </member>
+    <member kind="variable">
+      <type>constexpr size_type</type>
+      <name>default_column_index_truncate_length</name>
+      <anchorfile>group__io__readers.html</anchorfile>
+      <anchor>ga110f54b1f85956173feba8e6f6ae207c</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="namespace">
     <name>cudf::lists</name>
@@ -26495,6 +26558,13 @@
       <name>default_max_page_size_rows</name>
       <anchorfile>group__io__readers.html</anchorfile>
       <anchor>gafbbcfd26df7ebdfc7a72e3977332edc7</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr size_type</type>
+      <name>default_column_index_truncate_length</name>
+      <anchorfile>group__io__readers.html</anchorfile>
+      <anchor>ga110f54b1f85956173feba8e6f6ae207c</anchor>
       <arglist></arglist>
     </member>
   </compound>
