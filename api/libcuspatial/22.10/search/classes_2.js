@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['tuple_5fto_5fvec_5f2d_87',['tuple_to_vec_2d',['../structcuspatial_1_1detail_1_1tuple__to__vec__2d.html',1,'cuspatial::detail']]]
+  ['logic_5ferror_91',['logic_error',['../structcuspatial_1_1logic__error.html',1,'cuspatial']]],
+  ['lonlat_5f2d_92',['lonlat_2d',['../structcuspatial_1_1lonlat__2d.html',1,'cuspatial']]]
 ];
