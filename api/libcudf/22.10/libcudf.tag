@@ -1137,6 +1137,7 @@
     <path>/rapids/cudf/cpp/include/cudf/strings/</path>
     <filename>strings_2contains_8hpp.html</filename>
     <includes id="column_8hpp" name="column.hpp" local="no" imported="no">cudf/column/column.hpp</includes>
+    <includes id="scalar_8hpp" name="scalar.hpp" local="no" imported="no">cudf/scalar/scalar.hpp</includes>
     <includes id="strings__column__view_8hpp" name="strings_column_view.hpp" local="no" imported="no">cudf/strings/strings_column_view.hpp</includes>
     <namespace>cudf</namespace>
     <namespace>cudf::strings</namespace>
@@ -1160,6 +1161,13 @@
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>ga42591dbdf50f74b009ab92e4ed4845d4</anchor>
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>like</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>ga2760c4c5752dec2e566d51f6f2b0aef1</anchor>
+      <arglist>(strings_column_view const &amp;input, string_scalar const &amp;pattern, string_scalar const &amp;escape_character=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -4456,41 +4464,6 @@
       <anchorfile>group__reorder__compact.html</anchorfile>
       <anchor>gad861920389b600bb3310ecb22e307316</anchor>
       <arglist>(table_view const &amp;input, null_equality nulls_equal=null_equality::EQUAL)</arglist>
-    </member>
-  </compound>
-  <compound kind="file">
-    <name>string.cuh</name>
-    <path>/rapids/cudf/cpp/include/cudf/strings/</path>
-    <filename>string_8cuh.html</filename>
-    <namespace>cudf</namespace>
-    <namespace>cudf::strings</namespace>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_integer</name>
-      <anchorfile>group__strings__classes.html</anchorfile>
-      <anchor>ga23dd01c1e38467b454add191ef9b821f</anchor>
-      <arglist>(string_view const &amp;d_str)</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_nan_str</name>
-      <anchorfile>group__strings__classes.html</anchorfile>
-      <anchor>gae7a8449223679ac1ba91a74edfd54be1</anchor>
-      <arglist>(string_view const &amp;d_str)</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_inf_str</name>
-      <anchorfile>group__strings__classes.html</anchorfile>
-      <anchor>ga1a4c4205970e29aff05245e9b02b3ea4</anchor>
-      <arglist>(string_view const &amp;d_str)</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_float</name>
-      <anchorfile>group__strings__classes.html</anchorfile>
-      <anchor>ga75c7786b292618018ee808857b343cbb</anchor>
-      <arglist>(string_view const &amp;d_str)</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -14006,32 +13979,6 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>cudf::list_device_view::pair_accessor</name>
-    <filename>structcudf_1_1list__device__view_1_1pair__accessor.html</filename>
-    <templarg></templarg>
-    <member kind="function">
-      <type>CUDF_HOST_DEVICE</type>
-      <name>pair_accessor</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
-      <anchor>a14b2b90c570fd87997eed3cb731393ad</anchor>
-      <arglist>(list_device_view const &amp;_list)</arglist>
-    </member>
-    <member kind="function">
-      <type>thrust::pair&lt; T, bool &gt;</type>
-      <name>operator()</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
-      <anchor>a95483245b84735ba74f8c11f916c86f3</anchor>
-      <arglist>(cudf::size_type i) const</arglist>
-    </member>
-    <member kind="variable">
-      <type>list_device_view const  &amp;</type>
-      <name>list</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
-      <anchor>a1a9ded6b481d0ff1ebcd69d256d6dcd0</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
     <name>cudf::detail::pair_accessor</name>
     <filename>structcudf_1_1detail_1_1pair__accessor.html</filename>
     <templarg></templarg>
@@ -14055,6 +14002,32 @@
       <name>col</name>
       <anchorfile>structcudf_1_1detail_1_1pair__accessor.html</anchorfile>
       <anchor>a5c93941a91871e3e4116b7f848b87c7d</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>cudf::list_device_view::pair_accessor</name>
+    <filename>structcudf_1_1list__device__view_1_1pair__accessor.html</filename>
+    <templarg></templarg>
+    <member kind="function">
+      <type>CUDF_HOST_DEVICE</type>
+      <name>pair_accessor</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
+      <anchor>a14b2b90c570fd87997eed3cb731393ad</anchor>
+      <arglist>(list_device_view const &amp;_list)</arglist>
+    </member>
+    <member kind="function">
+      <type>thrust::pair&lt; T, bool &gt;</type>
+      <name>operator()</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
+      <anchor>a95483245b84735ba74f8c11f916c86f3</anchor>
+      <arglist>(cudf::size_type i) const</arglist>
+    </member>
+    <member kind="variable">
+      <type>list_device_view const  &amp;</type>
+      <name>list</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
+      <anchor>a1a9ded6b481d0ff1ebcd69d256d6dcd0</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -17977,31 +17950,6 @@
     </member>
   </compound>
   <compound kind="class">
-    <name>cudf::experimental::row::equality::two_table_comparator</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>two_table_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>ae79afc740f4f35933272256fbc307fff</anchor>
-      <arglist>(table_view const &amp;left, table_view const &amp;right, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>two_table_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>a3aa292bc6cf5051c8af76fd98e638b13</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; left, std::shared_ptr&lt; preprocessed_table &gt; right)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>equal_to</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>ac9c7c726b67a7b30f0232af9744a274c</anchor>
-      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
     <name>cudf::experimental::row::lexicographic::two_table_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</filename>
     <member kind="function">
@@ -18031,6 +17979,31 @@
       <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</anchorfile>
       <anchor>ac24f96efba1a47a1b63747143bbc6529</anchor>
       <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>cudf::experimental::row::equality::two_table_comparator</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>two_table_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>ae79afc740f4f35933272256fbc307fff</anchor>
+      <arglist>(table_view const &amp;left, table_view const &amp;right, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>two_table_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>a3aa292bc6cf5051c8af76fd98e638b13</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; left, std::shared_ptr&lt; preprocessed_table &gt; right)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>equal_to</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>ac9c7c726b67a7b30f0232af9744a274c</anchor>
+      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -21864,6 +21837,13 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
+      <name>like</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>ga2760c4c5752dec2e566d51f6f2b0aef1</anchor>
+      <arglist>(strings_column_view const &amp;input, string_scalar const &amp;pattern, string_scalar const &amp;escape_character=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
       <name>to_booleans</name>
       <anchorfile>group__strings__convert.html</anchorfile>
       <anchor>gadabfd784d248d6d6a7bfcf0d1674013d</anchor>
@@ -22316,34 +22296,6 @@
       <anchorfile>group__strings__split.html</anchorfile>
       <anchor>gaa3eef244c65b7be3468eaa86a30c2666</anchor>
       <arglist>(strings_column_view const &amp;input, std::string_view pattern, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_integer</name>
-      <anchorfile>group__strings__classes.html</anchorfile>
-      <anchor>ga23dd01c1e38467b454add191ef9b821f</anchor>
-      <arglist>(string_view const &amp;d_str)</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_nan_str</name>
-      <anchorfile>group__strings__classes.html</anchorfile>
-      <anchor>gae7a8449223679ac1ba91a74edfd54be1</anchor>
-      <arglist>(string_view const &amp;d_str)</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_inf_str</name>
-      <anchorfile>group__strings__classes.html</anchorfile>
-      <anchor>ga1a4c4205970e29aff05245e9b02b3ea4</anchor>
-      <arglist>(string_view const &amp;d_str)</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_float</name>
-      <anchorfile>group__strings__classes.html</anchorfile>
-      <anchor>ga75c7786b292618018ee808857b343cbb</anchor>
-      <arglist>(string_view const &amp;d_str)</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -22938,38 +22890,9 @@
     <name>strings_classes</name>
     <title>Strings</title>
     <filename>group__strings__classes.html</filename>
-    <file>string.cuh</file>
     <namespace>cudf::strings</namespace>
     <class kind="class">cudf::string_view</class>
     <class kind="class">cudf::strings_column_view</class>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_integer</name>
-      <anchorfile>group__strings__classes.html</anchorfile>
-      <anchor>ga23dd01c1e38467b454add191ef9b821f</anchor>
-      <arglist>(string_view const &amp;d_str)</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_nan_str</name>
-      <anchorfile>group__strings__classes.html</anchorfile>
-      <anchor>gae7a8449223679ac1ba91a74edfd54be1</anchor>
-      <arglist>(string_view const &amp;d_str)</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_inf_str</name>
-      <anchorfile>group__strings__classes.html</anchorfile>
-      <anchor>ga1a4c4205970e29aff05245e9b02b3ea4</anchor>
-      <arglist>(string_view const &amp;d_str)</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_float</name>
-      <anchorfile>group__strings__classes.html</anchorfile>
-      <anchor>ga75c7786b292618018ee808857b343cbb</anchor>
-      <arglist>(string_view const &amp;d_str)</arglist>
-    </member>
   </compound>
   <compound kind="group">
     <name>dictionary_classes</name>
@@ -25749,6 +25672,13 @@
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>ga42591dbdf50f74b009ab92e4ed4845d4</anchor>
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>like</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>ga2760c4c5752dec2e566d51f6f2b0aef1</anchor>
+      <arglist>(strings_column_view const &amp;input, string_scalar const &amp;pattern, string_scalar const &amp;escape_character=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; table &gt;</type>
