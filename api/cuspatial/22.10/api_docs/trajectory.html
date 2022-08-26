@@ -33,7 +33,7 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link href="../genindex.html" rel="index" title="Index">
     <link href="../search.html" rel="search" title="Search">
-    <link href="geopandas_compatibility.html" rel="next" title="GeoPandas Compatibility">
+    <link href="interpolation.html" rel="next" title="Interpolation">
     <link href="spatial.html" rel="prev" title="Spatial">
 <meta content="width=device-width, initial-scale=1" name="viewport">
 <meta content="en-US" name="docsearch:language">
@@ -155,6 +155,11 @@
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Trajectory
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="interpolation.html">
+   Interpolation
   </a>
  </li>
  <li class="toctree-l1">
@@ -424,100 +429,6 @@ y<sub>0</sub> to the farthest point in <code class="docutils literal notranslate
 </div>
 </dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="cuspatial.CubicSpline">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">CubicSpline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefixes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.CubicSpline" title="Permalink to this definition">#</a></dt>
-<dd><p>Fits each column of the input Series <cite>y</cite> to a hermetic cubic spline.</p>
-<p><code class="docutils literal notranslate"><span class="pre">cuspatial.CubicSpline</span></code> supports two usage patterns: The first is
-identical to scipy.interpolate.CubicSpline:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curve</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">CubicSpline</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="n">new_points</span> <span class="o">=</span> <span class="n">curve</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">min</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">max</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>This allows API parity with scipy. This isn&rsquo;t recommended, as scipy
-host based interpolation performance is likely to exceed GPU performance
-for a single curve.</p>
-<p>However, cuSpatial significantly outperforms scipy when many splines are
-fit simultaneously. Data must be arranged in a SoA format, and the
-exclusive <cite>prefix_sum</cite> of the separate curves must also be passed to the
-function.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NUM_SPLINES</span> <span class="o">=</span> <span class="mi">100000</span>
-<span class="n">SPLINE_LENGTH</span> <span class="o">=</span> <span class="mi">101</span>
-<span class="n">t</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">SPLINE_LENGTH</span><span class="p">),)</span> <span class="o">*</span> <span class="n">NUM_SPLINES</span><span class="p">)</span>
-<span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">SPLINE_LENGTH</span><span class="o">*</span><span class="n">NUM_SPLINES</span><span class="p">)</span>
-<span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
-<span class="n">prefix_sum</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
-    <span class="n">cp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">NUM_SPLINES</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">SPLINE_LENGTH</span>
-<span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'int32'</span><span class="p">)</span>
-<span class="n">curve</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">CubicSpline</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">prefixes</span><span class="o">=</span><span class="n">prefix_sum</span><span class="p">)</span>
-<span class="n">new_samples</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
-        <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">SPLINE_LENGTH</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">SPLINE_LENGTH</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="p">),)</span> <span class="o">*</span> <span class="n">NUM_SPLINES</span><span class="p">)</span>
-<span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float32'</span><span class="p">)</span>
-<span class="n">curve_ids</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">NUM_SPLINES</span><span class="p">),</span> <span class="n">SPLINE_LENGTH</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
-<span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)</span>
-<span class="n">new_points</span> <span class="o">=</span> <span class="n">curve</span><span class="p">(</span><span class="n">new_samples</span><span class="p">,</span> <span class="n">curve_ids</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="rubric">Methods</p>
-<table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 90%">
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#cuspatial.CubicSpline.__call__" title="cuspatial.CubicSpline.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(coordinates[,&nbsp;groups])</p></td>
-<td><p>Interpolates new input values <cite>coordinates</cite> using the <cite>.c</cite> DataFrame or map of DataFrames.</p></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cuspatial.CubicSpline.__init__">
-<span class="sig-prename descclassname"><span class="pre">CubicSpline.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefixes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.CubicSpline.__init__" title="Permalink to this definition">#</a></dt>
-<dd><p>Computes various error preconditions on the input data, then
-uses CUDA to compute cubic splines for each set of input
-coordinates on the GPU in parallel.</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>t</strong><span class="classifier">cudf.Series</span></dt><dd><p>time sample values. Must be monotonically increasing.</p>
-</dd>
-<dt><strong>y</strong><span class="classifier">cudf.Series</span></dt><dd><p>columns to have curves fit to according to x</p>
-</dd>
-<dt><strong>ids (Optional)</strong><span class="classifier">cudf.Series</span></dt><dd><p>ids of each spline</p>
-</dd>
-<dt><strong>size (Optional)</strong><span class="classifier">cudf.Series</span></dt><dd><p>fixed size of each spline</p>
-</dd>
-<dt><strong>prefixes (Optional)</strong><span class="classifier">cudf.Series</span></dt><dd><p>alternative to <cite>size</cite>, allows splines of varying
-length. Not yet fully supported.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl>
-<dt><strong>CubicSpline</strong><span class="classifier">callable <cite>o</cite></span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">o.c</span></code> contains the coefficients that can be used to compute new
-points along the spline fitting the original <code class="docutils literal notranslate"><span class="pre">t</span></code> data. <code class="docutils literal notranslate"><span class="pre">o(n)</span></code>
-interpolates the spline coordinates along new input values <code class="docutils literal notranslate"><span class="pre">n</span></code>.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cuspatial.CubicSpline.__call__">
-<span class="sig-prename descclassname"><span class="pre">CubicSpline.</span></span><span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coordinates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.CubicSpline.__call__" title="Permalink to this definition">#</a></dt>
-<dd><p>Interpolates new input values <cite>coordinates</cite> using the <cite>.c</cite> DataFrame
-or map of DataFrames.</p>
-</dd></dl>
-
 </section>
 
 
@@ -535,10 +446,10 @@ or map of DataFrames.</p>
           <p class="prev-next-title">Spatial</p>
       </div>
   </a>
-  <a class="right-next" href="geopandas_compatibility.html" id="next-link" title="next page">
+  <a class="right-next" href="interpolation.html" id="next-link" title="next page">
   <div class="prev-next-info">
       <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">GeoPandas Compatibility</p>
+      <p class="prev-next-title">Interpolation</p>
   </div>
   <i class="fas fa-angle-right"></i>
   </a>
