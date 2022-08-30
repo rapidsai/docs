@@ -2445,17 +2445,10 @@
     <namespace>cudf</namespace>
     <namespace>cudf::strings</namespace>
     <member kind="function">
-      <type>std::unique_ptr&lt; table &gt;</type>
+      <type>std::unique_ptr&lt; column &gt;</type>
       <name>findall</name>
       <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>ga9499ab03f51d04450a80d13f511a9235</anchor>
-      <arglist>(strings_column_view const &amp;input, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>findall_record</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>gab59941f62bf8bec10424c12661d09f4f</anchor>
+      <anchor>gafdbc44c1c22d27554a6048e40abcee0c</anchor>
       <arglist>(strings_column_view const &amp;input, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
@@ -22102,17 +22095,10 @@
       <arglist>(strings_column_view const &amp;input, strings_column_view const &amp;targets, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>std::unique_ptr&lt; table &gt;</type>
+      <type>std::unique_ptr&lt; column &gt;</type>
       <name>findall</name>
       <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>ga9499ab03f51d04450a80d13f511a9235</anchor>
-      <arglist>(strings_column_view const &amp;input, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>findall_record</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>gab59941f62bf8bec10424c12661d09f4f</anchor>
+      <anchor>gafdbc44c1c22d27554a6048e40abcee0c</anchor>
       <arglist>(strings_column_view const &amp;input, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
@@ -25681,17 +25667,10 @@
       <arglist>(strings_column_view const &amp;input, string_scalar const &amp;pattern, string_scalar const &amp;escape_character=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>std::unique_ptr&lt; table &gt;</type>
+      <type>std::unique_ptr&lt; column &gt;</type>
       <name>findall</name>
       <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>ga9499ab03f51d04450a80d13f511a9235</anchor>
-      <arglist>(strings_column_view const &amp;input, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>findall_record</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>gab59941f62bf8bec10424c12661d09f4f</anchor>
+      <anchor>gafdbc44c1c22d27554a6048e40abcee0c</anchor>
       <arglist>(strings_column_view const &amp;input, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
