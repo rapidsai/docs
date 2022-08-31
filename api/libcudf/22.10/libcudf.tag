@@ -6934,6 +6934,13 @@
       <anchor>a62665cfda3ed71564969b563053c6e71</anchor>
       <arglist>()</arglist>
     </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>empty</name>
+      <anchorfile>classcudf_1_1io_1_1text_1_1byte__range__info.html</anchorfile>
+      <anchor>af4ff25c43eb0249872e08d0c98aa2b82</anchor>
+      <arglist>()</arglist>
+    </member>
   </compound>
   <compound kind="class">
     <name>cudf::chrono_scalar</name>
