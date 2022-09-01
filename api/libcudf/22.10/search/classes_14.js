@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['value_5faccessor_2137',['value_accessor',['../structcudf_1_1detail_1_1value__accessor.html',1,'cudf::detail']]]
+  ['window_5fbounds_2134',['window_bounds',['../structcudf_1_1window__bounds.html',1,'cudf']]]
 ];

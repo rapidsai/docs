@@ -4816,12 +4816,11 @@
     <name>traits.hpp</name>
     <path>/rapids/cudf/cpp/include/cudf/utilities/</path>
     <filename>traits_8hpp.html</filename>
+    <includes id="fixed__point_8hpp" name="fixed_point.hpp" local="no" imported="no">cudf/fixed_point/fixed_point.hpp</includes>
     <includes id="types_8hpp" name="types.hpp" local="no" imported="no">cudf/types.hpp</includes>
-    <includes id="type__dispatcher_8hpp" name="type_dispatcher.hpp" local="no" imported="no">cudf/utilities/type_dispatcher.hpp</includes>
+    <includes id="dictionary_8hpp" name="dictionary.hpp" local="no" imported="no">cudf/wrappers/dictionary.hpp</includes>
     <includes id="durations_8hpp" name="durations.hpp" local="no" imported="no">cudf/wrappers/durations.hpp</includes>
     <includes id="timestamps_8hpp" name="timestamps.hpp" local="no" imported="no">cudf/wrappers/timestamps.hpp</includes>
-    <class kind="struct">cudf::detail::unary_relationally_comparable_functor</class>
-    <class kind="struct">cudf::detail::unary_equality_comparable_functor</class>
     <class kind="struct">cudf::is_convertible</class>
     <class kind="struct">cudf::is_convertible&lt; cudf::detail::timestamp&lt; Duration1 &gt;, cudf::detail::timestamp&lt; Duration2 &gt; &gt;</class>
     <namespace>cudf</namespace>
@@ -4917,10 +4916,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_numeric</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gac193df7b5be153a88978c2e6564bf4f2</anchor>
+      <anchor>ga2eaf2d3443dd8aa17724e78190b537ba</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -4931,10 +4930,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_index_type</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gafcea1949beafc7a69ad3fd84dc4963fa</anchor>
+      <anchor>ga4c4225b65c8d89fc680fc705676ff6f1</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -4945,10 +4944,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_unsigned</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gaa3b01989f258e0f5a65b023ee9afa0a4</anchor>
+      <anchor>ga95969e57d58b6b7468b1cba9f435d95e</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -4966,10 +4965,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_floating_point</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gad173b489d720cdd20017458b1bc61c4f</anchor>
+      <anchor>ga947bd07e5edd70d8d56b38aeb856e9c6</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -4987,10 +4986,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_boolean</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga96675e30be80f4236360466adcf9a70c</anchor>
+      <anchor>ga73bcdf0744b62b98f4aef5fccea5840c</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -5001,10 +5000,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_timestamp</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga96f7b448c30ecbce54e8c1243ccc8c4d</anchor>
+      <anchor>ga92ea03fd93fa19ae17c3190cb439e5b3</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -5015,10 +5014,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_fixed_point</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga5e49a6d3bc5c68766eedfa82682d2842</anchor>
+      <anchor>gad339e701fa8a26d7630aa28f846399fb</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -5029,10 +5028,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_duration</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gaabf6036c9eab0193544871dd85f96fd2</anchor>
+      <anchor>ga285e3a7963fa18d913c1c9ff389d58ba</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -5043,10 +5042,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_chrono</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gad532b2d9ce1a328903d86bdd68796b29</anchor>
+      <anchor>gad2846c31e90421f0cbe7834334822e6a</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -5064,10 +5063,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_dictionary</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga34b610d2a311e9c6ba8f2bc4c13b88da</anchor>
+      <anchor>ga0e213a7906791cb36453a966a16bf326</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -5078,10 +5077,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_fixed_width</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga347d883100d3f7c725ad64c649f59c11</anchor>
+      <anchor>gad588b3f9ca419e5a32f1ce42031994a5</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -5092,10 +5091,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_compound</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gad7f296c6fe2b6ae35ac59e41cbf1487d</anchor>
+      <anchor>ga7b9445eeead457a3d5e18a2a675eb8dd</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -5106,17 +5105,17 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_nested</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga78ef9ab51afae8235ee8b18f82cc8107</anchor>
+      <anchor>ga8bfcb79b22de847a085d106dbf813c03</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_bit_castable</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gac50d08604b1c456f7f586fd9822871bb</anchor>
+      <anchor>ga73dd2d74b0eafb1543eb1cd27accd38e</anchor>
       <arglist>(data_type from, data_type to)</arglist>
     </member>
     <member kind="variable">
@@ -5321,13 +5320,6 @@
       <anchorfile>group__utility__dispatcher.html</anchorfile>
       <anchor>gaed4d6fee1f0059e5f26ab79eda8ad758</anchor>
       <arglist>(type_id id)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr bool</type>
-      <name>is_fixed_point</name>
-      <anchorfile>group__utility__dispatcher.html</anchorfile>
-      <anchor>ga1329473664f916bec9220d1c0122fb3f</anchor>
-      <arglist>(cudf::type_id id)</arglist>
     </member>
     <member kind="function">
       <type>CUDF_HOST_DEVICE constexpr decltype(auto) __forceinline__</type>
@@ -10481,10 +10473,10 @@
     <filename>structcudf_1_1experimental_1_1dispatch__void__if__nested.html</filename>
     <templarg>t</templarg>
     <member kind="typedef">
-      <type>std::conditional_t&lt; cudf::is_nested(data_type(t)), void, id_to_type&lt; t &gt; &gt;</type>
+      <type>std::conditional_t&lt; t==type_id::STRUCT or t==type_id::LIST, void, id_to_type&lt; t &gt; &gt;</type>
       <name>type</name>
       <anchorfile>structcudf_1_1experimental_1_1dispatch__void__if__nested.html</anchorfile>
-      <anchor>ae3736e4dccbb3ab175449432c2aea655</anchor>
+      <anchor>ab283ea2576c53293a0d8c0455ce33dca</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -13979,33 +13971,6 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>cudf::detail::pair_accessor</name>
-    <filename>structcudf_1_1detail_1_1pair__accessor.html</filename>
-    <templarg></templarg>
-    <templarg>has_nulls</templarg>
-    <member kind="function">
-      <type></type>
-      <name>pair_accessor</name>
-      <anchorfile>structcudf_1_1detail_1_1pair__accessor.html</anchorfile>
-      <anchor>ad1986e9e117f350509fc30966fda20aa</anchor>
-      <arglist>(column_device_view const &amp;_col)</arglist>
-    </member>
-    <member kind="function">
-      <type>thrust::pair&lt; T, bool &gt;</type>
-      <name>operator()</name>
-      <anchorfile>structcudf_1_1detail_1_1pair__accessor.html</anchorfile>
-      <anchor>ac7822341f86baf10c7c807df08a03085</anchor>
-      <arglist>(cudf::size_type i) const</arglist>
-    </member>
-    <member kind="variable">
-      <type>column_device_view const</type>
-      <name>col</name>
-      <anchorfile>structcudf_1_1detail_1_1pair__accessor.html</anchorfile>
-      <anchor>a5c93941a91871e3e4116b7f848b87c7d</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
     <name>cudf::list_device_view::pair_accessor</name>
     <filename>structcudf_1_1list__device__view_1_1pair__accessor.html</filename>
     <templarg></templarg>
@@ -14032,35 +13997,29 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>cudf::list_device_view::pair_rep_accessor</name>
-    <filename>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</filename>
+    <name>cudf::detail::pair_accessor</name>
+    <filename>structcudf_1_1detail_1_1pair__accessor.html</filename>
     <templarg></templarg>
-    <member kind="typedef">
-      <type>device_storage_type_t&lt; T &gt;</type>
-      <name>rep_type</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>a86137f06ce1c5f85bcc056b3b510de2a</anchor>
-      <arglist></arglist>
+    <templarg>has_nulls</templarg>
+    <member kind="function">
+      <type></type>
+      <name>pair_accessor</name>
+      <anchorfile>structcudf_1_1detail_1_1pair__accessor.html</anchorfile>
+      <anchor>ad1986e9e117f350509fc30966fda20aa</anchor>
+      <arglist>(column_device_view const &amp;_col)</arglist>
     </member>
     <member kind="function">
-      <type>CUDF_HOST_DEVICE</type>
-      <name>pair_rep_accessor</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>ac1a536b6750af8049c148cee8296eb46</anchor>
-      <arglist>(list_device_view const &amp;_list)</arglist>
-    </member>
-    <member kind="function">
-      <type>thrust::pair&lt; rep_type, bool &gt;</type>
+      <type>thrust::pair&lt; T, bool &gt;</type>
       <name>operator()</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>acc82443ba86c3f670083a5cbec86af88</anchor>
+      <anchorfile>structcudf_1_1detail_1_1pair__accessor.html</anchorfile>
+      <anchor>ac7822341f86baf10c7c807df08a03085</anchor>
       <arglist>(cudf::size_type i) const</arglist>
     </member>
     <member kind="variable">
-      <type>list_device_view const  &amp;</type>
-      <name>list</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>a5a12a570f271728cdb4bca54c62cd6f2</anchor>
+      <type>column_device_view const</type>
+      <name>col</name>
+      <anchorfile>structcudf_1_1detail_1_1pair__accessor.html</anchorfile>
+      <anchor>a5c93941a91871e3e4116b7f848b87c7d</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -14095,6 +14054,39 @@
       <name>col</name>
       <anchorfile>structcudf_1_1detail_1_1pair__rep__accessor.html</anchorfile>
       <anchor>a59cd69e90ab4b57bc905fc60282f2479</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>cudf::list_device_view::pair_rep_accessor</name>
+    <filename>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</filename>
+    <templarg></templarg>
+    <member kind="typedef">
+      <type>device_storage_type_t&lt; T &gt;</type>
+      <name>rep_type</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>a86137f06ce1c5f85bcc056b3b510de2a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>CUDF_HOST_DEVICE</type>
+      <name>pair_rep_accessor</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>ac1a536b6750af8049c148cee8296eb46</anchor>
+      <arglist>(list_device_view const &amp;_list)</arglist>
+    </member>
+    <member kind="function">
+      <type>thrust::pair&lt; rep_type, bool &gt;</type>
+      <name>operator()</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>acc82443ba86c3f670083a5cbec86af88</anchor>
+      <arglist>(cudf::size_type i) const</arglist>
+    </member>
+    <member kind="variable">
+      <type>list_device_view const  &amp;</type>
+      <name>list</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>a5a12a570f271728cdb4bca54c62cd6f2</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -14977,6 +14969,31 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>cudf::experimental::row::hash::row_hasher</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
+      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
+      <name>device_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
+      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::row_hasher</name>
     <filename>classcudf_1_1row__hasher.html</filename>
     <templarg>hash_function</templarg>
@@ -15001,31 +15018,6 @@
       <anchorfile>classcudf_1_1row__hasher.html</anchorfile>
       <anchor>ab370aeff347da4c228ccd917af8b52be</anchor>
       <arglist>(size_type row_index) const</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>cudf::experimental::row::hash::row_hasher</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
-      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
-      <name>device_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
-      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -15223,6 +15215,31 @@
     <base virtualness="virtual">cudf::aggregation</base>
   </compound>
   <compound kind="class">
+    <name>cudf::experimental::row::equality::self_comparator</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>self_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>a8f53714e3008c063b18aa52cbd1f5a8e</anchor>
+      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>self_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>a305627a9b975fed5f09c5b49dfb6f644</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>equal_to</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>adfbbb6f105eb6f65f0689f4eceef1792</anchor>
+      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::experimental::row::lexicographic::self_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</filename>
     <member kind="function">
@@ -15252,31 +15269,6 @@
       <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
       <anchor>a6991c5b5ad4810bca020e684fcd9cd3b</anchor>
       <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>cudf::experimental::row::equality::self_comparator</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>self_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>a8f53714e3008c063b18aa52cbd1f5a8e</anchor>
-      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>self_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>a305627a9b975fed5f09c5b49dfb6f644</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>equal_to</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>adfbbb6f105eb6f65f0689f4eceef1792</anchor>
-      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -17950,6 +17942,31 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>cudf::experimental::row::equality::two_table_comparator</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>two_table_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>ae79afc740f4f35933272256fbc307fff</anchor>
+      <arglist>(table_view const &amp;left, table_view const &amp;right, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>two_table_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>a3aa292bc6cf5051c8af76fd98e638b13</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; left, std::shared_ptr&lt; preprocessed_table &gt; right)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>equal_to</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>ac9c7c726b67a7b30f0232af9744a274c</anchor>
+      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::experimental::row::lexicographic::two_table_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</filename>
     <member kind="function">
@@ -17981,31 +17998,6 @@
       <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
-  <compound kind="class">
-    <name>cudf::experimental::row::equality::two_table_comparator</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>two_table_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>ae79afc740f4f35933272256fbc307fff</anchor>
-      <arglist>(table_view const &amp;left, table_view const &amp;right, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>two_table_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>a3aa292bc6cf5051c8af76fd98e638b13</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; left, std::shared_ptr&lt; preprocessed_table &gt; right)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>equal_to</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>ac9c7c726b67a7b30f0232af9744a274c</anchor>
-      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
-    </member>
-  </compound>
   <compound kind="struct">
     <name>cudf::type_to_name</name>
     <filename>structcudf_1_1type__to__name.html</filename>
@@ -18015,28 +18007,6 @@
       <anchorfile>structcudf_1_1type__to__name.html</anchorfile>
       <anchor>a9eb468506b64c38e8f443ef630b003be</anchor>
       <arglist>()</arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
-    <name>cudf::detail::unary_equality_comparable_functor</name>
-    <filename>structcudf_1_1detail_1_1unary__equality__comparable__functor.html</filename>
-    <member kind="function">
-      <type>bool</type>
-      <name>operator()</name>
-      <anchorfile>structcudf_1_1detail_1_1unary__equality__comparable__functor.html</anchorfile>
-      <anchor>afd0afd2a1eb80fddd2fbd7358856e045</anchor>
-      <arglist>() const</arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
-    <name>cudf::detail::unary_relationally_comparable_functor</name>
-    <filename>structcudf_1_1detail_1_1unary__relationally__comparable__functor.html</filename>
-    <member kind="function">
-      <type>bool</type>
-      <name>operator()</name>
-      <anchorfile>structcudf_1_1detail_1_1unary__relationally__comparable__functor.html</anchorfile>
-      <anchor>a645f150fbf8493feca71f32b5658f06b</anchor>
-      <arglist>() const</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -20735,10 +20705,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_numeric</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gac193df7b5be153a88978c2e6564bf4f2</anchor>
+      <anchor>ga2eaf2d3443dd8aa17724e78190b537ba</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -20749,10 +20719,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_index_type</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gafcea1949beafc7a69ad3fd84dc4963fa</anchor>
+      <anchor>ga4c4225b65c8d89fc680fc705676ff6f1</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -20763,10 +20733,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_unsigned</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gaa3b01989f258e0f5a65b023ee9afa0a4</anchor>
+      <anchor>ga95969e57d58b6b7468b1cba9f435d95e</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -20784,10 +20754,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_floating_point</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gad173b489d720cdd20017458b1bc61c4f</anchor>
+      <anchor>ga947bd07e5edd70d8d56b38aeb856e9c6</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -20805,10 +20775,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_boolean</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga96675e30be80f4236360466adcf9a70c</anchor>
+      <anchor>ga73bcdf0744b62b98f4aef5fccea5840c</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -20819,10 +20789,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_timestamp</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga96f7b448c30ecbce54e8c1243ccc8c4d</anchor>
+      <anchor>ga92ea03fd93fa19ae17c3190cb439e5b3</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -20833,10 +20803,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_fixed_point</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga5e49a6d3bc5c68766eedfa82682d2842</anchor>
+      <anchor>gad339e701fa8a26d7630aa28f846399fb</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -20847,10 +20817,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_duration</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gaabf6036c9eab0193544871dd85f96fd2</anchor>
+      <anchor>ga285e3a7963fa18d913c1c9ff389d58ba</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -20861,10 +20831,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_chrono</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gad532b2d9ce1a328903d86bdd68796b29</anchor>
+      <anchor>gad2846c31e90421f0cbe7834334822e6a</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -20882,10 +20852,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_dictionary</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga34b610d2a311e9c6ba8f2bc4c13b88da</anchor>
+      <anchor>ga0e213a7906791cb36453a966a16bf326</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -20896,10 +20866,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_fixed_width</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga347d883100d3f7c725ad64c649f59c11</anchor>
+      <anchor>gad588b3f9ca419e5a32f1ce42031994a5</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -20910,10 +20880,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_compound</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gad7f296c6fe2b6ae35ac59e41cbf1487d</anchor>
+      <anchor>ga7b9445eeead457a3d5e18a2a675eb8dd</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -20924,17 +20894,17 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_nested</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga78ef9ab51afae8235ee8b18f82cc8107</anchor>
+      <anchor>ga8bfcb79b22de847a085d106dbf813c03</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_bit_castable</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gac50d08604b1c456f7f586fd9822871bb</anchor>
+      <anchor>ga73dd2d74b0eafb1543eb1cd27accd38e</anchor>
       <arglist>(data_type from, data_type to)</arglist>
     </member>
     <member kind="function">
@@ -20957,13 +20927,6 @@
       <anchorfile>group__utility__dispatcher.html</anchorfile>
       <anchor>gaed4d6fee1f0059e5f26ab79eda8ad758</anchor>
       <arglist>(type_id id)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr bool</type>
-      <name>is_fixed_point</name>
-      <anchorfile>group__utility__dispatcher.html</anchorfile>
-      <anchor>ga1329473664f916bec9220d1c0122fb3f</anchor>
-      <arglist>(cudf::type_id id)</arglist>
     </member>
     <member kind="function">
       <type>CUDF_HOST_DEVICE constexpr decltype(auto) __forceinline__</type>
@@ -27293,10 +27256,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_numeric</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gac193df7b5be153a88978c2e6564bf4f2</anchor>
+      <anchor>ga2eaf2d3443dd8aa17724e78190b537ba</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -27307,10 +27270,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_index_type</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gafcea1949beafc7a69ad3fd84dc4963fa</anchor>
+      <anchor>ga4c4225b65c8d89fc680fc705676ff6f1</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -27321,10 +27284,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_unsigned</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gaa3b01989f258e0f5a65b023ee9afa0a4</anchor>
+      <anchor>ga95969e57d58b6b7468b1cba9f435d95e</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -27342,10 +27305,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_floating_point</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gad173b489d720cdd20017458b1bc61c4f</anchor>
+      <anchor>ga947bd07e5edd70d8d56b38aeb856e9c6</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -27363,10 +27326,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_boolean</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga96675e30be80f4236360466adcf9a70c</anchor>
+      <anchor>ga73bcdf0744b62b98f4aef5fccea5840c</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -27377,10 +27340,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_timestamp</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga96f7b448c30ecbce54e8c1243ccc8c4d</anchor>
+      <anchor>ga92ea03fd93fa19ae17c3190cb439e5b3</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -27391,10 +27354,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_fixed_point</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga5e49a6d3bc5c68766eedfa82682d2842</anchor>
+      <anchor>gad339e701fa8a26d7630aa28f846399fb</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -27405,10 +27368,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_duration</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gaabf6036c9eab0193544871dd85f96fd2</anchor>
+      <anchor>ga285e3a7963fa18d913c1c9ff389d58ba</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -27419,10 +27382,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_chrono</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gad532b2d9ce1a328903d86bdd68796b29</anchor>
+      <anchor>gad2846c31e90421f0cbe7834334822e6a</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -27440,10 +27403,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_dictionary</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga34b610d2a311e9c6ba8f2bc4c13b88da</anchor>
+      <anchor>ga0e213a7906791cb36453a966a16bf326</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -27454,10 +27417,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_fixed_width</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga347d883100d3f7c725ad64c649f59c11</anchor>
+      <anchor>gad588b3f9ca419e5a32f1ce42031994a5</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -27468,10 +27431,10 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_compound</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gad7f296c6fe2b6ae35ac59e41cbf1487d</anchor>
+      <anchor>ga7b9445eeead457a3d5e18a2a675eb8dd</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
@@ -27482,17 +27445,17 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_nested</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>ga78ef9ab51afae8235ee8b18f82cc8107</anchor>
+      <anchor>ga8bfcb79b22de847a085d106dbf813c03</anchor>
       <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
+      <type>bool</type>
       <name>is_bit_castable</name>
       <anchorfile>group__utility__types.html</anchorfile>
-      <anchor>gac50d08604b1c456f7f586fd9822871bb</anchor>
+      <anchor>ga73dd2d74b0eafb1543eb1cd27accd38e</anchor>
       <arglist>(data_type from, data_type to)</arglist>
     </member>
     <member kind="variable">
@@ -27579,13 +27542,6 @@
       <anchorfile>group__utility__dispatcher.html</anchorfile>
       <anchor>gaed4d6fee1f0059e5f26ab79eda8ad758</anchor>
       <arglist>(type_id id)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr bool</type>
-      <name>is_fixed_point</name>
-      <anchorfile>group__utility__dispatcher.html</anchorfile>
-      <anchor>ga1329473664f916bec9220d1c0122fb3f</anchor>
-      <arglist>(cudf::type_id id)</arglist>
     </member>
     <member kind="function">
       <type>CUDF_HOST_DEVICE constexpr decltype(auto) __forceinline__</type>

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['unary_5fequality_5fcomparable_5ffunctor_2135',['unary_equality_comparable_functor',['../structcudf_1_1detail_1_1unary__equality__comparable__functor.html',1,'cudf::detail']]],
-  ['unary_5frelationally_5fcomparable_5ffunctor_2136',['unary_relationally_comparable_functor',['../structcudf_1_1detail_1_1unary__relationally__comparable__functor.html',1,'cudf::detail']]]
+  ['value_5faccessor_2133',['value_accessor',['../structcudf_1_1detail_1_1value__accessor.html',1,'cudf::detail']]]
 ];

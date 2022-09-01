@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['exists_3392',['Exists',['../type__list__utilities_8hpp.html#a4048cba7ba523b5b0330fb68e6f5ff0b',1,'cudf::test']]],
-  ['extent_3393',['extent',['../classcudf_1_1detail_1_1span__base.html#a8f2f6f3a209c859cfe60961e9f3fb09d',1,'cudf::detail::span_base']]]
+  ['exists_3388',['Exists',['../type__list__utilities_8hpp.html#a4048cba7ba523b5b0330fb68e6f5ff0b',1,'cudf::test']]],
+  ['extent_3389',['extent',['../classcudf_1_1detail_1_1span__base.html#a8f2f6f3a209c859cfe60961e9f3fb09d',1,'cudf::detail::span_base']]]
 ];

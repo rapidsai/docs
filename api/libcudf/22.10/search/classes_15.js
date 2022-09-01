@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['window_5fbounds_2138',['window_bounds',['../structcudf_1_1window__bounds.html',1,'cudf']]]
+  ['yes_2135',['YES',['../structcudf_1_1nullate_1_1YES.html',1,'cudf::nullate']]]
 ];
