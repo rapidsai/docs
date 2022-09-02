@@ -3278,8 +3278,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>zfill</name>
       <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>ga4d9466c39fda23bcc741d6151e20fc2f</anchor>
-      <arglist>(strings_column_view const &amp;strings, size_type width, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gade1c70f7fe1c4a69399abc24c2fcee22</anchor>
+      <arglist>(strings_column_view const &amp;input, size_type width, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -22089,8 +22089,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>zfill</name>
       <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>ga4d9466c39fda23bcc741d6151e20fc2f</anchor>
-      <arglist>(strings_column_view const &amp;strings, size_type width, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gade1c70f7fe1c4a69399abc24c2fcee22</anchor>
+      <arglist>(strings_column_view const &amp;input, size_type width, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>constexpr bool</type>
@@ -26053,8 +26053,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>zfill</name>
       <anchorfile>group__strings__modify.html</anchorfile>
-      <anchor>ga4d9466c39fda23bcc741d6151e20fc2f</anchor>
-      <arglist>(strings_column_view const &amp;strings, size_type width, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gade1c70f7fe1c4a69399abc24c2fcee22</anchor>
+      <arglist>(strings_column_view const &amp;input, size_type width, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
