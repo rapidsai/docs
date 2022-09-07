@@ -94,6 +94,7 @@ require.
 
     rapids_cuda_init_architectures </command/rapids_cuda_init_architectures>
     rapids_cuda_init_runtime </command/rapids_cuda_init_runtime>
+    rapids_cuda_patch_toolkit </command/rapids_cuda_patch_toolkit>
     rapids_cuda_set_architectures [Advanced] </command/rapids_cuda_set_architectures>
 
 
