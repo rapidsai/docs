@@ -14168,6 +14168,20 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
+      <type>size_type</type>
+      <name>get_skip_rows</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
+      <anchor>a5ea8020e09b6f0bf2cdd896659cea68e</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>size_type</type>
+      <name>get_num_rows</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
+      <anchor>ad3a5173d708afc5bc9bb30b5b3c931b1</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
       <type>auto const  &amp;</type>
       <name>get_columns</name>
       <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
@@ -14222,6 +14236,20 @@
       <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
       <anchor>acb95dd64482dd114752bdd4d71a42e25</anchor>
       <arglist>(std::vector&lt; reader_column_schema &gt; val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_skip_rows</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
+      <anchor>a556b3be526ba648aff30f4c715a1d83a</anchor>
+      <arglist>(size_type val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_num_rows</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__reader__options.html</anchorfile>
+      <anchor>a88dbd58ecb6fdff7b303d32b2624196c</anchor>
+      <arglist>(size_type val)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -14289,6 +14317,20 @@
       <anchorfile>classcudf_1_1io_1_1parquet__reader__options__builder.html</anchorfile>
       <anchor>ab088fef19df455c357520d6bd72c14ce</anchor>
       <arglist>(std::vector&lt; reader_column_schema &gt; val)</arglist>
+    </member>
+    <member kind="function">
+      <type>parquet_reader_options_builder &amp;</type>
+      <name>skip_rows</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__reader__options__builder.html</anchorfile>
+      <anchor>a23048f446b11202efc817b52b0fc9905</anchor>
+      <arglist>(size_type val)</arglist>
+    </member>
+    <member kind="function">
+      <type>parquet_reader_options_builder &amp;</type>
+      <name>num_rows</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__reader__options__builder.html</anchorfile>
+      <anchor>ae5b062156777bfa0b12881ae15f4f1cb</anchor>
+      <arglist>(size_type val)</arglist>
     </member>
     <member kind="function">
       <type>parquet_reader_options_builder &amp;</type>
