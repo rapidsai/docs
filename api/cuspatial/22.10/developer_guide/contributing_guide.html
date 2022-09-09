@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
 
-    <title>Internals &mdash; cuspatial 22.10.00 documentation</title>
+    <title>How to Contribute to cuSpatial &mdash; cuspatial 22.10.00 documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -31,10 +31,11 @@
     <script src="../_static/doctools.js"></script>
     <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'developer_guide/internals';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'developer_guide/contributing_guide';</script>
     <link href="../genindex.html" rel="index" title="Index">
     <link href="../search.html" rel="search" title="Search">
-    <link href="index.html" rel="prev" title="Developer Guide">
+    <link href="library_design.html" rel="next" title="cuSpatial Library Design">
+    <link href="development_environment.html" rel="prev" title="Creating a Development Environment">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="en-US" name="docsearch:language">
   <script id="rapids-selector-pixel-src" src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
@@ -112,7 +113,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="../api_docs/index.html">
-                        API reference
+                        API Reference
                     </a>
                 </li>
                 
@@ -218,7 +219,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="../api_docs/index.html">
-                        API reference
+                        API Reference
                     </a>
                 </li>
                 
@@ -285,9 +286,19 @@
   </p>
   <div class="bd-toc-item navbar-nav">
     <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="development_environment.html">
+   Creating a Development Environment
+  </a>
+ </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Internals
+   How to Contribute to cuSpatial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="library_design.html">
+   cuSpatial Library Design
   </a>
  </li>
 </ul>
@@ -318,100 +329,93 @@
             
             <article class="bd-article" role="main">
               
-  <section id="internals">
-<h1>Internals<a class="headerlink" href="#internals" title="Permalink to this heading">#</a></h1>
-<p>This page includes information to help users understand the internal
-data structure of cuspatial.</p>
-<section id="geoarrow-format">
-<h2>GeoArrow Format<a class="headerlink" href="#geoarrow-format" title="Permalink to this heading">#</a></h2>
-<p>Geospatial data is context rich; aside from just a set of
-numbers representing coordinates, they together represent certain geometry
-that requires grouping. For example, given 5 points in a plane,
-they could be 5 separate points, 2 line segments, a single linestring,
-or a pentagon. Many geometry libraries stores the points in
-arrays of geometric objects, commonly known as &ldquo;Array of Structure&rdquo; (AoS).
-AoS is not efficient for accelerated computing on parallel devices such
-as GPU. Therefore, GeoArrow format was introduced to store geodata in
-densely packed format, commonly known as &ldquo;Structure of Arrays&rdquo; (SoA).</p>
-<p>The GeoArrow format specifies a tabular data format for geometry
-information. Supported types include <code class="docutils literal notranslate"><span class="pre">Point</span></code>, <code class="docutils literal notranslate"><span class="pre">MultiPoint</span></code>, <code class="docutils literal notranslate"><span class="pre">LineString</span></code>,
-<code class="docutils literal notranslate"><span class="pre">MultiLineString</span></code>, <code class="docutils literal notranslate"><span class="pre">Polygon</span></code>, and <code class="docutils literal notranslate"><span class="pre">MultiPolygon</span></code>. In order to store
-these coordinate types in a strictly tabular fashion, columns are
-created for Points, MultiPoints, LineStrings, and Polygons.
-MultiLines and MultiPolygons are stored in the same data structure
-as LineStrings and Polygons.</p>
-<p>GeoArrow format packs complex geometry types into 14 single-column Arrow
-tables. See <code class="xref py py-func docutils literal notranslate"><span class="pre">GeoArrowBuffers</span></code> docstring
-for the complete list of keys for the columns.</p>
-<section id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">Point</span></code> geometry is the simplest. N points are stored in a length 2*N
-buffer with interleaved x,y coordinates. An optional z buffer of length N
-can be used.</p>
-<p>A <code class="docutils literal notranslate"><span class="pre">Multipoint</span></code> is a group of points, and is the second simplest GeoArrow
-geometry type. It is identical to points, with the addition of a
-<code class="docutils literal notranslate"><span class="pre">multipoints_offsets</span></code> buffer. The offsets buffer stores N+1 indices. The
-first multipoint offset is specified by 0, which is always stored in
-<code class="docutils literal notranslate"><span class="pre">offsets[0]</span></code>. The second offset is stored in <code class="docutils literal notranslate"><span class="pre">offsets[1]</span></code>, and so on.
-The number of points in multipoint <code class="docutils literal notranslate"><span class="pre">i</span></code> is the difference between
-<code class="docutils literal notranslate"><span class="pre">offsets[i+1]</span></code> and <code class="docutils literal notranslate"><span class="pre">offsets[i]</span></code>.</p>
-<p>Consider:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">buffers</span> <span class="o">=</span> <span class="n">GeoArrowBuffers</span><span class="p">({</span>
-    <span class="s2">"multipoints_xy"</span><span class="p">:</span>
-        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-    <span class="s2">"multipoints_offsets"</span><span class="p">:</span>
-        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">18</span><span class="p">]</span>
-<span class="p">})</span>
-</pre></div>
-</div>
-<p>which encodes the following GeoPandas Series:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">series</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span>
-    <span class="n">MultiPoint</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
-    <span class="n">MultiPoint</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
-    <span class="n">MultiPoint</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
-<span class="p">])</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">LineString</span></code> geometry is more complicated than multipoints because the
-format allows for the use of <code class="docutils literal notranslate"><span class="pre">LineString</span></code> and <code class="docutils literal notranslate"><span class="pre">MultiLineString</span></code> in the same
-buffer, via the <code class="docutils literal notranslate"><span class="pre">mlines</span></code> buffer. The <code class="docutils literal notranslate"><span class="pre">mlines</span></code> buffer stores 2M indices, where M
-is the number of <code class="docutils literal notranslate"><span class="pre">MultiLineString</span></code> s. The starting and ending <strong>Linestring offset</strong> of the <code class="docutils literal notranslate"><span class="pre">i</span></code> th
-<code class="docutils literal notranslate"><span class="pre">MultiLineString</span></code> is stored at <code class="docutils literal notranslate"><span class="pre">mlines[2*i]</span></code> and <code class="docutils literal notranslate"><span class="pre">mlines[2*i+1]</span></code> respectively.</p>
-<p>Consider:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">buffers</span> <span class="o">=</span> <span class="n">GeoArrowBuffers</span><span class="p">({</span>
-    <span class="s2">"lines_xy"</span><span class="p">:</span>
-        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-    <span class="s2">"lines_offsets"</span><span class="p">:</span>
-        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
-    <span class="s2">"mlines"</span><span class="p">:</span>
-        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-<span class="p">})</span>
-</pre></div>
-</div>
-<p>Which encodes a GeoPandas Series:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">series</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span>
-    <span class="n">LineString</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
-    <span class="n">MultiLineString</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
-                    <span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
-    <span class="p">)</span>
-    <span class="n">LineString</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
-    <span class="n">LineString</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
-<span class="p">])</span>
-</pre></div>
-</div>
-<p>Note that <code class="docutils literal notranslate"><span class="pre">mlines</span></code> has 2 entries, and therefore there is 1
-<code class="docutils literal notranslate"><span class="pre">MultiLineString</span></code> in <code class="docutils literal notranslate"><span class="pre">buffers</span></code>. It consists of 2
-<code class="docutils literal notranslate"><span class="pre">LineStrings</span></code>: the second and third <code class="docutils literal notranslate"><span class="pre">LineString</span></code> in the defined by
-<code class="docutils literal notranslate"><span class="pre">lines_offsets</span></code>.</p>
-<p>Polygon geometry includes <code class="docutils literal notranslate"><span class="pre">mpolygons</span></code> for MultiPolygons similar to the
-LineString geometry. Polygons are encoded using the same format as
-<a class="reference external" href="https://en.wikipedia.org/wiki/Shapefile">Shapefile</a> ,
-with left-wound external rings and right-wound internal rings.</p>
+  <section id="how-to-contribute-to-cuspatial">
+<h1>How to Contribute to cuSpatial<a class="headerlink" href="#how-to-contribute-to-cuspatial" title="Permalink to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">cuSpatial</span></code> is a part of the RAPIDS community. When contributing to cuSpatial, developers should
+follow the RAPIDS contribution guidelines. The RAPIDS documentation
+<a class="reference external" href="https://docs.rapids.ai/contributing">contributing section</a> walks through the process of identifying
+an issue, submitting and merging a PR.</p>
+<section id="directory-structure-and-file-naming">
+<h2>Directory structure and file naming<a class="headerlink" href="#directory-structure-and-file-naming" title="Permalink to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">cuspatial</span></code> package comprises several subpackages.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">core</span></code> contains the main components of cuspatial</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">io</span></code> contains I/O functions for reading and writing external data objects</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tests</span></code> contains unit tests for cuspatial</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">utils</span></code> contains utility functions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_lib</span></code> contains Cython APIs that wrap the C++ <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code> backend.</p></li>
+</ul>
+<p><a class="reference internal" href="library_design.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">library_design</span></code></span></a> further discusses high-level library design of <code class="docutils literal notranslate"><span class="pre">cuspatial</span></code>.</p>
+<section id="cython-code">
+<h3>Cython code<a class="headerlink" href="#cython-code" title="Permalink to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">_lib</span></code> folder contains all cython code. Each feature in <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code> exposed to
+<code class="docutils literal notranslate"><span class="pre">cuspatial</span></code> should have two Cython files:</p>
+<ol class="arabic simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">pxd</span></code> file declaring C++ APIs so that they may be used in Cython, and</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">pyx</span></code> file containing Cython functions that wrap those C++ APIs so that they can be called from Python.</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">pyx</span></code> files are organized under the root of <code class="docutils literal notranslate"><span class="pre">_lib</span></code>. <code class="docutils literal notranslate"><span class="pre">pxd</span></code> files are under <code class="docutils literal notranslate"><span class="pre">_lib/cpp</span></code>.
+<code class="docutils literal notranslate"><span class="pre">pxd</span></code> files should mirror the file hierarchy of <code class="docutils literal notranslate"><span class="pre">cpp/include</span></code> in <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code>.</p>
+<p>For more information see <span class="xref myst">the Cython layer design documentation</span>.</p>
 </section>
-<section id="geoarrow-internal-apis">
-<h3>GeoArrow Internal APIs<a class="headerlink" href="#geoarrow-internal-apis" title="Permalink to this heading">#</a></h3>
 </section>
+<section id="code-style">
+<h2>Code style<a class="headerlink" href="#code-style" title="Permalink to this heading">#</a></h2>
+<p>cuSpatial employs a number of linters to ensure consistent style across the code base, and manages
+them using <a class="reference external" href="https://pre-commit.com/"><code class="docutils literal notranslate"><span class="pre">pre-commit</span></code></a>. Developers are strongly recommended to set up
+<code class="docutils literal notranslate"><span class="pre">pre-commit</span></code> prior to any development. The <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file at the root of the repo is
+the primary source of truth for linting.</p>
+<p>To install pre-commit, install via conda/pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># conda</span>
+conda install -c conda-forge pre-commit
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># pip</span>
+pip install pre-commit
+</pre></div>
+</div>
+<p>Then run pre-commit hooks before committing code:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pre-commit run
+</pre></div>
+</div>
+<p>Optionally, you may set up the pre-commit hooks to run automatically when you make a git commit. This can be done by running the following command in cuspatial repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pre-commit install
+</pre></div>
+</div>
+<p>Now code linters and formatters will be run each time you commit changes.</p>
+<p>You can skip these checks with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">--no-verify</span></code> or with the short version <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-n</span></code>.</p>
+<section id="linter-details">
+<h3>Linter Details<a class="headerlink" href="#linter-details" title="Permalink to this heading">#</a></h3>
+<p>Specifically, cuSpatial uses the following tools:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/pycqa/flake8"><code class="docutils literal notranslate"><span class="pre">flake8</span></code></a> checks for general code formatting compliance.</p></li>
+<li><p><a class="reference external" href="https://github.com/psf/black"><code class="docutils literal notranslate"><span class="pre">black</span></code></a> is an automatic code formatter.</p></li>
+<li><p><a class="reference external" href="https://pycqa.github.io/isort/"><code class="docutils literal notranslate"><span class="pre">isort</span></code></a> ensures imports are sorted consistently.</p></li>
+</ul>
+<p>Linter config data is stored in a number of files. cuSpatial generally uses <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> over
+<code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> and avoids project-specific files (e.g. <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">python/cudf/setup.cfg</span></code>). However,
+differences between tools and the different packages in the repo result in the following caveats:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">flake8</span></code> has no plans to support <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, so it must live in <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">isort</span></code> must be configured per project to set which project is the &ldquo;first party&rdquo; project.</p></li>
+</ul>
+<p>Additionally, cuSpatial&rsquo;s use of <code class="docutils literal notranslate"><span class="pre">versioneer</span></code> means that each project must have a <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code>.
+As a result, cuSpatial currently maintains both root and project-level <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> and
+<code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> files.</p>
+</section>
+</section>
+<section id="writing-tests">
+<h2>Writing tests<a class="headerlink" href="#writing-tests" title="Permalink to this heading">#</a></h2>
+<p>Every new feature contributed to cuspatial should include unit tests. The unit test file should be
+added to the <code class="docutils literal notranslate"><span class="pre">tests</span></code> folder. In general, the <code class="docutils literal notranslate"><span class="pre">tests</span></code> folder mirrors the folder hierarchy of the
+<code class="docutils literal notranslate"><span class="pre">cuspatial</span></code> package. At the lowest level, each module expands into a folder that contains specific
+test files for features in the module.</p>
+<p>cuSpatial uses <a class="reference external" href="https://docs.pytest.org/"><code class="docutils literal notranslate"><span class="pre">pytest</span></code></a> as the unit testing framework. <code class="docutils literal notranslate"><span class="pre">conftest.py</span></code>
+contains useful fixtures that can be shared across different test functions. Reusing these fixtures
+reduces redundancy in test code.</p>
+<p>cuspatial compute APIs should strive to reach result parity with its host (CPU) equivalent. For
+<code class="docutils literal notranslate"><span class="pre">GeoSeries</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> features, unit tests should compare results with
+corresponding <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> functions.</p>
 </section>
 </section>
 
@@ -423,12 +427,19 @@ with left-wound external rings and right-wound internal rings.</p>
             <footer class="bd-footer-article">
                 <!-- Previous / next buttons -->
 <div class="prev-next-area">
-  <a class="left-prev" href="index.html" id="prev-link" title="previous page">
+  <a class="left-prev" href="development_environment.html" id="prev-link" title="previous page">
       <i class="fas fa-angle-left"></i>
       <div class="prev-next-info">
           <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">Developer Guide</p>
+          <p class="prev-next-title">Creating a Development Environment</p>
       </div>
+  </a>
+  <a class="right-next" href="library_design.html" id="next-link" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">cuSpatial Library Design</p>
+  </div>
+  <i class="fas fa-angle-right"></i>
   </a>
 </div>
             </footer>
@@ -447,21 +458,33 @@ with left-wound external rings and right-wound internal rings.</p>
 <nav class="page-toc" id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#geoarrow-format">
-   GeoArrow Format
+  <a class="reference internal nav-link" href="#directory-structure-and-file-naming">
+   Directory structure and file naming
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#examples">
-     Examples
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#geoarrow-internal-apis">
-     GeoArrow Internal APIs
+    <a class="reference internal nav-link" href="#cython-code">
+     Cython code
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#code-style">
+   Code style
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#linter-details">
+     Linter Details
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#writing-tests">
+   Writing tests
+  </a>
  </li>
 </ul>
 
@@ -475,7 +498,7 @@ with left-wound external rings and right-wound internal rings.</p>
 <div class="toc-item">
   
 <div class="tocsection sourcelink">
-    <a href="../_sources/developer_guide/internals.md.txt">
+    <a href="../_sources/developer_guide/contributing_guide.md.txt">
         <i class="fas fa-file-alt"></i> Show Source
     </a>
 </div>
