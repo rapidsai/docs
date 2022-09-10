@@ -45,7 +45,7 @@ There are two ways projects can use ``rapids-cmake`` functions.
 Overriding RAPIDS.cmake
 ***********************
 
-At times projects or developers will need to verify ``rapids-cmake`` branches. To do this you need to override the default git repositry and branch that ``RAPIDS.cmake`` downloads, which should be done
+At times projects or developers will need to verify ``rapids-cmake`` branches. To do this you need to override the default git repository and branch that ``RAPIDS.cmake`` downloads, which should be done
 like this:
 
 .. code-block:: cmake
