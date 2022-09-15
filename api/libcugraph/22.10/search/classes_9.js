@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['key_5faggregated_5fedge_5fop_5ft_730',['key_aggregated_edge_op_t',['../structcugraph_1_1detail_1_1key__aggregated__edge__op__t.html',1,'cugraph::detail']]],
-  ['key_5fbucket_5ft_731',['key_bucket_t',['../classcugraph_1_1key__bucket__t.html',1,'cugraph']]],
-  ['key_5fgroup_5fid_5fless_5ft_732',['key_group_id_less_t',['../structcugraph_1_1detail_1_1key__group__id__less__t.html',1,'cugraph::detail']]],
-  ['key_5fnaming_5ft_733',['key_naming_t',['../structcugraph_1_1partition__2d_1_1key__naming__t.html',1,'cugraph::partition_2d']]],
-  ['kv_5fpair_5fgroup_5fid_5fgreater_5fequal_5ft_734',['kv_pair_group_id_greater_equal_t',['../structcugraph_1_1detail_1_1kv__pair__group__id__greater__equal__t.html',1,'cugraph::detail']]],
-  ['kv_5fpair_5fgroup_5fid_5fless_5ft_735',['kv_pair_group_id_less_t',['../structcugraph_1_1detail_1_1kv__pair__group__id__less__t.html',1,'cugraph::detail']]]
+  ['key_5faggregated_5fedge_5fop_5ft_735',['key_aggregated_edge_op_t',['../structcugraph_1_1detail_1_1key__aggregated__edge__op__t.html',1,'cugraph::detail']]],
+  ['key_5fbucket_5ft_736',['key_bucket_t',['../classcugraph_1_1key__bucket__t.html',1,'cugraph']]],
+  ['key_5fgroup_5fid_5fless_5ft_737',['key_group_id_less_t',['../structcugraph_1_1detail_1_1key__group__id__less__t.html',1,'cugraph::detail']]],
+  ['key_5fnaming_5ft_738',['key_naming_t',['../structcugraph_1_1partition__2d_1_1key__naming__t.html',1,'cugraph::partition_2d']]],
+  ['kv_5fpair_5fgroup_5fid_5fgreater_5fequal_5ft_739',['kv_pair_group_id_greater_equal_t',['../structcugraph_1_1detail_1_1kv__pair__group__id__greater__equal__t.html',1,'cugraph::detail']]],
+  ['kv_5fpair_5fgroup_5fid_5fless_5ft_740',['kv_pair_group_id_less_t',['../structcugraph_1_1detail_1_1kv__pair__group__id__less__t.html',1,'cugraph::detail']]]
 ];
