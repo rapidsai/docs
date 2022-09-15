@@ -4621,6 +4621,13 @@
     <namespace>cudf</namespace>
     <member kind="function">
       <type>bool</type>
+      <name>has_nested_columns</name>
+      <anchorfile>table__view_8hpp.html</anchorfile>
+      <anchor>aee63ff93909aab1cf205625ee996236a</anchor>
+      <arglist>(table_view const &amp;table)</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
       <name>nullable</name>
       <anchorfile>namespacecudf.html</anchorfile>
       <anchor>a025670a619591e80fdf972c36e625005</anchor>
@@ -10041,13 +10048,14 @@
   <compound kind="class">
     <name>cudf::experimental::row::lexicographic::device_row_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1device__row__comparator.html</filename>
+    <templarg>has_nested_columns</templarg>
     <templarg></templarg>
     <templarg></templarg>
     <member kind="function">
       <type>constexpr weak_ordering</type>
       <name>operator()</name>
       <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1device__row__comparator.html</anchorfile>
-      <anchor>a11e51a6fa8832cfffe409aec44ed43ff</anchor>
+      <anchor>aa2d85a1fa9d81dcfcf289e48222e0a97</anchor>
       <arglist>(size_type const lhs_index, size_type const rhs_index) const noexcept</arglist>
     </member>
     <member kind="friend" protection="private">
@@ -10120,6 +10128,39 @@
     <base>span_base&lt; T, cudf::dynamic_extent, device_span&lt; T, cudf::dynamic_extent &gt; &gt;</base>
     <member kind="typedef">
       <type>cudf::detail::span_base&lt; T, Extent, device_span&lt; T, Extent &gt; &gt;</type>
+      <name>base</name>
+      <anchorfile>structcudf_1_1device__span.html</anchorfile>
+      <anchor>a1ac284a83461fb34368260cab25ea817</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr</type>
+      <name>device_span</name>
+      <anchorfile>structcudf_1_1device__span.html</anchorfile>
+      <anchor>ae0dbbe5653602145e25b62923c09bb1d</anchor>
+      <arglist>(C &amp;in)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr</type>
+      <name>device_span</name>
+      <anchorfile>structcudf_1_1device__span.html</anchorfile>
+      <anchor>ae7c5938284619d03c5de6348aa529940</anchor>
+      <arglist>(C const &amp;in)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr</type>
+      <name>device_span</name>
+      <anchorfile>structcudf_1_1device__span.html</anchorfile>
+      <anchor>a160281ced48c6d4578919905a489427c</anchor>
+      <arglist>(const device_span&lt; OtherT, OtherExtent &gt; &amp;other) noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>device_span&lt; detail::dremel_device_view const &gt;</name>
+    <filename>structcudf_1_1device__span.html</filename>
+    <base>span_base&lt; detail::dremel_device_view const, cudf::dynamic_extent, device_span&lt; detail::dremel_device_view const, cudf::dynamic_extent &gt; &gt;</base>
+    <member kind="typedef">
+      <type>cudf::detail::span_base&lt; detail::dremel_device_view const, cudf::dynamic_extent, device_span&lt; detail::dremel_device_view const, cudf::dynamic_extent &gt; &gt;</type>
       <name>base</name>
       <anchorfile>structcudf_1_1device__span.html</anchorfile>
       <anchor>a1ac284a83461fb34368260cab25ea817</anchor>
@@ -14024,6 +14065,39 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>cudf::list_device_view::pair_rep_accessor</name>
+    <filename>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</filename>
+    <templarg></templarg>
+    <member kind="typedef">
+      <type>device_storage_type_t&lt; T &gt;</type>
+      <name>rep_type</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>a86137f06ce1c5f85bcc056b3b510de2a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>CUDF_HOST_DEVICE</type>
+      <name>pair_rep_accessor</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>ac1a536b6750af8049c148cee8296eb46</anchor>
+      <arglist>(list_device_view const &amp;_list)</arglist>
+    </member>
+    <member kind="function">
+      <type>thrust::pair&lt; rep_type, bool &gt;</type>
+      <name>operator()</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>acc82443ba86c3f670083a5cbec86af88</anchor>
+      <arglist>(cudf::size_type i) const</arglist>
+    </member>
+    <member kind="variable">
+      <type>list_device_view const  &amp;</type>
+      <name>list</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>a5a12a570f271728cdb4bca54c62cd6f2</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>cudf::detail::pair_rep_accessor</name>
     <filename>structcudf_1_1detail_1_1pair__rep__accessor.html</filename>
     <templarg></templarg>
@@ -14054,39 +14128,6 @@
       <name>col</name>
       <anchorfile>structcudf_1_1detail_1_1pair__rep__accessor.html</anchorfile>
       <anchor>a59cd69e90ab4b57bc905fc60282f2479</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
-    <name>cudf::list_device_view::pair_rep_accessor</name>
-    <filename>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</filename>
-    <templarg></templarg>
-    <member kind="typedef">
-      <type>device_storage_type_t&lt; T &gt;</type>
-      <name>rep_type</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>a86137f06ce1c5f85bcc056b3b510de2a</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="function">
-      <type>CUDF_HOST_DEVICE</type>
-      <name>pair_rep_accessor</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>ac1a536b6750af8049c148cee8296eb46</anchor>
-      <arglist>(list_device_view const &amp;_list)</arglist>
-    </member>
-    <member kind="function">
-      <type>thrust::pair&lt; rep_type, bool &gt;</type>
-      <name>operator()</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>acc82443ba86c3f670083a5cbec86af88</anchor>
-      <arglist>(cudf::size_type i) const</arglist>
-    </member>
-    <member kind="variable">
-      <type>list_device_view const  &amp;</type>
-      <name>list</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>a5a12a570f271728cdb4bca54c62cd6f2</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -15011,31 +15052,6 @@
     </member>
   </compound>
   <compound kind="class">
-    <name>cudf::experimental::row::hash::row_hasher</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
-      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
-      <name>device_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
-      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
     <name>cudf::row_hasher</name>
     <filename>classcudf_1_1row__hasher.html</filename>
     <templarg>hash_function</templarg>
@@ -15060,6 +15076,31 @@
       <anchorfile>classcudf_1_1row__hasher.html</anchorfile>
       <anchor>ab370aeff347da4c228ccd917af8b52be</anchor>
       <arglist>(size_type row_index) const</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>cudf::experimental::row::hash::row_hasher</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
+      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
+      <name>device_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
+      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -15257,6 +15298,38 @@
     <base virtualness="virtual">cudf::aggregation</base>
   </compound>
   <compound kind="class">
+    <name>cudf::experimental::row::lexicographic::self_comparator</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>self_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
+      <anchor>a63a0543e03dcb8c313dfc00656d0c3a9</anchor>
+      <arglist>(table_view const &amp;t, host_span&lt; order const &gt; column_order={}, host_span&lt; null_order const &gt; null_precedence={}, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>self_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
+      <anchor>aa52032128e3e7607fd93bb30f5e90067</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>less</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
+      <anchor>ac379220fce38748fbf75c557569bf7ee</anchor>
+      <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>less_equivalent</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
+      <anchor>a3f1126f8f76064a8f0e6b96e4e51ce41</anchor>
+      <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::experimental::row::equality::self_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</filename>
     <member kind="function">
@@ -15279,38 +15352,6 @@
       <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
       <anchor>adfbbb6f105eb6f65f0689f4eceef1792</anchor>
       <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>cudf::experimental::row::lexicographic::self_comparator</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>self_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
-      <anchor>a63a0543e03dcb8c313dfc00656d0c3a9</anchor>
-      <arglist>(table_view const &amp;t, host_span&lt; order const &gt; column_order={}, host_span&lt; null_order const &gt; null_precedence={}, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>self_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
-      <anchor>aa52032128e3e7607fd93bb30f5e90067</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>less</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
-      <anchor>ac88c81fee67d53d66245421474910a9e</anchor>
-      <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>less_equivalent</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
-      <anchor>a6991c5b5ad4810bca020e684fcd9cd3b</anchor>
-      <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -15676,6 +15717,185 @@
     </member>
     <member kind="function">
       <type>constexpr Derived</type>
+      <name>subspan</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a9f7981146805a6f14eb1f89eed7f8892</anchor>
+      <arglist>(size_type offset, size_type count) const noexcept</arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr std::size_t</type>
+      <name>extent</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a8f2f6f3a209c859cfe60961e9f3fb09d</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>span_base&lt; detail::dremel_device_view const, cudf::dynamic_extent, device_span&lt; detail::dremel_device_view const, cudf::dynamic_extent &gt; &gt;</name>
+    <filename>classcudf_1_1detail_1_1span__base.html</filename>
+    <member kind="typedef">
+      <type>detail::dremel_device_view const</type>
+      <name>element_type</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>afda7fdb123d16df824d9be5f5fc98fee</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::remove_cv&lt; detail::dremel_device_view const &gt;</type>
+      <name>value_type</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a6e763be71eccf9aacc12ef7e6b9e58db</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::size_t</type>
+      <name>size_type</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a0d7ab8191520a4e12352e2b7877232db</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::ptrdiff_t</type>
+      <name>difference_type</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a7a28a324767cba3faf224bafd8455b42</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>detail::dremel_device_view const *</type>
+      <name>pointer</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a7beaa3396ddab0ddbc211eed47b1f450</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>detail::dremel_device_view const *</type>
+      <name>iterator</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a36a07abd40108908ba27ecc5a02036f7</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>detail::dremel_device_view const const *</type>
+      <name>const_pointer</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a8ed328d5728032e729df6f4abecead59</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>detail::dremel_device_view const &amp;</type>
+      <name>reference</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>aa6986fc5b58efff9bafbf0d1582a5021</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>detail::dremel_device_view const const &amp;</type>
+      <name>const_reference</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>afaec647f37b3ee5aca6a14d5f478f034</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr</type>
+      <name>span_base</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a64f2bf1131cccae8c851582d6266c103</anchor>
+      <arglist>(pointer data, size_type size)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr</type>
+      <name>span_base</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a6a0c756567535d71591bc94120042ea7</anchor>
+      <arglist>(span_base const &amp;) noexcept=default</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr span_base &amp;</type>
+      <name>operator=</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>abde4d56fd4ed94a60a39d3f4f437293c</anchor>
+      <arglist>(span_base const &amp;) noexcept=default</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr reference</type>
+      <name>front</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>adf4e29da1865298a654c72370f3be797</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr reference</type>
+      <name>back</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a34151076ca478b7411945c9165f2f540</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr reference</type>
+      <name>operator[]</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a1e427c5cc86714c90cfd785439679b24</anchor>
+      <arglist>(size_type idx) const</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr iterator</type>
+      <name>begin</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>aa8b7b5a55391e33465a8287fe61e4332</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr iterator</type>
+      <name>end</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a05b599c4198246db8e8ed481fbfe2853</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr pointer</type>
+      <name>data</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a69173bd857efea3b873d5777fee52e73</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr size_type</type>
+      <name>size</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>af462a382d03fac3b2a2e79c51ffce67a</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr size_type</type>
+      <name>size_bytes</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a5ef37eacb1f702c35f796c66e8712aa7</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>empty</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a187f48ab267b6cba5b3a4619c4c4f5b0</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr device_span&lt; detail::dremel_device_view const, cudf::dynamic_extent &gt;</type>
+      <name>first</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a35101762ae9d939127f64eebad83e5b8</anchor>
+      <arglist>(size_type count) const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr device_span&lt; detail::dremel_device_view const, cudf::dynamic_extent &gt;</type>
+      <name>last</name>
+      <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
+      <anchor>a6cf5820ed1c653ff012311e5f6fce571</anchor>
+      <arglist>(size_type count) const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr device_span&lt; detail::dremel_device_view const, cudf::dynamic_extent &gt;</type>
       <name>subspan</name>
       <anchorfile>classcudf_1_1detail_1_1span__base.html</anchorfile>
       <anchor>a9f7981146805a6f14eb1f89eed7f8892</anchor>
@@ -17984,6 +18204,38 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>cudf::experimental::row::lexicographic::two_table_comparator</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>two_table_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</anchorfile>
+      <anchor>afb050d221266e84aeeefd3ec66c3c0d3</anchor>
+      <arglist>(table_view const &amp;left, table_view const &amp;right, host_span&lt; order const &gt; column_order={}, host_span&lt; null_order const &gt; null_precedence={}, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>two_table_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</anchorfile>
+      <anchor>a1371bec879770f0998835be8a847c543</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; left, std::shared_ptr&lt; preprocessed_table &gt; right)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>less</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</anchorfile>
+      <anchor>afd8360b815634712c1566e280e0972e8</anchor>
+      <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>less_equivalent</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</anchorfile>
+      <anchor>ad3bdb200066d147566624fc1db2835f6</anchor>
+      <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::experimental::row::equality::two_table_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</filename>
     <member kind="function">
@@ -18006,38 +18258,6 @@
       <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
       <anchor>ac9c7c726b67a7b30f0232af9744a274c</anchor>
       <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>cudf::experimental::row::lexicographic::two_table_comparator</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>two_table_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</anchorfile>
-      <anchor>afb050d221266e84aeeefd3ec66c3c0d3</anchor>
-      <arglist>(table_view const &amp;left, table_view const &amp;right, host_span&lt; order const &gt; column_order={}, host_span&lt; null_order const &gt; null_precedence={}, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>two_table_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</anchorfile>
-      <anchor>a1371bec879770f0998835be8a847c543</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; left, std::shared_ptr&lt; preprocessed_table &gt; right)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>less</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</anchorfile>
-      <anchor>a15982ac2551ca5a492034c7f27785160</anchor>
-      <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>less_equivalent</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</anchorfile>
-      <anchor>ac24f96efba1a47a1b63747143bbc6529</anchor>
-      <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -27737,6 +27957,27 @@
     <name>md_unicode</name>
     <title>Unicode Limitations</title>
     <filename>md_unicode.html</filename>
+  </compound>
+  <compound kind="page">
+    <name>md_developer_guide_BENCHMARKING</name>
+    <title>Unit Benchmarking in libcudf</title>
+    <filename>md_developer_guide_BENCHMARKING.html</filename>
+  </compound>
+  <compound kind="page">
+    <name>md_developer_guide_DOCUMENTATION</name>
+    <title>libcudf++ C++ Documentation Guide</title>
+    <filename>md_developer_guide_DOCUMENTATION.html</filename>
+  </compound>
+  <compound kind="page">
+    <name>DEVELOPER_GUIDE</name>
+    <title>libcudf C++ Developer Guide</title>
+    <filename>DEVELOPER_GUIDE.html</filename>
+    <docanchor file="DEVELOPER_GUIDE.html">md_developer_guide_DEVELOPER_GUIDE</docanchor>
+  </compound>
+  <compound kind="page">
+    <name>md_developer_guide_TESTING</name>
+    <title>Unit Testing in libcudf</title>
+    <filename>md_developer_guide_TESTING.html</filename>
   </compound>
   <compound kind="page">
     <name>index</name>
