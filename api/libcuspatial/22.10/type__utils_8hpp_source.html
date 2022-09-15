@@ -76,7 +76,7 @@ $(function() {
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&nbsp;<span class="comment"> */</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&nbsp; </div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&nbsp;<span class="preprocessor">#include &lt;cuspatial/detail/iterator.hpp&gt;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&nbsp;<span class="preprocessor">#include &lt;cuspatial/detail/utility/traits.hpp&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&nbsp;<span class="preprocessor">#include &lt;cuspatial/traits.hpp&gt;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&nbsp;<span class="preprocessor">#include &lt;<a class="code" href="vec__2d_8hpp.html">cuspatial/vec_2d.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp; </div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="preprocessor">#include &lt;thrust/iterator/transform_iterator.h&gt;</span></div>
@@ -112,41 +112,40 @@ $(function() {
 <div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="group__type__factories.html#gab634e2f29ae223f9a7f36a2d4a72ff0b">   84</a></span>&nbsp;<span class="keyword">auto</span> <a class="code" href="group__type__factories.html#gab634e2f29ae223f9a7f36a2d4a72ff0b">make_vec_2d_iterator</a>(FirstIter first, SecondIter second)</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;{</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;  <span class="keyword">using</span> T = <span class="keyword">typename</span> std::iterator_traits&lt;FirstIter&gt;::value_type;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;  static_assert(detail::is_same&lt;T, detail::iterator_value_type&lt;SecondIter&gt;&gt;(),</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp;                <span class="stringliteral">"Iterator value_type mismatch"</span>);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;  <span class="keyword">auto</span> zipped = thrust::make_zip_iterator(thrust::make_tuple(first, second));</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;  <span class="keywordflow">return</span> thrust::make_transform_iterator(zipped, <a class="code" href="structcuspatial_1_1detail_1_1tuple__to__vec__2d.html">detail::tuple_to_vec_2d&lt;T&gt;</a>());</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp;}</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp; </div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> FirstIter, <span class="keyword">typename</span> SecondIter&gt;</div>
-<div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="group__type__factories.html#gacbaf2d67e9d7a3b5bb2c4fef5f243233">  116</a></span>&nbsp;<span class="keyword">auto</span> <a class="code" href="group__type__factories.html#gacbaf2d67e9d7a3b5bb2c4fef5f243233">make_zipped_vec_2d_output_iterator</a>(FirstIter first, SecondIter second)</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&nbsp;{</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&nbsp;  <span class="keyword">using</span> T         = <span class="keyword">typename</span> std::iterator_traits&lt;FirstIter&gt;::value_type;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&nbsp;  <span class="keyword">auto</span> zipped_out = thrust::make_zip_iterator(thrust::make_tuple(first, second));</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&nbsp;  <span class="keywordflow">return</span> thrust::make_transform_output_iterator(zipped_out, <a class="code" href="structcuspatial_1_1detail_1_1vec__2d__to__tuple.html">detail::vec_2d_to_tuple&lt;T&gt;</a>());</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&nbsp;}</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&nbsp; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> VectorType = vec_2d&lt;T&gt;&gt;</div>
-<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="structcuspatial_1_1interleaved__to__vec__2d.html">  124</a></span>&nbsp;<span class="keyword">struct </span><a class="code" href="structcuspatial_1_1interleaved__to__vec__2d.html">interleaved_to_vec_2d</a> {</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&nbsp;  T <span class="keyword">const</span>* it;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&nbsp;  __device__ VectorType operator()(std::size_t i) { <span class="keywordflow">return</span> VectorType{it[2 * i], it[2 * i + 1]}; }</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&nbsp;};</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&nbsp; </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iter&gt;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp;<span class="keyword">auto</span> interleaved_iterator_to_vec_2d_iterator(Iter d_points_begin)</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp;{</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp;  <span class="keyword">using</span> T = <span class="keyword">typename</span> std::iterator_traits&lt;Iter&gt;::value_type;</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&nbsp;  <span class="keywordflow">return</span> detail::make_counting_transform_iterator(0, <a class="code" href="structcuspatial_1_1interleaved__to__vec__2d.html">interleaved_to_vec_2d&lt;T&gt;</a>{d_points_begin});</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&nbsp;}</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&nbsp; </div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&nbsp;}  <span class="comment">// namespace cuspatial</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;  static_assert(is_same&lt;T, iterator_value_type&lt;SecondIter&gt;&gt;(), <span class="stringliteral">"Iterator value_type mismatch"</span>);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;  <span class="keyword">auto</span> zipped = thrust::make_zip_iterator(thrust::make_tuple(first, second));</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;  <span class="keywordflow">return</span> thrust::make_transform_iterator(zipped, <a class="code" href="structcuspatial_1_1detail_1_1tuple__to__vec__2d.html">detail::tuple_to_vec_2d&lt;T&gt;</a>());</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;}</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> FirstIter, <span class="keyword">typename</span> SecondIter&gt;</div>
+<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="group__type__factories.html#gacbaf2d67e9d7a3b5bb2c4fef5f243233">  115</a></span>&nbsp;<span class="keyword">auto</span> <a class="code" href="group__type__factories.html#gacbaf2d67e9d7a3b5bb2c4fef5f243233">make_zipped_vec_2d_output_iterator</a>(FirstIter first, SecondIter second)</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&nbsp;{</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&nbsp;  <span class="keyword">using</span> T         = <span class="keyword">typename</span> std::iterator_traits&lt;FirstIter&gt;::value_type;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&nbsp;  <span class="keyword">auto</span> zipped_out = thrust::make_zip_iterator(thrust::make_tuple(first, second));</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&nbsp;  <span class="keywordflow">return</span> thrust::make_transform_output_iterator(zipped_out, <a class="code" href="structcuspatial_1_1detail_1_1vec__2d__to__tuple.html">detail::vec_2d_to_tuple&lt;T&gt;</a>());</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&nbsp;}</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&nbsp; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> VectorType = vec_2d&lt;T&gt;&gt;</div>
+<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="structcuspatial_1_1interleaved__to__vec__2d.html">  123</a></span>&nbsp;<span class="keyword">struct </span><a class="code" href="structcuspatial_1_1interleaved__to__vec__2d.html">interleaved_to_vec_2d</a> {</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&nbsp;  T <span class="keyword">const</span>* it;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&nbsp;  __device__ VectorType operator()(std::size_t i) { <span class="keywordflow">return</span> VectorType{it[2 * i], it[2 * i + 1]}; }</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&nbsp;};</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&nbsp; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iter&gt;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&nbsp;<span class="keyword">auto</span> interleaved_iterator_to_vec_2d_iterator(Iter d_points_begin)</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp;{</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp;  <span class="keyword">using</span> T = <span class="keyword">typename</span> std::iterator_traits&lt;Iter&gt;::value_type;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp;  <span class="keywordflow">return</span> detail::make_counting_transform_iterator(0, <a class="code" href="structcuspatial_1_1interleaved__to__vec__2d.html">interleaved_to_vec_2d&lt;T&gt;</a>{d_points_begin});</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&nbsp;}</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&nbsp; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&nbsp;}  <span class="comment">// namespace cuspatial</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="agroup__type__factories_html_gab634e2f29ae223f9a7f36a2d4a72ff0b"><div class="ttname"><a href="group__type__factories.html#gab634e2f29ae223f9a7f36a2d4a72ff0b">cuspatial::make_vec_2d_iterator</a></div><div class="ttdeci">auto make_vec_2d_iterator(FirstIter first, SecondIter second)</div><div class="ttdoc">Create an iterator to vec_2d data from two input iterators.</div><div class="ttdef"><b>Definition:</b> <a href="type__utils_8hpp_source.html#l00084">type_utils.hpp:84</a></div></div>
 <div class="ttc" id="astructcuspatial_1_1detail_1_1vec__2d__to__tuple_html"><div class="ttname"><a href="structcuspatial_1_1detail_1_1vec__2d__to__tuple.html">cuspatial::detail::vec_2d_to_tuple</a></div><div class="ttdef"><b>Definition:</b> <a href="type__utils_8hpp_source.html#l00049">type_utils.hpp:49</a></div></div>
-<div class="ttc" id="astructcuspatial_1_1interleaved__to__vec__2d_html"><div class="ttname"><a href="structcuspatial_1_1interleaved__to__vec__2d.html">cuspatial::interleaved_to_vec_2d</a></div><div class="ttdef"><b>Definition:</b> <a href="type__utils_8hpp_source.html#l00124">type_utils.hpp:124</a></div></div>
+<div class="ttc" id="astructcuspatial_1_1interleaved__to__vec__2d_html"><div class="ttname"><a href="structcuspatial_1_1interleaved__to__vec__2d.html">cuspatial::interleaved_to_vec_2d</a></div><div class="ttdef"><b>Definition:</b> <a href="type__utils_8hpp_source.html#l00123">type_utils.hpp:123</a></div></div>
 <div class="ttc" id="astructcuspatial_1_1detail_1_1tuple__to__vec__2d_html"><div class="ttname"><a href="structcuspatial_1_1detail_1_1tuple__to__vec__2d.html">cuspatial::detail::tuple_to_vec_2d</a></div><div class="ttdef"><b>Definition:</b> <a href="type__utils_8hpp_source.html#l00037">type_utils.hpp:37</a></div></div>
-<div class="ttc" id="agroup__type__factories_html_gacbaf2d67e9d7a3b5bb2c4fef5f243233"><div class="ttname"><a href="group__type__factories.html#gacbaf2d67e9d7a3b5bb2c4fef5f243233">cuspatial::make_zipped_vec_2d_output_iterator</a></div><div class="ttdeci">auto make_zipped_vec_2d_output_iterator(FirstIter first, SecondIter second)</div><div class="ttdoc">Create an output iterator to vec_2d data from two output iterators.</div><div class="ttdef"><b>Definition:</b> <a href="type__utils_8hpp_source.html#l00116">type_utils.hpp:116</a></div></div>
+<div class="ttc" id="agroup__type__factories_html_gacbaf2d67e9d7a3b5bb2c4fef5f243233"><div class="ttname"><a href="group__type__factories.html#gacbaf2d67e9d7a3b5bb2c4fef5f243233">cuspatial::make_zipped_vec_2d_output_iterator</a></div><div class="ttdeci">auto make_zipped_vec_2d_output_iterator(FirstIter first, SecondIter second)</div><div class="ttdoc">Create an output iterator to vec_2d data from two output iterators.</div><div class="ttdef"><b>Definition:</b> <a href="type__utils_8hpp_source.html#l00115">type_utils.hpp:115</a></div></div>
 <div class="ttc" id="avec__2d_8hpp_html"><div class="ttname"><a href="vec__2d_8hpp.html">vec_2d.hpp</a></div></div>
 <!-- start footer part -->
 <hr class="footer"><address class="footer"><small>
