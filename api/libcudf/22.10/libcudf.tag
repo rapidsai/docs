@@ -12011,6 +12011,13 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
+      <type>bool</type>
+      <name>is_enabled_keep_quotes</name>
+      <anchorfile>classcudf_1_1io_1_1json__reader__options.html</anchorfile>
+      <anchor>a2c39809f3a0ec1268f4a95520d3debac</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
       <type>void</type>
       <name>set_dtypes</name>
       <anchorfile>classcudf_1_1io_1_1json__reader__options.html</anchorfile>
@@ -12064,6 +12071,13 @@
       <name>enable_experimental</name>
       <anchorfile>classcudf_1_1io_1_1json__reader__options.html</anchorfile>
       <anchor>a40b5548b78b2d0bd100225dc8d06e0a7</anchor>
+      <arglist>(bool val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>enable_keep_quotes</name>
+      <anchorfile>classcudf_1_1io_1_1json__reader__options.html</anchorfile>
+      <anchor>ab158ca02d218f12416553c7be7409c16</anchor>
       <arglist>(bool val)</arglist>
     </member>
     <member kind="function" static="yes">
@@ -12145,6 +12159,13 @@
       <name>experimental</name>
       <anchorfile>classcudf_1_1io_1_1json__reader__options__builder.html</anchorfile>
       <anchor>a6d6805f27d435674d49f9face2c1688f</anchor>
+      <arglist>(bool val)</arglist>
+    </member>
+    <member kind="function">
+      <type>json_reader_options_builder &amp;</type>
+      <name>keep_quotes</name>
+      <anchorfile>classcudf_1_1io_1_1json__reader__options__builder.html</anchorfile>
+      <anchor>a25b6f071411ff3944f3ae10848f9b54b</anchor>
       <arglist>(bool val)</arglist>
     </member>
     <member kind="function">
