@@ -103,7 +103,8 @@ as needed.
 
     An optional dictionary of cpu architecture and operating system keys to url values that represents a download for a pre-built proprietary version of the library.
     If a matching key exists the binary will be used instead of the specified git url and tag.
-    To determine the correct key, CMake will query for a key that matches the lower case value of `<arch>-<os>` where `arch` maps to :cmake:variable:`CMAKE_SYSTEM_PROCESSOR` and `os` maps to :cmake:variable:`CMAKE_SYSTEM_NAME`.
+    To determine the correct key, CMake will query for a key that matches the lower case value of `<arch>-<os>` where `arch` maps to
+    :cmake:variable:`CMAKE_SYSTEM_PROCESSOR <cmake:variable:CMAKE_SYSTEM_PROCESSOR>` and `os` maps to :cmake:variable:`CMAKE_SYSTEM_NAME <cmake:variable:CMAKE_SYSTEM_NAME>`.
 
     If no such key exists the request to use a `proprietary_binary` will be ignored.
 
