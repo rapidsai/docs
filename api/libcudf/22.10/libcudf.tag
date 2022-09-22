@@ -2960,6 +2960,7 @@
     <includes id="io_2types_8hpp" name="io/types.hpp" local="yes" imported="no">types.hpp</includes>
     <includes id="table__view_8hpp" name="table_view.hpp" local="no" imported="no">cudf/table/table_view.hpp</includes>
     <includes id="types_8hpp" name="types.hpp" local="no" imported="no">cudf/types.hpp</includes>
+    <class kind="struct">cudf::io::schema_element</class>
     <class kind="class">cudf::io::json_reader_options</class>
     <class kind="class">cudf::io::json_reader_options_builder</class>
     <namespace>cudf</namespace>
@@ -11948,10 +11949,10 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
-      <type>std::variant&lt; std::vector&lt; data_type &gt;, std::map&lt; std::string, data_type &gt; &gt; const  &amp;</type>
+      <type>std::variant&lt; std::vector&lt; data_type &gt;, std::map&lt; std::string, data_type &gt;, std::map&lt; std::string, schema_element &gt; &gt; const  &amp;</type>
       <name>get_dtypes</name>
       <anchorfile>classcudf_1_1io_1_1json__reader__options.html</anchorfile>
-      <anchor>adf9e41044ceed572a75a849abfd572c8</anchor>
+      <anchor>a9552c6b9834b8261a71d5240afde2c1b</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
@@ -12030,6 +12031,13 @@
       <anchorfile>classcudf_1_1io_1_1json__reader__options.html</anchorfile>
       <anchor>a57fdbb46908f332c7f37d779f9a868a3</anchor>
       <arglist>(std::map&lt; std::string, data_type &gt; types)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_dtypes</name>
+      <anchorfile>classcudf_1_1io_1_1json__reader__options.html</anchorfile>
+      <anchor>ab837a45de34c9ca45ee523e2d670795f</anchor>
+      <arglist>(std::map&lt; std::string, schema_element &gt; types)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -12118,6 +12126,13 @@
       <anchorfile>classcudf_1_1io_1_1json__reader__options__builder.html</anchorfile>
       <anchor>afcca4381b2083c913c36f064269749b8</anchor>
       <arglist>(std::map&lt; std::string, data_type &gt; types)</arglist>
+    </member>
+    <member kind="function">
+      <type>json_reader_options_builder &amp;</type>
+      <name>dtypes</name>
+      <anchorfile>classcudf_1_1io_1_1json__reader__options__builder.html</anchorfile>
+      <anchor>ae4103c9bb2048fac78fd3ca91c5fdf59</anchor>
+      <arglist>(std::map&lt; std::string, schema_element &gt; types)</arglist>
     </member>
     <member kind="function">
       <type>json_reader_options_builder &amp;</type>
@@ -15073,6 +15088,31 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>cudf::experimental::row::hash::row_hasher</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
+      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
+      <name>device_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
+      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::row_hasher</name>
     <filename>classcudf_1_1row__hasher.html</filename>
     <templarg>hash_function</templarg>
@@ -15097,31 +15137,6 @@
       <anchorfile>classcudf_1_1row__hasher.html</anchorfile>
       <anchor>ab370aeff347da4c228ccd917af8b52be</anchor>
       <arglist>(size_type row_index) const</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>cudf::experimental::row::hash::row_hasher</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
-      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
-      <name>device_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
-      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -15310,6 +15325,24 @@
       <name>aggregations</name>
       <anchorfile>structcudf_1_1groupby_1_1scan__request.html</anchorfile>
       <anchor>a9bc151ffba86e31feb32667890a197f9</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>cudf::io::schema_element</name>
+    <filename>structcudf_1_1io_1_1schema__element.html</filename>
+    <member kind="variable">
+      <type>data_type</type>
+      <name>type</name>
+      <anchorfile>structcudf_1_1io_1_1schema__element.html</anchorfile>
+      <anchor>a643963106e990df9f85c0e2fa21f3bea</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::map&lt; std::string, schema_element &gt;</type>
+      <name>child_types</name>
+      <anchorfile>structcudf_1_1io_1_1schema__element.html</anchorfile>
+      <anchor>ad3c41b8a50d8f2877dd05147bb1f1099</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -18225,6 +18258,31 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>cudf::experimental::row::equality::two_table_comparator</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>two_table_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>ae79afc740f4f35933272256fbc307fff</anchor>
+      <arglist>(table_view const &amp;left, table_view const &amp;right, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>two_table_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>a3aa292bc6cf5051c8af76fd98e638b13</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; left, std::shared_ptr&lt; preprocessed_table &gt; right)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>equal_to</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>ac9c7c726b67a7b30f0232af9744a274c</anchor>
+      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::experimental::row::lexicographic::two_table_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</filename>
     <member kind="function">
@@ -18254,31 +18312,6 @@
       <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</anchorfile>
       <anchor>ad3bdb200066d147566624fc1db2835f6</anchor>
       <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>cudf::experimental::row::equality::two_table_comparator</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>two_table_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>ae79afc740f4f35933272256fbc307fff</anchor>
-      <arglist>(table_view const &amp;left, table_view const &amp;right, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>two_table_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>a3aa292bc6cf5051c8af76fd98e638b13</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; left, std::shared_ptr&lt; preprocessed_table &gt; right)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>equal_to</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>ac9c7c726b67a7b30f0232af9744a274c</anchor>
-      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -21391,6 +21424,7 @@
     <class kind="struct">cudf::io::partition_info</class>
     <class kind="struct">cudf::io::raw_orc_statistics</class>
     <class kind="class">cudf::io::reader_column_schema</class>
+    <class kind="struct">cudf::io::schema_element</class>
     <class kind="struct">cudf::io::sink_info</class>
     <class kind="struct">cudf::io::source_info</class>
     <class kind="struct">cudf::io::string_statistics</class>
@@ -21914,6 +21948,15 @@
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>gga341eb616bce8b15119196ad8208ec16da467042b90d33829a8ae360d3c5d3c673</anchor>
       <arglist></arglist>
+    </member>
+    <member kind="enumeration">
+      <type></type>
+      <name>capture_groups</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>ga227bb80d548c2970e05f829839966ba3</anchor>
+      <arglist></arglist>
+      <enumvalue file="group__strings__contains.html" anchor="gga227bb80d548c2970e05f829839966ba3a06a05d6df9809ab85bf7734d9c49bc54">EXTRACT</enumvalue>
+      <enumvalue file="group__strings__contains.html" anchor="gga227bb80d548c2970e05f829839966ba3af3e94c14de21439caa9ef45151108b79">NON_CAPTURE</enumvalue>
     </member>
     <member kind="enumeration">
       <type></type>
@@ -25891,6 +25934,15 @@
       <anchor>gga341eb616bce8b15119196ad8208ec16da467042b90d33829a8ae360d3c5d3c673</anchor>
       <arglist></arglist>
     </member>
+    <member kind="enumeration">
+      <type></type>
+      <name>capture_groups</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>ga227bb80d548c2970e05f829839966ba3</anchor>
+      <arglist></arglist>
+      <enumvalue file="group__strings__contains.html" anchor="gga227bb80d548c2970e05f829839966ba3a06a05d6df9809ab85bf7734d9c49bc54">EXTRACT</enumvalue>
+      <enumvalue file="group__strings__contains.html" anchor="gga227bb80d548c2970e05f829839966ba3af3e94c14de21439caa9ef45151108b79">NON_CAPTURE</enumvalue>
+    </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>contains_re</name>
@@ -26618,6 +26670,7 @@
     <class kind="class">cudf::io::avro_reader_options_builder</class>
     <class kind="class">cudf::io::csv_reader_options</class>
     <class kind="class">cudf::io::csv_reader_options_builder</class>
+    <class kind="struct">cudf::io::schema_element</class>
     <class kind="class">cudf::io::json_reader_options</class>
     <class kind="class">cudf::io::json_reader_options_builder</class>
     <class kind="class">cudf::io::orc_reader_options</class>
