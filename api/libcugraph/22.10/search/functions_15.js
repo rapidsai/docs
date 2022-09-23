@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['weakly_5fconnected_5fcomponents_1011',['weakly_connected_components',['../namespacecugraph.html#a8a74317d58e73cb48b1240070e9a1c44',1,'cugraph']]],
-  ['what_1012',['what',['../classMLCommon_1_1Exception.html#ab0fbec35530d6998ae97b429579d8f17',1,'MLCommon::Exception']]]
+  ['view_1038',['view',['../structcugraph_1_1graph__mask__t.html#aed72cbfd3609f8b132456dcb9f3f349f',1,'cugraph::graph_mask_t']]]
 ];
