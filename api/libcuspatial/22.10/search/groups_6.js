@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['types_163',['Types',['../group__cuspatial__types.html',1,'(Global Namespace)'],['../group__types.html',1,'(Global Namespace)']]],
-  ['trajectory_20apis_164',['Trajectory APIs',['../group__trajectory__api.html',1,'']]]
+  ['spatial_20apis_181',['Spatial APIs',['../group__spatial__api.html',1,'']]],
+  ['spatial_20indexing_182',['Spatial Indexing',['../group__spatial__indexing.html',1,'']]],
+  ['spatial_20join_183',['Spatial Join',['../group__spatial__join.html',1,'']]],
+  ['spatial_20relationship_184',['Spatial Relationship',['../group__spatial__relationship.html',1,'']]]
 ];

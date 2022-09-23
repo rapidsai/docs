@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['operator_2a_41',['operator*',['../group__types.html#gaf5883f9ce35c0c597fd6800f8a05311c',1,'cuspatial::operator*(vec_2d&lt; T &gt; vec, T const &amp;r)'],['../group__types.html#ga99e52adb996d7ba7a31b05612040d78f',1,'cuspatial::operator*(T const &amp;r, vec_2d&lt; T &gt; vec)']]],
-  ['operator_2b_42',['operator+',['../group__types.html#ga18845c6d98fb3577d66819d1e8f207a4',1,'cuspatial']]],
-  ['operator_2d_43',['operator-',['../group__types.html#ga879dfe38d155b1d8552b374873c5c5a1',1,'cuspatial']]],
-  ['operator_3c_3c_44',['operator&lt;&lt;',['../group__types.html#gadb30f2a3e5821e4c20a9ede8fa70f295',1,'cuspatial']]],
-  ['operator_3d_3d_45',['operator==',['../group__types.html#ga2e2773d50271fe07f1526168b2ea984f',1,'cuspatial']]]
+  ['nearest_5flinestring_5fgeometry_5fid_41',['nearest_linestring_geometry_id',['../structcuspatial_1_1point__linestring__nearest__points__result.html#aff0cd6fec0cf7c35a1059875788a80b5',1,'cuspatial::point_linestring_nearest_points_result']]],
+  ['nearest_5fpoint_5fgeometry_5fid_42',['nearest_point_geometry_id',['../structcuspatial_1_1point__linestring__nearest__points__result.html#a8f47489732c2dba07b272857c078f138',1,'cuspatial::point_linestring_nearest_points_result']]],
+  ['nearest_5fpoint_5fon_5flinestring_5fxy_43',['nearest_point_on_linestring_xy',['../structcuspatial_1_1point__linestring__nearest__points__result.html#a476b33b65ba577e6d2d1e7ae55566c69',1,'cuspatial::point_linestring_nearest_points_result']]],
+  ['nearest_20points_44',['Nearest Points',['../group__nearest__points.html',1,'']]],
+  ['nearest_5fsegment_5fid_45',['nearest_segment_id',['../structcuspatial_1_1point__linestring__nearest__points__result.html#a309d4af9e6047c1947e5c3fa6217767f',1,'cuspatial::point_linestring_nearest_points_result']]]
 ];
