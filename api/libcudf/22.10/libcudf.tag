@@ -14101,39 +14101,6 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>cudf::list_device_view::pair_rep_accessor</name>
-    <filename>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</filename>
-    <templarg></templarg>
-    <member kind="typedef">
-      <type>device_storage_type_t&lt; T &gt;</type>
-      <name>rep_type</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>a86137f06ce1c5f85bcc056b3b510de2a</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="function">
-      <type>CUDF_HOST_DEVICE</type>
-      <name>pair_rep_accessor</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>ac1a536b6750af8049c148cee8296eb46</anchor>
-      <arglist>(list_device_view const &amp;_list)</arglist>
-    </member>
-    <member kind="function">
-      <type>thrust::pair&lt; rep_type, bool &gt;</type>
-      <name>operator()</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>acc82443ba86c3f670083a5cbec86af88</anchor>
-      <arglist>(cudf::size_type i) const</arglist>
-    </member>
-    <member kind="variable">
-      <type>list_device_view const  &amp;</type>
-      <name>list</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>a5a12a570f271728cdb4bca54c62cd6f2</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
     <name>cudf::detail::pair_rep_accessor</name>
     <filename>structcudf_1_1detail_1_1pair__rep__accessor.html</filename>
     <templarg></templarg>
@@ -14164,6 +14131,39 @@
       <name>col</name>
       <anchorfile>structcudf_1_1detail_1_1pair__rep__accessor.html</anchorfile>
       <anchor>a59cd69e90ab4b57bc905fc60282f2479</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>cudf::list_device_view::pair_rep_accessor</name>
+    <filename>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</filename>
+    <templarg></templarg>
+    <member kind="typedef">
+      <type>device_storage_type_t&lt; T &gt;</type>
+      <name>rep_type</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>a86137f06ce1c5f85bcc056b3b510de2a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>CUDF_HOST_DEVICE</type>
+      <name>pair_rep_accessor</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>ac1a536b6750af8049c148cee8296eb46</anchor>
+      <arglist>(list_device_view const &amp;_list)</arglist>
+    </member>
+    <member kind="function">
+      <type>thrust::pair&lt; rep_type, bool &gt;</type>
+      <name>operator()</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>acc82443ba86c3f670083a5cbec86af88</anchor>
+      <arglist>(cudf::size_type i) const</arglist>
+    </member>
+    <member kind="variable">
+      <type>list_device_view const  &amp;</type>
+      <name>list</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>a5a12a570f271728cdb4bca54c62cd6f2</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -15352,6 +15352,31 @@
     <base virtualness="virtual">cudf::aggregation</base>
   </compound>
   <compound kind="class">
+    <name>cudf::experimental::row::equality::self_comparator</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>self_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>a8f53714e3008c063b18aa52cbd1f5a8e</anchor>
+      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>self_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>a305627a9b975fed5f09c5b49dfb6f644</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>equal_to</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>adfbbb6f105eb6f65f0689f4eceef1792</anchor>
+      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::experimental::row::lexicographic::self_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</filename>
     <member kind="function">
@@ -15381,31 +15406,6 @@
       <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
       <anchor>a3f1126f8f76064a8f0e6b96e4e51ce41</anchor>
       <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>cudf::experimental::row::equality::self_comparator</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>self_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>a8f53714e3008c063b18aa52cbd1f5a8e</anchor>
-      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>self_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>a305627a9b975fed5f09c5b49dfb6f644</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>equal_to</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>adfbbb6f105eb6f65f0689f4eceef1792</anchor>
-      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -16461,7 +16461,7 @@
     <name>cudf::io::string_statistics</name>
     <filename>structcudf_1_1io_1_1string__statistics.html</filename>
     <base>minmax_statistics&lt; std::string &gt;</base>
-    <base>sum_statistics&lt; uint64_t &gt;</base>
+    <base>sum_statistics&lt; int64_t &gt;</base>
   </compound>
   <compound kind="class">
     <name>cudf::string_view</name>
@@ -17142,17 +17142,6 @@
     <filename>structcudf_1_1io_1_1sum__statistics.html</filename>
     <member kind="variable">
       <type>std::optional&lt; std::string &gt;</type>
-      <name>sum</name>
-      <anchorfile>structcudf_1_1io_1_1sum__statistics.html</anchorfile>
-      <anchor>aa1ebc0602a69347dff9c659a6188f019</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>sum_statistics&lt; uint64_t &gt;</name>
-    <filename>structcudf_1_1io_1_1sum__statistics.html</filename>
-    <member kind="variable">
-      <type>std::optional&lt; uint64_t &gt;</type>
       <name>sum</name>
       <anchorfile>structcudf_1_1io_1_1sum__statistics.html</anchorfile>
       <anchor>aa1ebc0602a69347dff9c659a6188f019</anchor>
@@ -18258,31 +18247,6 @@
     </member>
   </compound>
   <compound kind="class">
-    <name>cudf::experimental::row::equality::two_table_comparator</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>two_table_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>ae79afc740f4f35933272256fbc307fff</anchor>
-      <arglist>(table_view const &amp;left, table_view const &amp;right, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>two_table_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>a3aa292bc6cf5051c8af76fd98e638b13</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; left, std::shared_ptr&lt; preprocessed_table &gt; right)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>equal_to</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>ac9c7c726b67a7b30f0232af9744a274c</anchor>
-      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
     <name>cudf::experimental::row::lexicographic::two_table_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</filename>
     <member kind="function">
@@ -18312,6 +18276,31 @@
       <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</anchorfile>
       <anchor>ad3bdb200066d147566624fc1db2835f6</anchor>
       <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>cudf::experimental::row::equality::two_table_comparator</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>two_table_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>ae79afc740f4f35933272256fbc307fff</anchor>
+      <arglist>(table_view const &amp;left, table_view const &amp;right, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>two_table_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>a3aa292bc6cf5051c8af76fd98e638b13</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; left, std::shared_ptr&lt; preprocessed_table &gt; right)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>equal_to</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>ac9c7c726b67a7b30f0232af9744a274c</anchor>
+      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
