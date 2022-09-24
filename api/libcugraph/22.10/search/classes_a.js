@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['leiden_758',['Leiden',['../classcugraph_1_1legacy_1_1Leiden.html',1,'cugraph::legacy']]],
-  ['local_5fdegree_5fop_5ft_759',['local_degree_op_t',['../structcugraph_1_1detail_1_1local__degree__op__t.html',1,'cugraph::detail']]],
-  ['logdistribution_760',['LogDistribution',['../classcugraph_1_1mg_1_1detail_1_1LogDistribution.html',1,'cugraph::mg::detail']]],
-  ['logic_5ferror_761',['logic_error',['../structcugraph_1_1logic__error.html',1,'cugraph']]],
-  ['louvain_762',['Louvain',['../classcugraph_1_1legacy_1_1Louvain.html',1,'cugraph::legacy']]],
-  ['louvain_5ffunctor_763',['louvain_functor',['../classcugraph_1_1cython_1_1detail_1_1louvain__functor.html',1,'cugraph::cython::detail']]]
+  ['key_5faggregated_5fedge_5fop_5ft_766',['key_aggregated_edge_op_t',['../structcugraph_1_1detail_1_1key__aggregated__edge__op__t.html',1,'cugraph::detail']]],
+  ['key_5fbucket_5ft_767',['key_bucket_t',['../classcugraph_1_1key__bucket__t.html',1,'cugraph']]],
+  ['key_5fgroup_5fid_5fless_5ft_768',['key_group_id_less_t',['../structcugraph_1_1detail_1_1key__group__id__less__t.html',1,'cugraph::detail']]],
+  ['key_5fnaming_5ft_769',['key_naming_t',['../structcugraph_1_1partition__2d_1_1key__naming__t.html',1,'cugraph::partition_2d']]],
+  ['kv_5fpair_5fgroup_5fid_5fgreater_5fequal_5ft_770',['kv_pair_group_id_greater_equal_t',['../structcugraph_1_1detail_1_1kv__pair__group__id__greater__equal__t.html',1,'cugraph::detail']]],
+  ['kv_5fpair_5fgroup_5fid_5fless_5ft_771',['kv_pair_group_id_less_t',['../structcugraph_1_1detail_1_1kv__pair__group__id__less__t.html',1,'cugraph::detail']]]
 ];

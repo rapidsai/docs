@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['view_1038',['view',['../structcugraph_1_1graph__mask__t.html#aed72cbfd3609f8b132456dcb9f3f349f',1,'cugraph::graph_mask_t']]]
+  ['view_1060',['view',['../structcugraph_1_1graph__mask__t.html#aed72cbfd3609f8b132456dcb9f3f349f',1,'cugraph::graph_mask_t']]]
 ];

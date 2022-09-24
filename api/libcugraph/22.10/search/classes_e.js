@@ -1,11 +1,7 @@
 var searchData=
 [
-  ['pair_5fto_5fbinary_5fpartition_5fid_5ft_780',['pair_to_binary_partition_id_t',['../structcugraph_1_1detail_1_1pair__to__binary__partition__id__t.html',1,'cugraph::detail']]],
-  ['partition_5ft_781',['partition_t',['../classcugraph_1_1partition__t.html',1,'cugraph']]],
-  ['pick_5fmin_5fdegree_5ft_782',['pick_min_degree_t',['../structcugraph_1_1detail_1_1pick__min__degree__t.html',1,'cugraph::detail']]],
-  ['plus_783',['plus',['../structcugraph_1_1reduce__op_1_1plus.html',1,'cugraph::reduce_op']]],
-  ['property_5fop_784',['property_op',['../structcugraph_1_1property__op.html',1,'cugraph']]],
-  ['property_5fop_3c_20t_2c_20thrust_3a_3aplus_20_3e_785',['property_op&lt; T, thrust::plus &gt;',['../structcugraph_1_1property__op.html',1,'cugraph']]],
-  ['property_5fop_3c_20thrust_3a_3atuple_3c_20args_2e_2e_2e_20_3e_2c_20op_20_3e_786',['property_op&lt; thrust::tuple&lt; Args... &gt;, Op &gt;',['../structcugraph_1_1property__op_3_01thrust_1_1tuple_3_01Args_8_8_8_01_4_00_01Op_01_4.html',1,'cugraph']]],
-  ['property_5fop_3c_20value_5ftype_2c_20thrust_3a_3aplus_20_3e_787',['property_op&lt; value_type, thrust::plus &gt;',['../structcugraph_1_1property__op.html',1,'cugraph']]]
+  ['optional_5fdataframe_5fbuffer_5fvalue_5ftype_5ft_791',['optional_dataframe_buffer_value_type_t',['../structcugraph_1_1detail_1_1optional__dataframe__buffer__value__type__t.html',1,'cugraph::detail']]],
+  ['optional_5fdataframe_5fbuffer_5fvalue_5ftype_5ft_3c_20iterator_2c_20std_3a_3aenable_5fif_5ft_3c_20std_3a_3ais_5fsame_5fv_3c_20iterator_2c_20void_20_2a_20_3e_20_3e_20_3e_792',['optional_dataframe_buffer_value_type_t&lt; Iterator, std::enable_if_t&lt; std::is_same_v&lt; Iterator, void * &gt; &gt; &gt;',['../structcugraph_1_1detail_1_1optional__dataframe__buffer__value__type__t_3_01Iterator_00_01std_1_1a22cf8228c1868ffc71be5d29ca2d806.html',1,'cugraph::detail']]],
+  ['optional_5fdataframe_5fbuffer_5fvalue_5ftype_5ft_3c_20iterator_2c_20std_3a_3aenable_5fif_5ft_3c_21std_3a_3ais_5fsame_5fv_3c_20iterator_2c_20void_20_2a_20_3e_20_3e_20_3e_793',['optional_dataframe_buffer_value_type_t&lt; Iterator, std::enable_if_t&lt;!std::is_same_v&lt; Iterator, void * &gt; &gt; &gt;',['../structcugraph_1_1detail_1_1optional__dataframe__buffer__value__type__t_3_01Iterator_00_01std_1_1c0607fdd3820a326e1b0e2fde6701bc9.html',1,'cugraph::detail']]],
+  ['overlap_5ffunctor_5ft_794',['overlap_functor_t',['../structcugraph_1_1detail_1_1overlap__functor__t.html',1,'cugraph::detail']]]
 ];
