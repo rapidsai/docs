@@ -81,31 +81,32 @@ $(function() {
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp;<span class="preprocessor">#include &lt;rmm/device_vector.hpp&gt;</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="preprocessor">#include &lt;rmm/mr/device/thrust_allocator_adaptor.hpp&gt;</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp;<span class="preprocessor">#include &lt;thrust/execution_policy.h&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp;<span class="keyword">namespace </span>rmm {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp;<span class="keyword">using</span> par_t         = decltype(thrust::cuda::par(*(<span class="keyword">new</span> <a class="code" href="classrmm_1_1mr_1_1thrust__allocator.html">rmm::mr::thrust_allocator&lt;char&gt;</a>())));</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp;<span class="keyword">using</span> deleter_t     = std::function&lt;void(par_t*)&gt;;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp;<span class="keyword">using</span> exec_policy_t = std::unique_ptr&lt;par_t, deleter_t&gt;;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;[[deprecated(<span class="stringliteral">"Use new exec_policy in rmm/exec_policy.hpp"</span>)]] <span class="keyword">inline</span> exec_policy_t exec_policy(</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;  cudaStream_t stream = <span class="keyword">nullptr</span>)</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;{</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;  <span class="comment">// NOLINTNEXTLINE(cppcoreguidelines-owning-memory)</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;  <span class="keyword">auto</span>* alloc  = <span class="keyword">new</span> <a class="code" href="classrmm_1_1mr_1_1thrust__allocator.html">rmm::mr::thrust_allocator&lt;char&gt;</a>(cuda_stream_view{stream});</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;  <span class="keyword">auto</span> deleter = [alloc](par_t* pointer) {</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;    <span class="keyword">delete</span> alloc;    <span class="comment">// NOLINT(cppcoreguidelines-owning-memory)</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;    <span class="keyword">delete</span> pointer;  <span class="comment">// NOLINT(cppcoreguidelines-owning-memory)</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;  };</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;  exec_policy_t policy{<span class="keyword">new</span> par_t(*alloc), deleter};</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;  <span class="keywordflow">return</span> policy;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;}</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;}  <span class="comment">// namespace rmm</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp;<span class="preprocessor">#include &lt;rmm/detail/thrust_namespace.h&gt;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp;<span class="preprocessor">#include &lt;thrust/execution_policy.h&gt;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp;<span class="keyword">namespace </span>rmm {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp;<span class="keyword">using</span> par_t         = decltype(thrust::cuda::par(*(<span class="keyword">new</span> <a class="code" href="classrmm_1_1mr_1_1thrust__allocator.html">rmm::mr::thrust_allocator&lt;char&gt;</a>())));</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp;<span class="keyword">using</span> deleter_t     = std::function&lt;void(par_t*)&gt;;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp;<span class="keyword">using</span> exec_policy_t = std::unique_ptr&lt;par_t, deleter_t&gt;;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;[[deprecated(<span class="stringliteral">"Use new exec_policy in rmm/exec_policy.hpp"</span>)]] <span class="keyword">inline</span> exec_policy_t exec_policy(</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;  cudaStream_t stream = <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;{</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;  <span class="comment">// NOLINTNEXTLINE(cppcoreguidelines-owning-memory)</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;  <span class="keyword">auto</span>* alloc  = <span class="keyword">new</span> <a class="code" href="classrmm_1_1mr_1_1thrust__allocator.html">rmm::mr::thrust_allocator&lt;char&gt;</a>(cuda_stream_view{stream});</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;  <span class="keyword">auto</span> deleter = [alloc](par_t* pointer) {</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;    <span class="keyword">delete</span> alloc;    <span class="comment">// NOLINT(cppcoreguidelines-owning-memory)</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;    <span class="keyword">delete</span> pointer;  <span class="comment">// NOLINT(cppcoreguidelines-owning-memory)</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp;  };</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;  exec_policy_t policy{<span class="keyword">new</span> par_t(*alloc), deleter};</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;  <span class="keywordflow">return</span> policy;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;}</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;}  <span class="comment">// namespace rmm</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclassrmm_1_1mr_1_1thrust__allocator_html"><div class="ttname"><a href="classrmm_1_1mr_1_1thrust__allocator.html">rmm::mr::thrust_allocator</a></div><div class="ttdoc">An allocator compatible with Thrust containers and algorithms using a device_memory_resource for memo...</div><div class="ttdef"><b>Definition:</b> thrust_allocator_adaptor.hpp:38</div></div>
+<div class="ttc" id="aclassrmm_1_1mr_1_1thrust__allocator_html"><div class="ttname"><a href="classrmm_1_1mr_1_1thrust__allocator.html">rmm::mr::thrust_allocator</a></div><div class="ttdoc">An allocator compatible with Thrust containers and algorithms using a device_memory_resource for memo...</div><div class="ttdef"><b>Definition:</b> thrust_allocator_adaptor.hpp:39</div></div>
 <!-- start footer part -->
 <hr class="footer"><address class="footer"><small>
 Generated by&nbsp;<a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"></a> 1.8.20
