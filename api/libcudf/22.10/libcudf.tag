@@ -8273,6 +8273,13 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
+      <type>std::optional&lt; bool &gt;</type>
+      <name>has_null</name>
+      <anchorfile>structcudf_1_1io_1_1column__statistics.html</anchorfile>
+      <anchor>ab6f4122dd213847d16718e67f9df76cd</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
       <type>std::variant&lt; no_statistics, integer_statistics, double_statistics, string_statistics, bucket_statistics, decimal_statistics, date_statistics, binary_statistics, timestamp_statistics &gt;</type>
       <name>type_specific_stats</name>
       <anchorfile>structcudf_1_1io_1_1column__statistics.html</anchorfile>
