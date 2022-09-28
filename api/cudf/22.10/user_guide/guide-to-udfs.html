@@ -391,7 +391,7 @@
 </div>
 </div>
 <p>Like many tabular data processing APIs, cuDF provides a range of composable, DataFrame style operators. While out of the box functions are flexible and useful, it is sometimes necessary to write custom code, or user-defined functions (UDFs), that can be applied to rows, columns, and other groupings of the cells making up the DataFrame.</p>
-<p>In conjunction with the broader GPU PyData ecosystem, cuDF provides interfaces to run UDFs on a variety of data structures. Currently, we can only execute UDFs on numeric, boolean, datetime, and timedelta typed data (support for strings is being planned). This guide covers writing and executing UDFs on the following data structures:</p>
+<p>In conjunction with the broader GPU PyData ecosystem, cuDF provides interfaces to run UDFs on a variety of data structures. Currently, we can only execute UDFs on numeric, boolean, datetime, and timedelta typed data with partial support for strings in some APIs. This guide covers writing and executing UDFs on the following data structures:</p>
 <ul class="simple">
 <li><p>Series</p></li>
 <li><p>DataFrame</p></li>
@@ -551,6 +551,249 @@ dtype: int64
 </div>
 </div>
 <p>In addition, <code class="docutils literal notranslate"><span class="pre">cudf.NA</span></code> can be returned from a function directly or conditionally. This capability should allow you to implement custom null handling in a wide variety of cases.</p>
+</section>
+<section id="string-data">
+<h3>String data<a class="headerlink" href="#string-data" title="Permalink to this heading">#</a></h3>
+<p>Support for a subset of string functionality is available for <code class="docutils literal notranslate"><span class="pre">apply</span></code> through the <a class="reference external" href="https://anaconda.org/rapidsai-nightly/strings_udf">strings_udf</a> package, which is separately installable. Currently, the following string operations are provided through <code class="docutils literal notranslate"><span class="pre">strings_udf</span></code>:&rdquo;,</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">str.count</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str.startswith</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str.endswith</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str.find</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str.rfind</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str.isalnum</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str.isdecimal</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str.isdigit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str.islower</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str.isupper</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str.isalpha</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str.istitle</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str.isspace</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> (between two strings)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">len</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">len(some_string))</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__contains__</span></code> (e.g, <code class="docutils literal notranslate"><span class="pre">'abc'</span> <span class="pre">in</span> <span class="pre">some_string</span></code>)</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sr</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">''</span><span class="p">,</span> <span class="s1">'abc'</span><span class="p">,</span> <span class="s1">'some_example'</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">st</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'a'</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="s1">'example'</span> <span class="ow">in</span> <span class="n">st</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">42</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sr</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+TypingError                               Traceback (most recent call last)
+/opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/core/indexed_frame.py in _apply(self, func, kernel_getter, *args, **kwargs)
+   1792         try:
+-&gt; 1793             kernel, retty = _compile_or_get(
+   1794                 self, func, args, kernel_getter=kernel_getter
+
+/opt/conda/envs/rapids/lib/python3.9/contextlib.py in inner(*args, **kwds)
+     78             with self._recreate_cm():
+---&gt; 79                 return func(*args, **kwds)
+     80         return inner
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/core/udf/utils.py in _compile_or_get(frame, func, args, kernel_getter)
+    201 
+--&gt; 202     kernel, scalar_return_type = kernel_getter(frame, func, args)
+    203 
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/core/udf/scalar_function.py in _get_scalar_kernel(sr, func, args)
+     51     sr_type = MaskedType(numpy_support.from_dtype(sr.dtype))
+---&gt; 52     scalar_return_type = _get_udf_return_type(sr_type, func, args)
+     53 
+
+/opt/conda/envs/rapids/lib/python3.9/contextlib.py in inner(*args, **kwds)
+     78             with self._recreate_cm():
+---&gt; 79                 return func(*args, **kwds)
+     80         return inner
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/core/udf/utils.py in _get_udf_return_type(argty, func, args)
+     52     # needed here.
+---&gt; 53     ptx, output_type = cudautils.compile_udf(func, compile_sig)
+     54     if not isinstance(output_type, MaskedType):
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/utils/cudautils.py in compile_udf(udf, type_signature)
+    247     # compilation with Numba
+--&gt; 248     ptx_code, return_type = cuda.compile_ptx_for_current_device(
+    249         udf, type_signature, device=True
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/cuda/compiler.py in compile_ptx_for_current_device(pyfunc, args, debug, lineinfo, device, fastmath, opt)
+    289     cc = get_current_device().compute_capability
+--&gt; 290     return compile_ptx(pyfunc, args, debug=debug, lineinfo=lineinfo,
+    291                        device=device, fastmath=fastmath, cc=cc, opt=True)
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_lock.py in _acquire_compile_lock(*args, **kwargs)
+     34             with self:
+---&gt; 35                 return func(*args, **kwargs)
+     36         return _acquire_compile_lock
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/cuda/compiler.py in compile_ptx(pyfunc, args, debug, lineinfo, device, fastmath, cc, opt)
+    266 
+--&gt; 267     cres = compile_cuda(pyfunc, None, args, debug=debug, lineinfo=lineinfo,
+    268                         nvvm_options=nvvm_options)
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_lock.py in _acquire_compile_lock(*args, **kwargs)
+     34             with self:
+---&gt; 35                 return func(*args, **kwargs)
+     36         return _acquire_compile_lock
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/cuda/compiler.py in compile_cuda(pyfunc, return_type, args, debug, lineinfo, inline, fastmath, nvvm_options)
+    201     # Run compilation pipeline
+--&gt; 202     cres = compiler.compile_extra(typingctx=typingctx,
+    203                                   targetctx=targetctx,
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler.py in compile_extra(typingctx, targetctx, func, args, return_type, flags, locals, library, pipeline_class)
+    692                               args, return_type, flags, locals)
+--&gt; 693     return pipeline.compile_extra(func)
+    694 
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler.py in compile_extra(self, func)
+    428         self.state.lifted_from = None
+--&gt; 429         return self._compile_bytecode()
+    430 
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler.py in _compile_bytecode(self)
+    496         assert self.state.func_ir is None
+--&gt; 497         return self._compile_core()
+    498 
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler.py in _compile_core(self)
+    475                     if is_final_pipeline:
+--&gt; 476                         raise e
+    477             else:
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler.py in _compile_core(self)
+    462                 try:
+--&gt; 463                     pm.run(self.state)
+    464                     if self.state.cr is not None:
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_machinery.py in run(self, state)
+    352                 patched_exception = self._patch_error(msg, e)
+--&gt; 353                 raise patched_exception
+    354 
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_machinery.py in run(self, state)
+    340                 if isinstance(pass_inst, CompilerPass):
+--&gt; 341                     self._runPass(idx, pass_inst, state)
+    342                 else:
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_lock.py in _acquire_compile_lock(*args, **kwargs)
+     34             with self:
+---&gt; 35                 return func(*args, **kwargs)
+     36         return _acquire_compile_lock
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_machinery.py in _runPass(self, index, pss, internal_state)
+    295         with SimpleTimer() as pass_time:
+--&gt; 296             mutated |= check(pss.run_pass, internal_state)
+    297         with SimpleTimer() as finalize_time:
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_machinery.py in check(func, compiler_state)
+    268         def check(func, compiler_state):
+--&gt; 269             mangled = func(compiler_state)
+    270             if mangled not in (True, False):
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/typed_passes.py in run_pass(self, state)
+    104             # Type inference
+--&gt; 105             typemap, return_type, calltypes, errs = type_inference_stage(
+    106                 state.typingctx,
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/typed_passes.py in type_inference_stage(typingctx, targetctx, interp, args, return_type, locals, raise_errors)
+     82         # return errors in case of partial typing
+---&gt; 83         errs = infer.propagate(raise_errors=raise_errors)
+     84         typemap, restype, calltypes = infer.unify(raise_errors=raise_errors)
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/typeinfer.py in propagate(self, raise_errors)
+   1085                 if not force_lit_args:
+-&gt; 1086                     raise errors[0]
+   1087                 else:
+
+TypingError: Failed in cuda mode pipeline (step: nopython frontend)
+No implementation of function Function(&lt;built-in function len&gt;) found for signature:
+ 
+ &gt;&gt;&gt; len(MaskedPoison&lt;
+
+
+ Unsupported MaskedType. This is usually caused by attempting to use a column of unsupported dtype in a UDF. Supported dtypes are (&lt;class 'numba.core.types.abstract.Number'&gt;, &lt;class 'numba.core.types.scalars.Boolean'&gt;, &lt;class 'numba.core.types.scalars.NPDatetime'&gt;, &lt;class 'numba.core.types.scalars.NPTimedelta'&gt;)&gt;)
+ 
+There are 16 candidate implementations:
+  - Of which 16 did not match due to:
+  Overload of function 'len': File: &lt;numerous&gt;: Line N/A.
+    With argument(s): '(MaskedPoison&lt;
+  
+  
+   Unsupported MaskedType. This is usually caused by attempting to use a column of unsupported dtype in a UDF. Supported dtypes are (&lt;class 'numba.core.types.abstract.Number'&gt;, &lt;class 'numba.core.types.scalars.Boolean'&gt;, &lt;class 'numba.core.types.scalars.NPDatetime'&gt;, &lt;class 'numba.core.types.scalars.NPTimedelta'&gt;)&gt;)':
+   No match.
+
+During: resolving callee type: Function(&lt;built-in function len&gt;)
+During: typing of call at /tmp/ipykernel_1062/440050923.py (2)
+
+
+File "../../../../../../tmp/ipykernel_1062/440050923.py", line 2:
+&lt;source missing, REPL/exec in use?&gt;
+
+
+The above exception was the direct cause of the following exception:
+
+ValueError                                Traceback (most recent call last)
+/tmp/ipykernel_1062/4105892755.py in &lt;module&gt;
+----&gt; 1 sr.apply(f)
+
+/opt/conda/envs/rapids/lib/python3.9/contextlib.py in inner(*args, **kwds)
+     77         def inner(*args, **kwds):
+     78             with self._recreate_cm():
+---&gt; 79                 return func(*args, **kwds)
+     80         return inner
+     81 
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/core/series.py in apply(self, func, convert_dtype, args, **kwargs)
+   2332             raise ValueError("Series.apply only supports convert_dtype=True")
+   2333 
+-&gt; 2334         result = self._apply(func, _get_scalar_kernel, *args, **kwargs)
+   2335         result.name = self.name
+   2336         return result
+
+/opt/conda/envs/rapids/lib/python3.9/contextlib.py in inner(*args, **kwds)
+     77         def inner(*args, **kwds):
+     78             with self._recreate_cm():
+---&gt; 79                 return func(*args, **kwds)
+     80         return inner
+     81 
+
+/opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/core/indexed_frame.py in _apply(self, func, kernel_getter, *args, **kwargs)
+   1795             )
+   1796         except Exception as e:
+-&gt; 1797             raise ValueError(
+   1798                 "user defined function compilation failed."
+   1799             ) from e
+
+ValueError: user defined function compilation failed.
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="lower-level-control-with-custom-numba-kernels">
 <h3>Lower level control with custom <code class="docutils literal notranslate"><span class="pre">numba</span></code> kernels<a class="headerlink" href="#lower-level-control-with-custom-numba-kernels" title="Permalink to this heading">#</a></h3>
@@ -1153,6 +1396,92 @@ dtype: float64
 1    2.428571429
 2            8.5
 dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id1">
+<h3>String Data<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<p>String data may be used inside <code class="docutils literal notranslate"><span class="pre">DataFrame.apply</span></code> UDFs, subject to the same constraints as those for <code class="docutils literal notranslate"><span class="pre">Series.apply</span></code>. See the section on string handling for <code class="docutils literal notranslate"><span class="pre">Series</span></code> UDFs above for details. Below is a simple example extending the row UDF logic from above in the case of a string column:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">str_df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">'str_col'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'abc'</span><span class="p">,</span> <span class="s1">'ABC'</span><span class="p">,</span> <span class="s1">'Example'</span><span class="p">],</span>
+    <span class="s1">'scale'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="n">str_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>str_col</th>
+      <th>scale</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>abc</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>ABC</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Example</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">st</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">'str_col'</span><span class="p">]</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">'scale'</span><span class="p">]</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span> <span class="o">+</span> <span class="n">scale</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">str_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0     3
+1     3
+2    10
+dtype: int64
 </pre></div>
 </div>
 </div>
@@ -1929,7 +2258,7 @@ dtype: int32
 <section id="caveats">
 <h2>Caveats<a class="headerlink" href="#caveats" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p>Only numeric nondecimal scalar types are currently supported as of yet, but strings and structured types are in planning. Attempting to use this API with those types will throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p></li>
+<li><p>UDFs are currently only supported for numeric nondecimal scalar types (full support) and strings in <code class="docutils literal notranslate"><span class="pre">Series.apply</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrame.apply</span></code> (partial support, subject to the caveats outlined above). Attempting to use this API with unsupported types will raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p></li>
 <li><p>We do not yet fully support all arithmetic operators. Certain ops like bitwise operations are not currently implemented, but planned in future releases. If an operator is needed, a github issue should be raised so that it can be properly prioritized and implemented.</p></li>
 </ul>
 </section>
@@ -2012,6 +2341,11 @@ dtype: int32
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#string-data">
+     String data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#lower-level-control-with-custom-numba-kernels">
      Lower level control with custom
      <code class="docutils literal notranslate">
@@ -2036,6 +2370,11 @@ dtype: int32
        cudf.DataFrame.apply
       </span>
      </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     String Data
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
