@@ -1423,8 +1423,8 @@
       <type>std::pair&lt; std::size_t, std::size_t &gt;</type>
       <name>do_get_mem_info</name>
       <anchorfile>classrmm_1_1mr_1_1fixed__size__memory__resource.html</anchorfile>
-      <anchor>a366918431b3b9f5867e5d8fd7186f35a</anchor>
-      <arglist>(cuda_stream_view stream) const override</arglist>
+      <anchor>a3771d73870402c071c9ffd078ae895ad</anchor>
+      <arglist>(cuda_stream_view) const override</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
