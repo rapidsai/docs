@@ -32,6 +32,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
@@ -606,9 +607,9 @@ dtype: int64
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 TypingError                               Traceback (most recent call last)
 /opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/core/indexed_frame.py in _apply(self, func, kernel_getter, *args, **kwargs)
-   1792         try:
--&gt; 1793             kernel, retty = _compile_or_get(
-   1794                 self, func, args, kernel_getter=kernel_getter
+   1820         try:
+-&gt; 1821             kernel, retty = _compile_or_get(
+   1822                 self, func, args, kernel_getter=kernel_getter
 
 /opt/conda/envs/rapids/lib/python3.9/contextlib.py in inner(*args, **kwds)
      78             with self._recreate_cm():
@@ -616,9 +617,9 @@ TypingError                               Traceback (most recent call last)
      80         return inner
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/core/udf/utils.py in _compile_or_get(frame, func, args, kernel_getter)
-    201 
---&gt; 202     kernel, scalar_return_type = kernel_getter(frame, func, args)
-    203 
+    214 
+--&gt; 215     kernel, scalar_return_type = kernel_getter(frame, func, args)
+    216     np_return_type = numpy_support.as_dtype(scalar_return_type)
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/core/udf/scalar_function.py in _get_scalar_kernel(sr, func, args)
      51     sr_type = MaskedType(numpy_support.from_dtype(sr.dtype))
@@ -631,19 +632,19 @@ TypingError                               Traceback (most recent call last)
      80         return inner
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/core/udf/utils.py in _get_udf_return_type(argty, func, args)
-     52     # needed here.
----&gt; 53     ptx, output_type = cudautils.compile_udf(func, compile_sig)
-     54     if not isinstance(output_type, MaskedType):
+     55     # needed here.
+---&gt; 56     ptx, output_type = cudautils.compile_udf(func, compile_sig)
+     57     if not isinstance(output_type, MaskedType):
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/utils/cudautils.py in compile_udf(udf, type_signature)
-    247     # compilation with Numba
---&gt; 248     ptx_code, return_type = cuda.compile_ptx_for_current_device(
-    249         udf, type_signature, device=True
+    249     # compilation with Numba
+--&gt; 250     ptx_code, return_type = cuda.compile_ptx_for_current_device(
+    251         udf, type_signature, device=True
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/cuda/compiler.py in compile_ptx_for_current_device(pyfunc, args, debug, lineinfo, device, fastmath, opt)
-    289     cc = get_current_device().compute_capability
---&gt; 290     return compile_ptx(pyfunc, args, debug=debug, lineinfo=lineinfo,
-    291                        device=device, fastmath=fastmath, cc=cc, opt=True)
+    290     cc = get_current_device().compute_capability
+--&gt; 291     return compile_ptx(pyfunc, args, debug=debug, lineinfo=lineinfo,
+    292                        device=device, fastmath=fastmath, cc=cc, opt=True)
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_lock.py in _acquire_compile_lock(*args, **kwargs)
      34             with self:
@@ -653,7 +654,7 @@ TypingError                               Traceback (most recent call last)
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/cuda/compiler.py in compile_ptx(pyfunc, args, debug, lineinfo, device, fastmath, cc, opt)
     266 
 --&gt; 267     cres = compile_cuda(pyfunc, None, args, debug=debug, lineinfo=lineinfo,
-    268                         nvvm_options=nvvm_options)
+    268                         fastmath=fastmath,
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_lock.py in _acquire_compile_lock(*args, **kwargs)
      34             with self:
@@ -661,44 +662,44 @@ TypingError                               Traceback (most recent call last)
      36         return _acquire_compile_lock
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/cuda/compiler.py in compile_cuda(pyfunc, return_type, args, debug, lineinfo, inline, fastmath, nvvm_options)
-    201     # Run compilation pipeline
---&gt; 202     cres = compiler.compile_extra(typingctx=typingctx,
-    203                                   targetctx=targetctx,
+    209     # Run compilation pipeline
+--&gt; 210     cres = compiler.compile_extra(typingctx=typingctx,
+    211                                   targetctx=targetctx,
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler.py in compile_extra(typingctx, targetctx, func, args, return_type, flags, locals, library, pipeline_class)
-    692                               args, return_type, flags, locals)
---&gt; 693     return pipeline.compile_extra(func)
-    694 
+    715                               args, return_type, flags, locals)
+--&gt; 716     return pipeline.compile_extra(func)
+    717 
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler.py in compile_extra(self, func)
-    428         self.state.lifted_from = None
---&gt; 429         return self._compile_bytecode()
-    430 
+    451         self.state.lifted_from = None
+--&gt; 452         return self._compile_bytecode()
+    453 
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler.py in _compile_bytecode(self)
-    496         assert self.state.func_ir is None
---&gt; 497         return self._compile_core()
-    498 
+    519         assert self.state.func_ir is None
+--&gt; 520         return self._compile_core()
+    521 
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler.py in _compile_core(self)
-    475                     if is_final_pipeline:
---&gt; 476                         raise e
-    477             else:
+    498                     if is_final_pipeline:
+--&gt; 499                         raise e
+    500             else:
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler.py in _compile_core(self)
-    462                 try:
---&gt; 463                     pm.run(self.state)
-    464                     if self.state.cr is not None:
+    485                 try:
+--&gt; 486                     pm.run(self.state)
+    487                     if self.state.cr is not None:
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_machinery.py in run(self, state)
-    352                 patched_exception = self._patch_error(msg, e)
---&gt; 353                 raise patched_exception
-    354 
+    367                 patched_exception = self._patch_error(msg, e)
+--&gt; 368                 raise patched_exception
+    369 
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_machinery.py in run(self, state)
-    340                 if isinstance(pass_inst, CompilerPass):
---&gt; 341                     self._runPass(idx, pass_inst, state)
-    342                 else:
+    355                 if isinstance(pass_inst, CompilerPass):
+--&gt; 356                     self._runPass(idx, pass_inst, state)
+    357                 else:
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_lock.py in _acquire_compile_lock(*args, **kwargs)
      34             with self:
@@ -706,14 +707,14 @@ TypingError                               Traceback (most recent call last)
      36         return _acquire_compile_lock
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_machinery.py in _runPass(self, index, pss, internal_state)
-    295         with SimpleTimer() as pass_time:
---&gt; 296             mutated |= check(pss.run_pass, internal_state)
-    297         with SimpleTimer() as finalize_time:
+    310             with SimpleTimer() as pass_time:
+--&gt; 311                 mutated |= check(pss.run_pass, internal_state)
+    312             with SimpleTimer() as finalize_time:
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/compiler_machinery.py in check(func, compiler_state)
-    268         def check(func, compiler_state):
---&gt; 269             mangled = func(compiler_state)
-    270             if mangled not in (True, False):
+    272         def check(func, compiler_state):
+--&gt; 273             mangled = func(compiler_state)
+    274             if mangled not in (True, False):
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/numba/core/typed_passes.py in run_pass(self, state)
     104             # Type inference
@@ -733,32 +734,30 @@ TypingError                               Traceback (most recent call last)
 TypingError: Failed in cuda mode pipeline (step: nopython frontend)
 No implementation of function Function(&lt;built-in function len&gt;) found for signature:
  
- &gt;&gt;&gt; len(MaskedPoison&lt;
-
-
- Unsupported MaskedType. This is usually caused by attempting to use a column of unsupported dtype in a UDF. Supported dtypes are (&lt;class 'numba.core.types.abstract.Number'&gt;, &lt;class 'numba.core.types.scalars.Boolean'&gt;, &lt;class 'numba.core.types.scalars.NPDatetime'&gt;, &lt;class 'numba.core.types.scalars.NPTimedelta'&gt;)&gt;)
+ &gt;&gt;&gt; len(Masked(Poison&lt;
+strings_udf library required for usage of string dtypes inside user defined functions.
+&gt;))
  
-There are 16 candidate implementations:
-  - Of which 16 did not match due to:
+There are 20 candidate implementations:
+  - Of which 20 did not match due to:
   Overload of function 'len': File: &lt;numerous&gt;: Line N/A.
-    With argument(s): '(MaskedPoison&lt;
-  
-  
-   Unsupported MaskedType. This is usually caused by attempting to use a column of unsupported dtype in a UDF. Supported dtypes are (&lt;class 'numba.core.types.abstract.Number'&gt;, &lt;class 'numba.core.types.scalars.Boolean'&gt;, &lt;class 'numba.core.types.scalars.NPDatetime'&gt;, &lt;class 'numba.core.types.scalars.NPTimedelta'&gt;)&gt;)':
+    With argument(s): '(Masked(Poison&lt;
+  strings_udf library required for usage of string dtypes inside user defined functions.
+  &gt;))':
    No match.
 
 During: resolving callee type: Function(&lt;built-in function len&gt;)
-During: typing of call at /tmp/ipykernel_1064/440050923.py (2)
+During: typing of call at /tmp/ipykernel_836/440050923.py (2)
 
 
-File "../../../../../../tmp/ipykernel_1064/440050923.py", line 2:
+File "../../../../../../tmp/ipykernel_836/440050923.py", line 2:
 &lt;source missing, REPL/exec in use?&gt;
 
 
 The above exception was the direct cause of the following exception:
 
 ValueError                                Traceback (most recent call last)
-/tmp/ipykernel_1064/4105892755.py in &lt;module&gt;
+/tmp/ipykernel_836/4105892755.py in &lt;module&gt;
 ----&gt; 1 sr.apply(f)
 
 /opt/conda/envs/rapids/lib/python3.9/contextlib.py in inner(*args, **kwds)
@@ -769,11 +768,11 @@ ValueError                                Traceback (most recent call last)
      81 
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/core/series.py in apply(self, func, convert_dtype, args, **kwargs)
-   2332             raise ValueError("Series.apply only supports convert_dtype=True")
-   2333 
--&gt; 2334         result = self._apply(func, _get_scalar_kernel, *args, **kwargs)
-   2335         result.name = self.name
-   2336         return result
+   2380             raise ValueError("Series.apply only supports convert_dtype=True")
+   2381 
+-&gt; 2382         result = self._apply(func, _get_scalar_kernel, *args, **kwargs)
+   2383         result.name = self.name
+   2384         return result
 
 /opt/conda/envs/rapids/lib/python3.9/contextlib.py in inner(*args, **kwds)
      77         def inner(*args, **kwds):
@@ -783,11 +782,11 @@ ValueError                                Traceback (most recent call last)
      81 
 
 /opt/conda/envs/rapids/lib/python3.9/site-packages/cudf/core/indexed_frame.py in _apply(self, func, kernel_getter, *args, **kwargs)
-   1795             )
-   1796         except Exception as e:
--&gt; 1797             raise ValueError(
-   1798                 "user defined function compilation failed."
-   1799             ) from e
+   1823             )
+   1824         except Exception as e:
+-&gt; 1825             raise ValueError(
+   1826                 "user defined function compilation failed."
+   1827             ) from e
 
 ValueError: user defined function compilation failed.
 </pre></div>
@@ -2478,7 +2477,7 @@ dtype: int32
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.2.2.<br>
 </p>
 
   </div>
