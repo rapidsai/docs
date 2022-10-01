@@ -29,6 +29,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api_docs/spatial';</script>
@@ -106,8 +107,8 @@
         
                 <li class="nav-item">
                     <a class="nav-link" href="../user_guide/index.html">
-                        User Guide
-                    </a>
+                        <no title>
+                    </no></a>
                 </li>
                 
 
@@ -212,8 +213,8 @@
         
                 <li class="nav-item">
                     <a class="nav-link" href="../user_guide/index.html">
-                        User Guide
-                    </a>
+                        <no title>
+                    </no></a>
                 </li>
                 
 
@@ -747,7 +748,7 @@ y<sub>0</sub> to the farthest point in <code class="docutils literal notranslate
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">directed_hausdorff_distance</span><span class="p">(</span>
 <span class="go">        [0, 1, 0, 0], # xs</span>
 <span class="go">        [0, 0, 1, 2], # ys</span>
-<span class="go">        [0, 2, 4],    # space_offsets</span>
+<span class="go">        [0, 2],    # space_offsets</span>
 <span class="go">    )</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 <span class="go">         0         1</span>
@@ -864,6 +865,45 @@ their distance is 0.</p>
 <span class="n">Result</span><span class="p">:</span> <span class="p">{</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">}</span>
 </pre></div>
 </div>
+</dd></dl>
+
+</section>
+<section id="nearest-points-function">
+<h2>Nearest Points Function<a class="headerlink" href="#nearest-points-function" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cuspatial.pairwise_point_linestring_nearest_points">
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">pairwise_point_linestring_nearest_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestrings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoDataFrame" title="cuspatial.core.geodataframe.GeoDataFrame"><span class="pre">GeoDataFrame</span></a></span></span><a class="headerlink" href="#cuspatial.pairwise_point_linestring_nearest_points" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the nearest points between two GeoSeries of points and
+linestrings.</p>
+<p>Multipoints and Multilinestrings are also supported. With restriction that
+the <cite>points</cite> series must contain either only points or only multipoints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>points</strong><span class="classifier">GeoSeries</span></dt><dd><p>A GeoSeries of points. Currently either only a series of points or
+a series of multipoints is supported.</p>
+</dd>
+<dt><strong>linestrings</strong><span class="classifier">GeoSeries</span></dt><dd><p>A GeoSeries of linestrings or multilinestrings.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>GeoDataFrame</dt><dd><p>A GeoDataFrame with four columns.</p>
+<ul class="simple">
+<li><p>&ldquo;point_geometry_id&rdquo; contains index of the nearest point in the row.
+If <cite>points</cite> consists of single-points, it is always 0.</p></li>
+<li><p>&ldquo;linestring_geometry_id&rdquo; contains the index of the linestring in the
+multilinestring that contains the nearest point.</p></li>
+<li><p>&ldquo;segment_id&rdquo; contains the index of the segment in the linestring that
+contains the nearest point.</p></li>
+<li><p>&ldquo;geometry&rdquo; contains the points of the nearest
+point on the linestring.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -1068,31 +1108,167 @@ coordinates.</p>
   <a class="reference internal nav-link" href="#spatial-indexing-functions">
    Spatial Indexing Functions
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.quadtree_on_points">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       quadtree_on_points()
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#spatial-join-functions">
    Spatial Join Functions
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.point_in_polygon">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       point_in_polygon()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.quadtree_point_in_polygon">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       quadtree_point_in_polygon()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.quadtree_point_to_nearest_polyline">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       quadtree_point_to_nearest_polyline()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.join_quadtree_and_bounding_boxes">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       join_quadtree_and_bounding_boxes()
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#measurement-functions">
    Measurement Functions
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.directed_hausdorff_distance">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       directed_hausdorff_distance()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.haversine_distance">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       haversine_distance()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.pairwise_linestring_distance">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       pairwise_linestring_distance()
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#nearest-points-function">
+   Nearest Points Function
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.pairwise_point_linestring_nearest_points">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       pairwise_point_linestring_nearest_points()
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#bounding-boxes">
    Bounding Boxes
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.polygon_bounding_boxes">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       polygon_bounding_boxes()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.polyline_bounding_boxes">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       polyline_bounding_boxes()
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#projection-functions">
    Projection Functions
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.lonlat_to_cartesian">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       lonlat_to_cartesian()
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#spatial-filtering-functions">
    Spatial Filtering Functions
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.points_in_spatial_window">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       points_in_spatial_window()
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -1147,7 +1323,7 @@ coordinates.</p>
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.2.2.<br>
 </p>
 
   </div>

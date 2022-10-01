@@ -29,11 +29,13 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'developer_guide/library_design';</script>
     <link href="../genindex.html" rel="index" title="Index">
     <link href="../search.html" rel="search" title="Search">
+    <link href="benchmarking.html" rel="next" title="Benchmarking cuSpatial">
     <link href="contributing_guide.html" rel="prev" title="How to Contribute to cuSpatial">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="en-US" name="docsearch:language">
@@ -105,8 +107,8 @@
         
                 <li class="nav-item">
                     <a class="nav-link" href="../user_guide/index.html">
-                        User Guide
-                    </a>
+                        <no title>
+                    </no></a>
                 </li>
                 
 
@@ -211,8 +213,8 @@
         
                 <li class="nav-item">
                     <a class="nav-link" href="../user_guide/index.html">
-                        User Guide
-                    </a>
+                        <no title>
+                    </no></a>
                 </li>
                 
 
@@ -300,6 +302,11 @@
    cuSpatial Library Design
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="benchmarking.html">
+   Benchmarking cuSpatial
+  </a>
+ </li>
 </ul>
 
   </div>
@@ -332,8 +339,9 @@
 <h1>cuSpatial Library Design<a class="headerlink" href="#cuspatial-library-design" title="Permalink to this heading">#</a></h1>
 <p>cuSpatial has two main components: the cuSpatial Python package and the <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code> C++ library,
 referred to as <code class="docutils literal notranslate"><span class="pre">cuspatial</span></code> and <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code> respectively in this documentation. This page
-discusses the design of <code class="docutils literal notranslate"><span class="pre">cuspatial</span></code>. For information on <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code>, see the [libcuspatial
-developer guide](TODO link) and [C++ API reference](TODO link).</p>
+discusses the design of <code class="docutils literal notranslate"><span class="pre">cuspatial</span></code>. For information on <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code>, see the <a class="reference external" href="https://github.com/rapidsai/cuspatial/blob/branch-22.10/cpp/doc/DEVELOPER_GUIDE.md">libcuspatial
+developer guide</a>
+and <a class="reference external" href="https://docs.rapids.ai/api/libcuspatial/stable/">C++ API reference</a>.</p>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
 <p>At a high level, <code class="docutils literal notranslate"><span class="pre">cuspatial</span></code> has three parts:</p>
@@ -343,20 +351,23 @@ developer guide](TODO link) and [C++ API reference](TODO link).</p>
 <li><p>A Cython API layer</p></li>
 </ul>
 </section>
-<section id="gpu-accelerated-geodataframe-and-geoseries">
-<h2>GPU Accelerated <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoSeries</span></code><a class="headerlink" href="#gpu-accelerated-geodataframe-and-geoseries" title="Permalink to this heading">#</a></h2>
+<section id="core-data-structures">
+<h2>Core Data Structures<a class="headerlink" href="#core-data-structures" title="Permalink to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>Note: the core data structure of cuSpatial shares the same name as that of <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>, so we refer
 to geopandas&rsquo; dataframe object as <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> and to cuspatial&rsquo;s dataframe object as
 <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>.</p>
-<hr class="docutils">
+</div>
+<section id="introduction-to-geoarrow-format">
+<h3>Introduction to GeoArrow Format<a class="headerlink" href="#introduction-to-geoarrow-format" title="Permalink to this heading">#</a></h3>
 <p>Under the hood, cuspatial can perform parallel computation on geometry
 data thanks to its
 <a class="reference external" href="https://en.wikipedia.org/wiki/Parallel_array">structure of arrays</a> (SoA)
-format. Specifically, cuspatial adopts geoarrow format. Geoarrow is derived
-from the Apache Arrow list type, and it adopts a
-<a class="reference external" href="https://arrow.apache.org/docs/format/Columnar.html#variable-size-list-layout"><code class="docutils literal notranslate"><span class="pre">Variable-size</span> <span class="pre">List</span> <span class="pre">Layout</span></code></a>,
-with the inner-most layer storing the points in a <code class="docutils literal notranslate"><span class="pre">Fixed-size</span> <span class="pre">list</span> <span class="pre">layout</span></code> array
-with <code class="docutils literal notranslate"><span class="pre">size==2</span></code>.</p>
+format. Specifically, cuspatial adopts GeoArrow format, which is an extension
+to Apache Arrow format that uses Arrow&rsquo;s
+<a class="reference external" href="https://arrow.apache.org/docs/format/Columnar.html#variable-size-list-layout"><code class="docutils literal notranslate"><span class="pre">Variable-size</span> <span class="pre">List</span> <span class="pre">Layout</span></code></a>
+to support geometry arrays.</p>
 <p>By definition, each increase in geometry complexity (dimension, or multi-
 geometry) requires an extra level of indirection. In cuSpatial, we use the following names for the levels of indirection from
 highest level to lowest: <code class="docutils literal notranslate"><span class="pre">geometries</span></code>, <code class="docutils literal notranslate"><span class="pre">parts</span></code>, <code class="docutils literal notranslate"><span class="pre">rings</span></code> and <code class="docutils literal notranslate"><span class="pre">coordinates</span></code>. The
@@ -367,22 +378,26 @@ of geometry types to be present in the same column by adopting the
 <a class="reference external" href="https://arrow.apache.org/docs/format/Columnar.html#dense-union">Dense Union Array Layout</a>.</p>
 <p>Read the <a class="reference external" href="https://github.com/geopandas/geo-arrow-spec/blob/main/format.md">geoarrow format specification</a>
 for more detail.</p>
+</section>
+<section id="geocolumn">
+<h3>GeoColumn<a class="headerlink" href="#geocolumn" title="Permalink to this heading">#</a></h3>
 <p>cuSpatial implements a specialization of Arrow dense union via <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code> and
 <code class="docutils literal notranslate"><span class="pre">GeoMeta</span></code>. A <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code> is a composition of child columns and a
 <code class="docutils literal notranslate"><span class="pre">GeoMeta</span></code> object. The <code class="docutils literal notranslate"><span class="pre">GeoMeta</span></code> owns two arrays that are similar to the
 types buffer and offsets buffer from Arrow dense union.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Currently, <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code> only implements four concrete array types: <code class="docutils literal notranslate"><span class="pre">points</span></code>,
-<code class="docutils literal notranslate"><span class="pre">multipoints</span></code>, multilinestrings (called <code class="docutils literal notranslate"><span class="pre">lines</span></code>) and multipolygons (called
-<code class="docutils literal notranslate"><span class="pre">polygons</span></code>). Linestrings and multilinestrings are stored uniformly as
-multilinestrings in the <code class="docutils literal notranslate"><span class="pre">multilinestrings</span></code> array. Polygons and multipolygons are
+<p>Currently, <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code> implements four concrete array types: <code class="docutils literal notranslate"><span class="pre">points</span></code>,
+<code class="docutils literal notranslate"><span class="pre">multipoints</span></code>, multilinestrings and multipolygons. Linestrings and
+multilinestrings are stored uniformly as multilinestrings in the
+<code class="docutils literal notranslate"><span class="pre">multilinestrings</span></code> array. Polygons and multipolygons are
 stored uniformly as multipolygons in the <code class="docutils literal notranslate"><span class="pre">multipolygons</span></code> array.</p>
 <p>Points and multipoints are stored separately in different arrays, because
 storing points in a multipoints array requires 50% more storage overhead.
 While this may also be true for linestrings and polygons, many uses of
 cuSpatial involve more complex linestrings and polygons, where the
 storage overhead of multigeometry indirection is lower compared to points.</p>
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">GeoSeries</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> inherit from <code class="docutils literal notranslate"><span class="pre">cudf.Series</span></code> and
 <code class="docutils literal notranslate"><span class="pre">cudf.DataFrame</span></code> respectively. <code class="docutils literal notranslate"><span class="pre">Series</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> are both generic
 <code class="docutils literal notranslate"><span class="pre">Frame</span></code> objects which represent a collection of generic columns. cuSpatial
@@ -391,7 +406,9 @@ frame.</p>
 <p><code class="docutils literal notranslate"><span class="pre">GeoSeries</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> are convertible to and from <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>.
 Interoperability between cuspatial, <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> and other data formats is
 maintained in the <code class="docutils literal notranslate"><span class="pre">cuspatial.io</span></code> package.</p>
-<p class="rubric">UnionArray Compliance</p>
+</section>
+<section id="unionarray-compliance">
+<h3>UnionArray Compliance<a class="headerlink" href="#unionarray-compliance" title="Permalink to this heading">#</a></h3>
 <p>As previously mentioned, cuspatial&rsquo;s <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code> is a specialization of
 Arrow&rsquo;s dense <code class="docutils literal notranslate"><span class="pre">UnionArray</span></code>. A fundamental addition to cuDF data types should be
 implemented in cuDF so that <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code> can simply inherit its
@@ -399,14 +416,18 @@ functionality. However, dense <code class="docutils literal notranslate"><span c
 in libcudf and requires substantial effort to implement. In the interim,
 cuSpatial provides a <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code> complying to the dense <code class="docutils literal notranslate"><span class="pre">UnionArray</span></code>
 specification. This may be upstreamed to libcudf as it matures.</p>
-<p class="rubric">Geospatial computation APIs</p>
+</section>
+</section>
+<section id="geospatial-computation-apis">
+<h2>Geospatial computation APIs<a class="headerlink" href="#geospatial-computation-apis" title="Permalink to this heading">#</a></h2>
 <p>In addition to data structures, cuSpatial provides a set of computation APIs.
 The computation APIs are organized into several modules. All spatial
 computation modules are further grouped into a <code class="docutils literal notranslate"><span class="pre">spatial</span></code> subpackage.
 Module names should correspond to a specific computation category,
 such as <code class="docutils literal notranslate"><span class="pre">distance</span></code> or <code class="docutils literal notranslate"><span class="pre">join</span></code>. Cuspatial avoids using general category names,
 such as <code class="docutils literal notranslate"><span class="pre">generic</span></code>.</p>
-<p class="rubric">Legacy and Modern APIs</p>
+<section id="legacy-and-modern-apis">
+<h3>Legacy and Modern APIs<a class="headerlink" href="#legacy-and-modern-apis" title="Permalink to this heading">#</a></h3>
 <p>For historical reasons, older cuSpatial APIs expose raw array inputs for
 users to provide raw geometry coordinate arrays and offsets. Newer Python
 APIs should accept a <code class="docutils literal notranslate"><span class="pre">GeoSeries</span></code> or <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> as input. Developers
@@ -414,7 +435,10 @@ may extract geometry offsets and coordinates via cuSpatial&rsquo;s geometry
 accessors such as <code class="docutils literal notranslate"><span class="pre">GeoSeries.points</span></code>, <code class="docutils literal notranslate"><span class="pre">GeoSeries.multipoints</span></code>,
 <code class="docutils literal notranslate"><span class="pre">GeoSeries.lines</span></code>, <code class="docutils literal notranslate"><span class="pre">GeoSeries.polygons</span></code>. Developer can then pass the geometries
 offsets and corrdinate arrays to Cython APIs.</p>
-<p class="rubric">Cython Layer</p>
+</section>
+</section>
+<section id="cython-layer">
+<h2>Cython Layer<a class="headerlink" href="#cython-layer" title="Permalink to this heading">#</a></h2>
 <p>The lowest layer of cuspatial is its interaction with <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code> via Cython.
 The Cython layer is composed of two components: C++ bindings and
 Cython wrappers. The first component consists of
@@ -437,7 +461,6 @@ object from the c++ result. By the time code reaches this stage, the
 objects are assumed to be fully legal inputs to the <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code> API.
 Therefore the wrapper should not contain additional components besides
 the above.</p>
-</div>
 </section>
 </section>
 
@@ -455,6 +478,13 @@ the above.</p>
           <p class="prev-next-subtitle">previous</p>
           <p class="prev-next-title">How to Contribute to cuSpatial</p>
       </div>
+  </a>
+  <a class="right-next" href="benchmarking.html" id="next-link" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Benchmarking cuSpatial</p>
+  </div>
+  <i class="fas fa-angle-right"></i>
   </a>
 </div>
             </footer>
@@ -478,19 +508,42 @@ the above.</p>
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#gpu-accelerated-geodataframe-and-geoseries">
-   GPU Accelerated
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     GeoDataFrame
-    </span>
-   </code>
-   and
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     GeoSeries
-    </span>
-   </code>
+  <a class="reference internal nav-link" href="#core-data-structures">
+   Core Data Structures
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#introduction-to-geoarrow-format">
+     Introduction to GeoArrow Format
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#geocolumn">
+     GeoColumn
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#unionarray-compliance">
+     UnionArray Compliance
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#geospatial-computation-apis">
+   Geospatial computation APIs
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#legacy-and-modern-apis">
+     Legacy and Modern APIs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cython-layer">
+   Cython Layer
   </a>
  </li>
 </ul>
@@ -546,7 +599,7 @@ the above.</p>
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.2.2.<br>
 </p>
 
   </div>

@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['vec_5f2d_90',['vec_2d',['../structcuspatial_1_1vec__2d.html',1,'cuspatial']]],
-  ['vec_5f2d_2ehpp_91',['vec_2d.hpp',['../vec__2d_8hpp.html',1,'']]],
-  ['vec_5f2d_5fiterator_5fto_5foutput_5finterleaved_5fiterator_92',['vec_2d_iterator_to_output_interleaved_iterator',['../group__type__factories.html#ga1a338fb4991599b919be647edc4d6a87',1,'cuspatial']]],
-  ['vec_5f2d_5fto_5ftuple_93',['vec_2d_to_tuple',['../structcuspatial_1_1detail_1_1vec__2d__to__tuple.html',1,'cuspatial::detail']]]
+  ['unit_20benchmarking_20in_20libcuspatial_92',['Unit Benchmarking in libcuspatial',['../md_developer_guide_BENCHMARKING.html',1,'']]],
+  ['unit_20testing_20in_20libcuspatial_93',['Unit Testing in libcuspatial',['../md_developer_guide_TESTING.html',1,'']]]
 ];

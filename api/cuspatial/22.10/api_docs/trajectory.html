@@ -29,6 +29,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api_docs/trajectory';</script>
@@ -106,8 +107,8 @@
         
                 <li class="nav-item">
                     <a class="nav-link" href="../user_guide/index.html">
-                        User Guide
-                    </a>
+                        <no title>
+                    </no></a>
                 </li>
                 
 
@@ -212,8 +213,8 @@
         
                 <li class="nav-item">
                     <a class="nav-link" href="../user_guide/index.html">
-                        User Guide
-                    </a>
+                        <no title>
+                    </no></a>
                 </li>
                 
 
@@ -376,20 +377,20 @@ and <code class="docutils literal notranslate"><span class="pre">trajectory_dist
 <p class="rubric">Examples</p>
 <p>Compute sorted objects and discovered trajectories</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">objects</span><span class="p">,</span> <span class="n">traj_offsets</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">derive_trajectories</span><span class="p">(</span>
-<span class="go">        [0, 1, 2, 3],  # object_id</span>
+<span class="go">        [0, 1, 0, 1],  # object_id</span>
 <span class="go">        [0, 0, 1, 1],  # x</span>
 <span class="go">        [0, 0, 1, 1],  # y</span>
-<span class="go">        [0, 10, 0, 10] # timestamp</span>
+<span class="go">        [0, 10000, 0, 10000] # timestamp</span>
 <span class="go">    )</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">traj_offsets</span><span class="p">)</span>
 <span class="go">    0  0</span>
 <span class="go">    1  2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">objects</span><span class="p">)</span>
-<span class="go">       object_id       x       y  timestamp</span>
-<span class="go">    0          0       1       0          0</span>
-<span class="go">    1          0       0       0         10</span>
-<span class="go">    2          1       3       1          0</span>
-<span class="go">    3          1       2       1         10</span>
+<span class="go">    object_id    x    y           timestamp</span>
+<span class="go">    0          0  0.0  0.0 1970-01-01 00:00:00</span>
+<span class="go">    1          0  1.0  1.0 1970-01-01 00:00:10</span>
+<span class="go">    2          1  0.0  0.0 1970-01-01 00:00:00</span>
+<span class="go">    3          1  1.0  1.0 1970-01-01 00:00:10</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -436,68 +437,10 @@ and <code class="docutils literal notranslate"><span class="pre">trajectory_dist
 <span class="go">        objects['timestamp']</span>
 <span class="go">    )</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dists_and_speeds</span><span class="p">)</span>
-<span class="go">                   distance          speed</span>
+<span class="go">                      distance       speed</span>
 <span class="go">    trajectory_id</span>
-<span class="go">    0                1000.0  100000.000000</span>
-<span class="go">    1                1000.0  111111.109375</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="cuspatial.directed_hausdorff_distance">
-<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">directed_hausdorff_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space_offsets</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.directed_hausdorff_distance" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute the directed Hausdorff distances between all pairs of
-spaces.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>xs</strong></dt><dd><p>column of x-coordinates</p>
-</dd>
-<dt><strong>ys</strong></dt><dd><p>column of y-coordinates</p>
-</dd>
-<dt><strong>space_offsets</strong></dt><dd><p>beginning index of each space, plus the last space&rsquo;s end offset.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>The pairwise directed distance matrix with one row and one
-column per input space; the value at row i, column j represents the
-hausdorff distance from space i to space j.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<p>The directed Hausdorff distance from one space to another is the greatest
-of all the distances between any point in the first space to the closest
-point in the second.</p>
-<p><a class="reference external" href="https://en.wikipedia.org/wiki/Hausdorff_distance">Wikipedia</a></p>
-<p>Consider a pair of lines on a grid:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="p">:</span>
-     <span class="n">x</span>
-<span class="o">-----</span><span class="n">xyy</span><span class="o">---</span>
-     <span class="p">:</span>
-     <span class="p">:</span>
-</pre></div>
-</div>
-<p>x<sub>0</sub> = (0, 0), x<sub>1</sub> = (0, 1)</p>
-<p>y<sub>0</sub> = (1, 0), y<sub>1</sub> = (2, 0)</p>
-<p>x<sub>0</sub> is the closest point in <code class="docutils literal notranslate"><span class="pre">x</span></code> to <code class="docutils literal notranslate"><span class="pre">y</span></code>. The distance from
-x<sub>0</sub> to the farthest point in <code class="docutils literal notranslate"><span class="pre">y</span></code> is 2.</p>
-<p>y<sub>0</sub> is the closest point in <code class="docutils literal notranslate"><span class="pre">y</span></code> to <code class="docutils literal notranslate"><span class="pre">x</span></code>. The distance from
-y<sub>0</sub> to the farthest point in <code class="docutils literal notranslate"><span class="pre">x</span></code> is 1.414.</p>
-<p>Compute the directed hausdorff distances between a set of spaces</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">directed_hausdorff_distance</span><span class="p">(</span>
-<span class="go">        [0, 1, 0, 0], # xs</span>
-<span class="go">        [0, 0, 1, 2], # ys</span>
-<span class="go">        [0, 2, 4],    # space_offsets</span>
-<span class="go">    )</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-<span class="go">         0         1</span>
-<span class="go">    0  0.0  1.414214</span>
-<span class="go">    1  2.0  0.000000</span>
+<span class="go">    0              1414.213562  141.421356</span>
+<span class="go">    1              1414.213562  141.421356</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -538,7 +481,7 @@ y<sub>0</sub> to the farthest point in <code class="docutils literal notranslate
 </dl>
 <p class="rubric">Examples</p>
 <p>Compute the minimum bounding boxes of derived trajectories</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">objects</span><span class="p">,</span> <span class="n">traj_offsets</span> <span class="o">=</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">derive_trajectories</span><span class="p">(</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">objects</span><span class="p">,</span> <span class="n">traj_offsets</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">derive_trajectories</span><span class="p">(</span>
 <span class="go">        [0, 0, 1, 1],  # object_id</span>
 <span class="go">        [0, 1, 2, 3],  # x</span>
 <span class="go">        [0, 0, 1, 1],  # y</span>
@@ -593,6 +536,45 @@ y<sub>0</sub> to the farthest point in <code class="docutils literal notranslate
               
 <div class="toc-item">
   
+<div class="tocsection onthispage">
+    <i class="fas fa-list"></i> On this page
+</div>
+<nav class="page-toc" id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cuspatial.derive_trajectories">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     derive_trajectories()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cuspatial.trajectory_distances_and_speeds">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     trajectory_distances_and_speeds()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cuspatial.trajectory_bounding_boxes">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     trajectory_bounding_boxes()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
 </div>
 
 <div class="toc-item">
@@ -639,7 +621,7 @@ y<sub>0</sub> to the farthest point in <code class="docutils literal notranslate
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.2.2.<br>
 </p>
 
   </div>

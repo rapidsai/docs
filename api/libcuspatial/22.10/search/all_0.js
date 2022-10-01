@@ -16,5 +16,6 @@ var searchData=
   ['constants_13',['Constants',['../group__cuspatial__constants.html',1,'']]],
   ['cuspatial_5fcuda_5ftry_14',['CUSPATIAL_CUDA_TRY',['../error_8hpp.html#acfc1039c29661ff7f37f5b83b2b7a6fd',1,'error.hpp']]],
   ['cuspatial_5fexpects_15',['CUSPATIAL_EXPECTS',['../error_8hpp.html#ac62b6e15da5763cd1ae65f3845a697bc',1,'error.hpp']]],
-  ['cuspatial_5ffail_16',['CUSPATIAL_FAIL',['../error_8hpp.html#ae11b6562fe29fefbd9255c33b879c0b3',1,'error.hpp']]]
+  ['cuspatial_5ffail_16',['CUSPATIAL_FAIL',['../error_8hpp.html#ae11b6562fe29fefbd9255c33b879c0b3',1,'error.hpp']]],
+  ['cuspatial_20c_2b_2b_20api_20refactoring_20guide_17',['cuSpatial C++ API Refactoring Guide',['../md_developer_guide_REFACTORING_GUIDE.html',1,'']]]
 ];
