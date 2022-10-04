@@ -48,10 +48,10 @@ The GPU labeled runners are backed by lab machines and have the GPUs specified i
 
 **IMPORTANT**: GPU jobs have two requirements: 1) They **must** run in a container (i.e. `nvidia/cuda:11.5.0-base-ubuntu18.04`) and 2) They must set the {% raw %}`NVIDIA_VISIBLE_DEVICES: ${{ env.NVIDIA_VISIBLE_DEVICES }}`{% endraw %} container environment variable. If these requirements aren't met, the GitHub Actions job will fail. See the _Usage_ section below for an example.
 
-| Label Combination                | GPU                     | Driver Version | # of GPUs |
-| -------------------------------- | ----------------------- | -------------- | --------- |
-| `[linux, amd64, gpu-v100-495-1]` | `Tesla-V100-PCIE-32GB`  | `495`          | `1`       |
-| `[linux, arm64, gpu-a100-495-1]` | `NVIDIA-A100-PCIE-40GB` | `495`          | `1`       |
+| Label Combination                | GPU       | Driver Version | # of GPUs |
+| -------------------------------- | ----------| -------------- | --------- |
+| `[linux, amd64, gpu-v100-495-1]` | `V100`    | `495`          | `1`       |
+| `[linux, arm64, gpu-a100-495-1]` | `A100`    | `495`          | `1`       |
 
 ## Usage
 
