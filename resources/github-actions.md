@@ -50,6 +50,7 @@ The GPU labeled runners are backed by lab machines and have the GPUs specified i
 
 | Label Combination                | GPU       | Driver Version | # of GPUs |
 | -------------------------------- | ----------| -------------- | --------- |
+| `[linux, amd64, gpu-v100-450-1]` | `V100`    | `450`          | `1`       |
 | `[linux, amd64, gpu-v100-495-1]` | `V100`    | `495`          | `1`       |
 | `[linux, arm64, gpu-a100-495-1]` | `A100`    | `495`          | `1`       |
 
