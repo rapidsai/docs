@@ -7,18 +7,27 @@ title: GitHub Actions
 ---
 
 # {{ page.title }}
+{:.no_toc}
 
 ## Overview
+{:.no_toc}
 
 The RAPIDS team is in the process of migrating from Jenkins to GitHub Actions for CI/CD. The page below outlines some helpful information pertaining to the implementation of GitHub Actions provided by the RAPIDS Ops team. The official GitHub documentation for GitHub Actions is also useful and can be viewed [here](https://docs.github.com/en/actions).
 
 ### Intended audience
+{: .no_toc }
 
 Operations
 {: .label .label-purple}
 
 Developers
 {: .label .label-green}
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
 
 ## Implementation
 
