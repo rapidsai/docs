@@ -10,7 +10,7 @@ title: GitHub Actions
 
 ## Overview
 
-Details on the self-hosted GitHub Actions runners provided by the RAPIDS Ops team.
+The RAPIDS team is in the process of migrating from Jenkins to GitHub Actions for CI/CD. The page below outlines some helpful information pertaining to the implementation of GitHub Actions provided by the RAPIDS Ops team. The official GitHub documentation for GitHub Actions is also useful and can be viewed [here](https://docs.github.com/en/actions).
 
 ### Intended audience
 
@@ -20,7 +20,48 @@ Operations
 Developers
 {: .label .label-green}
 
-## Details
+## Implementation
+
+The RAPIDS Ops team provides GPU enabled self-hosted runners for use with GitHub Actions to the RAPIDS and other select GitHub organizations.
+
+To ensure proper usage of these GPU enabled CI machines, the RAPIDS Ops team has adopted a strategy known as _Marking code as trusted by pushing upstream_ which is described in [this CircleCI blog post](https://circleci.com/blog/triggering-trusted-ci-jobs-on-untrusted-forks/).
+
+The gist of the strategy is that the source code from trusted pull requests can be copied to a prefixed branch (e.g. `pull-request/<PR_NUMBER>`) within the source repository and CI can be configured to test only those prefixed branches rather than the pull requests themselves.
+
+Pull requests authored by members of the given GitHub organization are considered trusted and therefore are copied to a `pull-request/*` branch for testing automatically.
+
+Pull requests from authors outside of the GitHub organization must first be reviewed by a repository member with `write` permissions (or greater) to ensure that the code changes are legitimate and benign. That reviewer must leave an `/ok to test` (or `/okay to test`) comment on the pull request before it's code is copied to a `pull-request/*` branch for testing.
+
+The `/ok to test` comment is only valid for a single commit. Subsequent commits must be re-reviewed and validated with another `/ok to test` comment.
+
+### Ignoring Pull Request Branches in `git`
+
+One consequence of the strategy described above is that a lot of `pull-request/*` branches will be created and deleted in GitHub as pull requests are opened and closed. To avoid having these branches fetched locally, you can run the following `git config` command, where `upstream` in `remote.upstream.fetch` is the `git` remote name corresponding to the source repository:
+
+```sh
+git config \
+  --global \
+  --add "remote.upstream.fetch" \
+  '^refs/heads/pull-request/*'
+```
+
+### Skipping CI for Commits
+
+See the GitHub Actions document page below on how to prevent GitHub Actions from running on certain commits. This is useful for preventing GitHub Actions from running on pull requests that are not fully complete. This also helps preserve the finite GPU resources provided by the RAPIDS Ops team.
+
+With GitHub Actions, it is not possible to configure all commits for a pull request to be skipped. It must be specified at the commit level.
+
+**Link**: [https://docs.github.com/en/actions/managing-workflow-runs/skipping-workflow-runs](https://docs.github.com/en/actions/managing-workflow-runs/skipping-workflow-runs)
+
+### Rerunning Failed GitHub Actions
+
+See the GitHub Actions documentation page below on how to rerun failed workflows. In addition to rerunning an entire workflow, GitHub Actions also provides the ability to rerun only the failed jobs in a workflow.
+
+At this time there are no alternative ways to rerun tests with GitHub Actions beyond what is described in the documentation (e.g. there is no `rerun tests` comment for GitHub Actions).
+
+**Link**: [https://docs.github.com/en/actions/managing-workflow-runs/re-running-workflows-and-jobs](https://docs.github.com/en/actions/managing-workflow-runs/re-running-workflows-and-jobs)
+
+## Self-Hosted Runners
 
 The RAPIDS Ops team provides a set of self-hosted runners that can be used in GitHub Action workflows throughout supported organizations. The tables below outline the labels that can be utilized and their related specifications.
 
@@ -48,13 +89,13 @@ The GPU labeled runners are backed by lab machines and have the GPUs specified i
 
 **IMPORTANT**: GPU jobs have two requirements: 1) They **must** run in a container (i.e. `nvidia/cuda:11.5.0-base-ubuntu18.04`) and 2) They must set the {% raw %}`NVIDIA_VISIBLE_DEVICES: ${{ env.NVIDIA_VISIBLE_DEVICES }}`{% endraw %} container environment variable. If these requirements aren't met, the GitHub Actions job will fail. See the _Usage_ section below for an example.
 
-| Label Combination                | GPU       | Driver Version | # of GPUs |
-| -------------------------------- | ----------| -------------- | --------- |
-| `[linux, amd64, gpu-v100-450-1]` | `V100`    | `450`          | `1`       |
-| `[linux, amd64, gpu-v100-495-1]` | `V100`    | `495`          | `1`       |
-| `[linux, arm64, gpu-a100-495-1]` | `A100`    | `495`          | `1`       |
+| Label Combination                | GPU    | Driver Version | # of GPUs |
+| -------------------------------- | ------ | -------------- | --------- |
+| `[linux, amd64, gpu-v100-450-1]` | `V100` | `450`          | `1`       |
+| `[linux, amd64, gpu-v100-495-1]` | `V100` | `495`          | `1`       |
+| `[linux, arm64, gpu-a100-495-1]` | `A100` | `495`          | `1`       |
 
-## Usage
+### Usage
 
 The code snippet below shows how the labels above may be utilized in a GitHub Action workflow.
 
