@@ -54,6 +54,8 @@ git config \
   '^refs/heads/pull-request/*'
 ```
 
+Note that this `git` configuration option requires `git` version `2.29` or greater to support negative refspecs ([source](https://github.blog/2020-10-19-git-2-29-released/#user-content-negative-refspecs)).
+
 ### Skipping CI for Commits
 
 See the GitHub Actions document page below on how to prevent GitHub Actions from running on certain commits. This is useful for preventing GitHub Actions from running on pull requests that are not fully complete. This also helps preserve the finite GPU resources provided by the RAPIDS Ops team.
