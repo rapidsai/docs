@@ -39,7 +39,7 @@ The gist of the strategy is that the source code from trusted pull requests can 
 
 Pull requests authored by members of the given GitHub organization are considered trusted and therefore are copied to a `pull-request/*` branch for testing automatically.
 
-Pull requests from authors outside of the GitHub organization must first be reviewed by a repository member with `write` permissions (or greater) to ensure that the code changes are legitimate and benign. That reviewer must leave an `/ok to test` (or `/okay to test`) comment on the pull request before it's code is copied to a `pull-request/*` branch for testing.
+Pull requests from authors outside of the GitHub organization must first be reviewed by a repository member with `write` permissions (or greater) to ensure that the code changes are legitimate and benign. That reviewer must leave an `/ok to test` (or `/okay to test`) comment on the pull request before its code is copied to a `pull-request/*` branch for testing.
 
 The `/ok to test` comment is only valid for a single commit. Subsequent commits must be re-reviewed and validated with another `/ok to test` comment.
 
