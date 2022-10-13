@@ -58,7 +58,7 @@ Note that this `git` configuration option requires `git` version `2.29` or great
 
 ### Skipping CI for Commits
 
-See the GitHub Actions document page below on how to prevent GitHub Actions from running on certain commits. This is useful for preventing GitHub Actions from running on pull requests that are not fully complete. This also helps preserve the finite GPU resources provided by the RAPIDS Ops team.
+See the GitHub Actions documentation page below on how to prevent GitHub Actions from running on certain commits. This is useful for preventing GitHub Actions from running on pull requests that are not fully complete. This also helps preserve the finite GPU resources provided by the RAPIDS Ops team.
 
 With GitHub Actions, it is not possible to configure all commits for a pull request to be skipped. It must be specified at the commit level.
 
@@ -134,4 +134,4 @@ jobs:
           nvidia-smi
 ```
 
-For additional details, see the official GitHub Action documentation page here: [https://docs.github.com/en/actions/hosting-your-own-runners/using-self-hosted-runners-in-a-workflow](https://docs.github.com/en/actions/hosting-your-own-runners/using-self-hosted-runners-in-a-workflow)
+For additional details on self-hosted runner usage, see the official GitHub Action documentation page here: [https://docs.github.com/en/actions/hosting-your-own-runners/using-self-hosted-runners-in-a-workflow](https://docs.github.com/en/actions/hosting-your-own-runners/using-self-hosted-runners-in-a-workflow)
