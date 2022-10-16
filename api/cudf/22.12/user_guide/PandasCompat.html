@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
+
+    <title>Pandas Compatibility Notes &mdash; cudf 22.12.00 documentation</title>
+  <script>
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css" rel="stylesheet">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2">
+
+    <link href="../_static/pygments.css" rel="stylesheet" type="text/css">
+    <link href="../_static/copybutton.css" rel="stylesheet" type="text/css">
+    <link href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" rel="stylesheet" type="text/css">
+    <link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet" type="text/css">
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b" rel="preload">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/PandasCompat';</script>
+    <link href="../genindex.html" rel="index" title="Index">
+    <link href="../search.html" rel="search" title="Search">
+    <link href="../api_docs/index.html" rel="next" title="API reference">
+    <link href="options.html" rel="prev" title="Options">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="en" name="docsearch:language">
+  <script id="rapids-selector-pixel-src" src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+  
+  
+  <body data-default-mode data-offset="180" data-spy="scroll" data-target="#bd-toc-nav">
+
+  
+  <input class="sidebar-toggle" id="__primary" name="__primary" type="checkbox">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input class="sidebar-toggle" id="__secondary" name="__secondary" type="checkbox">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form action="../search.html" class="bd-search d-flex align-items-center" method="get">
+  <i class="icon fas fa-search"></i>
+  <input aria-label="Search the docs ..." autocapitalize="off" autocomplete="off" autocorrect="off" class="form-control" id="search-input" name="q" placeholder="Search the docs ..." spellcheck="false" type="search">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fas fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img alt="Logo image" class="logo__image only-light" src="../_static/RAPIDS-logo-purple.png">
+    <img alt="Logo image" class="logo__image only-dark" src="../_static/RAPIDS-logo-purple.png">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="navbar-header-items">
+    <div class="ml-auto" id="navbar-center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p aria-label="Site Navigation" aria-level="1" class="sidebar-header-items__title" role="heading">
+        Site Navigation
+    </p>
+    <ul class="navbar-nav" id="navbar-main-elements">
+        
+                <li class="nav-item current active">
+                    <a class="nav-link" href="index.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../api_docs/index.html">
+                        API reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../developer_guide/index.html">
+                        Developer Guide
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      <div class="navbar-end-item navbar-end__search-button-container">
+        
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search">
+  <i class="fas fa-search"></i>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul aria-label="Icon Links" class="navbar-nav" id="navbar-icon-links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" href="https://github.com/rapidsai/cudf" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  <div class="search-button-container--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search">
+  <i class="fas fa-search"></i>
+</button>
+  </div>
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fas fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar"><div id="rapids-pydata-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">cudf</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/stable/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libcuspatial/stable">libcuspatial</a><a class="rapids-selector__menu-item" href="/api/libkvikio/stable">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/raft/stable">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (22.12)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/nightly/index.html">nightly (22.12)</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">stable (22.08)</a><a class="rapids-selector__menu-item" href="/api/cudf/legacy/index.html">legacy (22.06)</a></div></div></div>
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p aria-label="Site Navigation" aria-level="1" class="sidebar-header-items__title" role="heading">
+        Site Navigation
+    </p>
+    <ul class="navbar-nav" id="navbar-main-elements">
+        
+                <li class="nav-item current active">
+                    <a class="nav-link" href="index.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../api_docs/index.html">
+                        API reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../developer_guide/index.html">
+                        Developer Guide
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul aria-label="Icon Links" class="navbar-nav" id="navbar-icon-links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" href="https://github.com/rapidsai/cudf" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav aria-label="Section navigation" class="bd-links" id="bd-docs-nav">
+  <p aria-level="1" class="bd-links__title" role="heading">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="10min.html">
+   10 Minutes to cuDF and Dask-cuDF
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pandas-comparison.html">
+   Comparison of cuDF and Pandas
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="data-types.html">
+   Supported Data Types
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="io.html">
+   Input / Output
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="missing-data.html">
+   Working with missing data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="groupby.html">
+   GroupBy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="guide-to-udfs.html">
+   Overview of User Defined Functions with cuDF
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cupy-interop.html">
+   Interoperability between cuDF and CuPy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="dask-cudf.html">
+   Multi-GPU with Dask-cuDF
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="options.html">
+   Options
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Pandas Compatibility Notes
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+      </div>
+      <main class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="pandas-compatibility-notes">
+<h1>Pandas Compatibility Notes<a class="headerlink" href="#pandas-compatibility-notes" title="Permalink to this heading">#</a></h1>
+<div class="admonition">
+<p class="admonition-title">Pandas Compatibility Note</p>
+<p><strong>DataFrame.quantile</strong></p>
+<p>One notable difference from Pandas is when DataFrame is of
+non-numeric types and result is expected to be a Series in case of
+Pandas. cuDF will return a DataFrame as it doesn't support mixed
+types under Series.</p>
+<p><a class="reference external" href="../api_docs/api/cudf.DataFrame.quantile.html#PandasCompat-0"><em>[source]</em></a></p>
+</div>
+<div class="admonition">
+<p class="admonition-title">Pandas Compatibility Note</p>
+<p><strong>DataFrame.reindex</strong></p>
+<p>Note: One difference from Pandas is that <code class="docutils literal notranslate"><span class="pre">NA</span></code> is used for rows
+that do not match, rather than <code class="docutils literal notranslate"><span class="pre">NaN</span></code>. One side effect of this is
+that the column <code class="docutils literal notranslate"><span class="pre">http_status</span></code> retains an integer dtype in cuDF
+where it is cast to float in Pandas.</p>
+<p><a class="reference external" href="../api_docs/api/cudf.DataFrame.reindex.html#PandasCompat-0"><em>[source]</em></a></p>
+</div>
+<div class="admonition">
+<p class="admonition-title">Pandas Compatibility Note</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">where</span></code> treats missing values as falsy,
+in parallel with pandas treatment of nullable data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gsr</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gsr</span><span class="o">.</span><span class="n">where</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">cudf</span><span class="o">.</span><span class="n">NA</span><span class="p">])</span>
+<span class="go">0       1</span>
+<span class="go">1    &lt;NA&gt;</span>
+<span class="go">2    &lt;NA&gt;</span>
+<span class="go">dtype: int64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gsr</span><span class="o">.</span><span class="n">where</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+<span class="go">0       1</span>
+<span class="go">1    &lt;NA&gt;</span>
+<span class="go">2    &lt;NA&gt;</span>
+<span class="go">dtype: int64</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="../api_docs/api/cudf.DataFrame.where.html#PandasCompat-0"><em>[source]</em></a></p>
+</div>
+<div class="admonition">
+<p class="admonition-title">Pandas Compatibility Note</p>
+<p><strong>MultiIndex.get_loc</strong></p>
+<p>The return types of this function may deviates from the
+method provided by Pandas. If the index is neither
+lexicographically sorted nor unique, a best effort attempt is made
+to coerce the found indices into a slice. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_tuples</span><span class="p">([</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">array([False,  True,  True,  True,  True, False])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cudf</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">slice(1, 5, 1)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="../api_docs/api/cudf.MultiIndex.get_loc.html#PandasCompat-0"><em>[source]</em></a></p>
+</div>
+<div class="admonition">
+<p class="admonition-title">Pandas Compatibility Note</p>
+<p><strong>Series.reindex</strong></p>
+<p>Note: One difference from Pandas is that <code class="docutils literal notranslate"><span class="pre">NA</span></code> is used for rows
+that do not match, rather than <code class="docutils literal notranslate"><span class="pre">NaN</span></code>. One side effect of this is
+that the series retains an integer dtype in cuDF
+where it is cast to float in Pandas.</p>
+<p><a class="reference external" href="../api_docs/api/cudf.Series.reindex.html#PandasCompat-0"><em>[source]</em></a></p>
+</div>
+<div class="admonition">
+<p class="admonition-title">Pandas Compatibility Note</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">where</span></code> treats missing values as falsy,
+in parallel with pandas treatment of nullable data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gsr</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gsr</span><span class="o">.</span><span class="n">where</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">cudf</span><span class="o">.</span><span class="n">NA</span><span class="p">])</span>
+<span class="go">0       1</span>
+<span class="go">1    &lt;NA&gt;</span>
+<span class="go">2    &lt;NA&gt;</span>
+<span class="go">dtype: int64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gsr</span><span class="o">.</span><span class="n">where</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+<span class="go">0       1</span>
+<span class="go">1    &lt;NA&gt;</span>
+<span class="go">2    &lt;NA&gt;</span>
+<span class="go">dtype: int64</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="../api_docs/api/cudf.Series.where.html#PandasCompat-0"><em>[source]</em></a></p>
+</div>
+<div class="admonition">
+<p class="admonition-title">Pandas Compatibility Note</p>
+<p><strong>groupby.fillna</strong></p>
+<p>This function may return result in different format to the method
+Pandas supports. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'k'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">'v'</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">4</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'k'</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">({</span><span class="s1">'v'</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span> <span class="c1"># pandas</span>
+<span class="go">       v</span>
+<span class="go">k</span>
+<span class="go">1 0  2.0</span>
+<span class="go">  1  4.0</span>
+<span class="go">2 2  4.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'k'</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">({</span><span class="s1">'v'</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span> <span class="c1"># cudf</span>
+<span class="go">     v</span>
+<span class="go">0  2.0</span>
+<span class="go">1  4.0</span>
+<span class="go">2  4.0</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="../api_docs/api/cudf.core.groupby.groupby.DataFrameGroupBy.fillna.html#PandasCompat-0"><em>[source]</em></a></p>
+</div>
+<div class="admonition">
+<p class="admonition-title">Pandas Compatibility Note</p>
+<p><strong>groupby.apply</strong></p>
+<p>cuDF's <code class="docutils literal notranslate"><span class="pre">groupby.apply</span></code> is limited compared to pandas.
+In some situations, Pandas returns the grouped keys as part of
+the index while cudf does not due to redundancy. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">'a'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">'b'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">'c'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'a'</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">]])</span>
+<span class="go">     a  b  c</span>
+<span class="go">a</span>
+<span class="go">1 0  1  1  1</span>
+<span class="go">2 2  2  1  3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'a'</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">]])</span>
+<span class="go">   a  b  c</span>
+<span class="go">0  1  1  1</span>
+<span class="go">2  2  1  3</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="../api_docs/api/cudf.core.groupby.groupby.GroupBy.apply.html#PandasCompat-0"><em>[source]</em></a></p>
+</div>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class="prev-next-area">
+  <a class="left-prev" href="options.html" id="prev-link" title="previous page">
+      <i class="fas fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Options</p>
+      </div>
+  </a>
+  <a class="right-next" href="../api_docs/index.html" id="next-link" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">API reference</p>
+  </div>
+  <i class="fas fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../_sources/user_guide/PandasCompat.md.txt">
+        <i class="fas fa-file-alt"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2018-2021, NVIDIA.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.2.3.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script><script id="rapids-selector-pixel-invocation" type="text/javascript">_satellite.pageBottom();</script></body></html>
