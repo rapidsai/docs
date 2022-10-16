@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
+
+    <title>cuSpatial Library Design &mdash; cuspatial 22.12.00 documentation</title>
+  <script>
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css" rel="stylesheet">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2">
+
+    <link href="../_static/pygments.css" rel="stylesheet" type="text/css">
+    <link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet" type="text/css">
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b" rel="preload">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'developer_guide/library_design';</script>
+    <link href="../genindex.html" rel="index" title="Index">
+    <link href="../search.html" rel="search" title="Search">
+    <link href="benchmarking.html" rel="next" title="Benchmarking cuSpatial">
+    <link href="contributing_guide.html" rel="prev" title="How to Contribute to cuSpatial">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="en-US" name="docsearch:language">
+  <script id="rapids-selector-pixel-src" src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+  
+  
+  <body data-default-mode data-offset="180" data-spy="scroll" data-target="#bd-toc-nav">
+
+  
+  <input class="sidebar-toggle" id="__primary" name="__primary" type="checkbox">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input class="sidebar-toggle" id="__secondary" name="__secondary" type="checkbox">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form action="../search.html" class="bd-search d-flex align-items-center" method="get">
+  <i class="icon fas fa-search"></i>
+  <input aria-label="Search the docs ..." autocapitalize="off" autocomplete="off" autocorrect="off" class="form-control" id="search-input" name="q" placeholder="Search the docs ..." spellcheck="false" type="search">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fas fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+    <p class="title logo__title">cuspatial 22.12.00 documentation</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="navbar-header-items">
+    <div class="ml-auto" id="navbar-center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p aria-label="Site Navigation" aria-level="1" class="sidebar-header-items__title" role="heading">
+        Site Navigation
+    </p>
+    <ul class="navbar-nav" id="navbar-main-elements">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../user_guide/index.html">
+                        <no title>
+                    </no></a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../api_docs/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="index.html">
+                        Developer Guide
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      <div class="navbar-end-item navbar-end__search-button-container">
+        
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search">
+  <i class="fas fa-search"></i>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul aria-label="Icon Links" class="navbar-nav" id="navbar-icon-links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" href="https://github.com/rapidsai/cuspatial" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  <div class="search-button-container--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search">
+  <i class="fas fa-search"></i>
+</button>
+  </div>
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fas fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar"><div id="rapids-pydata-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">cuspatial</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cuspatial/stable">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/stable/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libcuspatial/stable">libcuspatial</a><a class="rapids-selector__menu-item" href="/api/libkvikio/stable">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/raft/stable">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (22.12)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cuspatial/nightly">nightly (22.12)</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable">stable (22.08)</a><a class="rapids-selector__menu-item" href="/api/cuspatial/legacy">legacy (22.06)</a></div></div></div>
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p aria-label="Site Navigation" aria-level="1" class="sidebar-header-items__title" role="heading">
+        Site Navigation
+    </p>
+    <ul class="navbar-nav" id="navbar-main-elements">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../user_guide/index.html">
+                        <no title>
+                    </no></a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../api_docs/index.html">
+                        API Reference
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="index.html">
+                        Developer Guide
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul aria-label="Icon Links" class="navbar-nav" id="navbar-icon-links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" href="https://github.com/rapidsai/cuspatial" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav aria-label="Section navigation" class="bd-links" id="bd-docs-nav">
+  <p aria-level="1" class="bd-links__title" role="heading">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="development_environment.html">
+   Creating a Development Environment
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contributing_guide.html">
+   How to Contribute to cuSpatial
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   cuSpatial Library Design
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="benchmarking.html">
+   Benchmarking cuSpatial
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+      </div>
+      <main class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="cuspatial-library-design">
+<h1>cuSpatial Library Design<a class="headerlink" href="#cuspatial-library-design" title="Permalink to this heading">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
+<p>At a high level, <code class="docutils literal notranslate"><span class="pre">cuspatial</span></code> has three parts:</p>
+<ul class="simple">
+<li><p>A GPU backed <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> data structure</p></li>
+<li><p>A set of computation APIs</p></li>
+<li><p>A Cython API layer</p></li>
+</ul>
+</section>
+<section id="core-data-structures">
+<h2>Core Data Structures<a class="headerlink" href="#core-data-structures" title="Permalink to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note: the core data structure of cuSpatial shares the same name as that of <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>, so we refer
+to geopandas&rsquo; dataframe object as <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> and to cuspatial&rsquo;s dataframe object as
+<code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>.</p>
+</div>
+<section id="introduction-to-geoarrow-format">
+<h3>Introduction to GeoArrow Format<a class="headerlink" href="#introduction-to-geoarrow-format" title="Permalink to this heading">#</a></h3>
+<p>Under the hood, cuspatial can perform parallel computation on geometry
+data thanks to its
+<a class="reference external" href="https://en.wikipedia.org/wiki/Parallel_array">structure of arrays</a> (SoA)
+format. Specifically, cuspatial adopts GeoArrow format, which is an extension
+to Apache Arrow format that uses Arrow&rsquo;s
+<a class="reference external" href="https://arrow.apache.org/docs/format/Columnar.html#variable-size-list-layout"><code class="docutils literal notranslate"><span class="pre">Variable-size</span> <span class="pre">List</span> <span class="pre">Layout</span></code></a>
+to support geometry arrays.</p>
+<p>By definition, each increase in geometry complexity (dimension, or multi-
+geometry) requires an extra level of indirection. In cuSpatial, we use the following names for the levels of indirection from
+highest level to lowest: <code class="docutils literal notranslate"><span class="pre">geometries</span></code>, <code class="docutils literal notranslate"><span class="pre">parts</span></code>, <code class="docutils literal notranslate"><span class="pre">rings</span></code> and <code class="docutils literal notranslate"><span class="pre">coordinates</span></code>. The
+first three are integral offset arrays and the last is a floating-point
+interleaved xy-coordinate array.</p>
+<p>Geoarrow also allows a mixture
+of geometry types to be present in the same column by adopting the
+<a class="reference external" href="https://arrow.apache.org/docs/format/Columnar.html#dense-union">Dense Union Array Layout</a>.</p>
+<p>Read the <a class="reference external" href="https://github.com/geopandas/geo-arrow-spec/blob/main/format.md">geoarrow format specification</a>
+for more detail.</p>
+</section>
+<section id="geocolumn">
+<h3>GeoColumn<a class="headerlink" href="#geocolumn" title="Permalink to this heading">#</a></h3>
+<p>cuSpatial implements a specialization of Arrow dense union via <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code> and
+<code class="docutils literal notranslate"><span class="pre">GeoMeta</span></code>. A <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code> is a composition of child columns and a
+<code class="docutils literal notranslate"><span class="pre">GeoMeta</span></code> object. The <code class="docutils literal notranslate"><span class="pre">GeoMeta</span></code> owns two arrays that are similar to the
+types buffer and offsets buffer from Arrow dense union.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code> implements four concrete array types: <code class="docutils literal notranslate"><span class="pre">points</span></code>,
+<code class="docutils literal notranslate"><span class="pre">multipoints</span></code>, multilinestrings and multipolygons. Linestrings and
+multilinestrings are stored uniformly as multilinestrings in the
+<code class="docutils literal notranslate"><span class="pre">multilinestrings</span></code> array. Polygons and multipolygons are
+stored uniformly as multipolygons in the <code class="docutils literal notranslate"><span class="pre">multipolygons</span></code> array.</p>
+<p>Points and multipoints are stored separately in different arrays, because
+storing points in a multipoints array requires 50% more storage overhead.
+While this may also be true for linestrings and polygons, many uses of
+cuSpatial involve more complex linestrings and polygons, where the
+storage overhead of multigeometry indirection is lower compared to points.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">GeoSeries</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> inherit from <code class="docutils literal notranslate"><span class="pre">cudf.Series</span></code> and
+<code class="docutils literal notranslate"><span class="pre">cudf.DataFrame</span></code> respectively. <code class="docutils literal notranslate"><span class="pre">Series</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> are both generic
+<code class="docutils literal notranslate"><span class="pre">Frame</span></code> objects which represent a collection of generic columns. cuSpatial
+extends these cuDF objects by allowing <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code>s to be present in the
+frame.</p>
+<p><code class="docutils literal notranslate"><span class="pre">GeoSeries</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> are convertible to and from <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>.
+Interoperability between cuspatial, <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> and other data formats is
+maintained in the <code class="docutils literal notranslate"><span class="pre">cuspatial.io</span></code> package.</p>
+</section>
+<section id="unionarray-compliance">
+<h3>UnionArray Compliance<a class="headerlink" href="#unionarray-compliance" title="Permalink to this heading">#</a></h3>
+<p>As previously mentioned, cuspatial&rsquo;s <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code> is a specialization of
+Arrow&rsquo;s dense <code class="docutils literal notranslate"><span class="pre">UnionArray</span></code>. A fundamental addition to cuDF data types should be
+implemented in cuDF so that <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code> can simply inherit its
+functionality. However, dense <code class="docutils literal notranslate"><span class="pre">UnionArray</span></code> stands distinct from existing data types
+in libcudf and requires substantial effort to implement. In the interim,
+cuSpatial provides a <code class="docutils literal notranslate"><span class="pre">GeoColumn</span></code> complying to the dense <code class="docutils literal notranslate"><span class="pre">UnionArray</span></code>
+specification. This may be upstreamed to libcudf as it matures.</p>
+</section>
+</section>
+<section id="geospatial-computation-apis">
+<h2>Geospatial computation APIs<a class="headerlink" href="#geospatial-computation-apis" title="Permalink to this heading">#</a></h2>
+<p>In addition to data structures, cuSpatial provides a set of computation APIs.
+The computation APIs are organized into several modules. All spatial
+computation modules are further grouped into a <code class="docutils literal notranslate"><span class="pre">spatial</span></code> subpackage.
+Module names should correspond to a specific computation category,
+such as <code class="docutils literal notranslate"><span class="pre">distance</span></code> or <code class="docutils literal notranslate"><span class="pre">join</span></code>. Cuspatial avoids using general category names,
+such as <code class="docutils literal notranslate"><span class="pre">generic</span></code>.</p>
+<section id="legacy-and-modern-apis">
+<h3>Legacy and Modern APIs<a class="headerlink" href="#legacy-and-modern-apis" title="Permalink to this heading">#</a></h3>
+<p>For historical reasons, older cuSpatial APIs expose raw array inputs for
+users to provide raw geometry coordinate arrays and offsets. Newer Python
+APIs should accept a <code class="docutils literal notranslate"><span class="pre">GeoSeries</span></code> or <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> as input. Developers
+may extract geometry offsets and coordinates via cuSpatial&rsquo;s geometry
+accessors such as <code class="docutils literal notranslate"><span class="pre">GeoSeries.points</span></code>, <code class="docutils literal notranslate"><span class="pre">GeoSeries.multipoints</span></code>,
+<code class="docutils literal notranslate"><span class="pre">GeoSeries.lines</span></code>, <code class="docutils literal notranslate"><span class="pre">GeoSeries.polygons</span></code>. Developer can then pass the geometries
+offsets and corrdinate arrays to Cython APIs.</p>
+</section>
+</section>
+<section id="cython-layer">
+<h2>Cython Layer<a class="headerlink" href="#cython-layer" title="Permalink to this heading">#</a></h2>
+<p>The lowest layer of cuspatial is its interaction with <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code> via Cython.
+The Cython layer is composed of two components: C++ bindings and
+Cython wrappers. The first component consists of
+<a class="reference external" href="https://cython.readthedocs.io/en/latest/src/tutorial/pxd_files.html"><code class="docutils literal notranslate"><span class="pre">.pxd</span></code> files</a>,
+which are Cython declaration files that expose the contents of C++ header
+files to other Cython files. The second component consists of Cython
+wrappers for this functionality. These wrappers are necessary to expose
+this functionality to pure Python code.</p>
+<p>To interact with the column-based APIs in <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code>, developers should
+have basic familiarity with <code class="docutils literal notranslate"><span class="pre">libcudf</span></code> objects. <code class="docutils literal notranslate"><span class="pre">libcudf</span></code> is built around two
+principal objects whose names are largely self-explanatory: <code class="docutils literal notranslate"><span class="pre">column</span></code> and
+<code class="docutils literal notranslate"><span class="pre">table</span></code>. <code class="docutils literal notranslate"><span class="pre">libcudf</span></code> also defines corresponding non-owning &ldquo;view&rdquo; types
+<code class="docutils literal notranslate"><span class="pre">column_view</span></code> and <code class="docutils literal notranslate"><span class="pre">table_view</span></code>. Both <code class="docutils literal notranslate"><span class="pre">libcudf</span></code> and <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code> APIs
+typically accept views and return owning types. When a <code class="docutils literal notranslate"><span class="pre">cuspatial</span></code> object
+owns one ore more c++ owning objects, the lifetime of these objects is
+automatically managed by python&rsquo;s reference counting mechanism.</p>
+<p>Similar to cuDF, Cython wrappers must convert <code class="docutils literal notranslate"><span class="pre">Column</span></code> objects into
+<code class="docutils literal notranslate"><span class="pre">column_view</span></code> objects, call the <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code> API, and reconstruct a cuDF
+object from the c++ result. By the time code reaches this stage, the
+objects are assumed to be fully legal inputs to the <code class="docutils literal notranslate"><span class="pre">libcuspatial</span></code> API.
+Therefore the wrapper should not contain additional components besides
+the above.</p>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class="prev-next-area">
+  <a class="left-prev" href="contributing_guide.html" id="prev-link" title="previous page">
+      <i class="fas fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">How to Contribute to cuSpatial</p>
+      </div>
+  </a>
+  <a class="right-next" href="benchmarking.html" id="next-link" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Benchmarking cuSpatial</p>
+  </div>
+  <i class="fas fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fas fa-list"></i> On this page
+</div>
+<nav class="page-toc" id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#overview">
+   Overview
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#core-data-structures">
+   Core Data Structures
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#introduction-to-geoarrow-format">
+     Introduction to GeoArrow Format
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#geocolumn">
+     GeoColumn
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#unionarray-compliance">
+     UnionArray Compliance
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#geospatial-computation-apis">
+   Geospatial computation APIs
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#legacy-and-modern-apis">
+     Legacy and Modern APIs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cython-layer">
+   Cython Layer
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../_sources/developer_guide/library_design.md.txt">
+        <i class="fas fa-file-alt"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2019-2022, NVIDIA.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.2.3.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script><script id="rapids-selector-pixel-invocation" type="text/javascript">_satellite.pageBottom();</script></body></html>
