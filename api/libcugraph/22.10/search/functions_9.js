@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['jaccard_1032',['jaccard',['../namespacecugraph.html#ac234f529dba8fc868a9f9677e168e7b6',1,'cugraph']]],
-  ['jaccard_5fcoefficients_1033',['jaccard_coefficients',['../namespacecugraph.html#aca1b5a35b258db740fc3b29f14e9fe82',1,'cugraph']]],
-  ['jaccard_5flist_1034',['jaccard_list',['../namespacecugraph.html#ac5263bdd552e7951abf3973cc358dfda',1,'cugraph']]]
+  ['jaccard_1038',['jaccard',['../namespacecugraph.html#ac234f529dba8fc868a9f9677e168e7b6',1,'cugraph']]],
+  ['jaccard_5fcoefficients_1039',['jaccard_coefficients',['../namespacecugraph.html#aca1b5a35b258db740fc3b29f14e9fe82',1,'cugraph']]],
+  ['jaccard_5flist_1040',['jaccard_list',['../namespacecugraph.html#ac5263bdd552e7951abf3973cc358dfda',1,'cugraph']]]
 ];
