@@ -10,7 +10,7 @@ title: Recently Updated Check
 
 ## Overview
 
-Summary of _Recently Updated_ GitHub check used by some RAPIDS projects.
+A GitHub action that checks whether a pull-request is up-to-date with the latest changes from the source repository.
 
 ### Intended audience
 
