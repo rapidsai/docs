@@ -39,10 +39,11 @@ var searchData=
   ['buffer_5fsize_104',['buffer_size',['../namespaceML_1_1HoltWinters.html#a5582fc7cab5b09de5fbf3af030775810',1,'ML::HoltWinters']]],
   ['build_5fcondensed_5fhierarchy_105',['build_condensed_hierarchy',['../namespaceML.html#a08a0cbc81f9a9cd7ef8fb78657cf2224',1,'ML']]],
   ['build_5fdivision_5fmap_106',['build_division_map',['../namespaceML.html#a27ed4fdb2f62155d0a1fd81f1405a779',1,'ML']]],
-  ['build_5flinkage_107',['build_linkage',['../namespaceML_1_1HDBSCAN.html#a6039607d24779d20c31f70fe278b66aa',1,'ML::HDBSCAN']]],
-  ['build_5fprogram_108',['build_program',['../namespacecuml_1_1genetic.html#a0ca012f1f63afac17ad68676a07649e3',1,'cuml::genetic']]],
-  ['build_5ftreelite_5fforest_109',['build_treelite_forest',['../namespaceML.html#afbfb9c47569c55ab326bf282f8dba1e9',1,'ML']]],
-  ['builder_2ecuh_110',['builder.cuh',['../builder_8cuh.html',1,'']]],
-  ['builder_5fkernels_2ecuh_111',['builder_kernels.cuh',['../builder__kernels_8cuh.html',1,'']]],
-  ['builder_5fkernels_5fimpl_2ecuh_112',['builder_kernels_impl.cuh',['../builder__kernels__impl_8cuh.html',1,'']]]
+  ['build_5flinkage_107',['build_linkage',['../namespaceML_1_1HDBSCAN.html#a364e76f7104b104665ce1a883fe0616a',1,'ML::HDBSCAN']]],
+  ['build_5fprediction_5fdata_108',['build_prediction_data',['../namespaceML_1_1HDBSCAN_1_1Common.html#aac485cf46cc962aad0365ae09e17c3a2',1,'ML::HDBSCAN::Common']]],
+  ['build_5fprogram_109',['build_program',['../namespacecuml_1_1genetic.html#a0ca012f1f63afac17ad68676a07649e3',1,'cuml::genetic']]],
+  ['build_5ftreelite_5fforest_110',['build_treelite_forest',['../namespaceML.html#afbfb9c47569c55ab326bf282f8dba1e9',1,'ML']]],
+  ['builder_2ecuh_111',['builder.cuh',['../builder_8cuh.html',1,'']]],
+  ['builder_5fkernels_2ecuh_112',['builder_kernels.cuh',['../builder__kernels_8cuh.html',1,'']]],
+  ['builder_5fkernels_5fimpl_2ecuh_113',['builder_kernels_impl.cuh',['../builder__kernels__impl_8cuh.html',1,'']]]
 ];
