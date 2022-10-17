@@ -32,6 +32,18 @@ The current release schedule is posted on the [RAPIDS Maintainers Docs]({% link 
 
 Historical list of completed releases
 
+### Release v22.10 Schedule
+
+Phase | Start | End | Duration
+-- | -- | -- | --
+Development (cuDF/RMM) | Thu, Jul 21 | Wed, Sep 21 | 42 days
+Development (others) | Thu, Jul 28 | Wed, Sep 28 | 42 days
+[Burn Down]({% link releases/process.md %}#burn-down) (cuDF/RMM) | Thu, Sep 22 | Wed, Sep 28 | 5 days
+[Burn Down]({% link releases/process.md %}#burn-down) (others) | Thu, Sep 29 | Wed, Oct 5 | 5 days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM) | Thu, Sep 29 | Wed, Oct 5 | 5 days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | Thu, Oct 6 | Tue, Oct 11 | 4 days
+[Release]({% link releases/process.md %}#releasing) | Wed, Oct 12 | Thu, Oct 13 | 2 days
+
 ### Release v22.08 Schedule
 
 Phase | Start | End | Duration
@@ -41,7 +53,7 @@ Development (others) | Wed, May 25 | Wed, Jul 27 | 41 days
 [Burn Down]({% link releases/process.md %}#burn-down) (cuDF/RMM) | Thu, Jul 21 | Wed, Jul 27 | 5 days
 [Burn Down]({% link releases/process.md %}#burn-down) (others) | Thu, Jul 28 | Wed, Aug 3 | 5 days
 [Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM) | Thu, Jul 28 | Wed, Aug 3 | 5 days
-[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | Thu, Aug 4  | Wed, Aug 10 | 5 days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | Thu, Aug 4 | Wed, Aug 10 | 5 days
 [Release]({% link releases/process.md %}#releasing) | Thu, Aug 11 | Wed, Aug 17 | 5 days
 
 ### Release v22.06 Schedule
