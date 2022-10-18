@@ -1869,6 +1869,27 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; cudf::column &gt;</type>
+      <name>extract_millisecond_fraction</name>
+      <anchorfile>group__datetime__extract.html</anchorfile>
+      <anchor>gabf8189522d9250303da665274d60e4a0</anchor>
+      <arglist>(cudf::column_view const &amp;column, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; cudf::column &gt;</type>
+      <name>extract_microsecond_fraction</name>
+      <anchorfile>group__datetime__extract.html</anchorfile>
+      <anchor>ga782519e0ea4e8e084e03f16542998120</anchor>
+      <arglist>(cudf::column_view const &amp;column, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; cudf::column &gt;</type>
+      <name>extract_nanosecond_fraction</name>
+      <anchorfile>group__datetime__extract.html</anchorfile>
+      <anchor>ga4e5bcdcd8b2df68847f5d840e9af3dd8</anchor>
+      <arglist>(cudf::column_view const &amp;column, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; cudf::column &gt;</type>
       <name>last_day_of_month</name>
       <anchorfile>group__datetime__compute.html</anchorfile>
       <anchor>ga180c2f6373a9ad621a03e40e37090d7f</anchor>
@@ -25551,6 +25572,27 @@
       <name>extract_second</name>
       <anchorfile>group__datetime__extract.html</anchorfile>
       <anchor>ga9479440971fd5ed0bf909d4bd97ae106</anchor>
+      <arglist>(cudf::column_view const &amp;column, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; cudf::column &gt;</type>
+      <name>extract_millisecond_fraction</name>
+      <anchorfile>group__datetime__extract.html</anchorfile>
+      <anchor>gabf8189522d9250303da665274d60e4a0</anchor>
+      <arglist>(cudf::column_view const &amp;column, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; cudf::column &gt;</type>
+      <name>extract_microsecond_fraction</name>
+      <anchorfile>group__datetime__extract.html</anchorfile>
+      <anchor>ga782519e0ea4e8e084e03f16542998120</anchor>
+      <arglist>(cudf::column_view const &amp;column, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; cudf::column &gt;</type>
+      <name>extract_nanosecond_fraction</name>
+      <anchorfile>group__datetime__extract.html</anchorfile>
+      <anchor>ga4e5bcdcd8b2df68847f5d840e9af3dd8</anchor>
       <arglist>(cudf::column_view const &amp;column, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
