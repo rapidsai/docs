@@ -43,7 +43,7 @@ var searchData=
   ['extract_5fbfs_5fpaths_244',['extract_bfs_paths',['../namespacecugraph.html#a9dc29cc93342ec5e630aa8ab056b4229',1,'cugraph']]],
   ['extract_5fego_245',['extract_ego',['../namespacecugraph.html#a73675c501c55f4633b34da4475c9c5ed',1,'cugraph']]],
   ['extract_5fif_5fe_246',['extract_if_e',['../namespacecugraph.html#af7a769059a6a2c13ef6e04f7fa2a8e4f',1,'cugraph']]],
-  ['extract_5finduced_5fsubgraphs_247',['extract_induced_subgraphs',['../namespacecugraph.html#a53b895c6b014c3935ba7a6166b02af22',1,'cugraph']]],
+  ['extract_5finduced_5fsubgraphs_247',['extract_induced_subgraphs',['../namespacecugraph.html#a4a34a369505b90bdf7620ac3b89fb6f4',1,'cugraph']]],
   ['extract_5fpaths_5ffunctor_248',['extract_paths_functor',['../structcugraph_1_1c__api_1_1extract__paths__functor.html',1,'cugraph::c_api']]],
   ['extract_5ftransform_5fv_5ffrontier_5foutgoing_5fe_249',['extract_transform_v_frontier_outgoing_e',['../namespacecugraph.html#a298e4e4038fca9ea7341ca87c8bd11b3',1,'cugraph']]]
 ];
