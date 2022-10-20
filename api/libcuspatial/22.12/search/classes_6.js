@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['vec_5f2d_107',['vec_2d',['../structcuspatial_1_1vec__2d.html',1,'cuspatial']]],
-  ['vec_5f2d_5fto_5ftuple_108',['vec_2d_to_tuple',['../structcuspatial_1_1detail_1_1vec__2d__to__tuple.html',1,'cuspatial::detail']]]
+  ['strided_5ffunctor_128',['strided_functor',['../structcuspatial_1_1detail_1_1strided__functor.html',1,'cuspatial::detail']]]
 ];

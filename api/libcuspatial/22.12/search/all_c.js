@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['quadtree_5fon_5fpoints_75',['quadtree_on_points',['../group__spatial__indexing.html#gaad8459a012c3fbc467d93a8410c8d197',1,'cuspatial::quadtree_on_points(PointIt points_first, PointIt points_last, vec_2d&lt; T &gt; vertex_1, vec_2d&lt; T &gt; vertex_2, T scale, int8_t max_depth, int32_t max_size, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource(), rmm::cuda_stream_view stream=rmm::cuda_stream_default)'],['../group__spatial__indexing.html#gabb509efee50a582de35db54a3a12cdf5',1,'cuspatial::quadtree_on_points(cudf::column_view const &amp;x, cudf::column_view const &amp;y, double x_min, double x_max, double y_min, double y_max, double scale, int8_t max_depth, cudf::size_type max_size, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())']]],
-  ['quadtree_5fpoint_5fin_5fpolygon_76',['quadtree_point_in_polygon',['../group__spatial__join.html#ga2b03e7bcf1a42740a31ed1529a6ca6b6',1,'cuspatial']]],
-  ['quadtree_5fpoint_5fto_5fnearest_5fpolyline_77',['quadtree_point_to_nearest_polyline',['../group__spatial__join.html#ga503dd7c07f7f557fd51cd68a7c0c2165',1,'cuspatial']]]
+  ['nearest_5flinestring_5fgeometry_5fid_56',['nearest_linestring_geometry_id',['../structcuspatial_1_1point__linestring__nearest__points__result.html#aff0cd6fec0cf7c35a1059875788a80b5',1,'cuspatial::point_linestring_nearest_points_result']]],
+  ['nearest_5fpoint_5fgeometry_5fid_57',['nearest_point_geometry_id',['../structcuspatial_1_1point__linestring__nearest__points__result.html#a8f47489732c2dba07b272857c078f138',1,'cuspatial::point_linestring_nearest_points_result']]],
+  ['nearest_5fpoint_5fon_5flinestring_5fxy_58',['nearest_point_on_linestring_xy',['../structcuspatial_1_1point__linestring__nearest__points__result.html#a476b33b65ba577e6d2d1e7ae55566c69',1,'cuspatial::point_linestring_nearest_points_result']]],
+  ['nearest_20points_59',['Nearest Points',['../group__nearest__points.html',1,'']]],
+  ['nearest_5fsegment_5fid_60',['nearest_segment_id',['../structcuspatial_1_1point__linestring__nearest__points__result.html#a309d4af9e6047c1947e5c3fa6217767f',1,'cuspatial::point_linestring_nearest_points_result']]]
 ];

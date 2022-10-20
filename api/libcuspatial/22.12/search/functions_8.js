@@ -1,6 +1,9 @@
 var searchData=
 [
-  ['quadtree_5fon_5fpoints_163',['quadtree_on_points',['../group__spatial__indexing.html#gaad8459a012c3fbc467d93a8410c8d197',1,'cuspatial::quadtree_on_points(PointIt points_first, PointIt points_last, vec_2d&lt; T &gt; vertex_1, vec_2d&lt; T &gt; vertex_2, T scale, int8_t max_depth, int32_t max_size, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource(), rmm::cuda_stream_view stream=rmm::cuda_stream_default)'],['../group__spatial__indexing.html#gabb509efee50a582de35db54a3a12cdf5',1,'cuspatial::quadtree_on_points(cudf::column_view const &amp;x, cudf::column_view const &amp;y, double x_min, double x_max, double y_min, double y_max, double scale, int8_t max_depth, cudf::size_type max_size, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())']]],
-  ['quadtree_5fpoint_5fin_5fpolygon_164',['quadtree_point_in_polygon',['../group__spatial__join.html#ga2b03e7bcf1a42740a31ed1529a6ca6b6',1,'cuspatial']]],
-  ['quadtree_5fpoint_5fto_5fnearest_5fpolyline_165',['quadtree_point_to_nearest_polyline',['../group__spatial__join.html#ga503dd7c07f7f557fd51cd68a7c0c2165',1,'cuspatial']]]
+  ['operator_2a_180',['operator*',['../group__types.html#gaf5883f9ce35c0c597fd6800f8a05311c',1,'cuspatial::operator*(vec_2d&lt; T &gt; vec, T const &amp;r)'],['../group__types.html#ga99e52adb996d7ba7a31b05612040d78f',1,'cuspatial::operator*(T const &amp;r, vec_2d&lt; T &gt; vec)']]],
+  ['operator_2b_181',['operator+',['../group__types.html#ga18845c6d98fb3577d66819d1e8f207a4',1,'cuspatial']]],
+  ['operator_2d_182',['operator-',['../group__types.html#ga879dfe38d155b1d8552b374873c5c5a1',1,'cuspatial']]],
+  ['operator_3c_3c_183',['operator&lt;&lt;',['../group__types.html#gadb30f2a3e5821e4c20a9ede8fa70f295',1,'cuspatial']]],
+  ['operator_3d_3d_184',['operator==',['../group__types.html#ga2e2773d50271fe07f1526168b2ea984f',1,'cuspatial']]],
+  ['operator_5b_5d_185',['operator[]',['../classcuspatial_1_1multipoint__range.html#afc09c0205b8f5495f13337489a709d81',1,'cuspatial::multipoint_range']]]
 ];

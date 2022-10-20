@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['strided_5ffunctor_105',['strided_functor',['../structcuspatial_1_1detail_1_1strided__functor.html',1,'cuspatial::detail']]]
+  ['multipoint_5frange_123',['multipoint_range',['../classcuspatial_1_1multipoint__range.html',1,'cuspatial']]],
+  ['multipoint_5fref_124',['multipoint_ref',['../classcuspatial_1_1multipoint__ref.html',1,'cuspatial']]]
 ];

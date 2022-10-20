@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['join_5fquadtree_5fand_5fbounding_5fboxes_146',['join_quadtree_and_bounding_boxes',['../group__spatial__join.html#gafa5eacc638aa756aaa66bd5c3cd6c160',1,'cuspatial']]]
+  ['end_170',['end',['../classcuspatial_1_1multipoint__ref.html#a61e36e042f3da51ec1b17df067392e00',1,'cuspatial::multipoint_ref::end()'],['../classcuspatial_1_1multipoint__range.html#a64a6e889f9355b25cca1a85157a2ac2f',1,'cuspatial::multipoint_range::end()']]]
 ];

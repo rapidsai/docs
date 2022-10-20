@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['nearest_5flinestring_5fgeometry_5fid_169',['nearest_linestring_geometry_id',['../structcuspatial_1_1point__linestring__nearest__points__result.html#aff0cd6fec0cf7c35a1059875788a80b5',1,'cuspatial::point_linestring_nearest_points_result']]],
-  ['nearest_5fpoint_5fgeometry_5fid_170',['nearest_point_geometry_id',['../structcuspatial_1_1point__linestring__nearest__points__result.html#a8f47489732c2dba07b272857c078f138',1,'cuspatial::point_linestring_nearest_points_result']]],
-  ['nearest_5fpoint_5fon_5flinestring_5fxy_171',['nearest_point_on_linestring_xy',['../structcuspatial_1_1point__linestring__nearest__points__result.html#a476b33b65ba577e6d2d1e7ae55566c69',1,'cuspatial::point_linestring_nearest_points_result']]],
-  ['nearest_5fsegment_5fid_172',['nearest_segment_id',['../structcuspatial_1_1point__linestring__nearest__points__result.html#a309d4af9e6047c1947e5c3fa6217767f',1,'cuspatial::point_linestring_nearest_points_result']]]
+  ['_5fgeometry_5fbegin_203',['_geometry_begin',['../classcuspatial_1_1multipoint__range.html#a3b1043c7bf619544413f192e58100645',1,'cuspatial::multipoint_range']]],
+  ['_5fgeometry_5fend_204',['_geometry_end',['../classcuspatial_1_1multipoint__range.html#ae9173494b99764c608ec715a542392fd',1,'cuspatial::multipoint_range']]],
+  ['_5fpoints_5fbegin_205',['_points_begin',['../classcuspatial_1_1multipoint__range.html#a9d8e32eb5c8cc9c2ab9dda3ec3e43c6b',1,'cuspatial::multipoint_range']]],
+  ['_5fpoints_5fend_206',['_points_end',['../classcuspatial_1_1multipoint__range.html#a8f51d662abfb36ed229c8461f4f09233',1,'cuspatial::multipoint_range']]]
 ];

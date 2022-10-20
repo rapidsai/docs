@@ -1,8 +1,4 @@
 var searchData=
 [
-  ['operator_2a_150',['operator*',['../group__types.html#gaf5883f9ce35c0c597fd6800f8a05311c',1,'cuspatial::operator*(vec_2d&lt; T &gt; vec, T const &amp;r)'],['../group__types.html#ga99e52adb996d7ba7a31b05612040d78f',1,'cuspatial::operator*(T const &amp;r, vec_2d&lt; T &gt; vec)']]],
-  ['operator_2b_151',['operator+',['../group__types.html#ga18845c6d98fb3577d66819d1e8f207a4',1,'cuspatial']]],
-  ['operator_2d_152',['operator-',['../group__types.html#ga879dfe38d155b1d8552b374873c5c5a1',1,'cuspatial']]],
-  ['operator_3c_3c_153',['operator&lt;&lt;',['../group__types.html#gadb30f2a3e5821e4c20a9ede8fa70f295',1,'cuspatial']]],
-  ['operator_3d_3d_154',['operator==',['../group__types.html#ga2e2773d50271fe07f1526168b2ea984f',1,'cuspatial']]]
+  ['lonlat_5fto_5fcartesian_173',['lonlat_to_cartesian',['../group__coordinate__transform.html#ga68569f920b8fca1c3ff77450ba883afb',1,'cuspatial::lonlat_to_cartesian(double origin_lon, double origin_lat, cudf::column_view const &amp;input_lon, cudf::column_view const &amp;input_lat, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())'],['../coordinate__transform_8cuh.html#ab9acbb25a944c9180252721057f66dc6',1,'cuspatial::lonlat_to_cartesian(InputIt lon_lat_first, InputIt lon_lat_last, OutputIt xy_first, vec_2d&lt; T &gt; origin, rmm::cuda_stream_view stream=rmm::cuda_stream_default)']]]
 ];

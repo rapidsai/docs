@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['libcuspatial_20c_2b_2b_20developer_20guide_36',['libcuspatial C++ Developer Guide',['../DEVELOPER_GUIDE.html',1,'']]],
-  ['linestring_5fdistance_2ecuh_37',['linestring_distance.cuh',['../linestring__distance_8cuh.html',1,'']]],
-  ['linestring_5fdistance_2ehpp_38',['linestring_distance.hpp',['../linestring__distance_8hpp.html',1,'']]],
-  ['logic_5ferror_39',['logic_error',['../structcuspatial_1_1logic__error.html',1,'cuspatial']]],
-  ['lonlat_5fto_5fcartesian_40',['lonlat_to_cartesian',['../group__coordinate__transform.html#ga68569f920b8fca1c3ff77450ba883afb',1,'cuspatial::lonlat_to_cartesian(double origin_lon, double origin_lat, cudf::column_view const &amp;input_lon, cudf::column_view const &amp;input_lat, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())'],['../coordinate__transform_8cuh.html#ab9acbb25a944c9180252721057f66dc6',1,'cuspatial::lonlat_to_cartesian(InputIt lon_lat_first, InputIt lon_lat_last, OutputIt xy_first, vec_2d&lt; T &gt; origin, rmm::cuda_stream_view stream=rmm::cuda_stream_default)']]],
-  ['libcuspatial_20c_2b_2b_20documentation_20guide_41',['libcuspatial C++ Documentation Guide',['../md_developer_guide_DOCUMENTATION.html',1,'']]]
+  ['hausdorff_2ecuh_34',['hausdorff.cuh',['../hausdorff_8cuh.html',1,'']]],
+  ['hausdorff_2ehpp_35',['hausdorff.hpp',['../hausdorff_8hpp.html',1,'']]],
+  ['haversine_2ecuh_36',['haversine.cuh',['../haversine_8cuh.html',1,'']]],
+  ['haversine_2ehpp_37',['haversine.hpp',['../haversine_8hpp.html',1,'']]],
+  ['haversine_5fdistance_38',['haversine_distance',['../group__distance.html#ga84eb7a8d22b290107e00e9000effe374',1,'cuspatial::haversine_distance(cudf::column_view const &amp;a_lon, cudf::column_view const &amp;a_lat, cudf::column_view const &amp;b_lon, cudf::column_view const &amp;b_lat, double const radius=EARTH_RADIUS_KM, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())'],['../group__distance.html#gabcc3f2edbf4d84139779ada72c530aee',1,'cuspatial::haversine_distance(LonLatItA a_lonlat_first, LonLatItA a_lonlat_last, LonLatItB b_lonlat_first, OutputIt distance_first, T const radius=EARTH_RADIUS_KM, rmm::cuda_stream_view stream=rmm::cuda_stream_default)']]]
 ];

@@ -1,21 +1,7 @@
 var searchData=
 [
-  ['constants_2ehpp_0',['constants.hpp',['../constants_8hpp.html',1,'']]],
-  ['coordinate_20transform_1',['Coordinate Transform',['../group__coordinate__transform.html',1,'']]],
-  ['coordinate_5ftransform_2ecuh_2',['coordinate_transform.cuh',['../coordinate__transform_8cuh.html',1,'']]],
-  ['coordinate_5ftransform_2ehpp_3',['coordinate_transform.hpp',['../coordinate__transform_8hpp.html',1,'']]],
-  ['copy_5fpoints_5fin_5frange_4',['copy_points_in_range',['../group__spatial__relationship.html#gaabc1e4b45fbe5c8bd0473b97fe94d5fd',1,'cuspatial']]],
-  ['count_5fpoints_5fin_5frange_5',['count_points_in_range',['../group__spatial__relationship.html#ga3dddce88ff610262003b49d68b6d51cc',1,'cuspatial']]],
-  ['cubic_20spline_6',['Cubic Spline',['../group__cubic__spline.html',1,'']]],
-  ['cubic_5fspline_2ehpp_7',['cubic_spline.hpp',['../cubic__spline_8hpp.html',1,'']]],
-  ['cubicspline_5fcoefficients_8',['cubicspline_coefficients',['../group__cubic__spline.html#ga807d4d0bc2ea9cc952b23a17408988be',1,'cuspatial']]],
-  ['cubicspline_5finterpolate_9',['cubicspline_interpolate',['../group__cubic__spline.html#ga6558968d3fd40ee734b066037dc60fa5',1,'cuspatial']]],
-  ['cuda_5ferror_10',['cuda_error',['../structcuspatial_1_1cuda__error.html',1,'cuspatial']]],
-  ['cusparse_5ferror_11',['cusparse_error',['../structcuspatial_1_1cusparse__error.html',1,'cuspatial']]],
-  ['cuspatial_5fcheck_5fcuda_12',['CUSPATIAL_CHECK_CUDA',['../error_8hpp.html#afe9dae1e532c6d6925fff60b1a1b80d7',1,'error.hpp']]],
-  ['constants_13',['Constants',['../group__cuspatial__constants.html',1,'']]],
-  ['cuspatial_5fcuda_5ftry_14',['CUSPATIAL_CUDA_TRY',['../error_8hpp.html#acfc1039c29661ff7f37f5b83b2b7a6fd',1,'error.hpp']]],
-  ['cuspatial_5fexpects_15',['CUSPATIAL_EXPECTS',['../error_8hpp.html#ac62b6e15da5763cd1ae65f3845a697bc',1,'error.hpp']]],
-  ['cuspatial_5ffail_16',['CUSPATIAL_FAIL',['../error_8hpp.html#ae11b6562fe29fefbd9255c33b879c0b3',1,'error.hpp']]],
-  ['cuspatial_20c_2b_2b_20api_20refactoring_20guide_17',['cuSpatial C++ API Refactoring Guide',['../md_developer_guide_REFACTORING_GUIDE.html',1,'']]]
+  ['_5fgeometry_5fbegin_0',['_geometry_begin',['../classcuspatial_1_1multipoint__range.html#a3b1043c7bf619544413f192e58100645',1,'cuspatial::multipoint_range']]],
+  ['_5fgeometry_5fend_1',['_geometry_end',['../classcuspatial_1_1multipoint__range.html#ae9173494b99764c608ec715a542392fd',1,'cuspatial::multipoint_range']]],
+  ['_5fpoints_5fbegin_2',['_points_begin',['../classcuspatial_1_1multipoint__range.html#a9d8e32eb5c8cc9c2ab9dda3ec3e43c6b',1,'cuspatial::multipoint_range']]],
+  ['_5fpoints_5fend_3',['_points_end',['../classcuspatial_1_1multipoint__range.html#a8f51d662abfb36ed229c8461f4f09233',1,'cuspatial::multipoint_range']]]
 ];

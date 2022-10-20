@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['unit_20benchmarking_20in_20libcuspatial_93',['Unit Benchmarking in libcuspatial',['../md_developer_guide_BENCHMARKING.html',1,'']]],
-  ['unit_20testing_20in_20libcuspatial_94',['Unit Testing in libcuspatial',['../md_developer_guide_TESTING.html',1,'']]]
+  ['ranges_94',['Ranges',['../group__ranges.html',1,'']]],
+  ['read_5fpolygon_5fshapefile_95',['read_polygon_shapefile',['../group__io.html#ga602774407b16397be7f446dc3069dc09',1,'cuspatial']]]
 ];

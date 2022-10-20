@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['types_87',['Types',['../group__cuspatial__types.html',1,'(Global Namespace)'],['../group__types.html',1,'(Global Namespace)']]],
-  ['trajectory_2ehpp_88',['trajectory.hpp',['../trajectory_8hpp.html',1,'']]],
-  ['trajectory_20apis_89',['Trajectory APIs',['../group__trajectory__api.html',1,'']]],
-  ['trajectory_5fbounding_5fboxes_90',['trajectory_bounding_boxes',['../group__trajectory__api.html#gab8f8bc9719dbf7328d9323a47950ce39',1,'cuspatial']]],
-  ['trajectory_5fdistances_5fand_5fspeeds_91',['trajectory_distances_and_speeds',['../group__trajectory__api.html#ga128ec9107c4708a142e20f711f11bd48',1,'cuspatial']]],
-  ['tuple_5fto_5fvec_5f2d_92',['tuple_to_vec_2d',['../structcuspatial_1_1detail_1_1tuple__to__vec__2d.html',1,'cuspatial::detail']]]
+  ['quadtree_5fon_5fpoints_91',['quadtree_on_points',['../group__spatial__indexing.html#gaad8459a012c3fbc467d93a8410c8d197',1,'cuspatial::quadtree_on_points(PointIt points_first, PointIt points_last, vec_2d&lt; T &gt; vertex_1, vec_2d&lt; T &gt; vertex_2, T scale, int8_t max_depth, int32_t max_size, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource(), rmm::cuda_stream_view stream=rmm::cuda_stream_default)'],['../group__spatial__indexing.html#gabb509efee50a582de35db54a3a12cdf5',1,'cuspatial::quadtree_on_points(cudf::column_view const &amp;x, cudf::column_view const &amp;y, double x_min, double x_max, double y_min, double y_max, double scale, int8_t max_depth, cudf::size_type max_size, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())']]],
+  ['quadtree_5fpoint_5fin_5fpolygon_92',['quadtree_point_in_polygon',['../group__spatial__join.html#ga2b03e7bcf1a42740a31ed1529a6ca6b6',1,'cuspatial']]],
+  ['quadtree_5fpoint_5fto_5fnearest_5fpolyline_93',['quadtree_point_to_nearest_polyline',['../group__spatial__join.html#ga503dd7c07f7f557fd51cd68a7c0c2165',1,'cuspatial']]]
 ];
