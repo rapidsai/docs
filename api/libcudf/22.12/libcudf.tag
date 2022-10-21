@@ -205,8 +205,8 @@
       <type>std::unique_ptr&lt; Base &gt;</type>
       <name>make_collect_set_aggregation</name>
       <anchorfile>group__aggregation__factories.html</anchorfile>
-      <anchor>gae02625d427793418d9d1a854c81265d2</anchor>
-      <arglist>(null_policy null_handling=null_policy::INCLUDE, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::UNEQUAL)</arglist>
+      <anchor>gaebe680a414f3c942a631f609bcfb5781</anchor>
+      <arglist>(null_policy null_handling=null_policy::INCLUDE, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL)</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; Base &gt;</type>
@@ -1504,15 +1504,15 @@
       <type>std::unique_ptr&lt; table &gt;</type>
       <name>scatter</name>
       <anchorfile>group__copy__scatter.html</anchorfile>
-      <anchor>gaa4274057627ebf33639e757f660e2ec6</anchor>
-      <arglist>(table_view const &amp;source, column_view const &amp;scatter_map, table_view const &amp;target, bool check_bounds=false, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga22d4d656b63b6371a9a39d47a453c236</anchor>
+      <arglist>(table_view const &amp;source, column_view const &amp;scatter_map, table_view const &amp;target, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; table &gt;</type>
       <name>scatter</name>
       <anchorfile>group__copy__scatter.html</anchorfile>
-      <anchor>ga3940b7eebe85a49b6cf4e37c1965f63e</anchor>
-      <arglist>(std::vector&lt; std::reference_wrapper&lt; const scalar &gt;&gt; const &amp;source, column_view const &amp;indices, table_view const &amp;target, bool check_bounds=false, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga2d228e335ecd653a1d69b8dfb829a9ec</anchor>
+      <arglist>(std::vector&lt; std::reference_wrapper&lt; const scalar &gt;&gt; const &amp;source, column_view const &amp;indices, table_view const &amp;target, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -2321,8 +2321,8 @@
       <type>std::unique_ptr&lt; table &gt;</type>
       <name>repeat</name>
       <anchorfile>group__transformation__fill.html</anchorfile>
-      <anchor>ga1db3529bc2a411a342cb0fb6cb27e84f</anchor>
-      <arglist>(table_view const &amp;input_table, column_view const &amp;count, bool check_count=false, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga24eb5c6c88d719a3f32e7c9c267f56ea</anchor>
+      <arglist>(table_view const &amp;input_table, column_view const &amp;count, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; table &gt;</type>
@@ -19207,8 +19207,8 @@
       <type>std::unique_ptr&lt; Base &gt;</type>
       <name>make_collect_set_aggregation</name>
       <anchorfile>group__aggregation__factories.html</anchorfile>
-      <anchor>gae02625d427793418d9d1a854c81265d2</anchor>
-      <arglist>(null_policy null_handling=null_policy::INCLUDE, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::UNEQUAL)</arglist>
+      <anchor>gaebe680a414f3c942a631f609bcfb5781</anchor>
+      <arglist>(null_policy null_handling=null_policy::INCLUDE, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL)</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; Base &gt;</type>
@@ -19536,15 +19536,15 @@
       <type>std::unique_ptr&lt; table &gt;</type>
       <name>scatter</name>
       <anchorfile>group__copy__scatter.html</anchorfile>
-      <anchor>gaa4274057627ebf33639e757f660e2ec6</anchor>
-      <arglist>(table_view const &amp;source, column_view const &amp;scatter_map, table_view const &amp;target, bool check_bounds=false, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga22d4d656b63b6371a9a39d47a453c236</anchor>
+      <arglist>(table_view const &amp;source, column_view const &amp;scatter_map, table_view const &amp;target, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; table &gt;</type>
       <name>scatter</name>
       <anchorfile>group__copy__scatter.html</anchorfile>
-      <anchor>ga3940b7eebe85a49b6cf4e37c1965f63e</anchor>
-      <arglist>(std::vector&lt; std::reference_wrapper&lt; const scalar &gt;&gt; const &amp;source, column_view const &amp;indices, table_view const &amp;target, bool check_bounds=false, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga2d228e335ecd653a1d69b8dfb829a9ec</anchor>
+      <arglist>(std::vector&lt; std::reference_wrapper&lt; const scalar &gt;&gt; const &amp;source, column_view const &amp;indices, table_view const &amp;target, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -19823,8 +19823,8 @@
       <type>std::unique_ptr&lt; table &gt;</type>
       <name>repeat</name>
       <anchorfile>group__transformation__fill.html</anchorfile>
-      <anchor>ga1db3529bc2a411a342cb0fb6cb27e84f</anchor>
-      <arglist>(table_view const &amp;input_table, column_view const &amp;count, bool check_count=false, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga24eb5c6c88d719a3f32e7c9c267f56ea</anchor>
+      <arglist>(table_view const &amp;input_table, column_view const &amp;count, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; table &gt;</type>
@@ -23891,15 +23891,15 @@
       <type>std::unique_ptr&lt; table &gt;</type>
       <name>scatter</name>
       <anchorfile>group__copy__scatter.html</anchorfile>
-      <anchor>gaa4274057627ebf33639e757f660e2ec6</anchor>
-      <arglist>(table_view const &amp;source, column_view const &amp;scatter_map, table_view const &amp;target, bool check_bounds=false, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga22d4d656b63b6371a9a39d47a453c236</anchor>
+      <arglist>(table_view const &amp;source, column_view const &amp;scatter_map, table_view const &amp;target, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; table &gt;</type>
       <name>scatter</name>
       <anchorfile>group__copy__scatter.html</anchorfile>
-      <anchor>ga3940b7eebe85a49b6cf4e37c1965f63e</anchor>
-      <arglist>(std::vector&lt; std::reference_wrapper&lt; const scalar &gt;&gt; const &amp;source, column_view const &amp;indices, table_view const &amp;target, bool check_bounds=false, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga2d228e335ecd653a1d69b8dfb829a9ec</anchor>
+      <arglist>(std::vector&lt; std::reference_wrapper&lt; const scalar &gt;&gt; const &amp;source, column_view const &amp;indices, table_view const &amp;target, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; table &gt;</type>
@@ -24645,8 +24645,8 @@
       <type>std::unique_ptr&lt; Base &gt;</type>
       <name>make_collect_set_aggregation</name>
       <anchorfile>group__aggregation__factories.html</anchorfile>
-      <anchor>gae02625d427793418d9d1a854c81265d2</anchor>
-      <arglist>(null_policy null_handling=null_policy::INCLUDE, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::UNEQUAL)</arglist>
+      <anchor>gaebe680a414f3c942a631f609bcfb5781</anchor>
+      <arglist>(null_policy null_handling=null_policy::INCLUDE, null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL)</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; Base &gt;</type>
@@ -25226,8 +25226,8 @@
       <type>std::unique_ptr&lt; table &gt;</type>
       <name>repeat</name>
       <anchorfile>group__transformation__fill.html</anchorfile>
-      <anchor>ga1db3529bc2a411a342cb0fb6cb27e84f</anchor>
-      <arglist>(table_view const &amp;input_table, column_view const &amp;count, bool check_count=false, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga24eb5c6c88d719a3f32e7c9c267f56ea</anchor>
+      <arglist>(table_view const &amp;input_table, column_view const &amp;count, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; table &gt;</type>
@@ -28077,7 +28077,7 @@
   </compound>
   <compound kind="page">
     <name>md_developer_guide_DOCUMENTATION</name>
-    <title>libcudf++ C++ Documentation Guide</title>
+    <title>libcudf C++ Documentation Guide</title>
     <filename>md_developer_guide_DOCUMENTATION.html</filename>
   </compound>
   <compound kind="page">

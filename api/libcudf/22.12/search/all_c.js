@@ -63,7 +63,7 @@ var searchData=
   ['lowest_5fvalue_986',['lowest_value',['../structcudf_1_1dictionary__wrapper.html#aa2b1392a42877e5f115b9aabd44b0b47',1,'cudf::dictionary_wrapper']]],
   ['lz4_987',['LZ4',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8aca0c64c0de8f56bc573828ea6d764594',1,'cudf::io']]],
   ['lzo_988',['LZO',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8a5505119d5315d500a0fcdbe9f521d126',1,'cudf::io']]],
-  ['libcudf_2b_2b_20c_2b_2b_20documentation_20guide_989',['libcudf++ C++ Documentation Guide',['../md_developer_guide_DOCUMENTATION.html',1,'']]],
+  ['libcudf_20c_2b_2b_20documentation_20guide_989',['libcudf C++ Documentation Guide',['../md_developer_guide_DOCUMENTATION.html',1,'']]],
   ['sorting_2ehpp_990',['sorting.hpp',['../lists_2sorting_8hpp.html',1,'']]],
   ['stream_5fcompaction_2ehpp_991',['stream_compaction.hpp',['../lists_2stream__compaction_8hpp.html',1,'']]]
 ];
