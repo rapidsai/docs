@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en"><head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>dask_cuda.local_cuda_cluster &mdash; dask-cuda 22.12.00a0+gacc96a5 documentation</title>
+  <title>dask_cuda.local_cuda_cluster &mdash; dask-cuda 22.12.00a0+g713df2d documentation</title>
       <link href="../../_static/pygments.css" rel="stylesheet" type="text/css">
       <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css">
       <link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet" type="text/css">
@@ -86,7 +86,6 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">dask</span>
-<span class="kn">from</span> <span class="nn">dask.utils</span> <span class="kn">import</span> <span class="n">parse_bytes</span>
 <span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">LocalCluster</span><span class="p">,</span> <span class="n">Nanny</span><span class="p">,</span> <span class="n">Worker</span>
 <span class="kn">from</span> <span class="nn">distributed.worker_memory</span> <span class="kn">import</span> <span class="n">parse_memory_limit</span>
 
@@ -183,18 +182,19 @@
 <span class="sd">        Set environment variables to enable UCX RDMA connection manager support,</span>
 <span class="sd">        requires ``protocol="ucx"`` and ``enable_infiniband=True``.</span>
 <span class="sd">    rmm_pool_size : int, str or None, default None</span>
-<span class="sd">        RMM pool size to initialize each worker with. Can be an integer (bytes), string</span>
-<span class="sd">        (like ``"5GB"`` or ``"5000M"``), or ``None`` to disable RMM pools.</span>
+<span class="sd">        RMM pool size to initialize each worker with. Can be an integer (bytes), float</span>
+<span class="sd">        (fraction of total device memory), string (like ``"5GB"`` or ``"5000M"``), or</span>
+<span class="sd">        ``None`` to disable RMM pools.</span>
 
 <span class="sd">        .. note::</span>
 <span class="sd">            This size is a per-worker configuration, and not cluster-wide.</span>
 <span class="sd">    rmm_maximum_pool_size : int, str or None, default None</span>
 <span class="sd">        When ``rmm_pool_size`` is set, this argument indicates</span>
 <span class="sd">        the maximum pool size.</span>
-<span class="sd">        Can be an integer (bytes), string (like ``"5GB"`` or ``"5000M"``) or ``None``.</span>
-<span class="sd">        By default, the total available memory on the GPU is used.</span>
-<span class="sd">        ``rmm_pool_size`` must be specified to use RMM pool and</span>
-<span class="sd">        to set the maximum pool size.</span>
+<span class="sd">        Can be an integer (bytes), float (fraction of total device memory), string</span>
+<span class="sd">        (like ``"5GB"`` or ``"5000M"``) or ``None``. By default, the total available</span>
+<span class="sd">        memory on the GPU is used. ``rmm_pool_size`` must be specified to use RMM pool</span>
+<span class="sd">        and to set the maximum pool size.</span>
 
 <span class="sd">        .. note::</span>
 <span class="sd">            This size is a per-worker configuration, and not cluster-wide.</span>
@@ -339,10 +339,6 @@
                     <span class="s2">"RMM pool and managed memory are incompatible with asynchronous "</span>
                     <span class="s2">"allocator"</span>
                 <span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rmm_pool_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">rmm_pool_size</span> <span class="o">=</span> <span class="n">parse_bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rmm_pool_size</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rmm_maximum_pool_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">rmm_maximum_pool_size</span> <span class="o">=</span> <span class="n">parse_bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rmm_maximum_pool_size</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">enable_nvlink</span><span class="p">:</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
