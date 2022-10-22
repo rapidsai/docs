@@ -240,8 +240,8 @@
       <type>std::unique_ptr&lt; Base &gt;</type>
       <name>make_merge_sets_aggregation</name>
       <anchorfile>group__aggregation__factories.html</anchorfile>
-      <anchor>gaf05edd87facfdb3c0300892e9ba2a215</anchor>
-      <arglist>(null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::UNEQUAL)</arglist>
+      <anchor>ga46a7aab27ded048e5f7a2462eb8106b2</anchor>
+      <arglist>(null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL)</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; Base &gt;</type>
@@ -422,15 +422,15 @@
       <type>std::pair&lt; rmm::device_buffer, size_type &gt;</type>
       <name>scalar_col_valid_mask_and</name>
       <anchorfile>binaryop_8hpp.html</anchorfile>
-      <anchor>a12ea1fe20b89f34cb554c81fc6510f4f</anchor>
-      <arglist>(column_view const &amp;col, scalar const &amp;s, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>aac03090043af72f2b82fbd88b364590a</anchor>
+      <arglist>(column_view const &amp;col, scalar const &amp;s, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>apply_sorting_struct_binary_op</name>
       <anchorfile>binaryop_8hpp.html</anchorfile>
-      <anchor>acfab8cbab25db4bf4b572c7c6e4719fb</anchor>
-      <arglist>(mutable_column_view &amp;out, column_view const &amp;lhs, column_view const &amp;rhs, bool is_lhs_scalar, bool is_rhs_scalar, binary_operator op, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+      <anchor>afd0f9a637352f14fdd9623ae226bfe79</anchor>
+      <arglist>(mutable_column_view &amp;out, column_view const &amp;lhs, column_view const &amp;rhs, bool is_lhs_scalar, bool is_rhs_scalar, binary_operator op, rmm::cuda_stream_view stream=cudf::get_default_stream())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -774,92 +774,92 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_numeric_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>gad8b36985d1d61f70f94618fc3b1d62d2</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga5dba634555d7bd1ed528324f9ffe3a74</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_numeric_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga660fe09e08bb5f2f0c2a4f7b0e4e7d87</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaaac9db86bf3dd1bceacf93cfaac946ab</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_fixed_point_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga2643300b0ecece96f7fda5368e3b3074</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga8d4662d09fbcf25c9e136117c32beff7</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_fixed_point_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>gac33356275c21fcd6446ad6ab946db1ec</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gad4acb226b3625c54288ce31292078ddf</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_timestamp_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga226762ec117a2d4197f4aa5f73988aa2</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gadd88a93166aabc9db59c6432ed95ed50</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_timestamp_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga4b8e17193bc07a264b2a38a292938975</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga792492abff4dca48551d86fe906888b1</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_duration_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga4767f2ef1d0bf5595e4b0619f5c92223</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga38e53e7bab4c720c9b652ea644302232</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_duration_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga980c432732280c63efc4291e218ba3a3</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gae9ae25da34a1201745e66c3b57d48a5f</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_fixed_width_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga6c32b69ec1ea42c5be6948122fd87b74</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaa807d5eb1e0f71e5cc879a6d15b891d3</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_fixed_width_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga54f354e546435b6187faace7d055158e</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gae7859814b8305a3ee2643e03a0b5737e</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_strings_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga17a8df722294a0856bd13641660976ef</anchor>
-      <arglist>(cudf::device_span&lt; thrust::pair&lt; const char *, size_type &gt; const &gt; strings, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga1402fad84517486e091f8c59f48131ef</anchor>
+      <arglist>(cudf::device_span&lt; thrust::pair&lt; const char *, size_type &gt; const &gt; strings, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_strings_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga993941cbf14270bcea2cc95427996de1</anchor>
-      <arglist>(cudf::device_span&lt; string_view const &gt; string_views, const string_view null_placeholder, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga43b71803b5e2f2f3e60167b3559ba8a2</anchor>
+      <arglist>(cudf::device_span&lt; string_view const &gt; string_views, const string_view null_placeholder, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_strings_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga49259670a95fcf8dd2aac7d595f47cad</anchor>
-      <arglist>(cudf::device_span&lt; char const &gt; strings, cudf::device_span&lt; size_type const &gt; offsets, cudf::device_span&lt; bitmask_type const &gt; null_mask={}, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga2a80996f084aa4b12066522156c46376</anchor>
+      <arglist>(cudf::device_span&lt; char const &gt; strings, cudf::device_span&lt; size_type const &gt; offsets, cudf::device_span&lt; bitmask_type const &gt; null_mask={}, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -879,29 +879,29 @@
       <type>std::unique_ptr&lt; cudf::column &gt;</type>
       <name>make_lists_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>gad2565b997318bd92a0cb4346dc1aef51</anchor>
-      <arglist>(size_type num_rows, std::unique_ptr&lt; column &gt; offsets_column, std::unique_ptr&lt; column &gt; child_column, size_type null_count, rmm::device_buffer &amp;&amp;null_mask, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga4911069154b3a0f9c07f50e3431c293e</anchor>
+      <arglist>(size_type num_rows, std::unique_ptr&lt; column &gt; offsets_column, std::unique_ptr&lt; column &gt; child_column, size_type null_count, rmm::device_buffer &amp;&amp;null_mask, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; cudf::column &gt;</type>
       <name>make_structs_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga20b4015338542f48ca989ff3903a4038</anchor>
-      <arglist>(size_type num_rows, std::vector&lt; std::unique_ptr&lt; column &gt;&gt; &amp;&amp;child_columns, size_type null_count, rmm::device_buffer &amp;&amp;null_mask, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gab2635dbc8c557130e0ed2044cb66d329</anchor>
+      <arglist>(size_type num_rows, std::vector&lt; std::unique_ptr&lt; column &gt;&gt; &amp;&amp;child_columns, size_type null_count, rmm::device_buffer &amp;&amp;null_mask, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_column_from_scalar</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>gacf521c0f063c0af6634e75473de5b1c8</anchor>
-      <arglist>(scalar const &amp;s, size_type size, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gac34fa053551d43dfe798d4f2727bf451</anchor>
+      <arglist>(scalar const &amp;s, size_type size, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_dictionary_from_scalar</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga33568e589faffcb6ab84c08d273bf5d5</anchor>
-      <arglist>(scalar const &amp;s, size_type size, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga5c929ab7155762992c30512e840c42f9</anchor>
+      <arglist>(scalar const &amp;s, size_type size, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -2037,8 +2037,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_dictionary_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga6683db8e96a34aa7a28438876ba92af9</anchor>
-      <arglist>(column_view const &amp;keys_column, column_view const &amp;indices_column, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga0a837699fb743745e73568f3c07c187b</anchor>
+      <arglist>(column_view const &amp;keys_column, column_view const &amp;indices_column, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -2051,8 +2051,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_dictionary_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga8f6dcb4c45bf2c2bbfb7e2e24be60bb1</anchor>
-      <arglist>(std::unique_ptr&lt; column &gt; keys_column, std::unique_ptr&lt; column &gt; indices_column, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaa983ab78050e1c01cf1d1a9172372444</anchor>
+      <arglist>(std::unique_ptr&lt; column &gt; keys_column, std::unique_ptr&lt; column &gt; indices_column, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -3419,8 +3419,8 @@
       <type>std::pair&lt; std::unique_ptr&lt; table &gt;, std::vector&lt; size_type &gt; &gt;</type>
       <name>hash_partition</name>
       <anchorfile>group__reorder__partition.html</anchorfile>
-      <anchor>gadd0425513762803e040d0ff3312601e1</anchor>
-      <arglist>(table_view const &amp;input, std::vector&lt; size_type &gt; const &amp;columns_to_hash, int num_partitions, hash_id hash_function=hash_id::HASH_MURMUR3, uint32_t seed=DEFAULT_HASH_SEED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga65fe4ae8d1cbe9db31dbda43ebea0e7a</anchor>
+      <arglist>(table_view const &amp;input, std::vector&lt; size_type &gt; const &amp;columns_to_hash, int num_partitions, hash_id hash_function=hash_id::HASH_MURMUR3, uint32_t seed=DEFAULT_HASH_SEED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; cudf::table &gt;, std::vector&lt; cudf::size_type &gt; &gt;</type>
@@ -3480,15 +3480,15 @@
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>reduce</name>
       <anchorfile>group__aggregation__reduction.html</anchorfile>
-      <anchor>gaabf4fa288981643cca147633bdf58035</anchor>
-      <arglist>(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga48cc284a9371891975a6219cd3d2e36e</anchor>
+      <arglist>(column_view const &amp;col, reduce_aggregation const &amp;agg, data_type output_dtype, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>reduce</name>
       <anchorfile>group__aggregation__reduction.html</anchorfile>
-      <anchor>gac3c645be6677e326bea98fe901665d50</anchor>
-      <arglist>(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, std::optional&lt; std::reference_wrapper&lt; scalar const &gt;&gt; init, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga6a05c56d4b190f83a3001357898354be</anchor>
+      <arglist>(column_view const &amp;col, reduce_aggregation const &amp;agg, data_type output_dtype, std::optional&lt; std::reference_wrapper&lt; scalar const &gt;&gt; init, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -3508,8 +3508,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>scan</name>
       <anchorfile>group__aggregation__reduction.html</anchorfile>
-      <anchor>ga4d7636cf6e4568d9e92a4c5dc0310077</anchor>
-      <arglist>(const column_view &amp;input, std::unique_ptr&lt; scan_aggregation &gt; const &amp;agg, scan_type inclusive, null_policy null_handling=null_policy::EXCLUDE, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga52e9ced6d3b980ad70b72c8a2e8b3f3f</anchor>
+      <arglist>(const column_view &amp;input, scan_aggregation const &amp;agg, scan_type inclusive, null_policy null_handling=null_policy::EXCLUDE, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; scalar &gt;, std::unique_ptr&lt; scalar &gt; &gt;</type>
@@ -3949,85 +3949,85 @@
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_numeric_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga26f21162e51c5ae9bd18d9b67c0ccc3f</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaa76f2f5b1cab4f43ec997d77f1a3851e</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_timestamp_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga3eb9c9a687f4ef0becfc6e4162a6e247</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gacdd7c294fe02eed61bec156f3c960b59</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_duration_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga8759ed46dae98b64715a8c83d5d8655e</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gac64123bcc02bab8da7f9fd1b6cf0548d</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_fixed_width_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>gabdd2187fb17477179feecd5d1bdaf838</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gad2e8067caf5828b4d04e1e3ab29a0bf3</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_string_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>gaaf33ecbbfc774053925eb4aeb34cce30</anchor>
-      <arglist>(std::string const &amp;string, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga910858190bf158fce6adfba4cd0cfb43</anchor>
+      <arglist>(std::string const &amp;string, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_default_constructed_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga5a0f38d91a0ee0e60e134b37eb5d615d</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga23f7467077ab204c296573a23d5a74ac</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_empty_scalar_like</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga2e5497681065d9fd8e1e91ae4b2eb23d</anchor>
-      <arglist>(column_view const &amp;input, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gae120caba5b224250b6fc23d954de82d6</anchor>
+      <arglist>(column_view const &amp;input, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_fixed_width_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga11df45aa8e2c3aba5352687a6df24bbf</anchor>
-      <arglist>(T value, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gacb8f48b6ae589fcd90c53da755de4f41</anchor>
+      <arglist>(T value, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_fixed_point_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>gaff57fd7115cdf34d19f1d921bf868c38</anchor>
-      <arglist>(typename T::rep value, numeric::scale_type scale, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga50352072d1575284338fd7566e45584b</anchor>
+      <arglist>(typename T::rep value, numeric::scale_type scale, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_list_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>gaf95216c9528f36a0f759ece1e40423e1</anchor>
-      <arglist>(column_view elements, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga5d7e96f62c1be47c6219b4554e5d1cfa</anchor>
+      <arglist>(column_view elements, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_struct_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga6fcbc67383ff948fb8f2090b06e53315</anchor>
-      <arglist>(table_view const &amp;data, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga337d18a9477d205c8f40a64e0943ec4f</anchor>
+      <arglist>(table_view const &amp;data, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_struct_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga2b3d61ecb461767cf13b58b11cb72554</anchor>
-      <arglist>(host_span&lt; column_view const &gt; data, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga829d0d361c9613b6243c19ba0c022ab7</anchor>
+      <arglist>(host_span&lt; column_view const &gt; data, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -6842,15 +6842,15 @@
       <type></type>
       <name>bpe_merge_pairs</name>
       <anchorfile>structnvtext_1_1bpe__merge__pairs.html</anchorfile>
-      <anchor>afe4e616fa2ee52c5330c50d70b82e2c1</anchor>
-      <arglist>(std::unique_ptr&lt; cudf::column &gt; &amp;&amp;input, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a11b0dd538684bc0c89aa40a2bbc92e2e</anchor>
+      <arglist>(std::unique_ptr&lt; cudf::column &gt; &amp;&amp;input, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>bpe_merge_pairs</name>
       <anchorfile>structnvtext_1_1bpe__merge__pairs.html</anchorfile>
-      <anchor>a097a83cf9ba477da9cefd302ef925f40</anchor>
-      <arglist>(cudf::strings_column_view const &amp;input, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a956eb260eee55c7b4b461d9ac5f242ac</anchor>
+      <arglist>(cudf::strings_column_view const &amp;input, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>cudf::size_type</type>
@@ -6979,22 +6979,22 @@
       <type></type>
       <name>chrono_scalar</name>
       <anchorfile>classcudf_1_1chrono__scalar.html</anchorfile>
-      <anchor>a9f1f70988403b41d5bdf184a9782be2e</anchor>
-      <arglist>(chrono_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a033756b327a198f901824a8344af65fb</anchor>
+      <arglist>(chrono_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>chrono_scalar</name>
       <anchorfile>classcudf_1_1chrono__scalar.html</anchorfile>
-      <anchor>aa69c9e5873a7f62359fd7198bd25a38f</anchor>
-      <arglist>(T value, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a8ce9930791be1699ff5d411c4e454b4f</anchor>
+      <arglist>(T value, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>chrono_scalar</name>
       <anchorfile>classcudf_1_1chrono__scalar.html</anchorfile>
-      <anchor>ae3aaaedb03a2ea746925f6b25da9ea8a</anchor>
-      <arglist>(rmm::device_scalar&lt; T &gt; &amp;&amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a81914b7b37d143ab357225da03c5e6de</anchor>
+      <arglist>(rmm::device_scalar&lt; T &gt; &amp;&amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -7476,8 +7476,8 @@
       <type></type>
       <name>column</name>
       <anchorfile>classcudf_1_1column.html</anchorfile>
-      <anchor>a55dd814606c8e211588d55686b8cf4d4</anchor>
-      <arglist>(column const &amp;other, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ac932e5fa52aa1e84d602cbee507d7cbd</anchor>
+      <arglist>(column const &amp;other, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -7504,8 +7504,8 @@
       <type></type>
       <name>column</name>
       <anchorfile>classcudf_1_1column.html</anchorfile>
-      <anchor>a98a848d8dba83c0c30c3b3c7b35e87ba</anchor>
-      <arglist>(column_view view, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a6022e3e597ebcbc9c335d6de26f16799</anchor>
+      <arglist>(column_view view, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>data_type</type>
@@ -7539,8 +7539,8 @@
       <type>void</type>
       <name>set_null_mask</name>
       <anchorfile>classcudf_1_1column.html</anchorfile>
-      <anchor>aa112a9b73a2f017ea7845687ea7252bc</anchor>
-      <arglist>(rmm::device_buffer const &amp;new_null_mask, size_type new_null_count=UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+      <anchor>ab8110b755bc15f9e9266e4a51923d44f</anchor>
+      <arglist>(rmm::device_buffer const &amp;new_null_mask, size_type new_null_count=UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream())</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -7824,8 +7824,8 @@
       <type>static std::unique_ptr&lt; column_device_view, std::function&lt; void(column_device_view *)&gt; &gt;</type>
       <name>create</name>
       <anchorfile>classcudf_1_1column__device__view.html</anchorfile>
-      <anchor>a615a65ea21eed02e5a1f7aadb578219a</anchor>
-      <arglist>(column_view source_view, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+      <anchor>a02e91bd45051dd9acba89eb985d9cf3c</anchor>
+      <arglist>(column_view source_view, rmm::cuda_stream_view stream=cudf::get_default_stream())</arglist>
     </member>
     <member kind="function" static="yes">
       <type>static std::size_t</type>
@@ -10579,15 +10579,15 @@
       <type></type>
       <name>duration_scalar</name>
       <anchorfile>classcudf_1_1duration__scalar.html</anchorfile>
-      <anchor>ab906290dbb9224cef57d831a6454bbe9</anchor>
-      <arglist>(duration_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ab451c159d58a6b9e4925eb56804869af</anchor>
+      <arglist>(duration_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>duration_scalar</name>
       <anchorfile>classcudf_1_1duration__scalar.html</anchorfile>
-      <anchor>a26e168e0792b4a8cdab7b3c7eee93f0a</anchor>
-      <arglist>(rep_type value, bool is_valid, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a50e6be08d821482687c54b4aba2cc677</anchor>
+      <arglist>(rep_type value, bool is_valid, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>rep_type</type>
@@ -11166,50 +11166,50 @@
       <type></type>
       <name>fixed_point_scalar</name>
       <anchorfile>classcudf_1_1fixed__point__scalar.html</anchorfile>
-      <anchor>ab4cd8919fb2eac200f59242da67fd86a</anchor>
-      <arglist>(fixed_point_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a88c53409b603df4f5a7b1ffc791b26ad</anchor>
+      <arglist>(fixed_point_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>fixed_point_scalar</name>
       <anchorfile>classcudf_1_1fixed__point__scalar.html</anchorfile>
-      <anchor>a7ce703fe7fd09698c725dd86eb8fa4f2</anchor>
-      <arglist>(rep_type value, numeric::scale_type scale, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a844c20c64555db1a2caccf55b3862206</anchor>
+      <arglist>(rep_type value, numeric::scale_type scale, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>fixed_point_scalar</name>
       <anchorfile>classcudf_1_1fixed__point__scalar.html</anchorfile>
-      <anchor>abb6b120a54b63e28c1b8375c5221fc7b</anchor>
-      <arglist>(rep_type value, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a5523200b2c2c0f7a95d377e0e494603a</anchor>
+      <arglist>(rep_type value, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>fixed_point_scalar</name>
       <anchorfile>classcudf_1_1fixed__point__scalar.html</anchorfile>
-      <anchor>a6ab9fbc6a1e6978aeb744156b6bcf9dd</anchor>
-      <arglist>(T value, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>afa95abef06d2202a2b56517b9a01d945</anchor>
+      <arglist>(T value, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>fixed_point_scalar</name>
       <anchorfile>classcudf_1_1fixed__point__scalar.html</anchorfile>
-      <anchor>a187d566c54fdfe45f72ac2d9c32aaa82</anchor>
-      <arglist>(rmm::device_scalar&lt; rep_type &gt; &amp;&amp;data, numeric::scale_type scale, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a42786ad2ca0bf7ae4219a54cd81f8fe9</anchor>
+      <arglist>(rmm::device_scalar&lt; rep_type &gt; &amp;&amp;data, numeric::scale_type scale, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>rep_type</type>
       <name>value</name>
       <anchorfile>classcudf_1_1fixed__point__scalar.html</anchorfile>
-      <anchor>a83d501767cc28a07fce5d3651370b100</anchor>
-      <arglist>(rmm::cuda_stream_view stream=cudf::default_stream_value) const</arglist>
+      <anchor>a5d65ae96990b96b46cb0d49c196f1371</anchor>
+      <arglist>(rmm::cuda_stream_view stream=cudf::get_default_stream()) const</arglist>
     </member>
     <member kind="function">
       <type>T</type>
       <name>fixed_point_value</name>
       <anchorfile>classcudf_1_1fixed__point__scalar.html</anchorfile>
-      <anchor>af554df42ab1476f831c66220a84d3290</anchor>
-      <arglist>(rmm::cuda_stream_view stream=cudf::default_stream_value) const</arglist>
+      <anchor>a8245234876b179855a449cb90f3293e1</anchor>
+      <arglist>(rmm::cuda_stream_view stream=cudf::get_default_stream()) const</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -11360,15 +11360,15 @@
       <type></type>
       <name>fixed_width_scalar</name>
       <anchorfile>classcudf_1_1detail_1_1fixed__width__scalar.html</anchorfile>
-      <anchor>a949f48103cc68e09c20016ad1bd7d7bf</anchor>
-      <arglist>(fixed_width_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ac627f505965cbd7f403614fc5fedd34a</anchor>
+      <arglist>(fixed_width_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>set_value</name>
       <anchorfile>classcudf_1_1detail_1_1fixed__width__scalar.html</anchorfile>
-      <anchor>a55545fc1f6e65c5cc5c8458aaf2d065f</anchor>
-      <arglist>(T value, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+      <anchor>a2b6065a3f5700c68fa9770b64f218187</anchor>
+      <arglist>(T value, rmm::cuda_stream_view stream=cudf::get_default_stream())</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -11381,8 +11381,8 @@
       <type>T</type>
       <name>value</name>
       <anchorfile>classcudf_1_1detail_1_1fixed__width__scalar.html</anchorfile>
-      <anchor>ab1c15cc3283af8225236be327eb3da4a</anchor>
-      <arglist>(rmm::cuda_stream_view stream=cudf::default_stream_value) const</arglist>
+      <anchor>a491330d769efdc7ab4a86f1c7579f62a</anchor>
+      <arglist>(rmm::cuda_stream_view stream=cudf::get_default_stream()) const</arglist>
     </member>
     <member kind="function">
       <type>T *</type>
@@ -11402,15 +11402,15 @@
       <type></type>
       <name>fixed_width_scalar</name>
       <anchorfile>classcudf_1_1detail_1_1fixed__width__scalar.html</anchorfile>
-      <anchor>aef3effbffd5a7b84a3b832c854695d91</anchor>
-      <arglist>(T value, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a62cc75b8fdec3180fea7cb4def94792a</anchor>
+      <arglist>(T value, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function" protection="protected">
       <type></type>
       <name>fixed_width_scalar</name>
       <anchorfile>classcudf_1_1detail_1_1fixed__width__scalar.html</anchorfile>
-      <anchor>a0bade894714aafc5548d23a1ad889ba6</anchor>
-      <arglist>(rmm::device_scalar&lt; T &gt; &amp;&amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ad742c2fbf3ad2b06a06743255c54a286</anchor>
+      <arglist>(rmm::device_scalar&lt; T &gt; &amp;&amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>rmm::device_scalar&lt; T &gt;</type>
@@ -11710,50 +11710,50 @@
       <type></type>
       <name>hash_join</name>
       <anchorfile>classcudf_1_1hash__join.html</anchorfile>
-      <anchor>a1e658d2dca12f796200327e8bd701a87</anchor>
-      <arglist>(cudf::table_view const &amp;build, null_equality compare_nulls, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+      <anchor>a8680001f829c7aab709615686d3d165f</anchor>
+      <arglist>(cudf::table_view const &amp;build, null_equality compare_nulls, rmm::cuda_stream_view stream=cudf::get_default_stream())</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;, std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt; &gt;</type>
       <name>inner_join</name>
       <anchorfile>classcudf_1_1hash__join.html</anchorfile>
-      <anchor>a29067081c99dad1e2fa58ac6a83497a1</anchor>
-      <arglist>(cudf::table_view const &amp;probe, std::optional&lt; std::size_t &gt; output_size={}, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource()) const</arglist>
+      <anchor>a2d9271fa93d241e4bc5ffd61a41bd247</anchor>
+      <arglist>(cudf::table_view const &amp;probe, std::optional&lt; std::size_t &gt; output_size={}, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource()) const</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;, std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt; &gt;</type>
       <name>left_join</name>
       <anchorfile>classcudf_1_1hash__join.html</anchorfile>
-      <anchor>a332512d3654668e38a7a2568489090a6</anchor>
-      <arglist>(cudf::table_view const &amp;probe, std::optional&lt; std::size_t &gt; output_size={}, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource()) const</arglist>
+      <anchor>a6fe556a0b8afc9407ced3e9a1b9d9f96</anchor>
+      <arglist>(cudf::table_view const &amp;probe, std::optional&lt; std::size_t &gt; output_size={}, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource()) const</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt;, std::unique_ptr&lt; rmm::device_uvector&lt; size_type &gt; &gt; &gt;</type>
       <name>full_join</name>
       <anchorfile>classcudf_1_1hash__join.html</anchorfile>
-      <anchor>a3ecd4b9d9ee3c7b93722e37ba8952a48</anchor>
-      <arglist>(cudf::table_view const &amp;probe, std::optional&lt; std::size_t &gt; output_size={}, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource()) const</arglist>
+      <anchor>a4551caaa92c47091302ffc10160cf918</anchor>
+      <arglist>(cudf::table_view const &amp;probe, std::optional&lt; std::size_t &gt; output_size={}, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource()) const</arglist>
     </member>
     <member kind="function">
       <type>std::size_t</type>
       <name>inner_join_size</name>
       <anchorfile>classcudf_1_1hash__join.html</anchorfile>
-      <anchor>a9d758c8bd610ca8f2e29a56716c8fa25</anchor>
-      <arglist>(cudf::table_view const &amp;probe, rmm::cuda_stream_view stream=cudf::default_stream_value) const</arglist>
+      <anchor>a85d5aafccb5ed61826503367ee849822</anchor>
+      <arglist>(cudf::table_view const &amp;probe, rmm::cuda_stream_view stream=cudf::get_default_stream()) const</arglist>
     </member>
     <member kind="function">
       <type>std::size_t</type>
       <name>left_join_size</name>
       <anchorfile>classcudf_1_1hash__join.html</anchorfile>
-      <anchor>a49e664ca613f6990bdef452eab3684f0</anchor>
-      <arglist>(cudf::table_view const &amp;probe, rmm::cuda_stream_view stream=cudf::default_stream_value) const</arglist>
+      <anchor>a3df048507614481af13b4eb6aafebaa7</anchor>
+      <arglist>(cudf::table_view const &amp;probe, rmm::cuda_stream_view stream=cudf::get_default_stream()) const</arglist>
     </member>
     <member kind="function">
       <type>std::size_t</type>
       <name>full_join_size</name>
       <anchorfile>classcudf_1_1hash__join.html</anchorfile>
-      <anchor>a49485737febf451e9d82a4437cb070e8</anchor>
-      <arglist>(cudf::table_view const &amp;probe, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource()) const</arglist>
+      <anchor>a797523ea71d97d8f5d8eb076a8303236</anchor>
+      <arglist>(cudf::table_view const &amp;probe, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource()) const</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -12458,22 +12458,22 @@
       <type></type>
       <name>list_scalar</name>
       <anchorfile>classcudf_1_1list__scalar.html</anchorfile>
-      <anchor>a395c3d9f70ac7541c46f16d1514d2fce</anchor>
-      <arglist>(list_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a1244019452d79430f296ed79b7771787</anchor>
+      <arglist>(list_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>list_scalar</name>
       <anchorfile>classcudf_1_1list__scalar.html</anchorfile>
-      <anchor>a5f7a495f5a8eb3b6499a16c015651c79</anchor>
-      <arglist>(cudf::column_view const &amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a52e485f8a26ce27911d6625be322817e</anchor>
+      <arglist>(cudf::column_view const &amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>list_scalar</name>
       <anchorfile>classcudf_1_1list__scalar.html</anchorfile>
-      <anchor>a81a38917f5eff98f5774e0aa2077c6ac</anchor>
-      <arglist>(cudf::column &amp;&amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a1bcd8027cfed3072c7469a92f143e738</anchor>
+      <arglist>(cudf::column &amp;&amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>column_view</type>
@@ -13076,8 +13076,8 @@
       <type>static std::unique_ptr&lt; mutable_column_device_view, std::function&lt; void(mutable_column_device_view *)&gt; &gt;</type>
       <name>create</name>
       <anchorfile>classcudf_1_1mutable__column__device__view.html</anchorfile>
-      <anchor>acaf088e3cbf488bcd47d45770e881f87</anchor>
-      <arglist>(mutable_column_view source_view, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+      <anchor>ad8f73e5e9484188a5d376f2c9a321656</anchor>
+      <arglist>(mutable_column_view source_view, rmm::cuda_stream_view stream=cudf::get_default_stream())</arglist>
     </member>
     <member kind="function" static="yes">
       <type>static constexpr bool</type>
@@ -13231,8 +13231,8 @@
       <type>static auto</type>
       <name>create</name>
       <anchorfile>classcudf_1_1mutable__table__device__view.html</anchorfile>
-      <anchor>a4af93fdf54434127300302a12b92a43e</anchor>
-      <arglist>(mutable_table_view source_view, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+      <anchor>a97a9f3b5ea94b3cc055007ff5aebe8d1</anchor>
+      <arglist>(mutable_table_view source_view, rmm::cuda_stream_view stream=cudf::get_default_stream())</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -13365,22 +13365,22 @@
       <type></type>
       <name>numeric_scalar</name>
       <anchorfile>classcudf_1_1numeric__scalar.html</anchorfile>
-      <anchor>a7e9f19610c17bfa6c71ee4c6dd09bcbf</anchor>
-      <arglist>(numeric_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a30723519468c1264c2c89d64c2ce6831</anchor>
+      <arglist>(numeric_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>numeric_scalar</name>
       <anchorfile>classcudf_1_1numeric__scalar.html</anchorfile>
-      <anchor>a100176af1eddd4a8dcc5c99588e9ee6e</anchor>
-      <arglist>(T value, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a22f3476020bb114021da45366e8b778d</anchor>
+      <arglist>(T value, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>numeric_scalar</name>
       <anchorfile>classcudf_1_1numeric__scalar.html</anchorfile>
-      <anchor>ad863050cb530ce33d04165c41bd83653</anchor>
-      <arglist>(rmm::device_scalar&lt; T &gt; &amp;&amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a00182e56648a5499a2663f3c5398f1dd</anchor>
+      <arglist>(rmm::device_scalar&lt; T &gt; &amp;&amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -15200,15 +15200,15 @@
       <type>void</type>
       <name>set_valid_async</name>
       <anchorfile>classcudf_1_1scalar.html</anchorfile>
-      <anchor>abe565a78fac24273b428b9ae2dca33b5</anchor>
-      <arglist>(bool is_valid, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+      <anchor>a3de612652333b6c20cee910cad9f8d2a</anchor>
+      <arglist>(bool is_valid, rmm::cuda_stream_view stream=cudf::get_default_stream())</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>is_valid</name>
       <anchorfile>classcudf_1_1scalar.html</anchorfile>
-      <anchor>a20d8267831696eef88b6ace9c11b19f3</anchor>
-      <arglist>(rmm::cuda_stream_view stream=cudf::default_stream_value) const</arglist>
+      <anchor>a1a1fd922cacc88449792ed329ed3ebdb</anchor>
+      <arglist>(rmm::cuda_stream_view stream=cudf::get_default_stream()) const</arglist>
     </member>
     <member kind="function">
       <type>bool *</type>
@@ -15235,15 +15235,15 @@
       <type></type>
       <name>scalar</name>
       <anchorfile>classcudf_1_1scalar.html</anchorfile>
-      <anchor>aa639667d99a65b502d8b2b88970a822d</anchor>
-      <arglist>(scalar const &amp;other, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ac07b0f697d7510390a4ec944175938b1</anchor>
+      <arglist>(scalar const &amp;other, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function" protection="protected">
       <type></type>
       <name>scalar</name>
       <anchorfile>classcudf_1_1scalar.html</anchorfile>
-      <anchor>a063861d56470f73b281a36a8b4dcc437</anchor>
-      <arglist>(data_type type, bool is_valid=false, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a53ac56dc6a92452e19e0b97ac6052570</anchor>
+      <arglist>(data_type type, bool is_valid=false, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>data_type</type>
@@ -15411,8 +15411,8 @@
       <type></type>
       <name>self_comparator</name>
       <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
-      <anchor>a63a0543e03dcb8c313dfc00656d0c3a9</anchor>
-      <arglist>(table_view const &amp;t, host_span&lt; order const &gt; column_order={}, host_span&lt; null_order const &gt; null_precedence={}, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+      <anchor>a7b61f19b2f360b9b3344826e8a0d15e0</anchor>
+      <arglist>(table_view const &amp;t, host_span&lt; order const &gt; column_order={}, host_span&lt; null_order const &gt; null_precedence={}, rmm::cuda_stream_view stream=cudf::get_default_stream())</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -16371,36 +16371,36 @@
       <type></type>
       <name>string_scalar</name>
       <anchorfile>classcudf_1_1string__scalar.html</anchorfile>
-      <anchor>aa94e846720305bfcf5b443a1d1eab697</anchor>
-      <arglist>(string_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a9659318d639235bb7b86b34876d7acc6</anchor>
+      <arglist>(string_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>string_scalar</name>
       <anchorfile>classcudf_1_1string__scalar.html</anchorfile>
-      <anchor>ac2923438dcf0dea975facd5a19e6810b</anchor>
-      <arglist>(std::string const &amp;string, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ab6f662291b2819d1d3c9decf86dc57b8</anchor>
+      <arglist>(std::string const &amp;string, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>string_scalar</name>
       <anchorfile>classcudf_1_1string__scalar.html</anchorfile>
-      <anchor>a2ca0e0a1c0e08104689809f19d1806b2</anchor>
-      <arglist>(value_type const &amp;source, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a6a67b4192c721fc6797a576fd806aa94</anchor>
+      <arglist>(value_type const &amp;source, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>string_scalar</name>
       <anchorfile>classcudf_1_1string__scalar.html</anchorfile>
-      <anchor>a8bf9b1e474ff88feccb2a413bf8bfdc8</anchor>
-      <arglist>(rmm::device_scalar&lt; value_type &gt; &amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a513182fe055464c5e3e0d2bbe830a55d</anchor>
+      <arglist>(rmm::device_scalar&lt; value_type &gt; &amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>string_scalar</name>
       <anchorfile>classcudf_1_1string__scalar.html</anchorfile>
-      <anchor>ab305835bc06b92040eacfd082f0af285</anchor>
-      <arglist>(rmm::device_buffer &amp;&amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a494d0e7eb3aa111b2d698064b2e31b3d</anchor>
+      <arglist>(rmm::device_buffer &amp;&amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -16413,15 +16413,15 @@
       <type>std::string</type>
       <name>to_string</name>
       <anchorfile>classcudf_1_1string__scalar.html</anchorfile>
-      <anchor>abe034857cebe709c57e4872c66b0dbd0</anchor>
-      <arglist>(rmm::cuda_stream_view stream=cudf::default_stream_value) const</arglist>
+      <anchor>a0e17858682c82a055693964f633b3444</anchor>
+      <arglist>(rmm::cuda_stream_view stream=cudf::get_default_stream()) const</arglist>
     </member>
     <member kind="function">
       <type>value_type</type>
       <name>value</name>
       <anchorfile>classcudf_1_1string__scalar.html</anchorfile>
-      <anchor>ae92b6ab6691cef4f3e05de33ee723159</anchor>
-      <arglist>(rmm::cuda_stream_view stream=cudf::default_stream_value) const</arglist>
+      <anchor>a8137537559c495274b0d7c8b1cfe1c22</anchor>
+      <arglist>(rmm::cuda_stream_view stream=cudf::get_default_stream()) const</arglist>
     </member>
     <member kind="function">
       <type>size_type</type>
@@ -16940,29 +16940,29 @@
       <type></type>
       <name>struct_scalar</name>
       <anchorfile>classcudf_1_1struct__scalar.html</anchorfile>
-      <anchor>a6998de1024890fd3b728b478a3e33122</anchor>
-      <arglist>(struct_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>aa0fefb5d2dd553759deb0e25e32d73d4</anchor>
+      <arglist>(struct_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>struct_scalar</name>
       <anchorfile>classcudf_1_1struct__scalar.html</anchorfile>
-      <anchor>a4036a378f783f0aaf72d323b7c6bdac3</anchor>
-      <arglist>(table_view const &amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a1098ec1a155a01cf65a9ea63b2f4d6d2</anchor>
+      <arglist>(table_view const &amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>struct_scalar</name>
       <anchorfile>classcudf_1_1struct__scalar.html</anchorfile>
-      <anchor>a600f7974965fa81e4de7e4370b068cd9</anchor>
-      <arglist>(host_span&lt; column_view const &gt; data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ae41d326d6a6456f8a26b1ec5535c5f2a</anchor>
+      <arglist>(host_span&lt; column_view const &gt; data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>struct_scalar</name>
       <anchorfile>classcudf_1_1struct__scalar.html</anchorfile>
-      <anchor>a770e3f79bc5922797d351c14c6dfa565</anchor>
-      <arglist>(table &amp;&amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a39670003327187771e855ae16c0c50cb</anchor>
+      <arglist>(table &amp;&amp;data, bool is_valid=true, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>table_view</type>
@@ -17204,8 +17204,8 @@
       <type></type>
       <name>table</name>
       <anchorfile>classcudf_1_1table.html</anchorfile>
-      <anchor>ab6086e747c76e6bfe93c2816e38c4eb0</anchor>
-      <arglist>(table_view view, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a8912943ed42355f7f321145fe3070bea</anchor>
+      <arglist>(table_view view, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>size_type</type>
@@ -17293,8 +17293,8 @@
       <type>static auto</type>
       <name>create</name>
       <anchorfile>classcudf_1_1table__device__view.html</anchorfile>
-      <anchor>afe97cf520e989b7b0658a2276e23971c</anchor>
-      <arglist>(table_view source_view, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+      <anchor>a3527019afd61cf7546bfac42993066cf</anchor>
+      <arglist>(table_view source_view, rmm::cuda_stream_view stream=cudf::get_default_stream())</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -18185,15 +18185,15 @@
       <type></type>
       <name>timestamp_scalar</name>
       <anchorfile>classcudf_1_1timestamp__scalar.html</anchorfile>
-      <anchor>a42df23205d8184efd7cf98db7b1a8a87</anchor>
-      <arglist>(timestamp_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>accbcc30bd1c924fd04846fafcb81ff9c</anchor>
+      <arglist>(timestamp_scalar const &amp;other, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>timestamp_scalar</name>
       <anchorfile>classcudf_1_1timestamp__scalar.html</anchorfile>
-      <anchor>ace9b4c77d8c3460c9c1f9adaa1033077</anchor>
-      <arglist>(Duration2 const &amp;value, bool is_valid, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>a273688dd814cea31a5b11c5289d7d58c</anchor>
+      <arglist>(Duration2 const &amp;value, bool is_valid, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>rep_type</type>
@@ -18281,8 +18281,8 @@
       <type></type>
       <name>two_table_comparator</name>
       <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</anchorfile>
-      <anchor>afb050d221266e84aeeefd3ec66c3c0d3</anchor>
-      <arglist>(table_view const &amp;left, table_view const &amp;right, host_span&lt; order const &gt; column_order={}, host_span&lt; null_order const &gt; null_precedence={}, rmm::cuda_stream_view stream=cudf::default_stream_value)</arglist>
+      <anchor>a9100593c81d56739bb2abda32c38e384</anchor>
+      <arglist>(table_view const &amp;left, table_view const &amp;right, host_span&lt; order const &gt; column_order={}, host_span&lt; null_order const &gt; null_precedence={}, rmm::cuda_stream_view stream=cudf::get_default_stream())</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -19242,8 +19242,8 @@
       <type>std::unique_ptr&lt; Base &gt;</type>
       <name>make_merge_sets_aggregation</name>
       <anchorfile>group__aggregation__factories.html</anchorfile>
-      <anchor>gaf05edd87facfdb3c0300892e9ba2a215</anchor>
-      <arglist>(null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::UNEQUAL)</arglist>
+      <anchor>ga46a7aab27ded048e5f7a2462eb8106b2</anchor>
+      <arglist>(null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL)</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; Base &gt;</type>
@@ -19340,92 +19340,92 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_numeric_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>gad8b36985d1d61f70f94618fc3b1d62d2</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga5dba634555d7bd1ed528324f9ffe3a74</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_numeric_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga660fe09e08bb5f2f0c2a4f7b0e4e7d87</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaaac9db86bf3dd1bceacf93cfaac946ab</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_fixed_point_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga2643300b0ecece96f7fda5368e3b3074</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga8d4662d09fbcf25c9e136117c32beff7</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_fixed_point_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>gac33356275c21fcd6446ad6ab946db1ec</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gad4acb226b3625c54288ce31292078ddf</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_timestamp_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga226762ec117a2d4197f4aa5f73988aa2</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gadd88a93166aabc9db59c6432ed95ed50</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_timestamp_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga4b8e17193bc07a264b2a38a292938975</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga792492abff4dca48551d86fe906888b1</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_duration_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga4767f2ef1d0bf5595e4b0619f5c92223</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga38e53e7bab4c720c9b652ea644302232</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_duration_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga980c432732280c63efc4291e218ba3a3</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gae9ae25da34a1201745e66c3b57d48a5f</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_fixed_width_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga6c32b69ec1ea42c5be6948122fd87b74</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaa807d5eb1e0f71e5cc879a6d15b891d3</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_fixed_width_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga54f354e546435b6187faace7d055158e</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gae7859814b8305a3ee2643e03a0b5737e</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_strings_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga17a8df722294a0856bd13641660976ef</anchor>
-      <arglist>(cudf::device_span&lt; thrust::pair&lt; const char *, size_type &gt; const &gt; strings, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga1402fad84517486e091f8c59f48131ef</anchor>
+      <arglist>(cudf::device_span&lt; thrust::pair&lt; const char *, size_type &gt; const &gt; strings, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_strings_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga993941cbf14270bcea2cc95427996de1</anchor>
-      <arglist>(cudf::device_span&lt; string_view const &gt; string_views, const string_view null_placeholder, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga43b71803b5e2f2f3e60167b3559ba8a2</anchor>
+      <arglist>(cudf::device_span&lt; string_view const &gt; string_views, const string_view null_placeholder, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_strings_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga49259670a95fcf8dd2aac7d595f47cad</anchor>
-      <arglist>(cudf::device_span&lt; char const &gt; strings, cudf::device_span&lt; size_type const &gt; offsets, cudf::device_span&lt; bitmask_type const &gt; null_mask={}, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga2a80996f084aa4b12066522156c46376</anchor>
+      <arglist>(cudf::device_span&lt; char const &gt; strings, cudf::device_span&lt; size_type const &gt; offsets, cudf::device_span&lt; bitmask_type const &gt; null_mask={}, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -19445,29 +19445,29 @@
       <type>std::unique_ptr&lt; cudf::column &gt;</type>
       <name>make_lists_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>gad2565b997318bd92a0cb4346dc1aef51</anchor>
-      <arglist>(size_type num_rows, std::unique_ptr&lt; column &gt; offsets_column, std::unique_ptr&lt; column &gt; child_column, size_type null_count, rmm::device_buffer &amp;&amp;null_mask, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga4911069154b3a0f9c07f50e3431c293e</anchor>
+      <arglist>(size_type num_rows, std::unique_ptr&lt; column &gt; offsets_column, std::unique_ptr&lt; column &gt; child_column, size_type null_count, rmm::device_buffer &amp;&amp;null_mask, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; cudf::column &gt;</type>
       <name>make_structs_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga20b4015338542f48ca989ff3903a4038</anchor>
-      <arglist>(size_type num_rows, std::vector&lt; std::unique_ptr&lt; column &gt;&gt; &amp;&amp;child_columns, size_type null_count, rmm::device_buffer &amp;&amp;null_mask, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gab2635dbc8c557130e0ed2044cb66d329</anchor>
+      <arglist>(size_type num_rows, std::vector&lt; std::unique_ptr&lt; column &gt;&gt; &amp;&amp;child_columns, size_type null_count, rmm::device_buffer &amp;&amp;null_mask, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_column_from_scalar</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>gacf521c0f063c0af6634e75473de5b1c8</anchor>
-      <arglist>(scalar const &amp;s, size_type size, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gac34fa053551d43dfe798d4f2727bf451</anchor>
+      <arglist>(scalar const &amp;s, size_type size, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_dictionary_from_scalar</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga33568e589faffcb6ab84c08d273bf5d5</anchor>
-      <arglist>(scalar const &amp;s, size_type size, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga5c929ab7155762992c30512e840c42f9</anchor>
+      <arglist>(scalar const &amp;s, size_type size, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>size_type</type>
@@ -19788,8 +19788,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_dictionary_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga6683db8e96a34aa7a28438876ba92af9</anchor>
-      <arglist>(column_view const &amp;keys_column, column_view const &amp;indices_column, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga0a837699fb743745e73568f3c07c187b</anchor>
+      <arglist>(column_view const &amp;keys_column, column_view const &amp;indices_column, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -19802,8 +19802,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_dictionary_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga8f6dcb4c45bf2c2bbfb7e2e24be60bb1</anchor>
-      <arglist>(std::unique_ptr&lt; column &gt; keys_column, std::unique_ptr&lt; column &gt; indices_column, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaa983ab78050e1c01cf1d1a9172372444</anchor>
+      <arglist>(std::unique_ptr&lt; column &gt; keys_column, std::unique_ptr&lt; column &gt; indices_column, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -20180,8 +20180,8 @@
       <type>std::pair&lt; std::unique_ptr&lt; table &gt;, std::vector&lt; size_type &gt; &gt;</type>
       <name>hash_partition</name>
       <anchorfile>group__reorder__partition.html</anchorfile>
-      <anchor>gadd0425513762803e040d0ff3312601e1</anchor>
-      <arglist>(table_view const &amp;input, std::vector&lt; size_type &gt; const &amp;columns_to_hash, int num_partitions, hash_id hash_function=hash_id::HASH_MURMUR3, uint32_t seed=DEFAULT_HASH_SEED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga65fe4ae8d1cbe9db31dbda43ebea0e7a</anchor>
+      <arglist>(table_view const &amp;input, std::vector&lt; size_type &gt; const &amp;columns_to_hash, int num_partitions, hash_id hash_function=hash_id::HASH_MURMUR3, uint32_t seed=DEFAULT_HASH_SEED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; cudf::table &gt;, std::vector&lt; cudf::size_type &gt; &gt;</type>
@@ -20215,15 +20215,15 @@
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>reduce</name>
       <anchorfile>group__aggregation__reduction.html</anchorfile>
-      <anchor>gaabf4fa288981643cca147633bdf58035</anchor>
-      <arglist>(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga48cc284a9371891975a6219cd3d2e36e</anchor>
+      <arglist>(column_view const &amp;col, reduce_aggregation const &amp;agg, data_type output_dtype, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>reduce</name>
       <anchorfile>group__aggregation__reduction.html</anchorfile>
-      <anchor>gac3c645be6677e326bea98fe901665d50</anchor>
-      <arglist>(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, std::optional&lt; std::reference_wrapper&lt; scalar const &gt;&gt; init, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga6a05c56d4b190f83a3001357898354be</anchor>
+      <arglist>(column_view const &amp;col, reduce_aggregation const &amp;agg, data_type output_dtype, std::optional&lt; std::reference_wrapper&lt; scalar const &gt;&gt; init, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -20243,8 +20243,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>scan</name>
       <anchorfile>group__aggregation__reduction.html</anchorfile>
-      <anchor>ga4d7636cf6e4568d9e92a4c5dc0310077</anchor>
-      <arglist>(const column_view &amp;input, std::unique_ptr&lt; scan_aggregation &gt; const &amp;agg, scan_type inclusive, null_policy null_handling=null_policy::EXCLUDE, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga52e9ced6d3b980ad70b72c8a2e8b3f3f</anchor>
+      <arglist>(const column_view &amp;input, scan_aggregation const &amp;agg, scan_type inclusive, null_policy null_handling=null_policy::EXCLUDE, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; scalar &gt;, std::unique_ptr&lt; scalar &gt; &gt;</type>
@@ -20460,85 +20460,85 @@
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_numeric_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga26f21162e51c5ae9bd18d9b67c0ccc3f</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaa76f2f5b1cab4f43ec997d77f1a3851e</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_timestamp_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga3eb9c9a687f4ef0becfc6e4162a6e247</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gacdd7c294fe02eed61bec156f3c960b59</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_duration_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga8759ed46dae98b64715a8c83d5d8655e</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gac64123bcc02bab8da7f9fd1b6cf0548d</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_fixed_width_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>gabdd2187fb17477179feecd5d1bdaf838</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gad2e8067caf5828b4d04e1e3ab29a0bf3</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_string_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>gaaf33ecbbfc774053925eb4aeb34cce30</anchor>
-      <arglist>(std::string const &amp;string, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga910858190bf158fce6adfba4cd0cfb43</anchor>
+      <arglist>(std::string const &amp;string, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_default_constructed_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga5a0f38d91a0ee0e60e134b37eb5d615d</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga23f7467077ab204c296573a23d5a74ac</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_empty_scalar_like</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga2e5497681065d9fd8e1e91ae4b2eb23d</anchor>
-      <arglist>(column_view const &amp;input, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gae120caba5b224250b6fc23d954de82d6</anchor>
+      <arglist>(column_view const &amp;input, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_fixed_width_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga11df45aa8e2c3aba5352687a6df24bbf</anchor>
-      <arglist>(T value, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gacb8f48b6ae589fcd90c53da755de4f41</anchor>
+      <arglist>(T value, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_fixed_point_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>gaff57fd7115cdf34d19f1d921bf868c38</anchor>
-      <arglist>(typename T::rep value, numeric::scale_type scale, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga50352072d1575284338fd7566e45584b</anchor>
+      <arglist>(typename T::rep value, numeric::scale_type scale, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_list_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>gaf95216c9528f36a0f759ece1e40423e1</anchor>
-      <arglist>(column_view elements, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga5d7e96f62c1be47c6219b4554e5d1cfa</anchor>
+      <arglist>(column_view elements, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_struct_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga6fcbc67383ff948fb8f2090b06e53315</anchor>
-      <arglist>(table_view const &amp;data, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga337d18a9477d205c8f40a64e0943ec4f</anchor>
+      <arglist>(table_view const &amp;data, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_struct_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga2b3d61ecb461767cf13b58b11cb72554</anchor>
-      <arglist>(host_span&lt; column_view const &gt; data, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga829d0d361c9613b6243c19ba0c022ab7</anchor>
+      <arglist>(host_span&lt; column_view const &gt; data, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -20980,6 +20980,13 @@
       <anchorfile>group__utility__bitmask.html</anchorfile>
       <anchor>gae1761cf9cca86fe86d379bfdaa422e7b</anchor>
       <arglist>(size_type n)</arglist>
+    </member>
+    <member kind="function">
+      <type>rmm::cuda_stream_view const</type>
+      <name>get_default_stream</name>
+      <anchorfile>namespacecudf.html</anchorfile>
+      <anchor>a001ed29e71e759518cae31e52312befa</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
@@ -23034,92 +23041,92 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_numeric_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>gad8b36985d1d61f70f94618fc3b1d62d2</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga5dba634555d7bd1ed528324f9ffe3a74</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_numeric_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga660fe09e08bb5f2f0c2a4f7b0e4e7d87</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaaac9db86bf3dd1bceacf93cfaac946ab</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_fixed_point_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga2643300b0ecece96f7fda5368e3b3074</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga8d4662d09fbcf25c9e136117c32beff7</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_fixed_point_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>gac33356275c21fcd6446ad6ab946db1ec</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gad4acb226b3625c54288ce31292078ddf</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_timestamp_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga226762ec117a2d4197f4aa5f73988aa2</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gadd88a93166aabc9db59c6432ed95ed50</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_timestamp_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga4b8e17193bc07a264b2a38a292938975</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga792492abff4dca48551d86fe906888b1</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_duration_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga4767f2ef1d0bf5595e4b0619f5c92223</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga38e53e7bab4c720c9b652ea644302232</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_duration_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga980c432732280c63efc4291e218ba3a3</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gae9ae25da34a1201745e66c3b57d48a5f</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_fixed_width_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga6c32b69ec1ea42c5be6948122fd87b74</anchor>
-      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaa807d5eb1e0f71e5cc879a6d15b891d3</anchor>
+      <arglist>(data_type type, size_type size, mask_state state=mask_state::UNALLOCATED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_fixed_width_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga54f354e546435b6187faace7d055158e</anchor>
-      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gae7859814b8305a3ee2643e03a0b5737e</anchor>
+      <arglist>(data_type type, size_type size, B &amp;&amp;null_mask, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_strings_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga17a8df722294a0856bd13641660976ef</anchor>
-      <arglist>(cudf::device_span&lt; thrust::pair&lt; const char *, size_type &gt; const &gt; strings, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga1402fad84517486e091f8c59f48131ef</anchor>
+      <arglist>(cudf::device_span&lt; thrust::pair&lt; const char *, size_type &gt; const &gt; strings, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_strings_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga993941cbf14270bcea2cc95427996de1</anchor>
-      <arglist>(cudf::device_span&lt; string_view const &gt; string_views, const string_view null_placeholder, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga43b71803b5e2f2f3e60167b3559ba8a2</anchor>
+      <arglist>(cudf::device_span&lt; string_view const &gt; string_views, const string_view null_placeholder, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_strings_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga49259670a95fcf8dd2aac7d595f47cad</anchor>
-      <arglist>(cudf::device_span&lt; char const &gt; strings, cudf::device_span&lt; size_type const &gt; offsets, cudf::device_span&lt; bitmask_type const &gt; null_mask={}, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga2a80996f084aa4b12066522156c46376</anchor>
+      <arglist>(cudf::device_span&lt; char const &gt; strings, cudf::device_span&lt; size_type const &gt; offsets, cudf::device_span&lt; bitmask_type const &gt; null_mask={}, size_type null_count=cudf::UNKNOWN_NULL_COUNT, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -23139,36 +23146,36 @@
       <type>std::unique_ptr&lt; cudf::column &gt;</type>
       <name>make_lists_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>gad2565b997318bd92a0cb4346dc1aef51</anchor>
-      <arglist>(size_type num_rows, std::unique_ptr&lt; column &gt; offsets_column, std::unique_ptr&lt; column &gt; child_column, size_type null_count, rmm::device_buffer &amp;&amp;null_mask, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga4911069154b3a0f9c07f50e3431c293e</anchor>
+      <arglist>(size_type num_rows, std::unique_ptr&lt; column &gt; offsets_column, std::unique_ptr&lt; column &gt; child_column, size_type null_count, rmm::device_buffer &amp;&amp;null_mask, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; cudf::column &gt;</type>
       <name>make_structs_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga20b4015338542f48ca989ff3903a4038</anchor>
-      <arglist>(size_type num_rows, std::vector&lt; std::unique_ptr&lt; column &gt;&gt; &amp;&amp;child_columns, size_type null_count, rmm::device_buffer &amp;&amp;null_mask, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gab2635dbc8c557130e0ed2044cb66d329</anchor>
+      <arglist>(size_type num_rows, std::vector&lt; std::unique_ptr&lt; column &gt;&gt; &amp;&amp;child_columns, size_type null_count, rmm::device_buffer &amp;&amp;null_mask, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_column_from_scalar</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>gacf521c0f063c0af6634e75473de5b1c8</anchor>
-      <arglist>(scalar const &amp;s, size_type size, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gac34fa053551d43dfe798d4f2727bf451</anchor>
+      <arglist>(scalar const &amp;s, size_type size, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_dictionary_from_scalar</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga33568e589faffcb6ab84c08d273bf5d5</anchor>
-      <arglist>(scalar const &amp;s, size_type size, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga5c929ab7155762992c30512e840c42f9</anchor>
+      <arglist>(scalar const &amp;s, size_type size, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_dictionary_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga6683db8e96a34aa7a28438876ba92af9</anchor>
-      <arglist>(column_view const &amp;keys_column, column_view const &amp;indices_column, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga0a837699fb743745e73568f3c07c187b</anchor>
+      <arglist>(column_view const &amp;keys_column, column_view const &amp;indices_column, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -23181,8 +23188,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>make_dictionary_column</name>
       <anchorfile>group__column__factories.html</anchorfile>
-      <anchor>ga8f6dcb4c45bf2c2bbfb7e2e24be60bb1</anchor>
-      <arglist>(std::unique_ptr&lt; column &gt; keys_column, std::unique_ptr&lt; column &gt; indices_column, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaa983ab78050e1c01cf1d1a9172372444</anchor>
+      <arglist>(std::unique_ptr&lt; column &gt; keys_column, std::unique_ptr&lt; column &gt; indices_column, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -23399,85 +23406,85 @@
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_numeric_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga26f21162e51c5ae9bd18d9b67c0ccc3f</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaa76f2f5b1cab4f43ec997d77f1a3851e</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_timestamp_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga3eb9c9a687f4ef0becfc6e4162a6e247</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gacdd7c294fe02eed61bec156f3c960b59</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_duration_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga8759ed46dae98b64715a8c83d5d8655e</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gac64123bcc02bab8da7f9fd1b6cf0548d</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_fixed_width_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>gabdd2187fb17477179feecd5d1bdaf838</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gad2e8067caf5828b4d04e1e3ab29a0bf3</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_string_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>gaaf33ecbbfc774053925eb4aeb34cce30</anchor>
-      <arglist>(std::string const &amp;string, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga910858190bf158fce6adfba4cd0cfb43</anchor>
+      <arglist>(std::string const &amp;string, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_default_constructed_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga5a0f38d91a0ee0e60e134b37eb5d615d</anchor>
-      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga23f7467077ab204c296573a23d5a74ac</anchor>
+      <arglist>(data_type type, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_empty_scalar_like</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga2e5497681065d9fd8e1e91ae4b2eb23d</anchor>
-      <arglist>(column_view const &amp;input, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gae120caba5b224250b6fc23d954de82d6</anchor>
+      <arglist>(column_view const &amp;input, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_fixed_width_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga11df45aa8e2c3aba5352687a6df24bbf</anchor>
-      <arglist>(T value, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gacb8f48b6ae589fcd90c53da755de4f41</anchor>
+      <arglist>(T value, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_fixed_point_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>gaff57fd7115cdf34d19f1d921bf868c38</anchor>
-      <arglist>(typename T::rep value, numeric::scale_type scale, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga50352072d1575284338fd7566e45584b</anchor>
+      <arglist>(typename T::rep value, numeric::scale_type scale, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_list_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>gaf95216c9528f36a0f759ece1e40423e1</anchor>
-      <arglist>(column_view elements, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga5d7e96f62c1be47c6219b4554e5d1cfa</anchor>
+      <arglist>(column_view elements, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_struct_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga6fcbc67383ff948fb8f2090b06e53315</anchor>
-      <arglist>(table_view const &amp;data, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga337d18a9477d205c8f40a64e0943ec4f</anchor>
+      <arglist>(table_view const &amp;data, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>make_struct_scalar</name>
       <anchorfile>group__scalar__factories.html</anchorfile>
-      <anchor>ga2b3d61ecb461767cf13b58b11cb72554</anchor>
-      <arglist>(host_span&lt; column_view const &gt; data, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga829d0d361c9613b6243c19ba0c022ab7</anchor>
+      <arglist>(host_span&lt; column_view const &gt; data, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -24680,8 +24687,8 @@
       <type>std::unique_ptr&lt; Base &gt;</type>
       <name>make_merge_sets_aggregation</name>
       <anchorfile>group__aggregation__factories.html</anchorfile>
-      <anchor>gaf05edd87facfdb3c0300892e9ba2a215</anchor>
-      <arglist>(null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::UNEQUAL)</arglist>
+      <anchor>ga46a7aab27ded048e5f7a2462eb8106b2</anchor>
+      <arglist>(null_equality nulls_equal=null_equality::EQUAL, nan_equality nans_equal=nan_equality::ALL_EQUAL)</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; Base &gt;</type>
@@ -24737,15 +24744,15 @@
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>reduce</name>
       <anchorfile>group__aggregation__reduction.html</anchorfile>
-      <anchor>gaabf4fa288981643cca147633bdf58035</anchor>
-      <arglist>(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga48cc284a9371891975a6219cd3d2e36e</anchor>
+      <arglist>(column_view const &amp;col, reduce_aggregation const &amp;agg, data_type output_dtype, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; scalar &gt;</type>
       <name>reduce</name>
       <anchorfile>group__aggregation__reduction.html</anchorfile>
-      <anchor>gac3c645be6677e326bea98fe901665d50</anchor>
-      <arglist>(column_view const &amp;col, std::unique_ptr&lt; reduce_aggregation &gt; const &amp;agg, data_type output_dtype, std::optional&lt; std::reference_wrapper&lt; scalar const &gt;&gt; init, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga6a05c56d4b190f83a3001357898354be</anchor>
+      <arglist>(column_view const &amp;col, reduce_aggregation const &amp;agg, data_type output_dtype, std::optional&lt; std::reference_wrapper&lt; scalar const &gt;&gt; init, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -24765,8 +24772,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>scan</name>
       <anchorfile>group__aggregation__reduction.html</anchorfile>
-      <anchor>ga4d7636cf6e4568d9e92a4c5dc0310077</anchor>
-      <arglist>(const column_view &amp;input, std::unique_ptr&lt; scan_aggregation &gt; const &amp;agg, scan_type inclusive, null_policy null_handling=null_policy::EXCLUDE, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga52e9ced6d3b980ad70b72c8a2e8b3f3f</anchor>
+      <arglist>(const column_view &amp;input, scan_aggregation const &amp;agg, scan_type inclusive, null_policy null_handling=null_policy::EXCLUDE, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; scalar &gt;, std::unique_ptr&lt; scalar &gt; &gt;</type>
@@ -25360,8 +25367,8 @@
       <type>std::pair&lt; std::unique_ptr&lt; table &gt;, std::vector&lt; size_type &gt; &gt;</type>
       <name>hash_partition</name>
       <anchorfile>group__reorder__partition.html</anchorfile>
-      <anchor>gadd0425513762803e040d0ff3312601e1</anchor>
-      <arglist>(table_view const &amp;input, std::vector&lt; size_type &gt; const &amp;columns_to_hash, int num_partitions, hash_id hash_function=hash_id::HASH_MURMUR3, uint32_t seed=DEFAULT_HASH_SEED, rmm::cuda_stream_view stream=cudf::default_stream_value, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga65fe4ae8d1cbe9db31dbda43ebea0e7a</anchor>
+      <arglist>(table_view const &amp;input, std::vector&lt; size_type &gt; const &amp;columns_to_hash, int num_partitions, hash_id hash_function=hash_id::HASH_MURMUR3, uint32_t seed=DEFAULT_HASH_SEED, rmm::cuda_stream_view stream=cudf::get_default_stream(), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; std::unique_ptr&lt; cudf::table &gt;, std::vector&lt; cudf::size_type &gt; &gt;</type>
