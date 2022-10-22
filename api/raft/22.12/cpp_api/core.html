@@ -25,7 +25,7 @@
     <script src="../_static/js/theme.js"></script>
     <link href="../genindex.html" rel="index" title="Index">
     <link href="../search.html" rel="search" title="Search">
-    <link href="clustering.html" rel="next" title="Clustering">
+    <link href="cluster.html" rel="next" title="Cluster">
     <link href="../cpp_api.html" rel="prev" title="RAFT C++ API Reference"> 
 <script id="rapids-selector-pixel-src" src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
 
@@ -50,18 +50,22 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Core</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#handle-t">handle_t</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#interruptible">interruptible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nvtx">NVTX</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mdarray">mdarray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mdspan">mdspan</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#span">span</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#key-value-pair">Key-Value Pair</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#logger">logger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#multi-node-multi-gpu">Multi-node Multi-GPU</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="clustering.html">Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distance.html">Distance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="linalg.html">Linear Algebra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="matrix.html">Matrix</a></li>
-<li class="toctree-l2"><a class="reference internal" href="optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">Neighbors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solver.html">Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="random.html">Random</a></li>
-<li class="toctree-l2"><a class="reference internal" href="spatial.html">Spatial</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sparse.html">Sparse</a></li>
 <li class="toctree-l2"><a class="reference internal" href="stats.html">Stats</a></li>
 </ul>
@@ -335,6 +339,142 @@
 </dd></dl>
 
 </section>
+<section id="nvtx">
+<h2>NVTX<a class="headerlink" href="#nvtx" title="Permalink to this heading">&para;</a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4raft6common4nvtxE">
+<span id="_CPPv3N4raft6common4nvtxE"></span><span id="_CPPv2N4raft6common4nvtxE"></span><span id="raft::common::nvtx"></span><span class="target" id="namespaceraft_1_1common_1_1nvtx"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nvtx</span></span></span><a class="headerlink" href="#_CPPv4N4raft6common4nvtxE" title="Permalink to this definition">&para;</a><br></dt>
+<dd><section id="namespaceraft_1_1common_1_1nvtx_1Usage">
+<h3>Usage<a class="headerlink" href="#namespaceraft_1_1common_1_1nvtx_1Usage" title="Permalink to this heading">&para;</a></h3>
+<p id="namespaceraft_1_1common_1_1nvtx_1Usage">To add NVTX ranges to your code, use the <code class="docutils literal notranslate"><a class="reference internal" href="#classraft_1_1common_1_1nvtx_1_1range"><span class="std std-ref"><span class="pre">nvtx::range</span></span></a></code> RAII object. A range begins when the object is created, and ends when the object is destroyed.</p>
+<p>The example below creates nested NVTX ranges. The range <code class="docutils literal notranslate"><span class="pre">fun_scope</span></code> spans the whole function, while the range <code class="docutils literal notranslate"><span class="pre">epoch_scope</span></code> spans an iteration (and appears 5 times in the timeline). </p><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;raft/common/nvtx.hpp&gt;</span><span class="cp"></span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">some_function</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="p">){</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// Begins a NVTX range with the messsage "some_function_{k}"</span>
+<span class="w">  </span><span class="c1">// The range ends when some_function() returns</span>
+<span class="w">  </span><span class="n">common</span><span class="o">::</span><span class="n">nvtx</span><span class="o">::</span><span class="n">range</span><span class="w"> </span><span class="n">fun_scope</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">{</span><span class="s">"some_function_%d"</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">};</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="n">common</span><span class="o">::</span><span class="n">nvtx</span><span class="o">::</span><span class="n">range</span><span class="w"> </span><span class="n">epoch_scope</span><span class="p">{</span><span class="s">"epoch-%d"</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">};</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// some logic inside the loop</span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p></p>
+</section>
+<section id="namespaceraft_1_1common_1_1nvtx_1Domains">
+<h3>Domains<a class="headerlink" href="#namespaceraft_1_1common_1_1nvtx_1Domains" title="Permalink to this heading">&para;</a></h3>
+<p id="namespaceraft_1_1common_1_1nvtx_1Domains">All NVTX ranges are assigned to domains. A domain defines a named timeline in the Nsight Systems view. By default, we put all ranges into a domain <code class="docutils literal notranslate"><a class="reference internal" href="#structraft_1_1common_1_1nvtx_1_1domain_1_1app"><span class="std std-ref"><span class="pre">domain::app</span></span></a></code> named &ldquo;application&rdquo;. This is controlled by the template parameter <code class="docutils literal notranslate"><span class="pre">Domain</span></code>.</p>
+<p>The example below defines a domain and uses it in a function. </p><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;raft/common/nvtx.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">my_app_domain</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="k">const</span><span class="o">*</span><span class="w"> </span><span class="n">name</span><span class="p">{</span><span class="s">"my application"</span><span class="p">};</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">some_function</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="p">){</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// This NVTX range appears in the timeline named "my application" in Nsight Systems.</span>
+<span class="w">  </span><span class="n">common</span><span class="o">::</span><span class="n">nvtx</span><span class="o">::</span><span class="n">range</span><span class="o">&lt;</span><span class="n">my_app_domain</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fun_scope</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">{</span><span class="s">"some_function_%d"</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">};</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// some logic inside the loop</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ <p></p>
+</section>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0DpEN4raft6common4nvtx10push_rangeEvPKcDp4Args">
+<span id="_CPPv3I0DpEN4raft6common4nvtx10push_rangeEPKcDp4Args"></span><span id="_CPPv2I0DpEN4raft6common4nvtx10push_rangeEPKcDp4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Domain</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4raft6common4nvtx6domainE" title="raft::common::nvtx::domain"><span class="n"><span class="pre">domain</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4raft6common4nvtx6domain3appE" title="raft::common::nvtx::domain::app"><span class="n"><span class="pre">app</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1_1common_1_1nvtx_1a73d81ef00014d551c6aa9c05e062b445"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">push_range</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">format</span></span>, <a class="reference internal" href="#_CPPv4I0DpEN4raft6common4nvtx10push_rangeEvPKcDp4Args" title="raft::common::nvtx::push_range::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpEN4raft6common4nvtx10push_rangeEvPKcDp4Args" title="Permalink to this definition">&para;</a><br></dt>
+<dd><p>Push a named NVTX range. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>Domain</strong> &ndash; optional struct that defines the NVTX domain message; You can create a new domain with a custom message as follows: </p><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">custom_domain</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="k">const</span><span class="o">*</span><span class="w"> </span><span class="n">name</span><span class="p">{</span><span class="s">"custom message"</span><span class="p">};</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ NB: make sure to use the same domain for <code class="docutils literal notranslate"><span class="pre">push_range</span></code> and <code class="docutils literal notranslate"><span class="pre">pop_range</span></code>. <p></p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>format</strong> &ndash; range name format (accepts printf-style arguments) </p></li>
+<li><p><strong>args</strong> &ndash; the arguments for the printf-style formatting </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN4raft6common4nvtx9pop_rangeEvv">
+<span id="_CPPv3I0EN4raft6common4nvtx9pop_rangeEv"></span><span id="_CPPv2I0EN4raft6common4nvtx9pop_rangeEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Domain</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4raft6common4nvtx6domainE" title="raft::common::nvtx::domain"><span class="n"><span class="pre">domain</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4raft6common4nvtx6domain3appE" title="raft::common::nvtx::domain::app"><span class="n"><span class="pre">app</span></span></a><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1_1common_1_1nvtx_1acc311ad34a572ff4f49d04de23509778"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pop_range</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN4raft6common4nvtx9pop_rangeEvv" title="Permalink to this definition">&para;</a><br></dt>
+<dd><p>Pop the latest range. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>Domain</strong> &ndash; optional struct that defines the NVTX domain message; You can create a new domain with a custom message as follows: </p><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">custom_domain</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="k">const</span><span class="o">*</span><span class="w"> </span><span class="n">name</span><span class="p">{</span><span class="s">"custom message"</span><span class="p">};</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ NB: make sure to use the same domain for <code class="docutils literal notranslate"><span class="pre">push_range</span></code> and <code class="docutils literal notranslate"><span class="pre">pop_range</span></code>. <p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN4raft6common4nvtx5rangeE">
+<span id="_CPPv3I0EN4raft6common4nvtx5rangeE"></span><span id="_CPPv2I0EN4raft6common4nvtx5rangeE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Domain</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4raft6common4nvtx6domainE" title="raft::common::nvtx::domain"><span class="n"><span class="pre">domain</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4raft6common4nvtx6domain3appE" title="raft::common::nvtx::domain::app"><span class="n"><span class="pre">app</span></span></a><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="classraft_1_1common_1_1nvtx_1_1range"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">range</span></span></span><a class="headerlink" href="#_CPPv4I0EN4raft6common4nvtx5rangeE" title="Permalink to this definition">&para;</a><br></dt>
+<dd><div class="docutils container">
+<em>#include &lt;nvtx.hpp&gt;</em></div>
+<p>Push a named NVTX range that would be popped at the end of the object lifetime. </p>
+<p>Refer to <a class="reference internal" href="#namespaceraft_1_1common_1_1nvtx_1Usage"><span class="std std-ref">Usage</span></a> for the usage examples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><p><strong>Domain</strong> &ndash; optional struct that defines the NVTX domain message; You can create a new domain with a custom message as follows: </p><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">custom_domain</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="k">const</span><span class="o">*</span><span class="w"> </span><span class="n">name</span><span class="p">{</span><span class="s">"custom message"</span><span class="p">};</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+ <p></p>
+</dd>
+</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4IDpEN4raft6common4nvtx5range5rangeEPKcDp4Args">
+<span id="_CPPv3IDpEN4raft6common4nvtx5range5rangeEPKcDp4Args"></span><span id="_CPPv2IDpEN4raft6common4nvtx5range5rangeEPKcDp4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="classraft_1_1common_1_1nvtx_1_1range_1a0382d9ffbfe484ac38115e2562d858c1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">range</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">format</span></span>, <a class="reference internal" href="#_CPPv4IDpEN4raft6common4nvtx5range5rangeEPKcDp4Args" title="raft::common::nvtx::range::range::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN4raft6common4nvtx5range5rangeEPKcDp4Args" title="Permalink to this definition">&para;</a><br></dt>
+<dd><p>Push a named NVTX range. At the end of the object lifetime, pop the range back.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>format</strong> &ndash; range name format (accepts printf-style arguments) </p></li>
+<li><p><strong>args</strong> &ndash; the arguments for the printf-style formatting </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4raft6common4nvtx6domainE">
+<span id="_CPPv3N4raft6common4nvtx6domainE"></span><span id="_CPPv2N4raft6common4nvtx6domainE"></span><span id="raft::common::nvtx::domain"></span><span class="target" id="namespaceraft_1_1common_1_1nvtx_1_1domain"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">domain</span></span></span><a class="headerlink" href="#_CPPv4N4raft6common4nvtx6domainE" title="Permalink to this definition">&para;</a><br></dt>
+<dd><dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4raft6common4nvtx6domain3appE">
+<span id="_CPPv3N4raft6common4nvtx6domain3appE"></span><span id="_CPPv2N4raft6common4nvtx6domain3appE"></span><span id="raft::common::nvtx::domain::app"></span><span class="target" id="structraft_1_1common_1_1nvtx_1_1domain_1_1app"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">app</span></span></span><a class="headerlink" href="#_CPPv4N4raft6common4nvtx6domain3appE" title="Permalink to this definition">&para;</a><br></dt>
+<dd><div class="docutils container">
+<em>#include &lt;nvtx.hpp&gt;</em></div>
+<p>The default NVTX domain. </p>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4raft6common4nvtx6domain4raftE">
+<span id="_CPPv3N4raft6common4nvtx6domain4raftE"></span><span id="_CPPv2N4raft6common4nvtx6domain4raftE"></span><span id="raft::common::nvtx::domain::raft"></span><span class="target" id="structraft_1_1common_1_1nvtx_1_1domain_1_1raft"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">raft</span></span></span><a class="headerlink" href="#_CPPv4N4raft6common4nvtx6domain4raftE" title="Permalink to this definition">&para;</a><br></dt>
+<dd><div class="docutils container">
+<em>#include &lt;nvtx.hpp&gt;</em></div>
+<p>This NVTX domain is supposed to be used within raft. </p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="mdarray">
 <h2>mdarray<a class="headerlink" href="#mdarray" title="Permalink to this heading">&para;</a></h2>
 <dl class="cpp class">
@@ -401,59 +541,180 @@
 </div>
 </dd></dl>
 
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenclass: Cannot find class &ldquo;raft::make_device_matrix&rdquo; in doxygen xml output for project &ldquo;RAFT&rdquo; from directory: ../../cpp/build/xml/</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenclass: Cannot find class &ldquo;raft::make_device_vector&rdquo; in doxygen xml output for project &ldquo;RAFT&rdquo; from directory: ../../cpp/build/xml/</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenclass: Cannot find class &ldquo;raft::make_device_scalar&rdquo; in doxygen xml output for project &ldquo;RAFT&rdquo; from directory: ../../cpp/build/xml/</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenclass: Cannot find class &ldquo;raft::make_host_matrix&rdquo; in doxygen xml output for project &ldquo;RAFT&rdquo; from directory: ../../cpp/build/xml/</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenclass: Cannot find class &ldquo;raft::make_host_vector&rdquo; in doxygen xml output for project &ldquo;RAFT&rdquo; from directory: ../../cpp/build/xml/</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenclass: Cannot find class &ldquo;raft::make_device_scalar&rdquo; in doxygen xml output for project &ldquo;RAFT&rdquo; from directory: ../../cpp/build/xml/</p>
+</div>
+</section>
+<section id="mdspan">
+<h2>mdspan<a class="headerlink" href="#mdspan" title="Permalink to this heading">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfunction: Cannot find function &ldquo;raft::make_device_mdspan&rdquo; in doxygen xml output for project &ldquo;RAFT&rdquo; from directory: ../../cpp/build/xml/</p>
+</div>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I000EN4raft23make_device_matrix_viewEDaP11ElementType9IndexType9IndexType">
+<span id="_CPPv3I000EN4raft23make_device_matrix_viewEP11ElementType9IndexType9IndexType"></span><span id="_CPPv2I000EN4raft23make_device_matrix_viewEP11ElementType9IndexType9IndexType"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ElementType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IndexType</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LayoutPolicy</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">layout_c_contiguous</span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1ab5a2a4dc24316bde2dd01607a8820ec6"></span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">make_device_matrix_view</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I000EN4raft23make_device_matrix_viewEDaP11ElementType9IndexType9IndexType" title="raft::make_device_matrix_view::ElementType"><span class="n"><span class="pre">ElementType</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <a class="reference internal" href="#_CPPv4I000EN4raft23make_device_matrix_viewEDaP11ElementType9IndexType9IndexType" title="raft::make_device_matrix_view::IndexType"><span class="n"><span class="pre">IndexType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n_rows</span></span>, <a class="reference internal" href="#_CPPv4I000EN4raft23make_device_matrix_viewEDaP11ElementType9IndexType9IndexType" title="raft::make_device_matrix_view::IndexType"><span class="n"><span class="pre">IndexType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n_cols</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I000EN4raft23make_device_matrix_viewEDaP11ElementType9IndexType9IndexType" title="Permalink to this definition">&para;</a><br></dt>
+<dd><p>Create a 2-dim c-contiguous mdspan instance for device pointer. It&rsquo;s expected that the given layout policy match the layout of the underlying pointer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ElementType</strong> &ndash; the data type of the matrix elements </p></li>
+<li><p><strong>LayoutPolicy</strong> &ndash; policy for strides and layout ordering </p></li>
+<li><p><strong>IndexType</strong> &ndash; the index type of the extents </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ptr</strong> &ndash; <strong>[in]</strong> on device to wrap </p></li>
+<li><p><strong>n_rows</strong> &ndash; <strong>[in]</strong> number of rows in pointer </p></li>
+<li><p><strong>n_cols</strong> &ndash; <strong>[in]</strong> number of columns in pointer </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I000EN4raft23make_device_vector_viewEDaP11ElementType9IndexType">
+<span id="_CPPv3I000EN4raft23make_device_vector_viewEP11ElementType9IndexType"></span><span id="_CPPv2I000EN4raft23make_device_vector_viewEP11ElementType9IndexType"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ElementType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IndexType</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LayoutPolicy</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">layout_c_contiguous</span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1a4b9e3fb8d3ca127e34c95c022ccfff4d"></span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">make_device_vector_view</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I000EN4raft23make_device_vector_viewEDaP11ElementType9IndexType" title="raft::make_device_vector_view::ElementType"><span class="n"><span class="pre">ElementType</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <a class="reference internal" href="#_CPPv4I000EN4raft23make_device_vector_viewEDaP11ElementType9IndexType" title="raft::make_device_vector_view::IndexType"><span class="n"><span class="pre">IndexType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I000EN4raft23make_device_vector_viewEDaP11ElementType9IndexType" title="Permalink to this definition">&para;</a><br></dt>
+<dd><p>Create a 1-dim mdspan instance for device pointer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ElementType</strong> &ndash; the data type of the vector elements </p></li>
+<li><p><strong>IndexType</strong> &ndash; the index type of the extents </p></li>
+<li><p><strong>LayoutPolicy</strong> &ndash; policy for strides and layout ordering </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ptr</strong> &ndash; <strong>[in]</strong> on device to wrap </p></li>
+<li><p><strong>n</strong> &ndash; <strong>[in]</strong> number of elements in pointer </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>raft::device_vector_view </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN4raft23make_device_scalar_viewEDaP11ElementType">
+<span id="_CPPv3I00EN4raft23make_device_scalar_viewEP11ElementType"></span><span id="_CPPv2I00EN4raft23make_device_scalar_viewEP11ElementType"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ElementType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IndexType</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1a7c2c9251b0032dc8d4244afa876500fe"></span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">make_device_scalar_view</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00EN4raft23make_device_scalar_viewEDaP11ElementType" title="raft::make_device_scalar_view::ElementType"><span class="n"><span class="pre">ElementType</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN4raft23make_device_scalar_viewEDaP11ElementType" title="Permalink to this definition">&para;</a><br></dt>
+<dd><p>Create a 0-dim (scalar) mdspan instance for device value. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ElementType</strong> &ndash; the data type of the matrix elements </p></li>
+<li><p><strong>IndexType</strong> &ndash; the index type of the extents </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>ptr</strong> &ndash; <strong>[in]</strong> on device to wrap </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I000EN4raft21make_host_matrix_viewEDaP11ElementType9IndexType9IndexType">
+<span id="_CPPv3I000EN4raft21make_host_matrix_viewEP11ElementType9IndexType9IndexType"></span><span id="_CPPv2I000EN4raft21make_host_matrix_viewEP11ElementType9IndexType9IndexType"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ElementType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IndexType</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LayoutPolicy</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">layout_c_contiguous</span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1a0c4aafbe771ee4e2d71d789caa16b2dd"></span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">make_host_matrix_view</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I000EN4raft21make_host_matrix_viewEDaP11ElementType9IndexType9IndexType" title="raft::make_host_matrix_view::ElementType"><span class="n"><span class="pre">ElementType</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <a class="reference internal" href="#_CPPv4I000EN4raft21make_host_matrix_viewEDaP11ElementType9IndexType9IndexType" title="raft::make_host_matrix_view::IndexType"><span class="n"><span class="pre">IndexType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n_rows</span></span>, <a class="reference internal" href="#_CPPv4I000EN4raft21make_host_matrix_viewEDaP11ElementType9IndexType9IndexType" title="raft::make_host_matrix_view::IndexType"><span class="n"><span class="pre">IndexType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n_cols</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I000EN4raft21make_host_matrix_viewEDaP11ElementType9IndexType9IndexType" title="Permalink to this definition">&para;</a><br></dt>
+<dd><p>Create a 2-dim c-contiguous mdspan instance for host pointer. It&rsquo;s expected that the given layout policy match the layout of the underlying pointer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ElementType</strong> &ndash; the data type of the matrix elements </p></li>
+<li><p><strong>IndexType</strong> &ndash; the index type of the extents </p></li>
+<li><p><strong>LayoutPolicy</strong> &ndash; policy for strides and layout ordering </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ptr</strong> &ndash; <strong>[in]</strong> on host to wrap </p></li>
+<li><p><strong>n_rows</strong> &ndash; <strong>[in]</strong> number of rows in pointer </p></li>
+<li><p><strong>n_cols</strong> &ndash; <strong>[in]</strong> number of columns in pointer </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I000EN4raft21make_host_vector_viewEDaP11ElementType9IndexType">
+<span id="_CPPv3I000EN4raft21make_host_vector_viewEP11ElementType9IndexType"></span><span id="_CPPv2I000EN4raft21make_host_vector_viewEP11ElementType9IndexType"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ElementType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IndexType</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LayoutPolicy</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">layout_c_contiguous</span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1ac74eac7a8b5dfcba47d828c4fe432c0c"></span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">make_host_vector_view</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I000EN4raft21make_host_vector_viewEDaP11ElementType9IndexType" title="raft::make_host_vector_view::ElementType"><span class="n"><span class="pre">ElementType</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <a class="reference internal" href="#_CPPv4I000EN4raft21make_host_vector_viewEDaP11ElementType9IndexType" title="raft::make_host_vector_view::IndexType"><span class="n"><span class="pre">IndexType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I000EN4raft21make_host_vector_viewEDaP11ElementType9IndexType" title="Permalink to this definition">&para;</a><br></dt>
+<dd><p>Create a 1-dim mdspan instance for host pointer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ElementType</strong> &ndash; the data type of the vector elements </p></li>
+<li><p><strong>IndexType</strong> &ndash; the index type of the extents </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ptr</strong> &ndash; <strong>[in]</strong> on host to wrap </p></li>
+<li><p><strong>n</strong> &ndash; <strong>[in]</strong> number of elements in pointer </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>raft::host_vector_view </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ElementType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IndexType</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="namespaceraft_1a7c2c9251b0032dc8d4244afa876500fe"></span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">make_device_scalar_view</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00EN4raft23make_device_scalar_viewEDaP11ElementType" title="raft::make_device_scalar_view::ElementType"><span class="n"><span class="pre">ElementType</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span><span class="sig-paren">)</span><br></dt>
+<dd><p>Create a 0-dim (scalar) mdspan instance for device value. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ElementType</strong> &ndash; the data type of the matrix elements </p></li>
+<li><p><strong>IndexType</strong> &ndash; the index type of the extents </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>ptr</strong> &ndash; <strong>[in]</strong> on device to wrap </p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="span">
 <h2>span<a class="headerlink" href="#span" title="Permalink to this heading">&para;</a></h2>
-<dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4I0_b_NSt6size_tEEN4raft4spanE">
-<span id="_CPPv3I0_b_NSt6size_tEEN4raft4spanE"></span><span id="_CPPv2I0_b_NSt6size_tEEN4raft4spanE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_device</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Extent</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">dynamic_extent</span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="classraft_1_1span"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">span</span></span></span><a class="headerlink" href="#_CPPv4I0_b_NSt6size_tEEN4raft4spanE" title="Permalink to this definition">&para;</a><br></dt>
-<dd><p>The span class defined in ISO C++20. Iterator is defined as plain pointer and most of the methods have bound check on debug build. </p>
-<p></p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rmm</span><span class="p">::</span><span class="n">device_uvector</span><span class="o">&lt;</span><span class="nb">float</span><span class="o">&gt;</span> <span class="n">uvec</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">rmm</span><span class="p">::</span><span class="n">cuda_stream_default</span><span class="p">);</span>
-<span class="n">auto</span> <span class="n">view</span> <span class="o">=</span> <span class="n">device_span</span><span class="o">&lt;</span><span class="nb">float</span><span class="o">&gt;</span><span class="p">{</span><span class="n">uvec</span><span class="o">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">uvec</span><span class="o">.</span><span class="n">size</span><span class="p">()};</span>
-</pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenclass: Cannot find class &ldquo;raft::device_span&rdquo; in doxygen xml output for project &ldquo;RAFT&rdquo; from directory: ../../cpp/build/xml/</p>
 </div>
- <p></p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4raft4span4spanEv">
-<span id="_CPPv3N4raft4span4spanEv"></span><span id="_CPPv2N4raft4span4spanEv"></span><span id="raft::span::spanCE"></span><span class="target" id="classraft_1_1span_1a2b0818f47bb9e05a56f8d7eeaa92c8e5"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">span</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N4raft4span4spanEv" title="Permalink to this definition">&para;</a><br></dt>
-<dd><p>Default constructor that constructs a span with size 0 and nullptr. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4raft4span4spanE7pointer9size_type">
-<span id="_CPPv3N4raft4span4spanE7pointer9size_type"></span><span id="_CPPv2N4raft4span4spanE7pointer9size_type"></span><span id="raft::span::span__pointer.size_typeCE"></span><span class="target" id="classraft_1_1span_1a2686da762b59ab1cda4424647e80b99a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">span</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">pointer</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N4raft4span4spanE7pointer9size_type" title="Permalink to this definition">&para;</a><br></dt>
-<dd><p>Constructs a span that is a view over the range [first, first + count);. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4raft4span4spanE7pointer7pointer">
-<span id="_CPPv3N4raft4span4spanE7pointer7pointer"></span><span id="_CPPv2N4raft4span4spanE7pointer7pointer"></span><span id="raft::span::span__pointer.pointerCE"></span><span class="target" id="classraft_1_1span_1ae096f984bf42bf66af723626644cdbcd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">span</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">pointer</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">first</span></span>, <span class="n"><span class="pre">pointer</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">last</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N4raft4span4spanE7pointer7pointer" title="Permalink to this definition">&para;</a><br></dt>
-<dd><p>Constructs a span that is a view over the range [first, last) </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I_NSt6size_tEEN4raft4span4spanERA1N_12element_type">
-<span id="_CPPv3I_NSt6size_tEEN4raft4span4spanERA1N_12element_type"></span><span id="_CPPv2I_NSt6size_tEEN4raft4span4spanERAN_12element_type"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">N</span></span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="classraft_1_1span_1a35ce9473358b8d1502272264de1b578e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">span</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">element_type</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">arr</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I_NSt6size_tEEN4raft4span4spanERA1N_12element_type" title="raft::span::span::N"><span class="n"><span class="pre">N</span></span></a><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I_NSt6size_tEEN4raft4span4spanERA1N_12element_type" title="Permalink to this definition">&para;</a><br></dt>
-<dd><p>Constructs a span that is a view over the array arr. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I0_NSt6size_tE0EN4raft4span4spanERK4spanI1U9is_device11OtherExtentE">
-<span id="_CPPv3I0_NSt6size_tE0EN4raft4span4spanERK4spanI1U9is_device11OtherExtentE"></span><span id="_CPPv2I0_NSt6size_tE0EN4raft4span4spanERK4spanI1U9is_device11OtherExtentE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OtherExtent</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_if</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">is_allowed_element_type_conversion_t</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_NSt6size_tE0EN4raft4span4spanERK4spanI1U9is_device11OtherExtentE" title="raft::span::span::U"><span class="n"><span class="pre">U</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_b_NSt6size_tEEN4raft4spanE" title="raft::span::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="w"> </span><span class="o"><span class="pre">&amp;&amp;</span></span><span class="w"> </span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">is_allowed_extent_conversion_t</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_NSt6size_tE0EN4raft4span4spanERK4spanI1U9is_device11OtherExtentE" title="raft::span::span::OtherExtent"><span class="n"><span class="pre">OtherExtent</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_b_NSt6size_tEEN4raft4spanE" title="raft::span::Extent"><span class="n"><span class="pre">Extent</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="classraft_1_1span_1ad1729f715df2be05c54a90a127aaa392"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">span</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_NSt6size_tE0EN4raft4span4spanERK4spanI1U9is_device11OtherExtentE" title="raft::span::span"><span class="n"><span class="pre">span</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_NSt6size_tE0EN4raft4span4spanERK4spanI1U9is_device11OtherExtentE" title="raft::span::span::U"><span class="n"><span class="pre">U</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_b_NSt6size_tEEN4raft4spanE" title="raft::span::is_device"><span class="n"><span class="pre">is_device</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_NSt6size_tE0EN4raft4span4spanERK4spanI1U9is_device11OtherExtentE" title="raft::span::span::OtherExtent"><span class="n"><span class="pre">OtherExtent</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0_NSt6size_tE0EN4raft4span4spanERK4spanI1U9is_device11OtherExtentE" title="Permalink to this definition">&para;</a><br></dt>
-<dd><p>Initialize a span class from another one who&rsquo;s underlying type is convertible to element_type. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I_NSt6size_tE_NSt6size_tEENK4raft4span7subspanE4spanI12element_type9is_deviceN6detail14extent_value_tI6Extent6Offset5CountE5valueEEv">
-<span id="_CPPv3I_NSt6size_tE_NSt6size_tEENK4raft4span7subspanEv"></span><span id="_CPPv2I_NSt6size_tE_NSt6size_tEENK4raft4span7subspanEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Offset</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Count</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">dynamic_extent</span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="classraft_1_1span_1a307f75f36f4278bf3fdc8b408a0e3e5c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">subspan</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="o"><span class="pre">-&gt;</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_b_NSt6size_tEEN4raft4spanE" title="raft::span"><span class="n"><span class="pre">span</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">element_type</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_b_NSt6size_tEEN4raft4spanE" title="raft::span::is_device"><span class="n"><span class="pre">is_device</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">extent_value_t</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_b_NSt6size_tEEN4raft4spanE" title="raft::span::Extent"><span class="n"><span class="pre">Extent</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_NSt6size_tE_NSt6size_tEENK4raft4span7subspanE4spanI12element_type9is_deviceN6detail14extent_value_tI6Extent6Offset5CountE5valueEEv" title="raft::span::subspan::Offset"><span class="n"><span class="pre">Offset</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_NSt6size_tE_NSt6size_tEENK4raft4span7subspanE4spanI12element_type9is_deviceN6detail14extent_value_tI6Extent6Offset5CountE5valueEEv" title="raft::span::subspan::Count"><span class="n"><span class="pre">Count</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I_NSt6size_tE_NSt6size_tEENK4raft4span7subspanE4spanI12element_type9is_deviceN6detail14extent_value_tI6Extent6Offset5CountE5valueEEv" title="Permalink to this definition">&para;</a><br></dt>
-<dd><p>If Count is std::dynamic_extent, r.size() == this-&gt;size() - Offset; Otherwise r.size() == Count. </p>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenclass: Cannot find class &ldquo;raft::host_span&rdquo; in doxygen xml output for project &ldquo;RAFT&rdquo; from directory: ../../cpp/build/xml/</p>
 </div>
-</dd></dl>
-
+</section>
+<section id="key-value-pair">
+<h2>Key-Value Pair<a class="headerlink" href="#key-value-pair" title="Permalink to this heading">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenclass: Cannot find class &ldquo;raft::KeyValuePair&rdquo; in doxygen xml output for project &ldquo;RAFT&rdquo; from directory: ../../cpp/build/xml/</p>
+</div>
 </section>
 <section id="logger">
 <h2>logger<a class="headerlink" href="#logger" title="Permalink to this heading">&para;</a></h2>
@@ -1388,7 +1649,7 @@
           </div>
           <footer><div aria-label="Footer" class="rst-footer-buttons" role="navigation">
         <a accesskey="p" class="btn btn-neutral float-left" href="../cpp_api.html" rel="prev" title="RAFT C++ API Reference"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
-        <a accesskey="n" class="btn btn-neutral float-right" href="clustering.html" rel="next" title="Clustering">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+        <a accesskey="n" class="btn btn-neutral float-right" href="cluster.html" rel="next" title="Cluster">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
     </div>
 
   <hr>
