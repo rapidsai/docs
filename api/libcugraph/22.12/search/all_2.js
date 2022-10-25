@@ -18,7 +18,7 @@ var searchData=
   ['clear_5fvertex_5fmask_41',['clear_vertex_mask',['../structcugraph_1_1graph__mask__t.html#a5553712c84db8a1c383f75d004125f53',1,'cugraph::graph_mask_t']]],
   ['clock_5fseeding_5ft_42',['clock_seeding_t',['../structcugraph_1_1detail_1_1original_1_1clock__seeding__t.html',1,'cugraph::detail::original']]],
   ['cluster_5fupdate_5fop_5ft_43',['cluster_update_op_t',['../structcugraph_1_1detail_1_1cluster__update__op__t.html',1,'cugraph::detail']]],
-  ['coarsen_5fgraph_44',['coarsen_graph',['../namespacecugraph.html#a7cd02b2bb63db248a14141b4e2066c94',1,'cugraph']]],
+  ['coarsen_5fgraph_44',['coarsen_graph',['../namespacecugraph.html#af903a9b0db260ad602ea42ab07c1622c',1,'cugraph']]],
   ['col_5findx_5fextract_5ft_45',['col_indx_extract_t',['../structcugraph_1_1detail_1_1col__indx__extract__t.html',1,'cugraph::detail']]],
   ['col_5findx_5fextract_5ft_3c_20graph_5ft_2c_20index_5ft_2c_20std_3a_3aenable_5fif_5ft_3c_20graph_5ft_3a_3ais_5fmulti_5fgpu_3d_3dfalse_20_3e_20_3e_46',['col_indx_extract_t&lt; graph_t, index_t, std::enable_if_t&lt; graph_t::is_multi_gpu==false &gt; &gt;',['../structcugraph_1_1detail_1_1col__indx__extract__t_3_01graph__t_00_01index__t_00_01std_1_1enable__aac329b03074c911fa378536419ee34d.html',1,'cugraph::detail']]],
   ['combine_5fedgelists_47',['combine_edgelists',['../namespacecugraph.html#a7d0bbe5af0b12a11b5c8aba2fb9826df',1,'cugraph']]],

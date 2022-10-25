@@ -2,7 +2,7 @@ var searchData=
 [
   ['clear_5fedge_5fmask_929',['clear_edge_mask',['../structcugraph_1_1graph__mask__t.html#a02d2362a218ed2677a053d296223762b',1,'cugraph::graph_mask_t']]],
   ['clear_5fvertex_5fmask_930',['clear_vertex_mask',['../structcugraph_1_1graph__mask__t.html#a5553712c84db8a1c383f75d004125f53',1,'cugraph::graph_mask_t']]],
-  ['coarsen_5fgraph_931',['coarsen_graph',['../namespacecugraph.html#a7cd02b2bb63db248a14141b4e2066c94',1,'cugraph']]],
+  ['coarsen_5fgraph_931',['coarsen_graph',['../namespacecugraph.html#af903a9b0db260ad602ea42ab07c1622c',1,'cugraph']]],
   ['combine_5fedgelists_932',['combine_edgelists',['../namespacecugraph.html#a7d0bbe5af0b12a11b5c8aba2fb9826df',1,'cugraph']]],
   ['comms_5fbcast_933',['comms_bcast',['../namespacecugraph.html#a3ea68fa26fc144e25e2bb392903c4ec4',1,'cugraph']]],
   ['connected_5fcomponents_934',['connected_components',['../namespacecugraph.html#a5d2693f86441fd77a28bacadc7687a91',1,'cugraph']]],
