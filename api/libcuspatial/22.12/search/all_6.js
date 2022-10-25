@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['geometric_5fdistribution_33',['geometric_distribution',['../classgeometric__distribution.html',1,'']]]
+  ['geometric_5fdistribution_35',['geometric_distribution',['../classgeometric__distribution.html',1,'']]]
 ];
