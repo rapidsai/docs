@@ -8035,78 +8035,78 @@
       <type>column_in_metadata &amp;</type>
       <name>set_name</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>a3461aed229ba0d8527abc541dd22e39c</anchor>
-      <arglist>(std::string const &amp;name)</arglist>
+      <anchor>a06abea0c31cebaf9318b9c3461ea3106</anchor>
+      <arglist>(std::string const &amp;name) noexcept</arglist>
     </member>
     <member kind="function">
       <type>column_in_metadata &amp;</type>
       <name>set_nullability</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>a95eb361c2a5e3c0ed09cf7be77e4fc2e</anchor>
-      <arglist>(bool nullable)</arglist>
+      <anchor>acc46d6f2899e0f840fb18283c9061134</anchor>
+      <arglist>(bool nullable) noexcept</arglist>
     </member>
     <member kind="function">
       <type>column_in_metadata &amp;</type>
       <name>set_list_column_as_map</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>adc5bca0eba76117bb03f895b441f1963</anchor>
-      <arglist>()</arglist>
+      <anchor>aad63696190c529b58ed0066521b59ca0</anchor>
+      <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>column_in_metadata &amp;</type>
       <name>set_int96_timestamps</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>ae7c4634826b596efdcb9ca3ae9ab65ff</anchor>
-      <arglist>(bool req)</arglist>
+      <anchor>a22054988f51d61b4b29fc3d9a44bd4ee</anchor>
+      <arglist>(bool req) noexcept</arglist>
     </member>
     <member kind="function">
       <type>column_in_metadata &amp;</type>
       <name>set_decimal_precision</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>aa9efdf1535f2341362764fed54bcf51f</anchor>
-      <arglist>(uint8_t precision)</arglist>
+      <anchor>a25fe2b4f3b43ac3cf3d7706dcd3a5912</anchor>
+      <arglist>(uint8_t precision) noexcept</arglist>
     </member>
     <member kind="function">
       <type>column_in_metadata &amp;</type>
       <name>set_parquet_field_id</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>a0f2141d2d2b80d8c1f51766d33623c76</anchor>
-      <arglist>(int32_t field_id)</arglist>
+      <anchor>a1a3990ca7c159c905feb6568931a2073</anchor>
+      <arglist>(int32_t field_id) noexcept</arglist>
     </member>
     <member kind="function">
       <type>column_in_metadata &amp;</type>
       <name>set_output_as_binary</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>a77c3c5152c1d21628ef6bb5ebb7e9bd2</anchor>
-      <arglist>(bool binary)</arglist>
+      <anchor>a8c27527b05be18ffcd4c8e2553777ee8</anchor>
+      <arglist>(bool binary) noexcept</arglist>
     </member>
     <member kind="function">
       <type>column_in_metadata &amp;</type>
       <name>child</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>a1ea40b8e90e4bb4a195e687022fa5296</anchor>
-      <arglist>(size_type i)</arglist>
+      <anchor>a9c59ae9c5d057827edbae1aa0e2e4bcd</anchor>
+      <arglist>(size_type i) noexcept</arglist>
     </member>
     <member kind="function">
       <type>column_in_metadata const  &amp;</type>
       <name>child</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>a931603481051144530e72d798060373b</anchor>
-      <arglist>(size_type i) const</arglist>
+      <anchor>adbc8d4b091c5b51cfa7dc15222db369e</anchor>
+      <arglist>(size_type i) const noexcept</arglist>
     </member>
     <member kind="function">
       <type>std::string</type>
       <name>get_name</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>aea60e61f9d13ed32347357c0ce5c10d2</anchor>
-      <arglist>() const</arglist>
+      <anchor>aa68c5a0934034212f3e3f8e60aaabb66</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>is_nullability_defined</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>a19f3cdcf9a735f662c3de80eb59de5d2</anchor>
-      <arglist>() const</arglist>
+      <anchor>ad1e5e4b94878f4145fa5bb14150fdd10</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
@@ -8119,22 +8119,22 @@
       <type>bool</type>
       <name>is_map</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>aa5a0b173dfd3a26eda4b7bb66e5601f0</anchor>
-      <arglist>() const</arglist>
+      <anchor>a601603adb1a7f6d370bac45b50f4b855</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>is_enabled_int96_timestamps</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>a5e489364fee134c947d2eccea7b04c7d</anchor>
-      <arglist>() const</arglist>
+      <anchor>a2e83aab01fbbb2083ae30b012177e6bc</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>is_decimal_precision_set</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>a9977da75b70cd07a7293841f846aa86a</anchor>
-      <arglist>() const</arglist>
+      <anchor>a3ebd5eee3f6374617299759724bf689d</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>uint8_t</type>
@@ -8147,8 +8147,8 @@
       <type>bool</type>
       <name>is_parquet_field_id_set</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>ad2067528c9562459d8faa216df79371b</anchor>
-      <arglist>() const</arglist>
+      <anchor>a3a6ad6b24101140a2e25573299080f9f</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>int32_t</type>
@@ -8161,15 +8161,15 @@
       <type>size_type</type>
       <name>num_children</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>a55a6d987ef0be58e4799f8d064860d5f</anchor>
-      <arglist>() const</arglist>
+      <anchor>a4db050956548caf2337401e2adc195b1</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>is_enabled_output_as_binary</name>
       <anchorfile>classcudf_1_1io_1_1column__in__metadata.html</anchorfile>
-      <anchor>af315ea3f7888e3b91a4bbcf14fa3b86d</anchor>
-      <arglist>() const</arglist>
+      <anchor>a175d6a84b937864dfa608d2be103cadb</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
