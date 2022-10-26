@@ -89,7 +89,7 @@
 <h2>Pairwise Distances<a class="headerlink" href="#pairwise-distances" title="Permalink to this heading">&para;</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pylibraft.distance.pairwise_distance">
-<span class="sig-prename descclassname"><span class="pre">pylibraft.distance.</span></span><span class="sig-name descname"><span class="pre">pairwise_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dists</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/51eb937/python/pylibraftpylibraft/distance/pairwise_distance.pyx#L33"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.distance.pairwise_distance" title="Permalink to this definition">&para;</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pylibraft.distance.</span></span><span class="sig-name descname"><span class="pre">pairwise_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dists</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/7682ee4/python/pylibraftpylibraft/distance/pairwise_distance.pyx#L93"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.distance.pairwise_distance" title="Permalink to this definition">&para;</a></dt>
 <dd><p>Compute pairwise distances between X and Y</p>
 <dl class="simple">
 <dt>Valid values for metric:</dt><dd><dl class="simple">
@@ -108,12 +108,14 @@
 <dt><strong>dists</strong><span class="classifier">Writable CUDA array interface matrix shape (m, n)</span></dt><dd></dd>
 <dt><strong>metric</strong><span class="classifier">string denoting the metric type (default=&rdquo;euclidean&rdquo;)</span></dt><dd></dd>
 <dt><strong>p</strong><span class="classifier">metric parameter (currently used only for &ldquo;minkowski&rdquo;)</span></dt><dd></dd>
+<dt><strong>handle</strong><span class="classifier">Optional RAFT handle for reusing expensive CUDA resources</span></dt><dd></dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
 
+<span class="kn">from</span> <span class="nn">pylibraft.common</span> <span class="kn">import</span> <span class="n">Handle</span>
 <span class="kn">from</span> <span class="nn">pylibraft.distance</span> <span class="kn">import</span> <span class="n">pairwise_distance</span>
 
 <span class="n">n_samples</span> <span class="o">=</span> <span class="mi">5000</span>
@@ -125,7 +127,15 @@
                               <span class="n">dtype</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
-<span class="n">pairwise_distance</span><span class="p">(</span><span class="n">in1</span><span class="p">,</span> <span class="n">in2</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">"euclidean"</span><span class="p">)</span>
+<span class="c1"># A single RAFT handle can optionally be reused across</span>
+<span class="c1"># pylibraft functions.</span>
+<span class="n">handle</span> <span class="o">=</span> <span class="n">Handle</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="n">pairwise_distance</span><span class="p">(</span><span class="n">in1</span><span class="p">,</span> <span class="n">in2</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">"euclidean"</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">handle</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="c1"># pylibraft functions are often asynchronous so the</span>
+<span class="c1"># handle needs to be explicitly synchronized</span>
+<span class="n">handle</span><span class="o">.</span><span class="n">sync</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
