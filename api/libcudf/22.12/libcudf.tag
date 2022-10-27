@@ -429,8 +429,8 @@
       <type>void</type>
       <name>apply_sorting_struct_binary_op</name>
       <anchorfile>binaryop_8hpp.html</anchorfile>
-      <anchor>afd0f9a637352f14fdd9623ae226bfe79</anchor>
-      <arglist>(mutable_column_view &amp;out, column_view const &amp;lhs, column_view const &amp;rhs, bool is_lhs_scalar, bool is_rhs_scalar, binary_operator op, rmm::cuda_stream_view stream=cudf::get_default_stream())</arglist>
+      <anchor>aed04269dfa5a04dfd51bc9d87bb094d8</anchor>
+      <arglist>(mutable_column_view &amp;out, column_view const &amp;lhs, column_view const &amp;rhs, bool is_lhs_scalar, bool is_rhs_scalar, binary_operator op, rmm::cuda_stream_view stream)</arglist>
     </member>
   </compound>
   <compound kind="file">
