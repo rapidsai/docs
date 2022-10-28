@@ -14783,6 +14783,24 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>cudf::io::text::parse_options</name>
+    <filename>structcudf_1_1io_1_1text_1_1parse__options.html</filename>
+    <member kind="variable">
+      <type>byte_range_info</type>
+      <name>byte_range</name>
+      <anchorfile>structcudf_1_1io_1_1text_1_1parse__options.html</anchorfile>
+      <anchor>a203f140edeb559b36c47fd2d19517324</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>bool</type>
+      <name>strip_delimiters</name>
+      <anchorfile>structcudf_1_1io_1_1text_1_1parse__options.html</anchorfile>
+      <anchor>aed361bb709e30fc30af7f7cc1263a660</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>cudf::io::parsed_orc_statistics</name>
     <filename>structcudf_1_1io_1_1parsed__orc__statistics.html</filename>
     <member kind="variable">
@@ -15116,31 +15134,6 @@
     </member>
   </compound>
   <compound kind="class">
-    <name>cudf::experimental::row::hash::row_hasher</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
-      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
-      <name>device_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
-      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
     <name>cudf::row_hasher</name>
     <filename>classcudf_1_1row__hasher.html</filename>
     <templarg>hash_function</templarg>
@@ -15165,6 +15158,31 @@
       <anchorfile>classcudf_1_1row__hasher.html</anchorfile>
       <anchor>ab370aeff347da4c228ccd917af8b52be</anchor>
       <arglist>(size_type row_index) const</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>cudf::experimental::row::hash::row_hasher</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
+      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
+      <name>device_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
+      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -15380,31 +15398,6 @@
     <base virtualness="virtual">cudf::aggregation</base>
   </compound>
   <compound kind="class">
-    <name>cudf::experimental::row::equality::self_comparator</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>self_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>a8f53714e3008c063b18aa52cbd1f5a8e</anchor>
-      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>self_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>a305627a9b975fed5f09c5b49dfb6f644</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>equal_to</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>adfbbb6f105eb6f65f0689f4eceef1792</anchor>
-      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
     <name>cudf::experimental::row::lexicographic::self_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</filename>
     <member kind="function">
@@ -15434,6 +15427,31 @@
       <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
       <anchor>a3f1126f8f76064a8f0e6b96e4e51ce41</anchor>
       <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>cudf::experimental::row::equality::self_comparator</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>self_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>a8f53714e3008c063b18aa52cbd1f5a8e</anchor>
+      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>self_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>a305627a9b975fed5f09c5b49dfb6f644</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>equal_to</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>adfbbb6f105eb6f65f0689f4eceef1792</anchor>
+      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
