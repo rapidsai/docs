@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['haversine_5fdistance_175',['haversine_distance',['../group__distance.html#ga84eb7a8d22b290107e00e9000effe374',1,'cuspatial::haversine_distance(cudf::column_view const &amp;a_lon, cudf::column_view const &amp;a_lat, cudf::column_view const &amp;b_lon, cudf::column_view const &amp;b_lat, double const radius=EARTH_RADIUS_KM, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())'],['../group__distance.html#gabcc3f2edbf4d84139779ada72c530aee',1,'cuspatial::haversine_distance(LonLatItA a_lonlat_first, LonLatItA a_lonlat_last, LonLatItB b_lonlat_first, OutputIt distance_first, T const radius=EARTH_RADIUS_KM, rmm::cuda_stream_view stream=rmm::cuda_stream_default)']]]
+  ['geometry_5fidx_5ffrom_5fpart_5fidx_190',['geometry_idx_from_part_idx',['../classcuspatial_1_1multilinestring__range.html#a8f41b0841aa80f0d02d422b226441162',1,'cuspatial::multilinestring_range']]],
+  ['geometry_5fidx_5ffrom_5fpoint_5fidx_191',['geometry_idx_from_point_idx',['../classcuspatial_1_1multilinestring__range.html#a2a5794d819492f804b8e8372681af9f2',1,'cuspatial::multilinestring_range']]]
 ];
