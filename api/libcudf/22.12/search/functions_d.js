@@ -3,7 +3,7 @@ var searchData=
   ['na_5ffilter_2959',['na_filter',['../classcudf_1_1io_1_1csv__reader__options__builder.html#a598d257183e37ff9e3691b9ef4a20663',1,'cudf::io::csv_reader_options_builder']]],
   ['na_5frep_2960',['na_rep',['../classcudf_1_1io_1_1csv__writer__options__builder.html#a9a93f9ebbb23508a3e0da1d1cfc74768',1,'cudf::io::csv_writer_options_builder']]],
   ['na_5fvalues_2961',['na_values',['../classcudf_1_1io_1_1csv__reader__options__builder.html#a51dd2fd53c3c03e3be98014e597e3482',1,'cudf::io::csv_reader_options_builder']]],
-  ['names_2962',['names',['../classcudf_1_1io_1_1csv__reader__options__builder.html#a7b150f924302e8c1f99c54cf867c69fd',1,'cudf::io::csv_reader_options_builder']]],
+  ['names_2962',['names',['../classcudf_1_1io_1_1csv__reader__options__builder.html#a7b150f924302e8c1f99c54cf867c69fd',1,'cudf::io::csv_reader_options_builder::names()'],['../classcudf_1_1io_1_1csv__writer__options__builder.html#ab6ed21bf287c7f97742af56103bedc94',1,'cudf::io::csv_writer_options_builder::names()']]],
   ['nans_5fto_5fnulls_2963',['nans_to_nulls',['../group__transformation__transform.html#gae531f09656e2668d620bafe28bbd54ee',1,'cudf']]],
   ['ngrams_5ftokenize_2964',['ngrams_tokenize',['../group__nvtext__ngrams.html#gace17045b4ee5a3b10157ed40f9575298',1,'nvtext']]],
   ['non_5fowning_5fbuffer_2965',['non_owning_buffer',['../classcudf_1_1io_1_1datasource_1_1non__owning__buffer.html#a9ccdbb7fa3b6fddcd97c2fe99479378b',1,'cudf::io::datasource::non_owning_buffer']]],

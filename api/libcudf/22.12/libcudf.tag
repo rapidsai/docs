@@ -9515,10 +9515,10 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
-      <type>table_metadata const  *</type>
-      <name>get_metadata</name>
+      <type>std::vector&lt; std::string &gt; const  &amp;</type>
+      <name>get_names</name>
       <anchorfile>classcudf_1_1io_1_1csv__writer__options.html</anchorfile>
-      <anchor>a669f6f8bf1cd2d0681b955c2d067fcee</anchor>
+      <anchor>acebf020d070e55233e1639dc8690b5ee</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
@@ -9572,10 +9572,10 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>set_metadata</name>
+      <name>set_names</name>
       <anchorfile>classcudf_1_1io_1_1csv__writer__options.html</anchorfile>
-      <anchor>acea616c945d17f61d788e76e93e095f9</anchor>
-      <arglist>(table_metadata *metadata)</arglist>
+      <anchor>af4a8d597f6d0f99849786272557a41fb</anchor>
+      <arglist>(std::vector&lt; std::string &gt; names)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -9653,10 +9653,10 @@
     </member>
     <member kind="function">
       <type>csv_writer_options_builder &amp;</type>
-      <name>metadata</name>
+      <name>names</name>
       <anchorfile>classcudf_1_1io_1_1csv__writer__options__builder.html</anchorfile>
-      <anchor>af577cc827f1cfc6d0740c6b8ddb93ae4</anchor>
-      <arglist>(table_metadata *metadata)</arglist>
+      <anchor>ab6ed21bf287c7f97742af56103bedc94</anchor>
+      <arglist>(std::vector&lt; std::string &gt; names)</arglist>
     </member>
     <member kind="function">
       <type>csv_writer_options_builder &amp;</type>
