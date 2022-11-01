@@ -431,14 +431,15 @@
 <p>To use Dask, we need to create a scheduler and some workers that will perform our calculations. These workers will also need GPUs and the same Python environment as your notebook session. Dask has <a class="reference internal" href="../tools/kubernetes/dask-operator.html"><span class="doc std std-doc">an operator for Kubernetes</span></a> that you can use to manage Dask clusters on your Kubeflow cluster.</p>
 <section id="installing-the-dask-kubernetes-operator">
 <h3>Installing the Dask Kubernetes operator<a class="headerlink" href="#installing-the-dask-kubernetes-operator" title="Permalink to this heading">#</a></h3>
-<p>To install the operator we need to create any custom resources and the operator itself, please <a class="reference external" href="https://kubernetes.dask.org/en/latest/operator_installation.html">refer to the documentation</a> to find up-to-date installation instructions. From the terminal run the following commands.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl apply -f https://raw.githubusercontent.com/dask/dask-kubernetes/main/dask_kubernetes/operator/deployment/manifests/daskcluster.yaml
-
-<span class="gp">$ </span>kubectl apply -f https://raw.githubusercontent.com/dask/dask-kubernetes/main/dask_kubernetes/operator/deployment/manifests/daskworkergroup.yaml
-
-<span class="gp">$ </span>kubectl apply -f https://raw.githubusercontent.com/dask/dask-kubernetes/main/dask_kubernetes/operator/deployment/manifests/daskjob.yaml
-
-<span class="gp">$ </span>kubectl apply -f https://raw.githubusercontent.com/dask/dask-kubernetes/main/dask_kubernetes/operator/deployment/manifests/operator.yaml
+<p>To install the operator we need to create any custom resources and the operator itself, please <a class="reference external" href="https://kubernetes.dask.org/en/latest/operator_installation.html">refer to the documentation</a> to find up-to-date installation instructions. From the terminal run the following command.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>helm install --repo https://helm.dask.org --create-namespace -n dask-operator --generate-name dask-kubernetes-operator
+<span class="go">NAME: dask-kubernetes-operator-1666875935</span>
+<span class="go">NAMESPACE: dask-operator</span>
+<span class="go">STATUS: deployed</span>
+<span class="go">REVISION: 1</span>
+<span class="go">TEST SUITE: None</span>
+<span class="go">NOTES:</span>
+<span class="go">Operator has been installed successfully.</span>
 </pre></div>
 </div>
 <p>Verify our resources were applied successfully by listing our Dask clusters. Don’t expect to see any resources yet but the command should succeed.</p>
@@ -447,7 +448,7 @@
 </pre></div>
 </div>
 <p>You can also check the operator pod is running and ready to launch new Dask clusters.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl get pods -A -l <span class="nv">application</span><span class="o">=</span>dask-kubernetes-operator
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl get pods -A -l app.kubernetes.io/name<span class="o">=</span>dask-kubernetes-operator
 <span class="go">NAMESPACE       NAME                                        READY   STATUS    RESTARTS   AGE</span>
 <span class="go">dask-operator   dask-kubernetes-operator-775b8bbbd5-zdrf7   1/1     Running   0          74s</span>
 </pre></div>

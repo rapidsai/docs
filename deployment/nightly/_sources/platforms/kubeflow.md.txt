@@ -91,16 +91,17 @@ To use Dask, we need to create a scheduler and some workers that will perform ou
 
 ### Installing the Dask Kubernetes operator
 
-To install the operator we need to create any custom resources and the operator itself, please [refer to the documentation](https://kubernetes.dask.org/en/latest/operator_installation.html) to find up-to-date installation instructions. From the terminal run the following commands.
+To install the operator we need to create any custom resources and the operator itself, please [refer to the documentation](https://kubernetes.dask.org/en/latest/operator_installation.html) to find up-to-date installation instructions. From the terminal run the following command.
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/dask/dask-kubernetes/main/dask_kubernetes/operator/deployment/manifests/daskcluster.yaml
-
-$ kubectl apply -f https://raw.githubusercontent.com/dask/dask-kubernetes/main/dask_kubernetes/operator/deployment/manifests/daskworkergroup.yaml
-
-$ kubectl apply -f https://raw.githubusercontent.com/dask/dask-kubernetes/main/dask_kubernetes/operator/deployment/manifests/daskjob.yaml
-
-$ kubectl apply -f https://raw.githubusercontent.com/dask/dask-kubernetes/main/dask_kubernetes/operator/deployment/manifests/operator.yaml
+$ helm install --repo https://helm.dask.org --create-namespace -n dask-operator --generate-name dask-kubernetes-operator
+NAME: dask-kubernetes-operator-1666875935
+NAMESPACE: dask-operator
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+Operator has been installed successfully.
 ```
 
 Verify our resources were applied successfully by listing our Dask clusters. Don’t expect to see any resources yet but the command should succeed.
@@ -113,7 +114,7 @@ No resources found in default namespace.
 You can also check the operator pod is running and ready to launch new Dask clusters.
 
 ```console
-$ kubectl get pods -A -l application=dask-kubernetes-operator
+$ kubectl get pods -A -l app.kubernetes.io/name=dask-kubernetes-operator
 NAMESPACE       NAME                                        READY   STATUS    RESTARTS   AGE
 dask-operator   dask-kubernetes-operator-775b8bbbd5-zdrf7   1/1     Running   0          74s
 ```
