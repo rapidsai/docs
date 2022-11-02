@@ -3241,6 +3241,9 @@
     <class kind="struct">cudf::io::timestamp_statistics</class>
     <class kind="struct">cudf::io::column_statistics</class>
     <class kind="struct">cudf::io::parsed_orc_statistics</class>
+    <class kind="struct">cudf::io::orc_column_schema</class>
+    <class kind="struct">cudf::io::orc_schema</class>
+    <class kind="class">cudf::io::orc_metadata</class>
     <namespace>cudf</namespace>
     <namespace>cudf::io</namespace>
     <member kind="typedef">
@@ -3276,6 +3279,13 @@
       <name>read_parsed_orc_statistics</name>
       <anchorfile>group__io__readers.html</anchorfile>
       <anchor>ga70be592a55fe55b019cc327b723ef9ba</anchor>
+      <arglist>(source_info const &amp;src_info)</arglist>
+    </member>
+    <member kind="function">
+      <type>orc_metadata</type>
+      <name>read_orc_metadata</name>
+      <anchorfile>group__io__readers.html</anchorfile>
+      <anchor>ga8d4346f591df1c4737e8a6485a936e71</anchor>
       <arglist>(source_info const &amp;src_info)</arglist>
     </member>
   </compound>
@@ -8283,8 +8293,8 @@
       <type></type>
       <name>column_statistics</name>
       <anchorfile>structcudf_1_1io_1_1column__statistics.html</anchorfile>
-      <anchor>ace83f453738229cc89e6ef44b743b89b</anchor>
-      <arglist>(cudf::io::orc::column_statistics &amp;&amp;detail_statistics)</arglist>
+      <anchor>ac615b0af3c06eed692dc6af3829bcb56</anchor>
+      <arglist>(orc::column_statistics &amp;&amp;detail_statistics)</arglist>
     </member>
     <member kind="variable">
       <type>std::optional&lt; uint64_t &gt;</type>
@@ -13516,6 +13526,98 @@
       <arglist></arglist>
     </member>
   </compound>
+  <compound kind="struct">
+    <name>cudf::io::orc_column_schema</name>
+    <filename>structcudf_1_1io_1_1orc__column__schema.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>orc_column_schema</name>
+      <anchorfile>structcudf_1_1io_1_1orc__column__schema.html</anchorfile>
+      <anchor>a125852366e9d62ba024f4d719a776990</anchor>
+      <arglist>(std::string_view name, orc::TypeKind type, std::vector&lt; orc_column_schema &gt; children)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>name</name>
+      <anchorfile>structcudf_1_1io_1_1orc__column__schema.html</anchorfile>
+      <anchor>a9320660119bc7c9408b92fcbcd58c88d</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>type_kind</name>
+      <anchorfile>structcudf_1_1io_1_1orc__column__schema.html</anchorfile>
+      <anchor>a73e98ecabd8f9f052abbb5a2a1ba9b46</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>auto const  &amp;</type>
+      <name>children</name>
+      <anchorfile>structcudf_1_1io_1_1orc__column__schema.html</anchorfile>
+      <anchor>a097d1a984f937df6089708ab7e8852d9</anchor>
+      <arglist>() const &amp;</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>children</name>
+      <anchorfile>structcudf_1_1io_1_1orc__column__schema.html</anchorfile>
+      <anchor>aff7b34371bd3cab85a6996b6e12861a5</anchor>
+      <arglist>() &amp;&amp;</arglist>
+    </member>
+    <member kind="function">
+      <type>auto const  &amp;</type>
+      <name>child</name>
+      <anchorfile>structcudf_1_1io_1_1orc__column__schema.html</anchorfile>
+      <anchor>a87889eca29f53c07495be8a95d19eec3</anchor>
+      <arglist>(int idx) const &amp;</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>child</name>
+      <anchorfile>structcudf_1_1io_1_1orc__column__schema.html</anchorfile>
+      <anchor>a6e3f29d13e3753132f106dd577a61981</anchor>
+      <arglist>(int idx) &amp;&amp;</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>num_children</name>
+      <anchorfile>structcudf_1_1io_1_1orc__column__schema.html</anchorfile>
+      <anchor>ac66a7999e781a8158d99076d73d86f0b</anchor>
+      <arglist>() const</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>cudf::io::orc_metadata</name>
+    <filename>classcudf_1_1io_1_1orc__metadata.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>orc_metadata</name>
+      <anchorfile>classcudf_1_1io_1_1orc__metadata.html</anchorfile>
+      <anchor>ac27cce84571b612788d29b0d81c4cb05</anchor>
+      <arglist>(orc_schema schema, size_type num_rows, size_type num_stripes)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto const  &amp;</type>
+      <name>schema</name>
+      <anchorfile>classcudf_1_1io_1_1orc__metadata.html</anchorfile>
+      <anchor>a868a4d6fd474885ab0391df678c25ca3</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>num_rows</name>
+      <anchorfile>classcudf_1_1io_1_1orc__metadata.html</anchorfile>
+      <anchor>a5f71d6ee3ab37fa8c10fab7c0a1b1dea</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>num_stripes</name>
+      <anchorfile>classcudf_1_1io_1_1orc__metadata.html</anchorfile>
+      <anchor>ab1b4f85b505d2b7471cd49a5c07ed044</anchor>
+      <arglist>() const</arglist>
+    </member>
+  </compound>
   <compound kind="class">
     <name>cudf::io::orc_reader_options</name>
     <filename>classcudf_1_1io_1_1orc__reader__options.html</filename>
@@ -13739,6 +13841,31 @@
       <anchorfile>classcudf_1_1io_1_1orc__reader__options__builder.html</anchorfile>
       <anchor>ae5a0fa67bee4deb4dc99777313d58df5</anchor>
       <arglist>()</arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>cudf::io::orc_schema</name>
+    <filename>structcudf_1_1io_1_1orc__schema.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>orc_schema</name>
+      <anchorfile>structcudf_1_1io_1_1orc__schema.html</anchorfile>
+      <anchor>a8d4a2c6e18f6494e85c68da9af2d02aa</anchor>
+      <arglist>(orc_column_schema root_column_schema)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto const  &amp;</type>
+      <name>root</name>
+      <anchorfile>structcudf_1_1io_1_1orc__schema.html</anchorfile>
+      <anchor>a56ea4d6c9b2c9631acfb36461ee44eab</anchor>
+      <arglist>() const &amp;</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>root</name>
+      <anchorfile>structcudf_1_1io_1_1orc__schema.html</anchorfile>
+      <anchor>a54be1409d189051adcf1f40e3b405c52</anchor>
+      <arglist>() &amp;&amp;</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -18293,6 +18420,31 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>cudf::experimental::row::equality::two_table_comparator</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>two_table_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>ae79afc740f4f35933272256fbc307fff</anchor>
+      <arglist>(table_view const &amp;left, table_view const &amp;right, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>two_table_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>a3aa292bc6cf5051c8af76fd98e638b13</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; left, std::shared_ptr&lt; preprocessed_table &gt; right)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>equal_to</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
+      <anchor>ac9c7c726b67a7b30f0232af9744a274c</anchor>
+      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::experimental::row::lexicographic::two_table_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</filename>
     <member kind="function">
@@ -18322,31 +18474,6 @@
       <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html</anchorfile>
       <anchor>ad3bdb200066d147566624fc1db2835f6</anchor>
       <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>cudf::experimental::row::equality::two_table_comparator</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>two_table_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>ae79afc740f4f35933272256fbc307fff</anchor>
-      <arglist>(table_view const &amp;left, table_view const &amp;right, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>two_table_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>a3aa292bc6cf5051c8af76fd98e638b13</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; left, std::shared_ptr&lt; preprocessed_table &gt; right)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>equal_to</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>ac9c7c726b67a7b30f0232af9744a274c</anchor>
-      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -21453,8 +21580,11 @@
     <class kind="class">cudf::io::json_reader_options_builder</class>
     <class kind="struct">cudf::io::minmax_statistics</class>
     <class kind="class">cudf::io::orc_chunked_writer</class>
+    <class kind="struct">cudf::io::orc_column_schema</class>
+    <class kind="class">cudf::io::orc_metadata</class>
     <class kind="class">cudf::io::orc_reader_options</class>
     <class kind="class">cudf::io::orc_reader_options_builder</class>
+    <class kind="struct">cudf::io::orc_schema</class>
     <class kind="class">cudf::io::orc_writer_options</class>
     <class kind="class">cudf::io::orc_writer_options_builder</class>
     <class kind="class">cudf::io::parquet_chunked_writer</class>
@@ -21622,6 +21752,13 @@
       <name>read_parsed_orc_statistics</name>
       <anchorfile>group__io__readers.html</anchorfile>
       <anchor>ga70be592a55fe55b019cc327b723ef9ba</anchor>
+      <arglist>(source_info const &amp;src_info)</arglist>
+    </member>
+    <member kind="function">
+      <type>orc_metadata</type>
+      <name>read_orc_metadata</name>
+      <anchorfile>group__io__readers.html</anchorfile>
+      <anchor>ga8d4346f591df1c4737e8a6485a936e71</anchor>
       <arglist>(source_info const &amp;src_info)</arglist>
     </member>
     <member kind="function">
@@ -26780,6 +26917,13 @@
       <name>read_parsed_orc_statistics</name>
       <anchorfile>group__io__readers.html</anchorfile>
       <anchor>ga70be592a55fe55b019cc327b723ef9ba</anchor>
+      <arglist>(source_info const &amp;src_info)</arglist>
+    </member>
+    <member kind="function">
+      <type>orc_metadata</type>
+      <name>read_orc_metadata</name>
+      <anchorfile>group__io__readers.html</anchorfile>
+      <anchor>ga8d4346f591df1c4737e8a6485a936e71</anchor>
       <arglist>(source_info const &amp;src_info)</arglist>
     </member>
     <member kind="function">
