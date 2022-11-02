@@ -4,10 +4,7 @@ There are multiple ways you can deploy RAPIDS on a single instance, but the easi
 
 **1. Initiate.** Initiate an instance supported by RAPIDS. See the introduction
 section for a list of supported instance types. It is recommended to use an AMI
-that already includes the required NVIDIA drivers, such as the **[Amazon Linux 2
-AMI with NVIDIA TESLA GPU
-Driver](https://aws.amazon.com/marketplace/pp/Amazon-Web-Services-Amazon-Linux-2-AMI-with-NVIDIA/B07S5G9S1Z)**
-or the **[AWS Deep Learning
+that already includes the required NVIDIA drivers, such as the **[AWS Deep Learning
 AMI.](https://docs.aws.amazon.com/dlami/latest/devguide/what-is-dlami.html)**
 
 **2. Credentials.** Using the credentials supplied by AWS, log into the instance
@@ -25,9 +22,9 @@ Started](https://rapids.ai/start.html)** page of RAPIDS. Example of an image
 that can be used is provided below:
 
 ```shell
-$ docker pull rapidsai/rapidsai:cuda11.2-runtime-ubuntu18.04
+$ docker pull rapidsai/rapidsai:22.10-cuda11.5-runtime-ubuntu18.04-py3.9
 $ docker run --gpus all --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
-    rapidsai/rapidsai:cuda11.2-runtime-ubuntu18.04-py3.7
+         rapidsai/rapidsai:22.10-cuda11.5-runtime-ubuntu18.04-py3.9
 ```
 
 **5. Test RAPIDS.** Test it! The RAPIDS docker image will start a Jupyter
