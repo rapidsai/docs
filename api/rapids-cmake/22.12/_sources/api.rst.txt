@@ -70,6 +70,7 @@ The `rapids_cython` functions allow projects to easily build cython modules usin
 
    /command/rapids_cython_init
    /command/rapids_cython_create_modules
+   /command/rapids_cython_add_rpath_entries
 
 
 Find
