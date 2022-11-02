@@ -30,6 +30,7 @@ _Will be removed in the future._
 To leverage the GPUs assigned to each Pod the [`dask_cuda_worker`](https://docs.rapids.ai/api/dask-cuda/stable/index.html) command is launched in place of the regular `dask_worker`.
 
 If desired to have a different jupyter notebook password than default, compute the hash for `<your-password>` and update `jupyter.password`.
+You can compute password hash by following the [jupyter notebook guide](https://jupyter-notebook.readthedocs.io/en/stable/public_server.html?highlight=passwd#preparing-a-hashed-password).
 
 ### Installing the Helm Chart
 
