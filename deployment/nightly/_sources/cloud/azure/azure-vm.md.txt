@@ -1,19 +1,26 @@
-# Azure Single Node RAPIDS
+# Azure Virtual Machine
 
 ## Create Azure Virtual Machine with GPU, Nvidia Driver and Nvidia Container Runtime
 
 Nvidia maintains an image that pre-installs Nvidia drivers and container runtimes,
 we recommend using [this image](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/nvidia.ngc_azure_17_11?tab=Overview) as the starting point.
 
-### Option 1: Create VM Via Azure Portal
+`````{tab-set}
+
+````{tab-item} via Azure Portal
+:sync: portal
+
 
 1. Select the latest Nvidia GPU-Optimized VMI version from the drop down list, then select _Get It Now_.
 2. If already logged in on Azure, select continue clicking _Create_.
 3. In _Create a virtual machine_ interface, fill in required information for the vm.
    Select a GPU enabled VM size.
 
-```{note}
-Note that not all region support availability zone for GPU VMs. When the GPU VM size is not selectable
+```{dropdown} Note that not all regions support availability zones with GPU VMs.
+:color: info
+:icon: info
+
+When the GPU VM size is not selectable
 with notice: **The size is not available in zone x. No zones are supported.** It means the GPU VM does not
 support availability zone. Try other availability options.
 
@@ -22,7 +29,10 @@ support availability zone. Try other availability options.
 
 Click _Review+Create_ to start the virtual machine.
 
-### Option 2: Create VM Via Azure-CLI
+````
+
+````{tab-item} via Azure CLI
+:sync: cli
 
 Prepare the following environment variables.
 
@@ -57,15 +67,25 @@ See [this link](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/m
 for supported ssh keys on Azure.
 ```
 
+````
+
+`````
+
 ## Create Network Security Group
 
-### Option 1: Create NSG Via Azure Portal
+`````{tab-set}
+
+````{tab-item} via Azure Portal
+:sync: portal
 
 1. Select _Networking_ in the left panel.
 2. Select _Add inbound port rule_.
 3. Set _Destination port ranges_ to `8888,8787`. Keep rest unchanged. Select _Add_.
 
-### Option 2: Create NSG Via Azure-CLI
+````
+
+````{tab-item} via Azure CLI
+:sync: cli
 
 | Name           | Description         | Example                  |
 | -------------- | ------------------- | ------------------------ |
@@ -80,6 +100,9 @@ az network nsg rule create \
     --priority 1050 \
     --destination-port-ranges 8888 8787
 ```
+
+````
+`````
 
 ## Install RAPIDS
 

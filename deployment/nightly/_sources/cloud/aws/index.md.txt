@@ -5,10 +5,10 @@
 maxdepth: 2
 caption: Amazon Web Services
 ---
-sagemaker
-single-node
+ec2
 eks
 ecs
+sagemaker
 ```
 
 RAPIDS can be deployed on Amazon Web Services (AWS) in several ways. See the

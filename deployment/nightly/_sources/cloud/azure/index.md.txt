@@ -5,7 +5,7 @@
 maxdepth: 2
 caption: Microsoft Azure
 ---
-single-node
+azure-vm
 ```
 
 RAPIDS can be deployed on Microsoft Azure in several ways. Azure supports various kinds of GPU VMs for different needs.

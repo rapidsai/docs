@@ -1,11 +1,10 @@
-# Single Node
+# Virtual Server
 
 There are multiple ways you can deploy RAPIDS on a single instance, but the easiest is to use the RAPIDS docker image:
 
 ## Launch a VM instance
 
-Launch an instance supported by RAPIDS. See the [introduction
-section for a list of supported instance types](index).
+Launch an instance supported by RAPIDS. See the [introduction section for a list of supported instance types](index).
 
 ## Configure networking
 

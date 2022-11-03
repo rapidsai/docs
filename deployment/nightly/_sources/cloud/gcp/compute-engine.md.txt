@@ -1,4 +1,4 @@
-# Single Node
+# Compute Engine Instance
 
 The easiest way to deploy RAPIDS on a single instance is to use the `rapidsai/rapidsai` Docker image.
 
