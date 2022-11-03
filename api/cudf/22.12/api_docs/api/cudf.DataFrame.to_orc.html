@@ -1130,7 +1130,7 @@
 <h1>cudf.DataFrame.to_orc<a class="headerlink" href="#cudf-dataframe-to-orc" title="Permalink to this heading">#</a></h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="cudf.DataFrame.to_orc">
-<span class="sig-prename descclassname"><span class="pre">DataFrame.</span></span><span class="sig-name descname"><span class="pre">to_orc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'snappy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cudf.DataFrame.to_orc" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">DataFrame.</span></span><span class="sig-name descname"><span class="pre">to_orc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'snappy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statistics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ROWGROUP'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stripe_size_bytes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stripe_size_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_index_stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols_as_map_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cudf.DataFrame.to_orc" title="Permalink to this definition">#</a></dt>
 <dd><p>Write a DataFrame to the ORC format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1139,7 +1139,8 @@
 </dd>
 <dt><strong>compression</strong><span class="classifier">{{ &lsquo;snappy&rsquo;, &lsquo;ZSTD&rsquo;, None }}, default &lsquo;snappy&rsquo;</span></dt><dd><p>Name of the compression to use. Use None for no compression.</p>
 </dd>
-<dt><strong>enable_statistics: boolean, default True</strong></dt><dd><p>Enable writing column statistics.</p>
+<dt><strong>statistics: str {{ &ldquo;ROWGROUP&rdquo;, &ldquo;STRIPE&rdquo;, None }}, default &ldquo;ROWGROUP&rdquo;</strong></dt><dd><p>The granularity with which column statistics must
+be written to the file.</p>
 </dd>
 <dt><strong>stripe_size_bytes: integer or None, default None</strong></dt><dd><p>Maximum size of each stripe of the output.
 If None, 67108864 (64MB) will be used.</p>
@@ -1153,6 +1154,21 @@ If None, 10000 will be used.</p>
 <dt><strong>cols_as_map_type</strong><span class="classifier">list of column names or None, default None</span></dt><dd><p>A list of column names which should be written as map type in the ORC file.
 Note that this option only affects columns of ListDtype. Names of other
 column types will be ignored.</p>
+</dd>
+<dt><strong>storage_options</strong><span class="classifier">dict, optional, default None</span></dt><dd><p>Extra options that make sense for a particular storage connection,
+e.g. host, port, username, password, etc. For HTTP(S) URLs the key-value
+pairs are forwarded to <code class="docutils literal notranslate"><span class="pre">urllib.request.Request</span></code> as header options.
+For other URLs (e.g. starting with &ldquo;s3://&rdquo;, and &ldquo;gcs://&rdquo;) the key-value
+pairs are forwarded to <code class="docutils literal notranslate"><span class="pre">fsspec.open</span></code>. Please see <code class="docutils literal notranslate"><span class="pre">fsspec</span></code> and
+<code class="docutils literal notranslate"><span class="pre">urllib</span></code> for more details.</p>
+</dd>
+<dt><strong>index</strong><span class="classifier">bool, default None</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, include the dataframe&rsquo;s index(es) in the file output.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, they will not be written to the file.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, similar to <code class="docutils literal notranslate"><span class="pre">True</span></code> the dataframe&rsquo;s index(es) will
+be saved, however, instead of being saved as values any
+<code class="docutils literal notranslate"><span class="pre">RangeIndex</span></code> will be stored as a range in the metadata so it
+doesn&rsquo;t require much space and is faster. Other indexes will
+be included as columns in the file output.</p>
 </dd>
 </dl>
 </dd>

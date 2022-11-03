@@ -1130,7 +1130,7 @@
 <h1>cudf.read_text<a class="headerlink" href="#cudf-read-text" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="cudf.read_text">
-<span class="sig-prename descclassname"><span class="pre">cudf.</span></span><span class="sig-name descname"><span class="pre">read_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath_or_buffer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byte_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip_delimiters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression_offsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cudf.read_text" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cudf.</span></span><span class="sig-name descname"><span class="pre">read_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath_or_buffer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byte_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip_delimiters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression_offsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cudf.read_text" title="Permalink to this definition">#</a></dt>
 <dd><p>Configuration object for a text Datasource</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1143,18 +1143,18 @@ function or <cite>StringIO</cite>).</p>
 <dt><strong>delimiter</strong><span class="classifier">string, default None</span></dt><dd><p>The delimiter that should be used for splitting text chunks into
 separate cudf column rows. The delimiter may be one or more characters.</p>
 </dd>
+<dt><strong>byte_range</strong><span class="classifier">list or tuple, default None</span></dt><dd><p>Byte range within the input file to be read. The first number is the
+offset in bytes, the second number is the range size in bytes.
+The output contains all rows that start inside the byte range
+(i.e. at or after the offset, and before the end at <cite>offset + size</cite>),
+which may include rows that continue past the end.</p>
+</dd>
 <dt><strong>strip_delimiters</strong><span class="classifier">boolean, default False</span></dt><dd><p>Unlike the <cite>str.split()</cite> function, <cite>read_text</cite> preserves the delimiter
 at the end of a field in output by default, meaning <cite>a;b;c</cite> will turn into
 <cite>[&lsquo;a;&rsquo;,&rsquo;b;&rsquo;,&rsquo;c&rsquo;]</cite> when using <cite>;</cite> as a delimiter.
 Setting this option to <cite>True</cite> will strip these trailing delimiters,
 leaving only the contents between delimiters in the resulting column:
 <cite>[&lsquo;a&rsquo;,&rsquo;b&rsquo;,&rsquo;c&rsquo;]</cite></p>
-</dd>
-<dt><strong>byte_range</strong><span class="classifier">list or tuple, default None</span></dt><dd><p>Byte range within the input file to be read. The first number is the
-offset in bytes, the second number is the range size in bytes.
-The output contains all rows that start inside the byte range
-(i.e. at or after the offset, and before the end at <cite>offset + size</cite>),
-which may include rows that continue past the end.</p>
 </dd>
 <dt><strong>compression</strong><span class="classifier">string, default None</span></dt><dd><p>Which compression type is the input compressed with.
 Currently supports only <cite>bgzip</cite>, and requires the path to a file as input.</p>
@@ -1165,6 +1165,13 @@ BGZIP block (lower 16 bits) and the start offset of this BGZIP block in the
 compressed file (upper 48 bits).
 The start offset points to the first byte to be read, the end offset points
 one past the last byte to be read.</p>
+</dd>
+<dt><strong>storage_options</strong><span class="classifier">dict, optional, default None</span></dt><dd><p>Extra options that make sense for a particular storage connection,
+e.g. host, port, username, password, etc. For HTTP(S) URLs the key-value
+pairs are forwarded to <code class="docutils literal notranslate"><span class="pre">urllib.request.Request</span></code> as header options.
+For other URLs (e.g. starting with &ldquo;s3://&rdquo;, and &ldquo;gcs://&rdquo;) the key-value
+pairs are forwarded to <code class="docutils literal notranslate"><span class="pre">fsspec.open</span></code>. Please see <code class="docutils literal notranslate"><span class="pre">fsspec</span></code> and
+<code class="docutils literal notranslate"><span class="pre">urllib</span></code> for more details.</p>
 </dd>
 </dl>
 </dd>

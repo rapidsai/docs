@@ -1130,7 +1130,7 @@
 <h1>cudf.read_json<a class="headerlink" href="#cudf-read-json" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="cudf.read_json">
-<span class="sig-prename descclassname"><span class="pre">cudf.</span></span><span class="sig-name descname"><span class="pre">read_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_or_buf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'infer'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byte_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_quotes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cudf.read_json" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cudf.</span></span><span class="sig-name descname"><span class="pre">read_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_or_buf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'infer'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byte_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_quotes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cudf.read_json" title="Permalink to this definition">#</a></dt>
 <dd><p>Load a JSON dataset into a DataFrame</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -1187,9 +1187,10 @@ of the <cite>typ</cite> parameter.</p>
 </dd>
 <dt><strong>typ</strong><span class="classifier">type of object to recover (series or frame), default &lsquo;frame&rsquo;</span></dt><dd><p>With cudf engine, only frame output is supported.</p>
 </dd>
-<dt><strong>dtype</strong><span class="classifier">boolean or dict, default True</span></dt><dd><p>If True, infer dtypes for all columns; if False, then don&rsquo;t infer dtypes at all,
+<dt><strong>dtype</strong><span class="classifier">boolean or dict, default None</span></dt><dd><p>If True, infer dtypes for all columns; if False, then don&rsquo;t infer dtypes at all,
 if a dict, provide a mapping from column names to their respective dtype (any missing
-columns will have their dtype inferred). Applies only to the data.</p>
+columns will have their dtype inferred). Applies only to the data.
+For all <code class="docutils literal notranslate"><span class="pre">orient</span></code> values except <code class="docutils literal notranslate"><span class="pre">'table'</span></code>, default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt><strong>convert_axes</strong><span class="classifier">boolean, default True</span></dt><dd><div class="admonition-not-gpu-accelerated admonition">
 <p class="admonition-title">Not GPU-accelerated</p>
@@ -1285,6 +1286,13 @@ even if it ends after the end of the range.</p>
 If <cite>True</cite>, any string values are read literally (and wrapped in an
 additional set of quotes).
 If <cite>False</cite> string values are parsed into Python strings.</p>
+</dd>
+<dt><strong>storage_options</strong><span class="classifier">dict, optional, default None</span></dt><dd><p>Extra options that make sense for a particular storage connection,
+e.g. host, port, username, password, etc. For HTTP(S) URLs the key-value
+pairs are forwarded to <code class="docutils literal notranslate"><span class="pre">urllib.request.Request</span></code> as header options.
+For other URLs (e.g. starting with &ldquo;s3://&rdquo;, and &ldquo;gcs://&rdquo;) the key-value
+pairs are forwarded to <code class="docutils literal notranslate"><span class="pre">fsspec.open</span></code>. Please see <code class="docutils literal notranslate"><span class="pre">fsspec</span></code> and
+<code class="docutils literal notranslate"><span class="pre">urllib</span></code> for more details.</p>
 </dd>
 </dl>
 </dd>
