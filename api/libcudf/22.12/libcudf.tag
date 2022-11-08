@@ -18162,6 +18162,7 @@
     <name>cudf::tdigest::tdigest_column_view</name>
     <filename>classcudf_1_1tdigest_1_1tdigest__column__view.html</filename>
     <base protection="private">cudf::column_view</base>
+    <class kind="struct">cudf::tdigest::tdigest_column_view::tdigest_size_fn</class>
     <member kind="typedef">
       <type>offset_type const  *</type>
       <name>offset_iterator</name>
@@ -18290,20 +18291,20 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>cudf::tdigest::tdigest_size</name>
-    <filename>structcudf_1_1tdigest_1_1tdigest__size.html</filename>
+    <name>cudf::tdigest::tdigest_column_view::tdigest_size_fn</name>
+    <filename>structcudf_1_1tdigest_1_1tdigest__column__view_1_1tdigest__size__fn.html</filename>
     <member kind="function">
       <type>size_type</type>
       <name>operator()</name>
-      <anchorfile>structcudf_1_1tdigest_1_1tdigest__size.html</anchorfile>
-      <anchor>a05873c6aa709583b4f48a02e00e3bd84</anchor>
+      <anchorfile>structcudf_1_1tdigest_1_1tdigest__column__view_1_1tdigest__size__fn.html</anchorfile>
+      <anchor>a35d22a36e025c07ed833383a5cc84fb8</anchor>
       <arglist>(size_type tdigest_index)</arglist>
     </member>
     <member kind="variable">
       <type>size_type const  *</type>
       <name>offsets</name>
-      <anchorfile>structcudf_1_1tdigest_1_1tdigest__size.html</anchorfile>
-      <anchor>abbf67a286e1dadc3160dbb317d453328</anchor>
+      <anchorfile>structcudf_1_1tdigest_1_1tdigest__column__view_1_1tdigest__size__fn.html</anchorfile>
+      <anchor>a0e1dbaf29ddbcf80b635773112115dba</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -28254,6 +28255,7 @@
     <title>libcudf C++ Developer Guide</title>
     <filename>DEVELOPER_GUIDE.html</filename>
     <docanchor file="DEVELOPER_GUIDE.html">md_developer_guide_DEVELOPER_GUIDE</docanchor>
+    <docanchor file="DEVELOPER_GUIDE.html" title="Error Handling">errors</docanchor>
   </compound>
   <compound kind="page">
     <name>md_developer_guide_TESTING</name>

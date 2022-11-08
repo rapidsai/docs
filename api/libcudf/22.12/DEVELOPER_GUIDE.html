@@ -279,9 +279,12 @@ Treat libcudf APIs as if they were asynchronous</h2>
 <h2><a class="anchor" id="autotoc_md71"></a>
 libcudf generally does not make ordering guarantees</h2>
 <p>Functions like merge or groupby in libcudf make no guarantees about the order of entries in the output. Promising deterministic ordering is not, in general, conducive to fast parallel algorithms. Calling code is responsible for performing sorts after the fact if sorted outputs are needed.</p>
-<h1><a class="anchor" id="autotoc_md72"></a>
+<h2><a class="anchor" id="autotoc_md72"></a>
+libcudf does not promise specific exception messages</h2>
+<p>libcudf documents the exceptions that will be thrown by an API for different kinds of invalid inputs. The types of those exceptions (e.g. <code><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></code>) are part of the public API. However, the explanatory string returned by the <code>what</code> method of those exceptions is not part of the API and is subject to change. Calling code should not rely on the contents of libcudf error messages to determine the nature of the error. For information on the types of exceptions that libcudf throws under different circumstances, see the <a href="#errors">section on error handling</a>.</p>
+<h1><a class="anchor" id="autotoc_md73"></a>
 libcudf API and Implementation</h1>
-<h2><a class="anchor" id="autotoc_md73"></a>
+<h2><a class="anchor" id="autotoc_md74"></a>
 Streams</h2>
 <p>CUDA streams are not yet exposed in external libcudf APIs. However, in order to ease the transition to future use of streams, all libcudf APIs that allocate device memory or execute a kernel should be implemented using asynchronous APIs on the default stream (e.g., stream 0).</p>
 <p>The recommended pattern for doing this is to make the definition of the external API invoke an internal API in the <code>detail</code> namespace. The internal <code>detail</code> API has the same parameters as the public API, plus a <code><a class="elRef" href="https://docs.rapids.ai/api/librmm/22.12/classrmm_1_1cuda__stream__view.html">rmm::cuda_stream_view</a></code> parameter at the end with no default value. If the detail API also accepts a memory resource parameter, the stream parameter should be ideally placed just <em>before</em> the memory resource. The public API will call the detail API and provide <code><a class="el" href="namespacecudf.html#a001ed29e71e759518cae31e52312befa" title="Get the current default stream.">cudf::get_default_stream()</a></code>. The implementation should be wholly contained in the <code>detail</code> API definition and use only asynchronous versions of CUDA APIs with the stream parameter.</p>
@@ -313,16 +316,16 @@ Streams</h2>
 <div class="line">}</div>
 </div><!-- fragment --><p><b>Note:</b> It is important to synchronize the stream if <em>and only if</em> it is necessary. For example, when a non-pointer value is returned from the API that is the result of an asynchronous device-to-host copy, the stream used for the copy should be synchronized before returning. However, when a column is returned, the stream should not be synchronized because doing so will break asynchrony if and when we add an asynchronous API to libcudf.</p>
 <p><b>Note:</b> <code>cudaDeviceSynchronize()</code> should <em>never</em> be used. This limits the ability to do any multi-stream/multi-threaded work with libcudf APIs.</p>
-<h3><a class="anchor" id="autotoc_md74"></a>
+<h3><a class="anchor" id="autotoc_md75"></a>
 NVTX Ranges</h3>
 <p>In order to aid in performance optimization and debugging, all compute intensive libcudf functions should have a corresponding NVTX range. In libcudf, we have a convenience macro <code>CUDF_FUNC_RANGE()</code> that will automatically annotate the lifetime of the enclosing function and use the function's name as the name of the NVTX range. For more information about NVTX, see <a href="https://github.com/NVIDIA/NVTX/tree/dev/cpp">here</a>.</p>
-<h3><a class="anchor" id="autotoc_md75"></a>
+<h3><a class="anchor" id="autotoc_md76"></a>
 Stream Creation</h3>
 <p>There may be times in implementing libcudf features where it would be advantageous to use streams <em>internally</em>, i.e., to accomplish overlap in implementing an algorithm. However, dynamically creating a stream can be expensive. RMM has a stream pool class to help avoid dynamic stream creation. However, this is not yet exposed in libcudf, so for the time being, libcudf features should avoid creating streams (even if it is slightly less efficient). It is a good idea to leave a <code>// TODO:</code> note indicating where using a stream would be beneficial.</p>
-<h2><a class="anchor" id="autotoc_md76"></a>
+<h2><a class="anchor" id="autotoc_md77"></a>
 Memory Allocation</h2>
 <p>Device <a href="#rmmdevice_memory_resource">memory resources</a> are used in libcudf to abstract and control how device memory is allocated.</p>
-<h3><a class="anchor" id="autotoc_md77"></a>
+<h3><a class="anchor" id="autotoc_md78"></a>
 Output Memory</h3>
 <p>Any libcudf API that allocates memory that is <em>returned</em> to a user must accept a pointer to a <code>device_memory_resource</code> as the last parameter. Inside the API, this memory resource must be used to allocate any memory for returned objects. It should therefore be passed into functions whose outputs will be returned. Example:</p>
 <div class="fragment"><div class="line"><span class="comment">// Returned `column` contains newly allocated memory,</span></div>
@@ -333,7 +336,7 @@ Output Memory</h3>
 <div class="line"><span class="comment">// This API does not allocate any new *output* memory, therefore</span></div>
 <div class="line"><span class="comment">// a memory resource is unnecessary</span></div>
 <div class="line"><span class="keywordtype">void</span> does_not_allocate_output_memory(...);</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md78"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md79"></a>
 Temporary Memory</h3>
 <p>Not all memory allocated within a libcudf API is returned to the caller. Often algorithms must allocate temporary, scratch memory for intermediate results. Always use the default resource obtained from <code>rmm::mr::get_current_device_resource()</code> for temporary memory allocations. Example:</p>
 <div class="fragment"><div class="line"><a class="codeRef" href="https://docs.rapids.ai/api/librmm/22.12/classrmm_1_1device__buffer.html">rmm::device_buffer</a> some_function(</div>
@@ -344,10 +347,10 @@ Temporary Memory</h3>
 <div class="line">    ...</div>
 <div class="line">    <span class="keywordflow">return</span> returned_buffer;</div>
 <div class="line">}</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md79"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md80"></a>
 Memory Management</h3>
 <p>libcudf code generally eschews raw pointers and direct memory allocation. Use RMM classes built to use <code>device_memory_resource</code>(*)s for device memory allocation with automated lifetime management.</p>
-<h4><a class="anchor" id="autotoc_md80"></a>
+<h4><a class="anchor" id="autotoc_md81"></a>
 rmm::device_buffer</h4>
 <p>Allocates a specified number of bytes of untyped, uninitialized device memory using a <code>device_memory_resource</code>. If no resource is explicitly provided, uses <code>rmm::mr::get_current_device_resource()</code>.</p>
 <p><code><a class="elRef" href="https://docs.rapids.ai/api/librmm/22.12/classrmm_1_1device__buffer.html">rmm::device_buffer</a></code> is movable and copyable on a stream. A copy performs a deep copy of the <code>device_buffer</code>'s device memory on the specified stream, whereas a move moves ownership of the device memory from one <code>device_buffer</code> to another.</p>
@@ -365,7 +368,7 @@ rmm::device_buffer</h4>
 <div class="line">custom_memory_resource *mr...;</div>
 <div class="line"><span class="comment">// Allocates 100 bytes from the custom_memory_resource</span></div>
 <div class="line"><a class="codeRef" href="https://docs.rapids.ai/api/librmm/22.12/classrmm_1_1device__buffer.html">rmm::device_buffer</a> custom_buff(100, mr, stream);</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md81"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md82"></a>
 rmm::device_scalar&lt;T&gt;</h4>
 <p>Allocates a single element of the specified type initialized to the specified value. Use this for scalar input/outputs into device kernels, e.g., reduction results, null count, etc. This is effectively a convenience wrapper around a <code>rmm::device_vector&lt;T&gt;</code> of length 1.</p>
 <div class="fragment"><div class="line"><span class="comment">// Allocates device memory for a single int using the specified resource and stream</span></div>
@@ -378,11 +381,11 @@ rmm::device_scalar&lt;T&gt;</h4>
 <div class="line"><span class="comment">// scalar.value() synchronizes the scalar's stream and copies the</span></div>
 <div class="line"><span class="comment">// value from device to host and returns the value</span></div>
 <div class="line"><span class="keywordtype">int</span> host_value = int_scalar.<a class="codeRef" href="https://docs.rapids.ai/api/librmm/22.12/classrmm_1_1cuda__stream__view.html#a17aac270b340f8d9f73ad88c9636954f">value</a>();</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md82"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md83"></a>
 rmm::device_vector&lt;T&gt;</h4>
 <p>Allocates a specified number of elements of the specified type. If no initialization value is provided, all elements are default initialized (this incurs a kernel launch).</p>
 <p><b>Note</b>: We have removed all usage of <code>rmm::device_vector</code> and <code>thrust::device_vector</code> from libcudf, and you should not use it in new code in libcudf without careful consideration. Instead, use <code><a class="elRef" href="https://docs.rapids.ai/api/librmm/22.12/classrmm_1_1device__uvector.html">rmm::device_uvector</a></code> along with the utility factories in <code>device_factories.hpp</code>. These utilities enable creation of <code>uvector</code>s from host-side vectors, or creating zero-initialized <code>uvector</code>s, so that they are as convenient to use as <code>device_vector</code>. Avoiding <code>device_vector</code> has a number of benefits, as described in the following section on <code><a class="elRef" href="https://docs.rapids.ai/api/librmm/22.12/classrmm_1_1device__uvector.html">rmm::device_uvector</a></code>.</p>
-<h4><a class="anchor" id="autotoc_md83"></a>
+<h4><a class="anchor" id="autotoc_md84"></a>
 rmm::device_uvector&lt;T&gt;</h4>
 <p>Similar to a <code>device_vector</code>, allocates a contiguous set of elements in device memory but with key differences:</p><ul>
 <li>As an optimization, elements are uninitialized and no synchronization occurs at construction. This limits the types <code>T</code> to trivially copyable types.</li>
@@ -399,7 +402,7 @@ rmm::device_uvector&lt;T&gt;</h4>
 <div class="line"><a class="codeRef" href="https://docs.rapids.ai/api/librmm/22.12/classrmm_1_1mr_1_1device__memory__resource.html">rmm::mr::device_memory_resource</a> * mr = <span class="keyword">new</span> my_custom_resource{...};</div>
 <div class="line"><span class="comment">// Allocates uninitialized storage for 100 `int32_t` elements on stream `s` using the resource `mr`</span></div>
 <div class="line"><a class="codeRef" href="https://docs.rapids.ai/api/librmm/22.12/classrmm_1_1device__uvector.html">rmm::device_uvector&lt;int32_t&gt;</a> v2{100, s, mr};</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md84"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md85"></a>
 Input/Output Style</h2>
 <p>The preferred style for how inputs are passed in and outputs are returned is the following:</p><ul>
 <li>Inputs<ul>
@@ -460,7 +463,7 @@ Input/Output Style</h2>
 </ul>
 </li>
 </ul>
-<h3><a class="anchor" id="autotoc_md85"></a>
+<h3><a class="anchor" id="autotoc_md86"></a>
 Multiple Return Values</h3>
 <p>Sometimes it is necessary for functions to have multiple outputs. There are a few ways this can be done in C++ (including creating a <code>struct</code> for the output). One convenient way to do this is using <code>std::tie</code> and <code>std::pair</code>. Note that objects passed to <code>std::pair</code> will invoke either the copy constructor or the move constructor of the object, and it may be preferable to move non-trivially copyable objects (and required for types with deleted copy constructors, like <code>std::unique_ptr</code>).</p>
 <div class="fragment"><div class="line">std::pair&lt;table, table&gt; return_two_tables(<span class="keywordtype">void</span>){</div>
@@ -491,7 +494,7 @@ Multiple Return Values</h3>
 <div class="line">  <span class="comment">// Use out0 to compute something.</span></div>
 <div class="line">  <span class="comment">// ...</span></div>
 <div class="line">};</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md86"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md87"></a>
 Iterator-based interfaces</h2>
 <p>Increasingly, libcudf is moving toward internal (<code>detail</code>) APIs with iterator parameters rather than explicit <code>column</code>/<code>table</code>/<code>scalar</code> parameters. As with STL, iterators enable generic algorithms to be applied to arbitrary containers. A good example of this is <code><a class="el" href="group__column__copy.html#gab08aeaceb95ca962b4ddb5b4a471da4c" title="Returns a new column, where each element is selected from either lhs or rhs based on the value of the...">cudf::copy_if_else</a></code>. This function takes two inputs, and a Boolean mask. It copies the corresponding element from the first or second input depending on whether the mask at that index is <code>true</code> or <code>false</code>. Implementing <code>copy_if_else</code> for all combinations of <code>column</code> and <code>scalar</code> parameters is simplified by using iterators in the <code>detail</code> API.</p>
 <div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> FilterFn, <span class="keyword">typename</span> LeftIter, <span class="keyword">typename</span> RightIter&gt;</div>
@@ -503,16 +506,16 @@ Iterator-based interfaces</h2>
 <div class="line">  FilterFn filter,</div>
 <div class="line">  ...);</div>
 </div><!-- fragment --><p><code>LeftIter</code> and <code>RightIter</code> need only implement the necessary interface for an iterator. libcudf provides a number of iterator types and utilities that are useful with iterator-based APIs from libcudf as well as Thrust algorithms. Most are defined in <code>include/detail/iterator.cuh</code>.</p>
-<h3><a class="anchor" id="autotoc_md87"></a>
+<h3><a class="anchor" id="autotoc_md88"></a>
 Pair iterator</h3>
 <p>The pair iterator is used to access elements of nullable columns as a pair containing an element's value and validity. <code>cudf::detail::make_pair_iterator</code> can be used to create a pair iterator from a <code>column_device_view</code> or a <code><a class="el" href="classcudf_1_1scalar.html" title="An owning class to represent a singular value.">cudf::scalar</a></code>. <code>make_pair_iterator</code> is not available for <code>mutable_column_device_view</code>.</p>
-<h3><a class="anchor" id="autotoc_md88"></a>
+<h3><a class="anchor" id="autotoc_md89"></a>
 Null-replacement iterator</h3>
 <p>This iterator replaces the null/validity value for each element with a specified constant (<code>true</code> or <code>false</code>). Created using <code>cudf::detail::make_null_replacement_iterator</code>.</p>
-<h3><a class="anchor" id="autotoc_md89"></a>
+<h3><a class="anchor" id="autotoc_md90"></a>
 Validity iterator</h3>
 <p>This iterator returns the validity of the underlying element (<code>true</code> or <code>false</code>). Created using <code>cudf::detail::make_validity_iterator</code>.</p>
-<h3><a class="anchor" id="autotoc_md90"></a>
+<h3><a class="anchor" id="autotoc_md91"></a>
 Index-normalizing iterators</h3>
 <p>The proliferation of data types supported by libcudf can result in long compile times. One area where compile time was a problem is in types used to store indices, which can be any integer type. The "Indexalator", or index-normalizing iterator (<code>include/cudf/detail/indexalator.cuh</code>), can be used for index types (integers) without requiring a type-specific instance. It can be used for any iterator interface for reading an array of integer values of type <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>uint16</code>, <code>uint32</code>, or <code>uint64</code>. Reading specific elements always return a <code><a class="el" href="group__utility__types.html#ga0aff16b2db009d92300befaca11827e9" title="Row index type for columns and tables.">cudf::size_type</a></code> integer.</p>
 <p>Use the <code>indexalator_factory</code> to create an appropriate input iterator from a column_view. Example input iterator usage:</p>
@@ -528,19 +531,19 @@ Index-normalizing iterators</h3>
 <div class="line">                    values-&gt;end&lt;Element&gt;(),</div>
 <div class="line">                    result_itr,</div>
 <div class="line">                    thrust::less&lt;Element&gt;());</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md91"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md92"></a>
 Namespaces</h2>
-<h3><a class="anchor" id="autotoc_md92"></a>
+<h3><a class="anchor" id="autotoc_md93"></a>
 External</h3>
 <p>All public libcudf APIs should be placed in the <code>cudf</code> namespace. Example:</p>
 <div class="fragment"><div class="line"><span class="keyword">namespace </span><a class="code" href="namespacecudf.html">cudf</a>{</div>
 <div class="line">   <span class="keywordtype">void</span> public_function(...);</div>
 <div class="line">} <span class="comment">// namespace cudf</span></div>
 </div><!-- fragment --><p>The top-level <code>cudf</code> namespace is sufficient for most of the public API. However, to logically group a broad set of functions, further namespaces may be used. For example, there are numerous functions that are specific to columns of Strings. These functions reside in the <code><a class="el" href="namespacecudf_1_1strings.html" title="Strings column APIs.">cudf::strings</a>::</code> namespace. Similarly, functionality used exclusively for unit testing is in the <code>cudf::test::</code> namespace.</p>
-<h3><a class="anchor" id="autotoc_md93"></a>
+<h3><a class="anchor" id="autotoc_md94"></a>
 Internal</h3>
 <p>Many functions are not meant for public use, so place them in either the <code>detail</code> or an <em>anonymous</em> namespace, depending on the situation.</p>
-<h4><a class="anchor" id="autotoc_md94"></a>
+<h4><a class="anchor" id="autotoc_md95"></a>
 detail namespace</h4>
 <p>Functions or objects that will be used across <em>multiple</em> translation units (i.e., source files), should be exposed in an internal header file and placed in the <code>detail</code> namespace. Example:</p>
 <div class="fragment"><div class="line"><span class="comment">// some_utilities.hpp</span></div>
@@ -549,7 +552,7 @@ detail namespace</h4>
 <div class="line"><span class="keywordtype">void</span> reusable_helper_function(...);</div>
 <div class="line">} <span class="comment">// namespace detail</span></div>
 <div class="line">} <span class="comment">// namespace cudf</span></div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md95"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md96"></a>
 Anonymous namespace</h4>
 <p>Functions or objects that will only be used in a <em>single</em> translation unit should be defined in an <em>anonymous</em> namespace in the source file where it is used. Example:</p>
 <div class="fragment"><div class="line"><span class="comment">// some_file.cpp</span></div>
@@ -557,12 +560,12 @@ Anonymous namespace</h4>
 <div class="line"><span class="keywordtype">void</span> isolated_helper_function(...);</div>
 <div class="line">} <span class="comment">// anonymous namespace</span></div>
 </div><!-- fragment --><p><a href="https://wiki.sei.cmu.edu/confluence/display/cplusplus/DCL59-CPP.+Do+not+define+an+unnamed+namespace+in+a+header+file"><b>Anonymous namespaces should <em>never</em> be used in a header file.</b></a></p>
-<h1><a class="anchor" id="autotoc_md96"></a>
+<h1><a class="anchor" id="autotoc_md97"></a>
 Deprecating and Removing Code</h1>
 <p>libcudf is constantly evolving to improve performance and better meet our users' needs. As a result, we occasionally need to break or entirely remove APIs to respond to new and improved understanding of the functionality we provide. Remaining free to do this is essential to making libcudf an agile library that can rapidly accommodate our users needs. As a result, we do not always provide a warning or any lead time prior to releasing breaking changes. On a best effort basis, the libcudf team will notify users of changes that we expect to have significant or widespread effects.</p>
 <p>Where possible, indicate pending API removals using the <a href="https://en.cppreference.com/w/cpp/language/attributes/deprecated">deprecated</a> attribute and document them using Doxygen's <a href="https://www.doxygen.nl/manual/commands.html#cmddeprecated">deprecated</a> command prior to removal. When a replacement API is available for a deprecated API, mention the replacement in both the deprecation message and the deprecation documentation. Pull requests that introduce deprecations should be labeled "deprecation" to facilitate discovery and removal in the subsequent release.</p>
 <p>Advertise breaking changes by labeling any pull request that breaks or removes an existing API with the "breaking" tag. This ensures that the "Breaking" section of the release notes includes a description of what has broken from the past release. Label pull requests that contain deprecations with the "non-breaking" tag.</p>
-<h1><a class="anchor" id="autotoc_md97"></a>
+<h1><a class="anchor" id="errors"></a>
 Error Handling</h1>
 <p>libcudf follows conventions (and provides utilities) enforcing compile-time and run-time conditions and detecting and handling CUDA errors. Communication of errors is always via C++ exceptions.</p>
 <h2><a class="anchor" id="autotoc_md98"></a>
