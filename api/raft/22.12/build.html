@@ -110,6 +110,7 @@
 <section id="cuda-gpu-requirements">
 <h3>CUDA/GPU Requirements<a class="headerlink" href="#cuda-gpu-requirements" title="Permalink to this heading">&para;</a></h3>
 <ul class="simple">
+<li><p>GCC 9.0+ (9.5.0+ recommended)</p></li>
 <li><p>CUDA Toolkit 11.0+</p></li>
 <li><p>NVIDIA driver 450.80.02+</p></li>
 <li><p>Pascal architecture of better (compute capability &gt;= 6.0)</p></li>
@@ -130,14 +131,14 @@
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/NVIDIA/cuCollections">cuCollections</a> - Used in <code class="docutils literal notranslate"><span class="pre">raft::sparse::distance</span></code> API.</p></li>
 <li><p><a class="reference external" href="https://github.com/NVIDIA/libcudacxx">Libcu++</a> v1.7.0</p></li>
-<li><p><a class="reference external" href="https://github.com/facebookresearch/faiss">FAISS</a> v1.7.0 - Used in <code class="docutils literal notranslate"><span class="pre">raft::spatial::knn</span></code> API and needed to build tests.</p></li>
-<li><p><a class="reference external" href="https://github.com/NVIDIA/nccl">NCCL</a> - Used in <code class="docutils literal notranslate"><span class="pre">raft::comms</span></code> API and needed to build <code class="docutils literal notranslate"><span class="pre">raft-dask</span></code></p></li>
-<li><p><a class="reference external" href="https://github.com/openucx/ucx">UCX</a> - Used in <code class="docutils literal notranslate"><span class="pre">raft::comms</span></code> API and needed to build <code class="docutils literal notranslate"><span class="pre">raft-dask</span></code></p></li>
+<li><p><a class="reference external" href="https://github.com/facebookresearch/faiss">FAISS</a> v1.7.0 - Used in <code class="docutils literal notranslate"><span class="pre">raft::neighbors</span></code> API..</p></li>
+<li><p><a class="reference external" href="https://github.com/NVIDIA/nccl">NCCL</a> - Used in <code class="docutils literal notranslate"><span class="pre">raft::comms</span></code> API and needed to build <code class="docutils literal notranslate"><span class="pre">raft-dask</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/openucx/ucx">UCX</a> - Used in <code class="docutils literal notranslate"><span class="pre">raft::comms</span></code> API and needed to build <code class="docutils literal notranslate"><span class="pre">raft-dask</span></code>.</p></li>
 <li><p><a class="reference external" href="https://github.com/google/googletest">Googletest</a> - Needed to build tests</p></li>
 <li><p><a class="reference external" href="https://github.com/google/benchmark">Googlebench</a> - Needed to build benchmarks</p></li>
 <li><p><a class="reference external" href="https://github.com/doxygen/doxygen">Doxygen</a> - Needed to build docs</p></li>
 </ul>
-<p>C++ RAFT is a header-only library but provides the option of building shared libraries with template instantiations for common types to speed up compile times for larger projects.</p>
+<p>All of RAFT&rsquo;s C++ APIs can be used header-only but pre-compiled shared libraries also contain some host-accessable APIs and template instantiations to accelerate compile times.</p>
 <p>The recommended way to build and install RAFT is to use the <code class="docutils literal notranslate"><span class="pre">build.sh</span></code> script in the root of the repository. This script can build both the C++ and Python artifacts and provides options for building and installing the headers, tests, benchmarks, and individual shared libraries.</p>
 </section>
 </section>
@@ -354,7 +355,7 @@ py.test -s -v
 <p>There are two different strategies for including RAFT in downstream projects, depending on whether or not the required dependencies are already installed and available on the <code class="docutils literal notranslate"><span class="pre">lib</span></code> and <code class="docutils literal notranslate"><span class="pre">include</span></code> paths.</p>
 <section id="c-header-only-integration-using-cmake">
 <h3>C++ header-only integration using cmake<a class="headerlink" href="#c-header-only-integration-using-cmake" title="Permalink to this heading">&para;</a></h3>
-<p>When the needed <a class="reference external" href="#required_depenencies">build dependencies</a> are already satisfied, RAFT can be trivially integrated into downstream projects by cloning the repository and adding <code class="docutils literal notranslate"><span class="pre">cpp/include</span></code> from RAFT to the include path:</p>
+<p>When the needed <a class="reference external" href="#build-dependencies">build dependencies</a> are already satisfied, RAFT can be trivially integrated into downstream projects by cloning the repository and adding <code class="docutils literal notranslate"><span class="pre">cpp/include</span></code> from RAFT to the include path:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">RAFT_GIT_DIR</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/raft</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">STRING</span><span class="w"> </span><span class="s2">"Path to RAFT repo"</span><span class="p">)</span>
 <span class="nb">ExternalProject_Add</span><span class="p">(</span><span class="s">raft</span>
 <span class="w">  </span><span class="s">GIT_REPOSITORY</span><span class="w">    </span><span class="s">git@github.com:rapidsai/raft.git</span>
@@ -384,7 +385,7 @@ py.test -s -v
 <p>The following example is similar to invoking <code class="docutils literal notranslate"><span class="pre">find_package(raft)</span></code> but uses <code class="docutils literal notranslate"><span class="pre">rapids_cpm_find</span></code>, which provides a richer and more flexible configuration landscape by using CPM to fetch any dependencies not already available to the build. The <code class="docutils literal notranslate"><span class="pre">raft::raft</span></code> link target will be made available and it&rsquo;s recommended that it be used as a <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code> link dependency in downstream projects. The <code class="docutils literal notranslate"><span class="pre">COMPILE_LIBRARIES</span></code> option enables the building the shared libraries.</p>
 <p>The following <code class="docutils literal notranslate"><span class="pre">cmake</span></code> snippet enables a flexible configuration of RAFT:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span>
-set(RAFT_VERSION "22.10")
+set(RAFT_VERSION "22.12")
 set(RAFT_FORK "rapidsai")
 set(RAFT_PINNED_TAG "branch-${RAFT_VERSION}")
 
