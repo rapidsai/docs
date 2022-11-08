@@ -46,6 +46,17 @@ Use RAPIDS on high performance computers and supercomputers.
 ````
 
 ````{grid-item-card}
+:link: mig
+:link-type: doc
+{fas}`border-all;sd-text-primary` Multi-Instance GPUs
+^^^
+Use RAPIDS with Multi-Instance GPUs
+
+{bdg-primary}`Dask Cluster`
+{bdg-primary}`XGBoost with Dask Cluster`
+````
+
+````{grid-item-card}
 :link: platforms/index
 :link-type: doc
 {fas}`network-wired;sd-text-primary` Platforms
@@ -92,6 +103,7 @@ See our [example notebooks repo](https://github.com/rapidsai/cloud-ml-examples) 
 local
 cloud/index
 hpc
+mig
 platforms/index
 ```
 

@@ -4,8 +4,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; RAPIDS Deployment Documentation  documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Multi-Instance GPU (MIG) &#8212; RAPIDS Deployment Documentation  documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -47,9 +48,11 @@
     <script src="_static/design-tabs.js"></script>
     <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
-    <link rel="index" title="Index" href="#" />
+    <script>DOCUMENTATION_OPTIONS.pagename = 'mig';</script>
+    <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Platforms" href="platforms/index.html" />
+    <link rel="prev" title="HPC" href="hpc.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -140,8 +143,8 @@
                 </li>
                 
 
-                <li class="nav-item">
-                    <a class="nav-link" href="mig.html">
+                <li class="nav-item current active">
+                    <a class="nav-link" href="#">
                         Multi-Instance GPU (MIG)
                     </a>
                 </li>
@@ -277,8 +280,8 @@
                 </li>
                 
 
-                <li class="nav-item">
-                    <a class="nav-link" href="mig.html">
+                <li class="nav-item current active">
+                    <a class="nav-link" href="#">
                         Multi-Instance GPU (MIG)
                     </a>
                 </li>
@@ -377,12 +380,72 @@
             
             <article class="bd-article" role="main">
               
-
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- 
+  <section id="multi-instance-gpu-mig">
+<h1>Multi-Instance GPU (MIG)<a class="headerlink" href="#multi-instance-gpu-mig" title="Permalink to this heading">#</a></h1>
+<p><a class="reference external" href="https://www.nvidia.com/en-us/technologies/multi-instance-gpu/">Multi-Instance GPU</a> is a technology that allows partitioning a single GPU into multiple instances, making each one seem as a completely independent GPU. Each instance then receives a certain slice of the GPU computational resources and a pre-defined block of memory that is detached from the other instances by on-chip protections.</p>
+<p>Due to the protection layer to make MIG secure, certain limitations exist. One such limitation that is generally important for HPC applications is the lack of support for <a class="reference external" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#interprocess-communication">CUDA Inter-Process Communication (IPC)</a>, which enables transfers over NVLink and NVSwitch to greatly speed up communication between physical GPUs. When using MIG, <a class="reference external" href="https://www.nvidia.com/en-us/data-center/nvlink/">NVLink and NVSwitch</a> are thus completely unavailable, forcing the application to take a more expensive communication channel via the system (CPU) memory.</p>
+<p>Given limitations in communication capability, we advise users to first understand the tradeoffs that have to be made when attempting to setup a cluster of MIG instances. While the partitioning could be beneficial to certain applications that need only a certain amount of compute capability, communication bottlenecks may be a problem and thus need to be thought of carefully.</p>
+<section id="dask-cluster">
+<h2>Dask Cluster<a class="headerlink" href="#dask-cluster" title="Permalink to this heading">#</a></h2>
+<p>Dask clusters of MIG instances are supported via Dask-CUDA as long as all MIG instances are identical with respect to memory. Much like a cluster of physical GPUs, mixing GPUs with different memory sizes is generally not a good idea as Dask may not be able to balance work correctly and eventually could lead to more frequent out-of-memory errors.</p>
+<p>For example, partitioning two GPUs into 7 x 10GB instances each and setting up a cluster with all 14 instances should be ok. However, partitioning one of the GPUs into 7 x 10GB instances and another with 3 x 20GB should be avoided.</p>
+<p>Unlike for a system composed of unpartitioned GPUs, Dask-CUDA cannot automatically infer the GPUs to be utilized for the cluster. In a MIG setup, the user is then required to specify the GPU instances to be used by the cluster. This is achieved by specifying either the <code class="docutils literal notranslate"><span class="pre">CUDA_VISIBLE_DEVICES</span></code> environment variable for either <a class="reference external" href="https://docs.rapids.ai/api/dask-cuda/stable/api.html#dask_cuda.LocalCUDACluster" title="(in dask-cuda v22.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dask_cuda.LocalCUDACluster</span></code></a> or <code class="docutils literal notranslate"><span class="pre">dask-cuda-worker</span></code>, or the homonymous argument for <a class="reference external" href="https://docs.rapids.ai/api/dask-cuda/stable/api.html#dask_cuda.LocalCUDACluster" title="(in dask-cuda v22.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dask_cuda.LocalCUDACluster</span></code></a>.</p>
+<p>Physical GPUs can be addressed by their indices <code class="docutils literal notranslate"><span class="pre">[0..N)</span></code> (where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the total number of GPUs installed) or by its name composed of the <code class="docutils literal notranslate"><span class="pre">GPU-</span></code> prefix followed by its UUID. MIG instances have no indices and can only be addressed by their names, composed of the <code class="docutils literal notranslate"><span class="pre">MIG-</span></code> prefix followed by its UUID. The name of a MIG instance will the look similar to: <code class="docutils literal notranslate"><span class="pre">MIG-41b3359c-e721-56e5-8009-12e5797ed514</span></code>.</p>
+<section id="determine-mig-names">
+<h3>Determine MIG Names<a class="headerlink" href="#determine-mig-names" title="Permalink to this heading">#</a></h3>
+<p>The simplest way to determine the names of MIG instances is to run <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span> <span class="pre">-L</span></code> on the command line.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ nvidia-smi -L
+GPU <span class="m">0</span>: NVIDIA A100-PCIE-40GB <span class="o">(</span>UUID: GPU-84fd49f2-48ad-50e8-9f2e-3bf0dfd47ccb<span class="o">)</span>
+  MIG 2g.10gb     Device  <span class="m">0</span>: <span class="o">(</span>UUID: MIG-41b3359c-e721-56e5-8009-12e5797ed514<span class="o">)</span>
+  MIG 2g.10gb     Device  <span class="m">1</span>: <span class="o">(</span>UUID: MIG-65b79fff-6d3c-5490-a288-b31ec705f310<span class="o">)</span>
+  MIG 2g.10gb     Device  <span class="m">2</span>: <span class="o">(</span>UUID: MIG-c6e2bae8-46d4-5a7e-9a68-c6cf1f680ba0<span class="o">)</span>
+</pre></div>
 </div>
+<p>In the example case above the system has one NVIDIA A100 with 3 x 10GB MIG instances. In the next sections we will see how to use the instance names to startup a Dask cluster composed of MIG GPUs. Please note that once a GPU is partitioned, the physical GPU (named <code class="docutils literal notranslate"><span class="pre">GPU-84fd49f2-48ad-50e8-9f2e-3bf0dfd47ccb</span></code> above) is inaccessible for CUDA compute and cannot be used as part of a Dask cluster.</p>
+<p>Alternatively, MIG instance names can be obtained programatically using <a class="reference external" href="https://developer.nvidia.com/nvidia-management-library-nvml">NVML</a> or <a class="reference external" href="https://github.com/gpuopenanalytics/pynvml">PyNVML</a>. Please refer to the <a class="reference external" href="https://docs.nvidia.com/deploy/nvml-api/">NVML API</a> to write appropriate utilities for that purpose.</p>
+</section>
+<section id="localcudacluster">
+<h3>LocalCUDACluster<a class="headerlink" href="#localcudacluster" title="Permalink to this heading">#</a></h3>
+<p>Suppose you have 3 MIG instances on the local system:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MIG-41b3359c-e721-56e5-8009-12e5797ed514</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MIG-65b79fff-6d3c-5490-a288-b31ec705f310</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MIG-c6e2bae8-46d4-5a7e-9a68-c6cf1f680ba0</span></code></p></li>
+</ul>
+<p>To start a <a class="reference external" href="https://docs.rapids.ai/api/dask-cuda/stable/api.html#dask_cuda.LocalCUDACluster" title="(in dask-cuda v22.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dask_cuda.LocalCUDACluster</span></code></a>, the user would run the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_cuda</span> <span class="kn">import</span> <span class="n">LocalCUDACluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCUDACluster</span><span class="p">(</span>
+    <span class="n">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;MIG-41b3359c-e721-56e5-8009-12e5797ed514&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MIG-65b79fff-6d3c-5490-a288-b31ec705f310&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MIG-c6e2bae8-46d4-5a7e-9a68-c6cf1f680ba0&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="c1"># Other `LocalCUDACluster` arguments</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="dask-cuda-worker">
+<h3>dask-cuda-worker<a class="headerlink" href="#dask-cuda-worker" title="Permalink to this heading">#</a></h3>
+<p>Suppose you have 3 MIG instances on the local system:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MIG-41b3359c-e721-56e5-8009-12e5797ed514</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MIG-65b79fff-6d3c-5490-a288-b31ec705f310</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MIG-c6e2bae8-46d4-5a7e-9a68-c6cf1f680ba0</span></code></p></li>
+</ul>
+<p>To start a <code class="docutils literal notranslate"><span class="pre">dask-cuda-worker</span></code> that the address to the scheduler is located in the <code class="docutils literal notranslate"><span class="pre">scheduler.json</span></code> file, the user would run the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="s2">&quot;MIG-41b3359c-e721-56e5-8009-12e5797ed514,MIG-65b79fff-6d3c-5490-a288-b31ec705f310,MIG-c6e2bae8-46d4-5a7e-9a68-c6cf1f680ba0&quot;</span> dask-cuda-worker scheduler.json <span class="c1"># --other-arguments</span>
+</pre></div>
+</div>
+<p>Please note that in the example above we created 3 Dask-CUDA workers on one node, for a multi-node cluster, the correct MIG names need to be specified, and they will always be different for each host.</p>
+</section>
+</section>
+<section id="xgboost-with-dask-cluster">
+<h2>XGBoost with Dask Cluster<a class="headerlink" href="#xgboost-with-dask-cluster" title="Permalink to this heading">#</a></h2>
+<p>Currently <a class="reference external" href="https://www.nvidia.com/en-us/glossary/data-science/xgboost/">XGBoost</a> only exposes support for GPU communication via NCCL, which does not support MIG. For this reason, A Dask cluster that utilizes XGBoost would have to utilize TCP instead for all communications which will likely cause in considerable performance degradation. Therefore, using XGBoost with MIG is not recommended.</p>
+</section>
+</section>
 
 
             </article>
@@ -392,6 +455,20 @@
             <footer class="bd-footer-article">
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="hpc.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">HPC</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="platforms/index.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Platforms</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
 </div>
             </footer>
             
@@ -403,6 +480,45 @@
               
 <div class="toc-item">
   
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dask-cluster">
+   Dask Cluster
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#determine-mig-names">
+     Determine MIG Names
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#localcudacluster">
+     LocalCUDACluster
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dask-cuda-worker">
+     dask-cuda-worker
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#xgboost-with-dask-cluster">
+   XGBoost with Dask Cluster
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
 <div id="searchbox"></div>
 </div>
 
@@ -412,6 +528,12 @@
 
 <div class="toc-item">
   
+<div class="tocsection sourcelink">
+    <a href="_sources/mig.md.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
 </div>
 
             </div>
