@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['logic_5ferror_136',['logic_error',['../structcuspatial_1_1logic__error.html',1,'cuspatial']]]
+  ['linestring_5fref_144',['linestring_ref',['../classcuspatial_1_1linestring__ref.html',1,'cuspatial']]],
+  ['logic_5ferror_145',['logic_error',['../structcuspatial_1_1logic__error.html',1,'cuspatial']]]
 ];
