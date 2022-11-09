@@ -66,8 +66,8 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#using-raft-in-downstream-projects">Using RAFT in downstream projects</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#c-header-only-integration-using-cmake">C++ header-only integration using cmake</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#using-pre-compiled-shared-libraries">Using pre-compiled shared libraries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c-header-only-integration">C++ header-only integration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-c-pre-compiled-shared-libraries">Using C++ pre-compiled shared libraries</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#building-raft-c-from-source-in-cmake">Building RAFT C++ from source in cmake</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#python-cython-integration">Python/Cython Integration</a></li>
 </ul>
@@ -110,10 +110,11 @@
 <section id="cuda-gpu-requirements">
 <h3>CUDA/GPU Requirements<a class="headerlink" href="#cuda-gpu-requirements" title="Permalink to this heading">&para;</a></h3>
 <ul class="simple">
-<li><p>GCC 9.0+ (9.5.0+ recommended)</p></li>
-<li><p>CUDA Toolkit 11.0+</p></li>
+<li><p>cmake 3.23.1+</p></li>
+<li><p>GCC 9.3+ (9.5.0+ recommended)</p></li>
+<li><p>CUDA Toolkit 11.2+</p></li>
 <li><p>NVIDIA driver 450.80.02+</p></li>
-<li><p>Pascal architecture of better (compute capability &gt;= 6.0)</p></li>
+<li><p>Pascal architecture or better (compute capability &gt;= 6.0)</p></li>
 </ul>
 </section>
 <section id="build-dependencies">
@@ -352,9 +353,27 @@ py.test -s -v
 </section>
 <section id="using-raft-in-downstream-projects">
 <h2>Using RAFT in downstream projects<a class="headerlink" href="#using-raft-in-downstream-projects" title="Permalink to this heading">&para;</a></h2>
-<p>There are two different strategies for including RAFT in downstream projects, depending on whether or not the required dependencies are already installed and available on the <code class="docutils literal notranslate"><span class="pre">lib</span></code> and <code class="docutils literal notranslate"><span class="pre">include</span></code> paths.</p>
-<section id="c-header-only-integration-using-cmake">
-<h3>C++ header-only integration using cmake<a class="headerlink" href="#c-header-only-integration-using-cmake" title="Permalink to this heading">&para;</a></h3>
+<p>There are a few different strategies for including RAFT in downstream projects, depending on whether the <a class="reference external" href="#build-dependencies">required build dependencies</a> have already been installed and are available on the <code class="docutils literal notranslate"><span class="pre">lib</span></code> and <code class="docutils literal notranslate"><span class="pre">include</span></code> paths.</p>
+<p>Using cmake, you can enable CUDA support right in your project&rsquo;s declaration:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">project</span><span class="p">(</span><span class="s">YOUR_PROJECT</span><span class="w"> </span><span class="s">VERSION</span><span class="w"> </span><span class="s">0.1</span><span class="w"> </span><span class="s">LANGUAGES</span><span class="w"> </span><span class="s">CXX</span><span class="w"> </span><span class="s">CUDA</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Please note that some additional compiler flags might need to be added when building against RAFT. For example, if you see an error like this <code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">experimental</span> <span class="pre">flag</span> <span class="pre">'--expt-relaxed-constexpr'</span> <span class="pre">can</span> <span class="pre">be</span> <span class="pre">used</span> <span class="pre">to</span> <span class="pre">allow</span> <span class="pre">this.</span></code>. The necessary flags can be set with cmake:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">your_target_name</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="o">$&lt;</span><span class="nv">$&lt;COMPILE_LANGUAGE:CUDA</span><span class="o">&gt;</span><span class="s">:--expt-extended-lambda</span><span class="w"> </span><span class="s">--expt-relaxed-constexpr&gt;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Further, it&rsquo;s important that the language level be set to at least C++ 17. This can be done with cmake:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="s">your_target_name</span>
+<span class="s">PROPERTIES</span><span class="w"> </span><span class="s">CXX_STANDARD</span><span class="w">                        </span><span class="s">17</span>
+<span class="w">           </span><span class="s">CXX_STANDARD_REQUIRED</span><span class="w">               </span><span class="s">ON</span>
+<span class="w">           </span><span class="s">CUDA_STANDARD</span><span class="w">                       </span><span class="s">17</span>
+<span class="w">           </span><span class="s">CUDA_STANDARD_REQUIRED</span><span class="w">              </span><span class="s">ON</span>
+<span class="w">           </span><span class="s">POSITION_INDEPENDENT_CODE</span><span class="w">           </span><span class="s">ON</span>
+<span class="w">           </span><span class="s">INTERFACE_POSITION_INDEPENDENT_CODE</span><span class="w"> </span><span class="s">ON</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="c-header-only-integration">
+<h3>C++ header-only integration<a class="headerlink" href="#c-header-only-integration" title="Permalink to this heading">&para;</a></h3>
 <p>When the needed <a class="reference external" href="#build-dependencies">build dependencies</a> are already satisfied, RAFT can be trivially integrated into downstream projects by cloning the repository and adding <code class="docutils literal notranslate"><span class="pre">cpp/include</span></code> from RAFT to the include path:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">RAFT_GIT_DIR</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/raft</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">STRING</span><span class="w"> </span><span class="s2">"Path to RAFT repo"</span><span class="p">)</span>
 <span class="nb">ExternalProject_Add</span><span class="p">(</span><span class="s">raft</span>
@@ -367,10 +386,10 @@ py.test -s -v
 <span class="nb">set</span><span class="p">(</span><span class="s">RAFT_INCLUDE_DIR</span><span class="w"> </span><span class="o">${</span><span class="nv">RAFT_GIT_DIR</span><span class="o">}</span><span class="s">/raft/cpp/include</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">STRING</span><span class="w"> </span><span class="s2">"RAFT include variable"</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If RAFT has already been installed, such as by using the <code class="docutils literal notranslate"><span class="pre">build.sh</span></code> script, use <code class="docutils literal notranslate"><span class="pre">find_package(raft)</span></code> and the <code class="docutils literal notranslate"><span class="pre">raft::raft</span></code> target if using RAFT to interact only with the public APIs of consuming projects.</p>
+<p>If RAFT has already been installed, such as by using the <code class="docutils literal notranslate"><span class="pre">build.sh</span></code> script, use <code class="docutils literal notranslate"><span class="pre">find_package(raft)</span></code> and the <code class="docutils literal notranslate"><span class="pre">raft::raft</span></code> target.</p>
 </section>
-<section id="using-pre-compiled-shared-libraries">
-<h3>Using pre-compiled shared libraries<a class="headerlink" href="#using-pre-compiled-shared-libraries" title="Permalink to this heading">&para;</a></h3>
+<section id="using-c-pre-compiled-shared-libraries">
+<h3>Using C++ pre-compiled shared libraries<a class="headerlink" href="#using-c-pre-compiled-shared-libraries" title="Permalink to this heading">&para;</a></h3>
 <p>Use <code class="docutils literal notranslate"><span class="pre">find_package(raft</span> <span class="pre">COMPONENTS</span> <span class="pre">nn</span> <span class="pre">distance)</span></code> to enable the shared libraries and transitively pass dependencies through separate targets for each component. In this example, the <code class="docutils literal notranslate"><span class="pre">raft::distance</span></code> and <code class="docutils literal notranslate"><span class="pre">raft::nn</span></code> targets will be available for configuring linking paths in addition to <code class="docutils literal notranslate"><span class="pre">raft::raft</span></code>. These targets will also pass through any transitive dependencies (such as FAISS for the <code class="docutils literal notranslate"><span class="pre">nn</span></code> package).</p>
 <p>The pre-compiled libraries contain template specializations for commonly used types, such as single- and double-precision floating-point. In order to use the symbols in the pre-compiled libraries, the compiler needs to be told not to instantiate templates that are already contained in the shared libraries. By convention, these header files are named <code class="docutils literal notranslate"><span class="pre">specializations.hpp</span></code> and located in the base directory for the packages that contain specializations.</p>
 <p>The following example tells the compiler to ignore the pre-compiled templates for the <code class="docutils literal notranslate"><span class="pre">libraft-distance</span></code> API so any symbols already compiled into pre-compiled shared library will be used instead:</p>
