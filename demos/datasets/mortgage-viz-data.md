@@ -15,7 +15,7 @@ For the cuXfilter GTC mortgage visualization demo to work, the properly scored a
 
 For more details about its context read our blog [Accelerating Cross Filtering with cuDF](https://medium.com/rapids-ai/accelerating-cross-filtering-with-cudf-3b4c29c89292).
 
-The raw data comes from the [Mortgage Data Section](https://rapidsai.github.io/demos/datasets/mortgage-data) and the risk score is generated from a model trained on an end to end workflow using the RAPIDS framework. 
+The raw data comes from the [Mortgage Data Section](https://docs.rapids.ai/datasets/mortgage-data) and the risk score is generated from a model trained on an end to end workflow using the RAPIDS framework. 
 
 146 million active and non-delinquent loans are given a score from 0-1 to indicate the likelihood of the loan being risky for purchase as part of a loan portfolio. Riskiness could mean a chance of delinquency during the lifetime of the loan, or that the loan will be paid off soon and cease generating interest payments.
 
