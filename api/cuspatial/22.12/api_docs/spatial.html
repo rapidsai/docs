@@ -590,15 +590,63 @@ memory allocated to store the quadtree and sorted point_indices.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="cuspatial.quadtree_point_to_nearest_linestring">
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">quadtree_point_to_nearest_linestring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linestring_quad_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quadtree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestring_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestring_points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestring_points_y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.quadtree_point_to_nearest_linestring" title="Permalink to this definition">#</a></dt>
+<dd><p>Finds the nearest linestring to each point in a quadrant, and computes
+the distances between each point and linestring.</p>
+<p>Uses the table of (linestring, quadrant) pairs returned by
+<code class="docutils literal notranslate"><span class="pre">cuspatial.join_quadtree_and_bounding_boxes</span></code> to ensure distances are
+computed only for the points in the same quadrant as each linestring.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>linestring_quad_pairs: cudf.DataFrame</strong></dt><dd><p>Table of (linestring, quadrant) index pairs returned by
+<code class="docutils literal notranslate"><span class="pre">cuspatial.join_quadtree_and_bounding_boxes</span></code>.</p>
+</dd>
+<dt><strong>quadtree</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>A complete quadtree for a given area-of-interest bounding box.</p>
+</dd>
+<dt><strong>point_indices</strong><span class="classifier">cudf.Series</span></dt><dd><p>Sorted point indices returned by <code class="docutils literal notranslate"><span class="pre">cuspatial.quadtree_on_points</span></code></p>
+</dd>
+<dt><strong>points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>x-coordinates of points used to construct the quadtree.</p>
+</dd>
+<dt><strong>points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>y-coordinates of points used to construct the quadtree.</p>
+</dd>
+<dt><strong>linestring_offsets</strong><span class="classifier">cudf.Series</span></dt><dd><p>Begin index of the first point in each linestring.</p>
+</dd>
+<dt><strong>poly_points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>Linestring point x-coordinates.</p>
+</dd>
+<dt><strong>poly_points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>Linestring point y-coordinates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Indices for each point and its nearest linestring, and the distance
+between the two.</p>
+<dl class="simple">
+<dt>point_index<span class="classifier">cudf.Series</span></dt><dd><p>Indices of each point that intersects with a linestring.</p>
+</dd>
+<dt>linestring_index<span class="classifier">cudf.Series</span></dt><dd><p>Indices of each linestring with which a point intersected.</p>
+</dd>
+<dt>distance<span class="classifier">cudf.Series</span></dt><dd><p>Distances between each point and its nearest linestring.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="cuspatial.join_quadtree_and_bounding_boxes">
-<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">join_quadtree_and_bounding_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quadtree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_bounding_boxes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.join_quadtree_and_bounding_boxes" title="Permalink to this definition">#</a></dt>
-<dd><p>Search a quadtree for polygon or polyline bounding box intersections.</p>
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">join_quadtree_and_bounding_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quadtree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounding_boxes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.join_quadtree_and_bounding_boxes" title="Permalink to this definition">#</a></dt>
+<dd><p>Search a quadtree for polygon or linestring bounding box intersections.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>quadtree</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>A complete quadtree for a given area-of-interest bounding box.</p>
 </dd>
-<dt><strong>poly_bounding_boxes</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Minimum bounding boxes for a set of polygons or polylines</p>
+<dt><strong>bounding_boxes</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Minimum bounding boxes for a set of polygons or linestrings</p>
 </dd>
 <dt><strong>x_min</strong></dt><dd><p>The lower-left x-coordinate of the area of interest bounding box</p>
 </dd>
@@ -618,7 +666,7 @@ memory allocated to store the quadtree and sorted point_indices.</p>
 <dd class="field-even"><dl>
 <dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Indices for each intersecting bounding box and leaf quadrant.</p>
 <dl class="simple">
-<dt>poly_offset<span class="classifier">cudf.Series</span></dt><dd><p>Indices for each poly bbox that intersects with the quadtree.</p>
+<dt>bbox_offset<span class="classifier">cudf.Series</span></dt><dd><p>Indices for each bbox that intersects with the quadtree.</p>
 </dd>
 <dt>quad_offset<span class="classifier">cudf.Series</span></dt><dd><p>Indices for each leaf quadrant intersecting with a poly bbox.</p>
 </dd>
@@ -725,7 +773,7 @@ list of lon/lat pairs</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cuspatial.pairwise_linestring_distance">
 <span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">pairwise_linestring_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offsets1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.pairwise_linestring_distance" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute shortest distance between pairs of linestrings (a.k.a. polylines)</p>
+<dd><p>Compute shortest distance between pairs of linestrings</p>
 <p>The shortest distance between two linestrings is defined as the shortest
 distance between all pairs of segments of the two linestrings. If any of
 the segments intersect, the distance is 0.</p>
@@ -866,6 +914,42 @@ point on the linestring.</p></li>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
 <dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>minimum bounding boxes for each polygon</p>
+<dl class="simple">
+<dt>x_min<span class="classifier">cudf.Series</span></dt><dd><p>the minimum x-coordinate of each bounding box</p>
+</dd>
+<dt>y_min<span class="classifier">cudf.Series</span></dt><dd><p>the minimum y-coordinate of each bounding box</p>
+</dd>
+<dt>x_max<span class="classifier">cudf.Series</span></dt><dd><p>the maximum x-coordinate of each bounding box</p>
+</dd>
+<dt>y_max<span class="classifier">cudf.Series</span></dt><dd><p>the maximum y-coordinate of each bounding box</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cuspatial.linestring_bounding_boxes">
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">linestring_bounding_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linestring_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expansion_radius</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.linestring_bounding_boxes" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the minimum bounding boxes for a set of linestrings.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>linestring_offsets</strong></dt><dd><p>Begin indices of the each linestring</p>
+</dd>
+<dt><strong>xs</strong></dt><dd><p>Linestring point x-coordinates</p>
+</dd>
+<dt><strong>ys</strong></dt><dd><p>Linestring point y-coordinates</p>
+</dd>
+<dt><strong>expansion_radius</strong></dt><dd><p>radius of each linestring point</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>minimum bounding boxes for each linestring</p>
 <dl class="simple">
 <dt>x_min<span class="classifier">cudf.Series</span></dt><dd><p>the minimum x-coordinate of each bounding box</p>
 </dd>
@@ -1045,6 +1129,15 @@ coordinates.</p>
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.quadtree_point_to_nearest_linestring">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       quadtree_point_to_nearest_linestring()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#cuspatial.join_quadtree_and_bounding_boxes">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1115,6 +1208,15 @@ coordinates.</p>
      <code class="docutils literal notranslate">
       <span class="pre">
        polygon_bounding_boxes()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuspatial.linestring_bounding_boxes">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       linestring_bounding_boxes()
       </span>
      </code>
     </a>
