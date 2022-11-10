@@ -1150,6 +1150,13 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
+      <name>contains_re</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>ga3e4d76e1137ea30e7e27dd64083e1d1f</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
       <name>matches_re</name>
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>ga40856a39189e7ec86d25c11d874f5c3a</anchor>
@@ -1157,10 +1164,24 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
+      <name>matches_re</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>gaa77c5dbb4a88fa3608b3d1cf1dc8ac0a</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
       <name>count_re</name>
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>ga42591dbdf50f74b009ab92e4ed4845d4</anchor>
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>count_re</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>gaea68e9cf274516413e9a04a4485eae13</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -2290,11 +2311,25 @@
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
+      <type>std::unique_ptr&lt; table &gt;</type>
+      <name>extract</name>
+      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchor>ga8ccf342fdd9b4828fda32aced75df0b2</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>extract_all_record</name>
       <anchorfile>group__strings__substring.html</anchorfile>
       <anchor>ga0077f00bf771a3a03edc1d997a3a668a</anchor>
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>extract_all_record</name>
+      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchor>ga20434518750992e56f2ce5195eb8b67d</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -2471,6 +2506,13 @@
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>gafdbc44c1c22d27554a6048e40abcee0c</anchor>
       <arglist>(strings_column_view const &amp;input, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>findall</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>ga6ea0304140a5e79dca842eabfb0e414c</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -3726,6 +3768,13 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>replace_re</name>
       <anchorfile>group__strings__replace.html</anchorfile>
+      <anchor>gaaecff82e1bd292641708da2e7c3b9103</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, string_scalar const &amp;replacement=string_scalar(&quot;&quot;), std::optional&lt; size_type &gt; max_replace_count=std::nullopt, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>replace_re</name>
+      <anchorfile>group__strings__replace.html</anchorfile>
       <anchor>ga6f994f9badb4b10ae8d46b88589ad067</anchor>
       <arglist>(strings_column_view const &amp;strings, std::vector&lt; std::string &gt; const &amp;patterns, strings_column_view const &amp;replacements, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
@@ -3735,6 +3784,13 @@
       <anchorfile>group__strings__replace.html</anchorfile>
       <anchor>ga5e36a14e504147cb4cc8c766fa17f97a</anchor>
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, std::string_view replacement, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>replace_with_backrefs</name>
+      <anchorfile>group__strings__replace.html</anchorfile>
+      <anchor>ga90168f072570bbb05813d06c9541363f</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, std::string_view replacement, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -4314,10 +4370,24 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; table &gt;</type>
+      <name>split_re</name>
+      <anchorfile>group__strings__split.html</anchorfile>
+      <anchor>ga9c8b97a6577094b4242df315761be15c</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; table &gt;</type>
       <name>rsplit_re</name>
       <anchorfile>group__strings__split.html</anchorfile>
       <anchor>gab0849ff9c2fc1c44932e0fb6ea4fa604</anchor>
       <arglist>(strings_column_view const &amp;input, std::string_view pattern, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; table &gt;</type>
+      <name>rsplit_re</name>
+      <anchorfile>group__strings__split.html</anchorfile>
+      <anchor>ga56db26d88486b7543db7172ba78bffad</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -4328,10 +4398,24 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
+      <name>split_record_re</name>
+      <anchorfile>group__strings__split.html</anchorfile>
+      <anchor>ga80730be2a0f6498ef3e89dc75a6ef3a6</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
       <name>rsplit_record_re</name>
       <anchorfile>group__strings__split.html</anchorfile>
       <anchor>gaa3eef244c65b7be3468eaa86a30c2666</anchor>
       <arglist>(strings_column_view const &amp;input, std::string_view pattern, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>rsplit_record_re</name>
+      <anchorfile>group__strings__split.html</anchorfile>
+      <anchor>ga5ba9d0c33b3d455decf3c391157b2bb6</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -15211,6 +15295,73 @@
     <base virtualness="virtual">cudf::aggregation</base>
   </compound>
   <compound kind="struct">
+    <name>cudf::strings::regex_program</name>
+    <filename>structcudf_1_1strings_1_1regex__program.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>regex_program</name>
+      <anchorfile>structcudf_1_1strings_1_1regex__program.html</anchorfile>
+      <anchor>ab91875a27ba0c7463bc0fe2b979fe5c8</anchor>
+      <arglist>(regex_program &amp;&amp;other)</arglist>
+    </member>
+    <member kind="function">
+      <type>regex_program &amp;</type>
+      <name>operator=</name>
+      <anchorfile>structcudf_1_1strings_1_1regex__program.html</anchorfile>
+      <anchor>a23b4ee37aa3ab13633f99e11b6d39818</anchor>
+      <arglist>(regex_program &amp;&amp;other)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::string</type>
+      <name>pattern</name>
+      <anchorfile>structcudf_1_1strings_1_1regex__program.html</anchorfile>
+      <anchor>a8186ff8c76894d501a86df5ad2ffcd09</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>regex_flags</type>
+      <name>flags</name>
+      <anchorfile>structcudf_1_1strings_1_1regex__program.html</anchorfile>
+      <anchor>aa0778fc22d9ff8cddf2d7bfc1ec6e3d5</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>capture_groups</type>
+      <name>capture</name>
+      <anchorfile>structcudf_1_1strings_1_1regex__program.html</anchorfile>
+      <anchor>a449da7ed336b8929404e295c42f53bf9</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>int32_t</type>
+      <name>instructions_count</name>
+      <anchorfile>structcudf_1_1strings_1_1regex__program.html</anchorfile>
+      <anchor>aa0a4a650b84ed637372a352f2f7618c1</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>int32_t</type>
+      <name>groups_count</name>
+      <anchorfile>structcudf_1_1strings_1_1regex__program.html</anchorfile>
+      <anchor>a38ac3a1f769cc80b79f63bf2f6d5afd5</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>std::size_t</type>
+      <name>compute_working_memory_size</name>
+      <anchorfile>structcudf_1_1strings_1_1regex__program.html</anchorfile>
+      <anchor>adc099e7cac91d0ca18095c6364813c7e</anchor>
+      <arglist>(int32_t num_strings) const</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static std::unique_ptr&lt; regex_program &gt;</type>
+      <name>create</name>
+      <anchorfile>structcudf_1_1strings_1_1regex__program.html</anchorfile>
+      <anchor>a3100141866b6b2858d014e36287e5d0a</anchor>
+      <arglist>(std::string_view pattern, regex_flags flags=regex_flags::DEFAULT, capture_groups capture=capture_groups::EXTRACT)</arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>cudf::test::Repeat</name>
     <filename>structcudf_1_1test_1_1Repeat.html</filename>
     <templarg>N</templarg>
@@ -18162,7 +18313,6 @@
     <name>cudf::tdigest::tdigest_column_view</name>
     <filename>classcudf_1_1tdigest_1_1tdigest__column__view.html</filename>
     <base protection="private">cudf::column_view</base>
-    <class kind="struct">cudf::tdigest::tdigest_column_view::tdigest_size_fn</class>
     <member kind="typedef">
       <type>offset_type const  *</type>
       <name>offset_iterator</name>
@@ -18234,13 +18384,6 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
-      <type>auto</type>
-      <name>size_begin</name>
-      <anchorfile>classcudf_1_1tdigest_1_1tdigest__column__view.html</anchorfile>
-      <anchor>af92e4e23ec746ea7776512646780aa2a</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
       <type>double const  *</type>
       <name>min_begin</name>
       <anchorfile>classcudf_1_1tdigest_1_1tdigest__column__view.html</anchorfile>
@@ -18287,24 +18430,6 @@
       <name>max_column_index</name>
       <anchorfile>classcudf_1_1tdigest_1_1tdigest__column__view.html</anchorfile>
       <anchor>a628212a640264700df0dba4d52996e02</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
-    <name>cudf::tdigest::tdigest_column_view::tdigest_size_fn</name>
-    <filename>structcudf_1_1tdigest_1_1tdigest__column__view_1_1tdigest__size__fn.html</filename>
-    <member kind="function">
-      <type>size_type</type>
-      <name>operator()</name>
-      <anchorfile>structcudf_1_1tdigest_1_1tdigest__column__view_1_1tdigest__size__fn.html</anchorfile>
-      <anchor>a35d22a36e025c07ed833383a5cc84fb8</anchor>
-      <arglist>(size_type tdigest_index)</arglist>
-    </member>
-    <member kind="variable">
-      <type>size_type const  *</type>
-      <name>offsets</name>
-      <anchorfile>structcudf_1_1tdigest_1_1tdigest__column__view_1_1tdigest__size__fn.html</anchorfile>
-      <anchor>a0e1dbaf29ddbcf80b635773112115dba</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -22013,6 +22138,7 @@
     <name>cudf::strings</name>
     <filename>namespacecudf_1_1strings.html</filename>
     <class kind="class">cudf::strings::get_json_object_options</class>
+    <class kind="struct">cudf::strings::regex_program</class>
     <member kind="enumeration">
       <type></type>
       <name>string_character_types</name>
@@ -22101,42 +22227,42 @@
     <member kind="enumeration">
       <type></type>
       <name>regex_flags</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchorfile>group__strings__regex.html</anchorfile>
       <anchor>ga341eb616bce8b15119196ad8208ec16d</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>DEFAULT</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchorfile>group__strings__regex.html</anchorfile>
       <anchor>gga341eb616bce8b15119196ad8208ec16da432e1bed0776491ae9d73f3915142912</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>MULTILINE</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchorfile>group__strings__regex.html</anchorfile>
       <anchor>gga341eb616bce8b15119196ad8208ec16da5fbd6aff331b214f6042f54955becadb</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>DOTALL</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchorfile>group__strings__regex.html</anchorfile>
       <anchor>gga341eb616bce8b15119196ad8208ec16da20b3d35a53fddfb5bc6a6dfb7b6594c0</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>ASCII</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchorfile>group__strings__regex.html</anchorfile>
       <anchor>gga341eb616bce8b15119196ad8208ec16da467042b90d33829a8ae360d3c5d3c673</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumeration">
       <type></type>
       <name>capture_groups</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchorfile>group__strings__regex.html</anchorfile>
       <anchor>ga227bb80d548c2970e05f829839966ba3</anchor>
       <arglist></arglist>
-      <enumvalue file="group__strings__contains.html" anchor="gga227bb80d548c2970e05f829839966ba3a06a05d6df9809ab85bf7734d9c49bc54">EXTRACT</enumvalue>
-      <enumvalue file="group__strings__contains.html" anchor="gga227bb80d548c2970e05f829839966ba3af3e94c14de21439caa9ef45151108b79">NON_CAPTURE</enumvalue>
+      <enumvalue file="group__strings__regex.html" anchor="gga227bb80d548c2970e05f829839966ba3a06a05d6df9809ab85bf7734d9c49bc54">EXTRACT</enumvalue>
+      <enumvalue file="group__strings__regex.html" anchor="gga227bb80d548c2970e05f829839966ba3af3e94c14de21439caa9ef45151108b79">NON_CAPTURE</enumvalue>
     </member>
     <member kind="enumeration">
       <type></type>
@@ -22292,6 +22418,13 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
+      <name>contains_re</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>ga3e4d76e1137ea30e7e27dd64083e1d1f</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
       <name>matches_re</name>
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>ga40856a39189e7ec86d25c11d874f5c3a</anchor>
@@ -22299,10 +22432,24 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
+      <name>matches_re</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>gaa77c5dbb4a88fa3608b3d1cf1dc8ac0a</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
       <name>count_re</name>
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>ga42591dbdf50f74b009ab92e4ed4845d4</anchor>
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>count_re</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>gaea68e9cf274516413e9a04a4485eae13</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -22501,11 +22648,25 @@
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
+      <type>std::unique_ptr&lt; table &gt;</type>
+      <name>extract</name>
+      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchor>ga8ccf342fdd9b4828fda32aced75df0b2</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>extract_all_record</name>
       <anchorfile>group__strings__substring.html</anchorfile>
       <anchor>ga0077f00bf771a3a03edc1d997a3a668a</anchor>
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>extract_all_record</name>
+      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchor>ga20434518750992e56f2ce5195eb8b67d</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -22578,6 +22739,13 @@
       <arglist>(strings_column_view const &amp;input, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>findall</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>ga6ea0304140a5e79dca842eabfb0e414c</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
       <type>std::unique_ptr&lt; cudf::column &gt;</type>
       <name>get_json_object</name>
       <anchorfile>group__strings__json.html</anchorfile>
@@ -22601,21 +22769,21 @@
     <member kind="function">
       <type>constexpr bool</type>
       <name>is_multiline</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchorfile>group__strings__regex.html</anchorfile>
       <anchor>gab59842da60262f5143a199be227b9d8e</anchor>
       <arglist>(regex_flags const f)</arglist>
     </member>
     <member kind="function">
       <type>constexpr bool</type>
       <name>is_dotall</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchorfile>group__strings__regex.html</anchorfile>
       <anchor>ga817e21004c5c623990d063407794d13d</anchor>
       <arglist>(regex_flags const f)</arglist>
     </member>
     <member kind="function">
       <type>constexpr bool</type>
       <name>is_ascii</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchorfile>group__strings__regex.html</anchorfile>
       <anchor>gafa1a98e258a2831f917cbb4fefc9ab07</anchor>
       <arglist>(regex_flags const f)</arglist>
     </member>
@@ -22679,6 +22847,13 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>replace_re</name>
       <anchorfile>group__strings__replace.html</anchorfile>
+      <anchor>gaaecff82e1bd292641708da2e7c3b9103</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, string_scalar const &amp;replacement=string_scalar(&quot;&quot;), std::optional&lt; size_type &gt; max_replace_count=std::nullopt, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>replace_re</name>
+      <anchorfile>group__strings__replace.html</anchorfile>
       <anchor>ga6f994f9badb4b10ae8d46b88589ad067</anchor>
       <arglist>(strings_column_view const &amp;strings, std::vector&lt; std::string &gt; const &amp;patterns, strings_column_view const &amp;replacements, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
@@ -22688,6 +22863,13 @@
       <anchorfile>group__strings__replace.html</anchorfile>
       <anchor>ga5e36a14e504147cb4cc8c766fa17f97a</anchor>
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, std::string_view replacement, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>replace_with_backrefs</name>
+      <anchorfile>group__strings__replace.html</anchorfile>
+      <anchor>ga90168f072570bbb05813d06c9541363f</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, std::string_view replacement, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; table &gt;</type>
@@ -22740,10 +22922,24 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; table &gt;</type>
+      <name>split_re</name>
+      <anchorfile>group__strings__split.html</anchorfile>
+      <anchor>ga9c8b97a6577094b4242df315761be15c</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; table &gt;</type>
       <name>rsplit_re</name>
       <anchorfile>group__strings__split.html</anchorfile>
       <anchor>gab0849ff9c2fc1c44932e0fb6ea4fa604</anchor>
       <arglist>(strings_column_view const &amp;input, std::string_view pattern, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; table &gt;</type>
+      <name>rsplit_re</name>
+      <anchorfile>group__strings__split.html</anchorfile>
+      <anchor>ga56db26d88486b7543db7172ba78bffad</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -22754,10 +22950,24 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
+      <name>split_record_re</name>
+      <anchorfile>group__strings__split.html</anchorfile>
+      <anchor>ga80730be2a0f6498ef3e89dc75a6ef3a6</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
       <name>rsplit_record_re</name>
       <anchorfile>group__strings__split.html</anchorfile>
       <anchor>gaa3eef244c65b7be3468eaa86a30c2666</anchor>
       <arglist>(strings_column_view const &amp;input, std::string_view pattern, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>rsplit_record_re</name>
+      <anchorfile>group__strings__split.html</anchorfile>
+      <anchor>ga5ba9d0c33b3d455decf3c391157b2bb6</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -25865,6 +26075,7 @@
     <subgroup>strings_replace</subgroup>
     <subgroup>strings_split</subgroup>
     <subgroup>strings_json</subgroup>
+    <subgroup>strings_regex</subgroup>
     <file>attributes.hpp</file>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -26104,52 +26315,19 @@
     <filename>group__strings__contains.html</filename>
     <file>strings/contains.hpp</file>
     <file>findall.hpp</file>
-    <member kind="enumeration">
-      <type></type>
-      <name>regex_flags</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>ga341eb616bce8b15119196ad8208ec16d</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>DEFAULT</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>gga341eb616bce8b15119196ad8208ec16da432e1bed0776491ae9d73f3915142912</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>MULTILINE</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>gga341eb616bce8b15119196ad8208ec16da5fbd6aff331b214f6042f54955becadb</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>DOTALL</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>gga341eb616bce8b15119196ad8208ec16da20b3d35a53fddfb5bc6a6dfb7b6594c0</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>ASCII</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>gga341eb616bce8b15119196ad8208ec16da467042b90d33829a8ae360d3c5d3c673</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumeration">
-      <type></type>
-      <name>capture_groups</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>ga227bb80d548c2970e05f829839966ba3</anchor>
-      <arglist></arglist>
-      <enumvalue file="group__strings__contains.html" anchor="gga227bb80d548c2970e05f829839966ba3a06a05d6df9809ab85bf7734d9c49bc54">EXTRACT</enumvalue>
-      <enumvalue file="group__strings__contains.html" anchor="gga227bb80d548c2970e05f829839966ba3af3e94c14de21439caa9ef45151108b79">NON_CAPTURE</enumvalue>
-    </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>contains_re</name>
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>gace4fc3ece332dc6665fc52a28939d9ca</anchor>
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>contains_re</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>ga3e4d76e1137ea30e7e27dd64083e1d1f</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -26160,10 +26338,24 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
+      <name>matches_re</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>gaa77c5dbb4a88fa3608b3d1cf1dc8ac0a</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
       <name>count_re</name>
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>ga42591dbdf50f74b009ab92e4ed4845d4</anchor>
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>count_re</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>gaea68e9cf274516413e9a04a4485eae13</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -26180,25 +26372,11 @@
       <arglist>(strings_column_view const &amp;input, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
-      <type>constexpr bool</type>
-      <name>is_multiline</name>
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>findall</name>
       <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>gab59842da60262f5143a199be227b9d8e</anchor>
-      <arglist>(regex_flags const f)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr bool</type>
-      <name>is_dotall</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>ga817e21004c5c623990d063407794d13d</anchor>
-      <arglist>(regex_flags const f)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr bool</type>
-      <name>is_ascii</name>
-      <anchorfile>group__strings__contains.html</anchorfile>
-      <anchor>gafa1a98e258a2831f917cbb4fefc9ab07</anchor>
-      <arglist>(regex_flags const f)</arglist>
+      <anchor>ga6ea0304140a5e79dca842eabfb0e414c</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -26445,11 +26623,25 @@
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
+      <type>std::unique_ptr&lt; table &gt;</type>
+      <name>extract</name>
+      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchor>ga8ccf342fdd9b4828fda32aced75df0b2</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>extract_all_record</name>
       <anchorfile>group__strings__substring.html</anchorfile>
       <anchor>ga0077f00bf771a3a03edc1d997a3a668a</anchor>
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>extract_all_record</name>
+      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchor>ga20434518750992e56f2ce5195eb8b67d</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -26659,6 +26851,13 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>replace_re</name>
       <anchorfile>group__strings__replace.html</anchorfile>
+      <anchor>gaaecff82e1bd292641708da2e7c3b9103</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, string_scalar const &amp;replacement=string_scalar(&quot;&quot;), std::optional&lt; size_type &gt; max_replace_count=std::nullopt, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>replace_re</name>
+      <anchorfile>group__strings__replace.html</anchorfile>
       <anchor>ga6f994f9badb4b10ae8d46b88589ad067</anchor>
       <arglist>(strings_column_view const &amp;strings, std::vector&lt; std::string &gt; const &amp;patterns, strings_column_view const &amp;replacements, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
@@ -26668,6 +26867,13 @@
       <anchorfile>group__strings__replace.html</anchorfile>
       <anchor>ga5e36a14e504147cb4cc8c766fa17f97a</anchor>
       <arglist>(strings_column_view const &amp;strings, std::string_view pattern, std::string_view replacement, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>replace_with_backrefs</name>
+      <anchorfile>group__strings__replace.html</anchorfile>
+      <anchor>ga90168f072570bbb05813d06c9541363f</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, std::string_view replacement, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -26728,10 +26934,24 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; table &gt;</type>
+      <name>split_re</name>
+      <anchorfile>group__strings__split.html</anchorfile>
+      <anchor>ga9c8b97a6577094b4242df315761be15c</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; table &gt;</type>
       <name>rsplit_re</name>
       <anchorfile>group__strings__split.html</anchorfile>
       <anchor>gab0849ff9c2fc1c44932e0fb6ea4fa604</anchor>
       <arglist>(strings_column_view const &amp;input, std::string_view pattern, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; table &gt;</type>
+      <name>rsplit_re</name>
+      <anchorfile>group__strings__split.html</anchorfile>
+      <anchor>ga56db26d88486b7543db7172ba78bffad</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -26742,10 +26962,24 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
+      <name>split_record_re</name>
+      <anchorfile>group__strings__split.html</anchorfile>
+      <anchor>ga80730be2a0f6498ef3e89dc75a6ef3a6</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
       <name>rsplit_record_re</name>
       <anchorfile>group__strings__split.html</anchorfile>
       <anchor>gaa3eef244c65b7be3468eaa86a30c2666</anchor>
       <arglist>(strings_column_view const &amp;input, std::string_view pattern, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>rsplit_record_re</name>
+      <anchorfile>group__strings__split.html</anchorfile>
+      <anchor>ga5ba9d0c33b3d455decf3c391157b2bb6</anchor>
+      <arglist>(strings_column_view const &amp;input, regex_program const &amp;prog, size_type maxsplit=-1, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -26760,6 +26994,73 @@
       <anchorfile>group__strings__json.html</anchorfile>
       <anchor>gab840a94af453ae8219747cea833bb79c</anchor>
       <arglist>(cudf::strings_column_view const &amp;col, cudf::string_scalar const &amp;json_path, get_json_object_options options=get_json_object_options{}, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>strings_regex</name>
+    <title>Regex</title>
+    <filename>group__strings__regex.html</filename>
+    <class kind="struct">cudf::strings::regex_program</class>
+    <member kind="enumeration">
+      <type></type>
+      <name>regex_flags</name>
+      <anchorfile>group__strings__regex.html</anchorfile>
+      <anchor>ga341eb616bce8b15119196ad8208ec16d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>DEFAULT</name>
+      <anchorfile>group__strings__regex.html</anchorfile>
+      <anchor>gga341eb616bce8b15119196ad8208ec16da432e1bed0776491ae9d73f3915142912</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>MULTILINE</name>
+      <anchorfile>group__strings__regex.html</anchorfile>
+      <anchor>gga341eb616bce8b15119196ad8208ec16da5fbd6aff331b214f6042f54955becadb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>DOTALL</name>
+      <anchorfile>group__strings__regex.html</anchorfile>
+      <anchor>gga341eb616bce8b15119196ad8208ec16da20b3d35a53fddfb5bc6a6dfb7b6594c0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>ASCII</name>
+      <anchorfile>group__strings__regex.html</anchorfile>
+      <anchor>gga341eb616bce8b15119196ad8208ec16da467042b90d33829a8ae360d3c5d3c673</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumeration">
+      <type></type>
+      <name>capture_groups</name>
+      <anchorfile>group__strings__regex.html</anchorfile>
+      <anchor>ga227bb80d548c2970e05f829839966ba3</anchor>
+      <arglist></arglist>
+      <enumvalue file="group__strings__regex.html" anchor="gga227bb80d548c2970e05f829839966ba3a06a05d6df9809ab85bf7734d9c49bc54">EXTRACT</enumvalue>
+      <enumvalue file="group__strings__regex.html" anchor="gga227bb80d548c2970e05f829839966ba3af3e94c14de21439caa9ef45151108b79">NON_CAPTURE</enumvalue>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>is_multiline</name>
+      <anchorfile>group__strings__regex.html</anchorfile>
+      <anchor>gab59842da60262f5143a199be227b9d8e</anchor>
+      <arglist>(regex_flags const f)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>is_dotall</name>
+      <anchorfile>group__strings__regex.html</anchorfile>
+      <anchor>ga817e21004c5c623990d063407794d13d</anchor>
+      <arglist>(regex_flags const f)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>is_ascii</name>
+      <anchorfile>group__strings__regex.html</anchorfile>
+      <anchor>gafa1a98e258a2831f917cbb4fefc9ab07</anchor>
+      <arglist>(regex_flags const f)</arglist>
     </member>
   </compound>
   <compound kind="group">

@@ -574,8 +574,8 @@ dtype: int64
 </section>
 <section id="lower-level-control-with-custom-numba-kernels">
 <h3>Lower level control with custom <code class="docutils literal notranslate"><span class="pre">numba</span></code> kernels<a class="headerlink" href="#lower-level-control-with-custom-numba-kernels" title="Permalink to this heading">#</a></h3>
-<p>In addition to the Series.apply() method for performing custom operations, you can also pass Series objects directly into <a class="reference external" href="https://numba.pydata.org/numba-doc/latest/cuda/kernels.html">CUDA kernels written with Numba</a>.
-Note that this section requires basic CUDA knowledge. Refer to <a class="reference external" href="https://numba.pydata.org/numba-doc/latest/cuda/index.html">numba&rsquo;s CUDA documentation</a> for details.</p>
+<p>In addition to the Series.apply() method for performing custom operations, you can also pass Series objects directly into <a class="reference external" href="https://numba.readthedocs.io/en/stable/cuda/kernels.html">CUDA kernels written with Numba</a>.
+Note that this section requires basic CUDA knowledge. Refer to <a class="reference external" href="https://numba.readthedocs.io/en/stable/cuda/index.html">numba&rsquo;s CUDA documentation</a> for details.</p>
 <p>The easiest way to write a Numba kernel is to use <code class="docutils literal notranslate"><span class="pre">cuda.grid(1)</span></code> to manage thread indices, and then leverage Numba&rsquo;s <code class="docutils literal notranslate"><span class="pre">forall</span></code> method to configure the kernel for us. Below, define a basic multiplication kernel as an example and use <code class="docutils literal notranslate"><span class="pre">@cuda.jit</span></code> to compile it.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -598,7 +598,7 @@ Note that this section requires basic CUDA knowledge. Refer to <a class="referen
 </div>
 </div>
 <p>This kernel will take an input array, multiply it by a configurable value (supplied at runtime), and store the result in an output array. Notice that we wrapped our logic in an <code class="docutils literal notranslate"><span class="pre">if</span></code> statement. Because we can launch more threads than the size of our array, we need to make sure that we don&rsquo;t use threads with an index that would be out of bounds. Leaving this out can result in undefined behavior.</p>
-<p>To execute our kernel, must pre-allocate an output array and leverage the <code class="docutils literal notranslate"><span class="pre">forall</span></code> method mentioned above. First, we create a Series of all <code class="docutils literal notranslate"><span class="pre">0.0</span></code> in our DataFrame, since we want <code class="docutils literal notranslate"><span class="pre">float64</span></code> output. Next, we run the kernel with <code class="docutils literal notranslate"><span class="pre">forall</span></code>. <code class="docutils literal notranslate"><span class="pre">forall</span></code> requires us to specify our desired number of tasks, so we&rsquo;ll supply in the length of our Series (which we store in <code class="docutils literal notranslate"><span class="pre">size</span></code>). The <a class="reference external" href="https://numba.pydata.org/numba-doc/dev/cuda/cuda_array_interface.html"><strong>cuda_array_interface</strong></a> is what allows us to directly call our Numba kernel on our Series.</p>
+<p>To execute our kernel, must pre-allocate an output array and leverage the <code class="docutils literal notranslate"><span class="pre">forall</span></code> method mentioned above. First, we create a Series of all <code class="docutils literal notranslate"><span class="pre">0.0</span></code> in our DataFrame, since we want <code class="docutils literal notranslate"><span class="pre">float64</span></code> output. Next, we run the kernel with <code class="docutils literal notranslate"><span class="pre">forall</span></code>. <code class="docutils literal notranslate"><span class="pre">forall</span></code> requires us to specify our desired number of tasks, so we&rsquo;ll supply in the length of our Series (which we store in <code class="docutils literal notranslate"><span class="pre">size</span></code>). The <a class="reference external" href="https://numba.readthedocs.io/en/stable/cuda/cuda_array_interface.html"><strong>cuda_array_interface</strong></a> is what allows us to directly call our Numba kernel on our Series.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'a'</span><span class="p">])</span>
@@ -2052,7 +2052,7 @@ dtype: int32
 <li><p>Numba DeviceNDArrays</p></li>
 <li><p>Generalized NA UDFs</p></li>
 </ul>
-<p>For more information please see the <a class="reference external" href="https://docs.rapids.ai/api/cudf/nightly/">cuDF</a>, <a class="reference external" href="https://numba.pydata.org/numba-doc/dev/cuda/index.html">Numba.cuda</a>, and <a class="reference external" href="https://docs-cupy.chainer.org/en/stable/">CuPy</a> documentation.</p>
+<p>For more information please see the <a class="reference external" href="https://docs.rapids.ai/api/cudf/nightly/">cuDF</a>, <a class="reference external" href="https://numba.readthedocs.io/en/stable/cuda/index.html">Numba.cuda</a>, and <a class="reference external" href="https://docs-cupy.chainer.org/en/stable/">CuPy</a> documentation.</p>
 </section>
 </section>
 

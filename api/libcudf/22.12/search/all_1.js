@@ -51,7 +51,7 @@ var searchData=
   ['argmin_62',['ARGMIN',['../classcudf_1_1aggregation.html#a83579ae3cab2fc3d1c3b377d1cfab24ca6583738472adeb8cfc0cfbc43faafbe9',1,'cudf::aggregation']]],
   ['arrow_5fio_5fsource_63',['arrow_io_source',['../classcudf_1_1io_1_1arrow__io__source.html',1,'cudf::io::arrow_io_source'],['../classcudf_1_1io_1_1arrow__io__source.html#a1d153d49b0e71955810a4d9cf8932de8',1,'cudf::io::arrow_io_source::arrow_io_source(std::string_view arrow_uri)'],['../classcudf_1_1io_1_1arrow__io__source.html#ad85587d91df08750f004397b815fae8c',1,'cudf::io::arrow_io_source::arrow_io_source(std::shared_ptr&lt; arrow::io::RandomAccessFile &gt; file)']]],
   ['ascending_64',['ASCENDING',['../group__utility__types.html#gga750f02016b046079f7062d334890b4fca83ec681a20197326c163ea3b39ef7c32',1,'cudf']]],
-  ['ascii_65',['ASCII',['../group__strings__contains.html#gga341eb616bce8b15119196ad8208ec16da467042b90d33829a8ae360d3c5d3c673',1,'cudf::strings']]],
+  ['ascii_65',['ASCII',['../group__strings__regex.html#gga341eb616bce8b15119196ad8208ec16da467042b90d33829a8ae360d3c5d3c673',1,'cudf::strings']]],
   ['atan2_66',['ATAN2',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcaf8d5f387d3ac8f7084ae44566b32acb2',1,'cudf']]],
   ['attributes_2ehpp_67',['attributes.hpp',['../attributes_8hpp.html',1,'']]],
   ['auto_68',['AUTO',['../namespacecudf_1_1io.html#a8033aa1109d4e77468bda8b81eb216a8ae1f2d5134ed2543d38a0de9751cf75d9',1,'cudf::io']]],
