@@ -539,12 +539,18 @@
 <h1>pylibcugraph.weakly_connected_components<a class="headerlink" href="#pylibcugraph-weakly-connected-components" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pylibcugraph.weakly_connected_components">
-<span class="sig-prename descclassname"><span class="pre">pylibcugraph.</span></span><span class="sig-name descname"><span class="pre">weakly_connected_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_verts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/85c447b/python/cugraph/../../../../../../../../../rapids/cugraph/python/pylibcugraph/pylibcugraph/components/_connectivity.pyx#L132"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibcugraph.weakly_connected_components" title="Permalink to this definition">#</a></dt>
-<dd><p>Generate the Weakly Connected Components and attach a component label to
-each vertex.</p>
-<dl class="field-list">
+<span class="sig-prename descclassname"><span class="pre">pylibcugraph.</span></span><span class="sig-name descname"><span class="pre">weakly_connected_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ResourceHandle</span> <span class="pre">resource_handle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_GPUGraph</span> <span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bool_t</span> <span class="pre">do_expensive_check</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/1e85ee5/python/cugraph/../../../../../../../../rapids/cugraph/python/pylibcugraph/pylibcugraph/weakly_connected_components.pyx#L82"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibcugraph.weakly_connected_components" title="Permalink to this definition">#</a></dt>
+<dd><p>Generate the Weakly Connected Components from either an input graph or
+or CSR arrays(&lsquo;offsets&rsquo;, &lsquo;indices&rsquo;, &lsquo;weights&rsquo;) and attach a component label
+to each vertex.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>resource_handle</strong><span class="classifier">ResourceHandle</span></dt><dd><p>Handle to the underlying device resources needed for referencing data
+and running algorithms.</p>
+</dd>
+<dt><strong>graph</strong><span class="classifier">SGGraph or MGGraph</span></dt><dd><p>The input graph.</p>
+</dd>
 <dt><strong>offsets</strong><span class="classifier">object supporting a __cuda_array_interface__ interface</span></dt><dd><p>Array containing the offsets values of a Compressed Sparse Row matrix
 that represents the graph.</p>
 </dd>
@@ -552,31 +558,43 @@ that represents the graph.</p>
 that represents the graph.</p>
 </dd>
 <dt><strong>weights</strong><span class="classifier">object supporting a __cuda_array_interface__ interface</span></dt><dd><p>Array containing the weights values of a Compressed Sparse Row matrix
-that represents the graph.</p>
-<p>NOTE: weighted graphs are currently unsupported, and because of this the
-weights parameter can only be set to None.</p>
+that represents the graph</p>
 </dd>
-<dt><strong>num_verts</strong><span class="classifier">int</span></dt><dd><p>The number of vertices present in the graph represented by the CSR
-arrays above.</p>
-</dd>
-<dt><strong>num_edges</strong><span class="classifier">int</span></dt><dd><p>The number of edges present in the graph represented by the CSR arrays
-above.</p>
-</dd>
-<dt><strong>labels</strong><span class="classifier">object supporting a __cuda_array_interface__ interface</span></dt><dd><p>Array of size num_verts that will be populated with component label
-values. The component lables in the array are ordered based on the
-sorted vertex ID values of the graph.  For example, labels [9, 9, 7]
-mean vertex 0 is labelled 9, vertex 1 is labelled 9, and vertex 2 is
-labelled 7.</p>
+<dt><strong>do_expensive_check</strong><span class="classifier">bool_t</span></dt><dd><p>If True, performs more extensive tests on the inputs to ensure
+validitity, at the expense of increased run time.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>None</dt><dd></dd>
+<dt>A tuple containing containing two device arrays which are respectively</dt><dd></dd>
+<dt>vertices and their corresponding labels</dt><dd></dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylibcugraph</span><span class="o">,</span> <span class="nn">cupy</span><span class="o">,</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylibcugraph</span> <span class="kn">import</span> <span class="n">weakly_connected_components</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">srcs</span> <span class="o">=</span> <span class="n">cupy</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dsts</span> <span class="o">=</span> <span class="n">cupy</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span> <span class="o">=</span> <span class="n">cupy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resource_handle</span> <span class="o">=</span> <span class="n">pylibcugraph</span><span class="o">.</span><span class="n">ResourceHandle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph_props</span> <span class="o">=</span> <span class="n">pylibcugraph</span><span class="o">.</span><span class="n">GraphProperties</span><span class="p">(</span>
+<span class="gp">... </span>     <span class="n">is_symmetric</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">is_multigraph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pylibcugraph</span><span class="o">.</span><span class="n">SGGraph</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">resource_handle</span><span class="p">,</span> <span class="n">graph_props</span><span class="p">,</span> <span class="n">srcs</span><span class="p">,</span> <span class="n">dsts</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">store_transposed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">renumber</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">do_expensive_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span> <span class="o">=</span> <span class="n">weakly_connected_components</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">resource_handle</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vertices</span>
+<span class="go">[0, 1, 2]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span>
+<span class="go">[2, 2, 2]</span>
+</pre></div>
+</div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
@@ -589,21 +607,21 @@ labelled 7.</p>
 <span class="gp">... </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
 <span class="gp">... </span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">scipy_csr</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">num_verts</span> <span class="o">=</span> <span class="n">scipy_csr</span><span class="o">.</span><span class="n">get_shape</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">num_edges</span> <span class="o">=</span> <span class="n">scipy_csr</span><span class="o">.</span><span class="n">nnz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">scipy_csr</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scipy_csr</span><span class="p">[</span><span class="n">cols</span><span class="p">,</span> <span class="n">rows</span><span class="p">]</span> <span class="o">=</span> <span class="n">scipy_csr</span><span class="p">[</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">]</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cp_offsets</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">scipy_csr</span><span class="o">.</span><span class="n">indptr</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cp_indices</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">scipy_csr</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cp_labels</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_verts</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">weakly_connected_components</span><span class="p">(</span><span class="n">offsets</span><span class="o">=</span><span class="n">cp_offsets</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resource_handle</span> <span class="o">=</span> <span class="n">pylibcugraph</span><span class="o">.</span><span class="n">ResourceHandle</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weakly_connected_components</span><span class="p">(</span><span class="n">resource_handle</span><span class="o">=</span><span class="n">resource_handle</span><span class="p">,</span>
+<span class="go">                                graph=None,</span>
+<span class="gp">... </span>                            <span class="n">offsets</span><span class="o">=</span><span class="n">cp_offsets</span><span class="p">,</span>
 <span class="gp">... </span>                            <span class="n">indices</span><span class="o">=</span><span class="n">cp_indices</span><span class="p">,</span>
 <span class="gp">... </span>                            <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="gp">... </span>                            <span class="n">num_verts</span><span class="o">=</span><span class="n">num_verts</span><span class="p">,</span>
-<span class="gp">... </span>                            <span class="n">num_edges</span><span class="o">=</span><span class="n">num_edges</span><span class="p">,</span>
-<span class="gp">... </span>                            <span class="n">labels</span><span class="o">=</span><span class="n">cp_labels</span><span class="p">)</span>
+<span class="gp">... </span>                            <span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">cp_labels</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">cp_labels</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="go">2 - [1 1 1 4 4]</span>
+<span class="go">2 - [2 2 2 4 4]</span>
 </pre></div>
 </div>
 </dd></dl>

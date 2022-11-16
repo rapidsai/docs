@@ -539,8 +539,9 @@
 <h1>cugraph.structure.property_graph.EXPERIMENTAL__PropertyGraph.add_edge_data<a class="headerlink" href="#cugraph-structure-property-graph-experimental-propertygraph-add-edge-data" title="Permalink to this heading">#</a></h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="cugraph.structure.property_graph.EXPERIMENTAL__PropertyGraph.add_edge_data">
-<span class="sig-prename descclassname"><span class="pre">EXPERIMENTAL__PropertyGraph.</span></span><span class="sig-name descname"><span class="pre">add_edge_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_col_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_id_col_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/85c447b/python/cugraph/structure/property_graph.py#L531"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.structure.property_graph.EXPERIMENTAL__PropertyGraph.add_edge_data" title="Permalink to this definition">#</a></dt>
-<dd><p>Add a dataframe describing edge properties to the PropertyGraph.</p>
+<span class="sig-prename descclassname"><span class="pre">EXPERIMENTAL__PropertyGraph.</span></span><span class="sig-name descname"><span class="pre">add_edge_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_col_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_id_col_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/1e85ee5/python/cugraph/structure/property_graph.py#L760"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.structure.property_graph.EXPERIMENTAL__PropertyGraph.add_edge_data" title="Permalink to this definition">#</a></dt>
+<dd><p>Add a dataframe describing edge properties to the PropertyGraph.
+Columns not specified as vertex columns are considered properties.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -555,14 +556,14 @@ If unspecified, edge IDs will be automatically assigned.
 Currently, all edge data must be added with the same method: either
 with automatically generated IDs, or from user-provided edge IDs.</p>
 </dd>
-<dt><strong>type_name</strong><span class="classifier">string</span></dt><dd><p>The name to be assigned to the type of property being added. For
+<dt><strong>type_name</strong><span class="classifier">string, optional</span></dt><dd><p>The name to be assigned to the type of property being added. For
 example, if dataframe contains data about transactions, type_name
 might be &ldquo;transactions&rdquo;. If not specified, the type of properties
 will be added as the empty string &ldquo;&rdquo;.</p>
 </dd>
-<dt><strong>property_columns</strong><span class="classifier">list of strings</span></dt><dd><p>List of column names in dataframe to be added as properties. All
+<dt><strong>property_columns</strong><span class="classifier">list of strings, optional</span></dt><dd><p>List of column names in the dataframe to be added as properties. All
 other columns in dataframe will be ignored. If not specified, all
-columns in dataframe are added.</p>
+property columns in the dataframe are added.</p>
 </dd>
 </dl>
 </dd>
@@ -573,7 +574,19 @@ columns in dataframe are added.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cugraph</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cugraph.experimental</span> <span class="kn">import</span> <span class="n">PropertyGraph</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"src"</span><span class="p">,</span> <span class="s2">"dst"</span><span class="p">,</span> <span class="s2">"some_property"</span><span class="p">],</span>
+<span class="gp">... </span>                    <span class="n">data</span><span class="o">=</span><span class="p">[(</span><span class="mi">99</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">),</span>
+<span class="gp">... </span>                          <span class="p">(</span><span class="mi">98</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">),</span>
+<span class="gp">... </span>                          <span class="p">(</span><span class="mi">97</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">),</span>
+<span class="gp">... </span>                          <span class="p">(</span><span class="mi">96</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="s2">"d"</span><span class="p">),</span>
+<span class="gp">... </span>                         <span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pG</span> <span class="o">=</span> <span class="n">PropertyGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pG</span><span class="o">.</span><span class="n">add_edge_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">vertex_col_names</span><span class="o">=</span><span class="p">(</span><span class="s2">"src"</span><span class="p">,</span> <span class="s2">"dst"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pG</span><span class="o">.</span><span class="n">get_num_vertices</span><span class="p">()</span>
+<span class="go">8</span>
 </pre></div>
 </div>
 </dd></dl>

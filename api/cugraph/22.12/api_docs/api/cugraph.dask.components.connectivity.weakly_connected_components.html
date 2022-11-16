@@ -539,14 +539,26 @@
 <h1>cugraph.dask.components.connectivity.weakly_connected_components<a class="headerlink" href="#cugraph-dask-components-connectivity-weakly-connected-components" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="cugraph.dask.components.connectivity.weakly_connected_components">
-<span class="sig-prename descclassname"><span class="pre">cugraph.dask.components.connectivity.</span></span><span class="sig-name descname"><span class="pre">weakly_connected_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_graph</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/85c447b/python/cugraph/dask/components/connectivity.py#L53"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.dask.components.connectivity.weakly_connected_components" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cugraph.dask.components.connectivity.</span></span><span class="sig-name descname"><span class="pre">weakly_connected_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_graph</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/1e85ee5/python/cugraph/dask/components/connectivity.py#L49"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.dask.components.connectivity.weakly_connected_components" title="Permalink to this definition">#</a></dt>
 <dd><p>Generate the Weakly Connected Components and attach a component label to
 each vertex.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>input_graph</strong><span class="classifier">cugraph.Graph, networkx.Graph, CuPy or SciPy sparse matrix</span></dt><dd><p>Graph or matrix object, which should contain the connectivity
-information</p>
+<dt><strong>input_graph</strong><span class="classifier">cugraph.Graph</span></dt><dd><p>The graph descriptor should contain the connectivity information
+and weights. The adjacency list will be computed if not already
+present.
+The current implementation only supports undirected graphs.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>result</strong><span class="classifier">dask_cudf.DataFrame</span></dt><dd><p>GPU distributed data frame containing 2 dask_cudf.Series</p>
+</dd>
+<dt>ddf[&lsquo;vertex&rsquo;]: dask_cudf.Series</dt><dd><p>Contains the vertex identifiers</p>
+</dd>
+<dt>ddf[&lsquo;labels&rsquo;]: dask_cudf.Series</dt><dd><p>Contains the wcc labels</p>
 </dd>
 </dl>
 </dd>
@@ -562,7 +574,7 @@ information</p>
 <span class="gp">... </span>                         <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">" "</span><span class="p">,</span>
 <span class="gp">... </span>                         <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">"src"</span><span class="p">,</span> <span class="s2">"dst"</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">],</span>
 <span class="gp">... </span>                         <span class="n">dtype</span><span class="o">=</span><span class="p">[</span><span class="s2">"int32"</span><span class="p">,</span> <span class="s2">"int32"</span><span class="p">,</span> <span class="s2">"float32"</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dg</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dg</span> <span class="o">=</span> <span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dg</span><span class="o">.</span><span class="n">from_dask_cudf_edgelist</span><span class="p">(</span><span class="n">ddf</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'src'</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s1">'dst'</span><span class="p">,</span>
 <span class="gp">... </span>                           <span class="n">edge_attr</span><span class="o">=</span><span class="s1">'value'</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">dcg</span><span class="o">.</span><span class="n">weakly_connected_components</span><span class="p">(</span><span class="n">dg</span><span class="p">)</span>

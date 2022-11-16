@@ -539,7 +539,7 @@
 <h1>cugraph.structure.property_graph.EXPERIMENTAL__PropertyGraph.annotate_dataframe<a class="headerlink" href="#cugraph-structure-property-graph-experimental-propertygraph-annotate-dataframe" title="Permalink to this heading">#</a></h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="cugraph.structure.property_graph.EXPERIMENTAL__PropertyGraph.annotate_dataframe">
-<span class="sig-prename descclassname"><span class="pre">EXPERIMENTAL__PropertyGraph.</span></span><span class="sig-name descname"><span class="pre">annotate_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_vertex_col_names</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/85c447b/python/cugraph/structure/property_graph.py#L1010"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.structure.property_graph.EXPERIMENTAL__PropertyGraph.annotate_dataframe" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">EXPERIMENTAL__PropertyGraph.</span></span><span class="sig-name descname"><span class="pre">annotate_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_vertex_col_names</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/1e85ee5/python/cugraph/structure/property_graph.py#L1349"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.structure.property_graph.EXPERIMENTAL__PropertyGraph.annotate_dataframe" title="Permalink to this definition">#</a></dt>
 <dd><p>Add properties to df that represent the vertices and edges in graph G.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -561,12 +561,34 @@ vertices, used for identifying edges.</p>
 <dd class="field-even"><dl class="simple">
 <dt>A copy of df with additional columns corresponding to properties for</dt><dd></dd>
 <dt>the edge in the row.</dt><dd></dd>
-<dt>FIXME: also provide the ability to annotate vertex data.</dt><dd></dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cugraph.experimental</span> <span class="kn">import</span> <span class="n">PropertyGraph</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"src"</span><span class="p">,</span> <span class="s2">"dst"</span><span class="p">,</span> <span class="s2">"some_property"</span><span class="p">],</span>
+<span class="gp">... </span>                     <span class="n">data</span><span class="o">=</span><span class="p">[(</span><span class="mi">99</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">),</span>
+<span class="gp">... </span>                           <span class="p">(</span><span class="mi">98</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">),</span>
+<span class="gp">... </span>                           <span class="p">(</span><span class="mi">97</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">),</span>
+<span class="gp">... </span>                           <span class="p">(</span><span class="mi">96</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="s2">"d"</span><span class="p">),</span>
+<span class="gp">... </span>                          <span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pG</span> <span class="o">=</span> <span class="n">PropertyGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pG</span><span class="o">.</span><span class="n">add_edge_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">type_name</span><span class="o">=</span><span class="s2">"etype"</span><span class="p">,</span> <span class="n">vertex_col_names</span><span class="o">=</span><span class="p">(</span><span class="s2">"src"</span><span class="p">,</span> <span class="s2">"dst"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pG</span><span class="o">.</span><span class="n">extract_subgraph</span><span class="p">(</span><span class="n">create_using</span><span class="o">=</span><span class="n">cugraph</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Represents results of an algorithm run on the graph returning a dataframe</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo_result</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"from"</span><span class="p">:</span><span class="n">df</span><span class="o">.</span><span class="n">src</span><span class="p">,</span>
+<span class="gp">... </span>                               <span class="s2">"to"</span><span class="p">:</span><span class="n">df</span><span class="o">.</span><span class="n">dst</span><span class="p">,</span>
+<span class="gp">... </span>                               <span class="s2">"result"</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">src</span><span class="p">))})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">algo_result2</span> <span class="o">=</span> <span class="n">pG</span><span class="o">.</span><span class="n">annotate_dataframe</span><span class="p">(</span><span class="n">algo_result</span><span class="p">,</span>
+<span class="gp">... </span>                                      <span class="n">G</span><span class="p">,</span>
+<span class="gp">... </span>                                      <span class="n">edge_vertex_col_names</span><span class="o">=</span><span class="p">(</span><span class="s2">"from"</span><span class="p">,</span> <span class="s2">"to"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="n">algo_result2</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="go">_EDGE_ID_ _TYPE_  from  result some_property  to</span>
+<span class="go">0          0  etype    99       0             a  22</span>
+<span class="go">1          1  etype    98       1             b  34</span>
+<span class="go">2          2  etype    97       2             c  56</span>
+<span class="go">3          3  etype    96       3             d  88</span>
 </pre></div>
 </div>
 </dd></dl>

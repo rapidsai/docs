@@ -11,7 +11,9 @@ var searchData=
   ['biased_5frandom_5fwalks_20',['biased_random_walks',['../namespacecugraph.html#aba297f01aebc768538818c0ffe7236a2',1,'cugraph']]],
   ['biased_5fselector_21',['biased_selector',['../structcugraph_1_1detail_1_1biased__selector.html',1,'cugraph::detail']]],
   ['biased_5fselector_5ft_22',['biased_selector_t',['../structcugraph_1_1detail_1_1original_1_1biased__selector__t.html',1,'cugraph::detail::original']]],
-  ['bit_5fmod_23',['bit_mod',['../namespacecugraph.html#a7634aa4d8f0d326cab38b1a367c0666d',1,'cugraph']]],
-  ['bitwiseand_24',['BitwiseAnd',['../structcugraph_1_1detail_1_1traversal_1_1BitwiseAnd.html',1,'cugraph::detail::traversal']]],
-  ['bitwiseor_25',['BitwiseOr',['../structcugraph_1_1detail_1_1traversal_1_1BitwiseOr.html',1,'cugraph::detail::traversal']]]
+  ['binary_5fsearch_5fcontains_5fop_5ft_23',['binary_search_contains_op_t',['../structcugraph_1_1detail_1_1binary__search__contains__op__t.html',1,'cugraph::detail']]],
+  ['binary_5fsearch_5ffind_5fop_5ft_24',['binary_search_find_op_t',['../structcugraph_1_1detail_1_1binary__search__find__op__t.html',1,'cugraph::detail']]],
+  ['bit_5fmod_25',['bit_mod',['../namespacecugraph.html#a7634aa4d8f0d326cab38b1a367c0666d',1,'cugraph']]],
+  ['bitwiseand_26',['BitwiseAnd',['../structcugraph_1_1detail_1_1traversal_1_1BitwiseAnd.html',1,'cugraph::detail::traversal']]],
+  ['bitwiseor_27',['BitwiseOr',['../structcugraph_1_1detail_1_1traversal_1_1BitwiseOr.html',1,'cugraph::detail::traversal']]]
 ];

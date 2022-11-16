@@ -539,7 +539,7 @@
 <h1>cugraph.structure.property_graph.EXPERIMENTAL__PropertyGraph.select_vertices<a class="headerlink" href="#cugraph-structure-property-graph-experimental-propertygraph-select-vertices" title="Permalink to this heading">#</a></h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="cugraph.structure.property_graph.EXPERIMENTAL__PropertyGraph.select_vertices">
-<span class="sig-prename descclassname"><span class="pre">EXPERIMENTAL__PropertyGraph.</span></span><span class="sig-name descname"><span class="pre">select_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_previous_selection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/85c447b/python/cugraph/structure/property_graph.py#L787"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.structure.property_graph.EXPERIMENTAL__PropertyGraph.select_vertices" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">EXPERIMENTAL__PropertyGraph.</span></span><span class="sig-name descname"><span class="pre">select_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_previous_selection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/1e85ee5/python/cugraph/structure/property_graph.py#L1065"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.structure.property_graph.EXPERIMENTAL__PropertyGraph.select_vertices" title="Permalink to this definition">#</a></dt>
 <dd><p>Evaluate expr and return a PropertySelection object representing the
 vertices that match the expression.</p>
 <dl class="field-list simple">
@@ -548,7 +548,7 @@ vertices that match the expression.</p>
 <dt><strong>expr</strong><span class="classifier">string</span></dt><dd><p>A python expression using property names and operators to select
 specific vertices.</p>
 </dd>
-<dt><strong>from_previous_selection</strong><span class="classifier">PropertySelection</span></dt><dd><p>A PropertySelection instance returned from a prior call to
+<dt><strong>from_previous_selection</strong><span class="classifier">PropertySelection, optional</span></dt><dd><p>A PropertySelection instance returned from a prior call to
 select_vertices() that can be used to select a subset of vertices
 to evaluate the expression against. This allows for a selection of
 the intersection of vertices of multiple types (eg. all vertices
@@ -558,13 +558,31 @@ that are both type A and type B)</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>PropertySelection instance to be used for calls to extract_subgraph()</dt><dd></dd>
-<dt>in order to construct a Graph containing only specific vertices.</dt><dd></dd>
+<dt>PropertySelection</dt><dd><p>used for calls to extract_subgraph()
+in order to construct a Graph containing only specific vertices.</p>
+</dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cugraph</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cugraph.experimental</span> <span class="kn">import</span> <span class="n">PropertyGraph</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"src"</span><span class="p">,</span> <span class="s2">"dst"</span><span class="p">,</span> <span class="s2">"some_property"</span><span class="p">],</span>
+<span class="gp">... </span>                    <span class="n">data</span><span class="o">=</span><span class="p">[(</span><span class="mi">99</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">),</span>
+<span class="gp">... </span>                          <span class="p">(</span><span class="mi">98</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">),</span>
+<span class="gp">... </span>                          <span class="p">(</span><span class="mi">97</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">),</span>
+<span class="gp">... </span>                          <span class="p">(</span><span class="mi">96</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="s2">"d"</span><span class="p">),</span>
+<span class="gp">... </span>                         <span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pG</span> <span class="o">=</span> <span class="n">PropertyGraph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pG</span><span class="o">.</span><span class="n">add_edge_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">type_name</span><span class="o">=</span><span class="s2">"etype"</span><span class="p">,</span> <span class="n">vertex_col_names</span><span class="o">=</span><span class="p">(</span><span class="s2">"src"</span><span class="p">,</span> <span class="s2">"dst"</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vert_df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"vert_id"</span><span class="p">:</span> <span class="p">[</span><span class="mi">99</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">98</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">96</span><span class="p">,</span> <span class="mi">88</span><span class="p">],</span>
+<span class="gp">... </span>                          <span class="s2">"v_prop"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pG</span><span class="o">.</span><span class="n">add_vertex_data</span><span class="p">(</span><span class="n">vert_df</span><span class="p">,</span> <span class="n">type_name</span><span class="o">=</span><span class="s2">"vtype"</span><span class="p">,</span> <span class="n">vertex_col_name</span><span class="o">=</span><span class="s2">"vert_id"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selection</span> <span class="o">=</span> <span class="n">pG</span><span class="o">.</span><span class="n">select_vertices</span><span class="p">(</span><span class="s2">"(_TYPE_ == 'vtype') &amp; (v_prop &gt; 4)"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">pG</span><span class="o">.</span><span class="n">extract_subgraph</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">selection</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">number_of_vertices</span><span class="p">())</span>
+<span class="go">4</span>
 </pre></div>
 </div>
 </dd></dl>
