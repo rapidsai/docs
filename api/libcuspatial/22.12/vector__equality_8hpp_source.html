@@ -175,48 +175,86 @@ $(function() {
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&nbsp;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&nbsp;}</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&nbsp; </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Vector1, <span class="keyword">typename</span> Vector2&gt;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">void</span> expect_vector_equivalent(Vector1 <span class="keyword">const</span>&amp; lhs, Vector2 <span class="keyword">const</span>&amp; rhs)</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&nbsp;{</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&nbsp;  <span class="keyword">using</span> T = <span class="keyword">typename</span> Vector1::value_type;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp;  static_assert(std::is_same_v&lt;T, typename Vector2::value_type&gt;, <span class="stringliteral">"Value type mismatch."</span>);</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp; </div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp;  <span class="keywordflow">if</span> constexpr (cuspatial::is_vec_2d&lt;T&gt;()) {</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs), ::testing::Pointwise(vec_2d_matcher(), to_host&lt;T&gt;(rhs)));</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (std::is_floating_point_v&lt;T&gt;) {</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs), ::testing::Pointwise(float_matcher(), to_host&lt;T&gt;(rhs)));</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (std::is_integral_v&lt;T&gt;) {</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs), ::testing::Pointwise(::testing::Eq(), to_host&lt;T&gt;(rhs)));</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&nbsp;  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&nbsp;    EXPECT_EQ(lhs, rhs);</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&nbsp;  }</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&nbsp;}</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&nbsp; </div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Vector1, <span class="keyword">typename</span> Vector2, <span class="keyword">typename</span> T = <span class="keyword">typename</span> Vector1::value_type&gt;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">void</span> expect_vector_equivalent(Vector1 <span class="keyword">const</span>&amp; lhs, Vector2 <span class="keyword">const</span>&amp; rhs, T abs_error)</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&nbsp;{</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&nbsp;  static_assert(std::is_same_v&lt;T, typename Vector2::value_type&gt;, <span class="stringliteral">"Value type mismatch."</span>);</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&nbsp;  static_assert(!std::is_integral_v&lt;T&gt;, <span class="stringliteral">"Integral types cannot be compared with an error."</span>);</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&nbsp; </div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&nbsp;  <span class="keywordflow">if</span> constexpr (cuspatial::is_vec_2d&lt;T&gt;()) {</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&nbsp;                ::testing::Pointwise(vec_2d_near_matcher(abs_error), to_host&lt;T&gt;(rhs)));</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (std::is_floating_point_v&lt;T&gt;) {</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&nbsp;                ::testing::Pointwise(float_near_matcher(abs_error), to_host&lt;T&gt;(rhs)));</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&nbsp;  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&nbsp;    EXPECT_EQ(lhs, rhs);</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&nbsp;  }</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&nbsp;}</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&nbsp; </div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&nbsp;<span class="preprocessor">#define CUSPATIAL_EXPECT_VECTORS_EQUIVALENT(lhs, rhs, ...)              \</span></div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&nbsp;<span class="preprocessor">  do {                                                                  \</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&nbsp;<span class="preprocessor">    SCOPED_TRACE(" &lt;--  line of failure\n");                            \</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&nbsp;<span class="preprocessor">    cuspatial::test::expect_vector_equivalent(lhs, rhs, ##__VA_ARGS__); \</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&nbsp;<span class="preprocessor">  } while (0)</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&nbsp; </div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&nbsp;}  <span class="comment">// namespace test</span></div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&nbsp;}  <span class="comment">// namespace cuspatial</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&nbsp;MATCHER_P(optional_matcher, m, std::string(negation ? <span class="stringliteral">"are not"</span> : <span class="stringliteral">"are"</span>) + <span class="stringliteral">" equal optionals"</span>)</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&nbsp;{</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&nbsp;  <span class="keyword">auto</span> lhs = std::get&lt;0&gt;(arg);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&nbsp;  <span class="keyword">auto</span> rhs = std::get&lt;1&gt;(arg);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp; </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp;  <span class="keywordflow">if</span> (lhs.has_value() != rhs.has_value()) {</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp;    *result_listener &lt;&lt; <span class="stringliteral">"lhs "</span> &lt;&lt; (lhs.has_value() ? <span class="stringliteral">""</span> : <span class="stringliteral">"does not "</span>) &lt;&lt; <span class="stringliteral">"has value, while rhs "</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&nbsp;                     &lt;&lt; (rhs.has_value() ? <span class="stringliteral">""</span> : <span class="stringliteral">"does not "</span>) &lt;&lt; <span class="stringliteral">"has value."</span>;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&nbsp;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (!lhs.has_value() &amp;&amp; !rhs.has_value()) {</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&nbsp;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&nbsp;  } <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&nbsp;    <span class="keywordflow">return</span> ExplainMatchResult(m, std::tuple(lhs.value(), rhs.value()), result_listener);</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&nbsp;}</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&nbsp; </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Vector1, <span class="keyword">typename</span> Vector2&gt;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">void</span> expect_vector_equivalent(Vector1 <span class="keyword">const</span>&amp; lhs, Vector2 <span class="keyword">const</span>&amp; rhs)</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&nbsp;{</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&nbsp;  <span class="keyword">using</span> T = <span class="keyword">typename</span> Vector1::value_type;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&nbsp;  static_assert(std::is_same_v&lt;T, typename Vector2::value_type&gt;, <span class="stringliteral">"Value type mismatch."</span>);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&nbsp; </div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&nbsp;  <span class="keywordflow">if</span> constexpr (cuspatial::is_vec_2d&lt;T&gt;()) {</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs), ::testing::Pointwise(vec_2d_matcher(), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (std::is_floating_point_v&lt;T&gt;) {</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs), ::testing::Pointwise(float_matcher(), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (std::is_integral_v&lt;T&gt;) {</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs), ::testing::Pointwise(::testing::Eq(), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (cuspatial::is_optional&lt;T&gt;) {</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&nbsp;    <span class="keywordflow">if</span> constexpr (cuspatial::is_vec_2d&lt;typename T::value_type&gt;()) {</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&nbsp;      EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&nbsp;                  ::testing::Pointwise(optional_matcher(vec_2d_matcher()), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&nbsp;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (std::is_floating_point_v&lt;typename T::value_type&gt;) {</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&nbsp;      EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&nbsp;                  ::testing::Pointwise(optional_matcher(float_matcher()), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&nbsp;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (std::is_integral_v&lt;typename T::value_type&gt;) {</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&nbsp;      EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&nbsp;                  ::testing::Pointwise(optional_matcher(::testing::Eq()), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&nbsp;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&nbsp;      EXPECT_EQ(lhs, rhs);</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&nbsp;    }</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&nbsp;  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&nbsp;    EXPECT_EQ(lhs, rhs);</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&nbsp;  }</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&nbsp;}</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&nbsp; </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Vector1, <span class="keyword">typename</span> Vector2, <span class="keyword">typename</span> T = <span class="keyword">typename</span> Vector1::value_type&gt;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">void</span> expect_vector_equivalent(Vector1 <span class="keyword">const</span>&amp; lhs, Vector2 <span class="keyword">const</span>&amp; rhs, T abs_error)</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&nbsp;{</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&nbsp;  static_assert(std::is_same_v&lt;T, typename Vector2::value_type&gt;, <span class="stringliteral">"Value type mismatch."</span>);</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&nbsp;  static_assert(!std::is_integral_v&lt;T&gt;, <span class="stringliteral">"Integral types cannot be compared with an error."</span>);</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&nbsp; </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&nbsp;  <span class="keywordflow">if</span> constexpr (cuspatial::is_vec_2d&lt;T&gt;()) {</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&nbsp;                ::testing::Pointwise(vec_2d_near_matcher(abs_error), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (std::is_floating_point_v&lt;T&gt;) {</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&nbsp;                ::testing::Pointwise(float_near_matcher(abs_error), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (cuspatial::is_optional&lt;T&gt;) {</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&nbsp;    <span class="keywordflow">if</span> constexpr (cuspatial::is_vec_2d&lt;typename T::value_type&gt;()) {</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&nbsp;      EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&nbsp;                  ::testing::Pointwise(optional_matcher(vec_2d_matcher()), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&nbsp;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (std::is_floating_point_v&lt;typename T::value_type&gt;) {</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&nbsp;      EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&nbsp;                  ::testing::Pointwise(optional_matcher(float_matcher()), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&nbsp;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&nbsp;      EXPECT_EQ(lhs, rhs);</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&nbsp;    }</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&nbsp;  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&nbsp;    EXPECT_EQ(lhs, rhs);</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&nbsp;  }</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&nbsp;}</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&nbsp; </div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&nbsp;<span class="preprocessor">#define CUSPATIAL_EXPECT_VECTORS_EQUIVALENT(lhs, rhs, ...)              \</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&nbsp;<span class="preprocessor">  do {                                                                  \</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&nbsp;<span class="preprocessor">    SCOPED_TRACE(" &lt;--  line of failure\n");                            \</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&nbsp;<span class="preprocessor">    cuspatial::test::expect_vector_equivalent(lhs, rhs, ##__VA_ARGS__); \</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&nbsp;<span class="preprocessor">  } while (0)</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&nbsp; </div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&nbsp;}  <span class="comment">// namespace test</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&nbsp;}  <span class="comment">// namespace cuspatial</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="avec__2d_8hpp_html"><div class="ttname"><a href="vec__2d_8hpp.html">vec_2d.hpp</a></div></div>
 <!-- start footer part -->
