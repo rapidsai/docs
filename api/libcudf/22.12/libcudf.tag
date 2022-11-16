@@ -5082,6 +5082,20 @@
     </member>
     <member kind="function">
       <type>constexpr bool</type>
+      <name>is_integral</name>
+      <anchorfile>group__utility__types.html</anchorfile>
+      <anchor>gaa964d11859bcec770945cf53d964371c</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>is_integral</name>
+      <anchorfile>group__utility__types.html</anchorfile>
+      <anchor>ga31c663c44b3af8ae957a1d514052c923</anchor>
+      <arglist>(data_type type)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
       <name>is_floating_point</name>
       <anchorfile>group__utility__types.html</anchorfile>
       <anchor>gaac36fa8429a279de79c2afec53c02ee8</anchor>
@@ -21359,6 +21373,20 @@
     </member>
     <member kind="function">
       <type>constexpr bool</type>
+      <name>is_integral</name>
+      <anchorfile>group__utility__types.html</anchorfile>
+      <anchor>gaa964d11859bcec770945cf53d964371c</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>is_integral</name>
+      <anchorfile>group__utility__types.html</anchorfile>
+      <anchor>ga31c663c44b3af8ae957a1d514052c923</anchor>
+      <arglist>(data_type type)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
       <name>is_floating_point</name>
       <anchorfile>group__utility__types.html</anchorfile>
       <anchor>gaac36fa8429a279de79c2afec53c02ee8</anchor>
@@ -28141,6 +28169,20 @@
       <anchorfile>group__utility__types.html</anchorfile>
       <anchor>ga960cec36c56cd253a84fcd2cec3933f9</anchor>
       <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>is_integral</name>
+      <anchorfile>group__utility__types.html</anchorfile>
+      <anchor>gaa964d11859bcec770945cf53d964371c</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>is_integral</name>
+      <anchorfile>group__utility__types.html</anchorfile>
+      <anchor>ga31c663c44b3af8ae957a1d514052c923</anchor>
+      <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
       <type>constexpr bool</type>
