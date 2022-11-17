@@ -495,6 +495,35 @@ Conversely, when constructed from a host object,
 The data is then copied from the host object into the newly allocated device memory.
 You can read more about <a class="reference external" href="https://github.com/rapidsai/rmm">device memory allocation with RMM here</a>.</p>
 </section>
+<section id="spilling-to-host-memory">
+<h3>Spilling to host memory<a class="headerlink" href="#spilling-to-host-memory" title="Permalink to this heading">#</a></h3>
+<p>Setting the environment variable <code class="docutils literal notranslate"><span class="pre">CUDF_SPILL=on</span></code> enables automatic spilling (and &ldquo;unspilling&rdquo;) of buffers from
+device to host to enable out-of-memory computation, i.e., computing on objects that occupy more memory than is
+available on the GPU.</p>
+<p>Spilling can be enabled in two ways (it is disabled by default):</p>
+<ul class="simple">
+<li><p>setting the environment variable <code class="docutils literal notranslate"><span class="pre">CUDF_SPILL=on</span></code>, or</p></li>
+<li><p>setting the <code class="docutils literal notranslate"><span class="pre">spill</span></code> option in <code class="docutils literal notranslate"><span class="pre">cudf</span></code> by doing <code class="docutils literal notranslate"><span class="pre">cudf.set_option("spill",</span> <span class="pre">True)</span></code>.</p></li>
+</ul>
+<p>Additionally, parameters are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CUDF_SPILL_ON_DEMAND=ON</span></code> / <code class="docutils literal notranslate"><span class="pre">cudf.set_option("spill_on_demand",</span> <span class="pre">True)</span></code>, which registers an RMM out-of-memory error handler that spills buffers in order to free up memory.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CUDF_SPILL_DEVICE_LIMIT=...</span></code> / <code class="docutils literal notranslate"><span class="pre">cudf.set_option("spill_device_limit",</span> <span class="pre">...)</span></code>, which sets a device memory limit in bytes.</p></li>
+</ul>
+<section id="design">
+<h4>Design<a class="headerlink" href="#design" title="Permalink to this heading">#</a></h4>
+<p>Spilling consists of two components:</p>
+<ul class="simple">
+<li><p>A new buffer sub-class, <code class="docutils literal notranslate"><span class="pre">SpillableBuffer</span></code>, that implements moving of its data from host to device memory in-place.</p></li>
+<li><p>A spill manager that tracks all instances of <code class="docutils literal notranslate"><span class="pre">SpillableBuffer</span></code> and spills them on demand.
+A global spill manager is used throughout cudf when spilling is enabled, which makes <code class="docutils literal notranslate"><span class="pre">as_buffer()</span></code> return <code class="docutils literal notranslate"><span class="pre">SpillableBuffer</span></code> instead of the default <code class="docutils literal notranslate"><span class="pre">Buffer</span></code> instances.</p></li>
+</ul>
+<p>Accessing <code class="docutils literal notranslate"><span class="pre">Buffer.ptr</span></code>, we get the device memory pointer of the buffer. This is unproblematic in the case of <code class="docutils literal notranslate"><span class="pre">Buffer</span></code> but what happens when accessing <code class="docutils literal notranslate"><span class="pre">SpillableBuffer.ptr</span></code>, which might have spilled its device memory. In this case, <code class="docutils literal notranslate"><span class="pre">SpillableBuffer</span></code> needs to unspill the memory before returning its device memory pointer. Furthermore, while this device memory pointer is being used (or could be used), <code class="docutils literal notranslate"><span class="pre">SpillableBuffer</span></code>  cannot spill its memory back to host memory because doing so would invalidate the device pointer.</p>
+<p>To address this, we mark the <code class="docutils literal notranslate"><span class="pre">SpillableBuffer</span></code> as unspillable, we say that the buffer has been <em>exposed</em>. This can either be permanent if the device pointer is exposed to external projects or temporary while <code class="docutils literal notranslate"><span class="pre">libcudf</span></code> accesses the device memory.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SpillableBuffer.get_ptr()</span></code> returns the device pointer of the buffer memory just like <code class="docutils literal notranslate"><span class="pre">.ptr</span></code> but if given an instance of <code class="docutils literal notranslate"><span class="pre">SpillLock</span></code>, the buffer is only unspillable as long as the instance of <code class="docutils literal notranslate"><span class="pre">SpillLock</span></code> is alive.</p>
+<p>For convenience, one can use the decorator/context <code class="docutils literal notranslate"><span class="pre">with_spill_lock</span></code> to associate a <code class="docutils literal notranslate"><span class="pre">SpillLock</span></code> with a lifetime bound to the context automatically.</p>
+</section>
+</section>
 </section>
 <section id="the-cython-layer">
 <h2>The Cython layer<a class="headerlink" href="#the-cython-layer" title="Permalink to this heading">#</a></h2>
@@ -614,6 +643,18 @@ However, for performance reasons they frequently access internal attributes and 
     <a class="reference internal nav-link" href="#buffer">
      Buffer
     </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#spilling-to-host-memory">
+     Spilling to host memory
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#design">
+       Design
+      </a>
+     </li>
+    </ul>
    </li>
   </ul>
  </li>

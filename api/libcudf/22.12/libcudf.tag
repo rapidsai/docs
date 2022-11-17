@@ -1756,22 +1756,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>purge_nonempty_nulls</name>
       <anchorfile>group__column__copy.html</anchorfile>
-      <anchor>gab1c1b1e5126a1c4ff2091ac37f22bc9f</anchor>
-      <arglist>(lists_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>purge_nonempty_nulls</name>
-      <anchorfile>group__column__copy.html</anchorfile>
-      <anchor>ga426d9816b81e684b1e7dac6e9d99dac6</anchor>
-      <arglist>(strings_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>purge_nonempty_nulls</name>
-      <anchorfile>group__column__copy.html</anchorfile>
-      <anchor>ga809b415b9846d75abb80217a85c627e3</anchor>
-      <arglist>(structs_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gad82144bc75451067a2a8718b8d6cc03a</anchor>
+      <arglist>(column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -20052,22 +20038,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>purge_nonempty_nulls</name>
       <anchorfile>group__column__copy.html</anchorfile>
-      <anchor>gab1c1b1e5126a1c4ff2091ac37f22bc9f</anchor>
-      <arglist>(lists_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>purge_nonempty_nulls</name>
-      <anchorfile>group__column__copy.html</anchorfile>
-      <anchor>ga426d9816b81e684b1e7dac6e9d99dac6</anchor>
-      <arglist>(strings_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>purge_nonempty_nulls</name>
-      <anchorfile>group__column__copy.html</anchorfile>
-      <anchor>ga809b415b9846d75abb80217a85c627e3</anchor>
-      <arglist>(structs_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gad82144bc75451067a2a8718b8d6cc03a</anchor>
+      <arglist>(column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -24225,22 +24197,8 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>purge_nonempty_nulls</name>
       <anchorfile>group__column__copy.html</anchorfile>
-      <anchor>gab1c1b1e5126a1c4ff2091ac37f22bc9f</anchor>
-      <arglist>(lists_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>purge_nonempty_nulls</name>
-      <anchorfile>group__column__copy.html</anchorfile>
-      <anchor>ga426d9816b81e684b1e7dac6e9d99dac6</anchor>
-      <arglist>(strings_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>purge_nonempty_nulls</name>
-      <anchorfile>group__column__copy.html</anchorfile>
-      <anchor>ga809b415b9846d75abb80217a85c627e3</anchor>
-      <arglist>(structs_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gad82144bc75451067a2a8718b8d6cc03a</anchor>
+      <arglist>(column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="group">
