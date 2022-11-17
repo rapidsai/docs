@@ -4,7 +4,7 @@ The easiest way to deploy RAPIDS on a single instance is to use the `rapidsai/ra
 
 **1. Create a VM instance.** In the GCP console, nagivate to `Compute Engine` -> `VM instances` -> `CREATE INSTANCE`.
 
-Under the `Machine configuration` setting, select `GPU` and choose you NVIDIA GPU type and number.
+Under the `Machine configuration` setting, select `GPU` and choose your NVIDIA GPU type and number.
 
 Next under the `Container` setting, select `Deploy Container` and specify your preferred registry location of the `rapidsai/rapidsai` as your container image and check `Allocate a buffer for STDIN` and `Allocate a pseudo-TTY` to enable interactivty with the container.
 
