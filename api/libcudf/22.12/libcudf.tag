@@ -3352,6 +3352,7 @@
     <includes id="error_8hpp" name="error.hpp" local="no" imported="no">cudf/utilities/error.hpp</includes>
     <class kind="class">cudf::io::parquet_reader_options</class>
     <class kind="class">cudf::io::parquet_reader_options_builder</class>
+    <class kind="class">cudf::io::chunked_parquet_reader</class>
     <class kind="class">cudf::io::parquet_writer_options</class>
     <class kind="class">cudf::io::parquet_writer_options_builder</class>
     <class kind="class">cudf::io::chunked_parquet_writer_options</class>
@@ -7293,6 +7294,45 @@
       <anchorfile>classcudf_1_1io_1_1chunked__orc__writer__options__builder.html</anchorfile>
       <anchor>a375c9b87a707109dd4655144ad24f29b</anchor>
       <arglist>()</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>cudf::io::chunked_parquet_reader</name>
+    <filename>classcudf_1_1io_1_1chunked__parquet__reader.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>chunked_parquet_reader</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__reader.html</anchorfile>
+      <anchor>a24c0714fcbd2690fd89c1d1e8b6a7bab</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>chunked_parquet_reader</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__reader.html</anchorfile>
+      <anchor>a2ffda66174fcecc68613f5cf8845e4ce</anchor>
+      <arglist>(std::size_t chunk_read_limit, parquet_reader_options const &amp;options, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>~chunked_parquet_reader</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__reader.html</anchorfile>
+      <anchor>ac0411749d57041070648b7440792a992</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>has_next</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__reader.html</anchorfile>
+      <anchor>a093b46238fc2a2e2bd44515fd44379cf</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>table_with_metadata</type>
+      <name>read_chunk</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__reader.html</anchorfile>
+      <anchor>a05ead3f31db21bcd4b73588f29ecfa06</anchor>
+      <arglist>() const</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -14340,6 +14380,39 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>cudf::list_device_view::pair_rep_accessor</name>
+    <filename>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</filename>
+    <templarg></templarg>
+    <member kind="typedef">
+      <type>device_storage_type_t&lt; T &gt;</type>
+      <name>rep_type</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>a86137f06ce1c5f85bcc056b3b510de2a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>CUDF_HOST_DEVICE</type>
+      <name>pair_rep_accessor</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>ac1a536b6750af8049c148cee8296eb46</anchor>
+      <arglist>(list_device_view const &amp;_list)</arglist>
+    </member>
+    <member kind="function">
+      <type>thrust::pair&lt; rep_type, bool &gt;</type>
+      <name>operator()</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>acc82443ba86c3f670083a5cbec86af88</anchor>
+      <arglist>(cudf::size_type i) const</arglist>
+    </member>
+    <member kind="variable">
+      <type>list_device_view const  &amp;</type>
+      <name>list</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
+      <anchor>a5a12a570f271728cdb4bca54c62cd6f2</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>cudf::detail::pair_rep_accessor</name>
     <filename>structcudf_1_1detail_1_1pair__rep__accessor.html</filename>
     <templarg></templarg>
@@ -14370,39 +14443,6 @@
       <name>col</name>
       <anchorfile>structcudf_1_1detail_1_1pair__rep__accessor.html</anchorfile>
       <anchor>a59cd69e90ab4b57bc905fc60282f2479</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
-    <name>cudf::list_device_view::pair_rep_accessor</name>
-    <filename>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</filename>
-    <templarg></templarg>
-    <member kind="typedef">
-      <type>device_storage_type_t&lt; T &gt;</type>
-      <name>rep_type</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>a86137f06ce1c5f85bcc056b3b510de2a</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="function">
-      <type>CUDF_HOST_DEVICE</type>
-      <name>pair_rep_accessor</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>ac1a536b6750af8049c148cee8296eb46</anchor>
-      <arglist>(list_device_view const &amp;_list)</arglist>
-    </member>
-    <member kind="function">
-      <type>thrust::pair&lt; rep_type, bool &gt;</type>
-      <name>operator()</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>acc82443ba86c3f670083a5cbec86af88</anchor>
-      <arglist>(cudf::size_type i) const</arglist>
-    </member>
-    <member kind="variable">
-      <type>list_device_view const  &amp;</type>
-      <name>list</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__rep__accessor.html</anchorfile>
-      <anchor>a5a12a570f271728cdb4bca54c62cd6f2</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -15412,6 +15452,31 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>cudf::experimental::row::hash::row_hasher</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
+      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
+      <name>device_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
+      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::row_hasher</name>
     <filename>classcudf_1_1row__hasher.html</filename>
     <templarg>hash_function</templarg>
@@ -15436,31 +15501,6 @@
       <anchorfile>classcudf_1_1row__hasher.html</anchorfile>
       <anchor>ab370aeff347da4c228ccd917af8b52be</anchor>
       <arglist>(size_type row_index) const</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>cudf::experimental::row::hash::row_hasher</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
-      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
-      <name>device_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
-      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -15676,6 +15716,31 @@
     <base virtualness="virtual">cudf::aggregation</base>
   </compound>
   <compound kind="class">
+    <name>cudf::experimental::row::equality::self_comparator</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>self_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>a8f53714e3008c063b18aa52cbd1f5a8e</anchor>
+      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>self_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>a305627a9b975fed5f09c5b49dfb6f644</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>equal_to</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>adfbbb6f105eb6f65f0689f4eceef1792</anchor>
+      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::experimental::row::lexicographic::self_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</filename>
     <member kind="function">
@@ -15705,31 +15770,6 @@
       <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
       <anchor>a3f1126f8f76064a8f0e6b96e4e51ce41</anchor>
       <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>cudf::experimental::row::equality::self_comparator</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>self_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>a8f53714e3008c063b18aa52cbd1f5a8e</anchor>
-      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>self_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>a305627a9b975fed5f09c5b49dfb6f644</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>equal_to</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>adfbbb6f105eb6f65f0689f4eceef1792</anchor>
-      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -21687,6 +21727,7 @@
     <class kind="struct">cudf::io::bucket_statistics</class>
     <class kind="class">cudf::io::chunked_orc_writer_options</class>
     <class kind="class">cudf::io::chunked_orc_writer_options_builder</class>
+    <class kind="class">cudf::io::chunked_parquet_reader</class>
     <class kind="class">cudf::io::chunked_parquet_writer_options</class>
     <class kind="class">cudf::io::chunked_parquet_writer_options_builder</class>
     <class kind="class">cudf::io::column_in_metadata</class>
@@ -27165,6 +27206,7 @@
     <class kind="class">cudf::io::orc_reader_options_builder</class>
     <class kind="class">cudf::io::parquet_reader_options</class>
     <class kind="class">cudf::io::parquet_reader_options_builder</class>
+    <class kind="class">cudf::io::chunked_parquet_reader</class>
     <member kind="function">
       <type>table_with_metadata</type>
       <name>read_avro</name>
