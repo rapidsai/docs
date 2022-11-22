@@ -393,7 +393,7 @@
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../ibm/index.html">IBM Cloud</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../ibm/virtual-server.html">Virtual Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ibm/virtual-server.html">Virtual Server for VPC</a></li>
 </ul>
 </li>
 </ul>
@@ -429,30 +429,63 @@
               
   <section id="elastic-compute-cloud-ec2">
 <h1>Elastic Compute Cloud (EC2)<a class="headerlink" href="#elastic-compute-cloud-ec2" title="Permalink to this heading">#</a></h1>
-<p>There are multiple ways you can deploy RAPIDS on a single instance, but the easiest is to use the RAPIDS docker image:</p>
-<p><strong>1. Initiate.</strong> Initiate an instance supported by RAPIDS. See the introduction
-section for a list of supported instance types. It is recommended to use an AMI
-that already includes the required NVIDIA drivers, such as the <strong><a class="reference external" href="https://docs.aws.amazon.com/dlami/latest/devguide/what-is-dlami.html">AWS Deep Learning
-AMI.</a></strong></p>
-<p><strong>2. Credentials.</strong> Using the credentials supplied by AWS, log into the instance
-via SSH. For a short guide on launching your instance and accessing it, read the
-Getting Started with Amazon EC2 documentation.</p>
-<p><strong>3. Install.</strong> Install <a class="reference external" href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html">Docker and the NVIDIA Docker
-runtime</a>
-in the AWS instance. This step is not required if you are using AWS Deep
-Learning AMI.</p>
-<p><strong>4. Install.</strong> Install RAPIDS docker image. The docker container can be
-customized by using the options provided in the <strong><a class="reference external" href="https://rapids.ai/start.html">Getting
-Started</a></strong> page of RAPIDS. Example of an image
-that can be used is provided below:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ docker pull rapidsai/rapidsai:22.10-cuda11.5-runtime-ubuntu18.04-py3.9
-$ docker run --gpus all --rm -it -p <span class="m">8888</span>:8888 -p <span class="m">8787</span>:8787 -p <span class="m">8786</span>:8786 <span class="se">\</span>
-         rapidsai/rapidsai:22.10-cuda11.5-runtime-ubuntu18.04-py3.9
+<section id="create-instance">
+<h2>Create Instance<a class="headerlink" href="#create-instance" title="Permalink to this heading">#</a></h2>
+<p>Create a new <a class="reference external" href="https://aws.amazon.com/ec2/">EC2 Instance</a> with GPUs, the <a class="reference external" href="https://www.nvidia.co.uk/Download/index.aspx">NVIDIA Driver</a> and the <a class="reference external" href="https://developer.nvidia.com/nvidia-container-runtime">NVIDIA Container Runtime</a>.</p>
+<p>NVIDIA maintains an <a class="reference external" href="https://aws.amazon.com/marketplace/pp/prodview-7ikjtg3um26wq">Amazon Machine Image (AMI) that pre-installs NVIDIA drivers and container runtimes</a>, we recommend using this image as the starting point.</p>
+<ol class="arabic simple">
+<li><p>Open the <a class="reference external" href="https://console.aws.amazon.com/ec2/home"><strong>EC2 Dashboard</strong></a>.</p></li>
+<li><p>Select <strong>Launch Instance</strong>.</p></li>
+<li><p>In the AMI selection box search for “nvidia”, then switch to the <strong>AWS Marketplace AMIs</strong> tab.</p></li>
+<li><p>Select <strong>NVIDIA GPU-Optimized VMI</strong>, then select <strong>Select</strong> and then <strong>Continue</strong>.</p></li>
+<li><p>In <strong>Key pair</strong> select your SSH keys (create these first if you haven’t already).</p></li>
+<li><p>Under network settings create a security group (or choose an existing) that allows SSH access on port <code class="docutils literal notranslate"><span class="pre">22</span></code> and also allow ports <code class="docutils literal notranslate"><span class="pre">8888,8786,8787</span></code> to access Jupyter and Dask.</p></li>
+<li><p>Select <strong>Launch</strong>.</p></li>
+</ol>
+</section>
+<section id="connect-to-the-instance">
+<h2>Connect to the instance<a class="headerlink" href="#connect-to-the-instance" title="Permalink to this heading">#</a></h2>
+<p>Next we need to connect to the instance.</p>
+<ol class="arabic simple">
+<li><p>Open the <a class="reference external" href="https://console.aws.amazon.com/ec2/home"><strong>EC2 Dashboard</strong></a>.</p></li>
+<li><p>Locate your VM and note the <strong>Public IP Address</strong>.</p></li>
+<li><p>In your terminal run <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">ubuntu&#64;&lt;ip</span> <span class="pre">address&gt;</span></code></p></li>
+</ol>
+</section>
+<section id="install-rapids">
+<h2>Install RAPIDS<a class="headerlink" href="#install-rapids" title="Permalink to this heading">#</a></h2>
+<p>There are a selection of methods you can use to install RAPIDS which you can see via the <a class="reference external" href="https://rapids.ai/start.html#get-rapids">RAPIDS release selector</a>.</p>
+<p>For this example we are going to run the RAPIDS Docker container so we need to know the name of the most recent container.
+On the release selector choose <strong>Docker</strong> in the <strong>Method</strong> column.</p>
+<p>Then copy the commands shown:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker pull nvcr.io/nvidia/rapidsai/rapidsai-core:22.10-cuda11.5-runtime-ubuntu20.04-py3.9
+docker run --gpus all --rm -it <span class="se">\</span>
+    --shm-size<span class="o">=</span>1g --ulimit <span class="nv">memlock</span><span class="o">=</span>-1 <span class="se">\</span>
+    -p <span class="m">8888</span>:8888 -p <span class="m">8787</span>:8787 -p <span class="m">8786</span>:8786 <span class="se">\</span>
+    nvcr.io/nvidia/rapidsai/rapidsai-core:22.10-cuda11.5-runtime-ubuntu20.04-py3.9
 </pre></div>
 </div>
-<p><strong>5. Test RAPIDS.</strong> Test it! The RAPIDS docker image will start a Jupyter
-notebook instance automatically. You can log into it by going to the IP address
-provided by AWS on port 8888.</p>
+</section>
+<section id="test-rapids">
+<h2>Test RAPIDS<a class="headerlink" href="#test-rapids" title="Permalink to this heading">#</a></h2>
+<p>In the terminal we can open <code class="docutils literal notranslate"><span class="pre">ipython</span></code> and check that we can import and use RAPIDS libraries like <code class="docutils literal notranslate"><span class="pre">cudf</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">cudf</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">timeseries</span><span class="p">()</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span>
+                       <span class="nb">id</span>     <span class="n">name</span>         <span class="n">x</span>         <span class="n">y</span>
+<span class="n">timestamp</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">1020</span>    <span class="n">Kevin</span>  <span class="mf">0.091536</span>  <span class="mf">0.664482</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span>   <span class="mi">974</span>    <span class="n">Frank</span>  <span class="mf">0.683788</span> <span class="o">-</span><span class="mf">0.467281</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">02</span>  <span class="mi">1000</span>  <span class="n">Charlie</span>  <span class="mf">0.419740</span> <span class="o">-</span><span class="mf">0.796866</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">03</span>  <span class="mi">1019</span>    <span class="n">Edith</span>  <span class="mf">0.488411</span>  <span class="mf">0.731661</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">04</span>   <span class="mi">998</span>    <span class="n">Quinn</span>  <span class="mf">0.651381</span> <span class="o">-</span><span class="mf">0.525398</span>
+</pre></div>
+</div>
+<p>You can also access Jupyter via <code class="docutils literal notranslate"><span class="pre">&lt;VM</span> <span class="pre">ip&gt;:8888</span></code> in the browser.
+Visit <code class="docutils literal notranslate"><span class="pre">cudf/10-min.ipynb</span></code> and execute the cells to try things out.</p>
+<p>When running a Dask cluster you can also visit <code class="docutils literal notranslate"><span class="pre">&lt;VM</span> <span class="pre">ip&gt;:8787</span></code> to monitor the Dask cluster status.</p>
+</section>
 </section>
 
 
@@ -486,6 +519,38 @@ provided by AWS on port 8888.</p>
           
             <div class="bd-sidebar-secondary bd-toc">
               
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#create-instance">
+   Create Instance
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#connect-to-the-instance">
+   Connect to the instance
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#install-rapids">
+   Install RAPIDS
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#test-rapids">
+   Test RAPIDS
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
 <div class="toc-item">
   
 <div id="searchbox"></div>

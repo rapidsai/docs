@@ -1,9 +1,10 @@
 # Azure Virtual Machine
 
-## Create Azure Virtual Machine with GPU, Nvidia Driver and Nvidia Container Runtime
+## Create Virtual Machine
 
-Nvidia maintains an image that pre-installs Nvidia drivers and container runtimes,
-we recommend using [this image](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/nvidia.ngc_azure_17_11?tab=Overview) as the starting point.
+Create a new [Azure Virtual Machine](https://azure.microsoft.com/en-gb/products/virtual-machines/) with GPUs, the [NVIDIA Driver](https://www.nvidia.co.uk/Download/index.aspx) and the [NVIDIA Container Runtime](https://developer.nvidia.com/nvidia-container-runtime).
+
+NVIDIA maintains a [Virtual Machine Image (VMI) that pre-installs NVIDIA drivers and container runtimes](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/nvidia.ngc_azure_17_11?tab=Overview), we recommend using this image as the starting point.
 
 `````{tab-set}
 
@@ -11,9 +12,9 @@ we recommend using [this image](https://azuremarketplace.microsoft.com/en-us/mar
 :sync: portal
 
 
-1. Select the latest Nvidia GPU-Optimized VMI version from the drop down list, then select _Get It Now_.
-2. If already logged in on Azure, select continue clicking _Create_.
-3. In _Create a virtual machine_ interface, fill in required information for the vm.
+1. Select the latest **NVIDIA GPU-Optimized VMI** version from the drop down list, then select **Get It Now**.
+2. If already logged in on Azure, select continue clicking **Create**.
+3. In **Create a virtual machine** interface, fill in required information for the vm.
    Select a GPU enabled VM size.
 
 ```{dropdown} Note that not all regions support availability zones with GPU VMs.
@@ -27,7 +28,7 @@ support availability zone. Try other availability options.
 ![azure-gpuvm-availability-zone-error](../../_static/azure_availability_zone.PNG)
 ```
 
-Click _Review+Create_ to start the virtual machine.
+Click **Review+Create** to start the virtual machine.
 
 ````
 
@@ -36,15 +37,15 @@ Click _Review+Create_ to start the virtual machine.
 
 Prepare the following environment variables.
 
-| Name             | Description          | Example                                                      |
-| ---------------- | -------------------- | ------------------------------------------------------------ |
-| AZ_VMNAME        | Name for VM          | RapidsAI-V100                                                |
-| AZ_RESOURCEGROUP | Resource group of VM | rapidsai-deployment                                          |
-| AZ_LOCATION      | Region of VM         | westus2                                                      |
-| AZ_IMAGE         | URN of image         | nvidia:ngc_azure_17_11:ngc-base-version-22_06_0-gen2:22.06.0 |
-| AZ_SIZE          | VM Size              | Standard_NC6s_v3                                             |
-| AZ_USERNAME      | User name of VM      | rapidsai                                                     |
-| AZ_SSH_KEY       | public ssh key       | ~/.ssh/id_rsa.pub                                            |
+| Name               | Description          | Example                                                        |
+| ------------------ | -------------------- | -------------------------------------------------------------- |
+| `AZ_VMNAME`        | Name for VM          | `RapidsAI-V100`                                                |
+| `AZ_RESOURCEGROUP` | Resource group of VM | `rapidsai-deployment`                                          |
+| `AZ_LOCATION`      | Region of VM         | `westus2`                                                      |
+| `AZ_IMAGE`         | URN of image         | `nvidia:ngc_azure_17_11:ngc-base-version-22_06_0-gen2:22.06.0` |
+| `AZ_SIZE`          | VM Size              | `Standard_NC6s_v3`                                             |
+| `AZ_USERNAME`      | User name of VM      | `rapidsai`                                                     |
+| `AZ_SSH_KEY`       | public ssh key       | `~/.ssh/id_rsa.pub`                                            |
 
 ```bash
 az vm create \
@@ -59,7 +60,7 @@ az vm create \
 
 ```{note}
 Use `az vm image list --publisher Nvidia --all --output table` to inspect URNs of official
-Nvidia images on Azure.
+NVIDIA images on Azure.
 ```
 
 ```{note}
@@ -73,24 +74,26 @@ for supported ssh keys on Azure.
 
 ## Create Network Security Group
 
+Next we need to allow network traffic to the VM so we can access Jupyter and Dask.
+
 `````{tab-set}
 
 ````{tab-item} via Azure Portal
 :sync: portal
 
-1. Select _Networking_ in the left panel.
-2. Select _Add inbound port rule_.
-3. Set _Destination port ranges_ to `8888,8787`. Keep rest unchanged. Select _Add_.
+1. Select **Networking** in the left panel.
+2. Select **Add inbound port rule**.
+3. Set **Destination port ranges** to `8888,8787`. Keep rest unchanged. Select **Add**.
 
 ````
 
 ````{tab-item} via Azure CLI
 :sync: cli
 
-| Name           | Description         | Example                  |
-| -------------- | ------------------- | ------------------------ |
-| AZ_NSGNAME     | NSG name for the VM | ${AZ_VMNAME}NSG          |
-| AZ_NSGRULENAME | Name for NSG rule   | Allow-Dask-Jupyter-ports |
+| Name             | Description         | Example                    |
+| ---------------- | ------------------- | -------------------------- |
+| `AZ_NSGNAME`     | NSG name for the VM | `${AZ_VMNAME}NSG`          |
+| `AZ_NSGRULENAME` | Name for NSG rule   | `Allow-Dask-Jupyter-ports` |
 
 ```bash
 az network nsg rule create \
@@ -106,24 +109,15 @@ az network nsg rule create \
 
 ## Install RAPIDS
 
-It can take up to 10 minutes to provision a GPU VM. When available, ssh into the machine.
+```{include} ../../_includes/install-rapids-with-docker.md
 
-Visit [rapids release selector](https://rapids.ai/start.html#get-rapids) and choose `Docker` in `METHOD`
-column. For example, to pull 22.10 stable image and run the container:
-
-```bash
-docker pull nvcr.io/nvidia/rapidsai/rapidsai-core:22.10-cuda11.5-runtime-ubuntu20.04-py3.9
-docker run --gpus all --rm -it \
-    --shm-size=1g --ulimit memlock=-1 \
-    -p 8888:8888 -p 8787:8787 -p 8786:8786 \
-    nvcr.io/nvidia/rapidsai/rapidsai-core:22.10-cuda11.5-runtime-ubuntu20.04-py3.9
 ```
 
 ## Test RAPIDS
 
-Access the jupyter-lab portal via `<ip>:8888` in the browser. Visit `cudf/10-min.ipynb` and
-execute the cells. Open dask dashboard on the left and enter `<ip>:8787` in the url blank
-to monitor dask worker status.
+```{include} ../../_includes/test-rapids-docker-vm.md
+
+```
 
 ### Useful Links
 

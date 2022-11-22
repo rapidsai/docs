@@ -1,11 +1,11 @@
+---
+html_theme.sidebar_secondary.remove: true
+---
+
 # Microsoft Azure
 
-```{toctree}
----
-maxdepth: 2
-caption: Microsoft Azure
----
-azure-vm
+```{include} ../../_includes/menus/azure.md
+
 ```
 
 RAPIDS can be deployed on Microsoft Azure in several ways. Azure supports various kinds of GPU VMs for different needs.
@@ -41,3 +41,10 @@ ND (>=v2) series
 
 - [GPU VM availability by region](https://azure.microsoft.com/en-us/explore/global-infrastructure/products-by-region/?products=virtual-machines)
 - [For GPU VM sizes overview](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes-gpu)
+
+```{toctree}
+---
+hidden: true
+---
+azure-vm
+```

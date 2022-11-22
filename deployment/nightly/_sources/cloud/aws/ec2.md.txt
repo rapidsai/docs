@@ -1,32 +1,35 @@
 # Elastic Compute Cloud (EC2)
 
-There are multiple ways you can deploy RAPIDS on a single instance, but the easiest is to use the RAPIDS docker image:
+## Create Instance
 
-**1. Initiate.** Initiate an instance supported by RAPIDS. See the introduction
-section for a list of supported instance types. It is recommended to use an AMI
-that already includes the required NVIDIA drivers, such as the **[AWS Deep Learning
-AMI.](https://docs.aws.amazon.com/dlami/latest/devguide/what-is-dlami.html)**
+Create a new [EC2 Instance](https://aws.amazon.com/ec2/) with GPUs, the [NVIDIA Driver](https://www.nvidia.co.uk/Download/index.aspx) and the [NVIDIA Container Runtime](https://developer.nvidia.com/nvidia-container-runtime).
 
-**2. Credentials.** Using the credentials supplied by AWS, log into the instance
-via SSH. For a short guide on launching your instance and accessing it, read the
-Getting Started with Amazon EC2 documentation.
+NVIDIA maintains an [Amazon Machine Image (AMI) that pre-installs NVIDIA drivers and container runtimes](https://aws.amazon.com/marketplace/pp/prodview-7ikjtg3um26wq), we recommend using this image as the starting point.
 
-**3. Install.** Install [Docker and the NVIDIA Docker
-runtime](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
-in the AWS instance. This step is not required if you are using AWS Deep
-Learning AMI.
+1. Open the [**EC2 Dashboard**](https://console.aws.amazon.com/ec2/home).
+1. Select **Launch Instance**.
+1. In the AMI selection box search for "nvidia", then switch to the **AWS Marketplace AMIs** tab.
+1. Select **NVIDIA GPU-Optimized VMI**, then select **Select** and then **Continue**.
+1. In **Key pair** select your SSH keys (create these first if you haven't already).
+1. Under network settings create a security group (or choose an existing) that allows SSH access on port `22` and also allow ports `8888,8786,8787` to access Jupyter and Dask.
+1. Select **Launch**.
 
-**4. Install.** Install RAPIDS docker image. The docker container can be
-customized by using the options provided in the **[Getting
-Started](https://rapids.ai/start.html)** page of RAPIDS. Example of an image
-that can be used is provided below:
+## Connect to the instance
 
-```shell
-$ docker pull rapidsai/rapidsai:22.10-cuda11.5-runtime-ubuntu18.04-py3.9
-$ docker run --gpus all --rm -it -p 8888:8888 -p 8787:8787 -p 8786:8786 \
-         rapidsai/rapidsai:22.10-cuda11.5-runtime-ubuntu18.04-py3.9
+Next we need to connect to the instance.
+
+1. Open the [**EC2 Dashboard**](https://console.aws.amazon.com/ec2/home).
+2. Locate your VM and note the **Public IP Address**.
+3. In your terminal run `ssh ubuntu@<ip address>`
+
+## Install RAPIDS
+
+```{include} ../../_includes/install-rapids-with-docker.md
+
 ```
 
-**5. Test RAPIDS.** Test it! The RAPIDS docker image will start a Jupyter
-notebook instance automatically. You can log into it by going to the IP address
-provided by AWS on port 8888.
+## Test RAPIDS
+
+```{include} ../../_includes/test-rapids-docker-vm.md
+
+```

@@ -1,14 +1,11 @@
+---
+html_theme.sidebar_secondary.remove: true
+---
+
 # Amazon Web Services
 
-```{toctree}
----
-maxdepth: 2
-caption: Amazon Web Services
----
-ec2
-eks
-ecs
-sagemaker
+```{include} ../../_includes/menus/aws.md
+
 ```
 
 RAPIDS can be deployed on Amazon Web Services (AWS) in several ways. See the
@@ -32,3 +29,13 @@ list of accelerated instance types below:
 | AWS                 | G5              | g5\.12xlarge    | 4              | A10G          | 24 (GB)       |             96 (GB) |
 | AWS                 | G5              | g5\.24xlarge    | 4              | A10G          | 24 (GB)       |             96 (GB) |
 | AWS                 | G5              | g5\.48xlarge    | 8              | A10G          | 24 (GB)       |            192 (GB) |
+
+```{toctree}
+---
+hidden: true
+---
+ec2
+eks
+ecs
+sagemaker
+```

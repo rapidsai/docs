@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Virtual Server &#8212; RAPIDS Deployment Documentation  documentation</title>
+    <title>Virtual Server for VPC &#8212; RAPIDS Deployment Documentation  documentation</title>
   
   
   
@@ -393,7 +393,7 @@
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">IBM Cloud</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Virtual Server</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Virtual Server for VPC</a></li>
 </ul>
 </li>
 </ul>
@@ -427,46 +427,119 @@
             
             <article class="bd-article" role="main">
               
-  <section id="virtual-server">
-<h1>Virtual Server<a class="headerlink" href="#virtual-server" title="Permalink to this heading">#</a></h1>
-<p>There are multiple ways you can deploy RAPIDS on a single instance, but the easiest is to use the RAPIDS docker image:</p>
-<section id="launch-a-vm-instance">
-<h2>Launch a VM instance<a class="headerlink" href="#launch-a-vm-instance" title="Permalink to this heading">#</a></h2>
-<p>Launch an instance supported by RAPIDS. See the <a class="reference internal" href="index.html"><span class="doc std std-doc">introduction section for a list of supported instance types</span></a>.</p>
+  <section id="virtual-server-for-vpc">
+<h1>Virtual Server for VPC<a class="headerlink" href="#virtual-server-for-vpc" title="Permalink to this heading">#</a></h1>
+<section id="create-instance">
+<h2>Create Instance<a class="headerlink" href="#create-instance" title="Permalink to this heading">#</a></h2>
+<p>Create a new <a class="reference external" href="https://www.ibm.com/cloud/virtual-servers">Virtual Server (for VPC)</a> with GPUs, the <a class="reference external" href="https://www.nvidia.co.uk/Download/index.aspx">NVIDIA Driver</a> and the <a class="reference external" href="https://developer.nvidia.com/nvidia-container-runtime">NVIDIA Container Runtime</a>.</p>
+<ol class="arabic simple">
+<li><p>Open the <a class="reference external" href="https://cloud.ibm.com/vpc-ext/compute/vs"><strong>Virtual Server Dashboard</strong></a>.</p></li>
+<li><p>Select <strong>Create</strong>.</p></li>
+<li><p>Give the server a <strong>name</strong> and select your <strong>resource group</strong>.</p></li>
+<li><p>Under <strong>Operating System</strong> choose <strong>Ubuntu Linux</strong>.</p></li>
+<li><p>Under <strong>Profile</strong> select <strong>View all profiles</strong> and select a profile with NVIDIA GPUs.</p></li>
+<li><p>Under <strong>SSH Keys</strong> choose your SSH key.</p></li>
+<li><p>Under network settings create a security group (or choose an existing) that allows SSH access on port <code class="docutils literal notranslate"><span class="pre">22</span></code> and also allow ports <code class="docutils literal notranslate"><span class="pre">8888,8786,8787</span></code> to access Jupyter and Dask.</p></li>
+<li><p>Select <strong>Create Virtual Server</strong>.</p></li>
+</ol>
 </section>
-<section id="configure-networking">
-<h2>Configure networking<a class="headerlink" href="#configure-networking" title="Permalink to this heading">#</a></h2>
-<p>Create a Floating IP and associate that with the created instance to access the instance on the web.</p>
+<section id="create-floating-ip">
+<h2>Create floating IP<a class="headerlink" href="#create-floating-ip" title="Permalink to this heading">#</a></h2>
+<p>To access the virtual server we need to attach a public IP address.</p>
+<ol class="arabic simple">
+<li><p>Open <a class="reference external" href="https://cloud.ibm.com/vpc-ext/network/floatingIPs"><strong>Floating IPs</strong></a></p></li>
+<li><p>Select <strong>Reserve</strong>.</p></li>
+<li><p>Give the Floating IP a <strong>name</strong>.</p></li>
+<li><p>Under <strong>Resource to bind</strong> select the virtual server you just created.</p></li>
+</ol>
 </section>
-<section id="login">
-<h2>Login<a class="headerlink" href="#login" title="Permalink to this heading">#</a></h2>
-<p>Using the credentials supplied by IBM, log into the instance
-via SSH. For a short guide on launching your instance and accessing it, read the
+<section id="connect-to-the-instance">
+<h2>Connect to the instance<a class="headerlink" href="#connect-to-the-instance" title="Permalink to this heading">#</a></h2>
+<p>Next we need to connect to the instance.</p>
+<ol class="arabic simple">
+<li><p>Open <a class="reference external" href="https://cloud.ibm.com/vpc-ext/network/floatingIPs"><strong>Floating IPs</strong></a></p></li>
+<li><p>Locate the IP you just created and note the address.</p></li>
+<li><p>In your terminal run <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">root&#64;&lt;ip</span> <span class="pre">address&gt;</span></code></p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a short guide on launching your instance and accessing it, read the
 <a class="reference external" href="https://cloud.ibm.com/docs/virtual-servers?topic=virtual-servers-getting-started-tutorial">Getting Started with IBM Virtual Server Documentation</a>.</p>
+</div>
 </section>
-<section id="install-pre-requisites">
-<h2>Install pre-requisites<a class="headerlink" href="#install-pre-requisites" title="Permalink to this heading">#</a></h2>
-<p>Install the <a class="reference external" href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#nvidia-drivers">NVIDIA drivers</a> and <a class="reference external" href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html">Docker and the NVIDIA Docker
-runtime</a>
-in the IBM virtual server instance.</p>
-</section>
+<section id="install-nvidia-drivers">
+<h2>Install NVIDIA Drivers<a class="headerlink" href="#install-nvidia-drivers" title="Permalink to this heading">#</a></h2>
+<p>Next we need to install the NVIDIA drivers and container runtime.</p>
+<ol class="arabic simple">
+<li><p>Ensure build essentials are installed <code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">update</span> <span class="pre">&amp;&amp;</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">build-essential</span> <span class="pre">-y</span></code>.</p></li>
+<li><p>Install the <a class="reference external" href="https://www.nvidia.com/Download/index.aspx?lang=en-us">NVIDIA drivers</a>.</p></li>
+<li><p>Install <a class="reference external" href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html">Docker and the NVIDIA Docker runtime</a>.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-info sd-bg-text-info">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-info" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm6.5-.25A.75.75 0 017.25 7h1a.75.75 0 01.75.75v2.75h.25a.75.75 0 010 1.5h-2a.75.75 0 010-1.5h.25v-2h-.25a.75.75 0 01-.75-.75zM8 6a1 1 0 100-2 1 1 0 000 2z"></path></svg></span>How do I check everything installed successfully?<div class="sd-summary-down docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.72a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 00-1.06-1.06L12 14.44 6.28 8.72a.75.75 0 00-1.06 0z"></path></svg></div>
+<div class="sd-summary-up docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-up" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M18.78 15.28a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06L12 9.56l5.72 5.72a.75.75 0 001.06 0z"></path></svg></div>
+</summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">You can check everything installed correctly by running <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> in a container.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker run --rm --gpus all nvidia/cuda:11.6.2-base-ubuntu20.04 nvidia-smi
+<span class="go">+-----------------------------------------------------------------------------+</span>
+<span class="go">| NVIDIA-SMI 510.108.03   Driver Version: 510.108.03   CUDA Version: 11.6     |</span>
+<span class="go">|-------------------------------+----------------------+----------------------+</span>
+<span class="go">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span>
+<span class="go">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span>
+<span class="go">|                               |                      |               MIG M. |</span>
+<span class="go">|===============================+======================+======================|</span>
+<span class="go">|   0  Tesla V100-PCIE...  Off  | 00000000:04:01.0 Off |                    0 |</span>
+<span class="go">| N/A   33C    P0    36W / 250W |      0MiB / 16384MiB |      0%      Default |</span>
+<span class="go">|                               |                      |                  N/A |</span>
+<span class="go">+-------------------------------+----------------------+----------------------+</span>
+
+<span class="go">+-----------------------------------------------------------------------------+</span>
+<span class="go">| Processes:                                                                  |</span>
+<span class="go">|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |</span>
+<span class="go">|        ID   ID                                                   Usage      |</span>
+<span class="go">|=============================================================================|</span>
+<span class="go">|  No running processes found                                                 |</span>
+<span class="go">+-----------------------------------------------------------------------------+</span>
+</pre></div>
+</div>
+</div>
+</details></section>
 <section id="install-rapids">
 <h2>Install RAPIDS<a class="headerlink" href="#install-rapids" title="Permalink to this heading">#</a></h2>
-<p>Install RAPIDS docker image. The docker container can be
-customized by using the options provided in the <strong><a class="reference external" href="https://rapids.ai/start.html">Getting
-Started</a></strong> page of RAPIDS. Example of an image
-that can be used is provided below:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ docker pull rapidsai/rapidsai:22.10-cuda11.5-runtime-ubuntu20.04-py3.9
-$ docker run --gpus all --rm -it --shm-size<span class="o">=</span>1g --ulimit <span class="nv">memlock</span><span class="o">=</span>-1 -p <span class="m">8888</span>:8888 -p <span class="m">8787</span>:8787 -p <span class="m">8786</span>:8786 <span class="se">\</span>
-    rapidsai/rapidsai:22.10-cuda11.5-runtime-ubuntu20.04-py3.9
+<p>There are a selection of methods you can use to install RAPIDS which you can see via the <a class="reference external" href="https://rapids.ai/start.html#get-rapids">RAPIDS release selector</a>.</p>
+<p>For this example we are going to run the RAPIDS Docker container so we need to know the name of the most recent container.
+On the release selector choose <strong>Docker</strong> in the <strong>Method</strong> column.</p>
+<p>Then copy the commands shown:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker pull nvcr.io/nvidia/rapidsai/rapidsai-core:22.10-cuda11.5-runtime-ubuntu20.04-py3.9
+docker run --gpus all --rm -it <span class="se">\</span>
+    --shm-size<span class="o">=</span>1g --ulimit <span class="nv">memlock</span><span class="o">=</span>-1 <span class="se">\</span>
+    -p <span class="m">8888</span>:8888 -p <span class="m">8787</span>:8787 -p <span class="m">8786</span>:8786 <span class="se">\</span>
+    nvcr.io/nvidia/rapidsai/rapidsai-core:22.10-cuda11.5-runtime-ubuntu20.04-py3.9
 </pre></div>
 </div>
 </section>
 <section id="test-rapids">
 <h2>Test RAPIDS<a class="headerlink" href="#test-rapids" title="Permalink to this heading">#</a></h2>
-<p>Test it! The RAPIDS docker image will start a Jupyter
-notebook instance automatically. You can log into it by going to the Floating IP address
-associated with the instance on port 8888.</p>
+<p>In the terminal we can open <code class="docutils literal notranslate"><span class="pre">ipython</span></code> and check that we can import and use RAPIDS libraries like <code class="docutils literal notranslate"><span class="pre">cudf</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">cudf</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">timeseries</span><span class="p">()</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span>
+                       <span class="nb">id</span>     <span class="n">name</span>         <span class="n">x</span>         <span class="n">y</span>
+<span class="n">timestamp</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">1020</span>    <span class="n">Kevin</span>  <span class="mf">0.091536</span>  <span class="mf">0.664482</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span>   <span class="mi">974</span>    <span class="n">Frank</span>  <span class="mf">0.683788</span> <span class="o">-</span><span class="mf">0.467281</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">02</span>  <span class="mi">1000</span>  <span class="n">Charlie</span>  <span class="mf">0.419740</span> <span class="o">-</span><span class="mf">0.796866</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">03</span>  <span class="mi">1019</span>    <span class="n">Edith</span>  <span class="mf">0.488411</span>  <span class="mf">0.731661</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">04</span>   <span class="mi">998</span>    <span class="n">Quinn</span>  <span class="mf">0.651381</span> <span class="o">-</span><span class="mf">0.525398</span>
+</pre></div>
+</div>
+<p>You can also access Jupyter via <code class="docutils literal notranslate"><span class="pre">&lt;VM</span> <span class="pre">ip&gt;:8888</span></code> in the browser.
+Visit <code class="docutils literal notranslate"><span class="pre">cudf/10-min.ipynb</span></code> and execute the cells to try things out.</p>
+<p>When running a Dask cluster you can also visit <code class="docutils literal notranslate"><span class="pre">&lt;VM</span> <span class="pre">ip&gt;:8787</span></code> to monitor the Dask cluster status.</p>
 </section>
 </section>
 
@@ -509,23 +582,23 @@ associated with the instance on port 8888.</p>
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#launch-a-vm-instance">
-   Launch a VM instance
+  <a class="reference internal nav-link" href="#create-instance">
+   Create Instance
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#configure-networking">
-   Configure networking
+  <a class="reference internal nav-link" href="#create-floating-ip">
+   Create floating IP
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#login">
-   Login
+  <a class="reference internal nav-link" href="#connect-to-the-instance">
+   Connect to the instance
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#install-pre-requisites">
-   Install pre-requisites
+  <a class="reference internal nav-link" href="#install-nvidia-drivers">
+   Install NVIDIA Drivers
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">

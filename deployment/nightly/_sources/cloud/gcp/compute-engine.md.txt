@@ -1,34 +1,55 @@
 # Compute Engine Instance
 
-The easiest way to deploy RAPIDS on a single instance is to use the `rapidsai/rapidsai` Docker image.
+## Create Virtual Machine
 
-**1. Create a VM instance.** In the GCP console, nagivate to `Compute Engine` -> `VM instances` -> `CREATE INSTANCE`.
+Create a new [Compute Engine Instance](https://cloud.google.com/compute/docs/instances) with GPUs, the [NVIDIA Driver](https://www.nvidia.co.uk/Download/index.aspx) and the [NVIDIA Container Runtime](https://developer.nvidia.com/nvidia-container-runtime).
 
-Under the `Machine configuration` setting, select `GPU` and choose your NVIDIA GPU type and number.
+NVIDIA maintains a [Virtual Machine Image (VMI) that pre-installs NVIDIA drivers and container runtimes](https://console.cloud.google.com/marketplace/product/nvidia-ngc-public/nvidia-gpu-optimized-vmi), we recommend using this image.
 
-Next under the `Container` setting, select `Deploy Container` and specify your preferred registry location of the `rapidsai/rapidsai` as your container image and check `Allocate a buffer for STDIN` and `Allocate a pseudo-TTY` to enable interactivty with the container.
+1. Open [**Compute Engine**](https://console.cloud.google.com/compute/instances).
+1. Select **Create Instance**.
+1. Select **Marketplace**.
+1. Search for "nvidia" and select **NVIDIA GPU-Optimized VMI**, then select **Launch**.
+1. In the **New NVIDIA GPU-Optimized VMI deployment** interface, fill in the name and any required information for the vm (the defaults should be fine for most users).
+1. **Read and accept** the Terms of Service
+1. Select **Deploy** to start the virtual machine.
 
-After customizing other aspects of your VM, click `CREATE` to initialize the VM.
+## Allow network access
 
-For the `gcloud` CLI, you can use the `gcloud compute instances create-with-container` command with at _minimum_ flags:
+To access Jupyter and Dask we will need to set up some firewall rules to open up some ports.
 
-```shell
-$ gcloud compute instances create-with-container $INSTANCE_NAME --container-image=$IMAGE_PATH --accelerator=count=$GPU_NUMBER,type=$GPU_TYPE --container-stdin --container-tty
+### Create the firewall rule
+
+1. Open [**VPC Network**](https://console.cloud.google.com/networking/networks/list).
+2. Select **Firewall** and **Create firewall rule**
+3. Give the rule a name like `rapids` and ensure the network matches the one you selected for the VM.
+4. Add a tag like `rapids` which we will use to assign the rule to our VM.
+5. Set your source IP range. We recommend you restrict this to your own IP address or your corporate network rather than `0.0.0.0/0` which will allow anyone to access your VM.
+6. Under **Protocols and ports** allow TCP connections on ports `8786,8787,8888`.
+
+### Assign it to the VM
+
+1. Open [**Compute Engine**](https://console.cloud.google.com/compute/instances).
+2. Select your VM and press **Edit**.
+3. Scroll down to **Networking** and add the `rapids` network tag you gave your firewall rule.
+4. Select **Save**.
+
+## Connect to the VM
+
+Next we need to connect to the VM.
+
+1. Open [**Compute Engine**](https://console.cloud.google.com/compute/instances).
+2. Locate your VM and press the **SSH** button which will open a new browser tab with a terminal.
+3. **Read and accept** the NVIDIA installer prompts.
+
+## Install RAPIDS
+
+```{include} ../../_includes/install-rapids-with-docker.md
+
 ```
 
-**2. Test RAPIDS.**
+## Test RAPIDS
 
-Once the VM is running, you can SSH into the VM from the GCP console or using the `gcloud` CLI using `gcloud compute ssh` and `docker attach` to the container enter a shell to start using RAPIDS.
+```{include} ../../_includes/test-rapids-docker-vm.md
 
-```shell
-USER@VM-NAME ~ $ docker attach $CONTAINER_ID
-(rapids) root@VM-NAME:/rapids/notebooks# conda list cudf
-# packages in environment at /opt/conda/envs/rapids:
-#
-# Name                    Version                   Build  Channel
-cudf                      22.08.00        cuda_11_py39_gb71873c701_0    rapidsai
-cudf_kafka                22.08.00        py39_gb71873c701_0    rapidsai
-dask-cudf                 22.08.00        cuda_11_py39_gb71873c701_0    rapidsai
-libcudf                   22.08.00        cuda11_gb71873c701_0    rapidsai
-libcudf_kafka             22.08.00          gb71873c701_0    rapidsai
 ```
