@@ -7,7 +7,7 @@ var indexSectionsWithContent =
   4: "_n",
   5: "o",
   6: "c",
-  7: "cdefinrst",
+  7: "cdefinprst",
   8: "clu"
 };
 
