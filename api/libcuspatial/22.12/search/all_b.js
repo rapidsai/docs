@@ -11,9 +11,10 @@ var searchData=
   ['multilinestring_5frange_63',['multilinestring_range',['../classcuspatial_1_1multilinestring__range.html',1,'cuspatial']]],
   ['multilinestring_5frange_2ecuh_64',['multilinestring_range.cuh',['../multilinestring__range_8cuh.html',1,'']]],
   ['multilinestring_5fref_65',['multilinestring_ref',['../classcuspatial_1_1multilinestring__ref.html',1,'cuspatial']]],
-  ['multipoint_5fbegin_66',['multipoint_begin',['../classcuspatial_1_1multipoint__range.html#a87a6afeb155a2f3708e6daf77bda29f0',1,'cuspatial::multipoint_range']]],
-  ['multipoint_5fend_67',['multipoint_end',['../classcuspatial_1_1multipoint__range.html#a2c23a5c9433756a1376c1507b727ce9a',1,'cuspatial::multipoint_range']]],
-  ['multipoint_5frange_68',['multipoint_range',['../classcuspatial_1_1multipoint__range.html',1,'cuspatial::multipoint_range&lt; GeometryIterator, VecIterator &gt;'],['../classcuspatial_1_1multipoint__range.html#a2dfb7d156efe67707c573201082f121d',1,'cuspatial::multipoint_range::multipoint_range()']]],
-  ['multipoint_5frange_2ecuh_69',['multipoint_range.cuh',['../multipoint__range_8cuh.html',1,'']]],
-  ['multipoint_5fref_70',['multipoint_ref',['../classcuspatial_1_1multipoint__ref.html',1,'cuspatial']]]
+  ['multipoint_5farray_66',['multipoint_array',['../classcuspatial_1_1test_1_1multipoint__array.html',1,'cuspatial::test']]],
+  ['multipoint_5fbegin_67',['multipoint_begin',['../classcuspatial_1_1multipoint__range.html#a87a6afeb155a2f3708e6daf77bda29f0',1,'cuspatial::multipoint_range']]],
+  ['multipoint_5fend_68',['multipoint_end',['../classcuspatial_1_1multipoint__range.html#a2c23a5c9433756a1376c1507b727ce9a',1,'cuspatial::multipoint_range']]],
+  ['multipoint_5frange_69',['multipoint_range',['../classcuspatial_1_1multipoint__range.html',1,'cuspatial::multipoint_range&lt; GeometryIterator, VecIterator &gt;'],['../classcuspatial_1_1multipoint__range.html#a2dfb7d156efe67707c573201082f121d',1,'cuspatial::multipoint_range::multipoint_range()']]],
+  ['multipoint_5frange_2ecuh_70',['multipoint_range.cuh',['../multipoint__range_8cuh.html',1,'']]],
+  ['multipoint_5fref_71',['multipoint_ref',['../classcuspatial_1_1multipoint__ref.html',1,'cuspatial']]]
 ];
