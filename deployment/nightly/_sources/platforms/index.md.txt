@@ -26,6 +26,16 @@ Integrate RAPIDS with Kubeflow notebooks and pipelines.
 ````
 
 ````{grid-item-card}
+:link: coiled
+:link-type: doc
+Coiled
+^^^
+Run RAPIDS on Coiled.
+
+{bdg-primary}`multi-node`
+````
+
+````{grid-item-card}
 :link: databricks
 :link-type: doc
 Databricks
@@ -44,5 +54,6 @@ Run RAPIDS on Databricks.
 
 kubernetes
 kubeflow
+coiled
 databricks
 ```

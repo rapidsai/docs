@@ -1,0 +1,919 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>How to Setup InfiniBand on Azure &#8212; RAPIDS Deployment Documentation  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="https://docs.rapids.ai/assets/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script defer="defer" src="../../_static/js/nav.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/azure/infiniband';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/RAPIDS-logo-purple.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/RAPIDS-logo-purple.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class=" navbar-header-items">
+    <div id="navbar-center" class="ml-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../cloud/index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../mig.html">
+                        Multi-Instance GPU (MIG)
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/deployment" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/rapidsai" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../cloud/index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../mig.html">
+                        Multi-Instance GPU (MIG)
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/deployment" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/rapidsai" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="how-to-setup-infiniband-on-azure">
+<h1>How to Setup InfiniBand on Azure<a class="headerlink" href="#how-to-setup-infiniband-on-azure" title="Permalink to this heading">#</a></h1>
+<p><a class="reference external" href="https://learn.microsoft.com/en-us/azure/virtual-machines/sizes-gpu">Azure GPU optmized virtual machines</a> provide
+a low latency and high bandwidth InfiniBand network. This guide walks through the steps to enable InfiniBand to
+optimize network performance.</p>
+<section id="build-a-virtual-machine">
+<h2>Build a Virtual Machine<a class="headerlink" href="#build-a-virtual-machine" title="Permalink to this heading">#</a></h2>
+<p>Start by creating a GPU optimized VM from the Azure portal. Below is an example that we will use
+for demonstration.</p>
+<ul class="simple">
+<li><p>Create new VM instance.</p></li>
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">East</span> <span class="pre">US</span></code> region.</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">Availability</span> <span class="pre">options</span></code> to <code class="docutils literal notranslate"><span class="pre">Availability</span> <span class="pre">set</span></code> and create a set.</p>
+<ul>
+<li><p>If building multiple instances put additional instances in the same set.</p></li>
+</ul>
+</li>
+<li><p>Use the 2nd Gen Ubuntu 20.04 image.</p>
+<ul>
+<li><p>Search all images for <code class="docutils literal notranslate"><span class="pre">Ubuntu</span> <span class="pre">Server</span> <span class="pre">20.04</span></code> and choose the second one down on the list.</p></li>
+</ul>
+</li>
+<li><p>Change size to <code class="docutils literal notranslate"><span class="pre">ND40rs_v2</span></code>.</p></li>
+<li><p>Set password login with credentials.</p>
+<ul>
+<li><p>User <code class="docutils literal notranslate"><span class="pre">someuser</span></code></p></li>
+<li><p>Password <code class="docutils literal notranslate"><span class="pre">somepassword</span></code></p></li>
+</ul>
+</li>
+<li><p>Leave all other options as default.</p></li>
+</ul>
+<p>Then connect to the VM using your preferred method.</p>
+</section>
+<section id="install-software">
+<h2>Install Software<a class="headerlink" href="#install-software" title="Permalink to this heading">#</a></h2>
+<p>Before installing the drivers ensure the system is up to date.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo apt-get update
+sudo apt-get upgrade -y
+</pre></div>
+</div>
+<section id="nvidia-drivers">
+<h3>NVIDIA Drivers<a class="headerlink" href="#nvidia-drivers" title="Permalink to this heading">#</a></h3>
+<p>The commands below should work for Ubuntu. See the <a class="reference external" href="https://docs.nvidia.com/cuda/index.html#installation-guides">CUDA Toolkit documentation</a> for details on installing on other operating systems.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo apt-get install -y linux-headers-<span class="k">$(</span>uname -r<span class="k">)</span>
+<span class="nv">distribution</span><span class="o">=</span><span class="k">$(</span>. /etc/os-release<span class="p">;</span><span class="nb">echo</span> <span class="nv">$ID$VERSION_ID</span> <span class="p">|</span> sed -e <span class="s1">&#39;s/\.//g&#39;</span><span class="k">)</span>
+wget https://developer.download.nvidia.com/compute/cuda/repos/<span class="nv">$distribution</span>/x86_64/cuda-keyring_1.0-1_all.deb
+sudo dpkg -i cuda-keyring_1.0-1_all.deb
+sudo apt-get update
+sudo apt-get -y install cuda-drivers
+</pre></div>
+</div>
+<p>Restart VM instance</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo reboot
+</pre></div>
+</div>
+<p>Once the VM boots, reconnect and run <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> to verify driver installation.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>nvidia-smi
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Mon Nov <span class="m">14</span> <span class="m">20</span>:32:39 <span class="m">2022</span>
++-----------------------------------------------------------------------------+
+<span class="p">|</span> NVIDIA-SMI <span class="m">520</span>.61.05    Driver Version: <span class="m">520</span>.61.05    CUDA Version: <span class="m">11</span>.8     <span class="p">|</span>
+<span class="p">|</span>-------------------------------+----------------------+----------------------+
+<span class="p">|</span> GPU  Name        Persistence-M<span class="p">|</span> Bus-Id        Disp.A <span class="p">|</span> Volatile Uncorr. ECC <span class="p">|</span>
+<span class="p">|</span> Fan  Temp  Perf  Pwr:Usage/Cap<span class="p">|</span>         Memory-Usage <span class="p">|</span> GPU-Util  Compute M. <span class="p">|</span>
+<span class="p">|</span>                               <span class="p">|</span>                      <span class="p">|</span>               MIG M. <span class="p">|</span>
+<span class="p">|</span><span class="o">===============================</span>+<span class="o">======================</span>+<span class="o">======================</span><span class="p">|</span>
+<span class="p">|</span>   <span class="m">0</span>  Tesla V100-SXM2...  On   <span class="p">|</span> <span class="m">00000001</span>:00:00.0 Off <span class="p">|</span>                    <span class="m">0</span> <span class="p">|</span>
+<span class="p">|</span> N/A   34C    P0    41W / 300W <span class="p">|</span>    445MiB / 32768MiB <span class="p">|</span>      <span class="m">0</span>%      Default <span class="p">|</span>
+<span class="p">|</span>                               <span class="p">|</span>                      <span class="p">|</span>                  N/A <span class="p">|</span>
++-------------------------------+----------------------+----------------------+
+<span class="p">|</span>   <span class="m">1</span>  Tesla V100-SXM2...  On   <span class="p">|</span> <span class="m">00000002</span>:00:00.0 Off <span class="p">|</span>                    <span class="m">0</span> <span class="p">|</span>
+<span class="p">|</span> N/A   37C    P0    43W / 300W <span class="p">|</span>      4MiB / 32768MiB <span class="p">|</span>      <span class="m">0</span>%      Default <span class="p">|</span>
+<span class="p">|</span>                               <span class="p">|</span>                      <span class="p">|</span>                  N/A <span class="p">|</span>
++-------------------------------+----------------------+----------------------+
+<span class="p">|</span>   <span class="m">2</span>  Tesla V100-SXM2...  On   <span class="p">|</span> <span class="m">00000003</span>:00:00.0 Off <span class="p">|</span>                    <span class="m">0</span> <span class="p">|</span>
+<span class="p">|</span> N/A   34C    P0    42W / 300W <span class="p">|</span>      4MiB / 32768MiB <span class="p">|</span>      <span class="m">0</span>%      Default <span class="p">|</span>
+<span class="p">|</span>                               <span class="p">|</span>                      <span class="p">|</span>                  N/A <span class="p">|</span>
++-------------------------------+----------------------+----------------------+
+<span class="p">|</span>   <span class="m">3</span>  Tesla V100-SXM2...  On   <span class="p">|</span> <span class="m">00000004</span>:00:00.0 Off <span class="p">|</span>                    <span class="m">0</span> <span class="p">|</span>
+<span class="p">|</span> N/A   35C    P0    44W / 300W <span class="p">|</span>      4MiB / 32768MiB <span class="p">|</span>      <span class="m">0</span>%      Default <span class="p">|</span>
+<span class="p">|</span>                               <span class="p">|</span>                      <span class="p">|</span>                  N/A <span class="p">|</span>
++-------------------------------+----------------------+----------------------+
+<span class="p">|</span>   <span class="m">4</span>  Tesla V100-SXM2...  On   <span class="p">|</span> <span class="m">00000005</span>:00:00.0 Off <span class="p">|</span>                    <span class="m">0</span> <span class="p">|</span>
+<span class="p">|</span> N/A   35C    P0    41W / 300W <span class="p">|</span>      4MiB / 32768MiB <span class="p">|</span>      <span class="m">0</span>%      Default <span class="p">|</span>
+<span class="p">|</span>                               <span class="p">|</span>                      <span class="p">|</span>                  N/A <span class="p">|</span>
++-------------------------------+----------------------+----------------------+
+<span class="p">|</span>   <span class="m">5</span>  Tesla V100-SXM2...  On   <span class="p">|</span> <span class="m">00000006</span>:00:00.0 Off <span class="p">|</span>                    <span class="m">0</span> <span class="p">|</span>
+<span class="p">|</span> N/A   36C    P0    43W / 300W <span class="p">|</span>      4MiB / 32768MiB <span class="p">|</span>      <span class="m">0</span>%      Default <span class="p">|</span>
+<span class="p">|</span>                               <span class="p">|</span>                      <span class="p">|</span>                  N/A <span class="p">|</span>
++-------------------------------+----------------------+----------------------+
+<span class="p">|</span>   <span class="m">6</span>  Tesla V100-SXM2...  On   <span class="p">|</span> <span class="m">00000007</span>:00:00.0 Off <span class="p">|</span>                    <span class="m">0</span> <span class="p">|</span>
+<span class="p">|</span> N/A   37C    P0    44W / 300W <span class="p">|</span>      4MiB / 32768MiB <span class="p">|</span>      <span class="m">0</span>%      Default <span class="p">|</span>
+<span class="p">|</span>                               <span class="p">|</span>                      <span class="p">|</span>                  N/A <span class="p">|</span>
++-------------------------------+----------------------+----------------------+
+<span class="p">|</span>   <span class="m">7</span>  Tesla V100-SXM2...  On   <span class="p">|</span> <span class="m">00000008</span>:00:00.0 Off <span class="p">|</span>                    <span class="m">0</span> <span class="p">|</span>
+<span class="p">|</span> N/A   38C    P0    44W / 300W <span class="p">|</span>      4MiB / 32768MiB <span class="p">|</span>      <span class="m">0</span>%      Default <span class="p">|</span>
+<span class="p">|</span>                               <span class="p">|</span>                      <span class="p">|</span>                  N/A <span class="p">|</span>
++-------------------------------+----------------------+----------------------+
+
++-----------------------------------------------------------------------------+
+<span class="p">|</span> Processes:                                                                  <span class="p">|</span>
+<span class="p">|</span>  GPU   GI   CI        PID   Type   Process name                  GPU Memory <span class="p">|</span>
+<span class="p">|</span>        ID   ID                                                   Usage      <span class="p">|</span>
+<span class="p">|</span><span class="o">=============================================================================</span><span class="p">|</span>
+<span class="p">|</span>    <span class="m">0</span>   N/A  N/A      <span class="m">1396</span>      G   /usr/lib/xorg/Xorg                427MiB <span class="p">|</span>
+<span class="p">|</span>    <span class="m">0</span>   N/A  N/A      <span class="m">1762</span>      G   /usr/bin/gnome-shell               16MiB <span class="p">|</span>
+<span class="p">|</span>    <span class="m">1</span>   N/A  N/A      <span class="m">1396</span>      G   /usr/lib/xorg/Xorg                  4MiB <span class="p">|</span>
+<span class="p">|</span>    <span class="m">2</span>   N/A  N/A      <span class="m">1396</span>      G   /usr/lib/xorg/Xorg                  4MiB <span class="p">|</span>
+<span class="p">|</span>    <span class="m">3</span>   N/A  N/A      <span class="m">1396</span>      G   /usr/lib/xorg/Xorg                  4MiB <span class="p">|</span>
+<span class="p">|</span>    <span class="m">4</span>   N/A  N/A      <span class="m">1396</span>      G   /usr/lib/xorg/Xorg                  4MiB <span class="p">|</span>
+<span class="p">|</span>    <span class="m">5</span>   N/A  N/A      <span class="m">1396</span>      G   /usr/lib/xorg/Xorg                  4MiB <span class="p">|</span>
+<span class="p">|</span>    <span class="m">6</span>   N/A  N/A      <span class="m">1396</span>      G   /usr/lib/xorg/Xorg                  4MiB <span class="p">|</span>
+<span class="p">|</span>    <span class="m">7</span>   N/A  N/A      <span class="m">1396</span>      G   /usr/lib/xorg/Xorg                  4MiB <span class="p">|</span>
++-----------------------------------------------------------------------------+
+</pre></div>
+</div>
+</section>
+<section id="infiniband-driver">
+<h3>InfiniBand Driver<a class="headerlink" href="#infiniband-driver" title="Permalink to this heading">#</a></h3>
+<p>On Ubuntu 20.04</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo apt-get install -y automake dh-make git libcap2 libnuma-dev libtool make pkg-config udev curl librdmacm-dev rdma-core <span class="se">\</span>
+    libgfortran5 bison chrpath flex graphviz gfortran tk dpatch quilt swig tcl ibverbs-utils
+</pre></div>
+</div>
+<p>Check install</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ibv_devinfo
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>hca_id: mlx5_0
+        transport:                      InfiniBand <span class="o">(</span><span class="m">0</span><span class="o">)</span>
+        fw_ver:                         <span class="m">16</span>.28.4000
+        node_guid:                      <span class="m">0015</span>:5dff:fe33:ff2c
+        sys_image_guid:                 0c42:a103:00b3:2f68
+        vendor_id:                      0x02c9
+        vendor_part_id:                 <span class="m">4120</span>
+        hw_ver:                         0x0
+        board_id:                       MT_0000000010
+        phys_port_cnt:                  <span class="m">1</span>
+                port:   <span class="m">1</span>
+                        state:                  PORT_ACTIVE <span class="o">(</span><span class="m">4</span><span class="o">)</span>
+                        max_mtu:                <span class="m">4096</span> <span class="o">(</span><span class="m">5</span><span class="o">)</span>
+                        active_mtu:             <span class="m">4096</span> <span class="o">(</span><span class="m">5</span><span class="o">)</span>
+                        sm_lid:                 <span class="m">7</span>
+                        port_lid:               <span class="m">115</span>
+                        port_lmc:               0x00
+                        link_layer:             InfiniBand
+
+hca_id: rdmaP36305p0s2
+        transport:                      InfiniBand <span class="o">(</span><span class="m">0</span><span class="o">)</span>
+        fw_ver:                         <span class="m">2</span>.43.7008
+        node_guid:                      <span class="m">6045</span>:bdff:feed:8445
+        sys_image_guid:                 043f:7203:0003:d583
+        vendor_id:                      0x02c9
+        vendor_part_id:                 <span class="m">4100</span>
+        hw_ver:                         0x0
+        board_id:                       MT_1090111019
+        phys_port_cnt:                  <span class="m">1</span>
+                port:   <span class="m">1</span>
+                        state:                  PORT_ACTIVE <span class="o">(</span><span class="m">4</span><span class="o">)</span>
+                        max_mtu:                <span class="m">4096</span> <span class="o">(</span><span class="m">5</span><span class="o">)</span>
+                        active_mtu:             <span class="m">1024</span> <span class="o">(</span><span class="m">3</span><span class="o">)</span>
+                        sm_lid:                 <span class="m">0</span>
+                        port_lid:               <span class="m">0</span>
+                        port_lmc:               0x00
+                        link_layer:             Ethernet
+</pre></div>
+</div>
+<section id="enable-ipoib">
+<h4>Enable IPoIB<a class="headerlink" href="#enable-ipoib" title="Permalink to this heading">#</a></h4>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo sed -i -e <span class="s1">&#39;s/# OS.EnableRDMA=y/OS.EnableRDMA=y/g&#39;</span> /etc/waagent.conf
+</pre></div>
+</div>
+<p>Reboot and reconnect.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo reboot
+</pre></div>
+</div>
+</section>
+<section id="check-ib">
+<h4>Check IB<a class="headerlink" href="#check-ib" title="Permalink to this heading">#</a></h4>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ip addr show
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="m">1</span>: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
+    link/loopback <span class="m">00</span>:00:00:00:00:00 brd <span class="m">00</span>:00:00:00:00:00
+    inet <span class="m">127</span>.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+<span class="m">2</span>: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc mq state UP group default qlen <span class="m">1000</span>
+    link/ether <span class="m">60</span>:45:bd:a7:42:cc brd ff:ff:ff:ff:ff:ff
+    inet <span class="m">10</span>.6.0.5/24 brd <span class="m">10</span>.6.0.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::6245:bdff:fea7:42cc/64 scope link
+       valid_lft forever preferred_lft forever
+<span class="m">3</span>: eth1: &lt;BROADCAST,MULTICAST&gt; mtu <span class="m">1500</span> qdisc noop state DOWN group default qlen <span class="m">1000</span>
+    link/ether <span class="m">00</span>:15:5d:33:ff:16 brd ff:ff:ff:ff:ff:ff
+<span class="m">4</span>: enP44906s1: &lt;BROADCAST,MULTICAST,SLAVE,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc mq master eth0 state UP group default qlen <span class="m">1000</span>
+    link/ether <span class="m">60</span>:45:bd:a7:42:cc brd ff:ff:ff:ff:ff:ff
+    altname enP44906p0s2
+<span class="m">5</span>: ibP59423s2: &lt;BROADCAST,MULTICAST&gt; mtu <span class="m">4092</span> qdisc noop state DOWN group default qlen <span class="m">256</span>
+    link/infiniband <span class="m">00</span>:00:09:27:fe:80:00:00:00:00:00:00:00:15:5d:ff:fd:33:ff:16 brd <span class="m">00</span>:ff:ff:ff:ff:12:40:1b:80:1d:00:00:00:00:00:00:ff:ff:ff:ff
+    altname ibP59423p0s2
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>nvidia-smi topo -m
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>        GPU0  GPU1  GPU2  GPU3  GPU4  GPU5  GPU6  GPU7  mlx5_0  CPU Affinity  NUMA Affinity
+GPU0    X     NV2   NV1   NV2   NODE  NODE  NV1   NODE  NODE    <span class="m">0</span>-19          <span class="m">0</span>
+GPU1    NV2   X     NV2   NV1   NODE  NODE  NODE  NV1   NODE    <span class="m">0</span>-19          <span class="m">0</span>
+GPU2    NV1   NV2   X     NV1   NV2   NODE  NODE  NODE  NODE    <span class="m">0</span>-19          <span class="m">0</span>
+GPU3    NV2   NV1   NV1   X     NODE  NV2   NODE  NODE  NODE    <span class="m">0</span>-19          <span class="m">0</span>
+GPU4    NODE  NODE  NV2   NODE  X     NV1   NV1   NV2   NODE    <span class="m">0</span>-19          <span class="m">0</span>
+GPU5    NODE  NODE  NODE  NV2   NV1   X     NV2   NV1   NODE    <span class="m">0</span>-19          <span class="m">0</span>
+GPU6    NV1   NODE  NODE  NODE  NV1   NV2   X     NV2   NODE    <span class="m">0</span>-19          <span class="m">0</span>
+GPU7    NODE  NV1   NODE  NODE  NV2   NV1   NV2   X     NODE    <span class="m">0</span>-19          <span class="m">0</span>
+mlx5_0  NODE  NODE  NODE  NODE  NODE  NODE  NODE  NODE  X
+
+Legend:
+
+  <span class="nv">X</span>    <span class="o">=</span> Self
+  <span class="nv">SYS</span>  <span class="o">=</span> Connection traversing PCIe as well as the SMP interconnect between NUMA nodes <span class="o">(</span>e.g., QPI/UPI<span class="o">)</span>
+  <span class="nv">NODE</span> <span class="o">=</span> Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  <span class="nv">PHB</span>  <span class="o">=</span> Connection traversing PCIe as well as a PCIe Host Bridge <span class="o">(</span>typically the CPU<span class="o">)</span>
+  <span class="nv">PXB</span>  <span class="o">=</span> Connection traversing multiple PCIe bridges <span class="o">(</span>without traversing the PCIe Host Bridge<span class="o">)</span>
+  <span class="nv">PIX</span>  <span class="o">=</span> Connection traversing at most a single PCIe bridge
+  NV#  <span class="o">=</span> Connection traversing a bonded <span class="nb">set</span> of <span class="c1"># NVLinks</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="install-ucx-py-and-tools">
+<h3>Install UCX-Py and tools<a class="headerlink" href="#install-ucx-py-and-tools" title="Permalink to this heading">#</a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>wget https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh
+bash Mambaforge-Linux-x86_64.sh
+</pre></div>
+</div>
+<p>Accept the default and allow conda init to run. Then start a new shell.</p>
+<p>Create a conda environment (see <a class="reference external" href="https://ucx-py.readthedocs.io/en/latest/install.html">UCX-Py</a> docs)</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mamba create -n ucxpy -c rapidsai -c conda-forge -c nvidia <span class="nv">rapids</span><span class="o">=</span><span class="m">22</span>.10 <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9 <span class="nv">cudatoolkit</span><span class="o">=</span><span class="m">11</span>.5 ipython ucx-proc<span class="o">=</span>*<span class="o">=</span>gpu ucx ucx-py dask distributed numpy cupy pytest pynvml -y
+mamba activate ucxpy
+</pre></div>
+</div>
+<p>Clone UCX-Py repo locally</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/rapidsai/ucx-py.git
+<span class="nb">cd</span> ucx-py
+</pre></div>
+</div>
+</section>
+<section id="run-tests">
+<h3>Run Tests<a class="headerlink" href="#run-tests" title="Permalink to this heading">#</a></h3>
+<p>Start by running the UCX-Py test suite, from within the <code class="docutils literal notranslate"><span class="pre">ucx-py</span></code> repo:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pytest -vs tests/
+pytest -vs ucp/_libs/tests/
+</pre></div>
+</div>
+<p>Now check to see if InfiniBand works, for that you can run some of the benchmarks that we include in UCX-Py, for example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># cd out of the ucx-py directory</span>
+<span class="nb">cd</span> ..
+<span class="c1"># Let UCX pick the best transport (expecting NVLink when available,</span>
+<span class="c1"># otherwise InfiniBand, or TCP in worst case) on devices 0 and 1</span>
+python -m ucp.benchmarks.send_recv --server-dev <span class="m">0</span> --client-dev <span class="m">1</span> -o rmm --reuse-alloc -n 128MiB
+
+<span class="c1"># Force TCP-only on devices 0 and 1</span>
+<span class="nv">UCX_TLS</span><span class="o">=</span>tcp,cuda_copy python -m ucp.benchmarks.send_recv --server-dev <span class="m">0</span> --client-dev <span class="m">1</span> -o rmm --reuse-alloc -n 128MiB
+</pre></div>
+</div>
+<p>We expect the first case above to have much higher bandwidth than the second. If you happen to have both
+NVLink and InfiniBand connectivity, then you may limit to the specific transport by specifying <code class="docutils literal notranslate"><span class="pre">UCX_TLS</span></code>, e.g.:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># NVLink (if available) or TCP</span>
+<span class="nv">UCX_TLS</span><span class="o">=</span>tcp,cuda_copy,cuda_ipc
+
+<span class="c1"># InfiniBand (if available) or TCP</span>
+<span class="nv">UCX_TLS</span><span class="o">=</span>tcp,cuda_copy,rc
+</pre></div>
+</div>
+</section>
+</section>
+<section id="run-benchmarks">
+<h2>Run Benchmarks<a class="headerlink" href="#run-benchmarks" title="Permalink to this heading">#</a></h2>
+<p>Finally, let’s run the <a class="reference external" href="https://github.com/rapidsai/dask-cuda/blob/branch-22.12/dask_cuda/benchmarks/local_cudf_merge.py">merge benchmark</a> from <code class="docutils literal notranslate"><span class="pre">dask-cuda</span></code>.</p>
+<p>This benchmark uses Dask to perform a merge of two dataframes that are distributed across all the available GPUs on your
+VM. Merges are a challenging benchmark in a distributed setting since they require communication-intensive shuffle
+operations of the participating dataframes
+(see the <a class="reference external" href="https://docs.dask.org/en/stable/dataframe-best-practices.html#avoid-full-data-shuffling">Dask documentation</a>
+for more on this type of operation). To perform the merge, each dataframe is shuffled such that rows with the same join
+key appear on the same GPU. This results in an <a class="reference external" href="https://en.wikipedia.org/wiki/All-to-all_(parallel_pattern)">all-to-all</a>
+communication pattern which requires a lot of communication between the GPUs. As a result, network
+performance will be very important for the throughput of the benchmark.</p>
+<p>Below we are running for devices 0 through 7 (inclusive), you will want to adjust that for the number of devices available on your VM, the default
+is to run on GPU 0 only. Additionally, <code class="docutils literal notranslate"><span class="pre">--chunk-size</span> <span class="pre">100_000_000</span></code> is a safe value for 32GB GPUs, you may
+adjust that proportional to the size of the GPU you have (it scales linearly, so <code class="docutils literal notranslate"><span class="pre">50_000_000</span></code> should
+be good for 16GB or <code class="docutils literal notranslate"><span class="pre">150_000_000</span></code> for 48GB).</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Default Dask TCP communication protocol</span>
+python -m dask_cuda.benchmarks.local_cudf_merge --devs <span class="m">0</span>,1,2,3,4,5,6,7 --chunk-size 100_000_000 --no-show-p2p-bandwidth
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Merge benchmark
+--------------------------------------------------------------------------------
+Backend                   <span class="p">|</span> dask
+Merge <span class="nb">type</span>                <span class="p">|</span> gpu
+Rows-per-chunk            <span class="p">|</span> <span class="m">100000000</span>
+Base-chunks               <span class="p">|</span> <span class="m">8</span>
+Other-chunks              <span class="p">|</span> <span class="m">8</span>
+Broadcast                 <span class="p">|</span> default
+Protocol                  <span class="p">|</span> tcp
+Device<span class="o">(</span>s<span class="o">)</span>                 <span class="p">|</span> <span class="m">0</span>,1,2,3,4,5,6,7
+RMM Pool                  <span class="p">|</span> True
+Frac-match                <span class="p">|</span> <span class="m">0</span>.3
+Worker thread<span class="o">(</span>s<span class="o">)</span>          <span class="p">|</span> <span class="m">1</span>
+Data processed            <span class="p">|</span> <span class="m">23</span>.84 GiB
+Number of workers         <span class="p">|</span> <span class="nv">8</span>
+<span class="o">================================================================================</span>
+Wall clock                <span class="p">|</span> Throughput
+--------------------------------------------------------------------------------
+<span class="m">48</span>.51 s                   <span class="p">|</span> <span class="m">503</span>.25 MiB/s
+<span class="m">47</span>.85 s                   <span class="p">|</span> <span class="m">510</span>.23 MiB/s
+<span class="m">41</span>.20 s                   <span class="p">|</span> <span class="m">592</span>.57 MiB/s
+<span class="o">================================================================================</span>
+Throughput                <span class="p">|</span> <span class="m">532</span>.43 MiB/s +/- <span class="m">22</span>.13 MiB/s
+Bandwidth                 <span class="p">|</span> <span class="m">44</span>.76 MiB/s +/- <span class="m">0</span>.93 MiB/s
+Wall clock                <span class="p">|</span> <span class="m">45</span>.85 s +/- <span class="m">3</span>.30 s
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># UCX protocol</span>
+python -m dask_cuda.benchmarks.local_cudf_merge --devs <span class="m">0</span>,1,2,3,4,5,6,7 --chunk-size 100_000_000 --protocol ucx --no-show-p2p-bandwidth
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Merge benchmark
+--------------------------------------------------------------------------------
+Backend                   <span class="p">|</span> dask
+Merge <span class="nb">type</span>                <span class="p">|</span> gpu
+Rows-per-chunk            <span class="p">|</span> <span class="m">100000000</span>
+Base-chunks               <span class="p">|</span> <span class="m">8</span>
+Other-chunks              <span class="p">|</span> <span class="m">8</span>
+Broadcast                 <span class="p">|</span> default
+Protocol                  <span class="p">|</span> ucx
+Device<span class="o">(</span>s<span class="o">)</span>                 <span class="p">|</span> <span class="m">0</span>,1,2,3,4,5,6,7
+RMM Pool                  <span class="p">|</span> True
+Frac-match                <span class="p">|</span> <span class="m">0</span>.3
+TCP                       <span class="p">|</span> None
+InfiniBand                <span class="p">|</span> None
+NVLink                    <span class="p">|</span> None
+Worker thread<span class="o">(</span>s<span class="o">)</span>          <span class="p">|</span> <span class="m">1</span>
+Data processed            <span class="p">|</span> <span class="m">23</span>.84 GiB
+Number of workers         <span class="p">|</span> <span class="nv">8</span>
+<span class="o">================================================================================</span>
+Wall clock                <span class="p">|</span> Throughput
+--------------------------------------------------------------------------------
+<span class="m">9</span>.57 s                    <span class="p">|</span> <span class="m">2</span>.49 GiB/s
+<span class="m">6</span>.01 s                    <span class="p">|</span> <span class="m">3</span>.96 GiB/s
+<span class="m">9</span>.80 s                    <span class="p">|</span> <span class="m">2</span>.43 GiB/s
+<span class="o">================================================================================</span>
+Throughput                <span class="p">|</span> <span class="m">2</span>.82 GiB/s +/- <span class="m">341</span>.13 MiB/s
+Bandwidth                 <span class="p">|</span> <span class="m">159</span>.89 MiB/s +/- <span class="m">8</span>.96 MiB/s
+Wall clock                <span class="p">|</span> <span class="m">8</span>.46 s +/- <span class="m">1</span>.73 s
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#build-a-virtual-machine">
+   Build a Virtual Machine
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#install-software">
+   Install Software
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#nvidia-drivers">
+     NVIDIA Drivers
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#infiniband-driver">
+     InfiniBand Driver
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#enable-ipoib">
+       Enable IPoIB
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#check-ib">
+       Check IB
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#install-ucx-py-and-tools">
+     Install UCX-Py and tools
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#run-tests">
+     Run Tests
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#run-benchmarks">
+   Run Benchmarks
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../../_sources/guides/azure/infiniband.md.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2022, NVIDIA.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="theme-version">
+    Built with the
+    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
+        PyData Sphinx Theme
+    </a>
+    0.12.0.
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>
