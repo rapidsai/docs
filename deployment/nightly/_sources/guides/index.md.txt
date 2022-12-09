@@ -1,7 +1,22 @@
+---
+html_theme.sidebar_secondary.remove: true
+---
+
 # Guides
 
 `````{grid} 1 2 2 3
 :gutter: 2 2 2 2
+
+````{grid-item-card}
+:link: mig
+:link-type: doc
+Multi-Instance GPUs
+^^^
+Use RAPIDS with Multi-Instance GPUs
+
+{bdg-primary}`Dask Cluster`
+{bdg-primary}`XGBoost with Dask Cluster`
+````
 
 ````{grid-item-card}
 :link: azure/infiniband
@@ -17,10 +32,9 @@ How to setup InfiniBand on Azure.
 
 ```{toctree}
 :maxdepth: 2
-:caption: Platforms
+:caption: Guides
 :hidden:
 
-kubernetes
-kubeflow
-databricks
+mig
+azure/infiniband
 ```
