@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en"><head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>dask_cuda.explicit_comms.comms &mdash; dask-cuda 22.12.00a0+g2c99f5a documentation</title>
+  <title>dask_cuda.explicit_comms.comms &mdash; dask-cuda 22.12.00a0+g8c87288 documentation</title>
       <link href="../../../_static/pygments.css" rel="stylesheet" type="text/css">
       <link href="../../../_static/css/theme.css" rel="stylesheet" type="text/css">
       <link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet" type="text/css">
@@ -86,10 +86,11 @@
 <span class="kn">import</span> <span class="nn">contextlib</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">uuid</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">distributed.comm</span>
-<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">default_client</span><span class="p">,</span> <span class="n">get_worker</span>
+<span class="kn">from</span> <span class="nn">dask.utils</span> <span class="kn">import</span> <span class="n">stringify</span>
+<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">Worker</span><span class="p">,</span> <span class="n">default_client</span><span class="p">,</span> <span class="n">get_worker</span>
 <span class="kn">from</span> <span class="nn">distributed.comm.addressing</span> <span class="kn">import</span> <span class="n">parse_address</span><span class="p">,</span> <span class="n">parse_host_port</span><span class="p">,</span> <span class="n">unparse_address</span>
 
 <span class="n">_default_comms</span> <span class="o">=</span> <span class="kc">None</span>
@@ -156,7 +157,7 @@
 <span class="sd">    state: dict</span>
 <span class="sd">        Either a single state dict or a dict of state dict</span>
 <span class="sd">    """</span>
-    <span class="n">worker</span> <span class="o">=</span> <span class="n">get_worker</span><span class="p">()</span>
+    <span class="n">worker</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">get_worker</span><span class="p">()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="s2">"_explicit_comm_state"</span><span class="p">):</span>
         <span class="n">worker</span><span class="o">.</span><span class="n">_explicit_comm_state</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">sessionId</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -228,6 +229,20 @@
     <span class="k">assert</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"loop"</span><span class="p">]</span> <span class="ow">is</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
     <span class="n">session_state</span><span class="p">[</span><span class="s2">"lf"</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
     <span class="k">del</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"lf"</span><span class="p">]</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_stage_keys</span><span class="p">(</span><span class="n">session_state</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">keys</span><span class="p">:</span> <span class="nb">set</span><span class="p">):</span>
+    <span class="n">worker</span><span class="p">:</span> <span class="n">Worker</span> <span class="o">=</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"worker"</span><span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">my_keys</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">stages</span> <span class="o">=</span> <span class="n">session_state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"stages"</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">stage</span> <span class="o">=</span> <span class="n">stages</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">my_keys</span><span class="p">:</span>
+        <span class="n">stage</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">stages</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">stage</span>
+    <span class="n">session_state</span><span class="p">[</span><span class="s2">"stages"</span><span class="p">]</span> <span class="o">=</span> <span class="n">stages</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">session_state</span><span class="p">[</span><span class="s2">"rank"</span><span class="p">],</span> <span class="n">my_keys</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="CommsContext"><a class="viewcode-back" href="../../../api.html#dask_cuda.explicit_comms.comms.CommsContext">[docs]</a><span class="k">class</span> <span class="nc">CommsContext</span><span class="p">:</span>
@@ -342,7 +357,59 @@
                         <span class="n">pure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span></div></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CommsContext.stage_keys"><a class="viewcode-back" href="../../../api.html#dask_cuda.explicit_comms.comms.CommsContext.stage_keys">[docs]</a>    <span class="k">def</span> <span class="nf">stage_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">keys</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Hashable</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">set</span><span class="p">]:</span>
+        <span class="sd">"""Staging keys on workers under the given name</span>
+
+<span class="sd">        In an explicit-comms task, use `pop_staging_area(..., name)` to access</span>
+<span class="sd">        the staged keys and the associated data.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        In the context of explicit-comms, staging is the act of duplicating the</span>
+<span class="sd">        responsibility of Dask keys. When staging a key, the worker owning the</span>
+<span class="sd">        key (as assigned by the Dask scheduler) save a reference to the key and</span>
+<span class="sd">        the associated data to its local staging area. From this point on, if</span>
+<span class="sd">        the scheduler cancels the key, the worker (and the task running on the</span>
+<span class="sd">        worker) now has exclusive access to the key and the associated data.</span>
+<span class="sd">        This way, staging makes it possible for long running explicit-comms tasks</span>
+<span class="sd">        to free input data ASAP.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name: str</span>
+<span class="sd">            Name for the staging area</span>
+<span class="sd">        keys: iterable</span>
+<span class="sd">            The keys to stage</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            dict that maps each worker-rank to the workers set of staged keys</span>
+<span class="sd">        """</span>
+        <span class="n">key_set</span> <span class="o">=</span> <span class="p">{</span><span class="n">stringify</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">_stage_keys</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">key_set</span><span class="p">))</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">pop_staging_area</span><span class="p">(</span><span class="n">session_state</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="sd">"""Pop the staging area called `name`</span>
+
+<span class="sd">    This function must be called within a running explicit-comms task.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    session_state: dict</span>
+<span class="sd">        Worker session state</span>
+<span class="sd">    name: str</span>
+<span class="sd">        Name for the staging area</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        The staging area, which is a dict that maps keys to their data.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">session_state</span><span class="p">[</span><span class="s2">"stages"</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </pre></div>
 
            </div>
