@@ -189,8 +189,7 @@ documentation for more info</p>
 
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
-<script type="application/javascript">
-(function(root) {
+<script type="application/javascript">(function(root) {
   function now() {
     return new Date();
   }
@@ -261,13 +260,28 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {}, 'shim': {}});
-      
-      root._bokeh_is_loading = css_urls.length + 0;
+      window.requirejs.config({'packages': {}, 'paths': {'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5', 'notyf': 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
+      require(["gridstack"], function(GridStack) {
+	window.GridStack = GridStack
+	on_load()
+      })
+      require(["notyf"], function() {
+	on_load()
+      })
+      root._bokeh_is_loading = css_urls.length + 2;
     } else {
       root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
-    }
-    for (var i = 0; i < js_urls.length; i++) {
+    }    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    if (((window['Notyf'] !== undefined) && (!(window['Notyf'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/notificationarea/notyf@3/notyf.min.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    for (var i = 0; i < js_urls.length; i++) {
       var url = js_urls[i];
       if (skip.indexOf(url) >= 0) {
 	if (!window.requirejs) {
@@ -311,17 +325,15 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://unpkg.com/@holoviz/panel@0.12.7/dist/panel.min.js"];
+  var js_urls = ["https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://unpkg.com/@holoviz/panel@0.14.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://unpkg.com/@holoviz/panel@0.12.7/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/markdown.css"];
-  var inline_js = [
-    function(Bokeh) {
-      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\");\n      max-height: 400px;\n    }\n    ");
-    },
-    function(Bokeh) {
+  var css_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/css/widgets.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/loading.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/json.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/dataframe.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/alerts.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/card.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/debugger.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/markdown.css"];
+  var inline_js = [    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arc:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJtYXJnaW46IGF1dG87IGJhY2tncm91bmQ6IG5vbmU7IGRpc3BsYXk6IGJsb2NrOyBzaGFwZS1yZW5kZXJpbmc6IGF1dG87IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzNjM2MzIiBzdHJva2Utd2lkdGg9IjEwIiByPSIzNSIgc3Ryb2tlLWRhc2hhcnJheT0iMTY0LjkzMzYxNDMxMzQ2NDE1IDU2Ljk3Nzg3MTQzNzgyMTM4Ij4gICAgPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiBkdXI9IjFzIiB2YWx1ZXM9IjAgNTAgNTA7MzYwIDUwIDUwIiBrZXlUaW1lcz0iMDsxIj48L2FuaW1hdGVUcmFuc2Zvcm0+ICA8L2NpcmNsZT48L3N2Zz4=\");\n      background-size: auto calc(min(50%, 400px));\n    }\n    ");
+    },    function(Bokeh) {
       Bokeh.set_log_level("info");
     },
-    function(Bokeh) {} // ensure no trailing comma for IE
+function(Bokeh) {} // ensure no trailing comma for IE
   ];
 
   function run_inline_js() {
@@ -584,7 +596,12 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script></div>
+</script><div class="output text_html"><style>.bk-root, .bk-root .bk:before, .bk-root .bk:after {
+  font-family: var(--jp-ui-font-size1);
+  font-size: var(--jp-ui-font-size1);
+  color: var(--jp-ui-font-color1);
+}
+</style></div></div>
 </div>
 <section id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this heading">&para;</a></h3>
@@ -603,8 +620,7 @@ if (window.Jupyter !== undefined) {
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/javascript">
-(function(root) {
+<script type="application/javascript">(function(root) {
   function now() {
     return new Date();
   }
@@ -675,52 +691,62 @@ if (window.Jupyter !== undefined) {
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
-      
-      require(["deck.gl"], function(deck) {
-	
+      window.requirejs.config({'packages': {}, 'paths': {'h3': 'https://cdn.jsdelivr.net/npm/h3-js@3.7.2/dist/h3-js.umd', 'deck-gl': 'https://cdn.jsdelivr.net/npm/deck.gl@8.6.7/dist.min', 'deck-json': 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.6.7/dist.min', 'loader-csv': 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@3.1.7/dist/dist.min', 'loader-json': 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@3.1.7/dist/dist.min', 'loader-tiles': 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@3.1.7/dist/dist.min', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.6.1/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5', 'notyf': 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min'}, 'shim': {'deck-json': {'deps': ['deck-gl']}, 'deck-gl': {'deps': ['h3']}, 'gridstack': {'exports': 'GridStack'}}});
+      require(["h3"], function(h3) {
+	window.h3 = h3
+	on_load()
+      })
+      require(["deck-gl"], function(deck) {
 	window.deck = deck
-	
 	on_load()
       })
-      
+      require(["deck-json"], function() {
+	on_load()
+      })
+      require(["loader-csv"], function() {
+	on_load()
+      })
+      require(["loader-json"], function() {
+	on_load()
+      })
+      require(["loader-tiles"], function() {
+	on_load()
+      })
       require(["mapbox-gl"], function(mapboxgl) {
-	
 	window.mapboxgl = mapboxgl
-	
 	on_load()
       })
-      
       require(["gridstack"], function(GridStack) {
-	
 	window.GridStack = GridStack
-	
 	on_load()
       })
-      
-      root._bokeh_is_loading = css_urls.length + 3;
+      require(["notyf"], function() {
+	on_load()
+      })
+      root._bokeh_is_loading = css_urls.length + 9;
     } else {
       root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
-    }
-    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
+    }    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+    }    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
+    }    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    for (var i = 0; i < js_urls.length; i++) {
+    }    if (((window['Notyf'] !== undefined) && (!(window['Notyf'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/notificationarea/notyf@3/notyf.min.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    for (var i = 0; i < js_urls.length; i++) {
       var url = js_urls[i];
       if (skip.indexOf(url) >= 0) {
 	if (!window.requirejs) {
@@ -764,32 +790,24 @@ if (window.Jupyter !== undefined) {
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.7/dist/panel.min.js"];
+  var js_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.14.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/markdown.css"];
-  var inline_js = [
-    function(Bokeh) {
-      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\");\n      max-height: 400px;\n    }\n    ");
-    },
-    function(Bokeh) {
+  var css_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/widgets.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/loading.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/json.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/dataframe.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/alerts.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/card.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/debugger.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/markdown.css"];
+  var inline_js = [    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arc:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJtYXJnaW46IGF1dG87IGJhY2tncm91bmQ6IG5vbmU7IGRpc3BsYXk6IGJsb2NrOyBzaGFwZS1yZW5kZXJpbmc6IGF1dG87IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzNjM2MzIiBzdHJva2Utd2lkdGg9IjEwIiByPSIzNSIgc3Ryb2tlLWRhc2hhcnJheT0iMTY0LjkzMzYxNDMxMzQ2NDE1IDU2Ljk3Nzg3MTQzNzgyMTM4Ij4gICAgPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiBkdXI9IjFzIiB2YWx1ZXM9IjAgNTAgNTA7MzYwIDUwIDUwIiBrZXlUaW1lcz0iMDsxIj48L2FuaW1hdGVUcmFuc2Zvcm0+ICA8L2NpcmNsZT48L3N2Zz4=\");\n      background-size: auto calc(min(50%, 400px));\n    }\n    ");
+    },    function(Bokeh) {
       inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.multi-select{\n    color: white;\n    z-index: 100;\n    background: rgba(44,43,43,0.5);\n    border-radius: 1px;\n    width: 120px !important;\n    height: 30px !important;\n}\n.multi-select > .bk {\n    padding: 5px;\n    width: 120px !important;\n    height: 30px !important;\n}\n\n.deck-chart {\n    z-index: 10;\n    position: initial !important;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       Bokeh.set_log_level("info");
     },
-    
     function(Bokeh) {
       (function(root, factory) {
           factory(root["Bokeh"]);
@@ -868,7 +886,7 @@ if (window.Jupyter !== undefined) {
       });
 
     },
-    function(Bokeh) {} // ensure no trailing comma for IE
+function(Bokeh) {} // ensure no trailing comma for IE
   ];
 
   function run_inline_js() {
@@ -1131,23 +1149,37 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="docutils container">
+</script><div class="output text_html"><style>.bk-root, .bk-root .bk:before, .bk-root .bk:after {
+  font-family: var(--jp-ui-font-size1);
+  font-size: var(--jp-ui-font-size1);
+  color: var(--jp-ui-font-color1);
+}
+</style></div><div class="docutils container">
 </div>
 <div class="output text_html"><div id="1002">
-  <div class="bk-root" data-root-id="1002" id="8b32d9e8-68e3-425c-813c-8137a6ea5a82"></div>
+  <div class="bk-root" data-root-id="1002" id="bd2cb72c-67b9-49e7-99fe-13f28767c436"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"7b2f6190-cbd5-483a-a67a-3647e198c0e1":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"children":[{"id":"1004"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01560","sizing_mode":"stretch_width"},"id":"1003","type":"Row"},{"attributes":{"reload":false},"id":"1007","type":"panel.models.location.Location"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01562","sizing_mode":"stretch_width","text":"key_range_slider"},"id":"1004","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"600ce7f7651748e3a202d8d4671bf6dc","comm_id":"4500a93923a048f599cee1e90c2f77c9","plot_id":"1002"},"id":"1006","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1003"},{"id":"1005"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01561","sizing_mode":"scale_width","width":400},"id":"1002","type":"panel.models.layout.Card"},{"attributes":{"end":4,"margin":[5,10,5,10],"start":0,"step":0.1,"value":[0,4]},"id":"1005","type":"RangeSlider"}],"root_ids":["1002","1006","1007"]},"title":"Bokeh Application","version":"2.4.3"}};
-    var render_items = [{"docid":"7b2f6190-cbd5-483a-a67a-3647e198c0e1","root_ids":["1002"],"roots":{"1002":"8b32d9e8-68e3-425c-813c-8137a6ea5a82"}}];
+    var docs_json = {"09b0d292-ff77-45b4-9ec2-a0c96a10ea2a":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]},{"extends":null,"module":null,"name":"click1","overrides":[],"properties":[{"default":"","kind":null,"name":"terminal_output"},{"default":"","kind":null,"name":"debug_name"},{"default":0,"kind":null,"name":"clears"}]},{"extends":null,"module":null,"name":"NotificationAreaBase1","overrides":[],"properties":[{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"}]},{"extends":null,"module":null,"name":"NotificationArea1","overrides":[],"properties":[{"default":[],"kind":null,"name":"notifications"},{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"},{"default":[{"background":"#ffc107","icon":{"className":"fas fa-exclamation-triangle","color":"white","tagName":"i"},"type":"warning"},{"background":"#007bff","icon":{"className":"fas fa-info-circle","color":"white","tagName":"i"},"type":"info"}],"kind":null,"name":"types"}]},{"extends":null,"module":null,"name":"Notification","overrides":[],"properties":[{"default":null,"kind":null,"name":"background"},{"default":3000,"kind":null,"name":"duration"},{"default":null,"kind":null,"name":"icon"},{"default":"","kind":null,"name":"message"},{"default":null,"kind":null,"name":"notification_type"},{"default":false,"kind":null,"name":"_destroyed"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"children":[{"id":"1004"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01560","sizing_mode":"stretch_width"},"id":"1003","type":"Row"},{"attributes":{"end":4,"margin":[5,10,5,10],"start":0,"step":0.1,"value":[0,4]},"id":"1005","type":"RangeSlider"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01562","sizing_mode":"stretch_width","text":"key_range_slider"},"id":"1004","type":"panel.models.markup.HTML"},{"attributes":{"reload":false},"id":"1007","type":"panel.models.location.Location"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1003"},{"id":"1005"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01561","sizing_mode":"scale_width","width":400},"id":"1002","type":"panel.models.layout.Card"},{"attributes":{"client_comm_id":"bb737409c7df4300a5198f522eae84b0","comm_id":"20f2b2a8048e4a9a98d69c3a869c228d","plot_id":"1002"},"id":"1006","type":"panel.models.comm_manager.CommManager"}],"root_ids":["1002","1006","1007"]},"title":"Bokeh Application","version":"2.4.3"}};
+    var render_items = [{"docid":"09b0d292-ff77-45b4-9ec2-a0c96a10ea2a","root_ids":["1002"],"roots":{"1002":"bd2cb72c-67b9-49e7-99fe-13f28767c436"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
+    for (const render_item of render_items) {
+      for (const root_id of render_item.root_ids) {
+	const id_el = document.getElementById(root_id)
+	if (id_el.children.length && (id_el.children[0].className === 'bk-root')) {
+	  const root_el = id_el.children[0]
+	  root_el.id = root_el.id + '-rendered'
+	}
+      }
+    }
   }
-  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && ( root['deck'] !== undefined)) {
     embed_document(root);
   } else {
     var attempts = 0;
     var timer = setInterval(function(root) {
-      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && (root['deck'] !== undefined)) {
         clearInterval(timer);
         embed_document(root);
       } else if (document.readyState == "complete") {
@@ -1207,8 +1239,7 @@ DateRangeSlider documentation for more info</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/javascript">
-(function(root) {
+<script type="application/javascript">(function(root) {
   function now() {
     return new Date();
   }
@@ -1279,52 +1310,62 @@ DateRangeSlider documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
-      
-      require(["deck.gl"], function(deck) {
-	
+      window.requirejs.config({'packages': {}, 'paths': {'h3': 'https://cdn.jsdelivr.net/npm/h3-js@3.7.2/dist/h3-js.umd', 'deck-gl': 'https://cdn.jsdelivr.net/npm/deck.gl@8.6.7/dist.min', 'deck-json': 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.6.7/dist.min', 'loader-csv': 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@3.1.7/dist/dist.min', 'loader-json': 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@3.1.7/dist/dist.min', 'loader-tiles': 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@3.1.7/dist/dist.min', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.6.1/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5', 'notyf': 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min'}, 'shim': {'deck-json': {'deps': ['deck-gl']}, 'deck-gl': {'deps': ['h3']}, 'gridstack': {'exports': 'GridStack'}}});
+      require(["h3"], function(h3) {
+	window.h3 = h3
+	on_load()
+      })
+      require(["deck-gl"], function(deck) {
 	window.deck = deck
-	
 	on_load()
       })
-      
+      require(["deck-json"], function() {
+	on_load()
+      })
+      require(["loader-csv"], function() {
+	on_load()
+      })
+      require(["loader-json"], function() {
+	on_load()
+      })
+      require(["loader-tiles"], function() {
+	on_load()
+      })
       require(["mapbox-gl"], function(mapboxgl) {
-	
 	window.mapboxgl = mapboxgl
-	
 	on_load()
       })
-      
       require(["gridstack"], function(GridStack) {
-	
 	window.GridStack = GridStack
-	
 	on_load()
       })
-      
-      root._bokeh_is_loading = css_urls.length + 3;
+      require(["notyf"], function() {
+	on_load()
+      })
+      root._bokeh_is_loading = css_urls.length + 9;
     } else {
       root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
-    }
-    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
+    }    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+    }    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
+    }    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    for (var i = 0; i < js_urls.length; i++) {
+    }    if (((window['Notyf'] !== undefined) && (!(window['Notyf'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/notificationarea/notyf@3/notyf.min.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    for (var i = 0; i < js_urls.length; i++) {
       var url = js_urls[i];
       if (skip.indexOf(url) >= 0) {
 	if (!window.requirejs) {
@@ -1368,32 +1409,24 @@ DateRangeSlider documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.7/dist/panel.min.js"];
+  var js_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.14.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/markdown.css"];
-  var inline_js = [
-    function(Bokeh) {
-      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\");\n      max-height: 400px;\n    }\n    ");
-    },
-    function(Bokeh) {
+  var css_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/widgets.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/loading.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/json.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/dataframe.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/alerts.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/card.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/debugger.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/markdown.css"];
+  var inline_js = [    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arc:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJtYXJnaW46IGF1dG87IGJhY2tncm91bmQ6IG5vbmU7IGRpc3BsYXk6IGJsb2NrOyBzaGFwZS1yZW5kZXJpbmc6IGF1dG87IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzNjM2MzIiBzdHJva2Utd2lkdGg9IjEwIiByPSIzNSIgc3Ryb2tlLWRhc2hhcnJheT0iMTY0LjkzMzYxNDMxMzQ2NDE1IDU2Ljk3Nzg3MTQzNzgyMTM4Ij4gICAgPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiBkdXI9IjFzIiB2YWx1ZXM9IjAgNTAgNTA7MzYwIDUwIDUwIiBrZXlUaW1lcz0iMDsxIj48L2FuaW1hdGVUcmFuc2Zvcm0+ICA8L2NpcmNsZT48L3N2Zz4=\");\n      background-size: auto calc(min(50%, 400px));\n    }\n    ");
+    },    function(Bokeh) {
       inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.multi-select{\n    color: white;\n    z-index: 100;\n    background: rgba(44,43,43,0.5);\n    border-radius: 1px;\n    width: 120px !important;\n    height: 30px !important;\n}\n.multi-select > .bk {\n    padding: 5px;\n    width: 120px !important;\n    height: 30px !important;\n}\n\n.deck-chart {\n    z-index: 10;\n    position: initial !important;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       Bokeh.set_log_level("info");
     },
-    
     function(Bokeh) {
       (function(root, factory) {
           factory(root["Bokeh"]);
@@ -1472,7 +1505,7 @@ DateRangeSlider documentation for more info</p>
       });
 
     },
-    function(Bokeh) {} // ensure no trailing comma for IE
+function(Bokeh) {} // ensure no trailing comma for IE
   ];
 
   function run_inline_js() {
@@ -1735,23 +1768,37 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="docutils container">
+</script><div class="output text_html"><style>.bk-root, .bk-root .bk:before, .bk-root .bk:after {
+  font-family: var(--jp-ui-font-size1);
+  font-size: var(--jp-ui-font-size1);
+  color: var(--jp-ui-font-color1);
+}
+</style></div><div class="docutils container">
 </div>
 <div class="output text_html"><div id="1008">
-  <div class="bk-root" data-root-id="1008" id="0781dc4b-e4f6-4c83-a2a3-9651f9bce5d8"></div>
+  <div class="bk-root" data-root-id="1008" id="a98b02e8-2888-4995-b1ea-338d53d1e31c"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"1d04a4f0-a924-4807-aa36-835e994ee316":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"end":1582156800000.0,"margin":[5,10,5,10],"sizing_mode":"scale_width","start":1577836800000.0,"value":[1577836800000.0,1582156800000.0],"width":400},"id":"1011","type":"DateRangeSlider"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1009"},{"id":"1011"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01573","sizing_mode":"scale_width","width":400},"id":"1008","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01574","sizing_mode":"stretch_width","text":"time_date_range_slider"},"id":"1010","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"031280aca9fd4bd397d82dc1d1612042","comm_id":"6ae3c9662a854b4fbfa3b0077069dd45","plot_id":"1008"},"id":"1012","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1010"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01572","sizing_mode":"stretch_width"},"id":"1009","type":"Row"}],"root_ids":["1008","1012"]},"title":"Bokeh Application","version":"2.4.3"}};
-    var render_items = [{"docid":"1d04a4f0-a924-4807-aa36-835e994ee316","root_ids":["1008"],"roots":{"1008":"0781dc4b-e4f6-4c83-a2a3-9651f9bce5d8"}}];
+    var docs_json = {"d6067292-5be2-4933-a6c3-b805ffd2934e":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]},{"extends":null,"module":null,"name":"click1","overrides":[],"properties":[{"default":"","kind":null,"name":"terminal_output"},{"default":"","kind":null,"name":"debug_name"},{"default":0,"kind":null,"name":"clears"}]},{"extends":null,"module":null,"name":"NotificationAreaBase1","overrides":[],"properties":[{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"}]},{"extends":null,"module":null,"name":"NotificationArea1","overrides":[],"properties":[{"default":[],"kind":null,"name":"notifications"},{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"},{"default":[{"background":"#ffc107","icon":{"className":"fas fa-exclamation-triangle","color":"white","tagName":"i"},"type":"warning"},{"background":"#007bff","icon":{"className":"fas fa-info-circle","color":"white","tagName":"i"},"type":"info"}],"kind":null,"name":"types"}]},{"extends":null,"module":null,"name":"Notification","overrides":[],"properties":[{"default":null,"kind":null,"name":"background"},{"default":3000,"kind":null,"name":"duration"},{"default":null,"kind":null,"name":"icon"},{"default":"","kind":null,"name":"message"},{"default":null,"kind":null,"name":"notification_type"},{"default":false,"kind":null,"name":"_destroyed"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"end":1582156800000.0,"margin":[5,10,5,10],"sizing_mode":"scale_width","start":1577836800000.0,"value":[1577836800000.0,1582156800000.0],"width":400},"id":"1011","type":"DateRangeSlider"},{"attributes":{"client_comm_id":"0a446808c1a441639007ee29724847b5","comm_id":"c9b0a630aac54a999d1f94c582c4273c","plot_id":"1008"},"id":"1012","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01574","sizing_mode":"stretch_width","text":"time_date_range_slider"},"id":"1010","type":"panel.models.markup.HTML"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1009"},{"id":"1011"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01573","sizing_mode":"scale_width","width":400},"id":"1008","type":"panel.models.layout.Card"},{"attributes":{"children":[{"id":"1010"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01572","sizing_mode":"stretch_width"},"id":"1009","type":"Row"}],"root_ids":["1008","1012"]},"title":"Bokeh Application","version":"2.4.3"}};
+    var render_items = [{"docid":"d6067292-5be2-4933-a6c3-b805ffd2934e","root_ids":["1008"],"roots":{"1008":"a98b02e8-2888-4995-b1ea-338d53d1e31c"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
+    for (const render_item of render_items) {
+      for (const root_id of render_item.root_ids) {
+	const id_el = document.getElementById(root_id)
+	if (id_el.children.length && (id_el.children[0].className === 'bk-root')) {
+	  const root_el = id_el.children[0]
+	  root_el.id = root_el.id + '-rendered'
+	}
+      }
+    }
   }
-  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && ( root['deck'] !== undefined) && ( root['deck'] !== undefined)) {
     embed_document(root);
   } else {
     var attempts = 0;
     var timer = setInterval(function(root) {
-      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && (root['deck'] !== undefined) && (root['deck'] !== undefined)) {
         clearInterval(timer);
         embed_document(root);
       } else if (document.readyState == "complete") {
@@ -1809,8 +1856,7 @@ documentation for more info</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/javascript">
-(function(root) {
+<script type="application/javascript">(function(root) {
   function now() {
     return new Date();
   }
@@ -1881,52 +1927,62 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
-      
-      require(["deck.gl"], function(deck) {
-	
+      window.requirejs.config({'packages': {}, 'paths': {'h3': 'https://cdn.jsdelivr.net/npm/h3-js@3.7.2/dist/h3-js.umd', 'deck-gl': 'https://cdn.jsdelivr.net/npm/deck.gl@8.6.7/dist.min', 'deck-json': 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.6.7/dist.min', 'loader-csv': 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@3.1.7/dist/dist.min', 'loader-json': 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@3.1.7/dist/dist.min', 'loader-tiles': 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@3.1.7/dist/dist.min', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.6.1/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5', 'notyf': 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min'}, 'shim': {'deck-json': {'deps': ['deck-gl']}, 'deck-gl': {'deps': ['h3']}, 'gridstack': {'exports': 'GridStack'}}});
+      require(["h3"], function(h3) {
+	window.h3 = h3
+	on_load()
+      })
+      require(["deck-gl"], function(deck) {
 	window.deck = deck
-	
 	on_load()
       })
-      
+      require(["deck-json"], function() {
+	on_load()
+      })
+      require(["loader-csv"], function() {
+	on_load()
+      })
+      require(["loader-json"], function() {
+	on_load()
+      })
+      require(["loader-tiles"], function() {
+	on_load()
+      })
       require(["mapbox-gl"], function(mapboxgl) {
-	
 	window.mapboxgl = mapboxgl
-	
 	on_load()
       })
-      
       require(["gridstack"], function(GridStack) {
-	
 	window.GridStack = GridStack
-	
 	on_load()
       })
-      
-      root._bokeh_is_loading = css_urls.length + 3;
+      require(["notyf"], function() {
+	on_load()
+      })
+      root._bokeh_is_loading = css_urls.length + 9;
     } else {
       root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
-    }
-    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
+    }    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+    }    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
+    }    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    for (var i = 0; i < js_urls.length; i++) {
+    }    if (((window['Notyf'] !== undefined) && (!(window['Notyf'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/notificationarea/notyf@3/notyf.min.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    for (var i = 0; i < js_urls.length; i++) {
       var url = js_urls[i];
       if (skip.indexOf(url) >= 0) {
 	if (!window.requirejs) {
@@ -1970,32 +2026,24 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.7/dist/panel.min.js"];
+  var js_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.14.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/markdown.css"];
-  var inline_js = [
-    function(Bokeh) {
-      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\");\n      max-height: 400px;\n    }\n    ");
-    },
-    function(Bokeh) {
+  var css_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/widgets.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/loading.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/json.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/dataframe.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/alerts.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/card.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/debugger.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/markdown.css"];
+  var inline_js = [    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arc:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJtYXJnaW46IGF1dG87IGJhY2tncm91bmQ6IG5vbmU7IGRpc3BsYXk6IGJsb2NrOyBzaGFwZS1yZW5kZXJpbmc6IGF1dG87IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzNjM2MzIiBzdHJva2Utd2lkdGg9IjEwIiByPSIzNSIgc3Ryb2tlLWRhc2hhcnJheT0iMTY0LjkzMzYxNDMxMzQ2NDE1IDU2Ljk3Nzg3MTQzNzgyMTM4Ij4gICAgPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiBkdXI9IjFzIiB2YWx1ZXM9IjAgNTAgNTA7MzYwIDUwIDUwIiBrZXlUaW1lcz0iMDsxIj48L2FuaW1hdGVUcmFuc2Zvcm0+ICA8L2NpcmNsZT48L3N2Zz4=\");\n      background-size: auto calc(min(50%, 400px));\n    }\n    ");
+    },    function(Bokeh) {
       inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.multi-select{\n    color: white;\n    z-index: 100;\n    background: rgba(44,43,43,0.5);\n    border-radius: 1px;\n    width: 120px !important;\n    height: 30px !important;\n}\n.multi-select > .bk {\n    padding: 5px;\n    width: 120px !important;\n    height: 30px !important;\n}\n\n.deck-chart {\n    z-index: 10;\n    position: initial !important;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       Bokeh.set_log_level("info");
     },
-    
     function(Bokeh) {
       (function(root, factory) {
           factory(root["Bokeh"]);
@@ -2074,7 +2122,7 @@ documentation for more info</p>
       });
 
     },
-    function(Bokeh) {} // ensure no trailing comma for IE
+function(Bokeh) {} // ensure no trailing comma for IE
   ];
 
   function run_inline_js() {
@@ -2337,23 +2385,37 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="docutils container">
+</script><div class="output text_html"><style>.bk-root, .bk-root .bk:before, .bk-root .bk:after {
+  font-family: var(--jp-ui-font-size1);
+  font-size: var(--jp-ui-font-size1);
+  color: var(--jp-ui-font-color1);
+}
+</style></div><div class="docutils container">
 </div>
 <div class="output text_html"><div id="1013">
-  <div class="bk-root" data-root-id="1013" id="7a0309ff-0566-43da-83d8-2d1f5c10fdc9"></div>
+  <div class="bk-root" data-root-id="1013" id="25dbac7e-891b-42ae-ab0e-f2d6fad9472c"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"b2ef6e7c-88d4-4503-aeb8-f3da305a1314":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"client_comm_id":"93e254099e4049b9ac6e7eb9f45fb918","comm_id":"eeab8e7105e140e78fdae738600fb92e","plot_id":"1013"},"id":"1017","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1014"},{"id":"1016"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01584","sizing_mode":"scale_width","width":400},"id":"1013","type":"panel.models.layout.Card"},{"attributes":{"end":2.0,"height":40,"margin":[5,10,5,10],"sizing_mode":"fixed","start":0.0,"step":0.5,"value":0.0,"width":400},"id":"1016","type":"Slider"},{"attributes":{"children":[{"id":"1015"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01583","sizing_mode":"stretch_width"},"id":"1014","type":"Row"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01585","sizing_mode":"stretch_width","text":"key_float_slider"},"id":"1015","type":"panel.models.markup.HTML"}],"root_ids":["1013","1017"]},"title":"Bokeh Application","version":"2.4.3"}};
-    var render_items = [{"docid":"b2ef6e7c-88d4-4503-aeb8-f3da305a1314","root_ids":["1013"],"roots":{"1013":"7a0309ff-0566-43da-83d8-2d1f5c10fdc9"}}];
+    var docs_json = {"15b21c7c-f8ab-47ad-8d60-b6e664a341b2":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]},{"extends":null,"module":null,"name":"click1","overrides":[],"properties":[{"default":"","kind":null,"name":"terminal_output"},{"default":"","kind":null,"name":"debug_name"},{"default":0,"kind":null,"name":"clears"}]},{"extends":null,"module":null,"name":"NotificationAreaBase1","overrides":[],"properties":[{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"}]},{"extends":null,"module":null,"name":"NotificationArea1","overrides":[],"properties":[{"default":[],"kind":null,"name":"notifications"},{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"},{"default":[{"background":"#ffc107","icon":{"className":"fas fa-exclamation-triangle","color":"white","tagName":"i"},"type":"warning"},{"background":"#007bff","icon":{"className":"fas fa-info-circle","color":"white","tagName":"i"},"type":"info"}],"kind":null,"name":"types"}]},{"extends":null,"module":null,"name":"Notification","overrides":[],"properties":[{"default":null,"kind":null,"name":"background"},{"default":3000,"kind":null,"name":"duration"},{"default":null,"kind":null,"name":"icon"},{"default":"","kind":null,"name":"message"},{"default":null,"kind":null,"name":"notification_type"},{"default":false,"kind":null,"name":"_destroyed"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01585","sizing_mode":"stretch_width","text":"key_float_slider"},"id":"1015","type":"panel.models.markup.HTML"},{"attributes":{"children":[{"id":"1015"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01583","sizing_mode":"stretch_width"},"id":"1014","type":"Row"},{"attributes":{"client_comm_id":"25e4768d1bbc4833ab968eb202e0326c","comm_id":"5ef5a78f4863415ebe73c9cdd5845997","plot_id":"1013"},"id":"1017","type":"panel.models.comm_manager.CommManager"},{"attributes":{"end":2.0,"height":40,"margin":[5,10,5,10],"sizing_mode":"fixed","start":0.0,"step":0.5,"value":0.0,"width":400},"id":"1016","type":"Slider"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1014"},{"id":"1016"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01584","sizing_mode":"scale_width","width":400},"id":"1013","type":"panel.models.layout.Card"}],"root_ids":["1013","1017"]},"title":"Bokeh Application","version":"2.4.3"}};
+    var render_items = [{"docid":"15b21c7c-f8ab-47ad-8d60-b6e664a341b2","root_ids":["1013"],"roots":{"1013":"25dbac7e-891b-42ae-ab0e-f2d6fad9472c"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
+    for (const render_item of render_items) {
+      for (const root_id of render_item.root_ids) {
+	const id_el = document.getElementById(root_id)
+	if (id_el.children.length && (id_el.children[0].className === 'bk-root')) {
+	  const root_el = id_el.children[0]
+	  root_el.id = root_el.id + '-rendered'
+	}
+      }
+    }
   }
-  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined)) {
     embed_document(root);
   } else {
     var attempts = 0;
     var timer = setInterval(function(root) {
-      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined)) {
         clearInterval(timer);
         embed_document(root);
       } else if (document.readyState == "complete") {
@@ -2412,8 +2474,7 @@ documentation for more info</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/javascript">
-(function(root) {
+<script type="application/javascript">(function(root) {
   function now() {
     return new Date();
   }
@@ -2484,52 +2545,62 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
-      
-      require(["deck.gl"], function(deck) {
-	
+      window.requirejs.config({'packages': {}, 'paths': {'h3': 'https://cdn.jsdelivr.net/npm/h3-js@3.7.2/dist/h3-js.umd', 'deck-gl': 'https://cdn.jsdelivr.net/npm/deck.gl@8.6.7/dist.min', 'deck-json': 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.6.7/dist.min', 'loader-csv': 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@3.1.7/dist/dist.min', 'loader-json': 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@3.1.7/dist/dist.min', 'loader-tiles': 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@3.1.7/dist/dist.min', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.6.1/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5', 'notyf': 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min'}, 'shim': {'deck-json': {'deps': ['deck-gl']}, 'deck-gl': {'deps': ['h3']}, 'gridstack': {'exports': 'GridStack'}}});
+      require(["h3"], function(h3) {
+	window.h3 = h3
+	on_load()
+      })
+      require(["deck-gl"], function(deck) {
 	window.deck = deck
-	
 	on_load()
       })
-      
+      require(["deck-json"], function() {
+	on_load()
+      })
+      require(["loader-csv"], function() {
+	on_load()
+      })
+      require(["loader-json"], function() {
+	on_load()
+      })
+      require(["loader-tiles"], function() {
+	on_load()
+      })
       require(["mapbox-gl"], function(mapboxgl) {
-	
 	window.mapboxgl = mapboxgl
-	
 	on_load()
       })
-      
       require(["gridstack"], function(GridStack) {
-	
 	window.GridStack = GridStack
-	
 	on_load()
       })
-      
-      root._bokeh_is_loading = css_urls.length + 3;
+      require(["notyf"], function() {
+	on_load()
+      })
+      root._bokeh_is_loading = css_urls.length + 9;
     } else {
       root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
-    }
-    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
+    }    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+    }    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
+    }    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    for (var i = 0; i < js_urls.length; i++) {
+    }    if (((window['Notyf'] !== undefined) && (!(window['Notyf'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/notificationarea/notyf@3/notyf.min.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    for (var i = 0; i < js_urls.length; i++) {
       var url = js_urls[i];
       if (skip.indexOf(url) >= 0) {
 	if (!window.requirejs) {
@@ -2573,32 +2644,24 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.7/dist/panel.min.js"];
+  var js_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.14.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/markdown.css"];
-  var inline_js = [
-    function(Bokeh) {
-      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\");\n      max-height: 400px;\n    }\n    ");
-    },
-    function(Bokeh) {
+  var css_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/widgets.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/loading.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/json.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/dataframe.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/alerts.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/card.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/debugger.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/markdown.css"];
+  var inline_js = [    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arc:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJtYXJnaW46IGF1dG87IGJhY2tncm91bmQ6IG5vbmU7IGRpc3BsYXk6IGJsb2NrOyBzaGFwZS1yZW5kZXJpbmc6IGF1dG87IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzNjM2MzIiBzdHJva2Utd2lkdGg9IjEwIiByPSIzNSIgc3Ryb2tlLWRhc2hhcnJheT0iMTY0LjkzMzYxNDMxMzQ2NDE1IDU2Ljk3Nzg3MTQzNzgyMTM4Ij4gICAgPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiBkdXI9IjFzIiB2YWx1ZXM9IjAgNTAgNTA7MzYwIDUwIDUwIiBrZXlUaW1lcz0iMDsxIj48L2FuaW1hdGVUcmFuc2Zvcm0+ICA8L2NpcmNsZT48L3N2Zz4=\");\n      background-size: auto calc(min(50%, 400px));\n    }\n    ");
+    },    function(Bokeh) {
       inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.multi-select{\n    color: white;\n    z-index: 100;\n    background: rgba(44,43,43,0.5);\n    border-radius: 1px;\n    width: 120px !important;\n    height: 30px !important;\n}\n.multi-select > .bk {\n    padding: 5px;\n    width: 120px !important;\n    height: 30px !important;\n}\n\n.deck-chart {\n    z-index: 10;\n    position: initial !important;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       Bokeh.set_log_level("info");
     },
-    
     function(Bokeh) {
       (function(root, factory) {
           factory(root["Bokeh"]);
@@ -2677,7 +2740,7 @@ documentation for more info</p>
       });
 
     },
-    function(Bokeh) {} // ensure no trailing comma for IE
+function(Bokeh) {} // ensure no trailing comma for IE
   ];
 
   function run_inline_js() {
@@ -2940,23 +3003,37 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="docutils container">
+</script><div class="output text_html"><style>.bk-root, .bk-root .bk:before, .bk-root .bk:after {
+  font-family: var(--jp-ui-font-size1);
+  font-size: var(--jp-ui-font-size1);
+  color: var(--jp-ui-font-color1);
+}
+</style></div><div class="docutils container">
 </div>
 <div class="output text_html"><div id="1018">
-  <div class="bk-root" data-root-id="1018" id="92af141b-1811-4ff8-b1a0-f72612ec1025"></div>
+  <div class="bk-root" data-root-id="1018" id="f0dba846-194f-47b9-8a7c-21d8e11fe583"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"c3ec17ab-2111-4d33-a480-8f44346f171d":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"client_comm_id":"908d74a8eaf44473a7973bed5aa2b393","comm_id":"2618064b2c044464a4bc66e1ed38cfa9","plot_id":"1018"},"id":"1022","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1019"},{"id":"1021"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01595","sizing_mode":"scale_width","width":400},"id":"1018","type":"panel.models.layout.Card"},{"attributes":{"children":[{"id":"1020"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01594","sizing_mode":"stretch_width"},"id":"1019","type":"Row"},{"attributes":{"end":14,"height":40,"margin":[5,10,5,10],"sizing_mode":"fixed","start":10,"value":10,"width":400},"id":"1021","type":"Slider"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01596","sizing_mode":"stretch_width","text":"val_int_slider"},"id":"1020","type":"panel.models.markup.HTML"}],"root_ids":["1018","1022"]},"title":"Bokeh Application","version":"2.4.3"}};
-    var render_items = [{"docid":"c3ec17ab-2111-4d33-a480-8f44346f171d","root_ids":["1018"],"roots":{"1018":"92af141b-1811-4ff8-b1a0-f72612ec1025"}}];
+    var docs_json = {"339e3e42-fff8-44cb-913c-0190819e4a31":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]},{"extends":null,"module":null,"name":"click1","overrides":[],"properties":[{"default":"","kind":null,"name":"terminal_output"},{"default":"","kind":null,"name":"debug_name"},{"default":0,"kind":null,"name":"clears"}]},{"extends":null,"module":null,"name":"NotificationAreaBase1","overrides":[],"properties":[{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"}]},{"extends":null,"module":null,"name":"NotificationArea1","overrides":[],"properties":[{"default":[],"kind":null,"name":"notifications"},{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"},{"default":[{"background":"#ffc107","icon":{"className":"fas fa-exclamation-triangle","color":"white","tagName":"i"},"type":"warning"},{"background":"#007bff","icon":{"className":"fas fa-info-circle","color":"white","tagName":"i"},"type":"info"}],"kind":null,"name":"types"}]},{"extends":null,"module":null,"name":"Notification","overrides":[],"properties":[{"default":null,"kind":null,"name":"background"},{"default":3000,"kind":null,"name":"duration"},{"default":null,"kind":null,"name":"icon"},{"default":"","kind":null,"name":"message"},{"default":null,"kind":null,"name":"notification_type"},{"default":false,"kind":null,"name":"_destroyed"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"children":[{"id":"1020"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01594","sizing_mode":"stretch_width"},"id":"1019","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1019"},{"id":"1021"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01595","sizing_mode":"scale_width","width":400},"id":"1018","type":"panel.models.layout.Card"},{"attributes":{"client_comm_id":"db4bcdfafef841c2ad67c2fbda802225","comm_id":"21a6d3c180a6410c9037cbff1f0a43cd","plot_id":"1018"},"id":"1022","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01596","sizing_mode":"stretch_width","text":"val_int_slider"},"id":"1020","type":"panel.models.markup.HTML"},{"attributes":{"end":14,"height":40,"margin":[5,10,5,10],"sizing_mode":"fixed","start":10,"value":10,"width":400},"id":"1021","type":"Slider"}],"root_ids":["1018","1022"]},"title":"Bokeh Application","version":"2.4.3"}};
+    var render_items = [{"docid":"339e3e42-fff8-44cb-913c-0190819e4a31","root_ids":["1018"],"roots":{"1018":"f0dba846-194f-47b9-8a7c-21d8e11fe583"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
+    for (const render_item of render_items) {
+      for (const root_id of render_item.root_ids) {
+	const id_el = document.getElementById(root_id)
+	if (id_el.children.length && (id_el.children[0].className === 'bk-root')) {
+	  const root_el = id_el.children[0]
+	  root_el.id = root_el.id + '-rendered'
+	}
+      }
+    }
   }
-  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined)) {
     embed_document(root);
   } else {
     var attempts = 0;
     var timer = setInterval(function(root) {
-      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined)) {
         clearInterval(timer);
         embed_document(root);
       } else if (document.readyState == "complete") {
@@ -3012,8 +3089,7 @@ documentation for more info</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/javascript">
-(function(root) {
+<script type="application/javascript">(function(root) {
   function now() {
     return new Date();
   }
@@ -3084,52 +3160,62 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
-      
-      require(["deck.gl"], function(deck) {
-	
+      window.requirejs.config({'packages': {}, 'paths': {'h3': 'https://cdn.jsdelivr.net/npm/h3-js@3.7.2/dist/h3-js.umd', 'deck-gl': 'https://cdn.jsdelivr.net/npm/deck.gl@8.6.7/dist.min', 'deck-json': 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.6.7/dist.min', 'loader-csv': 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@3.1.7/dist/dist.min', 'loader-json': 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@3.1.7/dist/dist.min', 'loader-tiles': 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@3.1.7/dist/dist.min', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.6.1/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5', 'notyf': 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min'}, 'shim': {'deck-json': {'deps': ['deck-gl']}, 'deck-gl': {'deps': ['h3']}, 'gridstack': {'exports': 'GridStack'}}});
+      require(["h3"], function(h3) {
+	window.h3 = h3
+	on_load()
+      })
+      require(["deck-gl"], function(deck) {
 	window.deck = deck
-	
 	on_load()
       })
-      
+      require(["deck-json"], function() {
+	on_load()
+      })
+      require(["loader-csv"], function() {
+	on_load()
+      })
+      require(["loader-json"], function() {
+	on_load()
+      })
+      require(["loader-tiles"], function() {
+	on_load()
+      })
       require(["mapbox-gl"], function(mapboxgl) {
-	
 	window.mapboxgl = mapboxgl
-	
 	on_load()
       })
-      
       require(["gridstack"], function(GridStack) {
-	
 	window.GridStack = GridStack
-	
 	on_load()
       })
-      
-      root._bokeh_is_loading = css_urls.length + 3;
+      require(["notyf"], function() {
+	on_load()
+      })
+      root._bokeh_is_loading = css_urls.length + 9;
     } else {
       root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
-    }
-    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
+    }    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+    }    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
+    }    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    for (var i = 0; i < js_urls.length; i++) {
+    }    if (((window['Notyf'] !== undefined) && (!(window['Notyf'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/notificationarea/notyf@3/notyf.min.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    for (var i = 0; i < js_urls.length; i++) {
       var url = js_urls[i];
       if (skip.indexOf(url) >= 0) {
 	if (!window.requirejs) {
@@ -3173,32 +3259,24 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.7/dist/panel.min.js"];
+  var js_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.14.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/markdown.css"];
-  var inline_js = [
-    function(Bokeh) {
-      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\");\n      max-height: 400px;\n    }\n    ");
-    },
-    function(Bokeh) {
+  var css_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/widgets.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/loading.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/json.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/dataframe.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/alerts.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/card.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/debugger.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/markdown.css"];
+  var inline_js = [    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arc:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJtYXJnaW46IGF1dG87IGJhY2tncm91bmQ6IG5vbmU7IGRpc3BsYXk6IGJsb2NrOyBzaGFwZS1yZW5kZXJpbmc6IGF1dG87IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzNjM2MzIiBzdHJva2Utd2lkdGg9IjEwIiByPSIzNSIgc3Ryb2tlLWRhc2hhcnJheT0iMTY0LjkzMzYxNDMxMzQ2NDE1IDU2Ljk3Nzg3MTQzNzgyMTM4Ij4gICAgPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiBkdXI9IjFzIiB2YWx1ZXM9IjAgNTAgNTA7MzYwIDUwIDUwIiBrZXlUaW1lcz0iMDsxIj48L2FuaW1hdGVUcmFuc2Zvcm0+ICA8L2NpcmNsZT48L3N2Zz4=\");\n      background-size: auto calc(min(50%, 400px));\n    }\n    ");
+    },    function(Bokeh) {
       inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.multi-select{\n    color: white;\n    z-index: 100;\n    background: rgba(44,43,43,0.5);\n    border-radius: 1px;\n    width: 120px !important;\n    height: 30px !important;\n}\n.multi-select > .bk {\n    padding: 5px;\n    width: 120px !important;\n    height: 30px !important;\n}\n\n.deck-chart {\n    z-index: 10;\n    position: initial !important;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       Bokeh.set_log_level("info");
     },
-    
     function(Bokeh) {
       (function(root, factory) {
           factory(root["Bokeh"]);
@@ -3277,7 +3355,7 @@ documentation for more info</p>
       });
 
     },
-    function(Bokeh) {} // ensure no trailing comma for IE
+function(Bokeh) {} // ensure no trailing comma for IE
   ];
 
   function run_inline_js() {
@@ -3540,23 +3618,37 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="docutils container">
+</script><div class="output text_html"><style>.bk-root, .bk-root .bk:before, .bk-root .bk:after {
+  font-family: var(--jp-ui-font-size1);
+  font-size: var(--jp-ui-font-size1);
+  color: var(--jp-ui-font-color1);
+}
+</style></div><div class="docutils container">
 </div>
 <div class="output text_html"><div id="1023">
-  <div class="bk-root" data-root-id="1023" id="e27777ad-9f8a-4f86-a2f8-e730e9d6ca05"></div>
+  <div class="bk-root" data-root-id="1023" id="82ca6521-e4a5-43cf-8973-5708f649e53b"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"4d81a900-4260-46a8-81fe-1703a85d5f70":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1024"},{"id":"1026"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01606","sizing_mode":"scale_width","width":400},"id":"1023","type":"panel.models.layout.Card"},{"attributes":{"height":50,"margin":[5,10,5,10],"options":["10.0","11.0","12.0","13.0","14.0",""],"sizing_mode":"fixed","width":400},"id":"1026","type":"Select"},{"attributes":{"children":[{"id":"1025"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01605","sizing_mode":"stretch_width"},"id":"1024","type":"Row"},{"attributes":{"client_comm_id":"cffb635fcb07411f9792437a4f4d4fd0","comm_id":"82214ff50b3343d0878de65c0ce793ac","plot_id":"1023"},"id":"1027","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01607","sizing_mode":"stretch_width","text":"val_dropdown"},"id":"1025","type":"panel.models.markup.HTML"}],"root_ids":["1023","1027"]},"title":"Bokeh Application","version":"2.4.3"}};
-    var render_items = [{"docid":"4d81a900-4260-46a8-81fe-1703a85d5f70","root_ids":["1023"],"roots":{"1023":"e27777ad-9f8a-4f86-a2f8-e730e9d6ca05"}}];
+    var docs_json = {"3f551510-f265-4e37-b589-8b6a01c3d49a":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]},{"extends":null,"module":null,"name":"click1","overrides":[],"properties":[{"default":"","kind":null,"name":"terminal_output"},{"default":"","kind":null,"name":"debug_name"},{"default":0,"kind":null,"name":"clears"}]},{"extends":null,"module":null,"name":"NotificationAreaBase1","overrides":[],"properties":[{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"}]},{"extends":null,"module":null,"name":"NotificationArea1","overrides":[],"properties":[{"default":[],"kind":null,"name":"notifications"},{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"},{"default":[{"background":"#ffc107","icon":{"className":"fas fa-exclamation-triangle","color":"white","tagName":"i"},"type":"warning"},{"background":"#007bff","icon":{"className":"fas fa-info-circle","color":"white","tagName":"i"},"type":"info"}],"kind":null,"name":"types"}]},{"extends":null,"module":null,"name":"Notification","overrides":[],"properties":[{"default":null,"kind":null,"name":"background"},{"default":3000,"kind":null,"name":"duration"},{"default":null,"kind":null,"name":"icon"},{"default":"","kind":null,"name":"message"},{"default":null,"kind":null,"name":"notification_type"},{"default":false,"kind":null,"name":"_destroyed"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"height":50,"margin":[5,10,5,10],"options":["10.0","11.0","12.0","13.0","14.0",""],"sizing_mode":"fixed","width":400},"id":"1026","type":"panel.models.widgets.CustomSelect"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01607","sizing_mode":"stretch_width","text":"val_dropdown"},"id":"1025","type":"panel.models.markup.HTML"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1024"},{"id":"1026"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01606","sizing_mode":"scale_width","width":400},"id":"1023","type":"panel.models.layout.Card"},{"attributes":{"client_comm_id":"f238e7525b2b4e3aa2cd7f51a9baf4b1","comm_id":"0e8580df2a2144858cbe73eadbfeaf41","plot_id":"1023"},"id":"1027","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1025"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01605","sizing_mode":"stretch_width"},"id":"1024","type":"Row"}],"root_ids":["1023","1027"]},"title":"Bokeh Application","version":"2.4.3"}};
+    var render_items = [{"docid":"3f551510-f265-4e37-b589-8b6a01c3d49a","root_ids":["1023"],"roots":{"1023":"82ca6521-e4a5-43cf-8973-5708f649e53b"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
+    for (const render_item of render_items) {
+      for (const root_id of render_item.root_ids) {
+	const id_el = document.getElementById(root_id)
+	if (id_el.children.length && (id_el.children[0].className === 'bk-root')) {
+	  const root_el = id_el.children[0]
+	  root_el.id = root_el.id + '-rendered'
+	}
+      }
+    }
   }
-  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined)) {
     embed_document(root);
   } else {
     var attempts = 0;
     var timer = setInterval(function(root) {
-      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined)) {
         clearInterval(timer);
         embed_document(root);
       } else if (document.readyState == "complete") {
@@ -3612,8 +3704,7 @@ documentation for more info</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/javascript">
-(function(root) {
+<script type="application/javascript">(function(root) {
   function now() {
     return new Date();
   }
@@ -3684,52 +3775,62 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
-      
-      require(["deck.gl"], function(deck) {
-	
+      window.requirejs.config({'packages': {}, 'paths': {'h3': 'https://cdn.jsdelivr.net/npm/h3-js@3.7.2/dist/h3-js.umd', 'deck-gl': 'https://cdn.jsdelivr.net/npm/deck.gl@8.6.7/dist.min', 'deck-json': 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.6.7/dist.min', 'loader-csv': 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@3.1.7/dist/dist.min', 'loader-json': 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@3.1.7/dist/dist.min', 'loader-tiles': 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@3.1.7/dist/dist.min', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.6.1/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5', 'notyf': 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min'}, 'shim': {'deck-json': {'deps': ['deck-gl']}, 'deck-gl': {'deps': ['h3']}, 'gridstack': {'exports': 'GridStack'}}});
+      require(["h3"], function(h3) {
+	window.h3 = h3
+	on_load()
+      })
+      require(["deck-gl"], function(deck) {
 	window.deck = deck
-	
 	on_load()
       })
-      
+      require(["deck-json"], function() {
+	on_load()
+      })
+      require(["loader-csv"], function() {
+	on_load()
+      })
+      require(["loader-json"], function() {
+	on_load()
+      })
+      require(["loader-tiles"], function() {
+	on_load()
+      })
       require(["mapbox-gl"], function(mapboxgl) {
-	
 	window.mapboxgl = mapboxgl
-	
 	on_load()
       })
-      
       require(["gridstack"], function(GridStack) {
-	
 	window.GridStack = GridStack
-	
 	on_load()
       })
-      
-      root._bokeh_is_loading = css_urls.length + 3;
+      require(["notyf"], function() {
+	on_load()
+      })
+      root._bokeh_is_loading = css_urls.length + 9;
     } else {
       root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
-    }
-    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
+    }    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+    }    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
+    }    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    for (var i = 0; i < js_urls.length; i++) {
+    }    if (((window['Notyf'] !== undefined) && (!(window['Notyf'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/notificationarea/notyf@3/notyf.min.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    for (var i = 0; i < js_urls.length; i++) {
       var url = js_urls[i];
       if (skip.indexOf(url) >= 0) {
 	if (!window.requirejs) {
@@ -3773,32 +3874,24 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.7/dist/panel.min.js"];
+  var js_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.14.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/markdown.css"];
-  var inline_js = [
-    function(Bokeh) {
-      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\");\n      max-height: 400px;\n    }\n    ");
-    },
-    function(Bokeh) {
+  var css_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/widgets.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/loading.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/json.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/dataframe.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/alerts.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/card.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/debugger.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/markdown.css"];
+  var inline_js = [    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arc:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJtYXJnaW46IGF1dG87IGJhY2tncm91bmQ6IG5vbmU7IGRpc3BsYXk6IGJsb2NrOyBzaGFwZS1yZW5kZXJpbmc6IGF1dG87IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzNjM2MzIiBzdHJva2Utd2lkdGg9IjEwIiByPSIzNSIgc3Ryb2tlLWRhc2hhcnJheT0iMTY0LjkzMzYxNDMxMzQ2NDE1IDU2Ljk3Nzg3MTQzNzgyMTM4Ij4gICAgPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiBkdXI9IjFzIiB2YWx1ZXM9IjAgNTAgNTA7MzYwIDUwIDUwIiBrZXlUaW1lcz0iMDsxIj48L2FuaW1hdGVUcmFuc2Zvcm0+ICA8L2NpcmNsZT48L3N2Zz4=\");\n      background-size: auto calc(min(50%, 400px));\n    }\n    ");
+    },    function(Bokeh) {
       inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.multi-select{\n    color: white;\n    z-index: 100;\n    background: rgba(44,43,43,0.5);\n    border-radius: 1px;\n    width: 120px !important;\n    height: 30px !important;\n}\n.multi-select > .bk {\n    padding: 5px;\n    width: 120px !important;\n    height: 30px !important;\n}\n\n.deck-chart {\n    z-index: 10;\n    position: initial !important;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       Bokeh.set_log_level("info");
     },
-    
     function(Bokeh) {
       (function(root, factory) {
           factory(root["Bokeh"]);
@@ -3877,7 +3970,7 @@ documentation for more info</p>
       });
 
     },
-    function(Bokeh) {} // ensure no trailing comma for IE
+function(Bokeh) {} // ensure no trailing comma for IE
   ];
 
   function run_inline_js() {
@@ -4140,23 +4233,37 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="docutils container">
+</script><div class="output text_html"><style>.bk-root, .bk-root .bk:before, .bk-root .bk:after {
+  font-family: var(--jp-ui-font-size1);
+  font-size: var(--jp-ui-font-size1);
+  color: var(--jp-ui-font-color1);
+}
+</style></div><div class="docutils container">
 </div>
 <div class="output text_html"><div id="1028">
-  <div class="bk-root" data-root-id="1028" id="131a17a7-ea46-4dfc-b0d3-42bd5fb636d1"></div>
+  <div class="bk-root" data-root-id="1028" id="c95b247c-fe09-4a03-88f7-8d7cc684c0b6"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"b4ce3e43-b0d5-4ab5-aa5b-95b40433d6be":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01618","sizing_mode":"stretch_width","text":"val_multi_select"},"id":"1030","type":"panel.models.markup.HTML"},{"attributes":{"height":200,"margin":[5,10,5,10],"options":["10.0","11.0","12.0","13.0","14.0",""],"sizing_mode":"fixed","value":[""],"width":400},"id":"1031","type":"MultiSelect"},{"attributes":{"client_comm_id":"15adaeecdaf64e4a8bffce917eb42547","comm_id":"4eba2b12bebb4b99b8b5b62efd11d224","plot_id":"1028"},"id":"1032","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1030"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01616","sizing_mode":"stretch_width"},"id":"1029","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1029"},{"id":"1031"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01617","sizing_mode":"scale_width","width":400},"id":"1028","type":"panel.models.layout.Card"}],"root_ids":["1028","1032"]},"title":"Bokeh Application","version":"2.4.3"}};
-    var render_items = [{"docid":"b4ce3e43-b0d5-4ab5-aa5b-95b40433d6be","root_ids":["1028"],"roots":{"1028":"131a17a7-ea46-4dfc-b0d3-42bd5fb636d1"}}];
+    var docs_json = {"bc905524-7401-49cd-9b26-1190945d998f":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]},{"extends":null,"module":null,"name":"click1","overrides":[],"properties":[{"default":"","kind":null,"name":"terminal_output"},{"default":"","kind":null,"name":"debug_name"},{"default":0,"kind":null,"name":"clears"}]},{"extends":null,"module":null,"name":"NotificationAreaBase1","overrides":[],"properties":[{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"}]},{"extends":null,"module":null,"name":"NotificationArea1","overrides":[],"properties":[{"default":[],"kind":null,"name":"notifications"},{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"},{"default":[{"background":"#ffc107","icon":{"className":"fas fa-exclamation-triangle","color":"white","tagName":"i"},"type":"warning"},{"background":"#007bff","icon":{"className":"fas fa-info-circle","color":"white","tagName":"i"},"type":"info"}],"kind":null,"name":"types"}]},{"extends":null,"module":null,"name":"Notification","overrides":[],"properties":[{"default":null,"kind":null,"name":"background"},{"default":3000,"kind":null,"name":"duration"},{"default":null,"kind":null,"name":"icon"},{"default":"","kind":null,"name":"message"},{"default":null,"kind":null,"name":"notification_type"},{"default":false,"kind":null,"name":"_destroyed"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01618","sizing_mode":"stretch_width","text":"val_multi_select"},"id":"1030","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"59a575b06d894b9db3c3e53b28d9bf6d","comm_id":"a6446ad23e394fb2bec9d08da44c21c0","plot_id":"1028"},"id":"1032","type":"panel.models.comm_manager.CommManager"},{"attributes":{"height":200,"margin":[5,10,5,10],"options":["10.0","11.0","12.0","13.0","14.0",""],"sizing_mode":"fixed","value":[""],"width":400},"id":"1031","type":"MultiSelect"},{"attributes":{"children":[{"id":"1030"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01616","sizing_mode":"stretch_width"},"id":"1029","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1029"},{"id":"1031"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01617","sizing_mode":"scale_width","width":400},"id":"1028","type":"panel.models.layout.Card"}],"root_ids":["1028","1032"]},"title":"Bokeh Application","version":"2.4.3"}};
+    var render_items = [{"docid":"bc905524-7401-49cd-9b26-1190945d998f","root_ids":["1028"],"roots":{"1028":"c95b247c-fe09-4a03-88f7-8d7cc684c0b6"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
+    for (const render_item of render_items) {
+      for (const root_id of render_item.root_ids) {
+	const id_el = document.getElementById(root_id)
+	if (id_el.children.length && (id_el.children[0].className === 'bk-root')) {
+	  const root_el = id_el.children[0]
+	  root_el.id = root_el.id + '-rendered'
+	}
+      }
+    }
   }
-  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined)) {
     embed_document(root);
   } else {
     var attempts = 0;
     var timer = setInterval(function(root) {
-      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined)) {
         clearInterval(timer);
         embed_document(root);
       } else if (document.readyState == "complete") {
@@ -4227,8 +4334,7 @@ documentation for more info</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/javascript">
-(function(root) {
+<script type="application/javascript">(function(root) {
   function now() {
     return new Date();
   }
@@ -4299,52 +4405,62 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
-      
-      require(["deck.gl"], function(deck) {
-	
+      window.requirejs.config({'packages': {}, 'paths': {'h3': 'https://cdn.jsdelivr.net/npm/h3-js@3.7.2/dist/h3-js.umd', 'deck-gl': 'https://cdn.jsdelivr.net/npm/deck.gl@8.6.7/dist.min', 'deck-json': 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.6.7/dist.min', 'loader-csv': 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@3.1.7/dist/dist.min', 'loader-json': 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@3.1.7/dist/dist.min', 'loader-tiles': 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@3.1.7/dist/dist.min', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.6.1/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5', 'notyf': 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min'}, 'shim': {'deck-json': {'deps': ['deck-gl']}, 'deck-gl': {'deps': ['h3']}, 'gridstack': {'exports': 'GridStack'}}});
+      require(["h3"], function(h3) {
+	window.h3 = h3
+	on_load()
+      })
+      require(["deck-gl"], function(deck) {
 	window.deck = deck
-	
 	on_load()
       })
-      
+      require(["deck-json"], function() {
+	on_load()
+      })
+      require(["loader-csv"], function() {
+	on_load()
+      })
+      require(["loader-json"], function() {
+	on_load()
+      })
+      require(["loader-tiles"], function() {
+	on_load()
+      })
       require(["mapbox-gl"], function(mapboxgl) {
-	
 	window.mapboxgl = mapboxgl
-	
 	on_load()
       })
-      
       require(["gridstack"], function(GridStack) {
-	
 	window.GridStack = GridStack
-	
 	on_load()
       })
-      
-      root._bokeh_is_loading = css_urls.length + 3;
+      require(["notyf"], function() {
+	on_load()
+      })
+      root._bokeh_is_loading = css_urls.length + 9;
     } else {
       root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
-    }
-    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
+    }    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+    }    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
+    }    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    for (var i = 0; i < js_urls.length; i++) {
+    }    if (((window['Notyf'] !== undefined) && (!(window['Notyf'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/notificationarea/notyf@3/notyf.min.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    for (var i = 0; i < js_urls.length; i++) {
       var url = js_urls[i];
       if (skip.indexOf(url) >= 0) {
 	if (!window.requirejs) {
@@ -4388,32 +4504,24 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.7/dist/panel.min.js"];
+  var js_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.14.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/markdown.css"];
-  var inline_js = [
-    function(Bokeh) {
-      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\");\n      max-height: 400px;\n    }\n    ");
-    },
-    function(Bokeh) {
+  var css_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/widgets.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/loading.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/json.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/dataframe.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/alerts.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/card.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/debugger.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/markdown.css"];
+  var inline_js = [    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arc:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJtYXJnaW46IGF1dG87IGJhY2tncm91bmQ6IG5vbmU7IGRpc3BsYXk6IGJsb2NrOyBzaGFwZS1yZW5kZXJpbmc6IGF1dG87IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzNjM2MzIiBzdHJva2Utd2lkdGg9IjEwIiByPSIzNSIgc3Ryb2tlLWRhc2hhcnJheT0iMTY0LjkzMzYxNDMxMzQ2NDE1IDU2Ljk3Nzg3MTQzNzgyMTM4Ij4gICAgPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiBkdXI9IjFzIiB2YWx1ZXM9IjAgNTAgNTA7MzYwIDUwIDUwIiBrZXlUaW1lcz0iMDsxIj48L2FuaW1hdGVUcmFuc2Zvcm0+ICA8L2NpcmNsZT48L3N2Zz4=\");\n      background-size: auto calc(min(50%, 400px));\n    }\n    ");
+    },    function(Bokeh) {
       inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.multi-select{\n    color: white;\n    z-index: 100;\n    background: rgba(44,43,43,0.5);\n    border-radius: 1px;\n    width: 120px !important;\n    height: 30px !important;\n}\n.multi-select > .bk {\n    padding: 5px;\n    width: 120px !important;\n    height: 30px !important;\n}\n\n.deck-chart {\n    z-index: 10;\n    position: initial !important;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       Bokeh.set_log_level("info");
     },
-    
     function(Bokeh) {
       (function(root, factory) {
           factory(root["Bokeh"]);
@@ -4492,7 +4600,7 @@ documentation for more info</p>
       });
 
     },
-    function(Bokeh) {} // ensure no trailing comma for IE
+function(Bokeh) {} // ensure no trailing comma for IE
   ];
 
   function run_inline_js() {
@@ -4755,23 +4863,37 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="docutils container">
+</script><div class="output text_html"><style>.bk-root, .bk-root .bk:before, .bk-root .bk:after {
+  font-family: var(--jp-ui-font-size1);
+  font-size: var(--jp-ui-font-size1);
+  color: var(--jp-ui-font-color1);
+}
+</style></div><div class="docutils container">
 </div>
 <div class="output text_html"><div id="1033">
-  <div class="bk-root" data-root-id="1033" id="2bf174eb-e252-4b6a-8e30-e2615900d990"></div>
+  <div class="bk-root" data-root-id="1033" id="284a832c-dbd2-4661-ad2a-af902902d75c"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"9aec8133-ed5e-413f-aa51-e41f2201a2b6":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"css_classes":["indicator"],"margin":[5,10,5,10],"sizing_mode":"stretch_both","text":"&lt;div style=&quot;font-size: 18pt; color: black&quot;&gt;12%&lt;/div&gt;"},"id":"1036","type":"panel.models.markup.HTML"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01629","sizing_mode":"stretch_width","text":"val"},"id":"1035","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"c60b2871a141470cac64cb9e732ec5a3","comm_id":"8c0c5aa46a0f43e2a02eb45d65949589","plot_id":"1033"},"id":"1037","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1035"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01627","sizing_mode":"stretch_width"},"id":"1034","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1034"},{"id":"1036"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01628","sizing_mode":"scale_width"},"id":"1033","type":"panel.models.layout.Card"}],"root_ids":["1033","1037"]},"title":"Bokeh Application","version":"2.4.3"}};
-    var render_items = [{"docid":"9aec8133-ed5e-413f-aa51-e41f2201a2b6","root_ids":["1033"],"roots":{"1033":"2bf174eb-e252-4b6a-8e30-e2615900d990"}}];
+    var docs_json = {"d5ac41ef-fdd2-47d0-a21a-1243f430ba82":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]},{"extends":null,"module":null,"name":"click1","overrides":[],"properties":[{"default":"","kind":null,"name":"terminal_output"},{"default":"","kind":null,"name":"debug_name"},{"default":0,"kind":null,"name":"clears"}]},{"extends":null,"module":null,"name":"NotificationAreaBase1","overrides":[],"properties":[{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"}]},{"extends":null,"module":null,"name":"NotificationArea1","overrides":[],"properties":[{"default":[],"kind":null,"name":"notifications"},{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"},{"default":[{"background":"#ffc107","icon":{"className":"fas fa-exclamation-triangle","color":"white","tagName":"i"},"type":"warning"},{"background":"#007bff","icon":{"className":"fas fa-info-circle","color":"white","tagName":"i"},"type":"info"}],"kind":null,"name":"types"}]},{"extends":null,"module":null,"name":"Notification","overrides":[],"properties":[{"default":null,"kind":null,"name":"background"},{"default":3000,"kind":null,"name":"duration"},{"default":null,"kind":null,"name":"icon"},{"default":"","kind":null,"name":"message"},{"default":null,"kind":null,"name":"notification_type"},{"default":false,"kind":null,"name":"_destroyed"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"children":[{"id":"1035"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01627","sizing_mode":"stretch_width"},"id":"1034","type":"Row"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01629","sizing_mode":"stretch_width","text":"val"},"id":"1035","type":"panel.models.markup.HTML"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1034"},{"id":"1036"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01628","sizing_mode":"scale_width"},"id":"1033","type":"panel.models.layout.Card"},{"attributes":{"client_comm_id":"c909502890cb4b348eba483392e680cd","comm_id":"00ec679c452a4bab8e3eadfa6b0ce44a","plot_id":"1033"},"id":"1037","type":"panel.models.comm_manager.CommManager"},{"attributes":{"css_classes":["indicator"],"margin":[5,10,5,10],"sizing_mode":"stretch_both","text":"&lt;div style=&quot;font-size: 18pt; color: black&quot;&gt;12%&lt;/div&gt;"},"id":"1036","type":"panel.models.markup.HTML"}],"root_ids":["1033","1037"]},"title":"Bokeh Application","version":"2.4.3"}};
+    var render_items = [{"docid":"d5ac41ef-fdd2-47d0-a21a-1243f430ba82","root_ids":["1033"],"roots":{"1033":"284a832c-dbd2-4661-ad2a-af902902d75c"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
+    for (const render_item of render_items) {
+      for (const root_id of render_item.root_ids) {
+	const id_el = document.getElementById(root_id)
+	if (id_el.children.length && (id_el.children[0].className === 'bk-root')) {
+	  const root_el = id_el.children[0]
+	  root_el.id = root_el.id + '-rendered'
+	}
+      }
+    }
   }
-  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined)) {
     embed_document(root);
   } else {
     var attempts = 0;
     var timer = setInterval(function(root) {
-      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined)) {
         clearInterval(timer);
         embed_document(root);
       } else if (document.readyState == "complete") {
@@ -4807,8 +4929,7 @@ if (window.Jupyter !== undefined) {
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/javascript">
-(function(root) {
+<script type="application/javascript">(function(root) {
   function now() {
     return new Date();
   }
@@ -4879,52 +5000,62 @@ if (window.Jupyter !== undefined) {
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
-      
-      require(["deck.gl"], function(deck) {
-	
+      window.requirejs.config({'packages': {}, 'paths': {'h3': 'https://cdn.jsdelivr.net/npm/h3-js@3.7.2/dist/h3-js.umd', 'deck-gl': 'https://cdn.jsdelivr.net/npm/deck.gl@8.6.7/dist.min', 'deck-json': 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.6.7/dist.min', 'loader-csv': 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@3.1.7/dist/dist.min', 'loader-json': 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@3.1.7/dist/dist.min', 'loader-tiles': 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@3.1.7/dist/dist.min', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.6.1/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5', 'notyf': 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min'}, 'shim': {'deck-json': {'deps': ['deck-gl']}, 'deck-gl': {'deps': ['h3']}, 'gridstack': {'exports': 'GridStack'}}});
+      require(["h3"], function(h3) {
+	window.h3 = h3
+	on_load()
+      })
+      require(["deck-gl"], function(deck) {
 	window.deck = deck
-	
 	on_load()
       })
-      
+      require(["deck-json"], function() {
+	on_load()
+      })
+      require(["loader-csv"], function() {
+	on_load()
+      })
+      require(["loader-json"], function() {
+	on_load()
+      })
+      require(["loader-tiles"], function() {
+	on_load()
+      })
       require(["mapbox-gl"], function(mapboxgl) {
-	
 	window.mapboxgl = mapboxgl
-	
 	on_load()
       })
-      
       require(["gridstack"], function(GridStack) {
-	
 	window.GridStack = GridStack
-	
 	on_load()
       })
-      
-      root._bokeh_is_loading = css_urls.length + 3;
+      require(["notyf"], function() {
+	on_load()
+      })
+      root._bokeh_is_loading = css_urls.length + 9;
     } else {
       root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
-    }
-    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
+    }    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+    }    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
+    }    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    for (var i = 0; i < js_urls.length; i++) {
+    }    if (((window['Notyf'] !== undefined) && (!(window['Notyf'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/notificationarea/notyf@3/notyf.min.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    for (var i = 0; i < js_urls.length; i++) {
       var url = js_urls[i];
       if (skip.indexOf(url) >= 0) {
 	if (!window.requirejs) {
@@ -4968,32 +5099,24 @@ if (window.Jupyter !== undefined) {
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.7/dist/panel.min.js"];
+  var js_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.14.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/markdown.css"];
-  var inline_js = [
-    function(Bokeh) {
-      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\");\n      max-height: 400px;\n    }\n    ");
-    },
-    function(Bokeh) {
+  var css_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/widgets.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/loading.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/json.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/dataframe.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/alerts.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/card.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/debugger.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/markdown.css"];
+  var inline_js = [    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arc:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJtYXJnaW46IGF1dG87IGJhY2tncm91bmQ6IG5vbmU7IGRpc3BsYXk6IGJsb2NrOyBzaGFwZS1yZW5kZXJpbmc6IGF1dG87IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzNjM2MzIiBzdHJva2Utd2lkdGg9IjEwIiByPSIzNSIgc3Ryb2tlLWRhc2hhcnJheT0iMTY0LjkzMzYxNDMxMzQ2NDE1IDU2Ljk3Nzg3MTQzNzgyMTM4Ij4gICAgPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiBkdXI9IjFzIiB2YWx1ZXM9IjAgNTAgNTA7MzYwIDUwIDUwIiBrZXlUaW1lcz0iMDsxIj48L2FuaW1hdGVUcmFuc2Zvcm0+ICA8L2NpcmNsZT48L3N2Zz4=\");\n      background-size: auto calc(min(50%, 400px));\n    }\n    ");
+    },    function(Bokeh) {
       inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.multi-select{\n    color: white;\n    z-index: 100;\n    background: rgba(44,43,43,0.5);\n    border-radius: 1px;\n    width: 120px !important;\n    height: 30px !important;\n}\n.multi-select > .bk {\n    padding: 5px;\n    width: 120px !important;\n    height: 30px !important;\n}\n\n.deck-chart {\n    z-index: 10;\n    position: initial !important;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       Bokeh.set_log_level("info");
     },
-    
     function(Bokeh) {
       (function(root, factory) {
           factory(root["Bokeh"]);
@@ -5072,7 +5195,7 @@ if (window.Jupyter !== undefined) {
       });
 
     },
-    function(Bokeh) {} // ensure no trailing comma for IE
+function(Bokeh) {} // ensure no trailing comma for IE
   ];
 
   function run_inline_js() {
@@ -5335,23 +5458,37 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="docutils container">
+</script><div class="output text_html"><style>.bk-root, .bk-root .bk:before, .bk-root .bk:after {
+  font-family: var(--jp-ui-font-size1);
+  font-size: var(--jp-ui-font-size1);
+  color: var(--jp-ui-font-color1);
+}
+</style></div><div class="docutils container">
 </div>
 <div class="output text_html"><div id="1038">
-  <div class="bk-root" data-root-id="1038" id="5e2df96e-4239-4ef8-a71a-edfacc268497"></div>
+  <div class="bk-root" data-root-id="1038" id="db2222da-13c4-4e83-8ed8-30f166490a99"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"fd2f310c-3cd7-4e66-9300-3b328e0546e3":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"client_comm_id":"27a4003f9a164e7eb365fd0f946cf373","comm_id":"28d2e055360044b5ad2105ccb8591774","plot_id":"1038"},"id":"1042","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1040"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01638","sizing_mode":"stretch_width"},"id":"1039","type":"Row"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1039"},{"id":"1041"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01639","sizing_mode":"scale_width"},"id":"1038","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["indicator"],"margin":[5,10,5,10],"sizing_mode":"stretch_both","text":"&lt;div style=&quot;font-size: 20pt; color: black&quot;&gt;26,000&lt;/div&gt;"},"id":"1041","type":"panel.models.markup.HTML"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01640","sizing_mode":"stretch_width","text":"custom eval expr"},"id":"1040","type":"panel.models.markup.HTML"}],"root_ids":["1038","1042"]},"title":"Bokeh Application","version":"2.4.3"}};
-    var render_items = [{"docid":"fd2f310c-3cd7-4e66-9300-3b328e0546e3","root_ids":["1038"],"roots":{"1038":"5e2df96e-4239-4ef8-a71a-edfacc268497"}}];
+    var docs_json = {"d1605345-6fbb-4ec5-97e1-540ada6f793d":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]},{"extends":null,"module":null,"name":"click1","overrides":[],"properties":[{"default":"","kind":null,"name":"terminal_output"},{"default":"","kind":null,"name":"debug_name"},{"default":0,"kind":null,"name":"clears"}]},{"extends":null,"module":null,"name":"NotificationAreaBase1","overrides":[],"properties":[{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"}]},{"extends":null,"module":null,"name":"NotificationArea1","overrides":[],"properties":[{"default":[],"kind":null,"name":"notifications"},{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"},{"default":[{"background":"#ffc107","icon":{"className":"fas fa-exclamation-triangle","color":"white","tagName":"i"},"type":"warning"},{"background":"#007bff","icon":{"className":"fas fa-info-circle","color":"white","tagName":"i"},"type":"info"}],"kind":null,"name":"types"}]},{"extends":null,"module":null,"name":"Notification","overrides":[],"properties":[{"default":null,"kind":null,"name":"background"},{"default":3000,"kind":null,"name":"duration"},{"default":null,"kind":null,"name":"icon"},{"default":"","kind":null,"name":"message"},{"default":null,"kind":null,"name":"notification_type"},{"default":false,"kind":null,"name":"_destroyed"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"children":[{"id":"1040"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01638","sizing_mode":"stretch_width"},"id":"1039","type":"Row"},{"attributes":{"client_comm_id":"1a2e638b56304d35994ee18f5982667a","comm_id":"0c605d54e2434bf2ad198f8a7d1b7433","plot_id":"1038"},"id":"1042","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1039"},{"id":"1041"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01639","sizing_mode":"scale_width"},"id":"1038","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["indicator"],"margin":[5,10,5,10],"sizing_mode":"stretch_both","text":"&lt;div style=&quot;font-size: 20pt; color: black&quot;&gt;26,000&lt;/div&gt;"},"id":"1041","type":"panel.models.markup.HTML"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01640","sizing_mode":"stretch_width","text":"custom eval expr"},"id":"1040","type":"panel.models.markup.HTML"}],"root_ids":["1038","1042"]},"title":"Bokeh Application","version":"2.4.3"}};
+    var render_items = [{"docid":"d1605345-6fbb-4ec5-97e1-540ada6f793d","root_ids":["1038"],"roots":{"1038":"db2222da-13c4-4e83-8ed8-30f166490a99"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
+    for (const render_item of render_items) {
+      for (const root_id of render_item.root_ids) {
+	const id_el = document.getElementById(root_id)
+	if (id_el.children.length && (id_el.children[0].className === 'bk-root')) {
+	  const root_el = id_el.children[0]
+	  root_el.id = root_el.id + '-rendered'
+	}
+      }
+    }
   }
-  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined)) {
     embed_document(root);
   } else {
     var attempts = 0;
     var timer = setInterval(function(root) {
-      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined)) {
         clearInterval(timer);
         embed_document(root);
       } else if (document.readyState == "complete") {
@@ -5421,8 +5558,7 @@ documentation for more info</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/javascript">
-(function(root) {
+<script type="application/javascript">(function(root) {
   function now() {
     return new Date();
   }
@@ -5493,52 +5629,62 @@ documentation for more info</p>
 
     var skip = [];
     if (window.requirejs) {
-      window.requirejs.config({'packages': {}, 'paths': {'deck.gl': 'https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@^8.1.2/dist/index', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@1.7.0/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5'}, 'shim': {'gridstack': {'exports': 'GridStack'}}});
-      
-      require(["deck.gl"], function(deck) {
-	
+      window.requirejs.config({'packages': {}, 'paths': {'h3': 'https://cdn.jsdelivr.net/npm/h3-js@3.7.2/dist/h3-js.umd', 'deck-gl': 'https://cdn.jsdelivr.net/npm/deck.gl@8.6.7/dist.min', 'deck-json': 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.6.7/dist.min', 'loader-csv': 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@3.1.7/dist/dist.min', 'loader-json': 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@3.1.7/dist/dist.min', 'loader-tiles': 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@3.1.7/dist/dist.min', 'mapbox-gl': 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.6.1/dist/mapbox-gl.min', 'gridstack': 'https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5', 'notyf': 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min'}, 'shim': {'deck-json': {'deps': ['deck-gl']}, 'deck-gl': {'deps': ['h3']}, 'gridstack': {'exports': 'GridStack'}}});
+      require(["h3"], function(h3) {
+	window.h3 = h3
+	on_load()
+      })
+      require(["deck-gl"], function(deck) {
 	window.deck = deck
-	
 	on_load()
       })
-      
+      require(["deck-json"], function() {
+	on_load()
+      })
+      require(["loader-csv"], function() {
+	on_load()
+      })
+      require(["loader-json"], function() {
+	on_load()
+      })
+      require(["loader-tiles"], function() {
+	on_load()
+      })
       require(["mapbox-gl"], function(mapboxgl) {
-	
 	window.mapboxgl = mapboxgl
-	
 	on_load()
       })
-      
       require(["gridstack"], function(GridStack) {
-	
 	window.GridStack = GridStack
-	
 	on_load()
       })
-      
-      root._bokeh_is_loading = css_urls.length + 3;
+      require(["notyf"], function() {
+	on_load()
+      })
+      root._bokeh_is_loading = css_urls.length + 9;
     } else {
       root._bokeh_is_loading = css_urls.length + js_urls.length + js_modules.length;
-    }
-    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js', 'https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js'];
+    }    if (((window['deck'] !== undefined) && (!(window['deck'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js', 'https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'];
+    }    if (((window['mapboxgl'] !== undefined) && (!(window['mapboxgl'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
-      var urls = ['https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js'];
+    }    if (((window['GridStack'] !== undefined) && (!(window['GridStack'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js'];
       for (var i = 0; i < urls.length; i++) {
         skip.push(urls[i])
       }
-    }
-    for (var i = 0; i < js_urls.length; i++) {
+    }    if (((window['Notyf'] !== undefined) && (!(window['Notyf'] instanceof HTMLElement))) || window.requirejs) {
+      var urls = ['https://cdn.holoviz.org/panel/0.14.1/dist/bundled/notificationarea/notyf@3/notyf.min.js'];
+      for (var i = 0; i < urls.length; i++) {
+        skip.push(urls[i])
+      }
+    }    for (var i = 0; i < js_urls.length; i++) {
       var url = js_urls[i];
       if (skip.indexOf(url) >= 0) {
 	if (!window.requirejs) {
@@ -5582,32 +5728,24 @@ documentation for more info</p>
     document.body.appendChild(element);
   }
 
-  var js_urls = ["https://cdn.jsdelivr.net/npm/deck.gl@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@deck.gl/json@8.1.12/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/csv@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/json@2.0.2/dist/dist.min.js", "https://cdn.jsdelivr.net/npm/@loaders.gl/3d-tiles@2.0.2/dist/dist.min.js", "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.12.7/dist/panel.min.js"];
+  var js_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/h3-js@3.7.2/dist/h3-js.umd.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/deck.gl@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@deck.gl/json@8.6.7/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/csv@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/json@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/@loaders.gl/3d-tiles@3.1.7/dist/dist.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.js", "https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js", "https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-h5.js", "https://unpkg.com/@holoviz/panel@0.14.1/dist/panel.min.js"];
   var js_modules = [];
-  var css_urls = ["https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.jsdelivr.net/npm/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/widgets.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/loading.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/json.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/dataframe.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/alerts.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/card.css", "https://unpkg.com/@holoviz/panel@0.12.7/dist/css/markdown.css"];
-  var inline_js = [
-    function(Bokeh) {
-      inject_raw_css("\n    .bk.pn-loading.arcs:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBzdHlsZT0ibWFyZ2luOiBhdXRvOyBiYWNrZ3JvdW5kOiBub25lOyBkaXNwbGF5OiBibG9jazsgc2hhcGUtcmVuZGVyaW5nOiBhdXRvOyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIj4gIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMyIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZT0iI2MzYzNjMyIgc3Ryb2tlLWRhc2hhcnJheT0iNTAuMjY1NDgyNDU3NDM2NjkgNTAuMjY1NDgyNDU3NDM2NjkiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+ICAgIDxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZHVyPSIxcyIga2V5VGltZXM9IjA7MSIgdmFsdWVzPSIwIDUwIDUwOzM2MCA1MCA1MCI+PC9hbmltYXRlVHJhbnNmb3JtPiAgPC9jaXJjbGU+PC9zdmc+\");\n      max-height: 400px;\n    }\n    ");
-    },
-    function(Bokeh) {
+  var css_urls = ["https://cdn.holoviz.org/panel/0.14.1/dist/bundled/deckglplot/mapbox-gl-js/v2.6.1/mapbox-gl.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/bundled/gridstack/gridstack@4.2.5/dist/gridstack-extra.min.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/widgets.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/loading.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/json.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/dataframe.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/alerts.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/card.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/debugger.css", "https://cdn.holoviz.org/panel/0.14.1/dist/css/markdown.css"];
+  var inline_js = [    function(Bokeh) {
+      inject_raw_css("\n    .bk.pn-loading.arc:before {\n      background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJtYXJnaW46IGF1dG87IGJhY2tncm91bmQ6IG5vbmU7IGRpc3BsYXk6IGJsb2NrOyBzaGFwZS1yZW5kZXJpbmc6IGF1dG87IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzNjM2MzIiBzdHJva2Utd2lkdGg9IjEwIiByPSIzNSIgc3Ryb2tlLWRhc2hhcnJheT0iMTY0LjkzMzYxNDMxMzQ2NDE1IDU2Ljk3Nzg3MTQzNzgyMTM4Ij4gICAgPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiBkdXI9IjFzIiB2YWx1ZXM9IjAgNTAgNTA7MzYwIDUwIDUwIiBrZXlUaW1lcz0iMDsxIj48L2FuaW1hdGVUcmFuc2Zvcm0+ICA8L2NpcmNsZT48L3N2Zz4=\");\n      background-size: auto calc(min(50%, 400px));\n    }\n    ");
+    },    function(Bokeh) {
       inject_raw_css("\n.center-header {\n    text-align: center\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.dataframe table{\n  border: none;\n}\n\n.panel-df table{\n    width: 100%;\n    border-collapse: collapse;\n    border: none;\n}\n.panel-df td{\n    white-space: nowrap;\n    overflow: auto;\n    text-overflow: ellipsis;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n.multi-select{\n    color: white;\n    z-index: 100;\n    background: rgba(44,43,43,0.5);\n    border-radius: 1px;\n    width: 120px !important;\n    height: 30px !important;\n}\n.multi-select > .bk {\n    padding: 5px;\n    width: 120px !important;\n    height: 30px !important;\n}\n\n.deck-chart {\n    z-index: 10;\n    position: initial !important;\n}\n");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       inject_raw_css("\n        .indicator {\n            text-align: center;\n        }\n        ");
-    },
-    function(Bokeh) {
+    },    function(Bokeh) {
       Bokeh.set_log_level("info");
     },
-    
     function(Bokeh) {
       (function(root, factory) {
           factory(root["Bokeh"]);
@@ -5686,7 +5824,7 @@ documentation for more info</p>
       });
 
     },
-    function(Bokeh) {} // ensure no trailing comma for IE
+function(Bokeh) {} // ensure no trailing comma for IE
   ];
 
   function run_inline_js() {
@@ -5949,23 +6087,37 @@ if (window.Jupyter !== undefined) {
   } catch(err) {
   }
 }
-</script><div class="docutils container">
+</script><div class="output text_html"><style>.bk-root, .bk-root .bk:before, .bk-root .bk:after {
+  font-family: var(--jp-ui-font-size1);
+  font-size: var(--jp-ui-font-size1);
+  color: var(--jp-ui-font-color1);
+}
+</style></div><div class="docutils container">
 </div>
 <div class="output text_html"><div id="1043">
-  <div class="bk-root" data-root-id="1043" id="958cfe5d-4812-459d-8aa7-e6677a3d1a09"></div>
+  <div class="bk-root" data-root-id="1043" id="dbe9c5fc-a7ff-4491-8043-8a11a224e3b7"></div>
 </div>
 <script type="application/javascript">(function(root) {
   function embed_document(root) {
-    var docs_json = {"d143341d-f13e-42d8-95b6-613e9a0a3dc4":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]}],"roots":{"references":[{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1044"},{"id":"1046"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01652","sizing_mode":"scale_width"},"id":"1043","type":"panel.models.layout.Card"},{"attributes":{"css_classes":["markdown"],"margin":[5,5,5,5],"name":"Markdown01644","text":"&lt;h1&gt;H1&lt;/h1&gt;\n&lt;h2&gt;H2&lt;/h2&gt;\n&lt;h3&gt;H3&lt;/h3&gt;\n&lt;h4&gt;H4&lt;/h4&gt;\n&lt;h5&gt;H5&lt;/h5&gt;\n&lt;h6&gt;H6&lt;/h6&gt;\n&lt;h3&gt;Emphasis&lt;/h3&gt;\n&lt;p&gt;Emphasis, aka italics, with &lt;em&gt;asterisks&lt;/em&gt; or &lt;em&gt;underscores&lt;/em&gt;.&lt;/p&gt;"},"id":"1046","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"ac362d2db0be4d89aca44ca5fe8afe64","comm_id":"1b89cc058c994df7bea9f6252264d0c9","plot_id":"1043"},"id":"1047","type":"panel.models.comm_manager.CommManager"},{"attributes":{"children":[{"id":"1045"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01651","sizing_mode":"stretch_width"},"id":"1044","type":"Row"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01653","sizing_mode":"stretch_width","text":"Test Markdown title"},"id":"1045","type":"panel.models.markup.HTML"}],"root_ids":["1043","1047"]},"title":"Bokeh Application","version":"2.4.3"}};
-    var render_items = [{"docid":"d143341d-f13e-42d8-95b6-613e9a0a3dc4","root_ids":["1043"],"roots":{"1043":"958cfe5d-4812-459d-8aa7-e6677a3d1a09"}}];
+    var docs_json = {"d2dc5991-e205-4ef6-a3c3-af68cbf91c7a":{"defs":[{"extends":null,"module":null,"name":"ReactiveHTML1","overrides":[],"properties":[]},{"extends":null,"module":null,"name":"FlexBox1","overrides":[],"properties":[{"default":"flex-start","kind":null,"name":"align_content"},{"default":"flex-start","kind":null,"name":"align_items"},{"default":"row","kind":null,"name":"flex_direction"},{"default":"wrap","kind":null,"name":"flex_wrap"},{"default":"flex-start","kind":null,"name":"justify_content"}]},{"extends":null,"module":null,"name":"GridStack1","overrides":[],"properties":[{"default":"warn","kind":null,"name":"mode"},{"default":null,"kind":null,"name":"ncols"},{"default":null,"kind":null,"name":"nrows"},{"default":true,"kind":null,"name":"allow_resize"},{"default":true,"kind":null,"name":"allow_drag"},{"default":[],"kind":null,"name":"state"}]},{"extends":null,"module":null,"name":"click1","overrides":[],"properties":[{"default":"","kind":null,"name":"terminal_output"},{"default":"","kind":null,"name":"debug_name"},{"default":0,"kind":null,"name":"clears"}]},{"extends":null,"module":null,"name":"NotificationAreaBase1","overrides":[],"properties":[{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"}]},{"extends":null,"module":null,"name":"NotificationArea1","overrides":[],"properties":[{"default":[],"kind":null,"name":"notifications"},{"default":"bottom-right","kind":null,"name":"position"},{"default":0,"kind":null,"name":"_clear"},{"default":[{"background":"#ffc107","icon":{"className":"fas fa-exclamation-triangle","color":"white","tagName":"i"},"type":"warning"},{"background":"#007bff","icon":{"className":"fas fa-info-circle","color":"white","tagName":"i"},"type":"info"}],"kind":null,"name":"types"}]},{"extends":null,"module":null,"name":"Notification","overrides":[],"properties":[{"default":null,"kind":null,"name":"background"},{"default":3000,"kind":null,"name":"duration"},{"default":null,"kind":null,"name":"icon"},{"default":"","kind":null,"name":"message"},{"default":null,"kind":null,"name":"notification_type"},{"default":false,"kind":null,"name":"_destroyed"}]},{"extends":null,"module":null,"name":"TemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]},{"extends":null,"module":null,"name":"MaterialTemplateActions1","overrides":[],"properties":[{"default":0,"kind":null,"name":"open_modal"},{"default":0,"kind":null,"name":"close_modal"}]}],"roots":{"references":[{"attributes":{"css_classes":["markdown"],"margin":[5,5,5,5],"name":"Markdown01644","text":"&lt;h1&gt;H1&lt;/h1&gt;\n&lt;h2&gt;H2&lt;/h2&gt;\n&lt;h3&gt;H3&lt;/h3&gt;\n&lt;h4&gt;H4&lt;/h4&gt;\n&lt;h5&gt;H5&lt;/h5&gt;\n&lt;h6&gt;H6&lt;/h6&gt;\n&lt;h3&gt;Emphasis&lt;/h3&gt;\n&lt;p&gt;Emphasis, aka italics, with &lt;em&gt;asterisks&lt;/em&gt; or &lt;em&gt;underscores&lt;/em&gt;.&lt;/p&gt;"},"id":"1046","type":"panel.models.markup.HTML"},{"attributes":{"client_comm_id":"0f31bb2c560a41f3b7e75c457f77a2d9","comm_id":"2db760e8982549f0b5a1773cc83c4537","plot_id":"1043"},"id":"1047","type":"panel.models.comm_manager.CommManager"},{"attributes":{"active_header_background":"","button_css_classes":["card-button"],"children":[{"id":"1044"},{"id":"1046"}],"collapsed":false,"css_classes":["card"],"header_background":"","header_color":"","header_css_classes":["card-header"],"margin":[5,5,5,5],"name":"Card01652","sizing_mode":"scale_width"},"id":"1043","type":"panel.models.layout.Card"},{"attributes":{"children":[{"id":"1045"}],"css_classes":["card-header-row"],"margin":[0,0,0,0],"name":"Row01651","sizing_mode":"stretch_width"},"id":"1044","type":"Row"},{"attributes":{"css_classes":["card-title"],"margin":[5,0,5,0],"name":"HTML01653","sizing_mode":"stretch_width","text":"Test Markdown title"},"id":"1045","type":"panel.models.markup.HTML"}],"root_ids":["1043","1047"]},"title":"Bokeh Application","version":"2.4.3"}};
+    var render_items = [{"docid":"d2dc5991-e205-4ef6-a3c3-af68cbf91c7a","root_ids":["1043"],"roots":{"1043":"dbe9c5fc-a7ff-4491-8043-8a11a224e3b7"}}];
     root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
+    for (const render_item of render_items) {
+      for (const root_id of render_item.root_ids) {
+	const id_el = document.getElementById(root_id)
+	if (id_el.children.length && (id_el.children[0].className === 'bk-root')) {
+	  const root_el = id_el.children[0]
+	  root_el.id = root_el.id + '-rendered'
+	}
+      }
+    }
   }
-  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+  if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined) && ( root['deck'] !== undefined)) {
     embed_document(root);
   } else {
     var attempts = 0;
     var timer = setInterval(function(root) {
-      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined) {
+      if (root.Bokeh !== undefined && root.Bokeh.Panel !== undefined && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined) && (root['deck'] !== undefined)) {
         clearInterval(timer);
         embed_document(root);
       } else if (document.readyState == "complete") {
