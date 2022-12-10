@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['node2vec_5frandom_5fwalks_1102',['node2vec_random_walks',['../namespacecugraph.html#ae97a04254175094f14c3925c16263bc1',1,'cugraph']]]
+  ['node2vec_5frandom_5fwalks_1076',['node2vec_random_walks',['../namespacecugraph.html#ad76b807674d9f7970e022b5943aa8311',1,'cugraph']]]
 ];

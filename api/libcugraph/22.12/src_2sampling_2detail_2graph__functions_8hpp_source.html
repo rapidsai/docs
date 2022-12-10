@@ -101,29 +101,31 @@ $(function() {
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;                            rmm::device_uvector&lt;vertex_t&gt;&amp;&amp; dst,</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;                            rmm::device_uvector&lt;weight_t&gt;&amp;&amp; wgt);</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> GraphViewType&gt;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp;std::tuple&lt;rmm::device_uvector&lt;typename GraphViewType::vertex_type&gt;,</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp;           rmm::device_uvector&lt;typename GraphViewType::vertex_type&gt;,</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp;           std::optional&lt;rmm::device_uvector&lt;typename GraphViewType::weight_type&gt;&gt;&gt;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t, <span class="keyword">typename</span> edge_t, <span class="keyword">typename</span> weight_t, <span class="keywordtype">bool</span> multi_gpu&gt;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp;std::tuple&lt;rmm::device_uvector&lt;vertex_t&gt;,</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp;           rmm::device_uvector&lt;vertex_t&gt;,</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp;           std::optional&lt;rmm::device_uvector&lt;weight_t&gt;&gt;&gt;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp;gather_one_hop_edgelist(</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp;  raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;  GraphViewType <span class="keyword">const</span>&amp; graph_view,</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;  <span class="keyword">const</span> rmm::device_uvector&lt;typename GraphViewType::vertex_type&gt;&amp; active_majors,</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;  <span class="keywordtype">bool</span> do_expensive_check = <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> GraphViewType&gt;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&nbsp;std::tuple&lt;rmm::device_uvector&lt;typename GraphViewType::vertex_type&gt;,</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&nbsp;           rmm::device_uvector&lt;typename GraphViewType::vertex_type&gt;,</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp;           std::optional&lt;rmm::device_uvector&lt;typename GraphViewType::weight_type&gt;&gt;&gt;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp;sample_edges(raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp;             GraphViewType <span class="keyword">const</span>&amp; graph_view,</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp;             raft::random::RngState&amp; rng_state,</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&nbsp;             rmm::device_uvector&lt;typename GraphViewType::vertex_type&gt; <span class="keyword">const</span>&amp; active_majors,</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp;             <span class="keywordtype">size_t</span> fanout,</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&nbsp;             <span class="keywordtype">bool</span> with_replacement);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&nbsp; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp;}  <span class="comment">// namespace detail</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp;}  <span class="comment">// namespace cugraph</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;  graph_view_t&lt;vertex_t, edge_t, false, multi_gpu&gt; <span class="keyword">const</span>&amp; graph_view,</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;  std::optional&lt;edge_property_view_t&lt;edge_t, weight_t const*&gt;&gt; edge_weight_view,</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;  <span class="keyword">const</span> rmm::device_uvector&lt;vertex_t&gt;&amp; active_majors,</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;  <span class="keywordtype">bool</span> do_expensive_check = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t, <span class="keyword">typename</span> edge_t, <span class="keyword">typename</span> weight_t, <span class="keywordtype">bool</span> multi_gpu&gt;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&nbsp;std::tuple&lt;rmm::device_uvector&lt;vertex_t&gt;,</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp;           rmm::device_uvector&lt;vertex_t&gt;,</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp;           std::optional&lt;rmm::device_uvector&lt;weight_t&gt;&gt;&gt;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp;sample_edges(raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp;             graph_view_t&lt;vertex_t, edge_t, false, multi_gpu&gt; <span class="keyword">const</span>&amp; graph_view,</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&nbsp;             std::optional&lt;edge_property_view_t&lt;edge_t, weight_t const*&gt;&gt; edge_weight_view,</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp;             raft::random::RngState&amp; rng_state,</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&nbsp;             rmm::device_uvector&lt;vertex_t&gt; <span class="keyword">const</span>&amp; active_majors,</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&nbsp;             <span class="keywordtype">size_t</span> fanout,</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp;             <span class="keywordtype">bool</span> with_replacement);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&nbsp;}  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&nbsp;}  <span class="comment">// namespace cugraph</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacecugraph_html"><div class="ttname"><a href="namespacecugraph.html">cugraph</a></div><div class="ttdoc">Set of classes abstracting the type-erasure, templates, and template constraints to client code that ...</div><div class="ttdef"><b>Definition:</b> abstract_functor.hpp:22</div></div>
 <!-- start footer part -->

@@ -98,59 +98,97 @@ $(function() {
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp; </div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;  <span class="keywordtype">void</span>* graph_;            <span class="comment">// graph_t&lt;...&gt;*</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;  <span class="keywordtype">void</span>* number_map_;       <span class="comment">// rmm::device_uvector&lt;vertex_t&gt;*</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;  <span class="keywordtype">void</span>* edge_properties_;  <span class="comment">// edge_property_t&lt;</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;                           <span class="comment">//    graph_view_t&lt;vertex_t, edge_t, weight_t, store_transposed,</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;                           <span class="comment">//    multi_gpu&gt;, thrust::tuple&lt;edge_t, edge_type_id_t&gt;&gt;&gt;</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;};</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t,</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;          <span class="keyword">typename</span> edge_t,</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;          <span class="keyword">typename</span> weight_t,</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;          <span class="keywordtype">bool</span> store_transposed,</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp;          <span class="keywordtype">bool</span> multi_gpu&gt;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;cugraph_error_code_t transpose_storage(raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;                                       <a class="code" href="structcugraph_1_1c__api_1_1cugraph__graph__t.html">cugraph_graph_t</a>* graph,</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;                                       <a class="code" href="structcugraph_1_1c__api_1_1cugraph__error__t.html">cugraph_error_t</a>* error)</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;{</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;  <span class="keywordflow">if</span> (store_transposed == graph-&gt;store_transposed_) {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;    <span class="keyword">auto</span> p_graph =</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;      <span class="keyword">reinterpret_cast&lt;</span><a class="code" href="classcugraph_1_1graph__t.html">cugraph::graph_t&lt;vertex_t, edge_t, weight_t, store_transposed, multi_gpu&gt;</a>*<span class="keyword">&gt;</span>(</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;        graph-&gt;graph_);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;    <span class="keyword">auto</span> number_map = <span class="keyword">reinterpret_cast&lt;</span>rmm::device_uvector&lt;vertex_t&gt;*<span class="keyword">&gt;</span>(graph-&gt;number_map_);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;    <span class="keyword">auto</span> graph_transposed =</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;      <span class="keyword">new</span> <a class="code" href="classcugraph_1_1graph__t.html">cugraph::graph_t&lt;vertex_t, edge_t, weight_t, !store_transposed, multi_gpu&gt;</a>(handle);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;  <span class="keywordtype">void</span>* edge_weights_;     <span class="comment">// edge_property_t&lt;</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;                           <span class="comment">//    graph_view_t&lt;vertex_t, edge_t, store_transposed, multi_gpu&gt;,</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;                           <span class="comment">//    weight_t&gt;*</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;  <span class="keywordtype">void</span>* edge_properties_;  <span class="comment">// edge_property_t&lt;</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;                           <span class="comment">//    graph_view_t&lt;vertex_t, edge_t, store_transposed, multi_gpu&gt;,</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;                           <span class="comment">//    thrust::tuple&lt;edge_t, edge_type_id_t&gt;&gt;&gt;</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;};</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> vertex_t,</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp;          <span class="keyword">typename</span> edge_t,</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;          <span class="keyword">typename</span> weight_t,</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;          <span class="keywordtype">bool</span> store_transposed,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;          <span class="keywordtype">bool</span> multi_gpu&gt;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;cugraph_error_code_t transpose_storage(raft::handle_t <span class="keyword">const</span>&amp; handle,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;                                       <a class="code" href="structcugraph_1_1c__api_1_1cugraph__graph__t.html">cugraph_graph_t</a>* graph,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;                                       <a class="code" href="structcugraph_1_1c__api_1_1cugraph__error__t.html">cugraph_error_t</a>* error)</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;{</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;  <span class="keywordflow">if</span> (store_transposed == graph-&gt;store_transposed_) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;    <span class="keywordflow">if</span> (graph-&gt;edge_properties_ != <span class="keyword">nullptr</span>) {</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;      error-&gt;error_message_ =</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;        <span class="stringliteral">"transpose failed, transposing a graph with edge ID, type pairs unimplemented."</span>;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;      <span class="keywordflow">return</span> CUGRAPH_NOT_IMPLEMENTED;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;    }</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;    std::optional&lt;rmm::device_uvector&lt;vertex_t&gt;&gt; new_number_map{};</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp;    std::tie(*graph_transposed, new_number_map) = <a class="code" href="namespacecugraph.html#a9c870869082663cc3218c27131ace909">cugraph::transpose_graph_storage</a>(</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp;      handle,</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp;      std::move(*p_graph),</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp;      std::make_optional&lt;rmm::device_uvector&lt;vertex_t&gt;&gt;(std::move(*number_map)));</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp;    *number_map = std::move(new_number_map.value());</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp;    <span class="keyword">delete</span> p_graph;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;    graph-&gt;graph_            = graph_transposed;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;    graph-&gt;store_transposed_ = !store_transposed;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;    <span class="keywordflow">return</span> CUGRAPH_SUCCESS;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;    error-&gt;error_message_ = <span class="stringliteral">"transpose failed, value of transpose does not match graph"</span>;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp;    <span class="keywordflow">return</span> CUGRAPH_INVALID_INPUT;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;  }</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;}</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;    <span class="keyword">auto</span> p_graph =</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;      <span class="keyword">reinterpret_cast&lt;</span><a class="code" href="classcugraph_1_1graph__t.html">cugraph::graph_t&lt;vertex_t, edge_t, store_transposed, multi_gpu&gt;</a>*<span class="keyword">&gt;</span>(</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp;        graph-&gt;graph_);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp;    <span class="keyword">auto</span> number_map = <span class="keyword">reinterpret_cast&lt;</span>rmm::device_uvector&lt;vertex_t&gt;*<span class="keyword">&gt;</span>(graph-&gt;number_map_);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp;    <span class="keyword">auto</span> optional_edge_weights = std::optional&lt;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp;      <a class="code" href="classcugraph_1_1edge__property__t.html">edge_property_t&lt;graph_view_t&lt;vertex_t, edge_t, store_transposed, multi_gpu&gt;</a>, weight_t&gt;&gt;(</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp;      std::nullopt);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp;    <span class="keywordflow">if</span> (graph-&gt;edge_weights_ != <span class="keyword">nullptr</span>) {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;      <span class="keyword">auto</span> edge_weights = <span class="keyword">reinterpret_cast&lt;</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;        <a class="code" href="classcugraph_1_1edge__property__t.html">edge_property_t&lt;graph_view_t&lt;vertex_t, edge_t, store_transposed, multi_gpu&gt;</a>, weight_t<span class="keyword">&gt;</span>*&gt;(</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;        graph-&gt;edge_weights_);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;      optional_edge_weights = std::make_optional(std::move(*edge_weights));</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;      <span class="keyword">delete</span> edge_weights;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;    }</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;    <span class="keyword">auto</span> graph_transposed =</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;      <span class="keyword">new</span> <a class="code" href="classcugraph_1_1graph__t.html">cugraph::graph_t&lt;vertex_t, edge_t, !store_transposed, multi_gpu&gt;</a>(handle);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;}  <span class="comment">// namespace c_api</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;}  <span class="comment">// namespace cugraph</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;    std::optional&lt;rmm::device_uvector&lt;vertex_t&gt;&gt; new_number_map{std::nullopt};</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;    <span class="keyword">auto</span> new_optional_edge_weights = std::optional&lt;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp;      edge_property_t&lt;graph_view_t&lt;vertex_t, edge_t, !store_transposed, multi_gpu&gt;, weight_t&gt;&gt;(</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;      std::nullopt);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;    std::tie(*graph_transposed, new_optional_edge_weights, new_number_map) =</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp;      <a class="code" href="namespacecugraph.html#a45919b344a400cb0be461228d9c6cce3">cugraph::transpose_graph_storage</a>(</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp;        handle,</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&nbsp;        std::move(*p_graph),</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&nbsp;        std::move(optional_edge_weights),</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&nbsp;        std::make_optional&lt;rmm::device_uvector&lt;vertex_t&gt;&gt;(std::move(*number_map)));</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp;    *number_map = std::move(new_number_map.value());</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp;    <span class="keyword">delete</span> p_graph;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&nbsp; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp;    <span class="keywordflow">if</span> (new_optional_edge_weights) {</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&nbsp;      <span class="keyword">auto</span> new_edge_weights = <span class="keyword">new</span> <a class="code" href="classcugraph_1_1edge__property__t.html">cugraph::edge_property_t</a>&lt;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&nbsp;        <a class="code" href="classcugraph_1_1graph__view__t.html">cugraph::graph_view_t&lt;vertex_t, edge_t, !store_transposed, multi_gpu&gt;</a>,</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp;        weight_t&gt;(handle);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&nbsp;      *new_edge_weights    = std::move(new_optional_edge_weights.value());</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&nbsp;      graph-&gt;edge_weights_ = new_edge_weights;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&nbsp;    }</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&nbsp; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&nbsp;    graph-&gt;graph_            = graph_transposed;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp;    graph-&gt;store_transposed_ = !store_transposed;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp;    <span class="keywordflow">return</span> CUGRAPH_SUCCESS;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&nbsp;  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&nbsp;    error-&gt;error_message_ = <span class="stringliteral">"transpose failed, value of transpose does not match graph"</span>;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&nbsp;    <span class="keywordflow">return</span> CUGRAPH_INVALID_INPUT;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&nbsp;  }</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&nbsp;}</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&nbsp; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&nbsp;}  <span class="comment">// namespace c_api</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&nbsp;}  <span class="comment">// namespace cugraph</span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasscugraph_1_1graph__view__t_html"><div class="ttname"><a href="classcugraph_1_1graph__view__t.html">cugraph::graph_view_t</a></div><div class="ttdef"><b>Definition:</b> graph_view.hpp:388</div></div>
+<div class="ttc" id="aclasscugraph_1_1edge__property__t_html"><div class="ttname"><a href="classcugraph_1_1edge__property__t.html">cugraph::edge_property_t</a></div><div class="ttdef"><b>Definition:</b> edge_property.hpp:61</div></div>
 <div class="ttc" id="astructcugraph_1_1c__api_1_1cugraph__graph__t_html"><div class="ttname"><a href="structcugraph_1_1c__api_1_1cugraph__graph__t.html">cugraph::c_api::cugraph_graph_t</a></div><div class="ttdef"><b>Definition:</b> src/c_api/graph.hpp:30</div></div>
 <div class="ttc" id="anamespacecugraph_html"><div class="ttname"><a href="namespacecugraph.html">cugraph</a></div><div class="ttdoc">Set of classes abstracting the type-erasure, templates, and template constraints to client code that ...</div><div class="ttdef"><b>Definition:</b> abstract_functor.hpp:22</div></div>
-<div class="ttc" id="anamespacecugraph_html_a9c870869082663cc3218c27131ace909"><div class="ttname"><a href="namespacecugraph.html#a9c870869082663cc3218c27131ace909">cugraph::transpose_graph_storage</a></div><div class="ttdeci">std::tuple&lt; graph_t&lt; vertex_t, edge_t, weight_t, !store_transposed, multi_gpu &gt;, std::optional&lt; rmm::device_uvector&lt; vertex_t &gt; &gt; &gt; transpose_graph_storage(raft::handle_t const &amp;handle, graph_t&lt; vertex_t, edge_t, weight_t, store_transposed, multi_gpu &gt; &amp;&amp;graph, std::optional&lt; rmm::device_uvector&lt; vertex_t &gt;&gt; &amp;&amp;renumber_map, bool do_expensive_check)</div><div class="ttdoc">Transpose the storage format (no change in an actual graph topology).</div><div class="ttdef"><b>Definition:</b> transpose_graph_storage_impl.cuh:176</div></div>
-<div class="ttc" id="aclasscugraph_1_1graph__t_html"><div class="ttname"><a href="classcugraph_1_1graph__t.html">cugraph::graph_t</a></div><div class="ttdef"><b>Definition:</b> include/cugraph/graph.hpp:79</div></div>
+<div class="ttc" id="aclasscugraph_1_1graph__t_html"><div class="ttname"><a href="classcugraph_1_1graph__t.html">cugraph::graph_t</a></div><div class="ttdef"><b>Definition:</b> include/cugraph/graph.hpp:71</div></div>
 <div class="ttc" id="astructcugraph_1_1c__api_1_1cugraph__error__t_html"><div class="ttname"><a href="structcugraph_1_1c__api_1_1cugraph__error__t.html">cugraph::c_api::cugraph_error_t</a></div><div class="ttdef"><b>Definition:</b> src/c_api/error.hpp:32</div></div>
+<div class="ttc" id="anamespacecugraph_html_a45919b344a400cb0be461228d9c6cce3"><div class="ttname"><a href="namespacecugraph.html#a45919b344a400cb0be461228d9c6cce3">cugraph::transpose_graph_storage</a></div><div class="ttdeci">std::tuple&lt; graph_t&lt; vertex_t, edge_t, !store_transposed, multi_gpu &gt;, std::optional&lt; edge_property_t&lt; graph_view_t&lt; vertex_t, edge_t, !store_transposed, multi_gpu &gt;, weight_t &gt; &gt;, std::optional&lt; rmm::device_uvector&lt; vertex_t &gt; &gt; &gt; transpose_graph_storage(raft::handle_t const &amp;handle, graph_t&lt; vertex_t, edge_t, store_transposed, multi_gpu &gt; &amp;&amp;graph, std::optional&lt; edge_property_t&lt; graph_view_t&lt; vertex_t, edge_t, store_transposed, multi_gpu &gt;, weight_t &gt;&gt; &amp;&amp;edge_weights, std::optional&lt; rmm::device_uvector&lt; vertex_t &gt;&gt; &amp;&amp;renumber_map, bool do_expensive_check)</div><div class="ttdoc">Transpose the storage format (no change in an actual graph topology).</div><div class="ttdef"><b>Definition:</b> transpose_graph_storage_impl.cuh:207</div></div>
 <!-- start footer part -->
 <hr class="footer"><address class="footer"><small>
 Generated by&nbsp;<a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"></a> 1.8.20
