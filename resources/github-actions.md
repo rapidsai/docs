@@ -106,13 +106,16 @@ Additional specifications:
 
 The GPU labeled runners are backed by lab machines and have the GPUs specified in the table below installed.
 
-**IMPORTANT**: GPU jobs have two requirements: 1) They **must** run in a container (i.e. `nvidia/cuda:11.5.0-base-ubuntu18.04`) and 2) They must set the {% raw %}`NVIDIA_VISIBLE_DEVICES: ${{ env.NVIDIA_VISIBLE_DEVICES }}`{% endraw %} container environment variable. If these requirements aren't met, the GitHub Actions job will fail. See the _Usage_ section below for an example.
+**IMPORTANT**: GPU jobs have two requirements. If these requirements aren't met, the GitHub Actions job will fail. See the _Usage_ section below for an example.
 
-| Label Combination                | GPU    | Driver Version | # of GPUs |
-| -------------------------------- | ------ | -------------- | --------- |
-| `[linux, amd64, gpu-v100-450-1]` | `V100` | `450`          | `1`       |
-| `[linux, amd64, gpu-v100-495-1]` | `V100` | `495`          | `1`       |
-| `[linux, arm64, gpu-a100-495-1]` | `A100` | `495`          | `1`       |
+1. They must run in a container (i.e. `nvidia/cuda:11.5.0-base-ubuntu20.04`)
+2. They must set the {% raw %}`NVIDIA_VISIBLE_DEVICES: ${{ env.NVIDIA_VISIBLE_DEVICES }}`{% endraw %} container environment variable.
+
+| Label Combination                                                                                                                                                                                                                                                                                                                                            | GPU    | Driver Version | # of GPUs |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ | -------------- | --------- |
+| `[linux, amd64, gpu-v100-450-1]`                                                                                                                                                                                                                                                                                                                             | `V100` | `450`          | `1`       |
+| `[linux, amd64, gpu-v100-495-1]` <span class="table_br"></span> `[linux, amd64, gpu-v100-495]` <span class="table_br"></span> `[linux, amd64, gpu-v100-latest-1]` <span class="table_br"></span> `[linux, amd64, gpu-v100-latest]` <span class="table_br"></span> `[linux, amd64, gpu-latest-1]` <span class="table_br"></span> `[linux, amd64, gpu-latest]` | `V100` | `495`          | `1`       |
+| `[linux, arm64, gpu-a100-495-1]` <span class="table_br"></span> `[linux, arm64, gpu-a100-495]` <span class="table_br"></span> `[linux, arm64, gpu-a100-latest-1]` <span class="table_br"></span> `[linux, arm64, gpu-a100-latest]` <span class="table_br"></span> `[linux, arm64, gpu-latest-1]` <span class="table_br"></span> `[linux, arm64, gpu-latest]` | `A100` | `495`          | `1`       |
 
 ### Usage
 
