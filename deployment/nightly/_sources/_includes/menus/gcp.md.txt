@@ -21,4 +21,14 @@ Launch the RAPIDS container in Vertex AI managed notebooks.
 {bdg-primary}`single-node`
 ````
 
+````{grid-item-card}
+:link: /cloud/gcp/gke
+:link-type: doc
+Google Kubernetes Engine (GKE)
+^^^
+Launch a RAPIDS cluster on managed Kubernetes.
+
+{bdg-primary}`multi-node`
+````
+
 `````
