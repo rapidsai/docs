@@ -6,9 +6,9 @@ On the release selector choose **Docker** in the **Method** column.
 Then copy the commands shown:
 
 ```bash
-docker pull nvcr.io/nvidia/rapidsai/rapidsai-core:22.10-cuda11.5-runtime-ubuntu20.04-py3.9
+docker pull rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9
 docker run --gpus all --rm -it \
     --shm-size=1g --ulimit memlock=-1 \
     -p 8888:8888 -p 8787:8787 -p 8786:8786 \
-    nvcr.io/nvidia/rapidsai/rapidsai-core:22.10-cuda11.5-runtime-ubuntu20.04-py3.9
+    rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9
 ```

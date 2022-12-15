@@ -53,3 +53,7 @@ Next we need to connect to the VM.
 ```{include} ../../_includes/test-rapids-docker-vm.md
 
 ```
+
+## Clean up
+
+Once you are finished head back to the [Deployments](https://console.cloud.google.com/dm/deployments) page and delete the marketplace deployment you created.
