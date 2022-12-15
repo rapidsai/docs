@@ -109,6 +109,8 @@ az network nsg rule create \
 
 ## Install RAPIDS
 
+Next, we can SSH into our VM to install RAPIDS. SSH instructions can be found by selecting **Connect** in the left panel.
+
 ```{include} ../../_includes/install-rapids-with-docker.md
 
 ```
