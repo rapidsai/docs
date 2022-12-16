@@ -48,4 +48,5 @@ hidden: true
 ---
 azure-vm
 aks
+azureml
 ```

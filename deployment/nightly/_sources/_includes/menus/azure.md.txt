@@ -21,4 +21,14 @@ Launch a RAPIDS cluster on managed Kubernetes.
 {bdg-primary}`multi-node`
 ````
 
+````{grid-item-card}
+:link: /cloud/azure/azureml
+:link-type: doc
+Azure Machine Learning (Azure ML)
+^^^
+Launch a RAPIDS cluster on Azure ML.
+
+{bdg-primary}`multi-node`
+````
+
 `````
