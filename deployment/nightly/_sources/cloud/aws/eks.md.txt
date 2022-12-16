@@ -1,89 +1,117 @@
-# Elastic Kubernetes Service (EKS)
+# AWS Elastic Kubernetes Service (EKS)
 
-RAPIDS can be deployed on AWS via AWS’s managed Kubernetes service (EKS) using Helm. More details can be found at our **[helm docs.](https://helm.rapids.ai/docs/csp.html)**
+RAPIDS can be deployed on AWS via the [Elastic Kubernetes Service](https://aws.amazon.com/eks/) (EKS).
 
-**1. Install.** Install and configure dependencies in your local environment: kubectl, helm, awscli, and eksctl.
+To run RAPIDS you'll need a Kubernetes cluster with GPUs available.
 
-**2. Public Key.** Create a public key if you don't have one.
+## Prerequisites
 
-**3. Create your cluster:**
+First you'll need to have the [`aws` CLI tool](https://aws.amazon.com/cli/) and [`eksctl` CLI tool](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html) installed along with [`kubectl`](https://kubernetes.io/docs/tasks/tools/), [`helm`](https://helm.sh/docs/intro/install/), etc for managing Kubernetes.
 
-```shell
-$ eksctl create cluster \
-    --name [CLUSTER_NAME] \
-    --version 1.14 \
-    --region [REGION] \
-    --nodegroup-name gpu-workers \
-    --node-type [NODE_INSTANCE] \
-    --nodes  [NUM_NODES] \
-    --nodes-min 1 \
-    --nodes-max [MAX_NODES] \
-    --node-volume-size [NODE_SIZE] \
-    --ssh-access \
-    --ssh-public-key ~/path/to/id_rsa.pub \
-    --managed
+Ensure you are logged into the `aws` CLI.
+
+```console
+$ aws configure
 ```
 
-[CLUSTER_NAME] = Name of the EKS cluster. This will be auto generated if not specified. <br>
-[NODE_INSTANCE] = Node instance type to be used. Select one of the instance types supported by RAPIDS Refer to the introduction section for a list of supported instance types. <br>
-[NUM_NODES] = Number of nodes to be used. <br>
-[MAX_NODES] = Maximum size of the nodes. <br>
-[NODE_SIZE] = Size of the nodes. <br>
+## Create the Kubernetes cluster
 
-Update the path to the ssh-public-key to point to the folder and file where your public key is saved.
+Now we can launch a GPU enabled EKS cluster. First launch an EKS cluster with `eksctl`.
 
-**4. Install GPU addon:**
-
-```shell
-$ kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/1.0.0-beta4/nvidia-device-plugin.yml
+```console
+$ eksctl create cluster rapids \
+                      --version 1.24 \
+                      --nodes 3 \
+                      --node-type=p3.8xlarge \
+                      --timeout=40m \
+                      --ssh-access \
+                      --ssh-public-key <public key ID> \  # Be sure to set your public key ID here
+                      --region us-east-1 \
+                      --zones=us-east-1c,us-east-1b,us-east-1d \
+                      --auto-kubeconfig \
+                      --install-nvidia-plugin=false
 ```
 
-**5. Install RAPIDS helm repo:**
+With this command, you’ve launched an EKS cluster called `rapids`. You’ve specified that it should use nodes of type `p3.8xlarge`. We also specified that we don't want to install the NVIDIA drivers as we will do that with the NVIDIA operator.
 
-```shell
-$ helm repo add rapidsai https://helm.rapids.ai
-$ helm repo update
+To access the cluster we need to pull down the credentials.
+
+```console
+$ aws eks --region us-east-1 update-kubeconfig --name rapids
 ```
 
-**6. Install helm chart:**
+## Install drivers
 
-```shell
-$ helm install --set dask.scheduler.serviceType="LoadBalancer" --set dask.jupyter.serviceType="LoadBalancer" rapidstest rapidsai/rapidsai
+Next, [install the NVIDIA drivers](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html) onto each node.
+
+```console
+$ helm install --repo https://helm.ngc.nvidia.com/nvidia --wait --generate-name -n gpu-operator --create-namespace gpu-operator
+NAME: gpu-operator-1670843572
+NAMESPACE: gpu-operator
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
 ```
 
-**7. Accessing your cluster:**
+Verify that the NVIDIA drivers are successfully installed.
 
-```shell
-$ kubectl get svc
-NAME                TYPE          CLUSTER-IP      EXTERNAL-IP                                                               PORT(S)                         AGE
-kubernetes          ClusterIP     10.100.0.1      <none>                                                                    443/TCP                         12m
-rapidsai-jupyter    LoadBalancer  10.100.251.155  a454a9741455544cfa37fc4ac71caa53-868718558.us-east-1.elb.amazonaws.com    80:30633/TCP                    85s
-rapidsai-scheduler  LoadBalancer  10.100.11.182   a9c703f1c002f478ea60d9acaf165bab-1146605388.us-east-1.elb.amazonaws.com   8786:30346/TCP,8787:32444/TCP   85s
+```console
+$ kubectl get po -A --watch | grep nvidia
+kube-system   nvidia-driver-installer-6zwcn                                 1/1     Running   0         8m47s
+kube-system   nvidia-driver-installer-8zmmn                                 1/1     Running   0         8m47s
+kube-system   nvidia-driver-installer-mjkb8                                 1/1     Running   0         8m47s
+kube-system   nvidia-gpu-device-plugin-5ffkm                                1/1     Running   0         13m
+kube-system   nvidia-gpu-device-plugin-d599s                                1/1     Running   0         13m
+kube-system   nvidia-gpu-device-plugin-jrgjh                                1/1     Running   0         13m
 ```
 
-**7. ELB IP address:** **[Convert the DNS address provided above as the
-EXTERNAL-IP address to an IPV4
-address](https://aws.amazon.com/premiumsupport/knowledge-center/elb-find-load-balancer-IP/)**.
-Then use the obtained IPV4 address to visit the rapidsai-jupyter service in your
-browser!
+After your drivers are installed, create a quick sample pod that uses some GPU compute to make sure that everything is working as expected.
 
-**8. Delete the cluster:** List and delete services running in the cluster to release resources
-
-```shell
-$ kubectl get svc --all-namespaces
-$ kubectl delete svc [SERVICE_NAME]
+```console
+$ cat << EOF | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cuda-vectoradd
+spec:
+  restartPolicy: OnFailure
+  containers:
+  - name: cuda-vectoradd
+    image: "nvidia/samples:vectoradd-cuda11.2.1"
+    resources:
+       limits:
+         nvidia.com/gpu: 1
+EOF
 ```
 
-[SERVICE_NAME] = Name of the services which have an EXTERNAL-IP value and are required to be removed to release resources.
-
-Delete the cluster and its associated nodes
-
-```shell
-$ eksctl delete cluster --region=[REGION] --name=[CLUSTER_NAME]
+```console
+$ kubectl logs pod/cuda-vectoradd
+[Vector addition of 50000 elements]
+Copy input data from the host memory to the CUDA device
+CUDA kernel launch with 196 blocks of 256 threads
+Copy output data from the CUDA device to the host memory
+Test PASSED
+Done
 ```
 
-**9. Uninstall the helm chart:**
+If you see `Test PASSED` in the output, you can be confident that your Kubernetes cluster has GPU compute set up correctly.
 
-```shell
-$ helm uninstall rapidstest
+Next, clean up that pod.
+
+```console
+$ kubectl delete po cuda-vectoradd
+pod "cuda-vectoradd" deleted
+```
+
+## Install RAPIDS
+
+Now that you have a GPU enabled Kubernetes cluster on EKS you can install RAPIDS with [any of the supported methods](../../platforms/kubernetes).
+
+## Clean up
+
+You can also delete the EKS cluster to stop billing with the following command.
+
+```console
+$ eksctl delete cluster --region=us-east-1 --name=rapids
+Deleting cluster rapids...⠼
 ```
