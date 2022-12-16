@@ -11,4 +11,14 @@ Launch an Azure VM instance and run RAPIDS.
 {bdg-primary}`single-node`
 ````
 
+````{grid-item-card}
+:link: /cloud/azure/aks
+:link-type: doc
+Azure Kubernetes Service (AKS)
+^^^
+Launch a RAPIDS cluster on managed Kubernetes.
+
+{bdg-primary}`multi-node`
+````
+
 `````

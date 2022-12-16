@@ -44,14 +44,6 @@ Dask Helm Chart
 Install a single user notebook and cluster on Kubernetes with the Dask Helm Chart.
 ````
 
-````{grid-item-card}
-:link: kubernetes/dask-gateway
-:link-type: doc
-Dask Gateway
-^^^
-Centrally enable and manage cluster creation on Kubernetes with Dask gateway.
-````
-
 `````
 
 ```{toctree}
@@ -63,5 +55,4 @@ rapids-docker
 kubernetes/dask-kubernetes
 kubernetes/dask-operator
 kubernetes/dask-helm-chart
-kubernetes/dask-gateway
 ```

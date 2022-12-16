@@ -47,4 +47,5 @@ ND (>=v2) series
 hidden: true
 ---
 azure-vm
+aks
 ```

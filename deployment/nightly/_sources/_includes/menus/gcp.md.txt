@@ -31,4 +31,14 @@ Launch a RAPIDS cluster on managed Kubernetes.
 {bdg-primary}`multi-node`
 ````
 
+````{grid-item-card}
+:link: /cloud/gcp/dataproc
+:link-type: doc
+Dataproc
+^^^
+Launch a RAPIDS cluster on Dataproc.
+
+{bdg-primary}`multi-node`
+````
+
 `````

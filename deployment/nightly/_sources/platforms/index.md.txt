@@ -35,16 +35,6 @@ Run RAPIDS on Coiled.
 {bdg-primary}`multi-node`
 ````
 
-````{grid-item-card}
-:link: databricks
-:link-type: doc
-Databricks
-^^^
-Run RAPIDS on Databricks.
-
-{bdg-primary}`multi-node`
-````
-
 `````
 
 ```{toctree}
@@ -55,5 +45,4 @@ Run RAPIDS on Databricks.
 kubernetes
 kubeflow
 coiled
-databricks
 ```
