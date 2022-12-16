@@ -1,4 +1,4 @@
-# Local Machine
+# Local
 
 ## Conda
 
