@@ -430,21 +430,49 @@
               
   <section id="vertex-ai">
 <h1>Vertex AI<a class="headerlink" href="#vertex-ai" title="Permalink to this heading">#</a></h1>
-<p>RAPIDS can be deployed on Vertex AI.</p>
-<section id="managed-notebooks">
-<h2>Managed Notebooks<a class="headerlink" href="#managed-notebooks" title="Permalink to this heading">#</a></h2>
+<p>RAPIDS can be deployed on <a class="reference external" href="https://cloud.google.com/vertex-ai-workbench">Vertex AI Workbench</a>.</p>
 <p>For new, user-managed notebooks, it is recommended to use a RAPIDS docker image to access the latest RAPIDS software.</p>
-<p><strong>1. Prepare RAPIDS Docker Image.</strong> Before configuring a new notebook, the <span class="xref myst">RAPIDS Docker image</span> will need to be built to expose port 8080 to be used as a notebook service.</p>
-<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">ARG</span><span class="w"> </span>RAPIDS_IMAGE
-<span class="k">FROM</span><span class="w"> </span><span class="s">$RAPIDS_IMAGE</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">rapids</span>
+<section id="prepare-rapids-docker-image">
+<h2>Prepare RAPIDS Docker Image<a class="headerlink" href="#prepare-rapids-docker-image" title="Permalink to this heading">#</a></h2>
+<p>Before configuring a new notebook, the <span class="xref myst">RAPIDS Docker image</span> will need to be built to expose port 8080 to be used as a notebook service.</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9</span>
 <span class="k">EXPOSE</span><span class="w"> </span><span class="s">8080</span>
 
-<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;jupyter-lab&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--allow-root&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--ip=0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--port=8080&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--no-browser&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--NotebookApp.token=&#39;&#39;&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--NotebookApp.allow_origin=&#39;*&#39;&quot;</span><span class="w"> </span><span class="p">]</span>
+<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;jupyter-lab&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--allow-root&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--ip=0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--port=8080&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--no-browser&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--NotebookApp.token=&#39;&#39;&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--NotebookApp.allow_origin=&#39;*&#39;&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Once you have built this image, it needs to be pushed to <a class="reference external" href="https://cloud.google.com/container-registry/docs/pushing-and-pulling">Google Container Registry</a> for Vertex AI.</p>
-<p><strong>2. Create a New Notebook.</strong> From the Google Cloud UI, nagivate to <code class="docutils literal notranslate"><span class="pre">Vertex</span> <span class="pre">AI</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">Dashboard</span></code> and select <code class="docutils literal notranslate"><span class="pre">+</span> <span class="pre">CREATE</span> <span class="pre">NOTEBOOK</span> <span class="pre">INSTANCE</span></code>. Under the <code class="docutils literal notranslate"><span class="pre">Environment</span></code> section, specify <code class="docutils literal notranslate"><span class="pre">Custom</span> <span class="pre">container</span></code>, and in the section below, select the <code class="docutils literal notranslate"><span class="pre">gcr.io</span></code> path to your pushed RAPIDS Docker image. After customizing other aspects of the machine, click <code class="docutils literal notranslate"><span class="pre">CREATE</span></code></p>
-<p><strong>3. TEST RAPIDS</strong> Once the managed notebook is fully configured, you can click <code class="docutils literal notranslate"><span class="pre">OPEN</span> <span class="pre">JUPYTERLAB</span></code> to navigate to another tab running JupyterLab to use the latest version of RAPIDS with Vertex AI.</p>
+<p>Once you have built this image, it needs to be pushed to <a class="reference external" href="https://cloud.google.com/container-registry/docs/pushing-and-pulling">Google Container Registry</a> for Vertex AI to access.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker build -t gcr.io/&lt;project&gt;/&lt;folder&gt;/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9 .
+<span class="gp">$ </span>docker push gcr.io/&lt;project&gt;/&lt;folder&gt;/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9
+</pre></div>
+</div>
+</section>
+<section id="create-a-new-notebook">
+<h2>Create a New Notebook<a class="headerlink" href="#create-a-new-notebook" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>From the Google Cloud UI, navigate to <a class="reference external" href="https://console.cloud.google.com/vertex-ai"><strong>Vertex AI</strong></a> -&gt; <strong>Dashboard</strong> and select <strong>+ CREATE NOTEBOOK INSTANCE</strong>.</p></li>
+<li><p>Under the <strong>Environment</strong> section, specify <strong>Custom container</strong>, and in the section below, select the <code class="docutils literal notranslate"><span class="pre">gcr.io</span></code> path to your pushed RAPIDS Docker image.</p></li>
+<li><p>Under <strong>Machine Configuration</strong> select an NVIDIA GPU.</p></li>
+<li><p>Check the <strong>Install NVIDIA GPU Driver</strong> option.</p></li>
+<li><p>After customizing any other aspects of the machine you wish, click <strong>CREATE</strong>.</p></li>
+</ol>
+</section>
+<section id="test-rapids">
+<h2>TEST RAPIDS<a class="headerlink" href="#test-rapids" title="Permalink to this heading">#</a></h2>
+<p>Once the managed notebook is fully configured, you can click <strong>OPEN JUPYTERLAB</strong> to navigate to another tab running JupyterLab to use the latest version of RAPIDS with Vertex AI.</p>
+<p>For example we could import and use RAPIDS libraries like <code class="docutils literal notranslate"><span class="pre">cudf</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">timeseries</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+                       <span class="nb">id</span>     <span class="n">name</span>         <span class="n">x</span>         <span class="n">y</span>
+<span class="n">timestamp</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">1020</span>    <span class="n">Kevin</span>  <span class="mf">0.091536</span>  <span class="mf">0.664482</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span>   <span class="mi">974</span>    <span class="n">Frank</span>  <span class="mf">0.683788</span> <span class="o">-</span><span class="mf">0.467281</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">02</span>  <span class="mi">1000</span>  <span class="n">Charlie</span>  <span class="mf">0.419740</span> <span class="o">-</span><span class="mf">0.796866</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">03</span>  <span class="mi">1019</span>    <span class="n">Edith</span>  <span class="mf">0.488411</span>  <span class="mf">0.731661</span>
+<span class="mi">2000</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">04</span>   <span class="mi">998</span>    <span class="n">Quinn</span>  <span class="mf">0.651381</span> <span class="o">-</span><span class="mf">0.525398</span>
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -487,8 +515,18 @@
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#managed-notebooks">
-   Managed Notebooks
+  <a class="reference internal nav-link" href="#prepare-rapids-docker-image">
+   Prepare RAPIDS Docker Image
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#create-a-new-notebook">
+   Create a New Notebook
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#test-rapids">
+   TEST RAPIDS
   </a>
  </li>
 </ul>
