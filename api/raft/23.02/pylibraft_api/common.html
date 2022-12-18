@@ -421,12 +421,288 @@
 <p>This page provides <code class="xref py py-obj docutils literal notranslate"><span class="pre">pylibraft</span></code> class references for the publicly-exposed elements of the <code class="xref py py-obj docutils literal notranslate"><span class="pre">pylibraft.common</span></code> package.</p>
 <section id="basic-vocabulary">
 <h2>Basic Vocabulary<a class="headerlink" href="#basic-vocabulary" title="Permalink to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pylibraft.common.Handle">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pylibraft.common.</span></span><span class="sig-name descname"><span class="pre">Handle</span></span><a class="headerlink" href="#pylibraft.common.Handle" title="Permalink to this definition">#</a></dt>
+<dd><p>Handle is a lightweight python wrapper around the corresponding C++ class
+of handle_t exposed by RAFT&rsquo;s C++ interface. Refer to the header file
+raft/handle.hpp for interface level details of this struct</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylibraft.common</span> <span class="kn">import</span> <span class="n">Stream</span><span class="p">,</span> <span class="n">Handle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">Stream</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handle</span> <span class="o">=</span> <span class="n">Handle</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># call algos here</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># final sync of all work launched in the stream of this handle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># this is same as `raft.cuda.Stream.sync()` call, but safer in case</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the default stream inside the `handle_t` is being used</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handle</span><span class="o">.</span><span class="n">sync</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">handle</span>  <span class="c1"># optional!</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylibraft.common.Handle.getHandle" title="pylibraft.common.Handle.getHandle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getHandle</span></code></a>(self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylibraft.common.Handle.sync" title="pylibraft.common.Handle.sync"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sync</span></code></a>(self)</p></td>
+<td><p>Issues a sync on the stream set for this handle.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="pylibraft.common.Handle.getHandle">
+<span class="sig-name descname"><span class="pre">getHandle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/aec0948/python/pylibraftpylibraft/common/handle.pyx#L76"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.common.Handle.getHandle" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pylibraft.common.Handle.sync">
+<span class="sig-name descname"><span class="pre">sync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/aec0948/python/pylibraftpylibraft/common/handle.pyx#L70"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.common.Handle.sync" title="Permalink to this definition">#</a></dt>
+<dd><p>Issues a sync on the stream set for this handle.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pylibraft.common.Stream">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pylibraft.common.</span></span><span class="sig-name descname"><span class="pre">Stream</span></span><a class="headerlink" href="#pylibraft.common.Stream" title="Permalink to this definition">#</a></dt>
+<dd><p>Stream represents a thin-wrapper around cudaStream_t and its operations.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylibraft.common.cuda</span> <span class="kn">import</span> <span class="n">Stream</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span> <span class="o">=</span> <span class="n">Stream</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stream</span><span class="o">.</span><span class="n">sync</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">stream</span>  <span class="c1"># optional!</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylibraft.common.Stream.sync" title="pylibraft.common.Stream.sync"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sync</span></code></a>(self)</p></td>
+<td><p>Synchronize on the cudastream owned by this object.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="pylibraft.common.Stream.sync">
+<span class="sig-name descname"><span class="pre">sync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/aec0948/python/pylibraftpylibraft/common/cuda.pyx#L71"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.common.Stream.sync" title="Permalink to this definition">#</a></dt>
+<dd><p>Synchronize on the cudastream owned by this object. Note that this
+could raise exception due to issues with previous asynchronous
+launches</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pylibraft.common.device_ndarray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pylibraft.common.</span></span><span class="sig-name descname"><span class="pre">device_ndarray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">np_ndarray</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/aec0948/python/pylibraftpylibraft/common/device_ndarray.py#L21"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.common.device_ndarray" title="Permalink to this definition">#</a></dt>
+<dd><p>pylibraft.common.device_ndarray is meant to be a very lightweight
+__cuda_array_interface__ wrapper around a numpy.ndarray.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#pylibraft.common.device_ndarray.c_contiguous" title="pylibraft.common.device_ndarray.c_contiguous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">c_contiguous</span></code></a></dt><dd><p>Is the current device_ndarray laid out in row-major format?</p>
+</dd>
+<dt><a class="reference internal" href="#pylibraft.common.device_ndarray.dtype" title="pylibraft.common.device_ndarray.dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtype</span></code></a></dt><dd><p>Datatype of the current device_ndarray instance</p>
+</dd>
+<dt><a class="reference internal" href="#pylibraft.common.device_ndarray.f_contiguous" title="pylibraft.common.device_ndarray.f_contiguous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f_contiguous</span></code></a></dt><dd><p>Is the current device_ndarray laid out in column-major format?</p>
+</dd>
+<dt><a class="reference internal" href="#pylibraft.common.device_ndarray.shape" title="pylibraft.common.device_ndarray.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape</span></code></a></dt><dd><p>Shape of the current device_ndarray instance</p>
+</dd>
+<dt><a class="reference internal" href="#pylibraft.common.device_ndarray.strides" title="pylibraft.common.device_ndarray.strides"><code class="xref py py-obj docutils literal notranslate"><span class="pre">strides</span></code></a></dt><dd><p>Strides of the current device_ndarray instance</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<tbody>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="pylibraft.common.device_ndarray.c_contiguous">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">c_contiguous</span></span><a class="headerlink" href="#pylibraft.common.device_ndarray.c_contiguous" title="Permalink to this definition">#</a></dt>
+<dd><p>Is the current device_ndarray laid out in row-major format?</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pylibraft.common.device_ndarray.copy_to_host">
+<span class="sig-name descname"><span class="pre">copy_to_host</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/aec0948/python/pylibraftpylibraft/common/device_ndarray.py#L147"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.common.device_ndarray.copy_to_host" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns a new numpy.ndarray object on host with the current contents of
+this device_ndarray</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pylibraft.common.device_ndarray.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#pylibraft.common.device_ndarray.dtype" title="Permalink to this definition">#</a></dt>
+<dd><p>Datatype of the current device_ndarray instance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pylibraft.common.device_ndarray.empty">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float32'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order='C'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/aec0948/python/pylibraftpylibraft/common/device_ndarray.py#L67"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.common.device_ndarray.empty" title="Permalink to this definition">#</a></dt>
+<dd><p>Return a new device_ndarray of given shape and type, without
+initializing entries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>shape</strong><span class="classifier">int or tuple of int</span></dt><dd><p>Shape of the empty array, e.g., (2, 3) or 2.</p>
+</dd>
+<dt><strong>dtype</strong><span class="classifier">data-type, optional</span></dt><dd><p>Desired output data-type for the array, e.g, numpy.int8.
+Default is numpy.float32.</p>
+</dd>
+<dt><strong>order</strong><span class="classifier">{&lsquo;C&rsquo;, &lsquo;F&rsquo;}, optional (default: &lsquo;C&rsquo;)</span></dt><dd><p>Whether to store multi-dimensional dat ain row-major (C-style)
+or column-major (Fortran-style) order in memory</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pylibraft.common.device_ndarray.f_contiguous">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">f_contiguous</span></span><a class="headerlink" href="#pylibraft.common.device_ndarray.f_contiguous" title="Permalink to this definition">#</a></dt>
+<dd><p>Is the current device_ndarray laid out in column-major format?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pylibraft.common.device_ndarray.shape">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#pylibraft.common.device_ndarray.shape" title="Permalink to this definition">#</a></dt>
+<dd><p>Shape of the current device_ndarray instance</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pylibraft.common.device_ndarray.strides">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">strides</span></span><a class="headerlink" href="#pylibraft.common.device_ndarray.strides" title="Permalink to this definition">#</a></dt>
+<dd><p>Strides of the current device_ndarray instance</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="interruptible">
 <h2>Interruptible<a class="headerlink" href="#interruptible" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pylibraft.common.interruptible.cuda_interruptible">
+<span class="sig-prename descclassname"><span class="pre">pylibraft.common.interruptible.</span></span><span class="sig-name descname"><span class="pre">cuda_interruptible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/aec0948/python/pylibraftpylibraft/common/interruptible.pyx#L34"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.common.interruptible.cuda_interruptible" title="Permalink to this definition">#</a></dt>
+<dd><p>Temporarily install a keyboard interrupt handler (Ctrl+C)
+that cancels the enclosed interruptible C++ thread.</p>
+<p>Use this on a long-running C++ function imported via cython:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">cuda_interruptible</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">my_long_running_function</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It&rsquo;s also recommended to release the GIL during the call, to
+make sure the handler has a chance to run:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">cuda_interruptible</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">with</span> <span class="n">nogil</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">my_long_running_function</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pylibraft.common.interruptible.synchronize">
+<span class="sig-prename descclassname"><span class="pre">pylibraft.common.interruptible.</span></span><span class="sig-name descname"><span class="pre">synchronize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Stream</span> <span class="pre">stream:</span> <span class="pre">Stream</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/aec0948/python/pylibraftpylibraft/common/interruptible.pyx#L64"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.common.interruptible.synchronize" title="Permalink to this definition">#</a></dt>
+<dd><p>Same as cudaStreamSynchronize, but can be interrupted
+if called within a <code class="xref py py-obj docutils literal notranslate"><span class="pre">with</span> <span class="pre">cuda_interruptible()</span></code> block.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pylibraft.common.interruptible.cuda_yield">
+<span class="sig-prename descclassname"><span class="pre">pylibraft.common.interruptible.</span></span><span class="sig-name descname"><span class="pre">cuda_yield</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/aec0948/python/pylibraftpylibraft/common/interruptible.pyx#L74"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.common.interruptible.cuda_yield" title="Permalink to this definition">#</a></dt>
+<dd><p>Check for an asynchronously received interrupted_exception.
+Raises the exception if a user pressed Ctrl+C within a
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">with</span> <span class="pre">cuda_interruptible()</span></code> block before.</p>
+</dd></dl>
+
 </section>
 <section id="cuda-array-interface-helpers">
 <h2>CUDA Array Interface Helpers<a class="headerlink" href="#cuda-array-interface-helpers" title="Permalink to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pylibraft.common.cai_wrapper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pylibraft.common.</span></span><span class="sig-name descname"><span class="pre">cai_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cai_arr</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/aec0948/python/pylibraftpylibraft/common/cai_wrapper.py#L21"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.common.cai_wrapper" title="Permalink to this definition">#</a></dt>
+<dd><p>Simple wrapper around a CUDA array interface object to reduce
+boilerplate for extracting common information from the underlying
+dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#pylibraft.common.cai_wrapper.c_contiguous" title="pylibraft.common.cai_wrapper.c_contiguous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">c_contiguous</span></code></a></dt><dd><p>Returns whether the underlying CUDA array interface has</p>
+</dd>
+<dt><a class="reference internal" href="#pylibraft.common.cai_wrapper.data" title="pylibraft.common.cai_wrapper.data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data</span></code></a></dt><dd><p>Returns the data pointer of the underlying CUDA array interface</p>
+</dd>
+<dt><a class="reference internal" href="#pylibraft.common.cai_wrapper.dtype" title="pylibraft.common.cai_wrapper.dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtype</span></code></a></dt><dd><p>Returns the dtype of the underlying CUDA array interface</p>
+</dd>
+<dt><a class="reference internal" href="#pylibraft.common.cai_wrapper.f_contiguous" title="pylibraft.common.cai_wrapper.f_contiguous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f_contiguous</span></code></a></dt><dd><p>Returns whether the underlying CUDA array interface has</p>
+</dd>
+<dt><a class="reference internal" href="#pylibraft.common.cai_wrapper.shape" title="pylibraft.common.cai_wrapper.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape</span></code></a></dt><dd><p>Returns the shape of the underlying CUDA array interface</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<tbody>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="pylibraft.common.cai_wrapper.c_contiguous">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">c_contiguous</span></span><a class="headerlink" href="#pylibraft.common.cai_wrapper.c_contiguous" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns whether the underlying CUDA array interface has
+c-ordered (row-major) layout</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pylibraft.common.cai_wrapper.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#pylibraft.common.cai_wrapper.data" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the data pointer of the underlying CUDA array interface</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pylibraft.common.cai_wrapper.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#pylibraft.common.cai_wrapper.dtype" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the dtype of the underlying CUDA array interface</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pylibraft.common.cai_wrapper.f_contiguous">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">f_contiguous</span></span><a class="headerlink" href="#pylibraft.common.cai_wrapper.f_contiguous" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns whether the underlying CUDA array interface has
+f-ordered (column-major) layout</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pylibraft.common.cai_wrapper.shape">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#pylibraft.common.cai_wrapper.shape" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the shape of the underlying CUDA array interface</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pylibraft.common.cai_wrapper.validate_shape_dtype">
+<span class="sig-name descname"><span class="pre">validate_shape_dtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expected_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/aec0948/python/pylibraftpylibraft/common/cai_wrapper.py#L75"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.common.cai_wrapper.validate_shape_dtype" title="Permalink to this definition">#</a></dt>
+<dd><p>Checks to see if the shape, dtype, and strides match expectations</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
@@ -472,16 +748,237 @@
   <a class="reference internal nav-link" href="#basic-vocabulary">
    Basic Vocabulary
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pylibraft.common.Handle">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Handle
+      </span>
+     </code>
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.Handle.getHandle">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         Handle.getHandle()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.Handle.sync">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         Handle.sync()
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pylibraft.common.Stream">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Stream
+      </span>
+     </code>
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.Stream.sync">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         Stream.sync()
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pylibraft.common.device_ndarray">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       device_ndarray
+      </span>
+     </code>
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.device_ndarray.c_contiguous">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         device_ndarray.c_contiguous
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.device_ndarray.copy_to_host">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         device_ndarray.copy_to_host()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.device_ndarray.dtype">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         device_ndarray.dtype
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.device_ndarray.empty">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         device_ndarray.empty()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.device_ndarray.f_contiguous">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         device_ndarray.f_contiguous
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.device_ndarray.shape">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         device_ndarray.shape
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.device_ndarray.strides">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         device_ndarray.strides
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#interruptible">
    Interruptible
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pylibraft.common.interruptible.cuda_interruptible">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       cuda_interruptible()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pylibraft.common.interruptible.synchronize">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       synchronize()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pylibraft.common.interruptible.cuda_yield">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       cuda_yield()
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#cuda-array-interface-helpers">
    CUDA Array Interface Helpers
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pylibraft.common.cai_wrapper">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       cai_wrapper
+      </span>
+     </code>
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.cai_wrapper.c_contiguous">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         cai_wrapper.c_contiguous
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.cai_wrapper.data">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         cai_wrapper.data
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.cai_wrapper.dtype">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         cai_wrapper.dtype
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.cai_wrapper.f_contiguous">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         cai_wrapper.f_contiguous
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.cai_wrapper.shape">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         cai_wrapper.shape
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pylibraft.common.cai_wrapper.validate_shape_dtype">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         cai_wrapper.validate_shape_dtype()
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
  </li>
 </ul>
 

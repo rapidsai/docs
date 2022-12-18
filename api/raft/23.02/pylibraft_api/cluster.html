@@ -419,6 +419,80 @@
   <section id="cluster">
 <h1>Cluster<a class="headerlink" href="#cluster" title="Permalink to this heading">#</a></h1>
 <p>This page provides pylibraft class references for the publicly-exposed elements of the <code class="xref py py-obj docutils literal notranslate"><span class="pre">pylibraft.cluster</span></code> package.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pylibraft.cluster.compute_new_centroids">
+<span class="sig-prename descclassname"><span class="pre">pylibraft.cluster.</span></span><span class="sig-name descname"><span class="pre">compute_new_centroids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_centroids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_per_cluster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/raftraft/blob/aec0948/python/pylibraftpylibraft/cluster/kmeans.pyx#L50"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylibraft.cluster.compute_new_centroids" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute new centroids given an input matrix and existing centroids</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">Input CUDA array interface compliant matrix shape (m, k)</span></dt><dd></dd>
+<dt><strong>centroids</strong><span class="classifier">Input CUDA array interface compliant matrix shape</span></dt><dd><p>(n_clusters, k)</p>
+</dd>
+<dt><strong>labels</strong><span class="classifier">Input CUDA array interface compliant matrix shape</span></dt><dd><p>(m, 1)</p>
+</dd>
+<dt><strong>new_centroids</strong><span class="classifier">Writable CUDA array interface compliant matrix shape</span></dt><dd><p>(n_clusters, k)</p>
+</dd>
+<dt><strong>sample_weights</strong><span class="classifier">Optional input CUDA array interface compliant matrix shape</span></dt><dd><p>(n_clusters, 1) default: None</p>
+</dd>
+<dt><strong>weight_per_cluster</strong><span class="classifier">Optional writable CUDA array interface compliant</span></dt><dd><p>matrix shape (n_clusters, 1) default: None</p>
+</dd>
+<dt><strong>batch_samples</strong><span class="classifier">Optional integer specifying the batch size for X to compute</span></dt><dd><p>distances in batches. default: m</p>
+</dd>
+<dt><strong>batch_centroids</strong><span class="classifier">Optional integer specifying the batch size for centroids</span></dt><dd><p>to compute distances in batches. default: n_clusters</p>
+</dd>
+<dt><strong>handle</strong><span class="classifier">Optional RAFT handle for reusing expensive CUDA resources</span></dt><dd><p>If a handle isn&rsquo;t supplied, CUDA resources will be allocated
+inside this function and synchronized before the function exits.
+If a handle is supplied, you will need to explicitly synchronize
+yourself by calling <code class="xref py py-obj docutils literal notranslate"><span class="pre">handle.sync()</span></code> before accessing the output.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylibraft.common</span> <span class="kn">import</span> <span class="n">Handle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylibraft.cluster.kmeans</span> <span class="kn">import</span> <span class="n">compute_new_centroids</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># A single RAFT handle can optionally be reused across</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># pylibraft functions.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handle</span> <span class="o">=</span> <span class="n">Handle</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">5000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_features</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_clusters</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">((</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_features</span><span class="p">),</span>
+<span class="gp">... </span>                              <span class="n">dtype</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">centroids</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">((</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">n_features</span><span class="p">),</span>
+<span class="gp">... </span>                                        <span class="n">dtype</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">,</span>
+<span class="gp">... </span>                           <span class="n">dtype</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">new_centroids</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">n_features</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compute_new_centroids</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">X</span><span class="p">,</span> <span class="n">centroids</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">new_centroids</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">handle</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># pylibraft functions are often asynchronous so the</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># handle needs to be explicitly synchronized</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">handle</span><span class="o">.</span><span class="n">sync</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </section>
 
 
@@ -452,6 +526,27 @@
           
             <div class="bd-sidebar-secondary bd-toc">
               
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav class="page-toc" id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pylibraft.cluster.compute_new_centroids">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     compute_new_centroids()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
 <div class="toc-item">
   
 <div id="searchbox"></div>
