@@ -490,6 +490,77 @@ Another possibility is to use functions rather than fixtures to construct inputs
 <p>Other approaches are also possible, and the best solution should be discussed on a case-by-case basis during PR review.</p>
 </section>
 </section>
+<section id="tests-with-expected-failures-xfails">
+<h3>Tests with expected failures (<code class="docutils literal notranslate"><span class="pre">xfail</span></code>s)<a class="headerlink" href="#tests-with-expected-failures-xfails" title="Permalink to this heading">#</a></h3>
+<p>In some circumstances it makes sense to mark a test as <em>expected</em> to
+fail, perhaps because the functionality is not yet implemented in
+cuDF. To do so use the
+<a class="reference external" href="https://docs.pytest.org/en/stable/reference/reference.html#pytest.mark.xfail"><code class="docutils literal notranslate"><span class="pre">pytest.mark.xfail</span></code></a>
+fixture on the test.</p>
+<p>If the test is parametrized and only a single parameter is expected to
+fail, rather than marking the entire test as xfailing, mark the single
+parameter by creating a
+<a class="reference external" href="https://docs.pytest.org/en/stable/how-to/skipping.html#skip-xfail-with-parametrize"><code class="docutils literal notranslate"><span class="pre">pytest.param</span></code></a>
+with appropriate marks.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span>
+    <span class="s2">"value"</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">2</span><span class="p">,</span>
+        <span class="n">pytest</span><span class="o">.</span><span class="n">param</span><span class="p">(</span>
+            <span class="mi">3</span><span class="p">,</span> <span class="n">marks</span><span class="o">=</span><span class="n">pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">xfail</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="s2">"code doesn't work for 3"</span><span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_value</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>When marking an <code class="docutils literal notranslate"><span class="pre">xfail</span></code>ing test, provide a descriptive reason. This
+<em>should</em> include a link to an issue describing the problem so that
+progress towards fixing the problem can be tracked. If no such issue
+exists already, create one!</p>
+<section id="conditional-xfails">
+<h4>Conditional <code class="docutils literal notranslate"><span class="pre">xfail</span></code>s<a class="headerlink" href="#conditional-xfails" title="Permalink to this heading">#</a></h4>
+<p>Sometimes, a parametrized test is only expected to fail for some
+combination of its parameters. Say, for example, division by zero but
+only if the datatype is <code class="docutils literal notranslate"><span class="pre">bool</span></code>. If all combinations with a given
+parameter are expected to fail, one can mark the parameter with
+<code class="docutils literal notranslate"><span class="pre">pytest.mark.xfail</span></code>, indicating a reason for the expected failure. If
+only <em>some</em> of the combinations are expected to fail, it can be
+tempting to mark the parameter as <code class="docutils literal notranslate"><span class="pre">xfail</span></code>, but this should be avoided.
+A test marked as <code class="docutils literal notranslate"><span class="pre">xfail</span></code> that passes is an &ldquo;unexpected pass&rdquo; or
+<code class="docutils literal notranslate"><span class="pre">XPASS</span></code> which is considered a failure by the test suite since we use
+the pytest option
+<a class="reference external" href="https://docs.pytest.org/en/latest/how-to/skipping.html#strict-parameter"><code class="docutils literal notranslate"><span class="pre">xfail_strict=true</span></code></a>.
+Another option is to use the programmatic <code class="docutils literal notranslate"><span class="pre">pytest.xfail</span></code> function to
+fail in the test body to <code class="docutils literal notranslate"><span class="pre">xfail</span></code> the relevant combination of
+parameters. <strong>DO NOT USE THIS OPTION</strong>. Unlike the mark-based
+approach, <code class="docutils literal notranslate"><span class="pre">pytest.xfail</span></code> <em>does not</em> run the rest of the test body, so
+we will never know if the test starts to pass because the bug is
+fixed. Use of <code class="docutils literal notranslate"><span class="pre">pytest.xfail</span></code> is checked for, and forbidden, via
+a pre-commit hook.</p>
+<p>Instead, to handle this (hopefully rare) case, we can programmatically
+mark a test as expected to fail under a combination of conditions by
+applying the <code class="docutils literal notranslate"><span class="pre">pytest.mark.xfail</span></code> mark to the current test <code class="docutils literal notranslate"><span class="pre">request</span></code>.
+To achieve this, the test function should take an extra parameter
+named <code class="docutils literal notranslate"><span class="pre">request</span></code>, on which we call <code class="docutils literal notranslate"><span class="pre">applymarker</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"v1"</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"v2"</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">test_sum_lt_6</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span>
+    <span class="n">request</span><span class="o">.</span><span class="n">applymarker</span><span class="p">(</span>
+        <span class="n">pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">xfail</span><span class="p">(</span>
+            <span class="n">condition</span><span class="o">=</span><span class="p">(</span><span class="n">v1</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">v2</span> <span class="o">==</span> <span class="mi">3</span><span class="p">),</span>
+            <span class="n">reason</span><span class="o">=</span><span class="s2">"Add comment linking to relevant issue"</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">v1</span> <span class="o">+</span> <span class="n">v2</span> <span class="o">&lt;</span> <span class="mi">6</span>
+</pre></div>
+</div>
+<p>This way, when the bug is fixed, the test suite will fail at this
+point (and we will remember to update the test).</p>
+</section>
+</section>
 <section id="testing-utility-functions">
 <h3>Testing utility functions<a class="headerlink" href="#testing-utility-functions" title="Permalink to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">cudf.testing</span></code> subpackage provides a handful of utilities for testing the equality of objects.
@@ -575,6 +646,30 @@ In particular:</p>
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#complex-parametrizations">
        Complex parametrizations
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tests-with-expected-failures-xfails">
+     Tests with expected failures (
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       xfail
+      </span>
+     </code>
+     s)
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#conditional-xfails">
+       Conditional
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         xfail
+        </span>
+       </code>
+       s
       </a>
      </li>
     </ul>
