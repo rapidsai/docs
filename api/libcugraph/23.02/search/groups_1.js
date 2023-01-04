@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['labeling_20algorithms_1138',['Labeling algorithms',['../group__labeling.html',1,'']]]
+  ['labeling_20algorithms_1140',['Labeling algorithms',['../group__labeling.html',1,'']]]
 ];
