@@ -26,10 +26,8 @@ Operations
 
 Overall goal, follow the open source ecosystem for infrastructure choices
 
-### Jenkins
-Open source project for CI/CD and general automation that is very extensible and well adopted
-
-[gpuCI]({% link maintainers/gpuci.md %}) is built on top of Jenkins with a variety of plugins.
+### GitHub Actions
+See docs [here]({% link resources/github-actions.md %}).
 
 ### GitHub
 
