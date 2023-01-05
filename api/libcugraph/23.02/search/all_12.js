@@ -15,7 +15,7 @@ var searchData=
   ['sg_5flookup_5fpredecessor_480',['sg_lookup_predecessor',['../structcugraph_1_1detail_1_1sg__lookup__predecessor.html',1,'cugraph::detail']]],
   ['shift_5fleft_5ft_481',['shift_left_t',['../structcugraph_1_1detail_1_1shift__left__t.html',1,'cugraph::detail']]],
   ['shift_5fright_5ft_482',['shift_right_t',['../structcugraph_1_1detail_1_1shift__right__t.html',1,'cugraph::detail']]],
-  ['sorensen_5fcoefficients_483',['sorensen_coefficients',['../namespacecugraph.html#adc495a4cea697e6f932f72fb9100f81e',1,'cugraph']]],
+  ['sorensen_5fcoefficients_483',['sorensen_coefficients',['../namespacecugraph.html#a47489b49e9756bf613c80f1bfb8e901e',1,'cugraph']]],
   ['sorensen_5ffunctor_5ft_484',['sorensen_functor_t',['../structcugraph_1_1detail_1_1sorensen__functor__t.html',1,'cugraph::detail']]],
   ['spectralmodularitymaximization_485',['spectralModularityMaximization',['../namespacecugraph_1_1ext__raft.html#ab324c8783d61fa5ba3cf2e64a4c965ad',1,'cugraph::ext_raft']]],
   ['square_486',['square',['../structcugraph_1_1detail_1_1square.html',1,'cugraph::detail']]],
