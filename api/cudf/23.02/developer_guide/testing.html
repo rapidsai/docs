@@ -561,6 +561,28 @@ named <code class="docutils literal notranslate"><span class="pre">request</span
 point (and we will remember to update the test).</p>
 </section>
 </section>
+<section id="testing-code-that-throws-warnings">
+<h3>Testing code that throws warnings<a class="headerlink" href="#testing-code-that-throws-warnings" title="Permalink to this heading">#</a></h3>
+<p>Some code may be expected to throw warnings.
+A common example is when a cudf API is deprecated for future removal, but many other possibilities exist as well.
+The cudf testing suite <a class="reference external" href="https://docs.pytest.org/en/latest/how-to/capture-warnings.html#controlling-warnings">surfaces all warnings as errors</a>.
+This includes warnings raised from non-cudf code, such as calls to pandas or pyarrow.
+This setting forces developers to proactively deal with deprecations from other libraries,
+as well as preventing the internal use of deprecated cudf APIs in other parts of the library.
+Just as importantly, it can help catch real errors like integer overflow or division by zero.</p>
+<p>When testing code that is expected to throw a warnings, developers should use the
+<a class="reference external" href="https://docs.pytest.org/en/latest/how-to/capture-warnings.html#assertwarnings"><code class="docutils literal notranslate"><span class="pre">pytest.warns</span></code></a> context to catch the warning.
+For parametrized tests that raise warnings under specific conditions, use the <code class="docutils literal notranslate"><span class="pre">testing._utils.expect_warning_if</span></code> decorator instead of <code class="docutils literal notranslate"><span class="pre">pytest.warns</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><a class="reference external" href="https://docs.python.org/3/library/warnings.html#warnings.catch_warnings"><code class="docutils literal notranslate"><span class="pre">warnings.catch_warnings</span></code></a>
+is a tempting alternative to <code class="docutils literal notranslate"><span class="pre">pytest.warns</span></code>.
+<strong>Do not use this context manager in tests.</strong>
+Unlike <code class="docutils literal notranslate"><span class="pre">pytest.warns</span></code>, which <em>requires</em> that the expected warning be raised,
+<code class="docutils literal notranslate"><span class="pre">warnings.catch_warnings</span></code> simply catches warnings that appear without requiring them.
+The cudf testing suite should avoid such ambiguities.</p>
+</div>
+</section>
 <section id="testing-utility-functions">
 <h3>Testing utility functions<a class="headerlink" href="#testing-utility-functions" title="Permalink to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">cudf.testing</span></code> subpackage provides a handful of utilities for testing the equality of objects.
@@ -673,6 +695,11 @@ In particular:</p>
       </a>
      </li>
     </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#testing-code-that-throws-warnings">
+     Testing code that throws warnings
+    </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#testing-utility-functions">

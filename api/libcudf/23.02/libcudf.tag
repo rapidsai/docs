@@ -1190,6 +1190,13 @@
       <anchor>ga2760c4c5752dec2e566d51f6f2b0aef1</anchor>
       <arglist>(strings_column_view const &amp;input, string_scalar const &amp;pattern, string_scalar const &amp;escape_character=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>like</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>gaaae4b7abcddffd8c1143234a9daaff35</anchor>
+      <arglist>(strings_column_view const &amp;input, strings_column_view const &amp;patterns, string_scalar const &amp;escape_character=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
   </compound>
   <compound kind="file">
     <name>convert_booleans.hpp</name>
@@ -22539,6 +22546,13 @@
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
+      <name>like</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>gaaae4b7abcddffd8c1143234a9daaff35</anchor>
+      <arglist>(strings_column_view const &amp;input, strings_column_view const &amp;patterns, string_scalar const &amp;escape_character=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
       <name>to_booleans</name>
       <anchorfile>group__strings__convert.html</anchorfile>
       <anchor>gadabfd784d248d6d6a7bfcf0d1674013d</anchor>
@@ -26435,6 +26449,13 @@
       <anchorfile>group__strings__contains.html</anchorfile>
       <anchor>ga2760c4c5752dec2e566d51f6f2b0aef1</anchor>
       <arglist>(strings_column_view const &amp;input, string_scalar const &amp;pattern, string_scalar const &amp;escape_character=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>like</name>
+      <anchorfile>group__strings__contains.html</anchorfile>
+      <anchor>gaaae4b7abcddffd8c1143234a9daaff35</anchor>
+      <arglist>(strings_column_view const &amp;input, strings_column_view const &amp;patterns, string_scalar const &amp;escape_character=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
