@@ -20,6 +20,5 @@ var searchData=
   ['timestamp_5fstatistics_2178',['timestamp_statistics',['../structcudf_1_1io_1_1timestamp__statistics.html',1,'cudf::io']]],
   ['tokenizer_5fresult_2179',['tokenizer_result',['../structnvtext_1_1tokenizer__result.html',1,'nvtext']]],
   ['tracking_5fresource_5fadaptor_2180',['tracking_resource_adaptor',['https://docs.rapids.ai/api/librmm/23.02/classrmm_1_1mr_1_1tracking__resource__adaptor.html',1,'rmm::mr']]],
-  ['two_5ftable_5fcomparator_2181',['two_table_comparator',['../classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html',1,'cudf::experimental::row::equality::two_table_comparator'],['../classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html',1,'cudf::experimental::row::lexicographic::two_table_comparator']]],
-  ['type_5fto_5fname_2182',['type_to_name',['../structcudf_1_1type__to__name.html',1,'cudf']]]
+  ['two_5ftable_5fcomparator_2181',['two_table_comparator',['../classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html',1,'cudf::experimental::row::equality::two_table_comparator'],['../classcudf_1_1experimental_1_1row_1_1lexicographic_1_1two__table__comparator.html',1,'cudf::experimental::row::lexicographic::two_table_comparator']]]
 ];

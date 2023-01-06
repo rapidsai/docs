@@ -5410,7 +5410,6 @@
     <includes id="dictionary_8hpp" name="dictionary.hpp" local="no" imported="no">cudf/wrappers/dictionary.hpp</includes>
     <includes id="durations_8hpp" name="durations.hpp" local="no" imported="no">cudf/wrappers/durations.hpp</includes>
     <includes id="timestamps_8hpp" name="timestamps.hpp" local="no" imported="no">cudf/wrappers/timestamps.hpp</includes>
-    <class kind="struct">cudf::type_to_name</class>
     <class kind="struct">cudf::dispatch_storage_type</class>
     <namespace>cudf</namespace>
     <member kind="define">
@@ -5496,6 +5495,13 @@
       <anchorfile>group__utility__dispatcher.html</anchorfile>
       <anchor>gac948c88f1af24dc7c6b0651aed73859c</anchor>
       <arglist>(cudf::data_type type1, cudf::data_type type2, F &amp;&amp;f, Ts &amp;&amp;... args)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::string</type>
+      <name>type_to_name</name>
+      <anchorfile>group__utility__dispatcher.html</anchorfile>
+      <anchor>ga582e197cb1e5696948d1e91d3fee4751</anchor>
+      <arglist>(data_type type)</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -9798,6 +9804,13 @@
       <anchor>aeb47656b4e86a376c34eaee298831254</anchor>
       <arglist>(std::string val)</arglist>
     </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_table</name>
+      <anchorfile>classcudf_1_1io_1_1csv__writer__options.html</anchorfile>
+      <anchor>a08a45f99cf1d0788d8cd3b12ce6e8869</anchor>
+      <arglist>(table_view const &amp;table)</arglist>
+    </member>
     <member kind="function" static="yes">
       <type>static csv_writer_options_builder</type>
       <name>builder</name>
@@ -10703,10 +10716,10 @@
     <filename>structcudf_1_1dispatch__storage__type.html</filename>
     <templarg>Id</templarg>
     <member kind="typedef">
-      <type>device_storage_type_t&lt; typename id_to_type_impl&lt; Id &gt;::type &gt;</type>
+      <type>device_storage_type_t&lt; id_to_type&lt; Id &gt; &gt;</type>
       <name>type</name>
       <anchorfile>structcudf_1_1dispatch__storage__type.html</anchorfile>
-      <anchor>af0381ee1e1fcd32f4537720ac27620e7</anchor>
+      <anchor>abc6568d83dff4c09e80a90d7ba238f15</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -18681,17 +18694,6 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>cudf::type_to_name</name>
-    <filename>structcudf_1_1type__to__name.html</filename>
-    <member kind="function">
-      <type>std::string</type>
-      <name>operator()</name>
-      <anchorfile>structcudf_1_1type__to__name.html</anchorfile>
-      <anchor>a9eb468506b64c38e8f443ef630b003be</anchor>
-      <arglist>()</arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
     <name>cudf::detail::value_accessor</name>
     <filename>structcudf_1_1detail_1_1value__accessor.html</filename>
     <templarg></templarg>
@@ -18833,7 +18835,6 @@
     <class kind="class">cudf::table_view</class>
     <class kind="class">cudf::timestamp_scalar</class>
     <class kind="class">cudf::timestamp_scalar_device_view</class>
-    <class kind="struct">cudf::type_to_name</class>
     <class kind="struct">cudf::window_bounds</class>
     <member kind="typedef">
       <type>uint32_t</type>
@@ -21630,6 +21631,13 @@
       <anchorfile>group__utility__dispatcher.html</anchorfile>
       <anchor>gac948c88f1af24dc7c6b0651aed73859c</anchor>
       <arglist>(cudf::data_type type1, cudf::data_type type2, F &amp;&amp;f, Ts &amp;&amp;... args)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::string</type>
+      <name>type_to_name</name>
+      <anchorfile>group__utility__dispatcher.html</anchorfile>
+      <anchor>ga582e197cb1e5696948d1e91d3fee4751</anchor>
+      <arglist>(data_type type)</arglist>
     </member>
     <member kind="function">
       <type>CUDF_HOST_DEVICE bool</type>
@@ -28432,7 +28440,6 @@
     <title>Type Dispatcher</title>
     <filename>group__utility__dispatcher.html</filename>
     <file>type_dispatcher.hpp</file>
-    <class kind="struct">cudf::type_to_name</class>
     <class kind="struct">cudf::dispatch_storage_type</class>
     <member kind="define">
       <type>#define</type>
@@ -28517,6 +28524,13 @@
       <anchorfile>group__utility__dispatcher.html</anchorfile>
       <anchor>gac948c88f1af24dc7c6b0651aed73859c</anchor>
       <arglist>(cudf::data_type type1, cudf::data_type type2, F &amp;&amp;f, Ts &amp;&amp;... args)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::string</type>
+      <name>type_to_name</name>
+      <anchorfile>group__utility__dispatcher.html</anchorfile>
+      <anchor>ga582e197cb1e5696948d1e91d3fee4751</anchor>
+      <arglist>(data_type type)</arglist>
     </member>
   </compound>
   <compound kind="group">

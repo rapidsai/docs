@@ -525,8 +525,7 @@ dtype: int64
 </section>
 <section id="string-data">
 <h3>String data<a class="headerlink" href="#string-data" title="Permalink to this heading">#</a></h3>
-<p>Experimental support for a subset of string functionality is available for <code class="docutils literal notranslate"><span class="pre">apply</span></code> through the <a class="reference external" href="https://anaconda.org/rapidsai-nightly/strings_udf">strings_udf</a> package, which is separately installable from RAPIDS conda channels. The following several cells show an example of it&rsquo;s usage if present. If it is not present, this notebook may be restarted after a conda install of <code class="docutils literal notranslate"><span class="pre">strings_udf</span></code> to proceed through the example.</p>
-<p>CUDA 11.5 will initially be required to run string UDFs.</p>
+<p>Experimental support for a subset of string functionality is available for <code class="docutils literal notranslate"><span class="pre">apply</span></code> through the <a class="reference external" href="https://anaconda.org/rapidsai-nightly/strings_udf">strings_udf</a> package, which is separately installable from RAPIDS conda channels. The following several cells show an example of its usage if present. If it is not present, this notebook may be restarted after a conda install of <code class="docutils literal notranslate"><span class="pre">strings_udf</span></code> to proceed through the example.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">string_udfs_enabled</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">udf</span><span class="o">.</span><span class="n">_STRING_UDFS_ENABLED</span>
@@ -551,7 +550,14 @@ dtype: int64
 <li><p><code class="docutils literal notranslate"><span class="pre">str.isspace</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> (between two strings)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">len</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">len(some_string))</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">__contains__</span></code> (e.g, <code class="docutils literal notranslate"><span class="pre">'abc'</span> <span class="pre">in</span> <span class="pre">some_string</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">in</span></code> (e.g, <code class="docutils literal notranslate"><span class="pre">'abc'</span> <span class="pre">in</span> <span class="pre">some_string</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">strip</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lstrip</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rstrip</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">upper</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lower</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">+</span></code> (string concatenation)</p></li>
+<li><p>`replace</p></li>
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -582,6 +588,19 @@ dtype: int64
 <span class="k">if</span> <span class="n">string_udfs_enabled</span><span class="p">:</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">sr</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="string-udf-memory-considerations">
+<h3>String UDF Memory Considerations<a class="headerlink" href="#string-udf-memory-considerations" title="Permalink to this heading">#</a></h3>
+<p>UDFs that create intermediate strings as part of the computation may require memory tuning. An API is provided for convenience to accomplish this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">string_udfs_enabled</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">strings_udf</span> <span class="kn">import</span> <span class="n">set_malloc_heap_size</span>
+    <span class="n">set_malloc_heap_size</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">2e9</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -2136,6 +2155,11 @@ dtype: int32
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#string-data">
      String data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#string-udf-memory-considerations">
+     String UDF Memory Considerations
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">

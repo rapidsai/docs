@@ -13,5 +13,5 @@ var searchData=
   ['timestamp_5fus_3621',['timestamp_us',['../group__timestamp__classes.html#gabc5dd6cc3229f57af772e06f8c0bd828',1,'cudf']]],
   ['timestamptypes_3622',['TimestampTypes',['../type__lists_8hpp.html#a7e4c9ba95a6daa7e51d00e123c583759',1,'cudf::test']]],
   ['transform_3623',['Transform',['../type__list__utilities_8hpp.html#afc5541e096aafd209c32503601a7e296',1,'cudf::test']]],
-  ['type_3624',['type',['../structcudf_1_1experimental_1_1dispatch__void__if__nested.html#ab283ea2576c53293a0d8c0455ce33dca',1,'cudf::experimental::dispatch_void_if_nested::type()'],['../structcudf_1_1dispatch__storage__type.html#af0381ee1e1fcd32f4537720ac27620e7',1,'cudf::dispatch_storage_type::type()']]]
+  ['type_3624',['type',['../structcudf_1_1experimental_1_1dispatch__void__if__nested.html#ab283ea2576c53293a0d8c0455ce33dca',1,'cudf::experimental::dispatch_void_if_nested::type()'],['../structcudf_1_1dispatch__storage__type.html#abc6568d83dff4c09e80a90d7ba238f15',1,'cudf::dispatch_storage_type::type()']]]
 ];
