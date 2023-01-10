@@ -11,7 +11,7 @@ rapids-cmake uses a JSON file to encode the version of a project and how to down
 The JSON format is a root object that contains the ``packages`` object.
 
 The ``packages`` object contains a key/value map of all supported
-packages where the key is the case senstive name of the project and
+packages where the key is the case sensitive name of the project and
 the value is a ``project`` object, as seen in this example:
 
 .. literalinclude:: /packages/example.json
@@ -82,7 +82,7 @@ as needed.
     .. literalinclude:: /packages/patches.json
         :language: json
 
-    Each dictonary in the array of patches contains the following fields:
+    Each dictionary in the array of patches contains the following fields:
 
         ``file``
             A required string representing the git diff ( .diff ) or patch ( .patch ) to apply.
