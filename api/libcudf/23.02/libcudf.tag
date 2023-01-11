@@ -3422,6 +3422,20 @@
       <anchor>ga366458c2c66f0c164d7f807bdfd300b9</anchor>
       <arglist></arglist>
     </member>
+    <member kind="variable">
+      <type>constexpr size_t</type>
+      <name>default_max_dictionary_size</name>
+      <anchorfile>group__io__readers.html</anchorfile>
+      <anchor>ga9d21d92e8b66b4afa46bb2df7f7868b7</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr size_type</type>
+      <name>default_max_page_fragment_size</name>
+      <anchorfile>group__io__readers.html</anchorfile>
+      <anchor>ga78059ced30eb598019a795b5b60878eb</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="file">
     <name>partition.hpp</name>
@@ -5855,6 +5869,31 @@
       <anchor>ac52511ff52b01cf3c0d778bfaa5a5089a8dc9105a0a9b500299af0583ac00ab4b</anchor>
       <arglist></arglist>
     </member>
+    <member kind="enumeration">
+      <type></type>
+      <name>dictionary_policy</name>
+      <anchorfile>namespacecudf_1_1io.html</anchorfile>
+      <anchor>afe8aff5291f15d5fc30566d5568e411f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NEVER</name>
+      <anchorfile>namespacecudf_1_1io.html</anchorfile>
+      <anchor>afe8aff5291f15d5fc30566d5568e411fab6fe14ba42da71eaa9949644864f65ea</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>ADAPTIVE</name>
+      <anchorfile>namespacecudf_1_1io.html</anchorfile>
+      <anchor>afe8aff5291f15d5fc30566d5568e411fa98ba2824c18b095ea27eeb1a5eeb70b9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>ALWAYS</name>
+      <anchorfile>namespacecudf_1_1io.html</anchorfile>
+      <anchor>afe8aff5291f15d5fc30566d5568e411fa2a139f835a25049543ee9854a6df67ff</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="file">
     <name>types.hpp</name>
@@ -7467,6 +7506,27 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
+      <type>dictionary_policy</type>
+      <name>get_dictionary_policy</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options.html</anchorfile>
+      <anchor>a8d742034534816b7c8ee9985df0ace0e</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>get_max_dictionary_size</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options.html</anchorfile>
+      <anchor>a73827726f266846c231baa6e3619c374</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>get_max_page_fragment_size</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options.html</anchorfile>
+      <anchor>a273626aba2b9ec08fdf5beb6cd625362</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
       <type>void</type>
       <name>set_metadata</name>
       <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options.html</anchorfile>
@@ -7535,6 +7595,27 @@
       <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options.html</anchorfile>
       <anchor>ac8bfecb69419582d2430ffe99aced28a</anchor>
       <arglist>(int32_t size_bytes)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_dictionary_policy</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options.html</anchorfile>
+      <anchor>ad52e4713fcff6142413da269b1fab02b</anchor>
+      <arglist>(dictionary_policy policy)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_max_dictionary_size</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options.html</anchorfile>
+      <anchor>af2012f9b8995f83cbe23055fd5b15a71</anchor>
+      <arglist>(size_t size_bytes)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_max_page_fragment_size</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options.html</anchorfile>
+      <anchor>a762e601959fceae7fd65c90fdbcd1a88</anchor>
+      <arglist>(size_type size_rows)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>static chunked_parquet_writer_options_builder</type>
@@ -7630,6 +7711,27 @@
       <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options__builder.html</anchorfile>
       <anchor>ac4a99046e4f83713d8c6a07191b4c84c</anchor>
       <arglist>(int32_t val)</arglist>
+    </member>
+    <member kind="function">
+      <type>chunked_parquet_writer_options_builder &amp;</type>
+      <name>dictionary_policy</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options__builder.html</anchorfile>
+      <anchor>a9f7819e3805dfcc5ea7543ee688850fd</anchor>
+      <arglist>(enum dictionary_policy val)</arglist>
+    </member>
+    <member kind="function">
+      <type>chunked_parquet_writer_options_builder &amp;</type>
+      <name>max_dictionary_size</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options__builder.html</anchorfile>
+      <anchor>a0b5f9359f124dc5133cb8392e7b4cf01</anchor>
+      <arglist>(size_t val)</arglist>
+    </member>
+    <member kind="function">
+      <type>chunked_parquet_writer_options_builder &amp;</type>
+      <name>max_page_fragment_size</name>
+      <anchorfile>classcudf_1_1io_1_1chunked__parquet__writer__options__builder.html</anchorfile>
+      <anchor>a122e9f13393b69a77ddce8d2b82b0aab</anchor>
+      <arglist>(size_type val)</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -14870,6 +14972,27 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
+      <type>dictionary_policy</type>
+      <name>get_dictionary_policy</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__writer__options.html</anchorfile>
+      <anchor>aa8dbf1444ea6ec63599af6a4bc7aae08</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>get_max_dictionary_size</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__writer__options.html</anchorfile>
+      <anchor>a63a0acdb0d99c971673cb3f93a912c0d</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>get_max_page_fragment_size</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__writer__options.html</anchorfile>
+      <anchor>a7e9621c16283469c1b0bfd85dd8daabe</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
       <type>void</type>
       <name>set_partitions</name>
       <anchorfile>classcudf_1_1io_1_1parquet__writer__options.html</anchorfile>
@@ -14952,6 +15075,27 @@
       <anchorfile>classcudf_1_1io_1_1parquet__writer__options.html</anchorfile>
       <anchor>ae31728acf48a2b7bb7fb19a1d858e75e</anchor>
       <arglist>(int32_t size_bytes)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_dictionary_policy</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__writer__options.html</anchorfile>
+      <anchor>a2822029099628aa01f8145014fac88ab</anchor>
+      <arglist>(dictionary_policy policy)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_max_dictionary_size</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__writer__options.html</anchorfile>
+      <anchor>a4d11d2272c5e9901ee35bbd6cff1d815</anchor>
+      <arglist>(size_t size_bytes)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_max_page_fragment_size</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__writer__options.html</anchorfile>
+      <anchor>a565f917ea833d24a8fd1c109359c9f3e</anchor>
+      <arglist>(size_type size_rows)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>static parquet_writer_options_builder</type>
@@ -15061,6 +15205,27 @@
       <anchorfile>classcudf_1_1io_1_1parquet__writer__options__builder.html</anchorfile>
       <anchor>aee8597acc17b7aa63c561349e5724d7d</anchor>
       <arglist>(int32_t val)</arglist>
+    </member>
+    <member kind="function">
+      <type>parquet_writer_options_builder &amp;</type>
+      <name>dictionary_policy</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__writer__options__builder.html</anchorfile>
+      <anchor>a43aaaba27013c9269a35746ffa62a164</anchor>
+      <arglist>(enum dictionary_policy val)</arglist>
+    </member>
+    <member kind="function">
+      <type>parquet_writer_options_builder &amp;</type>
+      <name>max_dictionary_size</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__writer__options__builder.html</anchorfile>
+      <anchor>ab79c950f72ab80c569cdeff01ced61f0</anchor>
+      <arglist>(size_t val)</arglist>
+    </member>
+    <member kind="function">
+      <type>parquet_writer_options_builder &amp;</type>
+      <name>max_page_fragment_size</name>
+      <anchorfile>classcudf_1_1io_1_1parquet__writer__options__builder.html</anchorfile>
+      <anchor>aa7d9e2333eb340deb63db93daafd73ab</anchor>
+      <arglist>(size_type val)</arglist>
     </member>
     <member kind="function">
       <type>parquet_writer_options_builder &amp;</type>
@@ -21911,6 +22076,31 @@
       <anchor>ac52511ff52b01cf3c0d778bfaa5a5089a8dc9105a0a9b500299af0583ac00ab4b</anchor>
       <arglist></arglist>
     </member>
+    <member kind="enumeration">
+      <type></type>
+      <name>dictionary_policy</name>
+      <anchorfile>namespacecudf_1_1io.html</anchorfile>
+      <anchor>afe8aff5291f15d5fc30566d5568e411f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>NEVER</name>
+      <anchorfile>namespacecudf_1_1io.html</anchorfile>
+      <anchor>afe8aff5291f15d5fc30566d5568e411fab6fe14ba42da71eaa9949644864f65ea</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>ADAPTIVE</name>
+      <anchorfile>namespacecudf_1_1io.html</anchorfile>
+      <anchor>afe8aff5291f15d5fc30566d5568e411fa98ba2824c18b095ea27eeb1a5eeb70b9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>ALWAYS</name>
+      <anchorfile>namespacecudf_1_1io.html</anchorfile>
+      <anchor>afe8aff5291f15d5fc30566d5568e411fa2a139f835a25049543ee9854a6df67ff</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="function">
       <type>table_with_metadata</type>
       <name>read_avro</name>
@@ -22049,6 +22239,20 @@
       <name>default_column_index_truncate_length</name>
       <anchorfile>group__io__readers.html</anchorfile>
       <anchor>ga366458c2c66f0c164d7f807bdfd300b9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr size_t</type>
+      <name>default_max_dictionary_size</name>
+      <anchorfile>group__io__readers.html</anchorfile>
+      <anchor>ga9d21d92e8b66b4afa46bb2df7f7868b7</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr size_type</type>
+      <name>default_max_page_fragment_size</name>
+      <anchorfile>group__io__readers.html</anchorfile>
+      <anchor>ga78059ced30eb598019a795b5b60878eb</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -27399,6 +27603,20 @@
       <name>default_column_index_truncate_length</name>
       <anchorfile>group__io__readers.html</anchorfile>
       <anchor>ga366458c2c66f0c164d7f807bdfd300b9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr size_t</type>
+      <name>default_max_dictionary_size</name>
+      <anchorfile>group__io__readers.html</anchorfile>
+      <anchor>ga9d21d92e8b66b4afa46bb2df7f7868b7</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr size_type</type>
+      <name>default_max_page_fragment_size</name>
+      <anchorfile>group__io__readers.html</anchorfile>
+      <anchor>ga78059ced30eb598019a795b5b60878eb</anchor>
       <arglist></arglist>
     </member>
   </compound>
