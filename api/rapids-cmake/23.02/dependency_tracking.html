@@ -88,43 +88,43 @@ developer burden, and adds a common source of error.</p>
 <p><code class="docutils literal notranslate"><span class="pre">rapids-cmake</span></code> is designed to remove this dual source of truth by expanding the concept of Modern CMake <a class="reference external" href="https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#build-specification-and-usage-requirements">Usage Requirements</a> to include external packages.
 This is done via the <code class="docutils literal notranslate"><span class="pre">BUILD_EXPORT_SET</span></code> ( maps to <cite>&lt;BUILD_INTERFACE&gt;</cite> ) and <code class="docutils literal notranslate"><span class="pre">INSTALL_EXPORT_SET</span></code> ( maps to <cite>&lt;INSTALL_INTERFACE&gt;</cite> ) keywords on commands such as <span class="target" id="index-0-command:rapids_find_package"></span><a class="reference internal" href="command/rapids_find_package.html#command:rapids_find_package" title="rapids_find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">rapids_find_package()</span></code></a> and <span class="target" id="index-0-command:rapids_cpm_find"></span><a class="reference internal" href="command/rapids_cpm_find.html#command:rapids_cpm_find" title="rapids_cpm_find"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">rapids_cpm_find()</span></code></a>.
 Let&rsquo;s go over an example of how these come together to make dependency tracking for projects easy.</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">rapids_find_package(</span><span class="nb">Threads</span><span class="w"> </span><span class="no">REQUIRED</span><span class="w"></span>
-<span class="w">  </span><span class="no">BUILD_EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span><span class="w"></span>
-<span class="w">  </span><span class="no">INSTALL_EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span><span class="w"></span>
-<span class="w">  </span><span class="nf">)</span><span class="w"></span>
-<span class="nf">rapids_cpm_find(</span><span class="nb">nlohmann_json</span><span class="w"> </span><span class="m">3.9.1</span><span class="w"></span>
-<span class="w">  </span><span class="no">BUILD_EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span><span class="w"></span>
-<span class="w">  </span><span class="nf">)</span><span class="w"></span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">rapids_find_package(</span><span class="nb">Threads</span><span class="w"> </span><span class="no">REQUIRED</span>
+<span class="w">  </span><span class="no">BUILD_EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span>
+<span class="w">  </span><span class="no">INSTALL_EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">rapids_cpm_find(</span><span class="nb">nlohmann_json</span><span class="w"> </span><span class="m">3.9.1</span>
+<span class="w">  </span><span class="no">BUILD_EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span>
+<span class="w">  </span><span class="nf">)</span>
 
-<span class="nf">add_library(</span><span class="nb">example</span><span class="w"> </span><span class="nb">src.cpp</span><span class="nf">)</span><span class="w"></span>
-<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"></span>
-<span class="w">  </span><span class="no">PUBLIC</span><span class="w"> </span><span class="nb">Threads</span><span class="o">::</span><span class="nb">Threads</span><span class="w"></span>
-<span class="w">    </span><span class="o">$&lt;</span><span class="no">BUILD_INTERFACE</span><span class="o">:</span><span class="nb">nlohmann_json</span><span class="o">::</span><span class="nb">nlohmann_json</span><span class="o">&gt;</span><span class="w"></span>
-<span class="w">  </span><span class="nf">)</span><span class="w"></span>
-<span class="nf">install(</span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">example</span><span class="w"></span>
-<span class="w">  </span><span class="no">DESTINATION</span><span class="w"> </span><span class="nb">lib</span><span class="w"></span>
-<span class="w">  </span><span class="no">EXPORT</span><span class="w"> </span><span class="nb">example-targets</span><span class="w"></span>
-<span class="w">  </span><span class="nf">)</span><span class="w"></span>
+<span class="nf">add_library(</span><span class="nb">example</span><span class="w"> </span><span class="nb">src.cpp</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">example</span>
+<span class="w">  </span><span class="no">PUBLIC</span><span class="w"> </span><span class="nb">Threads</span><span class="o">::</span><span class="nb">Threads</span>
+<span class="w">    </span><span class="o">$&lt;</span><span class="no">BUILD_INTERFACE</span><span class="o">:</span><span class="nb">nlohmann_json</span><span class="o">::</span><span class="nb">nlohmann_json</span><span class="o">&gt;</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">install(</span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">example</span>
+<span class="w">  </span><span class="no">DESTINATION</span><span class="w"> </span><span class="nb">lib</span>
+<span class="w">  </span><span class="no">EXPORT</span><span class="w"> </span><span class="nb">example-targets</span>
+<span class="w">  </span><span class="nf">)</span>
 
-<span class="nf">set(</span><span class="nb">doc_string</span><span class="w"> </span><span class="p">[=[</span><span class="nb">Provide</span><span class="w"> </span><span class="nb">targets</span><span class="w"> </span><span class="nb">for</span><span class="w"> </span><span class="nb">the</span><span class="w"> </span><span class="nb">example</span><span class="w"> </span><span class="nb">library.</span><span class="p">]=]</span><span class="nf">)</span><span class="w"></span>
-<span class="nf">rapids_export(</span><span class="no">INSTALL</span><span class="w"> </span><span class="nb">example</span><span class="w"></span>
-<span class="w">  </span><span class="no">EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span><span class="w"></span>
-<span class="w">  </span><span class="no">NAMESPACE</span><span class="w"> </span><span class="nb">example</span><span class="o">::</span><span class="w"></span>
-<span class="w">  </span><span class="no">DOCUMENTATION</span><span class="w"> </span><span class="nb">doc_string</span><span class="w"></span>
-<span class="w">  </span><span class="nf">)</span><span class="w"></span>
-<span class="nf">rapids_export(</span><span class="no">BUILD</span><span class="w"> </span><span class="nb">example</span><span class="w"></span>
-<span class="w">  </span><span class="no">EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span><span class="w"></span>
-<span class="w">  </span><span class="no">NAMESPACE</span><span class="w"> </span><span class="nb">example</span><span class="o">::</span><span class="w"></span>
-<span class="w">  </span><span class="no">DOCUMENTATION</span><span class="w"> </span><span class="nb">doc_string</span><span class="w"></span>
-<span class="w">  </span><span class="nf">)</span><span class="w"></span>
+<span class="nf">set(</span><span class="nb">doc_string</span><span class="w"> </span><span class="p">[=[</span><span class="nb">Provide</span><span class="w"> </span><span class="nb">targets</span><span class="w"> </span><span class="nb">for</span><span class="w"> </span><span class="nb">the</span><span class="w"> </span><span class="nb">example</span><span class="w"> </span><span class="nb">library.</span><span class="p">]=]</span><span class="nf">)</span>
+<span class="nf">rapids_export(</span><span class="no">INSTALL</span><span class="w"> </span><span class="nb">example</span>
+<span class="w">  </span><span class="no">EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span>
+<span class="w">  </span><span class="no">NAMESPACE</span><span class="w"> </span><span class="nb">example</span><span class="o">::</span>
+<span class="w">  </span><span class="no">DOCUMENTATION</span><span class="w"> </span><span class="nb">doc_string</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">rapids_export(</span><span class="no">BUILD</span><span class="w"> </span><span class="nb">example</span>
+<span class="w">  </span><span class="no">EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span>
+<span class="w">  </span><span class="no">NAMESPACE</span><span class="w"> </span><span class="nb">example</span><span class="o">::</span>
+<span class="w">  </span><span class="no">DOCUMENTATION</span><span class="w"> </span><span class="nb">doc_string</span>
+<span class="w">  </span><span class="nf">)</span>
 </pre></div>
 </div>
 <section id="tracking-find-package">
 <h2>Tracking find_package<a class="headerlink" href="#tracking-find-package" title="Permalink to this heading">&para;</a></h2>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">rapids_find_package(</span><span class="nb">Threads</span><span class="w"> </span><span class="no">REQUIRED</span><span class="w"></span>
-<span class="w">  </span><span class="no">BUILD_EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span><span class="w"></span>
-<span class="w">  </span><span class="no">INSTALL_EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span><span class="w"></span>
-<span class="w">  </span><span class="nf">)</span><span class="w"></span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">rapids_find_package(</span><span class="nb">Threads</span><span class="w"> </span><span class="no">REQUIRED</span>
+<span class="w">  </span><span class="no">BUILD_EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span>
+<span class="w">  </span><span class="no">INSTALL_EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span>
+<span class="w">  </span><span class="nf">)</span>
 </pre></div>
 </div>
 <p>The <span class="target" id="index-1-command:rapids_find_package"></span><a class="reference internal" href="command/rapids_find_package.html#command:rapids_find_package" title="rapids_find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">rapids_find_package(&lt;PackageName&gt;)</span></code></a> combines the <span class="target" id="index-0-command:cmake:command:find_package"></span><a class="reference external" href="https://cmake.org/cmake/help/latest/command/find_package.html#command:find_package" title="(in CMake v3.25.1)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package</span></code></a> command and dependency tracking.
@@ -143,9 +143,9 @@ making sure it is part of <cite>CMAKE_MODULE_PATH</cite> for consumers.</p>
 </section>
 <section id="tracking-cpm">
 <h2>Tracking CPM<a class="headerlink" href="#tracking-cpm" title="Permalink to this heading">&para;</a></h2>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">rapids_cpm_find(</span><span class="nb">nlohmann_json</span><span class="w"> </span><span class="m">3.9.1</span><span class="w"></span>
-<span class="w">  </span><span class="no">BUILD_EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span><span class="w"></span>
-<span class="w">  </span><span class="nf">)</span><span class="w"></span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">rapids_cpm_find(</span><span class="nb">nlohmann_json</span><span class="w"> </span><span class="m">3.9.1</span>
+<span class="w">  </span><span class="no">BUILD_EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span>
+<span class="w">  </span><span class="nf">)</span>
 </pre></div>
 </div>
 <p>The <span class="target" id="index-1-command:rapids_cpm_find"></span><a class="reference internal" href="command/rapids_cpm_find.html#command:rapids_cpm_find" title="rapids_cpm_find"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">rapids_cpm_find()</span></code></a> combines the <span class="target" id="index-0-command:cpmfindpackage"></span><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">CPMFindPackage()</span></code> command and dependency tracking, in a very similar way
@@ -162,17 +162,17 @@ and forgo using <cite>[BUILD|INSTALL]_EXPORT_SET</cite>.</p>
 </section>
 <section id="generating-example-config-cmake">
 <h2>Generating example-config.cmake<a class="headerlink" href="#generating-example-config-cmake" title="Permalink to this heading">&para;</a></h2>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="nb">doc_string</span><span class="w"> </span><span class="p">[=[</span><span class="nb">Provide</span><span class="w"> </span><span class="nb">targets</span><span class="w"> </span><span class="nb">for</span><span class="w"> </span><span class="nb">the</span><span class="w"> </span><span class="nb">example</span><span class="w"> </span><span class="nb">library.</span><span class="p">]=]</span><span class="nf">)</span><span class="w"></span>
-<span class="nf">rapids_export(</span><span class="no">INSTALL</span><span class="w"> </span><span class="nb">example</span><span class="w"></span>
-<span class="w">  </span><span class="no">EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span><span class="w"></span>
-<span class="w">  </span><span class="no">NAMESPACE</span><span class="w"> </span><span class="nb">example</span><span class="o">::</span><span class="w"></span>
-<span class="w">  </span><span class="no">DOCUMENTATION</span><span class="w"> </span><span class="nb">doc_string</span><span class="w"></span>
-<span class="w">  </span><span class="nf">)</span><span class="w"></span>
-<span class="nf">rapids_export(</span><span class="no">BUILD</span><span class="w"> </span><span class="nb">example</span><span class="w"></span>
-<span class="w">  </span><span class="no">EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span><span class="w"></span>
-<span class="w">  </span><span class="no">NAMESPACE</span><span class="w"> </span><span class="nb">example</span><span class="o">::</span><span class="w"></span>
-<span class="w">  </span><span class="no">DOCUMENTATION</span><span class="w"> </span><span class="nb">doc_string</span><span class="w"></span>
-<span class="w">  </span><span class="nf">)</span><span class="w"></span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="nb">doc_string</span><span class="w"> </span><span class="p">[=[</span><span class="nb">Provide</span><span class="w"> </span><span class="nb">targets</span><span class="w"> </span><span class="nb">for</span><span class="w"> </span><span class="nb">the</span><span class="w"> </span><span class="nb">example</span><span class="w"> </span><span class="nb">library.</span><span class="p">]=]</span><span class="nf">)</span>
+<span class="nf">rapids_export(</span><span class="no">INSTALL</span><span class="w"> </span><span class="nb">example</span>
+<span class="w">  </span><span class="no">EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span>
+<span class="w">  </span><span class="no">NAMESPACE</span><span class="w"> </span><span class="nb">example</span><span class="o">::</span>
+<span class="w">  </span><span class="no">DOCUMENTATION</span><span class="w"> </span><span class="nb">doc_string</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">rapids_export(</span><span class="no">BUILD</span><span class="w"> </span><span class="nb">example</span>
+<span class="w">  </span><span class="no">EXPORT_SET</span><span class="w"> </span><span class="nb">example-targets</span>
+<span class="w">  </span><span class="no">NAMESPACE</span><span class="w"> </span><span class="nb">example</span><span class="o">::</span>
+<span class="w">  </span><span class="no">DOCUMENTATION</span><span class="w"> </span><span class="nb">doc_string</span>
+<span class="w">  </span><span class="nf">)</span>
 </pre></div>
 </div>
 <p>Before <cite>rapids-cmake</cite>, if a project wanted to generate a config module they would follow the example in
