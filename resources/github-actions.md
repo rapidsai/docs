@@ -129,9 +129,9 @@ jobs:
       - name: hello
         run: echo "hello"
   job2_gpu:
-    runs-on: [self-hosted, linux, amd64, gpu-v100-495-1]
+    runs-on: [self-hosted, linux, amd64, gpu-v100-520-1]
     container: # GPU jobs must run in a container
-      image: nvidia/cuda:11.5.0-base-ubuntu18.04
+      image: nvidia/cuda:11.8.0-base-ubuntu22.04
       env:
         NVIDIA_VISIBLE_DEVICES: {% raw %}${{ env.NVIDIA_VISIBLE_DEVICES }}{% endraw %} # GPU jobs must set this container env variable
     steps:
