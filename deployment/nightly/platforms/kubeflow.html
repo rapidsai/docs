@@ -430,7 +430,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You can <a class="reference external" href="https://jacobtomlinson.dev/posts/2022/how-to-check-your-nvidia-driver-and-cuda-version-in-kubernetes/">check your CUDA version</a> by creating a pod and running <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code>. For example:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl run nvidia-smi --restart<span class="o">=</span>Never --rm -i --tty --image nvidia/cuda:11.0.3-base-ubuntu20.04 -- nvidia-smi
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>run<span class="w"> </span>nvidia-smi<span class="w"> </span>--restart<span class="o">=</span>Never<span class="w"> </span>--rm<span class="w"> </span>-i<span class="w"> </span>--tty<span class="w"> </span>--image<span class="w"> </span>nvidia/cuda:11.0.3-base-ubuntu20.04<span class="w"> </span>--<span class="w"> </span>nvidia-smi
 <span class="go">+-----------------------------------------------------------------------------+</span>
 <span class="go">| NVIDIA-SMI 495.46       Driver Version: 495.46       CUDA Version: 11.5     |</span>
 <span class="go">|-------------------------------+----------------------+----------------------+</span>
@@ -479,7 +479,7 @@
 <section id="installing-the-dask-kubernetes-operator">
 <h3>Installing the Dask Kubernetes operator<a class="headerlink" href="#installing-the-dask-kubernetes-operator" title="Permalink to this heading">#</a></h3>
 <p>To install the operator we need to create any custom resources and the operator itself, please <a class="reference external" href="https://kubernetes.dask.org/en/latest/operator_installation.html">refer to the documentation</a> to find up-to-date installation instructions. From the terminal run the following command.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>helm install --repo https://helm.dask.org --create-namespace -n dask-operator --generate-name dask-kubernetes-operator
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>helm<span class="w"> </span>install<span class="w"> </span>--repo<span class="w"> </span>https://helm.dask.org<span class="w"> </span>--create-namespace<span class="w"> </span>-n<span class="w"> </span>dask-operator<span class="w"> </span>--generate-name<span class="w"> </span>dask-kubernetes-operator
 <span class="go">NAME: dask-kubernetes-operator-1666875935</span>
 <span class="go">NAMESPACE: dask-operator</span>
 <span class="go">STATUS: deployed</span>
@@ -490,18 +490,18 @@
 </pre></div>
 </div>
 <p>Verify our resources were applied successfully by listing our Dask clusters. Don’t expect to see any resources yet but the command should succeed.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl get daskclusters
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>get<span class="w"> </span>daskclusters
 <span class="go">No resources found in default namespace.</span>
 </pre></div>
 </div>
 <p>You can also check the operator pod is running and ready to launch new Dask clusters.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl get pods -A -l app.kubernetes.io/name<span class="o">=</span>dask-kubernetes-operator
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-A<span class="w"> </span>-l<span class="w"> </span>app.kubernetes.io/name<span class="o">=</span>dask-kubernetes-operator
 <span class="go">NAMESPACE       NAME                                        READY   STATUS    RESTARTS   AGE</span>
 <span class="go">dask-operator   dask-kubernetes-operator-775b8bbbd5-zdrf7   1/1     Running   0          74s</span>
 </pre></div>
 </div>
 <p>Lastly, ensure that your notebook session can create and manage Dask custom resources. To do this you need to edit the <code class="docutils literal notranslate"><span class="pre">kubeflow-kubernetes-edit</span></code> cluster role that gets applied to notebook pods. Add a new rule to the rules section for this role to allow everything in the <code class="docutils literal notranslate"><span class="pre">kubernetes.dask.org</span></code> API group.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl edit clusterrole kubeflow-kubernetes-edit
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>edit<span class="w"> </span>clusterrole<span class="w"> </span>kubeflow-kubernetes-edit
 <span class="go">…</span>
 <span class="go">rules:</span>
 <span class="go">…</span>
@@ -519,7 +519,7 @@
 <h3>Creating a Dask cluster<a class="headerlink" href="#creating-a-dask-cluster" title="Permalink to this heading">#</a></h3>
 <p>Now you can create <code class="docutils literal notranslate"><span class="pre">DaskCluster</span></code> resources in Kubernetes that will launch all the necessary pods and services for our cluster to work. This can be done in YAML via the Kubernetes API or using the Python API from a notebook session as shown in this section.</p>
 <p>In a Jupyter session, create a new notebook and install the <code class="docutils literal notranslate"><span class="pre">dask-kubernetes</span></code> package which you will need to launch Dask clusters.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install dask-kubernetes
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>dask-kubernetes
 </pre></div>
 </div>
 <p>Next, create a Dask cluster using the <code class="docutils literal notranslate"><span class="pre">KubeCluster</span></code> class. Set the container image to match the one used for your notebook environment and set the number of GPUs to 1. Also tell the RAPIDS container not to start Jupyter by default and run our Dask command instead.</p>
@@ -554,40 +554,40 @@
 <h2>Accessing the Dask dashboard from notebooks<a class="headerlink" href="#accessing-the-dask-dashboard-from-notebooks" title="Permalink to this heading">#</a></h2>
 <p>When working interactively in a notebook and leveraging a Dask cluster it can be really valuable to see the Dask dashboard. The dashboard is available on the scheduler <code class="docutils literal notranslate"><span class="pre">Pod</span></code> in the Dask cluster so we need to set some extra configuration to make this available from our notebook <code class="docutils literal notranslate"><span class="pre">Pod</span></code>.</p>
 <p>To do this, we can apply the following manifest.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># configure-dask-dashboard.yaml</span><span class="w"></span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;kubeflow.org/v1alpha1&quot;</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PodDefault</span><span class="w"></span>
-<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configure-dask-dashboard</span><span class="w"></span>
-<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">configure-dask-dashboard</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;configure</span><span class="nv"> </span><span class="s">dask</span><span class="nv"> </span><span class="s">dashboard&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DASK_DISTRIBUTED__DASHBOARD__LINK</span><span class="w"></span>
-<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{NB_PREFIX}/proxy/{host}:{port}/status&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter-server-proxy-config</span><span class="w"></span>
-<span class="w">      </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/root/.jupyter/jupyter_server_config.py</span><span class="w"></span>
-<span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter_server_config.py</span><span class="w"></span>
-<span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter-server-proxy-config</span><span class="w"></span>
-<span class="w">      </span><span class="nt">configMap</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter-server-proxy-config</span><span class="w"></span>
-<span class="nn">---</span><span class="w"></span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span><span class="w"></span>
-<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter-server-proxy-config</span><span class="w"></span>
-<span class="nt">data</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">jupyter_server_config.py</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">    </span><span class="no">c.ServerProxy.host_allowlist = lambda app, host: True</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># configure-dask-dashboard.yaml</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;kubeflow.org/v1alpha1&quot;</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PodDefault</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configure-dask-dashboard</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">configure-dask-dashboard</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+<span class="w">  </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;configure</span><span class="nv"> </span><span class="s">dask</span><span class="nv"> </span><span class="s">dashboard&quot;</span>
+<span class="w">  </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DASK_DISTRIBUTED__DASHBOARD__LINK</span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{NB_PREFIX}/proxy/{host}:{port}/status&quot;</span>
+<span class="w">  </span><span class="nt">volumeMounts</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter-server-proxy-config</span>
+<span class="w">      </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/root/.jupyter/jupyter_server_config.py</span>
+<span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter_server_config.py</span>
+<span class="w">  </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter-server-proxy-config</span>
+<span class="w">      </span><span class="nt">configMap</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter-server-proxy-config</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyter-server-proxy-config</span>
+<span class="nt">data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">jupyter_server_config.py</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">c.ServerProxy.host_allowlist = lambda app, host: True</span>
 </pre></div>
 </div>
 <p>Create a file with the above contents, and then apply it into your user’s namespace with <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</p>
 <p>For the default <code class="docutils literal notranslate"><span class="pre">user&#64;example.com</span></code> user it would look like this.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl apply -n kubeflow-user-example-com -f configure-dask-dashboard.yaml
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-n<span class="w"> </span>kubeflow-user-example-com<span class="w"> </span>-f<span class="w"> </span>configure-dask-dashboard.yaml
 </pre></div>
 </div>
 <p>This configuration file does two things. First it configures the <a class="reference external" href="https://github.com/jupyterhub/jupyter-server-proxy">jupyter-server-proxy</a> running in your Notebook container to allow proxying to all hosts. We can do this safely because we are relying on Kubernetes (and specifically Istio) to enforce network access controls. It also sets the <code class="docutils literal notranslate"><span class="pre">distributed.dashboard-link</span></code> config option in Dask so that the widgets and <code class="docutils literal notranslate"><span class="pre">.dashboard_link</span></code> attributes of the <code class="docutils literal notranslate"><span class="pre">KubeCluster</span></code> and <code class="docutils literal notranslate"><span class="pre">Client</span></code> objects show a url that uses the Jupyter server proxy.</p>
@@ -724,7 +724,7 @@
     
 <p class="copyright">
 
-    &copy; Copyright 2022, NVIDIA.<br>
+    &copy; Copyright 2023, NVIDIA.<br>
 
 </p>
 

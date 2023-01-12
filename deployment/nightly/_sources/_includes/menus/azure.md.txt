@@ -22,6 +22,16 @@ Launch a RAPIDS cluster on managed Kubernetes.
 ````
 
 ````{grid-item-card}
+:link: /cloud/azure/azure-vm-multi
+:link-type: doc
+Azure Cluster via Dask
+^^^
+Launch a RAPIDS cluster on Azure VMs or Azure ML with Dask.
+
+{bdg-primary}`multi-node`
+````
+
+````{grid-item-card}
 :link: /cloud/azure/azureml
 :link-type: doc
 Azure Machine Learning (Azure ML)

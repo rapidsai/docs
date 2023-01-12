@@ -386,6 +386,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../azure/index.html">Microsoft Azure</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../azure/azure-vm.html">Azure Virtual Machine</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../azure/aks.html">Azure Kubernetes Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../azure/azure-vm-multi.html">Azure VM Cluster (via Dask)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../azure/azureml.html">Azure Machine Learning (Azure ML)</a></li>
 </ul>
 </li>
@@ -439,20 +440,20 @@
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">#</a></h2>
 <p>First you’ll need to have the <a class="reference external" href="https://aws.amazon.com/cli/"><code class="docutils literal notranslate"><span class="pre">aws</span></code> CLI tool</a> and <a class="reference external" href="https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html"><code class="docutils literal notranslate"><span class="pre">eksctl</span></code> CLI tool</a> installed along with <a class="reference external" href="https://kubernetes.io/docs/tasks/tools/"><code class="docutils literal notranslate"><span class="pre">kubectl</span></code></a>, <a class="reference external" href="https://helm.sh/docs/intro/install/"><code class="docutils literal notranslate"><span class="pre">helm</span></code></a>, etc for managing Kubernetes.</p>
 <p>Ensure you are logged into the <code class="docutils literal notranslate"><span class="pre">aws</span></code> CLI.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>aws configure
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>aws<span class="w"> </span>configure
 </pre></div>
 </div>
 </section>
 <section id="create-the-kubernetes-cluster">
 <h2>Create the Kubernetes cluster<a class="headerlink" href="#create-the-kubernetes-cluster" title="Permalink to this heading">#</a></h2>
 <p>Now we can launch a GPU enabled EKS cluster. First launch an EKS cluster with <code class="docutils literal notranslate"><span class="pre">eksctl</span></code>.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>eksctl create cluster rapids <span class="se">\</span>
-                      --version <span class="m">1</span>.24 <span class="se">\</span>
-                      --nodes <span class="m">3</span> <span class="se">\</span>
-                      --node-type<span class="o">=</span>p3.8xlarge <span class="se">\</span>
-                      --timeout<span class="o">=</span>40m <span class="se">\</span>
-                      --ssh-access <span class="se">\</span>
-                      --ssh-public-key &lt;public key ID&gt; <span class="se">\ </span> <span class="c1"># Be sure to set your public key ID here</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>eksctl<span class="w"> </span>create<span class="w"> </span>cluster<span class="w"> </span>rapids<span class="w"> </span><span class="se">\</span>
+<span class="w">                      </span>--version<span class="w"> </span><span class="m">1</span>.24<span class="w"> </span><span class="se">\</span>
+<span class="w">                      </span>--nodes<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                      </span>--node-type<span class="o">=</span>p3.8xlarge<span class="w"> </span><span class="se">\</span>
+<span class="w">                      </span>--timeout<span class="o">=</span>40m<span class="w"> </span><span class="se">\</span>
+<span class="w">                      </span>--ssh-access<span class="w"> </span><span class="se">\</span>
+<span class="w">                      </span>--ssh-public-key<span class="w"> </span>&lt;public<span class="w"> </span>key<span class="w"> </span>ID&gt;<span class="w"> </span><span class="se">\ </span><span class="w"> </span><span class="c1"># Be sure to set your public key ID here</span>
 <span class="go">                      --region us-east-1 \</span>
 <span class="go">                      --zones=us-east-1c,us-east-1b,us-east-1d \</span>
 <span class="go">                      --auto-kubeconfig \</span>
@@ -461,14 +462,14 @@
 </div>
 <p>With this command, you’ve launched an EKS cluster called <code class="docutils literal notranslate"><span class="pre">rapids</span></code>. You’ve specified that it should use nodes of type <code class="docutils literal notranslate"><span class="pre">p3.8xlarge</span></code>. We also specified that we don’t want to install the NVIDIA drivers as we will do that with the NVIDIA operator.</p>
 <p>To access the cluster we need to pull down the credentials.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>aws eks --region us-east-1 update-kubeconfig --name rapids
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>aws<span class="w"> </span>eks<span class="w"> </span>--region<span class="w"> </span>us-east-1<span class="w"> </span>update-kubeconfig<span class="w"> </span>--name<span class="w"> </span>rapids
 </pre></div>
 </div>
 </section>
 <section id="install-drivers">
 <h2>Install drivers<a class="headerlink" href="#install-drivers" title="Permalink to this heading">#</a></h2>
 <p>Next, <a class="reference external" href="https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html">install the NVIDIA drivers</a> onto each node.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>helm install --repo https://helm.ngc.nvidia.com/nvidia --wait --generate-name -n gpu-operator --create-namespace gpu-operator
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>helm<span class="w"> </span>install<span class="w"> </span>--repo<span class="w"> </span>https://helm.ngc.nvidia.com/nvidia<span class="w"> </span>--wait<span class="w"> </span>--generate-name<span class="w"> </span>-n<span class="w"> </span>gpu-operator<span class="w"> </span>--create-namespace<span class="w"> </span>gpu-operator
 <span class="go">NAME: gpu-operator-1670843572</span>
 <span class="go">NAMESPACE: gpu-operator</span>
 <span class="go">STATUS: deployed</span>
@@ -477,7 +478,7 @@
 </pre></div>
 </div>
 <p>Verify that the NVIDIA drivers are successfully installed.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl get po -A --watch <span class="p">|</span> grep nvidia
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-A<span class="w"> </span>--watch<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nvidia
 <span class="go">kube-system   nvidia-driver-installer-6zwcn                                 1/1     Running   0         8m47s</span>
 <span class="go">kube-system   nvidia-driver-installer-8zmmn                                 1/1     Running   0         8m47s</span>
 <span class="go">kube-system   nvidia-driver-installer-mjkb8                                 1/1     Running   0         8m47s</span>
@@ -487,7 +488,7 @@
 </pre></div>
 </div>
 <p>After your drivers are installed, create a quick sample pod that uses some GPU compute to make sure that everything is working as expected.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat &lt;&lt; EOF <span class="p">|</span> kubectl create -f -
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>-
 <span class="go">apiVersion: v1</span>
 <span class="go">kind: Pod</span>
 <span class="go">metadata:</span>
@@ -503,7 +504,7 @@
 <span class="go">EOF</span>
 </pre></div>
 </div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl logs pod/cuda-vectoradd
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>logs<span class="w"> </span>pod/cuda-vectoradd
 <span class="go">[Vector addition of 50000 elements]</span>
 <span class="go">Copy input data from the host memory to the CUDA device</span>
 <span class="go">CUDA kernel launch with 196 blocks of 256 threads</span>
@@ -514,7 +515,7 @@
 </div>
 <p>If you see <code class="docutils literal notranslate"><span class="pre">Test</span> <span class="pre">PASSED</span></code> in the output, you can be confident that your Kubernetes cluster has GPU compute set up correctly.</p>
 <p>Next, clean up that pod.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl delete po cuda-vectoradd
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>delete<span class="w"> </span>po<span class="w"> </span>cuda-vectoradd
 <span class="go">pod &quot;cuda-vectoradd&quot; deleted</span>
 </pre></div>
 </div>
@@ -526,7 +527,7 @@
 <section id="clean-up">
 <h2>Clean up<a class="headerlink" href="#clean-up" title="Permalink to this heading">#</a></h2>
 <p>You can also delete the EKS cluster to stop billing with the following command.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>eksctl delete cluster --region<span class="o">=</span>us-east-1 --name<span class="o">=</span>rapids
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>eksctl<span class="w"> </span>delete<span class="w"> </span>cluster<span class="w"> </span>--region<span class="o">=</span>us-east-1<span class="w"> </span>--name<span class="o">=</span>rapids
 <span class="go">Deleting cluster rapids...⠼</span>
 </pre></div>
 </div>
@@ -646,7 +647,7 @@
     
 <p class="copyright">
 
-    &copy; Copyright 2022, NVIDIA.<br>
+    &copy; Copyright 2023, NVIDIA.<br>
 
 </p>
 

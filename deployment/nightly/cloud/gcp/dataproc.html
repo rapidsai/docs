@@ -386,6 +386,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../azure/index.html">Microsoft Azure</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../azure/azure-vm.html">Azure Virtual Machine</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../azure/aks.html">Azure Kubernetes Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../azure/azure-vm-multi.html">Azure VM Cluster (via Dask)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../azure/azureml.html">Azure Machine Learning (Azure ML)</a></li>
 </ul>
 </li>
@@ -439,22 +440,22 @@
 </div>
 <p>RAPIDS can be deployed on Google Cloud Dataproc using Dask. We have <strong><a class="reference external" href="https://github.com/GoogleCloudDataproc/initialization-actions/tree/master/rapids">helper scripts and detailed instructions</a></strong> to help.</p>
 <p><strong>1. Create Dataproc cluster with Dask RAPIDS.</strong> Use the gcloud command to create a new cluster with the below initialization action. Because of an Anaconda version conflict, script deployment on older images is slow, we recommend using Dask with Dataproc 2.0+.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">export</span> <span class="nv">GCS_BUCKET</span><span class="o">=[</span>BUCKET_NAME<span class="o">]</span>
-<span class="gp">$ </span><span class="nb">export</span> <span class="nv">CLUSTER_NAME</span><span class="o">=[</span>CLUSTER_NAME<span class="o">]</span>
-<span class="gp">$ </span><span class="nb">export</span> <span class="nv">REGION</span><span class="o">=[</span>REGION<span class="o">]</span>
-<span class="gp">$ </span><span class="nb">export</span> <span class="nv">DASK_RUNTIME</span><span class="o">=[</span>DASK_RUNTIME<span class="o">]</span>
-<span class="gp">$ </span>gcloud dataproc clusters create <span class="nv">$CLUSTER_NAME</span><span class="se">\</span>
-    --region <span class="nv">$REGION</span><span class="se">\</span>
-    --image-version preview-ubuntu18<span class="se">\</span>
-    --master-machine-type <span class="o">[</span>MACHINE_TYPE<span class="o">]</span><span class="se">\</span>
-    --master-accelerator <span class="nv">type</span><span class="o">=[</span>GPU_TYPE<span class="o">]</span>,count<span class="o">=[</span>NUM_GPU<span class="o">]</span><span class="se">\</span>
-    --worker-machine-type <span class="o">[</span>MACHINE_TYPE<span class="o">]</span><span class="se">\</span>
-    --worker-accelerator <span class="nv">type</span><span class="o">=[</span>GPU_TYPE<span class="o">]</span>,count<span class="o">=[</span>NUM_GPU<span class="o">]</span><span class="se">\</span>
-    --optional-components<span class="o">=</span>ANACONDA<span class="se">\</span>
-    --initialization-actions gs://goog-dataproc-initialization-actions-<span class="si">${</span><span class="nv">REGION</span><span class="si">}</span>/gpu/install_gpu_driver.sh,gs://goog-dataproc-initialization-actions-<span class="si">${</span><span class="nv">REGION</span><span class="si">}</span>/dask/dask.sh,gs://goog-dataproc-initialization-actions-<span class="si">${</span><span class="nv">REGION</span><span class="si">}</span>/rapids/rapids.sh<span class="se">\</span>
-    --initialization-action-timeout<span class="o">=</span>60m<span class="se">\</span>
-    --metadata gpu-driver-provider<span class="o">=</span>NVIDIA,dask-runtime<span class="o">=</span><span class="si">${</span><span class="nv">DASK_RUNTIME</span><span class="si">}</span>,rapids-runtime<span class="o">=</span>DASK<span class="se">\</span>
-    --enable-component-gateway
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">GCS_BUCKET</span><span class="o">=[</span>BUCKET_NAME<span class="o">]</span>
+<span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">CLUSTER_NAME</span><span class="o">=[</span>CLUSTER_NAME<span class="o">]</span>
+<span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">REGION</span><span class="o">=[</span>REGION<span class="o">]</span>
+<span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">DASK_RUNTIME</span><span class="o">=[</span>DASK_RUNTIME<span class="o">]</span>
+<span class="gp">$ </span>gcloud<span class="w"> </span>dataproc<span class="w"> </span>clusters<span class="w"> </span>create<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="se">\</span>
+<span class="w">    </span>--region<span class="w"> </span><span class="nv">$REGION</span><span class="se">\</span>
+<span class="w">    </span>--image-version<span class="w"> </span>preview-ubuntu18<span class="se">\</span>
+<span class="w">    </span>--master-machine-type<span class="w"> </span><span class="o">[</span>MACHINE_TYPE<span class="o">]</span><span class="se">\</span>
+<span class="w">    </span>--master-accelerator<span class="w"> </span><span class="nv">type</span><span class="o">=[</span>GPU_TYPE<span class="o">]</span>,count<span class="o">=[</span>NUM_GPU<span class="o">]</span><span class="se">\</span>
+<span class="w">    </span>--worker-machine-type<span class="w"> </span><span class="o">[</span>MACHINE_TYPE<span class="o">]</span><span class="se">\</span>
+<span class="w">    </span>--worker-accelerator<span class="w"> </span><span class="nv">type</span><span class="o">=[</span>GPU_TYPE<span class="o">]</span>,count<span class="o">=[</span>NUM_GPU<span class="o">]</span><span class="se">\</span>
+<span class="w">    </span>--optional-components<span class="o">=</span>ANACONDA<span class="se">\</span>
+<span class="w">    </span>--initialization-actions<span class="w"> </span>gs://goog-dataproc-initialization-actions-<span class="si">${</span><span class="nv">REGION</span><span class="si">}</span>/gpu/install_gpu_driver.sh,gs://goog-dataproc-initialization-actions-<span class="si">${</span><span class="nv">REGION</span><span class="si">}</span>/dask/dask.sh,gs://goog-dataproc-initialization-actions-<span class="si">${</span><span class="nv">REGION</span><span class="si">}</span>/rapids/rapids.sh<span class="se">\</span>
+<span class="w">    </span>--initialization-action-timeout<span class="o">=</span>60m<span class="se">\</span>
+<span class="w">    </span>--metadata<span class="w"> </span>gpu-driver-provider<span class="o">=</span>NVIDIA,dask-runtime<span class="o">=</span><span class="si">${</span><span class="nv">DASK_RUNTIME</span><span class="si">}</span>,rapids-runtime<span class="o">=</span>DASK<span class="se">\</span>
+<span class="w">    </span>--enable-component-gateway
 </pre></div>
 </div>
 <p>[BUCKET_NAME] = name of the bucket to use.<br />
@@ -541,7 +542,7 @@
     
 <p class="copyright">
 
-    &copy; Copyright 2022, NVIDIA.<br>
+    &copy; Copyright 2023, NVIDIA.<br>
 
 </p>
 
