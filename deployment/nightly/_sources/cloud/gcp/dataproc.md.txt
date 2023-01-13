@@ -6,29 +6,40 @@ This is a legacy page and may contain outdated information. We are working hard 
 
 RAPIDS can be deployed on Google Cloud Dataproc using Dask. We have **[helper scripts and detailed instructions](https://github.com/GoogleCloudDataproc/initialization-actions/tree/master/rapids)** to help.
 
-**1. Create Dataproc cluster with Dask RAPIDS.** Use the gcloud command to create a new cluster with the below initialization action. Because of an Anaconda version conflict, script deployment on older images is slow, we recommend using Dask with Dataproc 2.0+.
+**0. Copy initialization actions to your own Cloud Storage bucket.** Don't create production clusters that reference initialization actions located in the gs://goog-dataproc-initialization-actions-REGION public buckets. These scripts are provided as reference implementations, and are synchronized with ongoing GitHub repository changes. Before creating clusters, it is strongly recommended that you copy the init actions from the public bucket into your bucket to prevent unintended upgrades from upstream in the cluster:
 
 ```console
-$ export GCS_BUCKET=[BUCKET_NAME]
-$ export CLUSTER_NAME=[CLUSTER_NAME]
-$ export REGION=[REGION]
-$ export DASK_RUNTIME=[DASK_RUNTIME]
+$ REGION=<region>
+$ GCS_BUCKET=<bucket_name>
+$ gcloud storage buckets create gs://$GCS_BUCKET
+$ gsutil cp gs://goog-dataproc-initialization-actions-${REGION}/gpu/install_gpu_driver.sh,\
+            gs://goog-dataproc-initialization-actions-${REGION}/dask/dask.sh,\
+            gs://goog-dataproc-initialization-actions-${REGION}/rapids/rapids.sh\
+        gs://$GCS_BUCKET
+
+```
+
+**1. Create Dataproc cluster with Dask RAPIDS.** Use the gcloud command to create a new cluster. Because of an Anaconda version conflict, script deployment on older images is slow, we recommend using Dask with Dataproc 2.0+.
+
+```console
+$ CLUSTER_NAME=<CLUSTER_NAME>
+$ DASK_RUNTIME=yarn
 $ gcloud dataproc clusters create $CLUSTER_NAME\
     --region $REGION\
-    --image-version preview-ubuntu18\
-    --master-machine-type [MACHINE_TYPE]\
-    --master-accelerator type=[GPU_TYPE],count=[NUM_GPU]\
-    --worker-machine-type [MACHINE_TYPE]\
-    --worker-accelerator type=[GPU_TYPE],count=[NUM_GPU]\
-    --optional-components=ANACONDA\
-    --initialization-actions gs://goog-dataproc-initialization-actions-${REGION}/gpu/install_gpu_driver.sh,gs://goog-dataproc-initialization-actions-${REGION}/dask/dask.sh,gs://goog-dataproc-initialization-actions-${REGION}/rapids/rapids.sh\
-    --initialization-action-timeout=60m\
-    --metadata gpu-driver-provider=NVIDIA,dask-runtime=${DASK_RUNTIME},rapids-runtime=DASK\
+    --image-version 2.0-ubuntu18\
+    --master-machine-type n1-standard-32\
+    --master-accelerator type=nvidia-tesla-t4,count=2\
+    --worker-machine-type n1-standard-32\
+    --worker-accelerator type=nvidia-tesla-t4,count=2\
+    --initialization-actions=$GCS_BUCKET/install_gpu_driver.sh,gs://$GCS_BUCKET/dask.sh,gs://$GCS_BUCKET/rapids.sh\
+    --initialization-action-timeout 60m\
+    --optional-components=JUPYTER\
+    --metadata gpu-driver-provider=NVIDIA,dask-runtime=$DASK_RUNTIME,rapids-runtime=DASK\
     --enable-component-gateway
 
 ```
 
-[BUCKET_NAME] = name of the bucket to use.\
+[GCS_BUCKET] = name of the bucket to use.\
 [CLUSTER_NAME] = name of the cluster.\
 [REGION] = name of region where cluster is to be created.\
 [DASK_RUNTIME] = Dask runtime could be set to either yarn or standalone.

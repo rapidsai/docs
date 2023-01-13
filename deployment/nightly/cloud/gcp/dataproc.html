@@ -439,26 +439,34 @@
 <p>This is a legacy page and may contain outdated information. We are working hard to update our documentation with the latest and greatest information, thank you for bearing with us.</p>
 </div>
 <p>RAPIDS can be deployed on Google Cloud Dataproc using Dask. We have <strong><a class="reference external" href="https://github.com/GoogleCloudDataproc/initialization-actions/tree/master/rapids">helper scripts and detailed instructions</a></strong> to help.</p>
-<p><strong>1. Create Dataproc cluster with Dask RAPIDS.</strong> Use the gcloud command to create a new cluster with the below initialization action. Because of an Anaconda version conflict, script deployment on older images is slow, we recommend using Dask with Dataproc 2.0+.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">GCS_BUCKET</span><span class="o">=[</span>BUCKET_NAME<span class="o">]</span>
-<span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">CLUSTER_NAME</span><span class="o">=[</span>CLUSTER_NAME<span class="o">]</span>
-<span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">REGION</span><span class="o">=[</span>REGION<span class="o">]</span>
-<span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">DASK_RUNTIME</span><span class="o">=[</span>DASK_RUNTIME<span class="o">]</span>
+<p><strong>0. Copy initialization actions to your own Cloud Storage bucket.</strong> Don’t create production clusters that reference initialization actions located in the gs://goog-dataproc-initialization-actions-REGION public buckets. These scripts are provided as reference implementations, and are synchronized with ongoing GitHub repository changes. Before creating clusters, it is strongly recommended that you copy the init actions from the public bucket into your bucket to prevent unintended upgrades from upstream in the cluster:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">REGION</span><span class="o">=</span>&lt;region&gt;
+<span class="gp">$ </span><span class="nv">GCS_BUCKET</span><span class="o">=</span>&lt;bucket_name&gt;
+<span class="gp">$ </span>gcloud<span class="w"> </span>storage<span class="w"> </span>buckets<span class="w"> </span>create<span class="w"> </span>gs://<span class="nv">$GCS_BUCKET</span>
+<span class="gp">$ </span>gsutil<span class="w"> </span>cp<span class="w"> </span>gs://goog-dataproc-initialization-actions-<span class="si">${</span><span class="nv">REGION</span><span class="si">}</span>/gpu/install_gpu_driver.sh,<span class="se">\</span>
+<span class="w">            </span>gs://goog-dataproc-initialization-actions-<span class="si">${</span><span class="nv">REGION</span><span class="si">}</span>/dask/dask.sh,<span class="se">\</span>
+<span class="w">            </span>gs://goog-dataproc-initialization-actions-<span class="si">${</span><span class="nv">REGION</span><span class="si">}</span>/rapids/rapids.sh<span class="se">\</span>
+<span class="w">        </span>gs://<span class="nv">$GCS_BUCKET</span>
+</pre></div>
+</div>
+<p><strong>1. Create Dataproc cluster with Dask RAPIDS.</strong> Use the gcloud command to create a new cluster. Because of an Anaconda version conflict, script deployment on older images is slow, we recommend using Dask with Dataproc 2.0+.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">CLUSTER_NAME</span><span class="o">=</span>&lt;CLUSTER_NAME&gt;
+<span class="gp">$ </span><span class="nv">DASK_RUNTIME</span><span class="o">=</span>yarn
 <span class="gp">$ </span>gcloud<span class="w"> </span>dataproc<span class="w"> </span>clusters<span class="w"> </span>create<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="se">\</span>
 <span class="w">    </span>--region<span class="w"> </span><span class="nv">$REGION</span><span class="se">\</span>
-<span class="w">    </span>--image-version<span class="w"> </span>preview-ubuntu18<span class="se">\</span>
-<span class="w">    </span>--master-machine-type<span class="w"> </span><span class="o">[</span>MACHINE_TYPE<span class="o">]</span><span class="se">\</span>
-<span class="w">    </span>--master-accelerator<span class="w"> </span><span class="nv">type</span><span class="o">=[</span>GPU_TYPE<span class="o">]</span>,count<span class="o">=[</span>NUM_GPU<span class="o">]</span><span class="se">\</span>
-<span class="w">    </span>--worker-machine-type<span class="w"> </span><span class="o">[</span>MACHINE_TYPE<span class="o">]</span><span class="se">\</span>
-<span class="w">    </span>--worker-accelerator<span class="w"> </span><span class="nv">type</span><span class="o">=[</span>GPU_TYPE<span class="o">]</span>,count<span class="o">=[</span>NUM_GPU<span class="o">]</span><span class="se">\</span>
-<span class="w">    </span>--optional-components<span class="o">=</span>ANACONDA<span class="se">\</span>
-<span class="w">    </span>--initialization-actions<span class="w"> </span>gs://goog-dataproc-initialization-actions-<span class="si">${</span><span class="nv">REGION</span><span class="si">}</span>/gpu/install_gpu_driver.sh,gs://goog-dataproc-initialization-actions-<span class="si">${</span><span class="nv">REGION</span><span class="si">}</span>/dask/dask.sh,gs://goog-dataproc-initialization-actions-<span class="si">${</span><span class="nv">REGION</span><span class="si">}</span>/rapids/rapids.sh<span class="se">\</span>
-<span class="w">    </span>--initialization-action-timeout<span class="o">=</span>60m<span class="se">\</span>
-<span class="w">    </span>--metadata<span class="w"> </span>gpu-driver-provider<span class="o">=</span>NVIDIA,dask-runtime<span class="o">=</span><span class="si">${</span><span class="nv">DASK_RUNTIME</span><span class="si">}</span>,rapids-runtime<span class="o">=</span>DASK<span class="se">\</span>
+<span class="w">    </span>--image-version<span class="w"> </span><span class="m">2</span>.0-ubuntu18<span class="se">\</span>
+<span class="w">    </span>--master-machine-type<span class="w"> </span>n1-standard-32<span class="se">\</span>
+<span class="w">    </span>--master-accelerator<span class="w"> </span><span class="nv">type</span><span class="o">=</span>nvidia-tesla-t4,count<span class="o">=</span><span class="m">2</span><span class="se">\</span>
+<span class="w">    </span>--worker-machine-type<span class="w"> </span>n1-standard-32<span class="se">\</span>
+<span class="w">    </span>--worker-accelerator<span class="w"> </span><span class="nv">type</span><span class="o">=</span>nvidia-tesla-t4,count<span class="o">=</span><span class="m">2</span><span class="se">\</span>
+<span class="w">    </span>--initialization-actions<span class="o">=</span><span class="nv">$GCS_BUCKET</span>/install_gpu_driver.sh,gs://<span class="nv">$GCS_BUCKET</span>/dask.sh,gs://<span class="nv">$GCS_BUCKET</span>/rapids.sh<span class="se">\</span>
+<span class="w">    </span>--initialization-action-timeout<span class="w"> </span>60m<span class="se">\</span>
+<span class="w">    </span>--optional-components<span class="o">=</span>JUPYTER<span class="se">\</span>
+<span class="w">    </span>--metadata<span class="w"> </span>gpu-driver-provider<span class="o">=</span>NVIDIA,dask-runtime<span class="o">=</span><span class="nv">$DASK_RUNTIME</span>,rapids-runtime<span class="o">=</span>DASK<span class="se">\</span>
 <span class="w">    </span>--enable-component-gateway
 </pre></div>
 </div>
-<p>[BUCKET_NAME] = name of the bucket to use.<br />
+<p>[GCS_BUCKET] = name of the bucket to use.<br />
 [CLUSTER_NAME] = name of the cluster.<br />
 [REGION] = name of region where cluster is to be created.<br />
 [DASK_RUNTIME] = Dask runtime could be set to either yarn or standalone.</p>
