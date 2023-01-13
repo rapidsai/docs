@@ -173,18 +173,19 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Computes the reduction of the values in all rows of a column. </p>
-<p>This function does not detect overflows in reductions. Using a higher precision for output_dtype may prevent overflow. Only <code>min</code> and <code>max</code> ops are supported for reduction of non-arithmetic types (e.g. timestamp or string).</p>
+<p>This function does not detect overflows in reductions. When <code>output_dtype</code> does not match the <code>col.type()</code>, their values may be promoted to <code>int64_t</code> or <code>double</code> for computing aggregations and then cast to <code>output_dtype</code> before returning.</p>
+<p>Only <code>min</code> and <code>max</code> ops are supported for reduction of non-arithmetic types (e.g. timestamp or string).</p>
 <p>Any null values are skipped for the operation.</p>
 <p>If the column is empty or contains all null entries <code>col.size()==col.null_count()</code>, the output scalar value will be <code>false</code> for reduction type <code>any</code> and <code>true</code> for reduction type <code>all</code>. For all other reductions, the output scalar returns with <code><a class="el" href="group__transformation__unaryops.html#gadb9da192fb2de3cd433140273661dbdf" title="Creates a column of type_id::BOOL8 elements where for every element in input true indicates the value...">is_valid()</a>==false</code>.</p>
-<p>If the input column is an arithmetic type, the output_dtype can be any arithmetic type. If the input column is a non-arithmetic type (e.g. timestamp or string) the output_dtype must match the column type. If the reduction type is <code>any</code> or <code>all</code>, the output_dtype must be type BOOL8.</p>
+<p>If the input column is an arithmetic type, the <code>output_dtype</code> can be any arithmetic type. If the input column is a non-arithmetic type (e.g. timestamp or string) the <code>output_dtype</code> must match the <code>col.type()</code>. If the reduction type is <code>any</code> or <code>all</code>, the <code>output_dtype</code> must be type BOOL8.</p>
 <p>If the reduction fails, the output scalar returns with <code><a class="el" href="group__transformation__unaryops.html#gadb9da192fb2de3cd433140273661dbdf" title="Creates a column of type_id::BOOL8 elements where for every element in input true indicates the value...">is_valid()</a>==false</code>.</p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tbody><tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if reduction is called for non-arithmetic output type and operator other than <code>min</code> and <code>max</code>. </td></tr>
-    <tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if input column data type is not convertible to output data type. </td></tr>
+    <tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if input column data type is not convertible to <code>output_dtype</code>. </td></tr>
     <tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if <code>min</code> or <code>max</code> reduction is called and the output type does not match the input column data type. </td></tr>
     <tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if <code>any</code> or <code>all</code> reduction is called and the output type is not BOOL8. </td></tr>
-    <tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if <code>mean</code>, <code>var</code>, or <code>std</code> reduction is called and the output type is not floating point.</td></tr>
+    <tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if <code>mean</code>, <code>var</code>, or <code>std</code> reduction is called and the <code>output_dtype</code> is not floating point.</td></tr>
   </tbody></table>
   </dd>
 </dl>
@@ -192,7 +193,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tbody><tr><td class="paramname">col</td><td>Input column view </td></tr>
     <tr><td class="paramname">agg</td><td>Aggregation operator applied by the reduction </td></tr>
-    <tr><td class="paramname">output_dtype</td><td>The computation and output precision </td></tr>
+    <tr><td class="paramname">output_dtype</td><td>The output scalar type </td></tr>
     <tr><td class="paramname">mr</td><td>Device memory resource used to allocate the returned scalar's device memory </td></tr>
   </tbody></table>
   </dd>
@@ -257,7 +258,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tbody><tr><td class="paramname">col</td><td>Input column view </td></tr>
     <tr><td class="paramname">agg</td><td>Aggregation operator applied by the reduction </td></tr>
-    <tr><td class="paramname">output_dtype</td><td>The computation and output precision </td></tr>
+    <tr><td class="paramname">output_dtype</td><td>The output scalar type </td></tr>
     <tr><td class="paramname">init</td><td>The initial value of the reduction </td></tr>
     <tr><td class="paramname">mr</td><td>Device memory resource used to allocate the returned scalar's device memory </td></tr>
   </tbody></table>
@@ -384,19 +385,18 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Compute reduction of each segment in the input column. </p>
-<p>This function does not detect overflows in reductions. When given integral and floating point inputs, their values are promoted to <code>int64_t</code> and <code>double</code> respectively to compute, and casted to <code>output_dtype</code> before returning.</p>
+<p>This function does not detect overflows in reductions. When <code>output_dtype</code> does not match the <code>segmented_values.type()</code>, their values may be promoted to <code>int64_t</code> or <code>double</code> for computing aggregations and then cast to <code>output_dtype</code> before returning.</p>
 <p>Null values are treated as identities during reduction.</p>
 <p>If the segment is empty, the row corresponding to the result of the segment is null.</p>
-<p>If any index in <code>offsets</code> is out of bound of <code>segmented_values</code> , the behavior is undefined.</p>
-<dl class="section note"><dt>Note</dt><dd>If the input column has arithmetic type, output_dtype can be any arithmetic type. If the input column has non-arithmetic type, e.g. timestamp, the same output type must be specified.</dd>
-<dd>
-If input is not empty, the result is always nullable.</dd></dl>
+<p>If any index in <code>offsets</code> is out of bound of <code>segmented_values</code>, the behavior is undefined.</p>
+<p>If the input column has arithmetic type, <code>output_dtype</code> can be any arithmetic type. If the input column has non-arithmetic type, e.g. timestamp, the same output type must be specified.</p>
+<p>If input is not empty, the result is always nullable.</p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tbody><tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if reduction is called for non-arithmetic output type and operator other than <code>min</code> and <code>max</code>. </td></tr>
-    <tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if input column data type is not convertible to output data type. </td></tr>
-    <tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if <code>min</code> or <code>max</code> reduction is called and the output type does not match the input column data type. </td></tr>
-    <tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if <code>any</code> or <code>all</code> reduction is called and the output type is not bool8.</td></tr>
+    <tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if input column data type is not convertible to <code>output_dtype</code> type. </td></tr>
+    <tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if <code>min</code> or <code>max</code> reduction is called and the <code>output_dtype</code> does not match the input column data type. </td></tr>
+    <tr><td class="paramname"><a class="el" href="structcudf_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cudf::logic_error</a></td><td>if <code>any</code> or <code>all</code> reduction is called and the <code>output_dtype</code> is not BOOL8.</td></tr>
   </tbody></table>
   </dd>
 </dl>
@@ -405,7 +405,7 @@ If input is not empty, the result is always nullable.</dd></dl>
     <tbody><tr><td class="paramname">segmented_values</td><td>Column view of segmented inputs </td></tr>
     <tr><td class="paramname">offsets</td><td>Each segment's offset of <code>segmented_values</code>. A list of offsets with size <code>num_segments + 1</code>. The size of <code>i</code>th segment is <code>offsets[i+1] - offsets[i]</code>. </td></tr>
     <tr><td class="paramname">agg</td><td>Aggregation operator applied by the reduction </td></tr>
-    <tr><td class="paramname">output_dtype</td><td>The output precision </td></tr>
+    <tr><td class="paramname">output_dtype</td><td>The output column type </td></tr>
     <tr><td class="paramname">null_handling</td><td>If <code>INCLUDE</code>, the reduction is valid if all elements in a segment are valid, otherwise null. If <code>EXCLUDE</code>, the reduction is valid if any element in the segment is valid, otherwise null. </td></tr>
     <tr><td class="paramname">mr</td><td>Device memory resource used to allocate the returned scalar's device memory </td></tr>
   </tbody></table>
@@ -477,7 +477,7 @@ If input is not empty, the result is always nullable.</dd></dl>
     <tbody><tr><td class="paramname">segmented_values</td><td>Column view of segmented inputs </td></tr>
     <tr><td class="paramname">offsets</td><td>Each segment's offset of <code>segmented_values</code>. A list of offsets with size <code>num_segments + 1</code>. The size of <code>i</code>th segment is <code>offsets[i+1] - offsets[i]</code>. </td></tr>
     <tr><td class="paramname">agg</td><td>Aggregation operator applied by the reduction </td></tr>
-    <tr><td class="paramname">output_dtype</td><td>The output precision </td></tr>
+    <tr><td class="paramname">output_dtype</td><td>The output column type </td></tr>
     <tr><td class="paramname">null_handling</td><td>If <code>INCLUDE</code>, the reduction is valid if all elements in a segment are valid, otherwise null. If <code>EXCLUDE</code>, the reduction is valid if any element in the segment is valid, otherwise null. </td></tr>
     <tr><td class="paramname">init</td><td>The initial value of the reduction </td></tr>
     <tr><td class="paramname">mr</td><td>Device memory resource used to allocate the returned scalar's device memory </td></tr>
