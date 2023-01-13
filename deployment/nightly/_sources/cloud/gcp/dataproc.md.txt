@@ -1,12 +1,10 @@
 # Dataproc
 
-```{warning}
-This is a legacy page and may contain outdated information. We are working hard to update our documentation with the latest and greatest information, thank you for bearing with us.
-```
+RAPIDS can be deployed on Google Cloud Dataproc using Dask. For more details, see our **[detailed instructions and helper scripts.](https://github.com/GoogleCloudDataproc/initialization-actions/tree/master/rapids)**
 
-RAPIDS can be deployed on Google Cloud Dataproc using Dask. We have **[helper scripts and detailed instructions](https://github.com/GoogleCloudDataproc/initialization-actions/tree/master/rapids)** to help.
+**0. Copy initialization actions to your own Cloud Storage bucket.** Don't create clusters that reference initialization actions located in `gs://goog-dataproc-initialization-actions-REGION` public buckets. These scripts are provided as reference implementations and are synchronized with ongoing [GitHub repository](https://github.com/GoogleCloudDataproc/initialization-actions) changes.
 
-**0. Copy initialization actions to your own Cloud Storage bucket.** Don't create production clusters that reference initialization actions located in the gs://goog-dataproc-initialization-actions-REGION public buckets. These scripts are provided as reference implementations, and are synchronized with ongoing GitHub repository changes. Before creating clusters, it is strongly recommended that you copy the init actions from the public bucket into your bucket to prevent unintended upgrades from upstream in the cluster:
+It is strongly recommended that you copy the initialization scripts into your own Storage bucket to prevent unintended upgrades from upstream in the cluster:
 
 ```console
 $ REGION=<region>
@@ -44,6 +42,6 @@ $ gcloud dataproc clusters create $CLUSTER_NAME\
 [REGION] = name of region where cluster is to be created.\
 [DASK_RUNTIME] = Dask runtime could be set to either yarn or standalone.
 
-**2. Run Dask RAPIDS Workload.** Once the cluster has been created, the Dask scheduler listens for workers on port 8786, and its status dashboard is on port 8787 on the Dataproc master node. To connect to the Dask web interface, you will need to create an SSH tunnel as described in the **[Dataproc web interfaces documentation.](https://cloud.google.com/dataproc/docs/concepts/accessing/cluster-web-interfaces)** You can also connect using the Dask Client Python API from a Jupyter notebook, or from a Python script or interpreter session.
+**2. Run Dask RAPIDS Workload.** Once the cluster has been created, the Dask scheduler listens for workers on `port 8786`, and its status dashboard is on `port 8787` on the Dataproc master node.
 
-For more, see our **[detailed instructions and helper scripts.](https://github.com/GoogleCloudDataproc/initialization-actions/tree/master/rapids)**
+To connect to the Dask web interface, you will need to create an SSH tunnel as described in the [Dataproc web interfaces documentation.](https://cloud.google.com/dataproc/docs/concepts/accessing/cluster-web-interfaces) You can also connect using the Dask Client Python API from a Jupyter notebook, or from a Python script or interpreter session.
