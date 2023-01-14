@@ -9363,8 +9363,8 @@
       <type>void</type>
       <name>set_quoting</name>
       <anchorfile>classcudf_1_1io_1_1csv__reader__options.html</anchorfile>
-      <anchor>ac58f06e14e7f845c822a077643d58757</anchor>
-      <arglist>(quote_style style)</arglist>
+      <anchor>a4e5712f3aeb410f7284c184fa51b9f62</anchor>
+      <arglist>(quote_style quoting)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -9851,6 +9851,13 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
+      <type>quote_style</type>
+      <name>get_quoting</name>
+      <anchorfile>classcudf_1_1io_1_1csv__writer__options.html</anchorfile>
+      <anchor>ad5340754bce628f19e2e933b6db8f321</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
       <type>void</type>
       <name>set_names</name>
       <anchorfile>classcudf_1_1io_1_1csv__writer__options.html</anchorfile>
@@ -9912,6 +9919,13 @@
       <anchorfile>classcudf_1_1io_1_1csv__writer__options.html</anchorfile>
       <anchor>a08a45f99cf1d0788d8cd3b12ce6e8869</anchor>
       <arglist>(table_view const &amp;table)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_quoting</name>
+      <anchorfile>classcudf_1_1io_1_1csv__writer__options.html</anchorfile>
+      <anchor>a1c13f17936f405a8299582cf2c77aafe</anchor>
+      <arglist>(quote_style quoting)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>static csv_writer_options_builder</type>
@@ -9993,6 +10007,13 @@
       <anchorfile>classcudf_1_1io_1_1csv__writer__options__builder.html</anchorfile>
       <anchor>ab49976722848fcc0f8810302ccebd1e5</anchor>
       <arglist>(std::string val)</arglist>
+    </member>
+    <member kind="function">
+      <type>csv_writer_options_builder &amp;</type>
+      <name>quoting</name>
+      <anchorfile>classcudf_1_1io_1_1csv__writer__options__builder.html</anchorfile>
+      <anchor>a1eb34fb0c13c1491fe1f6b54150fa279</anchor>
+      <arglist>(quote_style quoting)</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -12321,9 +12342,9 @@
     </member>
     <member kind="function">
       <type>bool</type>
-      <name>is_enabled_experimental</name>
+      <name>is_enabled_legacy</name>
       <anchorfile>classcudf_1_1io_1_1json__reader__options.html</anchorfile>
-      <anchor>ac7189635984bff57d9cdc72fc2e38b82</anchor>
+      <anchor>ade6eddbfa485343c9a17d925300acda0</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
@@ -12391,9 +12412,9 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>enable_experimental</name>
+      <name>enable_legacy</name>
       <anchorfile>classcudf_1_1io_1_1json__reader__options.html</anchorfile>
-      <anchor>a40b5548b78b2d0bd100225dc8d06e0a7</anchor>
+      <anchor>a3eb05fef2c83da9f440ab07961b14e4c</anchor>
       <arglist>(bool val)</arglist>
     </member>
     <member kind="function">
@@ -12486,9 +12507,9 @@
     </member>
     <member kind="function">
       <type>json_reader_options_builder &amp;</type>
-      <name>experimental</name>
+      <name>legacy</name>
       <anchorfile>classcudf_1_1io_1_1json__reader__options__builder.html</anchorfile>
-      <anchor>a6d6805f27d435674d49f9face2c1688f</anchor>
+      <anchor>ae7148c48dce779dd2c13c40fb4b4f6b0</anchor>
       <arglist>(bool val)</arglist>
     </member>
     <member kind="function">

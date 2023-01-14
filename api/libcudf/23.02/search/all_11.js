@@ -6,5 +6,5 @@ var searchData=
   ['quantiles_2ehpp_1352',['quantiles.hpp',['../quantiles_8hpp.html',1,'']]],
   ['quote_5fstyle_1353',['quote_style',['../namespacecudf_1_1io.html#a9b3038122e7e69390b062270cf403007',1,'cudf::io']]],
   ['quotechar_1354',['quotechar',['../classcudf_1_1io_1_1csv__reader__options__builder.html#a513bc76b53365e78d44fc8362311c2a6',1,'cudf::io::csv_reader_options_builder']]],
-  ['quoting_1355',['quoting',['../classcudf_1_1io_1_1csv__reader__options__builder.html#aaa3dfcc5362623962feb003e75173a11',1,'cudf::io::csv_reader_options_builder']]]
+  ['quoting_1355',['quoting',['../classcudf_1_1io_1_1csv__reader__options__builder.html#aaa3dfcc5362623962feb003e75173a11',1,'cudf::io::csv_reader_options_builder::quoting()'],['../classcudf_1_1io_1_1csv__writer__options__builder.html#a1eb34fb0c13c1491fe1f6b54150fa279',1,'cudf::io::csv_writer_options_builder::quoting()']]]
 ];
