@@ -4245,6 +4245,44 @@
     </member>
   </compound>
   <compound kind="file">
+    <name>slice.hpp</name>
+    <path>/rapids/cudf/cpp/include/cudf/strings/</path>
+    <filename>slice_8hpp.html</filename>
+    <includes id="column_8hpp" name="column.hpp" local="no" imported="no">cudf/column/column.hpp</includes>
+    <includes id="scalar_8hpp" name="scalar.hpp" local="no" imported="no">cudf/scalar/scalar.hpp</includes>
+    <includes id="strings__column__view_8hpp" name="strings_column_view.hpp" local="no" imported="no">cudf/strings/strings_column_view.hpp</includes>
+    <namespace>cudf</namespace>
+    <namespace>cudf::strings</namespace>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>slice_strings</name>
+      <anchorfile>group__strings__slice.html</anchorfile>
+      <anchor>ga2bc738cebebcf6d1331d6e9d13d4cd28</anchor>
+      <arglist>(strings_column_view const &amp;strings, numeric_scalar&lt; size_type &gt; const &amp;start=numeric_scalar&lt; size_type &gt;(0, false), numeric_scalar&lt; size_type &gt; const &amp;stop=numeric_scalar&lt; size_type &gt;(0, false), numeric_scalar&lt; size_type &gt; const &amp;step=numeric_scalar&lt; size_type &gt;(1), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>slice_strings</name>
+      <anchorfile>group__strings__slice.html</anchorfile>
+      <anchor>gafe1c606292743b82d66d3dd48ca16032</anchor>
+      <arglist>(strings_column_view const &amp;strings, column_view const &amp;starts, column_view const &amp;stops, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>slice_strings</name>
+      <anchorfile>group__strings__slice.html</anchorfile>
+      <anchor>gaf1504116d31b0ec4f119f1477bb87ee1</anchor>
+      <arglist>(strings_column_view const &amp;strings, string_scalar const &amp;delimiter, size_type count, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>slice_strings</name>
+      <anchorfile>group__strings__slice.html</anchorfile>
+      <anchor>ga21f01493d15c18d67b66a94f20a24389</anchor>
+      <arglist>(strings_column_view const &amp;strings, strings_column_view const &amp;delimiter_strings, size_type count, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+  </compound>
+  <compound kind="file">
     <name>lists/sorting.hpp</name>
     <path>/rapids/cudf/cpp/include/cudf/lists/</path>
     <filename>lists_2sorting_8hpp.html</filename>
@@ -4672,44 +4710,6 @@
     <includes id="column__view_8hpp" name="column_view.hpp" local="no" imported="no">cudf/column/column_view.hpp</includes>
     <class kind="class">cudf::structs_column_view</class>
     <namespace>cudf</namespace>
-  </compound>
-  <compound kind="file">
-    <name>substring.hpp</name>
-    <path>/rapids/cudf/cpp/include/cudf/strings/</path>
-    <filename>substring_8hpp.html</filename>
-    <includes id="column_8hpp" name="column.hpp" local="no" imported="no">cudf/column/column.hpp</includes>
-    <includes id="scalar_8hpp" name="scalar.hpp" local="no" imported="no">cudf/scalar/scalar.hpp</includes>
-    <includes id="strings__column__view_8hpp" name="strings_column_view.hpp" local="no" imported="no">cudf/strings/strings_column_view.hpp</includes>
-    <namespace>cudf</namespace>
-    <namespace>cudf::strings</namespace>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>slice_strings</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
-      <anchor>ga2bc738cebebcf6d1331d6e9d13d4cd28</anchor>
-      <arglist>(strings_column_view const &amp;strings, numeric_scalar&lt; size_type &gt; const &amp;start=numeric_scalar&lt; size_type &gt;(0, false), numeric_scalar&lt; size_type &gt; const &amp;stop=numeric_scalar&lt; size_type &gt;(0, false), numeric_scalar&lt; size_type &gt; const &amp;step=numeric_scalar&lt; size_type &gt;(1), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>slice_strings</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
-      <anchor>gafe1c606292743b82d66d3dd48ca16032</anchor>
-      <arglist>(strings_column_view const &amp;strings, column_view const &amp;starts, column_view const &amp;stops, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>slice_strings</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
-      <anchor>gaf1504116d31b0ec4f119f1477bb87ee1</anchor>
-      <arglist>(strings_column_view const &amp;strings, string_scalar const &amp;delimiter, size_type count, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>slice_strings</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
-      <anchor>ga21f01493d15c18d67b66a94f20a24389</anchor>
-      <arglist>(strings_column_view const &amp;strings, strings_column_view const &amp;delimiter_strings, size_type count, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
   </compound>
   <compound kind="file">
     <name>subword_tokenize.hpp</name>
@@ -23205,6 +23205,34 @@
       <arglist>(strings_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>slice_strings</name>
+      <anchorfile>group__strings__slice.html</anchorfile>
+      <anchor>ga2bc738cebebcf6d1331d6e9d13d4cd28</anchor>
+      <arglist>(strings_column_view const &amp;strings, numeric_scalar&lt; size_type &gt; const &amp;start=numeric_scalar&lt; size_type &gt;(0, false), numeric_scalar&lt; size_type &gt; const &amp;stop=numeric_scalar&lt; size_type &gt;(0, false), numeric_scalar&lt; size_type &gt; const &amp;step=numeric_scalar&lt; size_type &gt;(1), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>slice_strings</name>
+      <anchorfile>group__strings__slice.html</anchorfile>
+      <anchor>gafe1c606292743b82d66d3dd48ca16032</anchor>
+      <arglist>(strings_column_view const &amp;strings, column_view const &amp;starts, column_view const &amp;stops, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>slice_strings</name>
+      <anchorfile>group__strings__slice.html</anchorfile>
+      <anchor>gaf1504116d31b0ec4f119f1477bb87ee1</anchor>
+      <arglist>(strings_column_view const &amp;strings, string_scalar const &amp;delimiter, size_type count, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>slice_strings</name>
+      <anchorfile>group__strings__slice.html</anchorfile>
+      <anchor>ga21f01493d15c18d67b66a94f20a24389</anchor>
+      <arglist>(strings_column_view const &amp;strings, strings_column_view const &amp;delimiter_strings, size_type count, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
       <type>std::unique_ptr&lt; table &gt;</type>
       <name>partition</name>
       <anchorfile>group__strings__split.html</anchorfile>
@@ -23308,34 +23336,6 @@
       <anchorfile>group__strings__modify.html</anchorfile>
       <anchor>ga7ba7677f2dbb160c9007fd1d401174f3</anchor>
       <arglist>(strings_column_view const &amp;input, side_type side=side_type::BOTH, string_scalar const &amp;to_strip=string_scalar(&quot;&quot;), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>slice_strings</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
-      <anchor>ga2bc738cebebcf6d1331d6e9d13d4cd28</anchor>
-      <arglist>(strings_column_view const &amp;strings, numeric_scalar&lt; size_type &gt; const &amp;start=numeric_scalar&lt; size_type &gt;(0, false), numeric_scalar&lt; size_type &gt; const &amp;stop=numeric_scalar&lt; size_type &gt;(0, false), numeric_scalar&lt; size_type &gt; const &amp;step=numeric_scalar&lt; size_type &gt;(1), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>slice_strings</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
-      <anchor>gafe1c606292743b82d66d3dd48ca16032</anchor>
-      <arglist>(strings_column_view const &amp;strings, column_view const &amp;starts, column_view const &amp;stops, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>slice_strings</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
-      <anchor>gaf1504116d31b0ec4f119f1477bb87ee1</anchor>
-      <arglist>(strings_column_view const &amp;strings, string_scalar const &amp;delimiter, size_type count, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>slice_strings</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
-      <anchor>ga21f01493d15c18d67b66a94f20a24389</anchor>
-      <arglist>(strings_column_view const &amp;strings, strings_column_view const &amp;delimiter_strings, size_type count, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -26388,7 +26388,7 @@
     <subgroup>strings_contains</subgroup>
     <subgroup>strings_convert</subgroup>
     <subgroup>strings_copy</subgroup>
-    <subgroup>strings_substring</subgroup>
+    <subgroup>strings_slice</subgroup>
     <subgroup>strings_find</subgroup>
     <subgroup>strings_modify</subgroup>
     <subgroup>strings_replace</subgroup>
@@ -26936,64 +26936,35 @@
     </member>
   </compound>
   <compound kind="group">
-    <name>strings_substring</name>
-    <title>Substring</title>
-    <filename>group__strings__substring.html</filename>
-    <file>strings/extract.hpp</file>
-    <file>substring.hpp</file>
-    <member kind="function">
-      <type>std::unique_ptr&lt; table &gt;</type>
-      <name>extract</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
-      <anchor>gaf82413da2904a9c9cb5645c114858d60</anchor>
-      <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; table &gt;</type>
-      <name>extract</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
-      <anchor>ga8ccf342fdd9b4828fda32aced75df0b2</anchor>
-      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>extract_all_record</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
-      <anchor>ga0077f00bf771a3a03edc1d997a3a668a</anchor>
-      <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
-    <member kind="function">
-      <type>std::unique_ptr&lt; column &gt;</type>
-      <name>extract_all_record</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
-      <anchor>ga20434518750992e56f2ce5195eb8b67d</anchor>
-      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
-    </member>
+    <name>strings_slice</name>
+    <title>Slicing</title>
+    <filename>group__strings__slice.html</filename>
+    <file>slice.hpp</file>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>slice_strings</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchorfile>group__strings__slice.html</anchorfile>
       <anchor>ga2bc738cebebcf6d1331d6e9d13d4cd28</anchor>
       <arglist>(strings_column_view const &amp;strings, numeric_scalar&lt; size_type &gt; const &amp;start=numeric_scalar&lt; size_type &gt;(0, false), numeric_scalar&lt; size_type &gt; const &amp;stop=numeric_scalar&lt; size_type &gt;(0, false), numeric_scalar&lt; size_type &gt; const &amp;step=numeric_scalar&lt; size_type &gt;(1), rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>slice_strings</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchorfile>group__strings__slice.html</anchorfile>
       <anchor>gafe1c606292743b82d66d3dd48ca16032</anchor>
       <arglist>(strings_column_view const &amp;strings, column_view const &amp;starts, column_view const &amp;stops, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>slice_strings</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchorfile>group__strings__slice.html</anchorfile>
       <anchor>gaf1504116d31b0ec4f119f1477bb87ee1</anchor>
       <arglist>(strings_column_view const &amp;strings, string_scalar const &amp;delimiter, size_type count, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>slice_strings</name>
-      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchorfile>group__strings__slice.html</anchorfile>
       <anchor>ga21f01493d15c18d67b66a94f20a24389</anchor>
       <arglist>(strings_column_view const &amp;strings, strings_column_view const &amp;delimiter_strings, size_type count, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
@@ -28911,6 +28882,40 @@
       <anchorfile>group__lists__modify.html</anchorfile>
       <anchor>ga89a8f90e01c9dd5a6afc395a34d9a7a0</anchor>
       <arglist>(lists_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>strings_substring</name>
+    <title>Strings_substring</title>
+    <filename>group__strings__substring.html</filename>
+    <file>strings/extract.hpp</file>
+    <member kind="function">
+      <type>std::unique_ptr&lt; table &gt;</type>
+      <name>extract</name>
+      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchor>gaf82413da2904a9c9cb5645c114858d60</anchor>
+      <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; table &gt;</type>
+      <name>extract</name>
+      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchor>ga8ccf342fdd9b4828fda32aced75df0b2</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>extract_all_record</name>
+      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchor>ga0077f00bf771a3a03edc1d997a3a668a</anchor>
+      <arglist>(strings_column_view const &amp;strings, std::string_view pattern, regex_flags const flags=regex_flags::DEFAULT, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::unique_ptr&lt; column &gt;</type>
+      <name>extract_all_record</name>
+      <anchorfile>group__strings__substring.html</anchorfile>
+      <anchor>ga20434518750992e56f2ce5195eb8b67d</anchor>
+      <arglist>(strings_column_view const &amp;strings, regex_program const &amp;prog, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="page">
