@@ -108,14 +108,27 @@ The GPU labeled runners are backed by lab machines and have the GPUs specified i
 
 **IMPORTANT**: GPU jobs have two requirements. If these requirements aren't met, the GitHub Actions job will fail. See the _Usage_ section below for an example.
 
-1. They must run in a container (i.e. `nvidia/cuda:11.5.0-base-ubuntu20.04`)
+1. They must run in a container (i.e. `nvidia/cuda:11.8.0-base-ubuntu22.04`)
 2. They must set the {% raw %}`NVIDIA_VISIBLE_DEVICES: ${{ env.NVIDIA_VISIBLE_DEVICES }}`{% endraw %} container environment variable.
 
-| Label Combination                                                                                                                                                                                                                                                                                                                                            | GPU    | Driver Version | # of GPUs |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ | -------------- | --------- |
-| `[linux, amd64, gpu-v100-450-1]`                                                                                                                                                                                                                                                                                                                             | `V100` | `450`          | `1`       |
-| `[linux, amd64, gpu-v100-495-1]` <span class="table_br"></span> `[linux, amd64, gpu-v100-495]` <span class="table_br"></span> `[linux, amd64, gpu-v100-latest-1]` <span class="table_br"></span> `[linux, amd64, gpu-v100-latest]` <span class="table_br"></span> `[linux, amd64, gpu-latest-1]` <span class="table_br"></span> `[linux, amd64, gpu-latest]` | `V100` | `495`          | `1`       |
-| `[linux, arm64, gpu-a100-495-1]` <span class="table_br"></span> `[linux, arm64, gpu-a100-495]` <span class="table_br"></span> `[linux, arm64, gpu-a100-latest-1]` <span class="table_br"></span> `[linux, arm64, gpu-a100-latest]` <span class="table_br"></span> `[linux, arm64, gpu-latest-1]` <span class="table_br"></span> `[linux, arm64, gpu-latest]` | `A100` | `495`          | `1`       |
+{% include gpu-labels-table.html %}
+
+Cells with multiple labels in the table above are aliases which represent the same runner type.
+
+The GPU label names consist of the following components:
+
+```text
+gpu-a100-495-1
+    ^    ^   ^
+    |    |   |
+    |    |   Number of GPUs Available
+    |    Driver Version
+    GPU Type
+```
+
+The driver version may also be `latest`, which is a moving tag for the latest CUDA version supported by RAPIDS at any given time.
+
+Since we will periodically deprecate runners that use old driver versions, the `latest` tag is useful for users who are not concerned with the driver version used by their jobs.
 
 ### Usage
 
@@ -133,9 +146,9 @@ jobs:
       - name: hello
         run: echo "hello"
   job2_gpu:
-    runs-on: [self-hosted, linux, amd64, gpu-v100-495-1]
+    runs-on: [self-hosted, linux, amd64, gpu-v100-520-1]
     container: # GPU jobs must run in a container
-      image: nvidia/cuda:11.5.0-base-ubuntu18.04
+      image: nvidia/cuda:11.8.0-base-ubuntu22.04
       env:
         NVIDIA_VISIBLE_DEVICES: {% raw %}${{ env.NVIDIA_VISIBLE_DEVICES }}{% endraw %} # GPU jobs must set this container env variable
     steps:
