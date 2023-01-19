@@ -5824,6 +5824,7 @@
       <arglist></arglist>
       <enumvalue file="namespacecudf_1_1io.html" anchor="a4a5909c7c1b3aef5e86d1f92e1b1d69da86e4c917b9ee70e67a68639bd9fcead7">FILEPATH</enumvalue>
       <enumvalue file="namespacecudf_1_1io.html" anchor="a4a5909c7c1b3aef5e86d1f92e1b1d69da0a4c208cf95063151fc52d4e293b7071">HOST_BUFFER</enumvalue>
+      <enumvalue file="namespacecudf_1_1io.html" anchor="a4a5909c7c1b3aef5e86d1f92e1b1d69dafca4b58205c5a9c54fae423fe8130a9c">DEVICE_BUFFER</enumvalue>
       <enumvalue file="namespacecudf_1_1io.html" anchor="a4a5909c7c1b3aef5e86d1f92e1b1d69da6d0c9fc747131795e6e5d0c5119f12cb">VOID</enumvalue>
       <enumvalue file="namespacecudf_1_1io.html" anchor="a4a5909c7c1b3aef5e86d1f92e1b1d69da6b5353dc0edecde08e5367adbf3b8d44">USER_IMPLEMENTED</enumvalue>
     </member>
@@ -10333,6 +10334,13 @@
       <type>static std::unique_ptr&lt; datasource &gt;</type>
       <name>create</name>
       <anchorfile>classcudf_1_1io_1_1datasource.html</anchorfile>
+      <anchor>a48822745e22e65bc8ce5cb564cf6563c</anchor>
+      <arglist>(cudf::device_span&lt; std::byte const &gt; buffer)</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static std::unique_ptr&lt; datasource &gt;</type>
+      <name>create</name>
+      <anchorfile>classcudf_1_1io_1_1datasource.html</anchorfile>
       <anchor>a1ff5411d9b32e000917cb4d2919e9802</anchor>
       <arglist>(std::shared_ptr&lt; arrow::io::RandomAccessFile &gt; arrow_file)</arglist>
     </member>
@@ -12156,10 +12164,10 @@
       <arglist>(const char *data, size_t size)</arglist>
     </member>
     <member kind="variable">
-      <type>const char *</type>
+      <type>char const  *</type>
       <name>data</name>
       <anchorfile>structcudf_1_1io_1_1host__buffer.html</anchorfile>
-      <anchor>a59b25422f2f3f34c3a50c58ff086550d</anchor>
+      <anchor>a4061f3fc89375a4e516774e79a8cc619</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -13632,8 +13640,8 @@
       <type></type>
       <name>non_owning_buffer</name>
       <anchorfile>classcudf_1_1io_1_1datasource_1_1non__owning__buffer.html</anchorfile>
-      <anchor>a9ccdbb7fa3b6fddcd97c2fe99479378b</anchor>
-      <arglist>(uint8_t *data, size_t size)</arglist>
+      <anchor>aead9a5691393893f696abfc41b6b8fe8</anchor>
+      <arglist>(uint8_t const *data, size_t size)</arglist>
     </member>
     <member kind="function">
       <type>size_t</type>
@@ -16150,6 +16158,20 @@
       <type></type>
       <name>source_info</name>
       <anchorfile>structcudf_1_1io_1_1source__info.html</anchorfile>
+      <anchor>ab0dbb39da22d900ac6bde1c4a4428697</anchor>
+      <arglist>(cudf::host_span&lt; cudf::device_span&lt; std::byte const &gt;&gt; device_buffers)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>source_info</name>
+      <anchorfile>structcudf_1_1io_1_1source__info.html</anchorfile>
+      <anchor>a7fa084584e25339f70e23fc2ee5c0ac5</anchor>
+      <arglist>(cudf::device_span&lt; std::byte const &gt; d_buffer)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>source_info</name>
+      <anchorfile>structcudf_1_1io_1_1source__info.html</anchorfile>
       <anchor>aa528d8e9108ee6acae10b8d3386f20b5</anchor>
       <arglist>(std::vector&lt; cudf::io::datasource * &gt; const &amp;sources)</arglist>
     </member>
@@ -16176,9 +16198,16 @@
     </member>
     <member kind="function">
       <type>auto const  &amp;</type>
-      <name>buffers</name>
+      <name>host_buffers</name>
       <anchorfile>structcudf_1_1io_1_1source__info.html</anchorfile>
-      <anchor>a5131e023298e00a02b044c72491fabdc</anchor>
+      <anchor>ad414114c66dad5c0dd84cfe95e9a2f41</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>auto const  &amp;</type>
+      <name>device_buffers</name>
+      <anchorfile>structcudf_1_1io_1_1source__info.html</anchorfile>
+      <anchor>a0582d718ee8151746ed678ded14cd079</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
@@ -22052,6 +22081,7 @@
       <arglist></arglist>
       <enumvalue file="namespacecudf_1_1io.html" anchor="a4a5909c7c1b3aef5e86d1f92e1b1d69da86e4c917b9ee70e67a68639bd9fcead7">FILEPATH</enumvalue>
       <enumvalue file="namespacecudf_1_1io.html" anchor="a4a5909c7c1b3aef5e86d1f92e1b1d69da0a4c208cf95063151fc52d4e293b7071">HOST_BUFFER</enumvalue>
+      <enumvalue file="namespacecudf_1_1io.html" anchor="a4a5909c7c1b3aef5e86d1f92e1b1d69dafca4b58205c5a9c54fae423fe8130a9c">DEVICE_BUFFER</enumvalue>
       <enumvalue file="namespacecudf_1_1io.html" anchor="a4a5909c7c1b3aef5e86d1f92e1b1d69da6d0c9fc747131795e6e5d0c5119f12cb">VOID</enumvalue>
       <enumvalue file="namespacecudf_1_1io.html" anchor="a4a5909c7c1b3aef5e86d1f92e1b1d69da6b5353dc0edecde08e5367adbf3b8d44">USER_IMPLEMENTED</enumvalue>
     </member>

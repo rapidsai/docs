@@ -1,16 +1,16 @@
 var searchData=
 [
-  ['managed_5fmemory_5fresource_2070',['managed_memory_resource',['https://docs.rapids.ai/api/librmm/23.02/classrmm_1_1mr_1_1managed__memory__resource.html',1,'rmm::mr']]],
-  ['metadata_2071',['metadata',['../structcudf_1_1packed__columns_1_1metadata.html',1,'cudf::packed_columns']]],
-  ['minmax_5fstatistics_2072',['minmax_statistics',['../structcudf_1_1io_1_1minmax__statistics.html',1,'cudf::io']]],
-  ['minmax_5fstatistics_3c_20double_20_3e_2073',['minmax_statistics&lt; double &gt;',['../structcudf_1_1io_1_1minmax__statistics.html',1,'cudf::io']]],
-  ['minmax_5fstatistics_3c_20int64_5ft_20_3e_2074',['minmax_statistics&lt; int64_t &gt;',['../structcudf_1_1io_1_1minmax__statistics.html',1,'cudf::io']]],
-  ['minmax_5fstatistics_3c_20std_3a_3astring_20_3e_2075',['minmax_statistics&lt; std::string &gt;',['../structcudf_1_1io_1_1minmax__statistics.html',1,'cudf::io']]],
-  ['murmurhash3_5f32_2076',['MurmurHash3_32',['../classcudf_1_1detail_1_1MurmurHash3__32.html',1,'cudf::detail']]],
-  ['mutable_5fcolumn_5fdevice_5fview_2077',['mutable_column_device_view',['../classcudf_1_1mutable__column__device__view.html',1,'cudf']]],
-  ['mutable_5fcolumn_5fview_2078',['mutable_column_view',['../classcudf_1_1mutable__column__view.html',1,'cudf']]],
-  ['mutable_5fcolumn_5fview_5fbase_2079',['mutable_column_view_base',['../classcudf_1_1detail_1_1mutable__column__view__base.html',1,'cudf::detail']]],
-  ['mutable_5ftable_5fdevice_5fview_2080',['mutable_table_device_view',['../classcudf_1_1mutable__table__device__view.html',1,'cudf']]],
-  ['mutable_5ftable_5fview_2081',['mutable_table_view',['../classcudf_1_1mutable__table__view.html',1,'cudf']]],
-  ['mutable_5fvalue_5faccessor_2082',['mutable_value_accessor',['../structcudf_1_1detail_1_1mutable__value__accessor.html',1,'cudf::detail']]]
+  ['managed_5fmemory_5fresource_2072',['managed_memory_resource',['https://docs.rapids.ai/api/librmm/23.02/classrmm_1_1mr_1_1managed__memory__resource.html',1,'rmm::mr']]],
+  ['metadata_2073',['metadata',['../structcudf_1_1packed__columns_1_1metadata.html',1,'cudf::packed_columns']]],
+  ['minmax_5fstatistics_2074',['minmax_statistics',['../structcudf_1_1io_1_1minmax__statistics.html',1,'cudf::io']]],
+  ['minmax_5fstatistics_3c_20double_20_3e_2075',['minmax_statistics&lt; double &gt;',['../structcudf_1_1io_1_1minmax__statistics.html',1,'cudf::io']]],
+  ['minmax_5fstatistics_3c_20int64_5ft_20_3e_2076',['minmax_statistics&lt; int64_t &gt;',['../structcudf_1_1io_1_1minmax__statistics.html',1,'cudf::io']]],
+  ['minmax_5fstatistics_3c_20std_3a_3astring_20_3e_2077',['minmax_statistics&lt; std::string &gt;',['../structcudf_1_1io_1_1minmax__statistics.html',1,'cudf::io']]],
+  ['murmurhash3_5f32_2078',['MurmurHash3_32',['../classcudf_1_1detail_1_1MurmurHash3__32.html',1,'cudf::detail']]],
+  ['mutable_5fcolumn_5fdevice_5fview_2079',['mutable_column_device_view',['../classcudf_1_1mutable__column__device__view.html',1,'cudf']]],
+  ['mutable_5fcolumn_5fview_2080',['mutable_column_view',['../classcudf_1_1mutable__column__view.html',1,'cudf']]],
+  ['mutable_5fcolumn_5fview_5fbase_2081',['mutable_column_view_base',['../classcudf_1_1detail_1_1mutable__column__view__base.html',1,'cudf::detail']]],
+  ['mutable_5ftable_5fdevice_5fview_2082',['mutable_table_device_view',['../classcudf_1_1mutable__table__device__view.html',1,'cudf']]],
+  ['mutable_5ftable_5fview_2083',['mutable_table_view',['../classcudf_1_1mutable__table__view.html',1,'cudf']]],
+  ['mutable_5fvalue_5faccessor_2084',['mutable_value_accessor',['../structcudf_1_1detail_1_1mutable__value__accessor.html',1,'cudf::detail']]]
 ];
