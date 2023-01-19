@@ -113,6 +113,23 @@ The GPU labeled runners are backed by lab machines and have the GPUs specified i
 
 {% include gpu-labels-table.html %}
 
+Cells with multiple labels in the table above are aliases which represent the same runner type.
+
+The GPU label names consist of the following components:
+
+```text
+gpu-a100-495-1
+    ^    ^   ^
+    |    |   |
+    |    |   Number of GPUs Available
+    |    Driver Version
+    GPU Type
+```
+
+The driver version may also be `latest`, which is a moving tag for the latest CUDA version supported by RAPIDS at any given time.
+
+Since we will periodically deprecate runners that use old driver versions, the `latest` tag is useful for users who are not concerned with the driver version used by their jobs.
+
 ### Usage
 
 The code snippet below shows how the labels above may be utilized in a GitHub Action workflow.
