@@ -94,57 +94,19 @@ $ az aks nodepool add \
     --name gpunp \
     --node-count 1 \
     --node-vm-size Standard_NC48ads_A100_v4 \
-    --node-taints sku=gpu:NoSchedule \
     --aks-custom-headers UseGPUDedicatedVHD=true \
     --enable-cluster-autoscaler \
     --min-count 1 \
     --max-count 3
 ```
 
-Here we have added a new pool made up of `Standard_NC48ads_A100_v4` instances which each have two A100 GPUs. We've also enabled autoscaling on the pool and added the `gpu:NoSchedule` taint to ensure that only our GPU pods end up on those nodes.
+Here we have added a new pool made up of `Standard_NC48ads_A100_v4` instances which each have two A100 GPUs. We've also enabled autoscaling between one and three nodes on the pool. Once our new pool has been created, we can test the cluster.
 
-Once our new pool has been created we should be able to test that we can schedule GPU pods.
+```{include} ../../_includes/check-gpu-pod-works.md
 
-```console
-$ cat << EOF | kubectl create -f -
-apiVersion: v1
-kind: Pod
-metadata:
-  name: cuda-vectoradd
-spec:
-  restartPolicy: OnFailure
-  containers:
-  - name: cuda-vectoradd
-    image: "nvidia/samples:vectoradd-cuda11.2.1"
-    resources:
-       limits:
-         nvidia.com/gpu: 1
-  tolerations:
-  - key: "sku"
-    operator: "Equal"
-    value: "gpu"
-    effect: "NoSchedule"
-EOF
 ```
 
-```console
-$ kubectl logs pod/cuda-vectoradd
-[Vector addition of 50000 elements]
-Copy input data from the host memory to the CUDA device
-CUDA kernel launch with 196 blocks of 256 threads
-Copy output data from the CUDA device to the host memory
-Test PASSED
-Done
-```
-
-If you see `Test PASSED` in the output, you can be confident that your Kubernetes cluster has GPU compute set up correctly.
-
-Next, clean up that pod.
-
-```console
-$ kubectl delete po cuda-vectoradd
-pod "cuda-vectoradd" deleted
-```
+we should be able to test that we can schedule GPU pods.
 
 ## Install RAPIDS
 

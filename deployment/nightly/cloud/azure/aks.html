@@ -509,15 +509,14 @@
 <span class="w">    </span>--name<span class="w"> </span>gpunp<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--node-count<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--node-vm-size<span class="w"> </span>Standard_NC48ads_A100_v4<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--node-taints<span class="w"> </span><span class="nv">sku</span><span class="o">=</span>gpu:NoSchedule<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--aks-custom-headers<span class="w"> </span><span class="nv">UseGPUDedicatedVHD</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--enable-cluster-autoscaler<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--min-count<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--max-count<span class="w"> </span><span class="m">3</span>
 </pre></div>
 </div>
-<p>Here we have added a new pool made up of <code class="docutils literal notranslate"><span class="pre">Standard_NC48ads_A100_v4</span></code> instances which each have two A100 GPUs. We’ve also enabled autoscaling on the pool and added the <code class="docutils literal notranslate"><span class="pre">gpu:NoSchedule</span></code> taint to ensure that only our GPU pods end up on those nodes.</p>
-<p>Once our new pool has been created we should be able to test that we can schedule GPU pods.</p>
+<p>Here we have added a new pool made up of <code class="docutils literal notranslate"><span class="pre">Standard_NC48ads_A100_v4</span></code> instances which each have two A100 GPUs. We’ve also enabled autoscaling between one and three nodes on the pool. Once our new pool has been created, we can test the cluster.</p>
+<p>Let’s create a sample pod that uses some GPU compute to make sure that everything is working as expected.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>-
 <span class="go">apiVersion: v1</span>
 <span class="go">kind: Pod</span>
@@ -531,11 +530,6 @@
 <span class="go">    resources:</span>
 <span class="go">       limits:</span>
 <span class="go">         nvidia.com/gpu: 1</span>
-<span class="go">  tolerations:</span>
-<span class="go">  - key: &quot;sku&quot;</span>
-<span class="go">    operator: &quot;Equal&quot;</span>
-<span class="go">    value: &quot;gpu&quot;</span>
-<span class="go">    effect: &quot;NoSchedule&quot;</span>
 <span class="go">EOF</span>
 </pre></div>
 </div>
@@ -550,10 +544,11 @@
 </div>
 <p>If you see <code class="docutils literal notranslate"><span class="pre">Test</span> <span class="pre">PASSED</span></code> in the output, you can be confident that your Kubernetes cluster has GPU compute set up correctly.</p>
 <p>Next, clean up that pod.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>delete<span class="w"> </span>po<span class="w"> </span>cuda-vectoradd
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>delete<span class="w"> </span>pod<span class="w"> </span>cuda-vectoradd
 <span class="go">pod &quot;cuda-vectoradd&quot; deleted</span>
 </pre></div>
 </div>
+<p>we should be able to test that we can schedule GPU pods.</p>
 </section>
 <section id="install-rapids">
 <h2>Install RAPIDS<a class="headerlink" href="#install-rapids" title="Permalink to this heading">#</a></h2>
