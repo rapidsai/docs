@@ -18208,13 +18208,6 @@
     <name>cudf::io::table_metadata</name>
     <filename>structcudf_1_1io_1_1table__metadata.html</filename>
     <member kind="variable">
-      <type>std::vector&lt; std::string &gt;</type>
-      <name>column_names</name>
-      <anchorfile>structcudf_1_1io_1_1table__metadata.html</anchorfile>
-      <anchor>a5003a7438f310eae6125c55ce7b0160c</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
       <type>std::vector&lt; column_name_info &gt;</type>
       <name>schema_info</name>
       <anchorfile>structcudf_1_1io_1_1table__metadata.html</anchorfile>
