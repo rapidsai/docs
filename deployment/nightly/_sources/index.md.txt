@@ -73,10 +73,10 @@ There are many tools to deploy RAPIDS.
 ````
 
 ````{grid-item-card}
-:link: https://github.com/rapidsai/cloud-ml-examples
-{fas}`book;sd-text-primary` Cloud ML Examples
+:link: examples
+{fas}`book;sd-text-primary` Workflow examples
 ^^^
-See our [example notebooks repo](https://github.com/rapidsai/cloud-ml-examples) with opinionated deployments of RAPIDS to boost machine learning workflows.
+For inspiration see our example notebooks with opinionated deployments of RAPIDS to boost machine learning workflows.
 
 {bdg-primary}`xgboost`
 {bdg-primary}`optuna`
@@ -115,4 +115,12 @@ guides/index
 :caption: Deploy RAPIDS with
 
 tools/index
+```
+
+```{toctree}
+:maxdepth: 3
+:hidden:
+:caption: Examples
+
+examples/index
 ```

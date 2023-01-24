@@ -1,0 +1,866 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Running RAPIDS hyperparameter experiments at scale on Amazon SageMaker &#8212; RAPIDS Deployment Documentation  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="https://docs.rapids.ai/assets/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script defer="defer" src="../../_static/js/nav.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/rapids-sagemaker-higgs/notebook';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Scaling up hyperparameter optimization with Kubernetes and XGBoost GPU algorithm" href="../xgboost-gpu-hpo-job-parallel-k8s/notebook.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/RAPIDS-logo-purple.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/RAPIDS-logo-purple.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class=" navbar-header-items">
+    <div id="navbar-center" class="ml-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../cloud/index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../guides/index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Workflow Examples
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/deployment" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/rapidsai" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../cloud/index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../guides/index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Workflow Examples
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/deployment" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/rapidsai" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <p aria-level="2" class="caption" role="heading"><span class="caption-text">Workflow Examples</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../xgboost-gpu-hpo-job-parallel-k8s/notebook.html">Scaling up hyperparameter optimization with Kubernetes and XGBoost GPU algorithm</a></li>
+
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Running RAPIDS hyperparameter experiments at scale on Amazon SageMaker</a></li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="running-rapids-hyperparameter-experiments-at-scale-on-amazon-sagemaker">
+<h1>Running RAPIDS hyperparameter experiments at scale on Amazon SageMaker<a class="headerlink" href="#running-rapids-hyperparameter-experiments-at-scale-on-amazon-sagemaker" title="Permalink to this heading">#</a></h1>
+<section id="import-packages-and-create-amazon-sagemaker-and-boto3-sessions">
+<h2>Import packages and create Amazon SageMaker and Boto3 sessions<a class="headerlink" href="#import-packages-and-create-amazon-sagemaker-and-boto3-sessions" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sagemaker</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">boto3</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">execution_role</span> <span class="o">=</span> <span class="n">sagemaker</span><span class="o">.</span><span class="n">get_execution_role</span><span class="p">()</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">sagemaker</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+
+<span class="n">region</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span><span class="o">.</span><span class="n">region_name</span>
+<span class="n">account</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s1">&#39;sts&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_caller_identity</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Account&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">account</span><span class="p">,</span> <span class="n">region</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="upload-the-higgs-boson-dataset-to-s3-bucket">
+<h2>Upload the higgs-boson dataset to s3 bucket<a class="headerlink" href="#upload-the-higgs-boson-dataset-to-s3-bucket" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>mkdir<span class="w"> </span>dataset
+<span class="o">!</span>wget<span class="w"> </span>-P<span class="w"> </span>dataset<span class="w"> </span>https://archive.ics.uci.edu/ml/machine-learning-databases/00280/HIGGS.csv.gz
+<span class="o">!</span>gunzip<span class="w"> </span>dataset/HIGGS.csv.gz
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s3_data_dir</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">upload_data</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;dataset&#39;</span><span class="p">,</span> <span class="n">key_prefix</span><span class="o">=</span><span class="s1">&#39;dataset/higgs-dataset&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s3_data_dir</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="download-latest-rapids-container-with-cloud-ml-examples">
+<h2>Download latest RAPIDS container with cloud-ml examples<a class="headerlink" href="#download-latest-rapids-container-with-cloud-ml-examples" title="Permalink to this heading">#</a></h2>
+<p>Extend the container by copying the training script and installing <a class="reference external" href="https://github.com/aws/sagemaker-training-toolkit">SageMaker Training toolkit</a> to makes RAPIDS compatible with SageMaker</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># estimator_info = {</span>
+<span class="c1">#     &#39;rapids_container&#39;: &#39;rapidsai/rapidsai-cloud-ml:latest&#39;,</span>
+<span class="c1">#     &#39;ecr_image&#39;: &#39;sagemaker-rapids-cloud-ml:latest&#39;,</span>
+<span class="c1">#     &#39;ecr_repository&#39;: &#39;sagemaker-rapids-cloud-ml&#39;</span>
+<span class="c1"># }</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator_info</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;rapids_container&#39;</span><span class="p">:</span><span class="s1">&#39;rapidsai/rapidsai-nightly:22.12-cuda11.5-runtime-ubuntu18.04-py3.9&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ecr_image&#39;</span><span class="p">:</span><span class="s1">&#39;sagemaker-rapids-nightly&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ecr_repository&#39;</span><span class="p">:</span><span class="s1">&#39;sagemaker-rapids-nightly&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%time
+!docker pull {estimator_info[&#39;rapids_container&#39;]}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>cat<span class="w"> </span>docker/Dockerfile
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#FROM rapidsai/rapidsai-cloud-ml:latest</span>
+<span class="c1">#!docker build -t sagemaker-rapids:latest docker</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>sagemaker-rapids-nightly<span class="w"> </span>docker
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>docker<span class="w"> </span>images
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="publish-to-elastic-container-registry">
+<h2>Publish to Elastic Container Registry<a class="headerlink" href="#publish-to-elastic-container-registry" title="Permalink to this heading">#</a></h2>
+<p>Note: SageMaker does not support using training images from private docker registry (ie. DockerHub), so we need to push
+the SageMaker-compatible <br />
+RAPIDS container to the Amazon Elastic Container Registry.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ECR_container_fullname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">account</span><span class="si">}</span><span class="s2">.dkr.ecr.</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">.amazonaws.com/</span><span class="si">{</span><span class="n">estimator_info</span><span class="p">[</span><span class="s1">&#39;ecr_image&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ECR_container_fullname</span> 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>docker<span class="w"> </span>tag<span class="w"> </span><span class="o">{</span>estimator_info<span class="o">[</span><span class="s1">&#39;rapids_container&#39;</span><span class="o">]}</span><span class="w"> </span><span class="o">{</span>ECR_container_fullname<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s2">&quot;source      : </span><span class="si">{</span><span class="n">estimator_info</span><span class="p">[</span><span class="s1">&#39;rapids_container&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+       <span class="sa">f</span><span class="s2">&quot;destination : </span><span class="si">{</span><span class="n">ECR_container_fullname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>docker<span class="w"> </span>images
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>aws<span class="w"> </span>ecr<span class="w"> </span>create-repository<span class="w"> </span>--repository-name<span class="w"> </span><span class="o">{</span>estimator_info<span class="o">[</span><span class="s1">&#39;ecr_repository&#39;</span><span class="o">]}</span>
+<span class="o">!</span><span class="k">$(</span>aws<span class="w"> </span>ecr<span class="w"> </span>get-login<span class="w"> </span>--no-include-email<span class="w"> </span>--region<span class="w"> </span><span class="o">{</span>region<span class="o">}</span><span class="k">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>docker<span class="w"> </span>push<span class="w"> </span><span class="o">{</span>ECR_container_fullname<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="define-hyperparameters-start-with-best-guess-values">
+<h3>Define hyperparameters: start with best guess values<a class="headerlink" href="#define-hyperparameters-start-with-best-guess-values" title="Permalink to this heading">#</a></h3>
+<p>Find the full list of Random Forest hyperparameters here in the RAPIDS doc page:
+<br>
+https://docs.rapids.ai/api/cuml/stable/api.html#random-forest</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hyperparams</span><span class="o">=</span><span class="p">{</span> 
+    <span class="s1">&#39;n_estimators&#39;</span>       <span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+    <span class="s1">&#39;max_depth&#39;</span>          <span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s1">&#39;n_bins&#39;</span>             <span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="s1">&#39;split_criterion&#39;</span>    <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># GINI:0, ENTROPY:1</span>
+    <span class="s1">&#39;bootstrap&#39;</span>          <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># true: sample with replacement, false: sample without replacement</span>
+    <span class="s1">&#39;max_leaves&#39;</span>         <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>     <span class="c1"># unlimited leaves</span>
+    <span class="s1">&#39;max_features&#39;</span>       <span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> 
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sagemaker.estimator</span> <span class="kn">import</span> <span class="n">Estimator</span>
+
+<span class="n">rapids_estimator</span> <span class="o">=</span> <span class="n">Estimator</span><span class="p">(</span><span class="n">image_uri</span><span class="o">=</span><span class="n">ECR_container_fullname</span><span class="p">,</span>
+                          <span class="n">role</span><span class="o">=</span><span class="n">execution_role</span><span class="p">,</span>
+                          <span class="n">instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                          <span class="n">instance_type</span><span class="o">=</span><span class="s1">&#39;ml.g4dn.4xlarge&#39;</span><span class="p">,</span>
+                          <span class="n">hyperparameters</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">,</span>
+                          <span class="n">metric_definitions</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;test_acc&#39;</span><span class="p">,</span> <span class="s1">&#39;Regex&#39;</span><span class="p">:</span> <span class="s1">&#39;test_acc: ([0-9</span><span class="se">\\</span><span class="s1">.]+)&#39;</span><span class="p">}])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">rapids_estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">inputs</span> <span class="o">=</span> <span class="n">s3_data_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sagemaker.tuner</span> <span class="kn">import</span> <span class="n">IntegerParameter</span><span class="p">,</span> <span class="n">CategoricalParameter</span><span class="p">,</span> <span class="n">ContinuousParameter</span><span class="p">,</span> <span class="n">HyperparameterTuner</span>
+
+<span class="n">hyperparameter_ranges</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;n_estimators&#39;</span>        <span class="p">:</span> <span class="n">IntegerParameter</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> 
+    <span class="s1">&#39;max_depth&#39;</span>           <span class="p">:</span> <span class="n">IntegerParameter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">22</span><span class="p">),</span>
+    <span class="s1">&#39;n_bins&#39;</span>              <span class="p">:</span> <span class="n">IntegerParameter</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">24</span><span class="p">),</span>
+    <span class="s1">&#39;split_criterion&#39;</span>     <span class="p">:</span> <span class="n">CategoricalParameter</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+    <span class="s1">&#39;bootstrap&#39;</span>           <span class="p">:</span> <span class="n">CategoricalParameter</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]),</span>
+    <span class="s1">&#39;max_features&#39;</span>        <span class="p">:</span> <span class="n">ContinuousParameter</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sagemaker.estimator</span> <span class="kn">import</span> <span class="n">Estimator</span>
+
+<span class="n">rapids_estimator</span> <span class="o">=</span> <span class="n">Estimator</span><span class="p">(</span><span class="n">image_uri</span><span class="o">=</span><span class="n">image</span><span class="p">,</span>
+                          <span class="n">role</span><span class="o">=</span><span class="n">execution_role</span><span class="p">,</span>
+                          <span class="n">instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                          <span class="n">instance_type</span><span class="o">=</span><span class="s1">&#39;ml.p3.2xlarge&#39;</span><span class="p">,</span>
+                          <span class="n">hyperparameters</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">,</span>
+                          <span class="n">metric_definitions</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;test_acc&#39;</span><span class="p">,</span> <span class="s1">&#39;Regex&#39;</span><span class="p">:</span> <span class="s1">&#39;test_acc: ([0-9</span><span class="se">\\</span><span class="s1">.]+)&#39;</span><span class="p">}])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tuner</span> <span class="o">=</span> <span class="n">HyperparameterTuner</span><span class="p">(</span><span class="n">rapids_estimator</span><span class="p">,</span>
+                            <span class="n">objective_metric_name</span><span class="o">=</span><span class="s1">&#39;test_acc&#39;</span><span class="p">,</span>
+                            <span class="n">hyperparameter_ranges</span><span class="o">=</span><span class="n">hyperparameter_ranges</span><span class="p">,</span>
+                            <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;Bayesian&#39;</span><span class="p">,</span>
+                            <span class="n">max_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">max_parallel_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">objective_type</span><span class="o">=</span><span class="s1">&#39;Maximize&#39;</span><span class="p">,</span>
+                            <span class="n">metric_definitions</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;test_acc&#39;</span><span class="p">,</span> <span class="s1">&#39;Regex&#39;</span><span class="p">:</span> <span class="s1">&#39;test_acc: ([0-9</span><span class="se">\\</span><span class="s1">.]+)&#39;</span><span class="p">}])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job_name</span> <span class="o">=</span> <span class="s1">&#39;rapidsHPO&#39;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">-%H-%M-%S-%j&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">())</span>
+<span class="n">tuner</span><span class="o">.</span><span class="n">fit</span><span class="p">({</span><span class="s1">&#39;dataset&#39;</span><span class="p">:</span> <span class="n">s3_data_dir</span><span class="p">},</span> <span class="n">job_name</span><span class="o">=</span><span class="n">job_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="clean-up">
+<h2>Clean up<a class="headerlink" href="#clean-up" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Delete S3 buckets and files you don’t need</p></li>
+<li><p>Kill training jobs that you don’t want running</p></li>
+<li><p>Delete container images and the repository you just created</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aws</span> <span class="n">ecr</span> <span class="n">delete</span><span class="o">-</span><span class="n">repository</span> <span class="o">--</span><span class="n">force</span> <span class="o">--</span><span class="n">repository</span><span class="o">-</span><span class="n">name</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="../xgboost-gpu-hpo-job-parallel-k8s/notebook.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Scaling up hyperparameter optimization with Kubernetes and XGBoost GPU algorithm</p>
+      </div>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#import-packages-and-create-amazon-sagemaker-and-boto3-sessions">
+   Import packages and create Amazon SageMaker and Boto3 sessions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#upload-the-higgs-boson-dataset-to-s3-bucket">
+   Upload the higgs-boson dataset to s3 bucket
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#download-latest-rapids-container-with-cloud-ml-examples">
+   Download latest RAPIDS container with cloud-ml examples
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#publish-to-elastic-container-registry">
+   Publish to Elastic Container Registry
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#define-hyperparameters-start-with-best-guess-values">
+     Define hyperparameters: start with best guess values
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#clean-up">
+   Clean up
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+  <i class="fa-regular fa-file"></i> Related files
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+  <ul class="visible nav section-nav flex-column">
+    
+    <li class="toc-h2 nav-item toc-entry">
+      <a class="reference external nav-link" href="https://github.com/rapidsai/deployment/blob/main/source/examples/rapids-sagemaker-higgs/rapids-higgs.py">
+        rapids-higgs.py
+      </a>
+    </li>
+    
+    <li class="toc-h2 nav-item toc-entry">
+      <a class="reference external nav-link" href="https://github.com/rapidsai/deployment/blob/main/source/examples/rapids-sagemaker-higgs/Dockerfile">
+        Dockerfile
+      </a>
+    </li>
+    
+  </ul>
+</nav>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2023, NVIDIA.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="theme-version">
+    Built with the
+    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
+        PyData Sphinx Theme
+    </a>
+    0.12.0.
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>
