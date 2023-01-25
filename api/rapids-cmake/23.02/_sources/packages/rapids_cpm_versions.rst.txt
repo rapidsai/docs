@@ -73,7 +73,9 @@ as needed.
     An optional boolean value that represents if CPM should just download the
     package ( `CPM_DOWNLOAD_ALL` ) instead of first searching for it on the machine.
 
-    If no such field exists the default is `false` for default packages, and `true` for any package that has an override.
+    The default value for this field is `false` unless all of the following criteria is met.
+        - The projects exists in both the default and override files
+        - The `git_url` or `git_tag` have been overridden
 
 ``patches``
     An optional list of dictionary sets of git patches to apply to the project
