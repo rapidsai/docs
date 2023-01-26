@@ -75,7 +75,7 @@ as needed.
 
     The default value for this field is `false` unless all of the following criteria is met.
         - The projects exists in both the default and override files
-        - The `git_url` or `git_tag` have been overridden
+        - The `git_url`, `git_tag`, `patches` keys exist in the override
 
 ``patches``
     An optional list of dictionary sets of git patches to apply to the project
