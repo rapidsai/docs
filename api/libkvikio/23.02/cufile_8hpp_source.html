@@ -78,79 +78,97 @@ $(function() {
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&nbsp; </div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&nbsp;<span class="preprocessor">#include &lt;stdexcept&gt;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&nbsp; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp;<span class="preprocessor">#include &lt;kvikio/shim/cufile_h_wrapper.hpp&gt;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="preprocessor">#include &lt;kvikio/shim/utils.hpp&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp;<span class="keyword">namespace </span>kvikio {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp;<span class="preprocessor">#ifdef KVIKIO_CUFILE_EXIST</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;<span class="keyword">class </span>cuFileAPI {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;  decltype(cuFileHandleRegister)* HandleRegister{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;  decltype(cuFileHandleDeregister)* HandleDeregister{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;  decltype(cuFileRead)* Read{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;  decltype(cuFileWrite)* Write{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;  decltype(cuFileBufRegister)* BufRegister{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;  decltype(cuFileBufDeregister)* BufDeregister{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;  decltype(cuFileDriverOpen)* DriverOpen{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;  decltype(cuFileDriverClose)* DriverClose{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;  decltype(cuFileDriverGetProperties)* DriverGetProperties{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;  decltype(cuFileDriverSetPollMode)* DriverSetPollMode{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;  decltype(cuFileDriverSetMaxCacheSize)* DriverSetMaxCacheSize{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;  decltype(cuFileDriverSetMaxPinnedMemSize)* DriverSetMaxPinnedMemSize{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp; <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;  cuFileAPI()</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;  {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;    <span class="keywordtype">void</span>* lib = load_library({<span class="stringliteral">"libcufile.so.1"</span>, <span class="stringliteral">"libcufile.so.0"</span>, <span class="stringliteral">"libcufile.so"</span>});</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;    get_symbol(HandleRegister, lib, KVIKIO_STRINGIFY(cuFileHandleRegister));</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;    get_symbol(HandleDeregister, lib, KVIKIO_STRINGIFY(cuFileHandleDeregister));</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;    get_symbol(Read, lib, KVIKIO_STRINGIFY(cuFileRead));</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;    get_symbol(Write, lib, KVIKIO_STRINGIFY(cuFileWrite));</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;    get_symbol(BufRegister, lib, KVIKIO_STRINGIFY(cuFileBufRegister));</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;    get_symbol(BufDeregister, lib, KVIKIO_STRINGIFY(cuFileBufDeregister));</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;    get_symbol(DriverOpen, lib, KVIKIO_STRINGIFY(cuFileDriverOpen));</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;    get_symbol(DriverClose, lib, KVIKIO_STRINGIFY(cuFileDriverClose));</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;    get_symbol(DriverGetProperties, lib, KVIKIO_STRINGIFY(cuFileDriverGetProperties));</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;    get_symbol(DriverSetPollMode, lib, KVIKIO_STRINGIFY(cuFileDriverSetPollMode));</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp;    get_symbol(DriverSetMaxCacheSize, lib, KVIKIO_STRINGIFY(cuFileDriverSetMaxCacheSize));</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;    get_symbol(DriverSetMaxPinnedMemSize, lib, KVIKIO_STRINGIFY(cuFileDriverSetMaxPinnedMemSize));</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;  }</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="preprocessor">#include &lt;kvikio/shim/cufile_h_wrapper.hpp&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp;<span class="preprocessor">#include &lt;kvikio/shim/utils.hpp&gt;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp;<span class="keyword">namespace </span>kvikio {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp;<span class="preprocessor">#ifdef KVIKIO_CUFILE_EXIST</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp;<span class="keyword">class </span>cuFileAPI {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;  decltype(cuFileHandleRegister)* HandleRegister{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;  decltype(cuFileHandleDeregister)* HandleDeregister{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;  decltype(cuFileRead)* Read{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;  decltype(cuFileWrite)* Write{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;  decltype(cuFileBufRegister)* BufRegister{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;  decltype(cuFileBufDeregister)* BufDeregister{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;  decltype(cuFileDriverOpen)* DriverOpen{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;  decltype(cuFileDriverClose)* DriverClose{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;  decltype(cuFileDriverGetProperties)* DriverGetProperties{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;  decltype(cuFileDriverSetPollMode)* DriverSetPollMode{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;  decltype(cuFileDriverSetMaxCacheSize)* DriverSetMaxCacheSize{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;  decltype(cuFileDriverSetMaxPinnedMemSize)* DriverSetMaxPinnedMemSize{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;  cuFileAPI()</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;  {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;    <span class="keywordtype">void</span>* lib = load_library({<span class="stringliteral">"libcufile.so.1"</span>, <span class="stringliteral">"libcufile.so.0"</span>, <span class="stringliteral">"libcufile.so"</span>});</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;    get_symbol(HandleRegister, lib, KVIKIO_STRINGIFY(cuFileHandleRegister));</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;    get_symbol(HandleDeregister, lib, KVIKIO_STRINGIFY(cuFileHandleDeregister));</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;    get_symbol(Read, lib, KVIKIO_STRINGIFY(cuFileRead));</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;    get_symbol(Write, lib, KVIKIO_STRINGIFY(cuFileWrite));</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;    get_symbol(BufRegister, lib, KVIKIO_STRINGIFY(cuFileBufRegister));</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;    get_symbol(BufDeregister, lib, KVIKIO_STRINGIFY(cuFileBufDeregister));</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;    get_symbol(DriverOpen, lib, KVIKIO_STRINGIFY(cuFileDriverOpen));</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;    get_symbol(DriverClose, lib, KVIKIO_STRINGIFY(cuFileDriverClose));</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;    get_symbol(DriverGetProperties, lib, KVIKIO_STRINGIFY(cuFileDriverGetProperties));</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp;    get_symbol(DriverSetPollMode, lib, KVIKIO_STRINGIFY(cuFileDriverSetPollMode));</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;    get_symbol(DriverSetMaxCacheSize, lib, KVIKIO_STRINGIFY(cuFileDriverSetMaxCacheSize));</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;    get_symbol(DriverSetMaxPinnedMemSize, lib, KVIKIO_STRINGIFY(cuFileDriverSetMaxPinnedMemSize));</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp;  cuFileAPI(cuFileAPI <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp;  <span class="keywordtype">void</span> operator=(cuFileAPI <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp;  <span class="keyword">static</span> cuFileAPI&amp; instance()</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp;  {</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp;    <span class="keyword">static</span> cuFileAPI _instance;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp;    <span class="keywordflow">return</span> _instance;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp;    <span class="comment">// cuFile is supposed to open and close the driver automatically but because of a bug in</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp;    <span class="comment">// CUDA 11.8, it sometimes segfault. See &lt;https://github.com/rapidsai/kvikio/issues/159&gt;.</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp;    CUfileError_t <span class="keyword">const</span> error = DriverOpen();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&nbsp;    <span class="keywordflow">if</span> (error.err != CU_FILE_SUCCESS) {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp;      <span class="keywordflow">throw</span> std::runtime_error(std::string{<span class="stringliteral">"cuFile error at: "</span>} + __FILE__ + <span class="stringliteral">":"</span> +</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp;                               KVIKIO_STRINGIFY(__LINE__) + <span class="stringliteral">": "</span> +</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp;                               cufileop_status_error(error.err));</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp;    }</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;  }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;};</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;<span class="preprocessor">#ifdef KVIKIO_CUFILE_EXIST</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">bool</span> is_cufile_library_available()</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;{</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;  <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;    cuFileAPI::instance();</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp;  } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::runtime_error&amp;) {</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&nbsp;  }</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&nbsp;  <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&nbsp;}</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp;constexpr <span class="keywordtype">bool</span> is_cufile_library_available() { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">bool</span> is_cufile_available()</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&nbsp;{</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&nbsp;  <span class="keywordflow">return</span> is_cufile_library_available() &amp;&amp; run_udev_readable() &amp;&amp; !is_running_in_wsl();</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp;}</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp;}  <span class="comment">// namespace kvikio</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;  ~cuFileAPI()</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;  {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;    CUfileError_t <span class="keyword">const</span> error = DriverClose();</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;    <span class="keywordflow">if</span> (error.err != CU_FILE_SUCCESS) {</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;      std::cerr &lt;&lt; <span class="stringliteral">"Unable to close GDS file driver: "</span> &lt;&lt; cufileop_status_error(error.err)</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp;                &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;    }</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;  }</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;  cuFileAPI(cuFileAPI <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;  <span class="keywordtype">void</span> operator=(cuFileAPI <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;  <span class="keyword">static</span> cuFileAPI&amp; instance()</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;  {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;    <span class="keyword">static</span> cuFileAPI _instance;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp;    <span class="keywordflow">return</span> _instance;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp;  }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&nbsp;};</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&nbsp; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&nbsp;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp;<span class="preprocessor">#ifdef KVIKIO_CUFILE_EXIST</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">bool</span> is_cufile_library_available()</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&nbsp;{</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&nbsp;  <span class="keywordflow">try</span> {</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&nbsp;    cuFileAPI::instance();</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&nbsp;  } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::runtime_error&amp;) {</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&nbsp;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp;  }</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp;  <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp;}</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&nbsp;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&nbsp;constexpr <span class="keywordtype">bool</span> is_cufile_library_available() { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&nbsp;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&nbsp; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">bool</span> is_cufile_available()</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&nbsp;{</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&nbsp;  <span class="keywordflow">return</span> is_cufile_library_available() &amp;&amp; run_udev_readable() &amp;&amp; !is_running_in_wsl();</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp;}</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp;}  <span class="comment">// namespace kvikio</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"><address class="footer"><small>
