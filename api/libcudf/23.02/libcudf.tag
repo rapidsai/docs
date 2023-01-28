@@ -3019,6 +3019,8 @@
     <class kind="struct">cudf::io::schema_element</class>
     <class kind="class">cudf::io::json_reader_options</class>
     <class kind="class">cudf::io::json_reader_options_builder</class>
+    <class kind="class">cudf::io::json_writer_options</class>
+    <class kind="class">cudf::io::json_writer_options_builder</class>
     <namespace>cudf</namespace>
     <namespace>cudf::io</namespace>
     <member kind="function">
@@ -3027,6 +3029,13 @@
       <anchorfile>group__io__readers.html</anchorfile>
       <anchor>gaa375890b86faacd14b6ebd135ae0aea2</anchor>
       <arglist>(json_reader_options options, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>write_json</name>
+      <anchorfile>group__io__writers.html</anchorfile>
+      <anchor>ga91583360b4224fbc77456bb3a93e2c89</anchor>
+      <arglist>(json_writer_options const &amp;options, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -12543,6 +12552,231 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>cudf::io::json_writer_options</name>
+    <filename>classcudf_1_1io_1_1json__writer__options.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>json_writer_options</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>a90a5e3e8307f3a3dc0dada33be65202d</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type>sink_info const  &amp;</type>
+      <name>get_sink</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>aa6f8371311a52843d46db6a46bb68e13</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>table_view const  &amp;</type>
+      <name>get_table</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>a3fb256ff4d9d28f0959df9d5827e1884</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>std::optional&lt; table_metadata &gt; const  &amp;</type>
+      <name>get_metadata</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>ae7b533de4e87edf82ab39a27727822b5</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>std::string const  &amp;</type>
+      <name>get_na_rep</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>afa170b883d4a0e7e9955788484cd4854</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>is_enabled_include_nulls</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>a72b22d5cc579f2d39420bf1b74a4281d</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>is_enabled_lines</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>ad49164504d14d037f14d30918a719839</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>size_type</type>
+      <name>get_rows_per_chunk</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>ade3a064b1a2d918d18f0646bf801be59</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>std::string const  &amp;</type>
+      <name>get_true_value</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>abb1c4756a6661c70db0178275320a793</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>std::string const  &amp;</type>
+      <name>get_false_value</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>ac4f8cf189e366748edf3c64ffb5067dc</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_table</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>abedd6bca6933b43c95f6759de6e0d1ef</anchor>
+      <arglist>(table_view tbl)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_metadata</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>aff2ec509a4ad9127175a4100ed51863c</anchor>
+      <arglist>(table_metadata metadata)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_na_rep</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>a75641f1cb1c60968284a819fd42c4c39</anchor>
+      <arglist>(std::string val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>enable_include_nulls</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>a6c52bfb36e7ba9cea5ea72482673c49a</anchor>
+      <arglist>(bool val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>enable_lines</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>a74c2ea1d8060d82c2bd50ec0f2bd67bb</anchor>
+      <arglist>(bool val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_rows_per_chunk</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>aab4615ea1f6b5c7487c766128feab7c0</anchor>
+      <arglist>(size_type val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_true_value</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>aa57e28cb527b52fca30daa4544eb1a21</anchor>
+      <arglist>(std::string val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_false_value</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>a46b59d0c695bc21886fd255acccf1fa9</anchor>
+      <arglist>(std::string val)</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static json_writer_options_builder</type>
+      <name>builder</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options.html</anchorfile>
+      <anchor>a7e8c493bbc7f73d10dde6dc7a5590772</anchor>
+      <arglist>(sink_info const &amp;sink, table_view const &amp;table)</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>cudf::io::json_writer_options_builder</name>
+    <filename>classcudf_1_1io_1_1json__writer__options__builder.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>json_writer_options_builder</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options__builder.html</anchorfile>
+      <anchor>a95847fdc91c37fc3ef771bc803fa3512</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>json_writer_options_builder</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options__builder.html</anchorfile>
+      <anchor>adabdbdab2f74ff89bfe1c596f2f241e3</anchor>
+      <arglist>(sink_info const &amp;sink, table_view const &amp;table)</arglist>
+    </member>
+    <member kind="function">
+      <type>json_writer_options_builder &amp;</type>
+      <name>table</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options__builder.html</anchorfile>
+      <anchor>a5f136472f992a9dc8659188fcc406668</anchor>
+      <arglist>(table_view tbl)</arglist>
+    </member>
+    <member kind="function">
+      <type>json_writer_options_builder &amp;</type>
+      <name>metadata</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options__builder.html</anchorfile>
+      <anchor>ae51dd627be4f9fa4c70f9c7be6f714a9</anchor>
+      <arglist>(table_metadata metadata)</arglist>
+    </member>
+    <member kind="function">
+      <type>json_writer_options_builder &amp;</type>
+      <name>na_rep</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options__builder.html</anchorfile>
+      <anchor>ade4732abf93908f1e0fd32191bd81a17</anchor>
+      <arglist>(std::string val)</arglist>
+    </member>
+    <member kind="function">
+      <type>json_writer_options_builder &amp;</type>
+      <name>include_nulls</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options__builder.html</anchorfile>
+      <anchor>a54c3703dd700a58aefaa72213b92be91</anchor>
+      <arglist>(bool val)</arglist>
+    </member>
+    <member kind="function">
+      <type>json_writer_options_builder &amp;</type>
+      <name>lines</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options__builder.html</anchorfile>
+      <anchor>affd5375290b1e7ea36ad49a2ab673e25</anchor>
+      <arglist>(bool val)</arglist>
+    </member>
+    <member kind="function">
+      <type>json_writer_options_builder &amp;</type>
+      <name>rows_per_chunk</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options__builder.html</anchorfile>
+      <anchor>aa241eabef781683ff6541ce1e8c37181</anchor>
+      <arglist>(int val)</arglist>
+    </member>
+    <member kind="function">
+      <type>json_writer_options_builder &amp;</type>
+      <name>true_value</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options__builder.html</anchorfile>
+      <anchor>accfa6f679097aed0bcd18fe0300e0b5f</anchor>
+      <arglist>(std::string val)</arglist>
+    </member>
+    <member kind="function">
+      <type>json_writer_options_builder &amp;</type>
+      <name>false_value</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options__builder.html</anchorfile>
+      <anchor>acfa5098bb549d805e2635704de03f5fd</anchor>
+      <arglist>(std::string val)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>operator json_writer_options &amp;&amp;</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options__builder.html</anchorfile>
+      <anchor>a8473b41bbdd595642c310e8f0c34a95e</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>json_writer_options &amp;&amp;</type>
+      <name>build</name>
+      <anchorfile>classcudf_1_1io_1_1json__writer__options__builder.html</anchorfile>
+      <anchor>afd37e09b9e63a95f85d562b054f1d77a</anchor>
+      <arglist>()</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>cudf::io::external::kafka::kafka_consumer</name>
     <filename>classcudf_1_1io_1_1external_1_1kafka_1_1kafka__consumer.html</filename>
     <base>cudf::io::datasource</base>
@@ -15697,31 +15931,6 @@
     </member>
   </compound>
   <compound kind="class">
-    <name>cudf::experimental::row::hash::row_hasher</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
-      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>row_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
-      <name>device_hasher</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
-      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
-      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
     <name>cudf::row_hasher</name>
     <filename>classcudf_1_1row__hasher.html</filename>
     <templarg>hash_function</templarg>
@@ -15746,6 +15955,31 @@
       <anchorfile>classcudf_1_1row__hasher.html</anchorfile>
       <anchor>ab370aeff347da4c228ccd917af8b52be</anchor>
       <arglist>(size_type row_index) const</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>cudf::experimental::row::hash::row_hasher</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a6d15e79a0b3edecb7d910819561ecdb4</anchor>
+      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>row_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>ac7b1c7c1b484ff5e8ed7c406ecf85dc9</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>DeviceRowHasher&lt; hash_function, Nullate &gt;</type>
+      <name>device_hasher</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1hash_1_1row__hasher.html</anchorfile>
+      <anchor>a4b41dc03787ffe4a655c6fd89d7d0ad1</anchor>
+      <arglist>(Nullate nullate={}, uint32_t seed=DEFAULT_HASH_SEED) const</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -15961,31 +16195,6 @@
     <base virtualness="virtual">cudf::aggregation</base>
   </compound>
   <compound kind="class">
-    <name>cudf::experimental::row::equality::self_comparator</name>
-    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</filename>
-    <member kind="function">
-      <type></type>
-      <name>self_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>a8f53714e3008c063b18aa52cbd1f5a8e</anchor>
-      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>self_comparator</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>a305627a9b975fed5f09c5b49dfb6f644</anchor>
-      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>equal_to</name>
-      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>adfbbb6f105eb6f65f0689f4eceef1792</anchor>
-      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
     <name>cudf::experimental::row::lexicographic::self_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</filename>
     <member kind="function">
@@ -16015,6 +16224,31 @@
       <anchorfile>classcudf_1_1experimental_1_1row_1_1lexicographic_1_1self__comparator.html</anchorfile>
       <anchor>a3f1126f8f76064a8f0e6b96e4e51ce41</anchor>
       <arglist>(Nullate nullate={}, PhysicalElementComparator comparator={}) const noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>cudf::experimental::row::equality::self_comparator</name>
+    <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>self_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>a8f53714e3008c063b18aa52cbd1f5a8e</anchor>
+      <arglist>(table_view const &amp;t, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>self_comparator</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>a305627a9b975fed5f09c5b49dfb6f644</anchor>
+      <arglist>(std::shared_ptr&lt; preprocessed_table &gt; t)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>equal_to</name>
+      <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
+      <anchor>adfbbb6f105eb6f65f0689f4eceef1792</anchor>
+      <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -21999,6 +22233,8 @@
     <class kind="struct">cudf::io::integer_statistics</class>
     <class kind="class">cudf::io::json_reader_options</class>
     <class kind="class">cudf::io::json_reader_options_builder</class>
+    <class kind="class">cudf::io::json_writer_options</class>
+    <class kind="class">cudf::io::json_writer_options_builder</class>
     <class kind="struct">cudf::io::minmax_statistics</class>
     <class kind="class">cudf::io::orc_chunked_writer</class>
     <class kind="struct">cudf::io::orc_column_schema</class>
@@ -22172,6 +22408,13 @@
       <anchorfile>group__io__readers.html</anchorfile>
       <anchor>gaa375890b86faacd14b6ebd135ae0aea2</anchor>
       <arglist>(json_reader_options options, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>write_json</name>
+      <anchorfile>group__io__writers.html</anchorfile>
+      <anchor>ga91583360b4224fbc77456bb3a93e2c89</anchor>
+      <arglist>(json_writer_options const &amp;options, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>table_with_metadata</type>
@@ -27640,10 +27883,13 @@
     <title>Writers</title>
     <filename>group__io__writers.html</filename>
     <file>csv.hpp</file>
+    <file>io/json.hpp</file>
     <file>orc.hpp</file>
     <file>parquet.hpp</file>
     <class kind="class">cudf::io::csv_writer_options</class>
     <class kind="class">cudf::io::csv_writer_options_builder</class>
+    <class kind="class">cudf::io::json_writer_options</class>
+    <class kind="class">cudf::io::json_writer_options_builder</class>
     <class kind="class">cudf::io::orc_writer_options</class>
     <class kind="class">cudf::io::orc_writer_options_builder</class>
     <class kind="class">cudf::io::chunked_orc_writer_options</class>
@@ -27660,6 +27906,13 @@
       <anchorfile>group__io__writers.html</anchorfile>
       <anchor>ga55f2477c2b822612d0c8168b9c8859fb</anchor>
       <arglist>(csv_writer_options const &amp;options, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>write_json</name>
+      <anchorfile>group__io__writers.html</anchorfile>
+      <anchor>ga91583360b4224fbc77456bb3a93e2c89</anchor>
+      <arglist>(json_writer_options const &amp;options, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>void</type>

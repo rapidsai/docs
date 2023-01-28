@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['nan_5fequal_5fphysical_5fequality_5fcomparator_2085',['nan_equal_physical_equality_comparator',['../structcudf_1_1experimental_1_1row_1_1equality_1_1nan__equal__physical__equality__comparator.html',1,'cudf::experimental::row::equality']]],
-  ['new_5fdelete_5fresource_2086',['new_delete_resource',['https://docs.rapids.ai/api/librmm/23.02/classrmm_1_1mr_1_1new__delete__resource.html',1,'rmm::mr']]],
-  ['no_2087',['NO',['../structcudf_1_1nullate_1_1NO.html',1,'cudf::nullate']]],
-  ['non_5fowning_5fbuffer_2088',['non_owning_buffer',['../classcudf_1_1io_1_1datasource_1_1non__owning__buffer.html',1,'cudf::io::datasource']]],
-  ['nullate_2089',['nullate',['../structcudf_1_1nullate.html',1,'cudf']]],
-  ['numeric_5fscalar_2090',['numeric_scalar',['../classcudf_1_1numeric__scalar.html',1,'cudf']]],
-  ['numeric_5fscalar_5fdevice_5fview_2091',['numeric_scalar_device_view',['../classcudf_1_1numeric__scalar__device__view.html',1,'cudf']]]
+  ['nan_5fequal_5fphysical_5fequality_5fcomparator_2094',['nan_equal_physical_equality_comparator',['../structcudf_1_1experimental_1_1row_1_1equality_1_1nan__equal__physical__equality__comparator.html',1,'cudf::experimental::row::equality']]],
+  ['new_5fdelete_5fresource_2095',['new_delete_resource',['https://docs.rapids.ai/api/librmm/23.02/classrmm_1_1mr_1_1new__delete__resource.html',1,'rmm::mr']]],
+  ['no_2096',['NO',['../structcudf_1_1nullate_1_1NO.html',1,'cudf::nullate']]],
+  ['non_5fowning_5fbuffer_2097',['non_owning_buffer',['../classcudf_1_1io_1_1datasource_1_1non__owning__buffer.html',1,'cudf::io::datasource']]],
+  ['nullate_2098',['nullate',['../structcudf_1_1nullate.html',1,'cudf']]],
+  ['numeric_5fscalar_2099',['numeric_scalar',['../classcudf_1_1numeric__scalar.html',1,'cudf']]],
+  ['numeric_5fscalar_5fdevice_5fview_2100',['numeric_scalar_device_view',['../classcudf_1_1numeric__scalar__device__view.html',1,'cudf']]]
 ];
