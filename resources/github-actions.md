@@ -118,7 +118,7 @@ Cells with multiple labels in the table above are aliases which represent the sa
 The GPU label names consist of the following components:
 
 ```text
-gpu-a100-495-1
+gpu-a100-520-1
     ^    ^   ^
     |    |   |
     |    |   Number of GPUs Available
