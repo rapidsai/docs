@@ -20,10 +20,6 @@ Developers
 Project Leads
 {: .label .label-blue}
 
-### See also
-
-- [Issues]({% link contributing/issues.md %})
-
 ## Triage goals
 
 RAPIDS projects are continuously triaging new issues and re-triaging existing issues frequently. This is to ensure that high priority issues are remedied in a timely manner and the community receives frequent updates on a filed issue.
@@ -150,4 +146,4 @@ Developers should be assigned to issues they are responsible for delivering.  Tr
 
 ### Link to PR
 
-Every [Pull Request]({% link contributing/prs.md %}) should have the issue number in the descriptions of the PR with `Addresses #[issue number]` so when the PR is merged the issue that created the PR will automatically close as well.
+Every pull request should have the issue number in the descriptions of the PR with `Addresses #[issue number]` so when the PR is merged the issue that created the PR will automatically close as well.

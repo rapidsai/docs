@@ -1,7 +1,7 @@
 ---
 layout: default
 title: RAPIDS Maintainer Docs
-nav_order: 8
+nav_order: 5
 has_children: true
 permalink: maintainers
 ---
