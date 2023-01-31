@@ -74,3 +74,7 @@ Please note that in the example above we created 3 Dask-CUDA workers on one node
 ## XGBoost with Dask Cluster
 
 Currently [XGBoost](https://www.nvidia.com/en-us/glossary/data-science/xgboost/) only exposes support for GPU communication via NCCL, which does not support MIG. For this reason, A Dask cluster that utilizes XGBoost would have to utilize TCP instead for all communications which will likely cause in considerable performance degradation. Therefore, using XGBoost with MIG is not recommended.
+
+```{relatedexamples}
+
+```

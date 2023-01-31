@@ -1,94 +1,75 @@
 # Azure VM Cluster (via Dask)
 
-```{warning}
-This is a legacy page and may contain outdated information. We are working hard to update our documentation with the latest and greatest information, thank you for bearing with us.
+## Create a Cluster using Dask Cloud Provider
+
+The easiest way to setup a multi-node, multi-GPU cluster on Azure is to use [Dask Cloud Provider](https://cloudprovider.dask.org/en/latest/azure.html).
+
+### 1. Install Dask Cloud Provider
+
+Dask Cloud Provider can be installed via `conda` or `pip`. The Azure-specific capabilities will need to be installed via the `[azure]` pip extra.
+
+```shell
+$ pip install dask-cloudprovider[azure]
 ```
 
-RAPIDS can be deployed at scale using Azure Machine Learning Service and easily scales up to any size needed. We have written a **[detailed guide](https://medium.com/rapids-ai/rapids-on-microsoft-azure-machine-learning-b51d5d5fde2b)** with **[helper scripts](https://github.com/rapidsai/cloud-ml-examples/tree/main/azure)** to get everything deployed, but the high level procedure is:
+### 2. Configure your Azure Resources
 
-**1. Create.** Create your Azure Resource Group.
+Set up your [Azure Resouce Group](https://cloudprovider.dask.org/en/latest/azure.html#resource-groups), [Virtual Network](https://cloudprovider.dask.org/en/latest/azure.html#virtual-networks), and [Security Group](https://cloudprovider.dask.org/en/latest/azure.html#security-groups) according to [Dask Cloud Provider instructions](https://cloudprovider.dask.org/en/latest/azure.html#authentication).
 
-**2. Workspace.** Within the Resource Group, create an Azure Machine Learning service Workspace.
+### 3. Create a Cluster
 
-**3. Config.** Within the Workspace, download the config.json file and verify that subscription_id, resource_group, and workspace_name are set correctly for your environment.
-
-**4. Quota.** Within your Workspace, check your Usage + Quota to ensure you have enough quota to launch your desired cluster size.
-
-**5. Clone.** From your local machine, clone the RAPIDS demonstration code and helper scripts.
-
-**6. Run Utility.** Run the RAPIDS helper utility script to initialize the Azure Machine Learning service Workspace:
-
-```console
-$ ./start_azureml.py\
- --config=[CONFIG_PATH]\
- --vm_size=[VM_SIZE]\
- --node_count=[NUM_NODES]
-
-```
-
-[CONFIG_PATH] = the path to the config file you downloaded in step three.
-
-**7. Start.** Open your browser to `http://localhost:8888` and get started!
-
-See **[the guide](https://medium.com/rapids-ai/rapids-on-microsoft-azure-machine-learning-b51d5d5fde2b#fee3)** or **[GitHub](https://github.com/rapidsai/cloud-ml-examples/tree/main/azure)** for more details.RAPIDS can be deployed on a Dask cluster on Azure ML Compute using dask-cloud provider.
-
-**1. Install.** Install Azure tools (azure-cli).
-
-**2. Install dask-cloudprovider:**
-
-```console
-$ pip install dask-cloudprovider
-
-```
-
-**3. Config.** Create your workspace config file -see **[Azure docs](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-configure-environment#workspace)** for details.
-
-**4. Environment.** Setup your Azure ML core environment using the RAPIDS docker container:
+In Python terminal, a cluster can be created using the `dask_cloudprovider` package. The below example creates a cluster with 2 workers in `westus2` with `Standard_NC12s_v3` VMs. The VMs should have at least 100GB of disk space in order to accommodate the RAPIDS container image and related dependencies.
 
 ```python
->>> from azureml.core import Environment
->>> # create the environment
->>> rapids_env = Environment('rapids_env')
->>> # create the environment inside a Docker container
->>> rapids_env.docker.enabled = True
->>> # specify docker steps as a string. Alternatively, load the string from a file
->>> dockerfile = """
->>> FROM [CONTAINER]:[TAG]
->>> RUN source activate rapids &&\
->>> pip install azureml-sdk &&\
->>> [ADDITIONAL_LIBRARIES]
->>> """
->>> # set base image to None since the image is defined by dockerfile
->>> rapids_env.docker.base_image = None
->>> rapids_env.docker.base_dockerfile = dockerfile
->>> # use rapids environment in the container
->>> rapids_env.python.user_managed_dependencies = True
-
+from dask_cloudprovider.azure import AzureVMCluster
+resource_group = "<RESOURCE_GROUP>"
+vnet = "<VNET>"
+security_group = "<SECURITY_GROUP>"
+subscription_id = "<SUBSCRIPTION_ID>"
+cluster = AzureVMCluster(
+    resource_group=resource_group,
+    vnet=vnet,
+    security_group=security_group,
+    subscription_id=security_group,
+    location="westus2",
+    vm_size="Standard_NC12s_v3",
+    public_ingress=True,
+    disk_size=100,
+    n_workers=2,
+    worker_class="dask_cuda.CUDAWorker",
+    docker_image="rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9",
+    docker_args="-e DISABLE_JUPYTER=true -p 8787:8787 -p 8786:8786",
+)
 ```
 
-[CONTAINER] = RAPIDS container to be used, for example, `rapidsai/rapidsai`\
-[TAG] = Docker container tag.\
-[ADDITIONAL_LIBRARIES] = Additional libraries required by the user can be installed by either using `conda` or `pip` install.
+### 4. Test RAPIDS
 
-**5. Setup.** Setup your Azure ML Workspace using the config file created in the previous step:
+To test RAPIDS, create a distributed client for the cluster and query for the GPU model.
 
 ```python
->>> from azureml.core import Workspace
->>> ws = Workspace.from_config()
+from dask.distributed import Client
+client = Client(cluster)
 
+def get_gpu_model():
+   import pynvml
+   pynvml.nvmlInit()
+   return pynvml.nvmlDeviceGetName(pynvml.nvmlDeviceGetHandleByIndex(0))
+client.submit(get_gpu_model).result()
 ```
 
-**6. Create the AzureMLCluster:**
+```shell
+Out[5]: b'Tesla V100-PCIE-16GB'
+```
+
+### 5. Cleanup
+
+Once done with the cluster, ensure the `cluster` and `client` are closed:
 
 ```python
->>> from dask_cloudprovider import AzureMLCluster
->>> cluster = AzureMLCluster(ws,
-                             datastores=ws.datastores.values(),
-                             environment_definition=rapids_env,
-                             initial_node_count=[NUM_NODES])
-
+client.close()
+cluster.close()
 ```
 
-[NUM_NODES] = Number of nodes to be used.
+```{relatedexamples}
 
-**7. Run Notebook.** In a Jupyter notebook, the cluster object will return a widget allowing you to scale up and containing links to the Jupyter Lab session running on the headnode and Dask dashboard, which are forwarded to local ports for you -unless running on a remote Compute Instance.
+```

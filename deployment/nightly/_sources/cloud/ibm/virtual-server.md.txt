@@ -85,3 +85,7 @@ $ docker run --rm --gpus all nvidia/cuda:11.6.2-base-ubuntu20.04 nvidia-smi
 ```{include} ../../_includes/test-rapids-docker-vm.md
 
 ```
+
+```{relatedexamples}
+
+```

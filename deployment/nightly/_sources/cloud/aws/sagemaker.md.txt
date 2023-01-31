@@ -20,3 +20,7 @@ for how to use Sagemaker with RAPIDS. To get started:
 - > Note: If you see Pending to the right of the notebook instance in the Status column, your notebook is still being created. The status will change to InService when the notebook is ready for use.
 
 **3. Run Notebook.** Once inside JupyterLab you should be able to navigate to the notebook in the root directory named **aws/rapids_sagemaker_hpo.ipynb** or **aws/rapids_sagemaker_higgs**.
+
+```{relatedexamples}
+
+```

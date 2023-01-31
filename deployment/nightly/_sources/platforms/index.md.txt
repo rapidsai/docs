@@ -1,6 +1,10 @@
+---
+html_theme.sidebar_secondary.remove: true
+---
+
 # Platforms
 
-`````{grid} 1 2 2 3
+`````{gridtoctree} 1 2 2 3
 :gutter: 2 2 2 2
 
 ````{grid-item-card}
@@ -10,8 +14,8 @@ Kubernetes
 ^^^
 Launch RAPIDS containers and cluster on Kubernetes with various tools.
 
-{bdg-primary}`single-node`
-{bdg-primary}`multi-node`
+{bdg}`single-node`
+{bdg}`multi-node`
 ````
 
 ````{grid-item-card}
@@ -21,8 +25,8 @@ Kubeflow
 ^^^
 Integrate RAPIDS with Kubeflow notebooks and pipelines.
 
-{bdg-primary}`single-node`
-{bdg-primary}`multi-node`
+{bdg}`single-node`
+{bdg}`multi-node`
 ````
 
 ````{grid-item-card}
@@ -32,17 +36,7 @@ Coiled
 ^^^
 Run RAPIDS on Coiled.
 
-{bdg-primary}`multi-node`
+{bdg}`multi-node`
 ````
 
 `````
-
-```{toctree}
-:maxdepth: 2
-:caption: Platforms
-:hidden:
-
-kubernetes
-kubeflow
-coiled
-```

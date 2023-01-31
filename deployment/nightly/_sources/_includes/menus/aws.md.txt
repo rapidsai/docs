@@ -8,7 +8,7 @@ Elastic Compute Cloud (EC2)
 ^^^
 Launch an EC2 instance and run RAPIDS.
 
-{bdg-primary}`single-node`
+{bdg}`single-node`
 ````
 
 ````{grid-item-card}
@@ -18,7 +18,7 @@ Elastic Kubernetes Service (EKS)
 ^^^
 Launch a RAPIDS cluster on managed Kubernetes.
 
-{bdg-primary}`multi-node`
+{bdg}`multi-node`
 ````
 
 ````{grid-item-card}
@@ -28,7 +28,7 @@ Elastic Container Service (ECS)
 ^^^
 Launch a RAPIDS cluster on managed container service.
 
-{bdg-primary}`multi-node`
+{bdg}`multi-node`
 ````
 
 ````{grid-item-card}
@@ -38,8 +38,8 @@ Sagemaker
 ^^^
 Launch the RAPIDS container as a Sagemaker notebook.
 
-{bdg-primary}`single-node`
-{bdg-primary}`multi-node`
+{bdg}`single-node`
+{bdg}`multi-node`
 ````
 
 `````

@@ -380,3 +380,7 @@ This is useful if you have a multi-stage pipeline made up of multiple Python pro
 
 You can also connect a `KubeCluster` object to your existing cluster with `cluster = KubeCluster.from_name(name="rapids-dask")` if you wish to use the cluster or manually call `cluster.close()` in the future.
 ```
+
+```{relatedexamples}
+
+```

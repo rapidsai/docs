@@ -383,3 +383,7 @@ Throughput                | 2.82 GiB/s +/- 341.13 MiB/s
 Bandwidth                 | 159.89 MiB/s +/- 8.96 MiB/s
 Wall clock                | 8.46 s +/- 1.73 s
 ```
+
+```{relatedexamples}
+
+```

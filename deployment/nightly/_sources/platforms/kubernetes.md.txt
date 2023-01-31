@@ -99,3 +99,7 @@ Find out more on the [Dask Gateway page](/tools/kubernetes/dask-gateway).
 If you are using KubeFlow you can integrate RAPIDS right away by using the RAPIDS container images within notebooks and pipelines and by using the Dask Operator to launch GPU accelerated Dask clusters.
 
 Find out more on the [KubeFlow page](/platforms/kubeflow).
+
+```{relatedexamples}
+
+```

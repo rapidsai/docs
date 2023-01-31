@@ -124,3 +124,7 @@ Next, we can SSH into our VM to install RAPIDS. SSH instructions can be found by
 ### Useful Links
 
 - [Using NGC with Azure](https://docs.nvidia.com/ngc/ngc-azure-setup-guide/index.html)
+
+```{relatedexamples}
+
+```

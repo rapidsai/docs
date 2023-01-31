@@ -8,7 +8,7 @@ Azure Virtual Machine
 ^^^
 Launch an Azure VM instance and run RAPIDS.
 
-{bdg-primary}`single-node`
+{bdg}`single-node`
 ````
 
 ````{grid-item-card}
@@ -18,7 +18,7 @@ Azure Kubernetes Service (AKS)
 ^^^
 Launch a RAPIDS cluster on managed Kubernetes.
 
-{bdg-primary}`multi-node`
+{bdg}`multi-node`
 ````
 
 ````{grid-item-card}
@@ -28,7 +28,7 @@ Azure Cluster via Dask
 ^^^
 Launch a RAPIDS cluster on Azure VMs or Azure ML with Dask.
 
-{bdg-primary}`multi-node`
+{bdg}`multi-node`
 ````
 
 ````{grid-item-card}
@@ -38,7 +38,7 @@ Azure Machine Learning (Azure ML)
 ^^^
 Launch a RAPIDS cluster on Azure ML.
 
-{bdg-primary}`multi-node`
+{bdg}`multi-node`
 ````
 
 `````

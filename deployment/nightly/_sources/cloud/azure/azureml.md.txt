@@ -31,3 +31,7 @@ $ ./start_azureml.py\
 **7. Start.** Open your browser to `http://localhost:8888` and get started!
 
 See **[the guide](https://medium.com/rapids-ai/rapids-on-microsoft-azure-machine-learning-b51d5d5fde2b#fee3)** or **[GitHub](https://github.com/rapidsai/cloud-ml-examples/tree/main/azure)** for more details.
+
+```{relatedexamples}
+
+```

@@ -77,3 +77,7 @@ ddf = dask_cudf.from_cudf(cudf.DataFrame(
 ddf.sum().compute()
 # should print a: 190
 ```
+
+```{relatedexamples}
+
+```

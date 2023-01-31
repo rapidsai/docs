@@ -103,3 +103,7 @@ $ helm upgrade --set worker.replicas=8 rapids-release dask/dask
 ```
 
 ![dask worker](../../_static/eightworkers.PNG)
+
+```{relatedexamples}
+
+```

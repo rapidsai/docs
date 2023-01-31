@@ -8,7 +8,7 @@ Compute Engine Instance
 ^^^
 Launch a Compute Engine instance and run RAPIDS.
 
-{bdg-primary}`single-node`
+{bdg}`single-node`
 ````
 
 ````{grid-item-card}
@@ -18,7 +18,7 @@ Vertex AI
 ^^^
 Launch the RAPIDS container in Vertex AI managed notebooks.
 
-{bdg-primary}`single-node`
+{bdg}`single-node`
 ````
 
 ````{grid-item-card}
@@ -28,7 +28,7 @@ Google Kubernetes Engine (GKE)
 ^^^
 Launch a RAPIDS cluster on managed Kubernetes.
 
-{bdg-primary}`multi-node`
+{bdg}`multi-node`
 ````
 
 ````{grid-item-card}
@@ -38,7 +38,7 @@ Dataproc
 ^^^
 Launch a RAPIDS cluster on Dataproc.
 
-{bdg-primary}`multi-node`
+{bdg}`multi-node`
 ````
 
 `````

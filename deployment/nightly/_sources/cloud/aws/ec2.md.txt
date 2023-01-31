@@ -33,3 +33,7 @@ Next we need to connect to the instance.
 ```{include} ../../_includes/test-rapids-docker-vm.md
 
 ```
+
+```{relatedexamples}
+
+```

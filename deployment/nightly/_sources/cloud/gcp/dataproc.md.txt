@@ -45,3 +45,7 @@ $ gcloud dataproc clusters create $CLUSTER_NAME\
 **2. Run Dask RAPIDS Workload.** Once the cluster has been created, the Dask scheduler listens for workers on `port 8786`, and its status dashboard is on `port 8787` on the Dataproc master node.
 
 To connect to the Dask web interface, you will need to create an SSH tunnel as described in the [Dataproc web interfaces documentation.](https://cloud.google.com/dataproc/docs/concepts/accessing/cluster-web-interfaces) You can also connect using the Dask Client Python API from a Jupyter notebook, or from a Python script or interpreter session.
+
+```{relatedexamples}
+
+```

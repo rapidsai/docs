@@ -105,3 +105,7 @@ Name: id, dtype: int64
 shut it down. You can either scale the number of nodes down to zero instances,
 or shut it down altogether. If you are planning to use the cluster again soon,
 it is probably preferable to reduce the nodes to zero.
+
+```{relatedexamples}
+
+```
