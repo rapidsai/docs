@@ -10,11 +10,19 @@ description: |
 # RAPIDS Docs
 {: .fs-8 }
 
-This site serves as a collection of all the documentation for RAPIDS. Whether you're new to RAPIDS, looking to contribute, or are a part of the RAPIDS team, the docs here will help guide you.<br/><br/>Visit [rapids.ai](http://rapids.ai) for more information on the overall project.<br/><br/>
+This site serves to unify the documentation for RAPIDS. Whether you're new to RAPIDS, looking to contribute, or are a part of the RAPIDS team, the docs here will help guide you. Visit [RAPIDS.ai](http://rapids.ai){: target="_blank"} for more information on the overall project.
 {: .fs-6 .fw-300 }
 
+## Sections
 
-[<i class="far fa-file-code"></i> Documentation]({% link api.md %}){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-2 } [<i class="fas fa-bullhorn"></i> RAPIDS Notices]({% link notices/notices.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }  [<i class="fab fa-github"></i> RAPIDS on GitHub](https://github.com/rapidsai){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
+[<i class="far fa-file-code"></i> Installation Guide]({% link install/install.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
+[<i class="far fa-file-code"></i> User Guides]({% link user-guide/user-guide.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
+[<i class="far fa-file-code"></i> API Documentation]({% link api.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
+[<i class="far fa-file-code"></i> Deployment Guides]({% link deployment/stable/index.html %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
+<br/><br/>
+[<i class="fas fa-bullhorn"></i> RAPIDS Notices]({% link maintainers/maintainers.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
+[<i class="fas fa-bullhorn"></i> RAPIDS Notices]({% link notices/notices.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 } 
+[<i class="fab fa-github"></i> RAPIDS GitHub](https://github.com/rapidsai){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
 
 ---
 
@@ -24,12 +32,11 @@ This site serves as a collection of all the documentation for RAPIDS. Whether yo
     {% for i in site.social %}
         {% assign social = i[1] %}
         <div class="footer-help-box">
-            <div class="footer-help-box-image"><i class="{{ social.fa-icon-class }} fa-3x"></i></div>
-            <a href=" {{ social.url }}" target="_blank" class="btn">{{ social.name }}</a>
+            <a href=" {{ social.url }}" target="_blank" class="btn"><i class="{{ social.fa-icon-class }}"></i> {{ social.name }}</a>
         </div>
     {% endfor %}
 </div>
 
-## Issues or Feedback
+## Docs Issues or Feedback
 
-[File an issue](https://github.com/rapidsai/docs/issues/new) for any unexpected problems encountered or general feedback with any of the information on this site.
+[File an issue](https://github.com/rapidsai/docs/issues/new) for any unexpected problems encountered or general feedback for this site.
