@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Azure VM Cluster (via Dask) &#8212; RAPIDS Deployment Documentation  documentation</title>
+    <title>EC2 Cluster (via Dask) &#8212; RAPIDS Deployment Documentation  documentation</title>
   
   
   
@@ -51,11 +51,11 @@
     <script src="../../_static/design-tabs.js"></script>
     <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'cloud/azure/azure-vm-multi';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cloud/aws/ec2-multi';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Azure Machine Learning (Azure ML)" href="azureml.html" />
-    <link rel="prev" title="Azure Kubernetes Service" href="aks.html" />
+    <link rel="next" title="AWS Elastic Kubernetes Service (EKS)" href="eks.html" />
+    <link rel="prev" title="Elastic Compute Cloud (EC2)" href="ec2.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -392,19 +392,19 @@
   <div class="bd-toc-item navbar-nav">
     <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cloud</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../aws/index.html">Amazon Web Services</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../aws/ec2.html">Elastic Compute Cloud (EC2)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../aws/ec2-multi.html">EC2 Cluster (via Dask)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../aws/eks.html">AWS Elastic Kubernetes Service (EKS)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../aws/ecs.html">Elastic Container Service (ECS)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../aws/sagemaker.html">SageMaker</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Amazon Web Services</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ec2.html">Elastic Compute Cloud (EC2)</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">EC2 Cluster (via Dask)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eks.html">AWS Elastic Kubernetes Service (EKS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ecs.html">Elastic Container Service (ECS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sagemaker.html">SageMaker</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Microsoft Azure</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="azure-vm.html">Azure Virtual Machine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="aks.html">Azure Kubernetes Service</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Azure VM Cluster (via Dask)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="azureml.html">Azure Machine Learning (Azure ML)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../azure/index.html">Microsoft Azure</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../azure/azure-vm.html">Azure Virtual Machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../azure/aks.html">Azure Kubernetes Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../azure/azure-vm-multi.html">Azure VM Cluster (via Dask)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../azure/azureml.html">Azure Machine Learning (Azure ML)</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../gcp/index.html">Google Cloud Platform</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -451,76 +451,132 @@
             
             <article class="bd-article" role="main">
               
-  <section id="azure-vm-cluster-via-dask">
-<h1>Azure VM Cluster (via Dask)<a class="headerlink" href="#azure-vm-cluster-via-dask" title="Permalink to this heading">#</a></h1>
-<section id="create-a-cluster-using-dask-cloud-provider">
-<h2>Create a Cluster using Dask Cloud Provider<a class="headerlink" href="#create-a-cluster-using-dask-cloud-provider" title="Permalink to this heading">#</a></h2>
-<p>The easiest way to setup a multi-node, multi-GPU cluster on Azure is to use <a class="reference external" href="https://cloudprovider.dask.org/en/latest/azure.html">Dask Cloud Provider</a>.</p>
+  <section id="ec2-cluster-via-dask">
+<h1>EC2 Cluster (via Dask)<a class="headerlink" href="#ec2-cluster-via-dask" title="Permalink to this heading">#</a></h1>
+<p>To launch a multi-node cluster on AWS EC2 we recommend you use <a class="reference external" href="https://cloudprovider.dask.org/en/latest/">Dask Cloud Provider</a>, a native cloud integration for Dask. It helps manage Dask clusters on different cloud platforms.</p>
+<section id="local-environment-setup">
+<h2>Local Environment Setup<a class="headerlink" href="#local-environment-setup" title="Permalink to this heading">#</a></h2>
+<p>Before running these instructions, ensure you have installed RAPIDS.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method of deploying RAPIDS effectively allows you to burst beyond the node you are on into a cluster of EC2 VMs. This does come with the caveat that you are on a RAPIDS capable environment with GPUs.</p>
+</div>
+<p>If you are using a machine with an NVIDIA GPU then follow the <a class="reference internal" href="../../local.html"><span class="doc std std-doc">local install instructions</span></a>. Alternatively if you do not have a GPU locally consider using s remote environment like a <a class="reference internal" href="sagemaker.html"><span class="doc std std-doc">SageMaker Notebook Instance</span></a>.</p>
+<section id="install-the-aws-cli">
+<h3>Install the AWS CLI<a class="headerlink" href="#install-the-aws-cli" title="Permalink to this heading">#</a></h3>
+<p>Install the AWS CLI tools following the <a class="reference external" href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">official instructions</a>.</p>
+</section>
 <section id="install-dask-cloud-provider">
-<h3>1. Install Dask Cloud Provider<a class="headerlink" href="#install-dask-cloud-provider" title="Permalink to this heading">#</a></h3>
-<p>Dask Cloud Provider can be installed via <code class="docutils literal notranslate"><span class="pre">conda</span></code> or <code class="docutils literal notranslate"><span class="pre">pip</span></code>. The Azure-specific capabilities will need to be installed via the <code class="docutils literal notranslate"><span class="pre">[azure]</span></code> pip extra.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>dask-cloudprovider<span class="o">[</span>azure<span class="o">]</span>
+<h3>Install Dask Cloud Provider<a class="headerlink" href="#install-dask-cloud-provider" title="Permalink to this heading">#</a></h3>
+<p>Also install <code class="docutils literal notranslate"><span class="pre">dask-cloudprovider</span></code> and ensure you select the <code class="docutils literal notranslate"><span class="pre">aws</span></code> optional extras.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;dask-cloudprovider[aws]&quot;</span>
 </pre></div>
 </div>
 </section>
-<section id="configure-your-azure-resources">
-<h3>2. Configure your Azure Resources<a class="headerlink" href="#configure-your-azure-resources" title="Permalink to this heading">#</a></h3>
-<p>Set up your <a class="reference external" href="https://cloudprovider.dask.org/en/latest/azure.html#resource-groups">Azure Resouce Group</a>, <a class="reference external" href="https://cloudprovider.dask.org/en/latest/azure.html#virtual-networks">Virtual Network</a>, and <a class="reference external" href="https://cloudprovider.dask.org/en/latest/azure.html#security-groups">Security Group</a> according to <a class="reference external" href="https://cloudprovider.dask.org/en/latest/azure.html#authentication">Dask Cloud Provider instructions</a>.</p>
 </section>
-<section id="create-a-cluster">
-<h3>3. Create a Cluster<a class="headerlink" href="#create-a-cluster" title="Permalink to this heading">#</a></h3>
-<p>In Python terminal, a cluster can be created using the <code class="docutils literal notranslate"><span class="pre">dask_cloudprovider</span></code> package. The below example creates a cluster with 2 workers in <code class="docutils literal notranslate"><span class="pre">westus2</span></code> with <code class="docutils literal notranslate"><span class="pre">Standard_NC12s_v3</span></code> VMs. The VMs should have at least 100GB of disk space in order to accommodate the RAPIDS container image and related dependencies.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_cloudprovider.azure</span> <span class="kn">import</span> <span class="n">AzureVMCluster</span>
+<section id="cluster-setup">
+<h2>Cluster setup<a class="headerlink" href="#cluster-setup" title="Permalink to this heading">#</a></h2>
+<p>We’ll now setup the <a class="reference external" href="https://cloudprovider.dask.org/en/latest/aws.html#elastic-compute-cloud-ec2">EC2Cluster</a> from Dask Cloud Provider.</p>
+<p>To do this, you’ll first need to run <code class="docutils literal notranslate"><span class="pre">aws</span> <span class="pre">configure</span></code> and ensure the credentials are updated. <a class="reference external" href="https://cloudprovider.dask.org/en/latest/aws.html#authentication">Learn more about the setup</a>. The API also expects a security group that allows access to ports 8786-8787 and all traffic between instances in the security group. If you do not pass a group here, <code class="docutils literal notranslate"><span class="pre">dask-cloudprovider</span></code> will create one for you.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_cloudprovider.aws</span> <span class="kn">import</span> <span class="n">EC2Cluster</span>
 
-<span class="n">resource_group</span> <span class="o">=</span> <span class="s2">&quot;&lt;RESOURCE_GROUP&gt;&quot;</span>
-<span class="n">vnet</span> <span class="o">=</span> <span class="s2">&quot;&lt;VNET&gt;&quot;</span>
-<span class="n">security_group</span> <span class="o">=</span> <span class="s2">&quot;&lt;SECURITY_GROUP&gt;&quot;</span>
-<span class="n">subscription_id</span> <span class="o">=</span> <span class="s2">&quot;&lt;SUBSCRIPTION_ID&gt;&quot;</span>
-<span class="n">cluster</span> <span class="o">=</span> <span class="n">AzureVMCluster</span><span class="p">(</span>
-    <span class="n">resource_group</span><span class="o">=</span><span class="n">resource_group</span><span class="p">,</span>
-    <span class="n">vnet</span><span class="o">=</span><span class="n">vnet</span><span class="p">,</span>
-    <span class="n">security_group</span><span class="o">=</span><span class="n">security_group</span><span class="p">,</span>
-    <span class="n">subscription_id</span><span class="o">=</span><span class="n">security_group</span><span class="p">,</span>
-    <span class="n">location</span><span class="o">=</span><span class="s2">&quot;westus2&quot;</span><span class="p">,</span>
-    <span class="n">vm_size</span><span class="o">=</span><span class="s2">&quot;Standard_NC12s_v3&quot;</span><span class="p">,</span>
-    <span class="n">public_ingress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">disk_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">n_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">worker_class</span><span class="o">=</span><span class="s2">&quot;dask_cuda.CUDAWorker&quot;</span><span class="p">,</span>
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">EC2Cluster</span><span class="p">(</span>
+    <span class="n">instance_type</span><span class="o">=</span><span class="s2">&quot;g4dn.12xlarge&quot;</span><span class="p">,</span>  <span class="c1"># 4 T4 GPUs</span>
     <span class="n">docker_image</span><span class="o">=</span><span class="s2">&quot;rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9&quot;</span><span class="p">,</span>
-    <span class="n">docker_args</span><span class="o">=</span><span class="s2">&quot;-e DISABLE_JUPYTER=true -p 8787:8787 -p 8786:8786&quot;</span><span class="p">,</span>
+    <span class="n">worker_class</span><span class="o">=</span><span class="s2">&quot;dask_cuda.CUDAWorker&quot;</span><span class="p">,</span>
+    <span class="n">worker_options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rmm-managed-memory&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+    <span class="n">security_groups</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;&lt;SECURITY GROUP ID&gt;&quot;</span><span class="p">],</span>
+    <span class="n">docker_args</span><span class="o">=</span><span class="s2">&quot;--shm-size=256m -e DISABLE_JUPYTER=true&quot;</span><span class="p">,</span>
+    <span class="n">n_workers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">security</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">availability_zone</span><span class="o">=</span><span class="s2">&quot;us-east-1a&quot;</span><span class="p">,</span>
+    <span class="n">region</span><span class="o">=</span><span class="s2">&quot;us-east-1&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="test-rapids">
-<h3>4. Test RAPIDS<a class="headerlink" href="#test-rapids" title="Permalink to this heading">#</a></h3>
-<p>To test RAPIDS, create a distributed client for the cluster and query for the GPU model.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Instantiating this class can take upwards of 30 minutes. See the <a class="reference external" href="https://cloudprovider.dask.org/en/latest/packer.html">Dask docs</a> on prebuilding AMIs to speed this up.</p>
+</div>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-info sd-bg-text-info">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-info" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm6.5-.25A.75.75 0 017.25 7h1a.75.75 0 01.75.75v2.75h.25a.75.75 0 010 1.5h-2a.75.75 0 010-1.5h.25v-2h-.25a.75.75 0 01-.75-.75zM8 6a1 1 0 100-2 1 1 0 000 2z"></path></svg></span>If you have non-default credentials you may need to pass your credentials manually.<div class="sd-summary-down docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.72a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 00-1.06-1.06L12 14.44 6.28 8.72a.75.75 0 00-1.06 0z"></path></svg></div>
+<div class="sd-summary-up docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-up" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M18.78 15.28a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06L12 9.56l5.72 5.72a.75.75 0 001.06 0z"></path></svg></div>
+</summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Here’s a small utility for parsing credential profiles.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">configparser</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
+
+
+<span class="k">def</span> <span class="nf">get_aws_credentials</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">aws_profile</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">RawConfigParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.aws/config&quot;</span><span class="p">))</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">items</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;profile </span><span class="si">{</span><span class="n">aws_profile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">aws_profile</span> <span class="o">!=</span> <span class="s2">&quot;default&quot;</span> <span class="k">else</span> <span class="s2">&quot;default&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.aws/credentials&quot;</span><span class="p">))</span>
+    <span class="n">credentials</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">aws_profile</span><span class="p">)</span>
+    <span class="n">all_credentials</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="n">config</span><span class="p">,</span> <span class="o">*</span><span class="n">credentials</span><span class="p">]}</span>
+    <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">suppress</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">):</span>
+        <span class="n">all_credentials</span><span class="p">[</span><span class="s2">&quot;AWS_REGION&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_credentials</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;REGION&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">all_credentials</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">EC2Cluster</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">env_vars</span><span class="o">=</span><span class="n">get_aws_credentials</span><span class="p">(</span><span class="n">aws_profile</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+<section id="connecting-a-client">
+<h2>Connecting a client<a class="headerlink" href="#connecting-a-client" title="Permalink to this heading">#</a></h2>
+<p>Once your cluster has started you can connect a Dask client to submit work.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">get_gpu_model</span><span class="p">():</span>
-    <span class="kn">import</span> <span class="nn">pynvml</span>
-
-    <span class="n">pynvml</span><span class="o">.</span><span class="n">nvmlInit</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">pynvml</span><span class="o">.</span><span class="n">nvmlDeviceGetName</span><span class="p">(</span><span class="n">pynvml</span><span class="o">.</span><span class="n">nvmlDeviceGetHandleByIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-
-
-<span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">get_gpu_model</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Out<span class="o">[</span><span class="m">5</span><span class="o">]</span>:<span class="w"> </span>b<span class="s1">&#39;Tesla V100-PCIE-16GB&#39;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="kn">import</span> <span class="nn">dask_cudf</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">from_cudf</span><span class="p">(</span><span class="n">cudf</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">timeseries</span><span class="p">(),</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
-<section id="cleanup">
-<h3>5. Cleanup<a class="headerlink" href="#cleanup" title="Permalink to this heading">#</a></h3>
-<p>Once done with the cluster, ensure the <code class="docutils literal notranslate"><span class="pre">cluster</span></code> and <code class="docutils literal notranslate"><span class="pre">client</span></code> are closed:</p>
+<section id="clean-up">
+<h2>Clean up<a class="headerlink" href="#clean-up" title="Permalink to this heading">#</a></h2>
+<p>When you create your cluster Dask Cloud Provider will register a finalizer to shutdown the cluster. So when your Python process exits the cluster will be cleaned up.</p>
+<p>You can also explicitly shutdown the cluster with:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 <span class="n">cluster</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
+</div>
+<section id="relatedexamples">
+<h3>Related Examples<a class="headerlink" href="#relatedexamples" title="Permalink to this heading">#</a></h3>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-3 sd-g-2 sd-g-xs-2 sd-g-sm-2 sd-g-md-2 sd-g-lg-2 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text">Multi-node multi-GPU example on AWS using dask-cloudprovider</p>
+</div>
+<div class="sd-card-body docutils">
+<p class="sd-card-text"><span class="sd-sphinx-override sd-badge">cloud/aws/ec2-multi</span>
+<span class="sd-sphinx-override sd-badge">library/cuml</span>
+<span class="sd-sphinx-override sd-badge">library/dask</span>
+<span class="sd-sphinx-override sd-badge">library/numpy</span>
+<span class="sd-sphinx-override sd-badge">library/dask-ml</span>
+<span class="sd-sphinx-override sd-badge">library/cudf</span>
+<span class="sd-sphinx-override sd-badge">dataset/nyc-taxi</span>
+<span class="sd-sphinx-override sd-badge">workflow/randomforest</span>
+<span class="sd-sphinx-override sd-badge">tools/dask-cloudprovider</span></p>
+</div>
+<a class="sd-stretched-link reference internal" href="../../examples/rapids-ec2-mnmg/notebook.html"><span class="doc"></span></a></div>
+</div>
+</div>
 </div>
 </section>
 </section>
@@ -534,17 +590,17 @@
             <footer class="bd-footer-article">
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-  <a class='left-prev' id="prev-link" href="aks.html" title="previous page">
+  <a class='left-prev' id="prev-link" href="ec2.html" title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
           <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">Azure Kubernetes Service</p>
+          <p class="prev-next-title">Elastic Compute Cloud (EC2)</p>
       </div>
   </a>
-  <a class='right-next' id="next-link" href="azureml.html" title="next page">
+  <a class='right-next' id="next-link" href="eks.html" title="next page">
   <div class="prev-next-info">
       <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">Azure Machine Learning (Azure ML)</p>
+      <p class="prev-next-title">AWS Elastic Kubernetes Service (EKS)</p>
   </div>
   <i class="fa-solid fa-angle-right"></i>
   </a>
@@ -565,33 +621,40 @@
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#create-a-cluster-using-dask-cloud-provider">
-   Create a Cluster using Dask Cloud Provider
+  <a class="reference internal nav-link" href="#local-environment-setup">
+   Local Environment Setup
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#install-the-aws-cli">
+     Install the AWS CLI
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#install-dask-cloud-provider">
-     1. Install Dask Cloud Provider
+     Install Dask Cloud Provider
     </a>
    </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cluster-setup">
+   Cluster setup
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#connecting-a-client">
+   Connecting a client
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#clean-up">
+   Clean up
+  </a>
+  <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#configure-your-azure-resources">
-     2. Configure your Azure Resources
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#create-a-cluster">
-     3. Create a Cluster
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#test-rapids">
-     4. Test RAPIDS
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#cleanup">
-     5. Cleanup
+    <a class="reference internal nav-link" href="#relatedexamples">
+     Related Examples
     </a>
    </li>
   </ul>

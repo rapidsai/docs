@@ -12,6 +12,16 @@ Launch an EC2 instance and run RAPIDS.
 ````
 
 ````{grid-item-card}
+:link: /cloud/aws/ec2-multi
+:link-type: doc
+EC2 Cluster (with Dask)
+^^^
+Launch a RAPIDS cluster on EC2 with Dask.
+
+{bdg}`multi-node`
+````
+
+````{grid-item-card}
 :link: /cloud/aws/eks
 :link-type: doc
 Elastic Kubernetes Service (EKS)
