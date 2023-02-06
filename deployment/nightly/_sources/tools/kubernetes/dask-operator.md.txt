@@ -331,7 +331,7 @@ cluster = KubeCluster(
     name="rapids-dask",
     image="rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9",
     n_workers=3,
-    resources={"limit": {"nvidia.com/gpu": "1"}},
+    resources={"limits": {"nvidia.com/gpu": "1"}},
     env={"DISABLE_JUPYTER": "true"},
     worker_command="dask-cuda-worker",
 )
