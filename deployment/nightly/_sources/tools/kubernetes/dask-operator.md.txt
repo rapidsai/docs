@@ -327,12 +327,14 @@ In additon to creating clusters via `kubectl` you can also do so from Python wit
 ```python
 from dask_kubernetes.experimental import KubeCluster
 
-cluster = KubeCluster(name="rapids-dask",
-                      image="rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9",
-                      n_workers=3,
-                      resources={"limit": {"nvidia.com/gpu": "1"}},
-                      env={"DISABLE_JUPYTER": "true"},
-                      worker_command="dask-cuda-worker")
+cluster = KubeCluster(
+    name="rapids-dask",
+    image="rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9",
+    n_workers=3,
+    resources={"limit": {"nvidia.com/gpu": "1"}},
+    env={"DISABLE_JUPYTER": "true"},
+    worker_command="dask-cuda-worker",
+)
 ```
 
 If we check with `kubectl` we can see the above Python generated the same `DaskCluster` resource as the `kubectl` example above.

@@ -623,14 +623,17 @@ Successfully installed Mako-1.2.4 PrettyTable-3.5.0 alembic-1.8.1 autopage-0.5.1
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_kubernetes.operator</span> <span class="kn">import</span> <span class="n">KubeCluster</span>
 
-<span class="n">cluster</span> <span class="o">=</span> <span class="n">KubeCluster</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;rapids-dask&quot;</span><span class="p">,</span>
-                      <span class="n">image</span><span class="o">=</span><span class="n">rapids_image</span><span class="p">,</span>
-                      <span class="n">worker_command</span><span class="o">=</span><span class="s2">&quot;dask-cuda-worker&quot;</span><span class="p">,</span>
-                      <span class="n">n_workers</span><span class="o">=</span><span class="n">n_workers</span><span class="p">,</span>
-                      <span class="n">resources</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;limits&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;nvidia.com/gpu&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">}},</span>
-                      <span class="n">env</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;DISABLE_JUPYTER&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
-                           <span class="s2">&quot;EXTRA_PIP_PACKAGES&quot;</span><span class="p">:</span>
-                               <span class="s2">&quot;git+https://github.com/optuna/optuna.git@bc6c05dc655aab7e7a02e91e7306609f2a4524ec&quot;</span><span class="p">})</span>
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">KubeCluster</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;rapids-dask&quot;</span><span class="p">,</span>
+    <span class="n">image</span><span class="o">=</span><span class="n">rapids_image</span><span class="p">,</span>
+    <span class="n">worker_command</span><span class="o">=</span><span class="s2">&quot;dask-cuda-worker&quot;</span><span class="p">,</span>
+    <span class="n">n_workers</span><span class="o">=</span><span class="n">n_workers</span><span class="p">,</span>
+    <span class="n">resources</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;limits&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;nvidia.com/gpu&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">}},</span>
+    <span class="n">env</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;DISABLE_JUPYTER&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EXTRA_PIP_PACKAGES&quot;</span><span class="p">:</span> <span class="s2">&quot;git+https://github.com/optuna/optuna.git@bc6c05dc655aab7e7a02e91e7306609f2a4524ec&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -694,7 +697,7 @@ client_session: &lt;aiohttp.client.ClientSession object at 0x7f0b4652b130&gt;
             <span class="s2">&quot;futures&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">study</span><span class="o">.</span><span class="n">optimize</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">n_trials</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pure</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">*</span><span class="n">iter_range</span><span class="p">)</span>
-            <span class="p">]</span>
+            <span class="p">],</span>
         <span class="p">}</span>
     <span class="p">)</span>
 <span class="k">for</span> <span class="n">partition</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">:</span>
@@ -755,6 +758,7 @@ Testing hyperparameter combinations 96..100
 <span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
 <span class="kn">from</span> <span class="nn">optuna.samplers</span> <span class="kn">import</span> <span class="n">RandomSampler</span>
 
+
 <span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
     <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_breast_cancer</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
@@ -769,16 +773,18 @@ Testing hyperparameter combinations 96..100
         <span class="s2">&quot;colsample_bytree&quot;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s2">&quot;colsample_bytree&quot;</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
         <span class="s2">&quot;max_depth&quot;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_int</span><span class="p">(</span><span class="s2">&quot;max_depth&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
         <span class="c1"># minimum child weight, larger the term more conservative the tree.</span>
-        <span class="s2">&quot;min_child_weight&quot;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s2">&quot;min_child_weight&quot;</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="s2">&quot;min_child_weight&quot;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span>
+            <span class="s2">&quot;min_child_weight&quot;</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">),</span>
         <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
         <span class="c1"># defines how selective algorithm is.</span>
         <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s2">&quot;gamma&quot;</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
         <span class="s2">&quot;grow_policy&quot;</span><span class="p">:</span> <span class="s2">&quot;depthwise&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;eval_metric&quot;</span><span class="p">:</span> <span class="s2">&quot;logloss&quot;</span>
+        <span class="s2">&quot;eval_metric&quot;</span><span class="p">:</span> <span class="s2">&quot;logloss&quot;</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">clf</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
     <span class="n">fold</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">score</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">fold</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_log_loss&#39;</span><span class="p">)</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">fold</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;neg_log_loss&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">score</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -792,9 +798,9 @@ Testing hyperparameter combinations 96..100
 <span class="c1"># Optimize in parallel on your Dask cluster</span>
 <span class="n">backend_storage</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">storages</span><span class="o">.</span><span class="n">InMemoryStorage</span><span class="p">()</span>
 <span class="n">dask_storage</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">integration</span><span class="o">.</span><span class="n">DaskStorage</span><span class="p">(</span><span class="n">storage</span><span class="o">=</span><span class="n">backend_storage</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
-<span class="n">study</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">create_study</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;maximize&quot;</span><span class="p">,</span>
-                            <span class="n">sampler</span><span class="o">=</span><span class="n">RandomSampler</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-                            <span class="n">storage</span><span class="o">=</span><span class="n">dask_storage</span><span class="p">)</span>
+<span class="n">study</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">create_study</span><span class="p">(</span>
+    <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;maximize&quot;</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">RandomSampler</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">storage</span><span class="o">=</span><span class="n">dask_storage</span>
+<span class="p">)</span>
 <span class="n">futures</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_trials</span><span class="p">,</span> <span class="n">n_workers</span> <span class="o">*</span> <span class="mi">4</span><span class="p">):</span>
     <span class="n">iter_range</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">min</span><span class="p">([</span><span class="n">i</span> <span class="o">+</span> <span class="n">n_workers</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="n">n_trials</span><span class="p">]))</span>
@@ -804,7 +810,7 @@ Testing hyperparameter combinations 96..100
             <span class="s2">&quot;futures&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">study</span><span class="o">.</span><span class="n">optimize</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">n_trials</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pure</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">*</span><span class="n">iter_range</span><span class="p">)</span>
-            <span class="p">]</span>
+            <span class="p">],</span>
         <span class="p">}</span>
     <span class="p">)</span>
 <span class="k">for</span> <span class="n">partition</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">:</span>
@@ -872,7 +878,10 @@ Testing hyperparameter combinations 240..250
 <p>Let’s visualize the progress made by hyperparameter optimization.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">optuna.visualization.matplotlib</span> <span class="kn">import</span> <span class="n">plot_optimization_history</span><span class="p">,</span> <span class="n">plot_param_importances</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">optuna.visualization.matplotlib</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">plot_optimization_history</span><span class="p">,</span>
+    <span class="n">plot_param_importances</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1003,14 +1012,6 @@ Testing hyperparameter combinations 240..250
 <nav id="bd-toc-nav" class="page-toc">
   <div class="tagwrapper">
     
-    <a href="../?filters=workflow/hpo">
-      <span class="sd-sphinx-override sd-badge">workflow/hpo</span>
-    </a>
-    
-    <a href="../?filters=library/scikit-learn">
-      <span class="sd-sphinx-override sd-badge">library/scikit-learn</span>
-    </a>
-    
     <a href="../?filters=library/xgboost">
       <span class="sd-sphinx-override sd-badge">library/xgboost</span>
     </a>
@@ -1033,6 +1034,14 @@ Testing hyperparameter combinations 240..250
     
     <a href="../?filters=platform/kubeflow">
       <span class="sd-sphinx-override sd-badge">platform/kubeflow</span>
+    </a>
+    
+    <a href="../?filters=library/scikit-learn">
+      <span class="sd-sphinx-override sd-badge">library/scikit-learn</span>
+    </a>
+    
+    <a href="../?filters=workflow/hpo">
+      <span class="sd-sphinx-override sd-badge">workflow/hpo</span>
     </a>
     
   </div>

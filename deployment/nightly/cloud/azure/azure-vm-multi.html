@@ -470,6 +470,7 @@
 <h3>3. Create a Cluster<a class="headerlink" href="#create-a-cluster" title="Permalink to this heading">#</a></h3>
 <p>In Python terminal, a cluster can be created using the <code class="docutils literal notranslate"><span class="pre">dask_cloudprovider</span></code> package. The below example creates a cluster with 2 workers in <code class="docutils literal notranslate"><span class="pre">westus2</span></code> with <code class="docutils literal notranslate"><span class="pre">Standard_NC12s_v3</span></code> VMs. The VMs should have at least 100GB of disk space in order to accommodate the RAPIDS container image and related dependencies.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_cloudprovider.azure</span> <span class="kn">import</span> <span class="n">AzureVMCluster</span>
+
 <span class="n">resource_group</span> <span class="o">=</span> <span class="s2">&quot;&lt;RESOURCE_GROUP&gt;&quot;</span>
 <span class="n">vnet</span> <span class="o">=</span> <span class="s2">&quot;&lt;VNET&gt;&quot;</span>
 <span class="n">security_group</span> <span class="o">=</span> <span class="s2">&quot;&lt;SECURITY_GROUP&gt;&quot;</span>
@@ -495,12 +496,17 @@
 <h3>4. Test RAPIDS<a class="headerlink" href="#test-rapids" title="Permalink to this heading">#</a></h3>
 <p>To test RAPIDS, create a distributed client for the cluster and query for the GPU model.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
 
+
 <span class="k">def</span> <span class="nf">get_gpu_model</span><span class="p">():</span>
-   <span class="kn">import</span> <span class="nn">pynvml</span>
-   <span class="n">pynvml</span><span class="o">.</span><span class="n">nvmlInit</span><span class="p">()</span>
-   <span class="k">return</span> <span class="n">pynvml</span><span class="o">.</span><span class="n">nvmlDeviceGetName</span><span class="p">(</span><span class="n">pynvml</span><span class="o">.</span><span class="n">nvmlDeviceGetHandleByIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+    <span class="kn">import</span> <span class="nn">pynvml</span>
+
+    <span class="n">pynvml</span><span class="o">.</span><span class="n">nvmlInit</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">pynvml</span><span class="o">.</span><span class="n">nvmlDeviceGetName</span><span class="p">(</span><span class="n">pynvml</span><span class="o">.</span><span class="n">nvmlDeviceGetHandleByIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+
 <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">get_gpu_model</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
 </pre></div>
 </div>

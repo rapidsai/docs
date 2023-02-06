@@ -265,14 +265,17 @@
    "source": [
     "from dask_kubernetes.operator import KubeCluster\n",
     "\n",
-    "cluster = KubeCluster(name=\"rapids-dask\",\n",
-    "                      image=rapids_image,\n",
-    "                      worker_command=\"dask-cuda-worker\",\n",
-    "                      n_workers=n_workers,\n",
-    "                      resources={\"limits\": {\"nvidia.com/gpu\": \"1\"}},\n",
-    "                      env={\"DISABLE_JUPYTER\": \"true\",\n",
-    "                           \"EXTRA_PIP_PACKAGES\":\n",
-    "                               \"git+https://github.com/optuna/optuna.git@bc6c05dc655aab7e7a02e91e7306609f2a4524ec\"})"
+    "cluster = KubeCluster(\n",
+    "    name=\"rapids-dask\",\n",
+    "    image=rapids_image,\n",
+    "    worker_command=\"dask-cuda-worker\",\n",
+    "    n_workers=n_workers,\n",
+    "    resources={\"limits\": {\"nvidia.com/gpu\": \"1\"}},\n",
+    "    env={\n",
+    "        \"DISABLE_JUPYTER\": \"true\",\n",
+    "        \"EXTRA_PIP_PACKAGES\": \"git+https://github.com/optuna/optuna.git@bc6c05dc655aab7e7a02e91e7306609f2a4524ec\",\n",
+    "    },\n",
+    ")"
    ]
   },
   {
@@ -472,7 +475,7 @@
     "            \"futures\": [\n",
     "                client.submit(study.optimize, objective, n_trials=1, pure=False)\n",
     "                for _ in range(*iter_range)\n",
-    "            ]\n",
+    "            ],\n",
     "        }\n",
     "    )\n",
     "for partition in futures:\n",
@@ -551,6 +554,7 @@
     "import xgboost as xgb\n",
     "from optuna.samplers import RandomSampler\n",
     "\n",
+    "\n",
     "def objective(trial):\n",
     "    X, y = load_breast_cancer(return_X_y=True)\n",
     "    params = {\n",
@@ -565,16 +569,18 @@
     "        \"colsample_bytree\": trial.suggest_float(\"colsample_bytree\", 0.2, 1.0),\n",
     "        \"max_depth\": trial.suggest_int(\"max_depth\", 2, 10, step=1),\n",
     "        # minimum child weight, larger the term more conservative the tree.\n",
-    "        \"min_child_weight\": trial.suggest_float(\"min_child_weight\", 1e-8, 100, log=True),\n",
+    "        \"min_child_weight\": trial.suggest_float(\n",
+    "            \"min_child_weight\", 1e-8, 100, log=True\n",
+    "        ),\n",
     "        \"learning_rate\": trial.suggest_float(\"learning_rate\", 1e-8, 1.0, log=True),\n",
     "        # defines how selective algorithm is.\n",
     "        \"gamma\": trial.suggest_float(\"gamma\", 1e-8, 1.0, log=True),\n",
     "        \"grow_policy\": \"depthwise\",\n",
-    "        \"eval_metric\": \"logloss\"\n",
+    "        \"eval_metric\": \"logloss\",\n",
     "    }\n",
     "    clf = xgb.XGBClassifier(**params)\n",
     "    fold = KFold(n_splits=5, shuffle=True, random_state=0)\n",
-    "    score = cross_val_score(clf, X, y, cv=fold, scoring='neg_log_loss')\n",
+    "    score = cross_val_score(clf, X, y, cv=fold, scoring=\"neg_log_loss\")\n",
     "    return score.mean()"
    ]
   },
@@ -625,9 +631,9 @@
     "# Optimize in parallel on your Dask cluster\n",
     "backend_storage = optuna.storages.InMemoryStorage()\n",
     "dask_storage = optuna.integration.DaskStorage(storage=backend_storage, client=client)\n",
-    "study = optuna.create_study(direction=\"maximize\",\n",
-    "                            sampler=RandomSampler(seed=0),\n",
-    "                            storage=dask_storage)\n",
+    "study = optuna.create_study(\n",
+    "    direction=\"maximize\", sampler=RandomSampler(seed=0), storage=dask_storage\n",
+    ")\n",
     "futures = []\n",
     "for i in range(0, n_trials, n_workers * 4):\n",
     "    iter_range = (i, min([i + n_workers * 4, n_trials]))\n",
@@ -637,7 +643,7 @@
     "            \"futures\": [\n",
     "                client.submit(study.optimize, objective, n_trials=1, pure=False)\n",
     "                for _ in range(*iter_range)\n",
-    "            ]\n",
+    "            ],\n",
     "        }\n",
     "    )\n",
     "for partition in futures:\n",
@@ -709,7 +715,10 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "from optuna.visualization.matplotlib import plot_optimization_history, plot_param_importances"
+    "from optuna.visualization.matplotlib import (\n",
+    "    plot_optimization_history,\n",
+    "    plot_param_importances,\n",
+    ")"
    ]
   },
   {

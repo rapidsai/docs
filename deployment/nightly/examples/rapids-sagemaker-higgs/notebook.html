@@ -450,7 +450,7 @@
 <span class="n">session</span> <span class="o">=</span> <span class="n">sagemaker</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
 
 <span class="n">region</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span><span class="o">.</span><span class="n">region_name</span>
-<span class="n">account</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s1">&#39;sts&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_caller_identity</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Account&#39;</span><span class="p">)</span>
+<span class="n">account</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;sts&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_caller_identity</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Account&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -476,7 +476,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s3_data_dir</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">upload_data</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;dataset&#39;</span><span class="p">,</span> <span class="n">key_prefix</span><span class="o">=</span><span class="s1">&#39;dataset/higgs-dataset&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s3_data_dir</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">upload_data</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="n">key_prefix</span><span class="o">=</span><span class="s2">&quot;dataset/higgs-dataset&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -506,9 +506,9 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">estimator_info</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;rapids_container&#39;</span><span class="p">:</span><span class="s1">&#39;rapidsai/rapidsai-nightly:22.12-cuda11.5-runtime-ubuntu18.04-py3.9&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;ecr_image&#39;</span><span class="p">:</span><span class="s1">&#39;sagemaker-rapids-nightly&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;ecr_repository&#39;</span><span class="p">:</span><span class="s1">&#39;sagemaker-rapids-nightly&#39;</span>
+    <span class="s2">&quot;rapids_container&quot;</span><span class="p">:</span> <span class="s2">&quot;rapidsai/rapidsai-nightly:22.12-cuda11.5-runtime-ubuntu18.04-py3.9&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ecr_image&quot;</span><span class="p">:</span> <span class="s2">&quot;sagemaker-rapids-nightly&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ecr_repository&quot;</span><span class="p">:</span> <span class="s2">&quot;sagemaker-rapids-nightly&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -531,7 +531,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#FROM rapidsai/rapidsai-cloud-ml:latest</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># FROM rapidsai/rapidsai-cloud-ml:latest</span>
 <span class="c1">#!docker build -t sagemaker-rapids:latest docker</span>
 </pre></div>
 </div>
@@ -559,14 +559,16 @@ the SageMaker-compatible <br />
 RAPIDS container to the Amazon Elastic Container Registry.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ECR_container_fullname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">account</span><span class="si">}</span><span class="s2">.dkr.ecr.</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">.amazonaws.com/</span><span class="si">{</span><span class="n">estimator_info</span><span class="p">[</span><span class="s1">&#39;ecr_image&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ECR_container_fullname</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">account</span><span class="si">}</span><span class="s2">.dkr.ecr.</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">.amazonaws.com/</span><span class="si">{</span><span class="n">estimator_info</span><span class="p">[</span><span class="s1">&#39;ecr_image&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ECR_container_fullname</span> 
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ECR_container_fullname</span>
 </pre></div>
 </div>
 </div>
@@ -580,8 +582,10 @@ RAPIDS container to the Amazon Elastic Container Registry.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s2">&quot;source      : </span><span class="si">{</span><span class="n">estimator_info</span><span class="p">[</span><span class="s1">&#39;rapids_container&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-       <span class="sa">f</span><span class="s2">&quot;destination : </span><span class="si">{</span><span class="n">ECR_container_fullname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;source      : </span><span class="si">{</span><span class="n">estimator_info</span><span class="p">[</span><span class="s1">&#39;rapids_container&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="sa">f</span><span class="s2">&quot;destination : </span><span class="si">{</span><span class="n">ECR_container_fullname</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -615,14 +619,14 @@ RAPIDS container to the Amazon Elastic Container Registry.</p>
 https://docs.rapids.ai/api/cuml/stable/api.html#random-forest</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hyperparams</span><span class="o">=</span><span class="p">{</span> 
-    <span class="s1">&#39;n_estimators&#39;</span>       <span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
-    <span class="s1">&#39;max_depth&#39;</span>          <span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="s1">&#39;n_bins&#39;</span>             <span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
-    <span class="s1">&#39;split_criterion&#39;</span>    <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># GINI:0, ENTROPY:1</span>
-    <span class="s1">&#39;bootstrap&#39;</span>          <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="c1"># true: sample with replacement, false: sample without replacement</span>
-    <span class="s1">&#39;max_leaves&#39;</span>         <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>     <span class="c1"># unlimited leaves</span>
-    <span class="s1">&#39;max_features&#39;</span>       <span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> 
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hyperparams</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+    <span class="s2">&quot;max_depth&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s2">&quot;n_bins&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="s2">&quot;split_criterion&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>  <span class="c1"># GINI:0, ENTROPY:1</span>
+    <span class="s2">&quot;bootstrap&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>  <span class="c1"># true: sample with replacement, false: sample without replacement</span>
+    <span class="s2">&quot;max_leaves&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># unlimited leaves</span>
+    <span class="s2">&quot;max_features&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -632,12 +636,14 @@ https://docs.rapids.ai/api/cuml/stable/api.html#random-forest</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sagemaker.estimator</span> <span class="kn">import</span> <span class="n">Estimator</span>
 
-<span class="n">rapids_estimator</span> <span class="o">=</span> <span class="n">Estimator</span><span class="p">(</span><span class="n">image_uri</span><span class="o">=</span><span class="n">ECR_container_fullname</span><span class="p">,</span>
-                          <span class="n">role</span><span class="o">=</span><span class="n">execution_role</span><span class="p">,</span>
-                          <span class="n">instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                          <span class="n">instance_type</span><span class="o">=</span><span class="s1">&#39;ml.g4dn.4xlarge&#39;</span><span class="p">,</span>
-                          <span class="n">hyperparameters</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">,</span>
-                          <span class="n">metric_definitions</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;test_acc&#39;</span><span class="p">,</span> <span class="s1">&#39;Regex&#39;</span><span class="p">:</span> <span class="s1">&#39;test_acc: ([0-9</span><span class="se">\\</span><span class="s1">.]+)&#39;</span><span class="p">}])</span>
+<span class="n">rapids_estimator</span> <span class="o">=</span> <span class="n">Estimator</span><span class="p">(</span>
+    <span class="n">image_uri</span><span class="o">=</span><span class="n">ECR_container_fullname</span><span class="p">,</span>
+    <span class="n">role</span><span class="o">=</span><span class="n">execution_role</span><span class="p">,</span>
+    <span class="n">instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">instance_type</span><span class="o">=</span><span class="s2">&quot;ml.g4dn.4xlarge&quot;</span><span class="p">,</span>
+    <span class="n">hyperparameters</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">,</span>
+    <span class="n">metric_definitions</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;test_acc&quot;</span><span class="p">,</span> <span class="s2">&quot;Regex&quot;</span><span class="p">:</span> <span class="s2">&quot;test_acc: ([0-9</span><span class="se">\\</span><span class="s2">.]+)&quot;</span><span class="p">}],</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -645,22 +651,27 @@ https://docs.rapids.ai/api/cuml/stable/api.html#random-forest</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
-<span class="n">rapids_estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">inputs</span> <span class="o">=</span> <span class="n">s3_data_dir</span><span class="p">)</span>
+<span class="n">rapids_estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">s3_data_dir</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sagemaker.tuner</span> <span class="kn">import</span> <span class="n">IntegerParameter</span><span class="p">,</span> <span class="n">CategoricalParameter</span><span class="p">,</span> <span class="n">ContinuousParameter</span><span class="p">,</span> <span class="n">HyperparameterTuner</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sagemaker.tuner</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">IntegerParameter</span><span class="p">,</span>
+    <span class="n">CategoricalParameter</span><span class="p">,</span>
+    <span class="n">ContinuousParameter</span><span class="p">,</span>
+    <span class="n">HyperparameterTuner</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">hyperparameter_ranges</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;n_estimators&#39;</span>        <span class="p">:</span> <span class="n">IntegerParameter</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> 
-    <span class="s1">&#39;max_depth&#39;</span>           <span class="p">:</span> <span class="n">IntegerParameter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">22</span><span class="p">),</span>
-    <span class="s1">&#39;n_bins&#39;</span>              <span class="p">:</span> <span class="n">IntegerParameter</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">24</span><span class="p">),</span>
-    <span class="s1">&#39;split_criterion&#39;</span>     <span class="p">:</span> <span class="n">CategoricalParameter</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
-    <span class="s1">&#39;bootstrap&#39;</span>           <span class="p">:</span> <span class="n">CategoricalParameter</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]),</span>
-    <span class="s1">&#39;max_features&#39;</span>        <span class="p">:</span> <span class="n">ContinuousParameter</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
+    <span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="n">IntegerParameter</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>
+    <span class="s2">&quot;max_depth&quot;</span><span class="p">:</span> <span class="n">IntegerParameter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">22</span><span class="p">),</span>
+    <span class="s2">&quot;n_bins&quot;</span><span class="p">:</span> <span class="n">IntegerParameter</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">24</span><span class="p">),</span>
+    <span class="s2">&quot;split_criterion&quot;</span><span class="p">:</span> <span class="n">CategoricalParameter</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+    <span class="s2">&quot;bootstrap&quot;</span><span class="p">:</span> <span class="n">CategoricalParameter</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]),</span>
+    <span class="s2">&quot;max_features&quot;</span><span class="p">:</span> <span class="n">ContinuousParameter</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -670,34 +681,38 @@ https://docs.rapids.ai/api/cuml/stable/api.html#random-forest</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sagemaker.estimator</span> <span class="kn">import</span> <span class="n">Estimator</span>
 
-<span class="n">rapids_estimator</span> <span class="o">=</span> <span class="n">Estimator</span><span class="p">(</span><span class="n">image_uri</span><span class="o">=</span><span class="n">image</span><span class="p">,</span>
-                          <span class="n">role</span><span class="o">=</span><span class="n">execution_role</span><span class="p">,</span>
-                          <span class="n">instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                          <span class="n">instance_type</span><span class="o">=</span><span class="s1">&#39;ml.p3.2xlarge&#39;</span><span class="p">,</span>
-                          <span class="n">hyperparameters</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">,</span>
-                          <span class="n">metric_definitions</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;test_acc&#39;</span><span class="p">,</span> <span class="s1">&#39;Regex&#39;</span><span class="p">:</span> <span class="s1">&#39;test_acc: ([0-9</span><span class="se">\\</span><span class="s1">.]+)&#39;</span><span class="p">}])</span>
+<span class="n">rapids_estimator</span> <span class="o">=</span> <span class="n">Estimator</span><span class="p">(</span>
+    <span class="n">image_uri</span><span class="o">=</span><span class="n">image</span><span class="p">,</span>
+    <span class="n">role</span><span class="o">=</span><span class="n">execution_role</span><span class="p">,</span>
+    <span class="n">instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">instance_type</span><span class="o">=</span><span class="s2">&quot;ml.p3.2xlarge&quot;</span><span class="p">,</span>
+    <span class="n">hyperparameters</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">,</span>
+    <span class="n">metric_definitions</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;test_acc&quot;</span><span class="p">,</span> <span class="s2">&quot;Regex&quot;</span><span class="p">:</span> <span class="s2">&quot;test_acc: ([0-9</span><span class="se">\\</span><span class="s2">.]+)&quot;</span><span class="p">}],</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tuner</span> <span class="o">=</span> <span class="n">HyperparameterTuner</span><span class="p">(</span><span class="n">rapids_estimator</span><span class="p">,</span>
-                            <span class="n">objective_metric_name</span><span class="o">=</span><span class="s1">&#39;test_acc&#39;</span><span class="p">,</span>
-                            <span class="n">hyperparameter_ranges</span><span class="o">=</span><span class="n">hyperparameter_ranges</span><span class="p">,</span>
-                            <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;Bayesian&#39;</span><span class="p">,</span>
-                            <span class="n">max_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                            <span class="n">max_parallel_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                            <span class="n">objective_type</span><span class="o">=</span><span class="s1">&#39;Maximize&#39;</span><span class="p">,</span>
-                            <span class="n">metric_definitions</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;test_acc&#39;</span><span class="p">,</span> <span class="s1">&#39;Regex&#39;</span><span class="p">:</span> <span class="s1">&#39;test_acc: ([0-9</span><span class="se">\\</span><span class="s1">.]+)&#39;</span><span class="p">}])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tuner</span> <span class="o">=</span> <span class="n">HyperparameterTuner</span><span class="p">(</span>
+    <span class="n">rapids_estimator</span><span class="p">,</span>
+    <span class="n">objective_metric_name</span><span class="o">=</span><span class="s2">&quot;test_acc&quot;</span><span class="p">,</span>
+    <span class="n">hyperparameter_ranges</span><span class="o">=</span><span class="n">hyperparameter_ranges</span><span class="p">,</span>
+    <span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;Bayesian&quot;</span><span class="p">,</span>
+    <span class="n">max_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">max_parallel_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">objective_type</span><span class="o">=</span><span class="s2">&quot;Maximize&quot;</span><span class="p">,</span>
+    <span class="n">metric_definitions</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;test_acc&quot;</span><span class="p">,</span> <span class="s2">&quot;Regex&quot;</span><span class="p">:</span> <span class="s2">&quot;test_acc: ([0-9</span><span class="se">\\</span><span class="s2">.]+)&quot;</span><span class="p">}],</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job_name</span> <span class="o">=</span> <span class="s1">&#39;rapidsHPO&#39;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">-%H-%M-%S-%j&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">())</span>
-<span class="n">tuner</span><span class="o">.</span><span class="n">fit</span><span class="p">({</span><span class="s1">&#39;dataset&#39;</span><span class="p">:</span> <span class="n">s3_data_dir</span><span class="p">},</span> <span class="n">job_name</span><span class="o">=</span><span class="n">job_name</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job_name</span> <span class="o">=</span> <span class="s2">&quot;rapidsHPO&quot;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">-%H-%M-%S-%j&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">())</span>
+<span class="n">tuner</span><span class="o">.</span><span class="n">fit</span><span class="p">({</span><span class="s2">&quot;dataset&quot;</span><span class="p">:</span> <span class="n">s3_data_dir</span><span class="p">},</span> <span class="n">job_name</span><span class="o">=</span><span class="n">job_name</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -827,12 +842,16 @@ https://docs.rapids.ai/api/cuml/stable/api.html#random-forest</p>
 <nav id="bd-toc-nav" class="page-toc">
   <div class="tagwrapper">
     
-    <a href="../?filters=cloud/aws/sagemaker">
-      <span class="sd-sphinx-override sd-badge">cloud/aws/sagemaker</span>
+    <a href="../?filters=library/scikit-learn">
+      <span class="sd-sphinx-override sd-badge">library/scikit-learn</span>
     </a>
     
     <a href="../?filters=workflow/hpo">
       <span class="sd-sphinx-override sd-badge">workflow/hpo</span>
+    </a>
+    
+    <a href="../?filters=cloud/aws/sagemaker">
+      <span class="sd-sphinx-override sd-badge">cloud/aws/sagemaker</span>
     </a>
     
     <a href="../?filters=library/cudf">
@@ -841,10 +860,6 @@ https://docs.rapids.ai/api/cuml/stable/api.html#random-forest</p>
     
     <a href="../?filters=library/cuml">
       <span class="sd-sphinx-override sd-badge">library/cuml</span>
-    </a>
-    
-    <a href="../?filters=library/scikit-learn">
-      <span class="sd-sphinx-override sd-badge">library/scikit-learn</span>
     </a>
     
   </div>

@@ -152,12 +152,14 @@ This can take a similar amount of time to starting up the notebook container as 
 ```python
 from dask_kubernetes.experimental import KubeCluster
 
-cluster = KubeCluster(name="rapids-dask",
-                      image="rapidsai/rapidsai-core:22.06-cuda11.4-runtime-ubuntu20.04-py3.9",
-                      worker_command="dask-cuda-worker",
-                      n_workers=2,
-                      resources={"limits": {"nvidia.com/gpu": "1"}},
-                      env={"DISABLE_JUPYTER": "true"})
+cluster = KubeCluster(
+    name="rapids-dask",
+    image="rapidsai/rapidsai-core:22.06-cuda11.4-runtime-ubuntu20.04-py3.9",
+    worker_command="dask-cuda-worker",
+    n_workers=2,
+    resources={"limits": {"nvidia.com/gpu": "1"}},
+    env={"DISABLE_JUPYTER": "true"},
+)
 ```
 
 ```{figure} /images/kubeflow-jupyter-dask-cluster-widget.png

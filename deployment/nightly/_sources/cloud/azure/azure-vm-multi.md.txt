@@ -22,6 +22,7 @@ In Python terminal, a cluster can be created using the `dask_cloudprovider` pack
 
 ```python
 from dask_cloudprovider.azure import AzureVMCluster
+
 resource_group = "<RESOURCE_GROUP>"
 vnet = "<VNET>"
 security_group = "<SECURITY_GROUP>"
@@ -48,12 +49,17 @@ To test RAPIDS, create a distributed client for the cluster and query for the GP
 
 ```python
 from dask.distributed import Client
+
 client = Client(cluster)
 
+
 def get_gpu_model():
-   import pynvml
-   pynvml.nvmlInit()
-   return pynvml.nvmlDeviceGetName(pynvml.nvmlDeviceGetHandleByIndex(0))
+    import pynvml
+
+    pynvml.nvmlInit()
+    return pynvml.nvmlDeviceGetName(pynvml.nvmlDeviceGetHandleByIndex(0))
+
+
 client.submit(get_gpu_model).result()
 ```
 

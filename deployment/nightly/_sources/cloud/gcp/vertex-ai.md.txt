@@ -36,10 +36,11 @@ Once the managed notebook is fully configured, you can click **OPEN JUPYTERLAB**
 
 For example we could import and use RAPIDS libraries like `cudf`.
 
-```python
-import cudf
-df = cudf.datasets.timeseries()
-df.head()
+```ipython
+In [1]: import cudf
+In [2]: df = cudf.datasets.timeseries()
+In [3]: df.head()
+Out[3]:
                        id     name         x         y
 timestamp
 2000-01-01 00:00:00  1020    Kevin  0.091536  0.664482

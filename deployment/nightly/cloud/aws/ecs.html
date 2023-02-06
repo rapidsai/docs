@@ -498,10 +498,10 @@ for the cluster creation to complete.</p>
 <p>[REGION] = code fo the region being used.</p>
 <p>Create the ECSCluster object in your Python session:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_cloudprovider.aws</span> <span class="kn">import</span> <span class="n">ECSCluster</span>
-<span class="n">cluster</span> <span class="o">=</span> <span class="n">ECSCluster</span><span class="p">(</span><span class="n">cluster_arn</span><span class="o">=</span><span class="p">[</span><span class="n">CLUSTER_ARN</span><span class="p">],</span>
-                     <span class="n">n_workers</span><span class="o">=</span><span class="p">[</span><span class="n">NUM_WORKERS</span><span class="p">],</span>
-                     <span class="n">worker_gpu</span><span class="o">=</span><span class="p">[</span><span class="n">NUM_GPUS</span><span class="p">]</span>
-                     <span class="p">)</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">ECSCluster</span><span class="p">(</span>
+    <span class="n">cluster_arn</span><span class="o">=</span><span class="p">[</span><span class="n">CLUSTER_ARN</span><span class="p">],</span> <span class="n">n_workers</span><span class="o">=</span><span class="p">[</span><span class="n">NUM_WORKERS</span><span class="p">],</span> <span class="n">worker_gpu</span><span class="o">=</span><span class="p">[</span><span class="n">NUM_GPUS</span><span class="p">]</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <p>[CLUSTER_ARN] = The ARN of an existing ECS cluster to use for launching tasks <br />
@@ -509,14 +509,16 @@ for the cluster creation to complete.</p>
 [NUM_GPUS] = The number of GPUs to expose to the worker, this must be less than or equal to the number of GPUs in the instance type you selected for the ECS cluster (e.g <code class="docutils literal notranslate"><span class="pre">1</span></code> for <code class="docutils literal notranslate"><span class="pre">p3.2xlarge</span></code>).</p>
 <p><strong>5. Test RAPIDS.</strong> Create a distributed client for our cluster:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Load sample data and test the cluster!</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dask</span><span class="o">,</span> <span class="nn">cudf</span><span class="o">,</span> <span class="nn">dask_cudf</span>
+
 <span class="n">ddf</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">timeseries</span><span class="p">()</span>
 <span class="n">gdf</span> <span class="o">=</span> <span class="n">ddf</span><span class="o">.</span><span class="n">map_partitions</span><span class="p">(</span><span class="n">cudf</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">)</span>
-<span class="n">gdf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Out<span class="o">[</span><span class="m">34</span><span class="o">]</span>:

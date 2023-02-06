@@ -28,14 +28,15 @@ User may create dask-cuda cluster either via `KubeCluster` interface:
 
 ```python
 from dask_kubernetes import KubeCluster, make_pod_spec
+
 gpu_worker_spec = make_pod_spec(
-    image='nvcr.io/nvidia/rapidsai/rapidsai-core:22.08-cuda11.5-runtime-ubuntu20.04-py3.9',
-    env={"DISABLE_JUPYTER":"true"},
+    image="nvcr.io/nvidia/rapidsai/rapidsai-core:22.08-cuda11.5-runtime-ubuntu20.04-py3.9",
+    env={"DISABLE_JUPYTER": "true"},
     cpu_limit=2,
     cpu_request=2,
-    memory_limit='3G',
-    memory_request='3G',
-    gpu_limit=1
+    memory_limit="3G",
+    memory_request="3G",
+    gpu_limit=1,
 )
 cluster = KubeCluster(gpu_worker_spec)
 ```
@@ -49,7 +50,7 @@ Alternatively, user can specify pod specs with standard kubernetes pod specifica
 Load the spec via:
 
 ```python
-cluster = KubeCluster('gpu-worker-spec.yaml')
+cluster = KubeCluster("gpu-worker-spec.yaml")
 ```
 
 ```{note}
@@ -72,8 +73,7 @@ Create a small `dask_cudf` dataframe and compute the result on the cluster:
 ```python
 import cudf, dask_cudf
 
-ddf = dask_cudf.from_cudf(cudf.DataFrame(
-    {'a': list(range(20))}), npartitions=2)
+ddf = dask_cudf.from_cudf(cudf.DataFrame({"a": list(range(20))}), npartitions=2)
 ddf.sum().compute()
 # should print a: 190
 ```
