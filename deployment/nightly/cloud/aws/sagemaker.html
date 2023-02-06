@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Sagemaker &#8212; RAPIDS Deployment Documentation  documentation</title>
+    <title>SageMaker &#8212; RAPIDS Deployment Documentation  documentation</title>
   
   
   
@@ -396,7 +396,7 @@
 <li class="toctree-l2"><a class="reference internal" href="ec2.html">Elastic Compute Cloud (EC2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eks.html">AWS Elastic Kubernetes Service (EKS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ecs.html">Elastic Container Service (ECS)</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Sagemaker</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">SageMaker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../azure/index.html">Microsoft Azure</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -451,30 +451,86 @@
             <article class="bd-article" role="main">
               
   <section id="sagemaker">
-<h1>Sagemaker<a class="headerlink" href="#sagemaker" title="Permalink to this heading">#</a></h1>
-<p>RAPIDS also works with AWS SageMaker. We’ve written a <strong><a class="reference external" href="https://medium.com/rapids-ai/running-rapids-experiments-at-scale-using-amazon-sagemaker-d516420f165b">detailed
-blog post</a></strong>
-with <strong><a class="reference external" href="https://github.com/rapidsai/cloud-ml-examples/tree/main/aws">examples</a></strong>
-for how to use Sagemaker with RAPIDS. To get started:</p>
-<p><strong>0. Upload data to S3.</strong> We offer the dataset for this demo in a public bucket hosted in either the <a class="reference external" href="https://s3.console.aws.amazon.com/s3/buckets/sagemaker-rapids-hpo-us-east-1/"><code class="docutils literal notranslate"><span class="pre">us-east-1</span></code></a> or <a class="reference external" href="https://s3.console.aws.amazon.com/s3/buckets/sagemaker-rapids-hpo-us-west-2/"><code class="docutils literal notranslate"><span class="pre">us-west-2</span></code></a> regions</p>
-<p><strong>1. Create Notebook Instance.</strong> Sign in to the Amazon SageMaker <a class="reference external" href="https://console.aws.amazon.com/sagemaker/">console</a>. Choose Notebook &gt; Notebook Instances &gt; Create notebook instance. If a field is not mentioned below, leave the default values:</p>
+<h1>SageMaker<a class="headerlink" href="#sagemaker" title="Permalink to this heading">#</a></h1>
+<p>RAPIDS can be used in a few ways with <a class="reference external" href="https://aws.amazon.com/sagemaker/">AWS SageMaker</a>.</p>
+<section id="sagemaker-notebooks">
+<h2>SageMaker Notebooks<a class="headerlink" href="#sagemaker-notebooks" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi.html">SageMaker Notebook Instances</a> can be augmented with a RAPIDS conda environment.</p>
+<p>We can add a RAPIDS conda environment to the set of Jupyter ipython kernels available in our SageMaker notebook instance by installing in a <a class="reference external" href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">lifecycle configuration script</a>.</p>
+<p>To get started head to SageMaker and create a <a class="reference external" href="https://console.aws.amazon.com/sagemaker/home#/notebook-instances/create">new SageMaker Notebook Instance</a>.</p>
+<section id="select-your-instance">
+<h3>Select your instance<a class="headerlink" href="#select-your-instance" title="Permalink to this heading">#</a></h3>
+<p>Select a <a class="reference external" href="https://medium.com/dropout-analytics/which-gpus-work-with-rapids-ai-f562ef29c75f">RAPIDS compatible GPU</a> (NVIDIA Pascal or greater with compute capability 6.0+) as the SageMaker Notebook instance type (e.g., <code class="docutils literal notranslate"><span class="pre">ml.p3.2xlarge</span></code>).</p>
+<p><img alt="Screenshot of the create new notebook screen with a ml.p3.2xlarge selected" src="../../_images/sagemaker-create-notebook-instance.png" /></p>
+</section>
+<section id="create-a-rapids-lifecycle-configuration">
+<h3>Create a RAPIDS lifecycle configuration<a class="headerlink" href="#create-a-rapids-lifecycle-configuration" title="Permalink to this heading">#</a></h3>
+<p>Create a new lifecycle configuration (via the ‘Additional Options’ dropdown).</p>
+<p><img alt="Screenshot of the create lifecycle configuration screen" src="../../_images/sagemaker-create-lifecycle-configuration.png" /></p>
+<p>Give your configuration a name like <code class="docutils literal notranslate"><span class="pre">rapids</span></code> and paste the following script into the “start notebook” script.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="nb">set</span><span class="w"> </span>-e
+
+sudo<span class="w"> </span>-u<span class="w"> </span>ec2-user<span class="w"> </span>-i<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+
+<span class="s">mamba create -y -n rapids -c rapidsai -c conda-forge -c nvidia rapids=22.12 python=3.9 cudatoolkit=11.5 ipykernel</span>
+<span class="s">conda activate rapids</span>
+
+<span class="s"># optionally install AutoGluon for AutoML GPU demo</span>
+<span class="s"># anaconda3/envs/rapids/bin/python -m pip install --pre autogluon</span>
+
+<span class="s">anaconda3/envs/rapids/bin/python -m ipykernel install --user --name rapids</span>
+<span class="s">echo &quot;kernel install completed&quot;</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+<p>Set the volume size to at least <code class="docutils literal notranslate"><span class="pre">15GB</span></code>, to accommodate the conda environment.</p>
+<p>Then launch the instance.</p>
+</section>
+<section id="select-the-rapids-environment">
+<h3>Select the RAPIDS environment<a class="headerlink" href="#select-the-rapids-environment" title="Permalink to this heading">#</a></h3>
+<p>Once your Notebook Instance is <code class="docutils literal notranslate"><span class="pre">InService</span></code> select “Open JupyterLab”</p>
+<p>Then in Jupyter select the <code class="docutils literal notranslate"><span class="pre">rapids</span></code> kernel when working with a new notebook.</p>
+<p><img alt="Screenshot of Jupyter with the rapids kernel highlighted" src="../../_images/sagemaker-choose-rapids-kernel.png" /></p>
+</section>
+</section>
+<section id="sagemaker-estimators">
+<h2>SageMaker Estimators<a class="headerlink" href="#sagemaker-estimators" title="Permalink to this heading">#</a></h2>
+<p>RAPIDS can also be used in <a class="reference external" href="https://sagemaker.readthedocs.io/en/stable/api/training/estimators.html">SageMaker Estimators</a>. Estimators allow you to launch training jobs on ephemeral VMs which SageMaker manages for you. The benefit of this is that your Notebook Instance doesn’t need to have a GPU, so you are only charged for GPU instances for the time that your training job is running.</p>
+<section id="upload-data-to-s3">
+<h3>Upload data to S3<a class="headerlink" href="#upload-data-to-s3" title="Permalink to this heading">#</a></h3>
+<p>We offer the dataset for this demo in a public bucket hosted in either the <a class="reference external" href="https://s3.console.aws.amazon.com/s3/buckets/sagemaker-rapids-hpo-us-east-1/"><code class="docutils literal notranslate"><span class="pre">us-east-1</span></code></a> or <a class="reference external" href="https://s3.console.aws.amazon.com/s3/buckets/sagemaker-rapids-hpo-us-west-2/"><code class="docutils literal notranslate"><span class="pre">us-west-2</span></code></a> regions</p>
+</section>
+<section id="create-notebook-instance">
+<h3>Create Notebook Instance<a class="headerlink" href="#create-notebook-instance" title="Permalink to this heading">#</a></h3>
+<p>Sign in to the Amazon SageMaker <a class="reference external" href="https://console.aws.amazon.com/sagemaker/">console</a>. Choose Notebook &gt; Notebook Instances &gt; Create notebook instance. If a field is not mentioned below, leave the default values:</p>
 <ul class="simple">
 <li><p><strong>NOTEBOOK_INSTANCE_NAME</strong> = Name of the notebook instance</p></li>
 <li><p><strong>NOTEBOOK_INSTANCE_TYPE</strong> = Type of notebook instance. We recommend a lightweight instance (e.g., ml.t2.medium) since the instance will only be used to build the container and launch work</p></li>
 <li><p><strong>PLATFORM_IDENTIFIER</strong> = ‘Amazon Linux 2, Jupyter Lab 3’</p></li>
 <li><p><strong>IAM_ROLE</strong> = Create a new role &gt; Create role</p></li>
-<li><p><strong>GIT_REPOSITORIES</strong> = Under Default Repository &gt; Repository, select ‘Clone a public Git repository to this notebook instance only’ and add the <a class="reference external" href="https://github.com/rapidsai/cloud-ml-examples">cloud-ml-examples repository</a></p></li>
+<li><p><strong>GIT_REPOSITORIES</strong> = Under Default Repository &gt; Repository, select ‘Clone a public Git repository to this notebook instance only’ and add the <a class="reference external" href="https://github.com/rapidsai/deployment">RAPIDS deployment repository</a></p></li>
 </ul>
-<p><strong>2. Launch Jupyter Notebook.</strong> In a few minutes, Amazon SageMaker launches an ML compute instance — when its ready you should see several links appear in the Actions tab of the ‘Notebook Instances’ section, click on <strong>Open JupyerLab</strong> to launch into the notebook.</p>
-<ul>
-<li><blockquote>
-<div><p>Note: If you see Pending to the right of the notebook instance in the Status column, your notebook is still being created. The status will change to InService when the notebook is ready for use.</p>
-</div></blockquote>
-</li>
-</ul>
-<p><strong>3. Run Notebook.</strong> Once inside JupyterLab you should be able to navigate to the notebook in the root directory named <strong>aws/rapids_sagemaker_hpo.ipynb</strong> or <strong>aws/rapids_sagemaker_higgs</strong>.</p>
+</section>
+<section id="launch-jupyter-notebook">
+<h3>Launch Jupyter Notebook<a class="headerlink" href="#launch-jupyter-notebook" title="Permalink to this heading">#</a></h3>
+<p>In a few minutes, Amazon SageMaker launches an ML compute instance — when its ready you should see several links appear in the Actions tab of the ‘Notebook Instances’ section, click on <strong>Open JupyerLab</strong> to launch into the notebook.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you see Pending to the right of the notebook instance in the Status column, your notebook is still being created. The status will change to InService when the notebook is ready for use.</p>
+</div>
+</section>
+<section id="run-the-example-notebook">
+<h3>Run the Example Notebook<a class="headerlink" href="#run-the-example-notebook" title="Permalink to this heading">#</a></h3>
+<p>Once inside JupyterLab you should be able to navigate to the example notebook named <a class="reference internal" href="../../examples/rapids-sagemaker-higgs/notebook.html"><span class="doc std std-doc">source/examples/rapids-sagemaker-higgs/notebook.ipynb</span></a> and continue following those instructions.</p>
+</section>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Permalink to this heading">#</a></h2>
+<p>We’ve also written a <strong><a class="reference external" href="https://medium.com/rapids-ai/running-rapids-experiments-at-scale-using-amazon-sagemaker-d516420f165b">detailed blog post</a></strong> on how to use SageMaker with RAPIDS.</p>
 <section id="relatedexamples">
-<h2>Related Examples<a class="headerlink" href="#relatedexamples" title="Permalink to this heading">#</a></h2>
+<h3>Related Examples<a class="headerlink" href="#relatedexamples" title="Permalink to this heading">#</a></h3>
 <div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
 <div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-3 sd-g-2 sd-g-xs-2 sd-g-sm-2 sd-g-md-2 sd-g-lg-2 docutils">
 <div class="sd-col sd-d-flex-row docutils">
@@ -493,6 +549,7 @@ for how to use Sagemaker with RAPIDS. To get started:</p>
 </div>
 </div>
 </div>
+</section>
 </section>
 </section>
 
@@ -535,9 +592,65 @@ for how to use Sagemaker with RAPIDS. To get started:</p>
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#relatedexamples">
-   Related Examples
+  <a class="reference internal nav-link" href="#sagemaker-notebooks">
+   SageMaker Notebooks
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#select-your-instance">
+     Select your instance
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-a-rapids-lifecycle-configuration">
+     Create a RAPIDS lifecycle configuration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#select-the-rapids-environment">
+     Select the RAPIDS environment
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#sagemaker-estimators">
+   SageMaker Estimators
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#upload-data-to-s3">
+     Upload data to S3
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-notebook-instance">
+     Create Notebook Instance
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#launch-jupyter-notebook">
+     Launch Jupyter Notebook
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#run-the-example-notebook">
+     Run the Example Notebook
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#further-reading">
+   Further reading
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#relatedexamples">
+     Related Examples
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
