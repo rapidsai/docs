@@ -1169,13 +1169,23 @@
 <h1>cudf.core.groupby.groupby.GroupBy.apply<a class="headerlink" href="#cudf-core-groupby-groupby-groupby-apply" title="Permalink to this heading">#</a></h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="cudf.core.groupby.groupby.GroupBy.apply">
-<span class="sig-prename descclassname"><span class="pre">GroupBy.</span></span><span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cudf.core.groupby.groupby.GroupBy.apply" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">GroupBy.</span></span><span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cudf'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cudf.core.groupby.groupby.GroupBy.apply" title="Permalink to this definition">#</a></dt>
 <dd><p>Apply a python transformation function over the grouped chunk.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>func</strong><span class="classifier">function</span></dt><dd><p>The python transformation function that will be applied
+<dt><strong>function</strong><span class="classifier">callable</span></dt><dd><p>The python transformation function that will be applied
 on the grouped chunk.</p>
+</dd>
+<dt><strong>args</strong><span class="classifier">tuple</span></dt><dd><p>Optional positional arguments to pass to the function.</p>
+</dd>
+<dt><strong>engine: {&lsquo;cudf&rsquo;, &lsquo;jit&rsquo;}, default &lsquo;cudf&rsquo;</strong></dt><dd><p>Selects the GroupBy.apply implementation. Use <cite>jit</cite> to
+select the numba JIT pipeline. Only certain operations are allowed
+within the function when using this option: min, max, sum, mean, var,
+std, idxmax, and idxmin and any arithmetic formula involving them are
+allowed. Binary operations are not yet supported, so syntax like
+<cite>df[&lsquo;x&rsquo;] * 2</cite> is not yet allowed.
+For more information, see the <a class="reference external" href="https://docs.rapids.ai/api/cudf/stable/user_guide/guide-to-udfs.html">cuDF guide to user defined functions</a>.</p>
 </dd>
 </dl>
 </dd>
@@ -1231,6 +1241,19 @@ the index while cudf does not due to redundancy. For example:</p>
 </pre></div>
 </div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">engine='jit'</span></code> may be used to accelerate certain functions,
+initially those that contain reductions and arithmetic operations
+between results of those reductions:
+&gt;&gt;&gt; import cudf
+&gt;&gt;&gt; df = cudf.DataFrame({&lsquo;a&rsquo;:[1,1,2,2,3,3], &lsquo;b&rsquo;:[1,2,3,4,5,6]})
+&gt;&gt;&gt; df.groupby(&lsquo;a&rsquo;).apply(
+&hellip;     lambda group: group[&lsquo;b&rsquo;].max() - group[&lsquo;b&rsquo;].min(),
+&hellip;     engine=&rsquo;jit&rsquo;
+&hellip; )
+a  None
+0  1     1
+1  2     1
+2  3     1</p>
 </dd></dl>
 
 </section>
