@@ -46,6 +46,213 @@ spec:
           name: notebook
 ```
 
+````{dropdown} Optional: Extended notebook configuration to enable launching multi-node Dask clusters
+:color: info
+:icon: info
+
+Deploying an interactive single-user notebook can provide a great place to launch further resources. For example you could install `dask-kubernetes` and use the [dask-operator](../tools/kubernetes/dask-operator) to create multi-node Dask clusters from your notebooks.
+
+To do this you'll need to create a couple of extra resources when launching your notebook `Pod`.
+
+### Service account and role
+
+To be able to interact with the Kubernetes API from within your notebook and create Dask resources you'll need to create a service account with an attached role.
+
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rapids-dask
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: rapids-dask
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get", "list"]
+  - apiGroups: [kubernetes.dask.org]
+    resources: ["*"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rapids-dask
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: rapids-dask
+subjects:
+  - kind: ServiceAccount
+    name: rapids-dask
+```
+
+Then you need to augment the `Pod` spec above with a reference to this service account.
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rapids-notebook
+  labels:
+    app: rapids-notebook
+spec:
+  serviceAccountName: rapids-dask
+  ...
+```
+
+### Proxying the Dask dashboard and other services
+
+The RAPIDS container comes with the [jupyter-server-proxy](https://jupyter-server-proxy.readthedocs.io/en/latest/) plugin preinstalled which you can use to access other services running in your notebook via the Jupyter URL. However, by default [this is restricted to only proxying services running within your Jupyter Pod](https://jupyter-server-proxy.readthedocs.io/en/latest/arbitrary-ports-hosts.html). To access other resources like Dask clusters that have been launched in the Kubernetes cluster we need to configure Jupyter to allow this.
+
+First we create a `ConfigMap` with our configuration file.
+
+```yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jupyter-server-proxy-config
+data:
+  jupyter_server_config.py: |
+    c.ServerProxy.host_allowlist = lambda app, host: True
+```
+
+Then we further modify out `Pod` spec to mount in this config map to the right location.
+
+```yaml
+apiVersion: v1
+kind: Pod
+...
+spec:
+  containers
+    - name: rapids-notebook
+      ...
+      volumeMounts:
+        - name: jupyter-server-proxy-config
+          mountPath: /root/.jupyter/jupyter_server_config.py
+          subPath: jupyter_server_config.py
+  volumes:
+    - name: jupyter-server-proxy-config
+      configMap:
+        name: jupyter-server-proxy-config
+```
+
+We also might want to configure Dask to know where to look for the Dashboard via the proxied URL. We can set this via an environment variable in our `Pod`.
+
+```yaml
+apiVersion: v1
+kind: Pod
+...
+spec:
+  containers
+    - name: rapids-notebook
+      ...
+      env:
+        - name: DASK_DISTRIBUTED__DASHBOARD__LINK
+          value: "/proxy/{host}:{port}/status"
+```
+
+### Putting it all together
+
+Here's an extended `rapids-notebook.yaml` spec putting all of this together.
+
+```yaml
+# rapids-notebook.yaml (extended)
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rapids-dask
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: rapids-dask
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get", "list"]
+  - apiGroups: [kubernetes.dask.org]
+    resources: ["*"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rapids-dask
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: rapids-dask
+subjects:
+  - kind: ServiceAccount
+    name: rapids-dask
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jupyter-server-proxy-config
+data:
+  jupyter_server_config.py: |
+    c.ServerProxy.host_allowlist = lambda app, host: True
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rapids-notebook
+  labels:
+    app: rapids-notebook
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8888
+      name: http
+      targetPort: notebook
+  selector:
+    app: rapids-notebook
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rapids-notebook
+  labels:
+    app: rapids-notebook
+spec:
+  serviceAccountName: rapids-dask
+  securityContext:
+    fsGroup: 0
+  containers:
+    - name: rapids-notebook
+      image: rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9
+      resources:
+        limits:
+          nvidia.com/gpu: 1
+      ports:
+        - containerPort: 8888
+          name: notebook
+      env:
+        - name: DASK_DISTRIBUTED__DASHBOARD__LINK
+          value: "/proxy/{host}:{port}/status"
+      volumeMounts:
+        - name: jupyter-server-proxy-config
+          mountPath: /root/.jupyter/jupyter_server_config.py
+          subPath: jupyter_server_config.py
+  volumes:
+    - name: jupyter-server-proxy-config
+      configMap:
+        name: jupyter-server-proxy-config
+```
+
+````
+
 ```console
 $ kubectl apply -f rapids-notebook.yaml
 ```
