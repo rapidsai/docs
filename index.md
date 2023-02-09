@@ -18,10 +18,12 @@ This site serves to unify the documentation for RAPIDS. Whether you're new to RA
 [<i class="fa-solid fa-download"></i> Installation Guide]({% link install/install.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
 [<i class="fa-solid fa-file-circle-info"></i> User Guides]({% link user-guide/user-guide.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
 [<i class="fa-solid fa-file-circle-info"></i> API Documentation]({% link api.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
-[<i class="fa-solid fa-file-circle-info"></i>Deployment Guides]({% link deployment/stable/index.html %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
-<br/><br/>
+<br/>
+[<i class="fa-solid fa-file-circle-info"></i> Visualization Guide]({% link visualization/visualization.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
+[<i class="fa-solid fa-file-circle-info"></i> Deployment Guides]({% link deployment/stable/index.html %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
+<br/>
 [<i class="fa-solid fa-file-circle-info"></i> Maintainer Documentation]({% link maintainers/maintainers.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
-[<i class="fas fa-bullhorn"></i> RAPIDS Notices]({% link notices/notices.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 } 
+[<i class="fas fa-bullhorn"></i> RAPIDS Notices]({% link notices/notices.md %}){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
 [<i class="fab fa-github"></i> RAPIDS GitHub](https://github.com/rapidsai){: .btn.fs-4 .mb-4 .mb-md-0 .mr-2 }
 
 ---
