@@ -10,7 +10,7 @@ permalink: visualization
 RAPIDS libraries can easily fit in visualization workflows. This catalog of featured libraries offer direct cuDF support or easy integration.
 {: .fs-6 .fw-300 }
 
-<img src="images/datashader-census-rapids.png" style="width:870px">
+<img src="/assets/images/datashader-census-rapids.png" style="width:870px">
 
 *[330 million+ datapoints rendered in under 1.5s via RAPIDS + Plotly Dash 2020 Census Demo](https://github.com/rapidsai/plotly-dash-rapids-census-demo)*
 
@@ -47,9 +47,9 @@ When interacting with this page through a website, the interactive examples belo
 # Featured Libraries
 
 <a id='holoviews'></a><br/>
-<img src="images/holoviews-logo.png" style="width:150px; display:inline-block;">
+<img src="/assets/images/holoviews-logo.png" style="width:150px; display:inline-block; vertical-align:middle;">
 <a href="https://holoviews.org/gallery/index.html" target="_blank" title="holoviews NYC taxi example">
-<img src="images/nytaxi_hover.gif" style="width:300px; display:inline-block; padding-left:20px;"></a>
+<img src="/assets/images/nytaxi_hover.gif" style="width:300px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
 <br/>
 - HoloViews is an open-source Python library designed to make data analysis and visualization seamless and simple. [See this diagram](https://holoviz.org/background.html#the-holoviz-ecosystem)  for an excellent architecture overview.
 - With HoloViews, you can usually express what you want to do in very few lines of code, letting you focus on what you are trying to explore and convey, not on the process of plotting.
@@ -60,9 +60,9 @@ When interacting with this page through a website, the interactive examples belo
 {% include holoviews.html %}
 
 <a id='hvplot'></a><br/>
-<img src="images/hvplot-logo.png" style="width:90px; display:inline-block;">
+<img src="/assets/images/hvplot-logo.png" style="width:90px; display:inline-block; vertical-align:middle;">
 <a href="https://hvplot.holoviz.org/reference/index.html" target="_blank" title="hvplot heat map example">
-<img src="images/heatmap.png" style="width:120px; display:inline-block; padding-left:20px;"></a>
+<img src="/assets/images/heatmap.png" style="width:120px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
 
 - hvPlot provides an alternative for the static plotting API provided by Pandas and other libraries, with an interactive plotting API. Just replace `.plot()` with `.hvplot()`.
 - hvPlot can integrate neatly with the individual libraries if an extension mechanism for the native plot APIs is offered, or it can be used as a standalone component.   
@@ -73,9 +73,9 @@ When interacting with this page through a website, the interactive examples belo
 {% include hvplot.html %}
 
 <a id='datashader'></a><br/>
-<img src="images/datashader-logo.png" style="width:150px; display:inline-block;">
+<img src="/assets/images/datashader-logo.png" style="width:150px; display:inline-block; vertical-align:middle;">
 <a href="https://panel.holoviz.org/gallery/simple/clifford_interact.html" target="_blank" title="datashader clifford demo">
-<img src="images/clifford_interact.png" style="width:130px; display:inline-block; padding-left:20px;"></a>
+<img src="/assets/images/clifford_interact.png" style="width:130px; display:inline-block; vertical-align:middle; padding-left:20px; "></a>
 
 - Datashader is a graphics pipeline system for creating meaningful representations of large datasets quickly and flexibly.
 - Datashader is able to render a variety of chart types statically, and interactively when combined with other libraries like HoloViews or cuxfilter.
@@ -88,9 +88,9 @@ When interacting with this page through a website, the interactive examples belo
                                                                                                                                                                                                              
 
 <a id='plotly'></a><br/>
-<img src="images/plotly-logo.png" style="width:160px; vertical-align:middle;"> 
+<img src="/assets/images/plotly-logo.png" style="width:160px; vertical-align:middle;"> 
 <a href="https://dash.gallery/Portal/" target="_blank" title="plotly dash US Opioid Epidemic demo">
-<img src="images/plotly-dash.png" style="width:230px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
+<img src="/assets/images/plotly-dash.png" style="width:230px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
 <br/>
 - Plotly provides browser based graphing, analytics, and statistics tools to create powerful applications.
 - Read about Plotly's Python charting library at [plotly.com/python/](https://plotly.com/python/) and explore the Plotly Dash gallery [ash.gallery/Portal/](https://dash.gallery/Portal/).
@@ -101,9 +101,9 @@ When interacting with this page through a website, the interactive examples belo
                                                                                                                                                                                                              
 
 <a id='bokeh'></a><br/>
-<img src="images/bokeh-logo.svg" style="width:130px; display:inline-block; vertical-align:middle;">
+<img src="/assets/images/bokeh-logo.svg" style="width:130px; display:inline-block; vertical-align:middle;">
 <a href="https://docs.bokeh.org/en/latest/docs/gallery.html" target="_blank" title="bokeh blackbody radiation chart">
-<img src="images/latex_blackbody_radiation.png" style="width:130px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
+<img src="/assets/images/latex_blackbody_radiation.png" style="width:130px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
 <br/>
 - Bokeh makes it simple to create common interactive plots, but also can handle custom or specialized use-cases with tools and widgets.
 - Plots, dashboards, and apps can be published in web pages or Jupyter notebooks.
@@ -116,9 +116,9 @@ When interacting with this page through a website, the interactive examples belo
                                                                                                                                                                                                              
 
 <a id='seaborn'></a><br/>
-<img src="images/seaborn-logo.svg" style="width:200px; display:inline-block; vertical-align:middle;"> 
+<img src="/assets/images/seaborn-logo.svg" style="width:200px; display:inline-block; vertical-align:middle;"> 
 <a href="https://seaborn.pydata.org/examples/hexbin_marginals.html" target="_blank" title="seaborn hexbin example">
-<img src="images/hexbin_marginals.png" style="width:130px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
+<img src="/assets/images/hexbin_marginals.png" style="width:130px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
 <br/>
 - Seaborn is a Python data visualization library based on [matplotlib](https://matplotlib.org/). It provides a high-level interface for drawing static charts.
 - Although not directly accelerated with GPU usage, it provides a base example of using a popular Python based visualization library with RAPIDS. 
@@ -133,9 +133,9 @@ When interacting with this page through a website, the interactive examples belo
 # Other Notable Libraries
 
 <a id='panel'></a><br/>
-<img src="images/panel-logo.png" style="width:100px; display:inline-block; vertical-align:middle;"> 
+<img src="/assets/images/panel-logo.png" style="width:100px; display:inline-block; vertical-align:middle;"> 
 <a href="https://panel.holoviz.org/gallery/index.html" target="_blank" title="panel gapminder example">
-<img src="images/gapminders.png" style="width:210px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
+<img src="/assets/images/gapminders.png" style="width:210px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
 <br/>
 - Panel is a Python library that lets you create custom interactive web apps and dashboards by connecting user-defined widgets to plots, images, tables, or text.
 - Panel -like holoViews, hvPlot, and datashader- is part of the [HoloViz Ecosystem](https://holoviz.org/).
@@ -145,9 +145,9 @@ When interacting with this page through a website, the interactive examples belo
 
 
 <a id='pydeck'></a><br/>
-<img src="images/pyDeck-logo.svg" style="width:200px; display:inline-block; vertical-align:middle;">
+<img src="/assets/images/pyDeck-logo.svg" style="width:200px; display:inline-block; vertical-align:middle;">
 <a href="https://deckgl.readthedocs.io/en/latest/layer.html" target="_blank" title="pydeck example page">
-<img src="images/hexagon-layer.jpg" style="width:140px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
+<img src="/assets/images/hexagon-layer.jpg" style="width:140px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
 <br/>
 - The pyDeck library is a set of Python bindings for making spatial visualizations with deck.gl, optimized for a Jupyter environment.
 - Learn more about its core deck.gl webGL based library a [deck.gl](https://deck.gl/).
@@ -159,7 +159,7 @@ When interacting with this page through a website, the interactive examples belo
 <img src="https://rapids.ai/assets/images/RAPIDS-logo-white.png" style="width:150px; display:inline-block; vertical-align:middle;">
 <span style="color:#7400ff; font-size:2.5em; vertical-align: middle;">cuxfilter</span>
 <a href="https://docs.rapids.ai/api/cuxfilter/nightly/examples/examples.html" target="_blank" title="cuxfilter example page">
-<img src="images/cuxfilter-demo.gif" style="width:220px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
+<img src="/assets/images/cuxfilter-demo.gif" style="width:220px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
 <br/>
 - cuxfilter is a RAPIDS developed cross filtering library which enables GPU accelerated dashboards, using best in class charting libraries, with just a few lines of Python.
 - Read about cuxfilter at [github.com/rapidsai/cuxfilter](https://github.com/rapidsai/cuxfilter) and explore its examples [docs.rapids.ai/api/cuxfilter/stable/examples/examples.html](https://docs.rapids.ai/api/cuxfilter/stable/examples/examples.html).
@@ -170,7 +170,7 @@ When interacting with this page through a website, the interactive examples belo
 <img src="https://rapids.ai/assets/images/RAPIDS-logo-white.png" style="width:150px; display:inline-block; vertical-align:middle;">
 <span style="color:#7400ff; font-size:2.5em; vertical-align: middle;">nodeRAPIDS</span>
 <a href="https://github.com/rapidsai/node/tree/main/modules/demo" target="_blank" title="nodeRAPIDS demo page">
-<img src="images/nodeRAPIDS-streaming.png" style="width:200px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
+<img src="/assets/images/nodeRAPIDS-streaming.png" style="width:200px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
 <br/>
 - node RAPIDS brings GPU acceleration to the nodeJS and JS/TypeScript user ecosystem.
 - Keep large datasets and complex compute processes in GPU memory while using the browser front end just for performant interactions.
