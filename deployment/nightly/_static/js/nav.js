@@ -4,14 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
     `
     <div id="rapids-pydata-container">
         <div class="rapids-home-container">
-            <a class="rapids-home-container__home-btn" href="/">Home</a>
+            <a class="rapids-home-container__home-btn" href="https://docs.rapids.ai/">Docs Home</a>
         </div>
-        <div class="rapids-selector__container rapids-selector--hidden">
-            <div class="rapids-selector__selected">deployment</div>
-            <div class="rapids-selector__menu" style="height: 65px;">
-                <a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="https://docs.rapids.ai/deployment">deployment</a>
-                <a class="rapids-selector__menu-item" href="https://docs.rapids.ai/api">api docs</a>
-            </div>
+        <div class="rapids-home-container">
+            <a class="rapids-home-container__home-btn" href="https://docs.rapids.ai/deployment/stable/">Deployment Home</a>
         </div>
         <div id="rapids-selector__container-version" class="rapids-selector__container rapids-selector--hidden">
             <div class="rapids-selector__selected"></div>

@@ -1,4 +1,4 @@
-There are a selection of methods you can use to install RAPIDS which you can see via the [RAPIDS release selector](https://rapids.ai/start.html#get-rapids).
+There are a selection of methods you can use to install RAPIDS which you can see via the [RAPIDS release selector](https://docs.rapids.ai/install#selector).
 
 For this example we are going to run the RAPIDS Docker container so we need to know the name of the most recent container.
 On the release selector choose **Docker** in the **Method** column.

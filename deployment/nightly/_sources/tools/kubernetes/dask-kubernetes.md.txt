@@ -12,10 +12,10 @@ This article introduces the classic way to setup RAPIDS with `dask-kubernetes`.
 The client environment is used to setup dask cluster and execute user domain code.
 In this demo we need to meet minimum requirement of `cudf`, `dask-cudf` and
 `dask-kubernetes`. It is recommended to follow RAPIDS
-[release-selector](https://rapids.ai/start.html#get-rapids) to setup your environment.
+[release-selector](https://docs.rapids.ai/install#selector) to setup your environment.
 
 For simplicity, this guide assumes user manages environments with conda and installs
-The minimal requiredments mentioned above by:
+The minimal requirements mentioned above by:
 
 ```bash
 conda create -n rapids-22.08 -c rapidsai -c nvidia -c conda-forge  \
