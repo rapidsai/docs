@@ -229,53 +229,6 @@
       <arglist>(std::size_t allocation_size, device_memory_resource *bin_resource=nullptr)</arglist>
     </member>
   </compound>
-  <compound kind="class">
-    <name>rmm::mr::detail::arena::block</name>
-    <filename>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</filename>
-    <base>rmm::mr::detail::arena::byte_span</base>
-    <member kind="function">
-      <type>bool</type>
-      <name>fits</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>a5c5b223322005db7d414f0bfdba2551f</anchor>
-      <arglist>(std::size_t bytes) const</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>is_contiguous_before</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>abad2f881436844da18b27b5899c3769f</anchor>
-      <arglist>(block const &amp;blk) const</arglist>
-    </member>
-    <member kind="function">
-      <type>std::pair&lt; block, block &gt;</type>
-      <name>split</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>aac16b2414587cf7340b0eb2b66f6fdca</anchor>
-      <arglist>(std::size_t bytes) const</arglist>
-    </member>
-    <member kind="function">
-      <type>block</type>
-      <name>merge</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>af2895c1a6f4a5d26cd5ce0bb011f1938</anchor>
-      <arglist>(block const &amp;blk) const</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>byte_span</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>af3f67e8fbbb614924d8aa698b0fd1691</anchor>
-      <arglist>()=default</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>byte_span</name>
-      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
-      <anchor>ad85c3457cbaf4613c42c780db9bd28e1</anchor>
-      <arglist>(void *pointer, std::size_t size)</arglist>
-    </member>
-  </compound>
   <compound kind="struct">
     <name>rmm::mr::detail::block</name>
     <filename>structrmm_1_1mr_1_1detail_1_1block.html</filename>
@@ -335,6 +288,53 @@
       <anchorfile>structrmm_1_1mr_1_1detail_1_1block.html</anchorfile>
       <anchor>a3354308b0df2d3cd51e3200bcf8182f1</anchor>
       <arglist>(std::size_t bytes, block const &amp;blk) const noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>rmm::mr::detail::arena::block</name>
+    <filename>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</filename>
+    <base>rmm::mr::detail::arena::byte_span</base>
+    <member kind="function">
+      <type>bool</type>
+      <name>fits</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
+      <anchor>a5c5b223322005db7d414f0bfdba2551f</anchor>
+      <arglist>(std::size_t bytes) const</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>is_contiguous_before</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
+      <anchor>abad2f881436844da18b27b5899c3769f</anchor>
+      <arglist>(block const &amp;blk) const</arglist>
+    </member>
+    <member kind="function">
+      <type>std::pair&lt; block, block &gt;</type>
+      <name>split</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
+      <anchor>aac16b2414587cf7340b0eb2b66f6fdca</anchor>
+      <arglist>(std::size_t bytes) const</arglist>
+    </member>
+    <member kind="function">
+      <type>block</type>
+      <name>merge</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
+      <anchor>af2895c1a6f4a5d26cd5ce0bb011f1938</anchor>
+      <arglist>(block const &amp;blk) const</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>byte_span</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
+      <anchor>af3f67e8fbbb614924d8aa698b0fd1691</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>byte_span</name>
+      <anchorfile>classrmm_1_1mr_1_1detail_1_1arena_1_1block.html</anchorfile>
+      <anchor>ad85c3457cbaf4613c42c780db9bd28e1</anchor>
+      <arglist>(void *pointer, std::size_t size)</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -1441,6 +1441,10 @@
       <arglist>(free_list const &amp;blocks)</arglist>
     </member>
   </compound>
+  <compound kind="struct">
+    <name>fmt::formatter&lt; rmm::detail::bytes &gt;</name>
+    <filename>structfmt_1_1formatter_3_01rmm_1_1detail_1_1bytes_01_4.html</filename>
+  </compound>
   <compound kind="class">
     <name>rmm::mr::detail::free_list</name>
     <filename>classrmm_1_1mr_1_1detail_1_1free__list.html</filename>
@@ -2234,13 +2238,13 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>rmm::mr::thrust_allocator::rebind</name>
-    <filename>structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html</filename>
+    <name>rmm::mr::stream_allocator_adaptor::rebind</name>
+    <filename>structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html</filename>
     <templarg></templarg>
   </compound>
   <compound kind="struct">
-    <name>rmm::mr::stream_allocator_adaptor::rebind</name>
-    <filename>structrmm_1_1mr_1_1stream__allocator__adaptor_1_1rebind.html</filename>
+    <name>rmm::mr::thrust_allocator::rebind</name>
+    <filename>structrmm_1_1mr_1_1thrust__allocator_1_1rebind.html</filename>
     <templarg></templarg>
   </compound>
   <compound kind="class">
