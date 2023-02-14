@@ -41,7 +41,7 @@ To get started, you should first identify the image that's being used in a parti
 
 This can be done by inspecting the _Intialize Containers_ step as seen in the screenshot below.
 
-![](/assets/reproducing-ci/container.png)
+![](/assets/images/reproducing-ci/container.png)
 
 After the container image has been identified, you can volume mount your local repository into the container with the command below:
 
@@ -118,7 +118,7 @@ Anytime the `rapids-download-conda-from-s3` command (e.g. [here](https://github.
 
 The screenshot below shows an example.
 
-![](/assets/reproducing-ci/prompts.png)
+![](/assets/images/reproducing-ci/prompts.png)
 
 You can enter these values preemptively to suppress the prompts. For example:
 
