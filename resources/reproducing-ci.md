@@ -147,8 +147,10 @@ This value is used to set the `output_folder` of the `.condarc` file used in our
 For example:
 
 ```sh
+# Replace all local uses of `rapids-download-conda-from-s3`
 sed -ri '/rapids-download-conda-from-s3/ s/_CHANNEL=.*/_CHANNEL=${RAPIDS_CONDA_BLD_OUTPUT_DIR}/' ci/*.sh
 
+# Run the sequence of build/test scripts
 ./ci/build_cpp.sh
 ./ci/build_python.sh
 ./ci/test_cpp.sh
