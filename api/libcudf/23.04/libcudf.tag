@@ -14736,32 +14736,6 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>cudf::list_device_view::pair_accessor</name>
-    <filename>structcudf_1_1list__device__view_1_1pair__accessor.html</filename>
-    <templarg></templarg>
-    <member kind="function">
-      <type>CUDF_HOST_DEVICE</type>
-      <name>pair_accessor</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
-      <anchor>a14b2b90c570fd87997eed3cb731393ad</anchor>
-      <arglist>(list_device_view const &amp;_list)</arglist>
-    </member>
-    <member kind="function">
-      <type>thrust::pair&lt; T, bool &gt;</type>
-      <name>operator()</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
-      <anchor>a95483245b84735ba74f8c11f916c86f3</anchor>
-      <arglist>(cudf::size_type i) const</arglist>
-    </member>
-    <member kind="variable">
-      <type>list_device_view const  &amp;</type>
-      <name>list</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
-      <anchor>a1a9ded6b481d0ff1ebcd69d256d6dcd0</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
     <name>cudf::detail::pair_accessor</name>
     <filename>structcudf_1_1detail_1_1pair__accessor.html</filename>
     <templarg></templarg>
@@ -14785,6 +14759,32 @@
       <name>col</name>
       <anchorfile>structcudf_1_1detail_1_1pair__accessor.html</anchorfile>
       <anchor>a5c93941a91871e3e4116b7f848b87c7d</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>cudf::list_device_view::pair_accessor</name>
+    <filename>structcudf_1_1list__device__view_1_1pair__accessor.html</filename>
+    <templarg></templarg>
+    <member kind="function">
+      <type>CUDF_HOST_DEVICE</type>
+      <name>pair_accessor</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
+      <anchor>a14b2b90c570fd87997eed3cb731393ad</anchor>
+      <arglist>(list_device_view const &amp;_list)</arglist>
+    </member>
+    <member kind="function">
+      <type>thrust::pair&lt; T, bool &gt;</type>
+      <name>operator()</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
+      <anchor>a95483245b84735ba74f8c11f916c86f3</anchor>
+      <arglist>(cudf::size_type i) const</arglist>
+    </member>
+    <member kind="variable">
+      <type>list_device_view const  &amp;</type>
+      <name>list</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
+      <anchor>a1a9ded6b481d0ff1ebcd69d256d6dcd0</anchor>
       <arglist></arglist>
     </member>
   </compound>

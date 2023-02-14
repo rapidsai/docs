@@ -28,7 +28,7 @@ var searchData=
   ['bitwise_5fand_102',['BITWISE_AND',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edcaaa5f2eafabf8fa18cbb708c657f37245',1,'cudf']]],
   ['bitwise_5for_103',['BITWISE_OR',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca0d89cfe1f2f7f0c2deb3d35455783ab9',1,'cudf']]],
   ['bitwise_5fxor_104',['BITWISE_XOR',['../group__transformation__binaryops.html#gga00ed76601b6db662550f6826cfd99edca6d7cca7c0f0f278c56131a25e77c4a5c',1,'cudf']]],
-  ['block_105',['block',['https://docs.rapids.ai/api/librmm/23.04/classrmm_1_1mr_1_1detail_1_1arena_1_1block.html',1,'rmm::mr::detail::arena::block'],['https://docs.rapids.ai/api/librmm/23.04/structrmm_1_1mr_1_1detail_1_1block.html',1,'rmm::mr::detail::block']]],
+  ['block_105',['block',['https://docs.rapids.ai/api/librmm/23.04/structrmm_1_1mr_1_1detail_1_1block.html',1,'rmm::mr::detail::block'],['https://docs.rapids.ai/api/librmm/23.04/classrmm_1_1mr_1_1detail_1_1arena_1_1block.html',1,'rmm::mr::detail::arena::block']]],
   ['block_5fbase_106',['block_base',['https://docs.rapids.ai/api/librmm/23.04/structrmm_1_1mr_1_1detail_1_1block__base.html',1,'rmm::mr::detail']]],
   ['block_5ffrom_5fupstream_107',['block_from_upstream',['https://docs.rapids.ai/api/librmm/23.04/classrmm_1_1mr_1_1pool__memory__resource.html#a4c687e04a1cc07fe5f9cfee3105f5335',1,'rmm::mr::pool_memory_resource']]],
   ['blocks_5ffrom_5fupstream_108',['blocks_from_upstream',['https://docs.rapids.ai/api/librmm/23.04/classrmm_1_1mr_1_1fixed__size__memory__resource.html#a971b75ce7dda5cb23c15351f84902234',1,'rmm::mr::fixed_size_memory_resource']]],
