@@ -3,7 +3,7 @@ layout: default
 nav_order: 3
 parent: Resources
 grand_parent: RAPIDS Maintainer Docs
-title: GitHub Actions
+title: Reproducing CI
 ---
 
 # {{ page.title }}
