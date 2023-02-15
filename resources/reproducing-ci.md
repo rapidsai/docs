@@ -56,19 +56,7 @@ docker run \
   rapidsai/ci:cuda11.8.0-ubuntu22.04-py3.10
 ```
 
-This command makes the following assumptions:
-
-- Your current directory is the repository that you wish to troubleshoot
-- Your current directory has the same commit checked out as the pull-request whose jobs you are trying to debug
-
-A few notes about the flags above:
-
-- Most of the RAPIDS conda builds occur on machines without GPUs. Only the tests require GPUs. Therefore, you can omit the `--gpus` flag when running local conda builds
-- The `--network` flag ensures that the container has access to the VPN connection on your host machine. VPN connectivity is required for test jobs since they need access to [downloads.rapids.ai](https://downloads.rapids.ai) for downloading build artifacts from a particular pull-request. This flag can be omitted for build jobs
-
-After you run the command above, you will be able to run commands inside the container.
-
-From here you can run any of the CI scripts:
+Once the container has started, you can run any of the CI scripts inside of it:
 
 ```sh
 # to build cpp...
@@ -90,6 +78,17 @@ From here you can run any of the CI scripts:
 ./ci/build_docs.sh
 ```
 
+The `docker` command above makes the follow assumptions:
+
+- Your current directory is the repository that you wish to troubleshoot
+- Your current directory has the same commit checked out as the pull-request whose jobs you are trying to debug
+
+A few notes about the `docker` command flags:
+
+- Most of the RAPIDS conda builds occur on machines without GPUs. Only the tests require GPUs. Therefore, you can omit the `--gpus` flag when running local conda builds
+- The `--network` flag ensures that the container has access to the VPN connection on your host machine. VPN connectivity is required for test jobs since they need access to [downloads.rapids.ai](https://downloads.rapids.ai) for downloading build artifacts from a particular pull-request. This flag can be omitted for build jobs
+
+
 ## Additional Considerations
 
 There are a few additional considerations for running CI jobs locally.
@@ -108,7 +107,7 @@ In RAPIDS CI workflows, the builds and tests occur on different machines.
 
 Machines without GPUs are used for builds, while the tests occur on machines with GPUs.
 
-Due to this process, the artifacts from the build jobs must be downloaded in order for the test jobs to run.
+Due to this process, the artifacts from the build jobs must be downloaded from [downloads.rapids.ai](https://downloads.rapids.ai) in order for the test jobs to run.
 
 In CI, this process happens transparently.
 
@@ -142,7 +141,7 @@ If builds are failing in CI, developers should fix the problem locally and then 
 
 Then CI jobs can run and the fixed build artifacts will be made available for the test job to download and use.
 
-To attempt a complete build and test workflow locally, you could manually update any instances of `CPP_CHANNEL` and `PYTHON_CHANNEL` that use `rapids-download-conda-from-s3` (e.g. [1](https://github.com/rapidsai/cuml/blob/dc38afc584154ebe7332d43f69e3913492f7a273/ci/build_python.sh#L14),[2](https://github.com/rapidsai/cuml/blob/dc38afc584154ebe7332d43f69e3913492f7a273/ci/test_python_common.sh#L22-L23)) with the value of the `RAPIDS_CONDA_BLD_OUTPUT_DIR` environment variable that is [set in our CI images](https://github.com/rapidsai/ci-imgs/blob/d048ffa6bfd672fa72f31aeb7cc5cf2363aff6d9/Dockerfile#L105).
+To attempt a complete build and test workflow locally, you can manually update any instances of `CPP_CHANNEL` and `PYTHON_CHANNEL` that use `rapids-download-conda-from-s3` (e.g. [1](https://github.com/rapidsai/cuml/blob/dc38afc584154ebe7332d43f69e3913492f7a273/ci/build_python.sh#L14),[2](https://github.com/rapidsai/cuml/blob/dc38afc584154ebe7332d43f69e3913492f7a273/ci/test_python_common.sh#L22-L23)) with the value of the `RAPIDS_CONDA_BLD_OUTPUT_DIR` environment variable that is [set in our CI images](https://github.com/rapidsai/ci-imgs/blob/d048ffa6bfd672fa72f31aeb7cc5cf2363aff6d9/Dockerfile#L105).
 
 This value is used to set the `output_folder` of the `.condarc` file used in our CI images (see [docs](https://conda.io/projects/conda/en/latest/user-guide/configuration/use-condarc.html#specify-conda-build-build-folder-conda-build-3-16-3-output-folder)). Therefore, any locally built packages will end up in this directory.
 
