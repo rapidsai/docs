@@ -10423,13 +10423,14 @@
   <compound kind="class">
     <name>cudf::experimental::row::equality::device_row_comparator</name>
     <filename>classcudf_1_1experimental_1_1row_1_1equality_1_1device__row__comparator.html</filename>
+    <templarg>has_nested_columns</templarg>
     <templarg></templarg>
     <templarg></templarg>
     <member kind="function">
       <type>constexpr bool</type>
       <name>operator()</name>
       <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1device__row__comparator.html</anchorfile>
-      <anchor>a75e967e76b5ef70ceb6f859a5567802d</anchor>
+      <anchor>a49c3afc2286a886d23f311d1b382ad4a</anchor>
       <arglist>(size_type const lhs_index, size_type const rhs_index) const noexcept</arglist>
     </member>
     <member kind="friend" protection="private">
@@ -16240,7 +16241,7 @@
       <type>auto</type>
       <name>equal_to</name>
       <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1self__comparator.html</anchorfile>
-      <anchor>adfbbb6f105eb6f65f0689f4eceef1792</anchor>
+      <anchor>aeb610c52a0f6e65e67240f85ade72f60</anchor>
       <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
@@ -19092,7 +19093,7 @@
       <type>auto</type>
       <name>equal_to</name>
       <anchorfile>classcudf_1_1experimental_1_1row_1_1equality_1_1two__table__comparator.html</anchorfile>
-      <anchor>ac9c7c726b67a7b30f0232af9744a274c</anchor>
+      <anchor>ab2b3f03a8c7cfe45e1ce15c3ab301432</anchor>
       <arglist>(Nullate nullate={}, null_equality nulls_are_equal=null_equality::EQUAL, PhysicalEqualityComparator comparator={}) const noexcept</arglist>
     </member>
   </compound>
