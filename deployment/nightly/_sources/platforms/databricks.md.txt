@@ -26,7 +26,7 @@ RUN conda create --name rapids --file /tmp/spec.txt && \
 ```
 
 ```console
-$ docker build --tag <username>/rapids_databricks:latest --build-arg RAPIDS_IMAGE=rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu18.04-py3.9 ./docker
+$ docker build --tag <username>/rapids_databricks:latest --build-arg RAPIDS_IMAGE={{ rapids_container }} ./docker
 ```
 
 Push this image to a Docker registry (DockerHub, Amazon ECR or Azure ACR).

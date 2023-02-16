@@ -9,7 +9,7 @@ For new, user-managed notebooks, it is recommended to use a RAPIDS docker image 
 Before configuring a new notebook, the [RAPIDS Docker image](#rapids-docker) will need to be built to expose port 8080 to be used as a notebook service.
 
 ```dockerfile
-FROM rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9
+FROM {{ rapids_container }}
 EXPOSE 8080
 
 ENTRYPOINT ["jupyter-lab", "--allow-root", "--ip=0.0.0.0", "--port=8080", "--no-browser", "--NotebookApp.token=''", "--NotebookApp.allow_origin='*'"]
@@ -18,8 +18,8 @@ ENTRYPOINT ["jupyter-lab", "--allow-root", "--ip=0.0.0.0", "--port=8080", "--no-
 Once you have built this image, it needs to be pushed to [Google Container Registry](https://cloud.google.com/container-registry/docs/pushing-and-pulling) for Vertex AI to access.
 
 ```console
-$ docker build -t gcr.io/<project>/<folder>/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9 .
-$ docker push gcr.io/<project>/<folder>/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9
+$ docker build -t gcr.io/<project>/<folder>/{{ rapids_container.replace('rapidsai/', '') }} .
+$ docker push gcr.io/<project>/<folder>/{{ rapids_container.replace('rapidsai/', '') }}
 ```
 
 ## Create a New Notebook

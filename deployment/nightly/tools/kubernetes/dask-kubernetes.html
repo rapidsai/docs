@@ -410,8 +410,8 @@ In this demo we need to meet minimum requirement of <code class="docutils litera
 <a class="reference external" href="https://docs.rapids.ai/install#selector">release-selector</a> to setup your environment.</p>
 <p>For simplicity, this guide assumes user manages environments with conda and installs
 The minimal requirements mentioned above by:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>rapids-22.08<span class="w"> </span>-c<span class="w"> </span>rapidsai<span class="w"> </span>-c<span class="w"> </span>nvidia<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w">  </span><span class="se">\</span>
-<span class="w">    </span><span class="nv">cudf</span><span class="o">=</span><span class="m">22</span>.08<span class="w"> </span><span class="nv">dask_cudf</span><span class="o">=</span><span class="m">22</span>.08<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9<span class="w"> </span><span class="nv">cudatoolkit</span><span class="o">=</span><span class="m">11</span>.5<span class="w"> </span>dask_kubernetes
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>rapids<span class="w"> </span>-c<span class="w"> </span>rapidsai-nightly<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>-c<span class="w"> </span>nvidia<span class="w">  </span><span class="se">\</span>
+<span class="w">    </span><span class="nv">rapids</span><span class="o">=</span><span class="m">23</span>.02<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9<span class="w"> </span><span class="nv">cudatoolkit</span><span class="o">=</span><span class="m">11</span>.5<span class="w"> </span>dask_kubernetes
 </pre></div>
 </div>
 </section>
@@ -421,7 +421,7 @@ The minimal requirements mentioned above by:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_kubernetes</span> <span class="kn">import</span> <span class="n">KubeCluster</span><span class="p">,</span> <span class="n">make_pod_spec</span>
 
 <span class="n">gpu_worker_spec</span> <span class="o">=</span> <span class="n">make_pod_spec</span><span class="p">(</span>
-    <span class="n">image</span><span class="o">=</span><span class="s2">&quot;nvcr.io/nvidia/rapidsai/rapidsai-core:22.08-cuda11.5-runtime-ubuntu20.04-py3.9&quot;</span><span class="p">,</span>
+    <span class="n">image</span><span class="o">=</span><span class="s2">&quot;rapidsai/rapidsai-core-nightly:23.02-cuda11.5-runtime-ubuntu20.04-py3.9&quot;</span><span class="p">,</span>
     <span class="n">env</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;DISABLE_JUPYTER&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">},</span>
     <span class="n">cpu_limit</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">cpu_request</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
@@ -433,7 +433,7 @@ The minimal requirements mentioned above by:</p>
 </pre></div>
 </div>
 <p>Alternatively, user can specify pod specs with standard kubernetes pod specification.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># source/tools/kubernetes/dask-kubernetes/gpu-worker-spec.yaml</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># gpu-worker-spec.yaml</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pod</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
@@ -442,7 +442,7 @@ The minimal requirements mentioned above by:</p>
 <span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Never</span>
 <span class="w">  </span><span class="nt">containers</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/rapidsai/rapidsai-core:22.08-cuda11.5-runtime-ubuntu20.04-py3.9</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="w"> </span><span class="nv">rapids_container</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w"> </span><span class="p p-Indicator">}</span>
 <span class="w">      </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IfNotPresent</span>
 <span class="w">      </span><span class="nt">env</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_JUPYTER</span>

@@ -437,7 +437,7 @@
 
 sudo<span class="w"> </span>-u<span class="w"> </span>ec2-user<span class="w"> </span>-i<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
 
-<span class="s">mamba create -y -n rapids -c rapidsai -c conda-forge -c nvidia rapids=22.12 python=3.9 cudatoolkit=11.5 ipykernel</span>
+<span class="s">mamba create -y -n rapids -c rapidsai-nightly -c conda-forge -c nvidia rapids=23.02 python=3.9 cudatoolkit=11.5 ipykernel</span>
 <span class="s">conda activate rapids</span>
 
 <span class="s"># optionally install AutoGluon for AutoML GPU demo</span>
@@ -461,6 +461,44 @@ sudo<span class="w"> </span>-u<span class="w"> </span>ec2-user<span class="w"> <
 <section id="sagemaker-estimators">
 <h2>SageMaker Estimators<a class="headerlink" href="#sagemaker-estimators" title="Permalink to this heading">#</a></h2>
 <p>RAPIDS can also be used in <a class="reference external" href="https://sagemaker.readthedocs.io/en/stable/api/training/estimators.html">SageMaker Estimators</a>. Estimators allow you to launch training jobs on ephemeral VMs which SageMaker manages for you. The benefit of this is that your Notebook Instance doesn’t need to have a GPU, so you are only charged for GPU instances for the time that your training job is running.</p>
+<p>All you’ll need to do is bring in your RAPIDS training script and libraries as a Docker container image and ask Amazon SageMaker to run copies of it in-parallel on a specified number of GPU instances in the cloud. Let’s take a closer look at how this works through a step-by-step approach:</p>
+<ul class="simple">
+<li><p>Training script should accept hyperparameters as command line arguments. Starting with the base RAPIDS container (pulled from <a class="reference external" href="https://hub.docker.com/u/rapidsai">Docker Hub</a>), use a <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> to augment it by copying your training code and set <code class="docutils literal notranslate"><span class="pre">WORKDIR</span></code> path to the code.</p></li>
+<li><p>Install <a class="reference external" href="https://github.com/aws/sagemaker-training-toolkit">sagemaker-training toolkit</a> to make the container compatible with Sagemaker. Add other packages as needed for your workflow needs e.g. python, flask (model serving), dask-ml etc.</p></li>
+<li><p>Push the image to a container registry (ECR).</p></li>
+</ul>
+<p><img alt="Screenshot of summarized step to build Estimator" src="../../_images/sagemaker-containerize-and-publish.png" /></p>
+<ul class="simple">
+<li><p>Having built our container [ +custom logic], compile all efforts into an Estimator instance. Test the Estimator and run parallel hyperparameter optimization tuning jobs.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">estimator</span> <span class="o">=</span> <span class="n">sagemaker</span><span class="o">.</span><span class="n">estimator</span><span class="o">.</span><span class="n">Estimator</span><span class="p">(</span>
+    <span class="n">image_uri</span><span class="p">,</span>
+    <span class="n">role</span><span class="p">,</span>
+    <span class="n">instance_type</span><span class="p">,</span>
+    <span class="n">instance_count</span><span class="p">,</span>
+    <span class="n">input_mode</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="p">,</span>
+    <span class="n">use_spot_instances</span><span class="p">,</span>
+    <span class="n">max_run</span><span class="o">=</span><span class="mi">86400</span><span class="p">,</span>
+    <span class="n">sagemaker_session</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">s3_data_input</span><span class="p">,</span> <span class="n">job_name</span><span class="o">=</span><span class="n">job_name</span><span class="p">)</span>
+
+
+<span class="n">hpo</span> <span class="o">=</span> <span class="n">sagemaker</span><span class="o">.</span><span class="n">tuner</span><span class="o">.</span><span class="n">HyperparameterTuner</span><span class="p">(</span>
+    <span class="n">estimator</span><span class="p">,</span>
+    <span class="n">metric_definitions</span><span class="p">,</span>
+    <span class="n">objective_metric_name</span><span class="p">,</span>
+    <span class="n">objective_type</span><span class="o">=</span><span class="s2">&quot;Maximize&quot;</span><span class="p">,</span>
+    <span class="n">hyperparameter_ranges</span><span class="p">,</span>
+    <span class="n">strategy</span><span class="p">,</span>
+    <span class="n">max_jobs</span><span class="p">,</span>
+    <span class="n">max_parallel_jobs</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">hpo</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">s3_data_input</span><span class="p">,</span> <span class="n">job_name</span><span class="o">=</span><span class="n">tuning_job_name</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="s2">&quot;All&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <section id="upload-data-to-s3">
 <h3>Upload data to S3<a class="headerlink" href="#upload-data-to-s3" title="Permalink to this heading">#</a></h3>
 <p>We offer the dataset for this demo in a public bucket hosted in either the <a class="reference external" href="https://s3.console.aws.amazon.com/s3/buckets/sagemaker-rapids-hpo-us-east-1/"><code class="docutils literal notranslate"><span class="pre">us-east-1</span></code></a> or <a class="reference external" href="https://s3.console.aws.amazon.com/s3/buckets/sagemaker-rapids-hpo-us-west-2/"><code class="docutils literal notranslate"><span class="pre">us-west-2</span></code></a> regions</p>

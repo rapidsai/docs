@@ -38,7 +38,7 @@ cluster = AzureVMCluster(
     disk_size=100,
     n_workers=2,
     worker_class="dask_cuda.CUDAWorker",
-    docker_image="rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9",
+    docker_image={{rapids_container}},
     docker_args="-e DISABLE_JUPYTER=true -p 8787:8787 -p 8786:8786",
 )
 ```

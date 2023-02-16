@@ -10,7 +10,7 @@ These instructions were tested against [Kubeflow v1.5.1](https://github.com/kube
 
 The [RAPIDS docker images](/tools/rapids-docker) can be used directly in Kubeflow Notebooks with no additional configuration. To find the latest image head to [the RAPIDS install page](https://docs.rapids.ai/install), as shown in below, and choose a version of RAPIDS to use. Typically we want to choose the container image for the latest release. Verify the Docker image is selected when installing the latest RAPIDS release.
 
-Be sure to match the CUDA version in the container image with that installed on your Kubernetes nodes. The default CUDA version installed on GKE Stable is 11.4 for example, so we would want to choose that. From 11.5 onwards it doesn’t matter as they will be backward compatible. Copy the container image name from the install command (i.e. `rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9`).
+Be sure to match the CUDA version in the container image with that installed on your Kubernetes nodes. The default CUDA version installed on GKE Stable is 11.4 for example, so we would want to choose that. From 11.5 onwards it doesn’t matter as they will be backward compatible. Copy the container image name from the install command (i.e. `{{ rapids_container }}`).
 
 ````{note}
 You can [check your CUDA version](https://jacobtomlinson.dev/posts/2022/how-to-check-your-nvidia-driver-and-cuda-version-in-kubernetes/) by creating a pod and running `nvidia-smi`. For example:
@@ -146,7 +146,7 @@ from dask_kubernetes.experimental import KubeCluster
 
 cluster = KubeCluster(
     name="rapids-dask",
-    image="rapidsai/rapidsai-core:22.06-cuda11.4-runtime-ubuntu20.04-py3.9",
+    image="{{ rapids_container }}",
     worker_command="dask-cuda-worker",
     n_workers=2,
     resources={"limits": {"nvidia.com/gpu": "1"}},

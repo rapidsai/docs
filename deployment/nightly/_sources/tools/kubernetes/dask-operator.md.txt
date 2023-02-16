@@ -73,7 +73,7 @@ spec:
     spec:
       containers:
         - name: worker
-          image: "rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9"
+          image: "{{ rapids_container }}"
           imagePullPolicy: "IfNotPresent"
           env:
             - name: DISABLE_JUPYTER
@@ -89,7 +89,7 @@ spec:
     spec:
       containers:
         - name: scheduler
-          image: "rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9"
+          image: "{{ rapids_container }}"
           imagePullPolicy: "IfNotPresent"
           env:
             - name: DISABLE_JUPYTER
@@ -174,7 +174,7 @@ spec:
     spec:
       containers:
         - name: worker
-          image: "rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9"
+          image: "{{ rapids_container }}"
           imagePullPolicy: "IfNotPresent"
           env:
             - name: DISABLE_JUPYTER
@@ -210,7 +210,7 @@ spec:
     spec:
       containers:
         - name: scheduler
-          image: "rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9"
+          image: "{{ rapids_container }}"
           imagePullPolicy: "IfNotPresent"
           env:
             - name: DISABLE_JUPYTER
@@ -329,7 +329,7 @@ from dask_kubernetes.experimental import KubeCluster
 
 cluster = KubeCluster(
     name="rapids-dask",
-    image="rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9",
+    image="{{ rapids_container }}",
     n_workers=3,
     resources={"limits": {"nvidia.com/gpu": "1"}},
     env={"DISABLE_JUPYTER": "true"},

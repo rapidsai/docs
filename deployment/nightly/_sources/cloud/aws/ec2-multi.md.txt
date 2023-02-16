@@ -35,7 +35,7 @@ from dask_cloudprovider.aws import EC2Cluster
 
 cluster = EC2Cluster(
     instance_type="g4dn.12xlarge",  # 4 T4 GPUs
-    docker_image="rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9",
+    docker_image="{{ rapids_container }}",
     worker_class="dask_cuda.CUDAWorker",
     worker_options={"rmm-managed-memory": True},
     security_groups=["<SECURITY GROUP ID>"],

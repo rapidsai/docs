@@ -18,8 +18,8 @@ For simplicity, this guide assumes user manages environments with conda and inst
 The minimal requirements mentioned above by:
 
 ```bash
-conda create -n rapids-22.08 -c rapidsai -c nvidia -c conda-forge  \
-    cudf=22.08 dask_cudf=22.08 python=3.9 cudatoolkit=11.5 dask_kubernetes
+conda create -n rapids {{ rapids_conda_channels }}  \
+    {{ rapids_conda_packages }} dask_kubernetes
 ```
 
 ## Cluster setup
@@ -30,7 +30,7 @@ User may create dask-cuda cluster either via `KubeCluster` interface:
 from dask_kubernetes import KubeCluster, make_pod_spec
 
 gpu_worker_spec = make_pod_spec(
-    image="nvcr.io/nvidia/rapidsai/rapidsai-core:22.08-cuda11.5-runtime-ubuntu20.04-py3.9",
+    image="{{ rapids_container }}",
     env={"DISABLE_JUPYTER": "true"},
     cpu_limit=2,
     cpu_request=2,
@@ -43,8 +43,32 @@ cluster = KubeCluster(gpu_worker_spec)
 
 Alternatively, user can specify pod specs with standard kubernetes pod specification.
 
-```{literalinclude} ./dask-kubernetes/gpu-worker-spec.yaml
-:language: yaml
+```yaml
+# gpu-worker-spec.yaml
+kind: Pod
+metadata:
+  labels:
+    cluster_type: dask
+    dask_type: GPU_worker
+spec:
+  restartPolicy: Never
+  containers:
+    - image: { { rapids_container } }
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: DISABLE_JUPYTER
+          value: "true"
+      args: [dask-cuda-worker, $(DASK_SCHEDULER_ADDRESS), --rmm-managed-memory]
+      name: dask-cuda
+      resources:
+        limits:
+          cpu: "2"
+          memory: 3G
+          nvidia.com/gpu: 1 # requesting 1 GPU
+        requests:
+          cpu: "2"
+          memory: 3G
+          nvidia.com/gpu: 1 # requesting 1 GPU
 ```
 
 Load the spec via:

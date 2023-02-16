@@ -37,7 +37,7 @@ spec:
     fsGroup: 0
   containers:
     - name: rapids-notebook
-      image: rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9
+      image: { { rapids_container } }
       resources:
         limits:
           nvidia.com/gpu: 1
@@ -231,7 +231,7 @@ spec:
     fsGroup: 0
   containers:
     - name: rapids-notebook
-      image: rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9
+      image: {{ rapids_container }}
       resources:
         limits:
           nvidia.com/gpu: 1
