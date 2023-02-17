@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
 
-    <title>Pandas Compatibility Notes &mdash; cudf 23.04.00 documentation</title>
+    <title>Copy-on-write &mdash; cudf 23.04.00 documentation</title>
   
   
   
@@ -41,11 +41,11 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/PandasCompat';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/copy-on-write';</script>
     <link href="../genindex.html" rel="index" title="Index">
     <link href="../search.html" rel="search" title="Search">
-    <link href="copy-on-write.html" rel="next" title="Copy-on-write">
-    <link href="options.html" rel="prev" title="Options">
+    <link href="../api_docs/index.html" rel="next" title="API reference">
+    <link href="PandasCompat.html" rel="prev" title="Pandas Compatibility Notes">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="en" name="docsearch:language">
   <script id="rapids-selector-pixel-src" src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
@@ -322,8 +322,8 @@
 <li class="toctree-l1"><a class="reference internal" href="guide-to-udfs.html">Overview of User Defined Functions with cuDF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cupy-interop.html">Interoperability between cuDF and CuPy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="options.html">Options</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Pandas Compatibility Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="copy-on-write.html">Copy-on-write</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PandasCompat.html">Pandas Compatibility Notes</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Copy-on-write</a></li>
 </ul>
 
   </div>
@@ -355,136 +355,183 @@
             
             <article class="bd-article" role="main">
               
-  <section id="pandas-compatibility-notes">
-<h1>Pandas Compatibility Notes<a class="headerlink" href="#pandas-compatibility-notes" title="Permalink to this heading">#</a></h1>
-<div class="admonition">
-<p class="admonition-title">Pandas Compatibility Note</p>
-<p><strong>DataFrame.quantile</strong></p>
-<p>One notable difference from Pandas is when DataFrame is of
-non-numeric types and result is expected to be a Series in case of
-Pandas. cuDF will return a DataFrame as it doesn't support mixed
-types under Series.</p>
-<p><a class="reference external" href="../api_docs/api/cudf.DataFrame.quantile.html#PandasCompat-0"><em>[source]</em></a></p>
+  <section id="copy-on-write">
+<span id="copy-on-write-user-doc"></span><h1>Copy-on-write<a class="headerlink" href="#copy-on-write" title="Permalink to this heading">#</a></h1>
+<p>Copy-on-write is a memory management strategy that allows multiple cuDF objects containing the same data to refer to the same memory address as long as neither of them modify the underlying data.
+With this approach, any operation that generates an unmodified view of an object (such as copies, slices, or methods like <code class="docutils literal notranslate"><span class="pre">DataFrame.head</span></code>) returns a new object that points to the same memory as the original.
+However, when either the existing or new object is <em>modified</em>, a copy of the data is made prior to the modification, ensuring that the changes do not propagate between the two objects.
+This behavior is best understood by looking at the examples below.</p>
+<p>The default behaviour in cuDF is for copy-on-write to be disabled, so to use it, one must explicitly
+opt in by setting a cuDF option. It is recommended to set the copy-on-write at the beginning of the
+script execution, because when this setting is changed in middle of a script execution there will
+be un-intended behavior where the objects created when copy-on-write is enabled will still have the
+copy-on-write behavior whereas the objects created when copy-on-write is disabled will have
+different behavior.</p>
+<section id="enabling-copy-on-write">
+<h2>Enabling copy-on-write<a class="headerlink" href="#enabling-copy-on-write" title="Permalink to this heading">#</a></h2>
+<ol class="arabic">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">cudf.set_option</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cudf</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">"copy_on_write"</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="admonition">
-<p class="admonition-title">Pandas Compatibility Note</p>
-<p><strong>DataFrame.reindex</strong></p>
-<p>Note: One difference from Pandas is that <code class="docutils literal notranslate"><span class="pre">NA</span></code> is used for rows
-that do not match, rather than <code class="docutils literal notranslate"><span class="pre">NaN</span></code>. One side effect of this is
-that the column <code class="docutils literal notranslate"><span class="pre">http_status</span></code> retains an integer dtype in cuDF
-where it is cast to float in Pandas.</p>
-<p><a class="reference external" href="../api_docs/api/cudf.DataFrame.reindex.html#PandasCompat-0"><em>[source]</em></a></p>
+</li>
+<li><p>Set the environment variable <code class="docutils literal notranslate"><span class="pre">CUDF_COPY_ON_WRITE</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code> prior to the
+launch of the Python interpreter:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">CUDF_COPY_ON_WRITE</span><span class="o">=</span><span class="s2">"1"</span><span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import cudf"</span>
+</pre></div>
 </div>
-<div class="admonition">
-<p class="admonition-title">Pandas Compatibility Note</p>
-<p><strong>DataFrame.truncate, Series.truncate</strong></p>
-<p>The <code class="docutils literal notranslate"><span class="pre">copy</span></code> parameter is only present for API compatibility, but
-<code class="docutils literal notranslate"><span class="pre">copy=False</span></code> is not supported. This method always generates a
-copy.</p>
-<p><a class="reference external" href="../api_docs/api/cudf.DataFrame.truncate.html#PandasCompat-0"><em>[source]</em></a></p>
+</li>
+</ol>
+</section>
+<section id="disabling-copy-on-write">
+<h2>Disabling copy-on-write<a class="headerlink" href="#disabling-copy-on-write" title="Permalink to this heading">#</a></h2>
+<p>Copy-on-write can be disabled by setting the <code class="docutils literal notranslate"><span class="pre">copy_on_write</span></code> option to <code class="docutils literal notranslate"><span class="pre">False</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cudf</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">"copy_on_write"</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="admonition">
-<p class="admonition-title">Pandas Compatibility Note</p>
-<p>Note that <code class="docutils literal notranslate"><span class="pre">where</span></code> treats missing values as falsy,
-in parallel with pandas treatment of nullable data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gsr</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">gsr</span><span class="o">.</span><span class="n">where</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">cudf</span><span class="o">.</span><span class="n">NA</span><span class="p">])</span>
-<span class="go">0       1</span>
-<span class="go">1    &lt;NA&gt;</span>
-<span class="go">2    &lt;NA&gt;</span>
+</section>
+<section id="making-copies">
+<h2>Making copies<a class="headerlink" href="#making-copies" title="Permalink to this heading">#</a></h2>
+<p>There are no additional changes required in the code to make use of copy-on-write.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">series</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Performing a shallow copy will create a new Series object pointing to the
+same underlying device memory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">copied_series</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">series</span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">3    4</span>
 <span class="go">dtype: int64</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">gsr</span><span class="o">.</span><span class="n">where</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
-<span class="go">0       1</span>
-<span class="go">1    &lt;NA&gt;</span>
-<span class="go">2    &lt;NA&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">copied_series</span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">3    4</span>
 <span class="go">dtype: int64</span>
 </pre></div>
 </div>
-<p><a class="reference external" href="../api_docs/api/cudf.DataFrame.where.html#PandasCompat-0"><em>[source]</em></a></p>
+<p>When a write operation is performed on either <code class="docutils literal notranslate"><span class="pre">series</span></code> or
+<code class="docutils literal notranslate"><span class="pre">copied_series</span></code>, a true physical copy of the data is created:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">series</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">series</span>
+<span class="go">0    10</span>
+<span class="go">1    10</span>
+<span class="go">2     3</span>
+<span class="go">3     4</span>
+<span class="go">dtype: int64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">copied_series</span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">3    4</span>
+<span class="go">dtype: int64</span>
+</pre></div>
 </div>
-<div class="admonition">
-<p class="admonition-title">Pandas Compatibility Note</p>
-<p><strong>MultiIndex.get_loc</strong></p>
-<p>The return types of this function may deviates from the
-method provided by Pandas. If the index is neither
-lexicographically sorted nor unique, a best effort attempt is made
-to coerce the found indices into a slice. For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this heading">#</a></h2>
+<p>When copy-on-write is enabled, there is no longer a concept of views when
+slicing or indexing. In this sense, indexing behaves as one would expect for
+built-in Python containers like <code class="docutils literal notranslate"><span class="pre">lists</span></code>, rather than indexing <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">arrays</span></code>.
+Modifying a &ldquo;view&rdquo; created by cuDF will always trigger a copy and will not
+modify the original object.</p>
+<p>Copy-on-write produces much more consistent copy semantics. Since every object is a copy of the original, users no longer have to think about when modifications may unexpectedly happen in place. This will bring consistency across operations and bring cudf and pandas behavior into alignment when copy-on-write is enabled for both. Here is one example where pandas and cudf are currently inconsistent without copy-on-write enabled:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s1</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s1</span>
+<span class="mi">0</span>    <span class="mi">10</span>
+<span class="mi">1</span>     <span class="mi">2</span>
+<span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s</span>
+<span class="mi">0</span>    <span class="mi">10</span>
+<span class="mi">1</span>     <span class="mi">2</span>
+<span class="mi">2</span>     <span class="mi">3</span>
+<span class="mi">3</span>     <span class="mi">4</span>
+<span class="mi">4</span>     <span class="mi">5</span>
+<span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">cudf</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s1</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s1</span>
+<span class="mi">0</span>    <span class="mi">10</span>
+<span class="mi">1</span>     <span class="mi">2</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s</span>
+<span class="mi">0</span>    <span class="mi">1</span>
+<span class="mi">1</span>    <span class="mi">2</span>
+<span class="mi">2</span>    <span class="mi">3</span>
+<span class="mi">3</span>    <span class="mi">4</span>
+<span class="mi">4</span>    <span class="mi">5</span>
+<span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
+</pre></div>
+</div>
+<p>The above inconsistency is solved when copy-on-write is enabled:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">"mode.copy_on_write"</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span>
+<span class="go">0    10</span>
+<span class="go">1     2</span>
+<span class="go">dtype: int64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">3    4</span>
+<span class="go">4    5</span>
+<span class="go">dtype: int64</span>
+
+
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cudf</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_tuples</span><span class="p">([</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-<span class="gp">... </span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="go">array([False,  True,  True,  True,  True, False])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cudf</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="go">slice(1, 5, 1)</span>
-</pre></div>
-</div>
-<p><a class="reference external" href="../api_docs/api/cudf.MultiIndex.get_loc.html#PandasCompat-0"><em>[source]</em></a></p>
-</div>
-<div class="admonition">
-<p class="admonition-title">Pandas Compatibility Note</p>
-<p><strong>Series.reindex</strong></p>
-<p>Note: One difference from Pandas is that <code class="docutils literal notranslate"><span class="pre">NA</span></code> is used for rows
-that do not match, rather than <code class="docutils literal notranslate"><span class="pre">NaN</span></code>. One side effect of this is
-that the series retains an integer dtype in cuDF
-where it is cast to float in Pandas.</p>
-<p><a class="reference external" href="../api_docs/api/cudf.Series.reindex.html#PandasCompat-0"><em>[source]</em></a></p>
-</div>
-<div class="admonition">
-<p class="admonition-title">Pandas Compatibility Note</p>
-<p><strong>DataFrame.truncate, Series.truncate</strong></p>
-<p>The <code class="docutils literal notranslate"><span class="pre">copy</span></code> parameter is only present for API compatibility, but
-<code class="docutils literal notranslate"><span class="pre">copy=False</span></code> is not supported. This method always generates a
-copy.</p>
-<p><a class="reference external" href="../api_docs/api/cudf.Series.truncate.html#PandasCompat-0"><em>[source]</em></a></p>
-</div>
-<div class="admonition">
-<p class="admonition-title">Pandas Compatibility Note</p>
-<p>Note that <code class="docutils literal notranslate"><span class="pre">where</span></code> treats missing values as falsy,
-in parallel with pandas treatment of nullable data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gsr</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">gsr</span><span class="o">.</span><span class="n">where</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">cudf</span><span class="o">.</span><span class="n">NA</span><span class="p">])</span>
-<span class="go">0       1</span>
-<span class="go">1    &lt;NA&gt;</span>
-<span class="go">2    &lt;NA&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cudf</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">"copy_on_write"</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span>
+<span class="go">0    10</span>
+<span class="go">1     2</span>
 <span class="go">dtype: int64</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">gsr</span><span class="o">.</span><span class="n">where</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
-<span class="go">0       1</span>
-<span class="go">1    &lt;NA&gt;</span>
-<span class="go">2    &lt;NA&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">3    4</span>
+<span class="go">4    5</span>
 <span class="go">dtype: int64</span>
 </pre></div>
 </div>
-<p><a class="reference external" href="../api_docs/api/cudf.Series.where.html#PandasCompat-0"><em>[source]</em></a></p>
-</div>
-<div class="admonition">
-<p class="admonition-title">Pandas Compatibility Note</p>
-<p><strong>groupby.apply</strong></p>
-<p>cuDF's <code class="docutils literal notranslate"><span class="pre">groupby.apply</span></code> is limited compared to pandas.
-In some situations, Pandas returns the grouped keys as part of
-the index while cudf does not due to redundancy. For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>    <span class="s1">'a'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="s1">'b'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="s1">'c'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'a'</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">]])</span>
-<span class="go">     a  b  c</span>
-<span class="go">a</span>
-<span class="go">1 0  1  1  1</span>
-<span class="go">2 2  2  1  3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">gdf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'a'</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">]])</span>
-<span class="go">   a  b  c</span>
-<span class="go">0  1  1  1</span>
-<span class="go">2  2  1  3</span>
-</pre></div>
-</div>
-<p><a class="reference external" href="../api_docs/api/cudf.core.groupby.groupby.GroupBy.apply.html#PandasCompat-0"><em>[source]</em></a></p>
-</div>
+<section id="explicit-deep-and-shallow-copies-comparison">
+<h3>Explicit deep and shallow copies comparison<a class="headerlink" href="#explicit-deep-and-shallow-copies-comparison" title="Permalink to this heading">#</a></h3>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>Copy-on-Write enabled</p></th>
+<th class="head"><p>Copy-on-Write disabled (default)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.copy(deep=True)</span></code></p></td>
+<td><p>A true copy is made and changes don&rsquo;t propagate to the original object.</p></td>
+<td><p>A true copy is made and changes don&rsquo;t propagate to the original object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.copy(deep=False)</span></code></p></td>
+<td><p>Memory is shared between the two objects and but any write operation on one object will trigger a true physical copy before the write is performed. Hence changes will not propagate to the original object.</p></td>
+<td><p>Memory is shared between the two objects and changes performed on one will propagate to the other object.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
 </section>
 
 
@@ -495,17 +542,17 @@ the index while cudf does not due to redundancy. For example:</p>
             <footer class="bd-footer-article">
                 <!-- Previous / next buttons -->
 <div class="prev-next-area">
-  <a class="left-prev" href="options.html" id="prev-link" title="previous page">
+  <a class="left-prev" href="PandasCompat.html" id="prev-link" title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
           <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">Options</p>
+          <p class="prev-next-title">Pandas Compatibility Notes</p>
       </div>
   </a>
-  <a class="right-next" href="copy-on-write.html" id="next-link" title="next page">
+  <a class="right-next" href="../api_docs/index.html" id="next-link" title="next page">
   <div class="prev-next-info">
       <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">Copy-on-write</p>
+      <p class="prev-next-title">API reference</p>
   </div>
   <i class="fa-solid fa-angle-right"></i>
   </a>
@@ -520,6 +567,45 @@ the index while cudf does not due to redundancy. For example:</p>
               
 <div class="toc-item">
   
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav class="page-toc" id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#enabling-copy-on-write">
+   Enabling copy-on-write
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#disabling-copy-on-write">
+   Disabling copy-on-write
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#making-copies">
+   Making copies
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#notes">
+   Notes
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#explicit-deep-and-shallow-copies-comparison">
+     Explicit deep and shallow copies comparison
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
 <div id="searchbox"></div>
 </div>
 
@@ -530,7 +616,7 @@ the index while cudf does not due to redundancy. For example:</p>
 <div class="toc-item">
   
 <div class="tocsection sourcelink">
-    <a href="../_sources/user_guide/PandasCompat.md.txt">
+    <a href="../_sources/user_guide/copy-on-write.md.txt">
         <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
 </div>
