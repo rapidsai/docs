@@ -5897,6 +5897,13 @@
       <anchor>afe8aff5291f15d5fc30566d5568e411fa2a139f835a25049543ee9854a6df67ff</anchor>
       <arglist></arglist>
     </member>
+    <member kind="function">
+      <type>constexpr auto</type>
+      <name>is_byte_like_type</name>
+      <anchorfile>namespacecudf_1_1io.html</anchorfile>
+      <anchor>a6af3f5a5a2ab2059248551fa53bf28c2</anchor>
+      <arglist>()</arglist>
+    </member>
   </compound>
   <compound kind="file">
     <name>types.hpp</name>
@@ -10331,6 +10338,13 @@
       <anchorfile>classcudf_1_1io_1_1datasource.html</anchorfile>
       <anchor>a76f63ec57d93d3ed7bff8de2df990b34</anchor>
       <arglist>(host_buffer const &amp;buffer)</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static std::unique_ptr&lt; datasource &gt;</type>
+      <name>create</name>
+      <anchorfile>classcudf_1_1io_1_1datasource.html</anchorfile>
+      <anchor>ad47db42b4d21c39bb4ac89423a6e193c</anchor>
+      <arglist>(cudf::host_span&lt; std::byte const &gt; buffer)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>static std::unique_ptr&lt; datasource &gt;</type>
@@ -16381,6 +16395,20 @@
       <anchorfile>structcudf_1_1io_1_1source__info.html</anchorfile>
       <anchor>a3d2ea3b4284f5e87339645c83ca990fd</anchor>
       <arglist>(const char *host_data, size_t size)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>source_info</name>
+      <anchorfile>structcudf_1_1io_1_1source__info.html</anchorfile>
+      <anchor>a7d18a23abd6a47a7c9c41a41cf77bf5f</anchor>
+      <arglist>(cudf::host_span&lt; cudf::host_span&lt; T &gt;&gt; const host_buffers)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>source_info</name>
+      <anchorfile>structcudf_1_1io_1_1source__info.html</anchorfile>
+      <anchor>a449dd46f58d765741389908ee8985610</anchor>
+      <arglist>(cudf::host_span&lt; T &gt; host_data)</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -22465,6 +22493,13 @@
       <anchorfile>group__io__writers.html</anchorfile>
       <anchor>ga886bfae27530c54e21d014a46ecc8e25</anchor>
       <arglist>(const std::vector&lt; std::unique_ptr&lt; std::vector&lt; uint8_t &gt;&gt;&gt; &amp;metadata_list)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr auto</type>
+      <name>is_byte_like_type</name>
+      <anchorfile>namespacecudf_1_1io.html</anchorfile>
+      <anchor>a6af3f5a5a2ab2059248551fa53bf28c2</anchor>
+      <arglist>()</arglist>
     </member>
     <member kind="variable">
       <type>constexpr size_t</type>
