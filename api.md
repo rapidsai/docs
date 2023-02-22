@@ -7,7 +7,7 @@ has_toc: false
 has_children: false
 ---
 
-# API Docs
+# RAPIDS API Docs
 {:.no_toc}
 
 Access our current docs for the RAPIDS projects below. Docs are available in

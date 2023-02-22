@@ -1,6 +1,6 @@
 ---
 layout: default
-title: RAPIDS Visualization Guide
+title: Visualization Guide
 nav_order: 5
 permalink: visualization
 ---
