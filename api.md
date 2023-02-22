@@ -1,16 +1,16 @@
 ---
 layout: default
 title: API Docs
-nav_order: 3
+nav_order: 4
 permalink: api
 has_toc: false
 has_children: false
 ---
 
-# API Docs
+# RAPIDS API Docs
 {:.no_toc}
 
-Access our current docs for all RAPIDS projects below. Docs are available in
+Access our current docs for the RAPIDS projects below. Docs are available in
 both "stable" and "nightly" versions. The description of each is below to help
 select the docs that fit your needs.
 {: .fs-6 .fw-300 }
