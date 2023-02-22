@@ -348,18 +348,19 @@
             </div>
         </div>
         <div class="selector-buttons">
-            <a class="cmd-button" x-on:click="copyToClipboard">COPY COMMAND <i class="fas fa-clipboard"></i></a>
+            <a class="primary-btn" x-on:click="copyToClipboard">COPY COMMAND <i class="fas fa-clipboard"></i></a>
         </div>
     </div>
 </section>
 
 <script type="text/javascript">
+
     document.addEventListener('alpine:init', () => {
         Alpine.data('rapids_selector', () => ({
             // default values
-            active_python_ver: "3.9",
-            active_cuda_ver: "11.5",
-            active_os_ver: "Ubuntu 20.04",
+            active_python_ver: "3.10",
+            active_cuda_ver: "11.8",
+            active_os_ver: "Ubuntu 22.04",
             active_method: "Conda",
             active_release: "Stable",
             active_arch: "amd",
@@ -370,9 +371,9 @@
             active_additional_packages: [],
 
             // all possible values
-            python_vers: ["3.8", "3.9"],
-            cuda_vers: ["11.2", "11.4", "11.5"],
-            os_vers: ["Ubuntu 18.04", "Ubuntu 20.04", "CentOS 7", "Rocky Linux 8"],
+            python_vers: ["3.8", "3.10"],
+            cuda_vers: ["11.2", "11.4", "11.5", "11.8"],
+            os_vers: ["Ubuntu 20.04", "Ubuntu 22.04", "CentOS 7", "Rocky Linux 8"],
             methods: ["Conda", "Docker", "Source"],
             releases: ["Stable", "Nightly"],
             arches: ["amd", "arm"],
@@ -636,8 +637,8 @@
                 if (this.active_img_options.includes("development") && cuda_version !== this.getNewestCudaVer()) {
                     isDisabled = true;
                 }
-                if (this.active_arch === "arm" && cuda_version === "11.0") isDisabled = true;
                 if (this.active_additional_packages.includes("TensorFlow") && cuda_version !== "11.2") isDisabled = true;
+                if (this.active_os_ver === 'Ubuntu 22.04' && cuda_version !== '11.8' && this.active_method === 'Docker') isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedPython(python_version) {
@@ -647,7 +648,7 @@
             disableUnsupportedImgOS(os) {
                 var isDisabled = false;
                 if (this.active_arch === "arm" && os === "CentOS 7") isDisabled = true;
-                if (this.active_release === "Nightly" && os === "CentOS 8") isDisabled = true;
+                if (this.active_cuda_ver !== '11.8' && os === 'Ubuntu 22.04' && this.active_method === 'Docker') isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedImgType(type) {
@@ -670,7 +671,6 @@
             },
             releaseClickHandler(e, release) {
                 if (this.isDisabled(e.target)) return;
-                if (release === "Nightly" && this.active_os_ver === "CentOS 8") this.active_os_ver = "CentOS 7";
                 this.active_release = release;
             },
             imgTypeClickHandler(e, type) {
@@ -680,8 +680,7 @@
             archClickHandler(e, arch) {
                 if (this.isDisabled(e.target)) return;
                 if (arch === "arm") this.active_img_type = "core";
-                if (arch === "arm" && this.active_os_ver === "CentOS 7") this.active_os_ver = "Ubuntu 20.04";
-                if (arch === "arm" && this.active_cuda_ver === "11.0") this.active_cuda_ver = "11.2";
+                if (arch === "arm" && this.active_os_ver === "CentOS 7") this.active_os_ver = "Ubuntu 22.04";
                 this.active_arch = arch;
             },
             cudaClickHandler(e, version) {
@@ -703,6 +702,9 @@
                 }
                 if (method === "Docker") {
                     this.active_release = "Stable"
+                    if (this.active_os_ver === 'Ubuntu 22.04') {
+                        this.active_cuda_ver = '11.8';
+                    }
                 }
                 this.active_method = method;
             },

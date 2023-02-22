@@ -69,7 +69,7 @@ A GitHub repository with our introductory examples of XGBoost, cuDF, cuML, cuGra
 {: .mb-8 }
 
 
-###  <i class="fa-light fa-notebook"></i>Extended Collection of [Community Notebooks](https://github.com/rapidsai/notebooks-contrib){: target="_blank"}
+###  <i class="fa-light fa-notebook"></i> Extended Collection of [Community Notebooks](https://github.com/rapidsai/notebooks-contrib){: target="_blank"}
 A collection of examples and tutorials used to introduce new users to the features and capabilities of RAPIDS.
 {: .mb-8 }
 
