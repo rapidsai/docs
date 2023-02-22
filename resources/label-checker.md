@@ -2,7 +2,7 @@
 layout: default
 nav_order: 6
 parent: Resources
-grand_parent: RAPIDS Maintainer Docs
+grand_parent: Maintainer Docs
 title: Label Checker
 ---
 

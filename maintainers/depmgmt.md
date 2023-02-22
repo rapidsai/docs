@@ -1,7 +1,7 @@
 ---
 layout: default
-nav_order: 4
-parent: RAPIDS Maintainer Docs
+nav_order: 2
+parent: Maintainer Docs
 title: Dependency Management
 ---
 

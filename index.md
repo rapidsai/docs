@@ -4,7 +4,7 @@ title: Home
 nav_order: 1
 permalink: /
 description: |
-  This site serves as a collection of all the documentation for RAPIDS. Whether you're new to RAPIDS, looking to contribute, or are a part of the RAPIDS team, the docs here will help guide you.
+  A collection of all the documentation for RAPIDS. Whether you're new to RAPIDS, looking to contribute, or are a part of the RAPIDS team, the docs here will help guide you.
 ---
 
 # RAPIDS Documentation and Resources
