@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['projections_342',['Projections',['../group__projection.html',1,'']]]
+  ['ranges_337',['Ranges',['../group__ranges.html',1,'']]]
 ];

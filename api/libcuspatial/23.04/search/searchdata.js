@@ -7,7 +7,7 @@ var indexSectionsWithContent =
   4: "_glnpst",
   5: "o",
   6: "c",
-  7: "cdefinprst",
+  7: "cdefnprst",
   8: "clu"
 };
 
