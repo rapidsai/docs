@@ -7,7 +7,7 @@ description: |
   Guide to installing RAPIDS
 ---
 
-# Installation Guide
+# RAPIDS Installation Guide
 {: .fs-8 }
 
 RAPIDS has several methods for installation, depending on the preferred environment and versioning. Get started by following these four steps:

@@ -7,7 +7,7 @@ description: |
   Guide to Getting Started Using RAPIDS
 ---
 
-# User Guides
+# RAPIDS User Guides
 {: .fs-8 }
 
 The RAPIDS data science framework is a collection of libraries for running end-to-end data science pipelines completely on the GPU. The interaction is designed to have a familiar look and feel to working in Python, but utilizes optimized NVIDIA® CUDA® primitives and high-bandwidth GPU memory under the hood. Below are some links to help getting started with the RAPIDS libraries.
