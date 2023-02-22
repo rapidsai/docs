@@ -1,7 +1,7 @@
 ---
 layout: default
-nav_order: 3
-parent: RAPIDS Maintainer Docs
+nav_order: 4
+parent: Maintainer Docs
 title: Testing Practices
 ---
 
