@@ -65,10 +65,10 @@ Create the ECSCluster object in your Python session:
 
 ```python
 from dask_cloudprovider.aws import ECSCluster
-cluster = ECSCluster(cluster_arn=[CLUSTER_ARN],
-                     n_workers=[NUM_WORKERS],
-                     worker_gpu=[NUM_GPUS]
-                     )
+
+cluster = ECSCluster(
+    cluster_arn=[CLUSTER_ARN], n_workers=[NUM_WORKERS], worker_gpu=[NUM_GPUS]
+)
 ```
 
 [CLUSTER_ARN] = The ARN of an existing ECS cluster to use for launching tasks <br />
@@ -79,6 +79,7 @@ cluster = ECSCluster(cluster_arn=[CLUSTER_ARN],
 
 ```python
 from dask.distributed import Client
+
 client = Client(cluster)
 ```
 
@@ -86,9 +87,10 @@ Load sample data and test the cluster!
 
 ```python
 import dask, cudf, dask_cudf
+
 ddf = dask.datasets.timeseries()
 gdf = ddf.map_partitions(cudf.from_pandas)
-gdf.groupby('name').id.count().compute().head()
+gdf.groupby("name").id.count().compute().head()
 ```
 
 ```shell

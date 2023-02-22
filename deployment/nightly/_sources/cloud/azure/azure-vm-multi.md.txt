@@ -22,6 +22,7 @@ In Python terminal, a cluster can be created using the `dask_cloudprovider` pack
 
 ```python
 from dask_cloudprovider.azure import AzureVMCluster
+
 resource_group = "<RESOURCE_GROUP>"
 vnet = "<VNET>"
 security_group = "<SECURITY_GROUP>"
@@ -30,14 +31,14 @@ cluster = AzureVMCluster(
     resource_group=resource_group,
     vnet=vnet,
     security_group=security_group,
-    subscription_id=security_group,
+    subscription_id=subscription_id,
     location="westus2",
     vm_size="Standard_NC12s_v3",
     public_ingress=True,
     disk_size=100,
     n_workers=2,
     worker_class="dask_cuda.CUDAWorker",
-    docker_image="rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9",
+    docker_image="{{rapids_container}}",
     docker_args="-e DISABLE_JUPYTER=true -p 8787:8787 -p 8786:8786",
 )
 ```
@@ -48,12 +49,17 @@ To test RAPIDS, create a distributed client for the cluster and query for the GP
 
 ```python
 from dask.distributed import Client
+
 client = Client(cluster)
 
+
 def get_gpu_model():
-   import pynvml
-   pynvml.nvmlInit()
-   return pynvml.nvmlDeviceGetName(pynvml.nvmlDeviceGetHandleByIndex(0))
+    import pynvml
+
+    pynvml.nvmlInit()
+    return pynvml.nvmlDeviceGetName(pynvml.nvmlDeviceGetHandleByIndex(0))
+
+
 client.submit(get_gpu_model).result()
 ```
 

@@ -1,0 +1,698 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Does the Dask scheduler need a GPU? &#8212; RAPIDS Deployment Documentation  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="https://docs.rapids.ai/assets/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script defer="defer" src="../_static/js/nav.js"></script>
+    <script defer="defer" src="../_static/js/notebook-gallery.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/scheduler-gpu-requirements';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="How to Setup InfiniBand on Azure" href="azure/infiniband.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+   
+
+
+<a class="navbar-brand logo" href="https://docs.rapids.ai/">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../_static/RAPIDS-logo-purple.png" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/RAPIDS-logo-purple.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class=" navbar-header-items">
+    <div id="navbar-center" class="ml-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../cloud/index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../examples/index.html">
+                        Workflow Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../cloud/index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../examples/index.html">
+                        Workflow Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="mig.html">Multi-Instance GPU (MIG)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="azure/infiniband.html">How to Setup InfiniBand on Azure</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Does the Dask scheduler need a GPU?</a></li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+    <div class="sidebar-start-items__item">
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="does-the-dask-scheduler-need-a-gpu">
+<h1>Does the Dask scheduler need a GPU?<a class="headerlink" href="#does-the-dask-scheduler-need-a-gpu" title="Permalink to this heading">#</a></h1>
+<p>A common question from users deploying Dask clusters is whether the scheduler has different minimum requirements to the workers. This question is compounded when using RAPIDS and GPUs.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This guide outlines our current advice on scheduler hardware requirements, but this may be subject to change.</p>
+</div>
+<p><strong>TLDR; It is strongly suggested that your Dask scheduler has matching hardware/software capabilities to the other components in your cluster.</strong></p>
+<p>Therefore, if your workers have GPUs and the RAPIDS libraries installed we recommend that your scheduler does too. However the GPU attached to your scheduler doesn’t need to be as powerful as the GPUs on your workers, as long as it has the same capabilities and driver/CUDA versions.</p>
+<section id="what-does-the-scheduler-use-a-gpu-for">
+<h2>What does the scheduler use a GPU for?<a class="headerlink" href="#what-does-the-scheduler-use-a-gpu-for" title="Permalink to this heading">#</a></h2>
+<p>The Dask client generates a task graph of operations that it wants to be performed and serializes any data that needs to be sent to the workers. The scheduler handles allocating those tasks to the various Dask workers and passes serialized data back and forth. The workers deserialize the data, perform calculations, serialize the result and pass it back.</p>
+<p>This can lead users to logically ask if the scheduler needs the same capabilities as the workers/client. It doesn’t handle the actual data or do any of the user calculations, it just decides where work should go.</p>
+<p>Taking this even further you could even ask “Does the Dask scheduler even need to be written in Python?”. Some folks even <a class="reference external" href="https://github.com/It4innovations/rsds">experimented with a Rust implementation of the scheduler</a> a couple of years ago.</p>
+<p>There are two primary reasons why we recommend that the scheduler has the same capabilities:</p>
+<ul class="simple">
+<li><p>There are edge cases where the scheduler does deserialize data.</p></li>
+<li><p>Some scheduler optimizations require high-level graphs to be pickled on the client and unpickled on the scheduler.</p></li>
+</ul>
+<p>If your workload doesn’t trigger any edge-cases and you’re not using the high-level graph optimizations then you could likely get away with not having a GPU. But it is likely you will run into problems eventually and the failure-modes will be potentially hard to debug.</p>
+<section id="known-edge-cases">
+<h3>Known edge cases<a class="headerlink" href="#known-edge-cases" title="Permalink to this heading">#</a></h3>
+<p>When calling <a class="reference external" href="https://docs.dask.org/en/latest/futures.html#distributed.Client.submit" title="(in Dask)"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">client.submit</span></code></span></a> and passing data directly to a function the whole graph is serialized and sent to the scheduler. In order for the scheduler to figure out what to do with it the graph is deserialized. If the data uses GPUs this can cause the scheduler to import RAPIDS libraries, attempt to instantiate a CUDA context and populate the data into GPU memory. If those libraries are missing and/or there are no GPUs this will cause the scheduler to fail.</p>
+<p>Many Dask collections also have a meta object which represents the overall collection but without any data. For example a Dask Dataframe has a meta Pandas Dataframe which has the same meta properties and is used during scheduling. If the underlying data is instead a cuDF Dataframe then the meta object will be too, which is deserialized on the scheduler.</p>
+</section>
+<section id="example-failure-modes">
+<h3>Example failure modes<a class="headerlink" href="#example-failure-modes" title="Permalink to this heading">#</a></h3>
+<p>When using the default TCP communication protocol, the scheduler generally does <em>not</em> inspect data communicated between clients and workers, so many workflows will not provoke failure. For example, suppose we set up a Dask cluster and do not provide the scheduler with a GPU. The following simple computation with <a class="reference external" href="https://cupy.dev">CuPy</a>-backed Dask arrays completes successfully</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cupy</span>
+<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">wait</span>
+<span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">scheduler_file</span><span class="o">=</span><span class="s2">&quot;scheduler.json&quot;</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">cupy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">like</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">persist</span><span class="p">()</span>
+<span class="n">wait</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="c1"># Now let&#39;s look at some results</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">compute</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>We can run this code, giving the scheduler no access to a GPU:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="w"> </span>dask<span class="w"> </span>scheduler<span class="w"> </span>--protocol<span class="w"> </span>tcp<span class="w"> </span>--scheduler-file<span class="w"> </span>scheduler.json<span class="w">  </span><span class="p">&amp;</span>
+$<span class="w"> </span>dask<span class="w"> </span>cuda<span class="w"> </span>worker<span class="w"> </span>--protocol<span class="w"> </span>tcp<span class="w"> </span>--scheduler-file<span class="w"> </span>scheduler.json<span class="w"> </span><span class="p">&amp;</span>
+$<span class="w"> </span>python<span class="w"> </span>test.py
+...
+<span class="o">[</span><span class="w"> </span><span class="m">0</span><span class="w">  </span><span class="m">2</span><span class="w">  </span><span class="m">4</span><span class="w">  </span><span class="m">6</span><span class="w">  </span><span class="m">8</span><span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="m">12</span><span class="w"> </span><span class="m">14</span><span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">18</span><span class="o">]</span>
+...
+</pre></div>
+</div>
+<p>In contrast, if you provision an <a class="reference internal" href="azure/infiniband.html"><span class="doc std std-doc">Infiniband-enabled system</span></a> and wish to take advantage of the high-performance network, you will want to use the <a class="reference external" href="https://openucx.org/">UCX</a> protocol, rather than TCP. Using such a setup without a GPU on the scheduler will not succeed. When the client or workers communicate with the scheduler, any GPU-allocated buffers will be sent directly between GPUs (avoiding a roundtrip to host memory). This is more efficient, but will not succeed if the scheduler does not <em>have</em> a GPU. Running the same example from above, but this time using UCX we obtain an error:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="w"> </span>dask<span class="w"> </span>scheduler<span class="w"> </span>--protocol<span class="w"> </span>ucx<span class="w"> </span>--scheduler-file<span class="w"> </span>scheduler.json<span class="w">  </span><span class="p">&amp;</span>
+$<span class="w"> </span>dask<span class="w"> </span>cuda<span class="w"> </span>worker<span class="w"> </span>--protocol<span class="w"> </span>ucx<span class="w"> </span>--scheduler-file<span class="w"> </span>scheduler.json<span class="w"> </span><span class="p">&amp;</span>
+$<span class="w"> </span>python<span class="w"> </span>test.py
+$<span class="w"> </span><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="w"> </span>dask<span class="w"> </span>scheduler<span class="w"> </span>--protocol<span class="w"> </span>ucx<span class="w"> </span>--scheduler-file<span class="w"> </span>foo.json<span class="w">  </span><span class="p">&amp;</span>
+$<span class="w"> </span>dask-cuda-worker<span class="w"> </span>--protocol<span class="w"> </span>ucx<span class="w">  </span>--scheduler-file<span class="w"> </span>scheduler.json<span class="w"> </span><span class="p">&amp;</span>
+$<span class="w"> </span>python<span class="w"> </span>test.py
+...
+<span class="m">2023</span>-01-27<span class="w"> </span><span class="m">11</span>:01:28,263<span class="w"> </span>-<span class="w"> </span>distributed.core<span class="w"> </span>-<span class="w"> </span>ERROR<span class="w"> </span>-<span class="w"> </span>CUDA<span class="w"> </span>error<span class="w"> </span>at:<span class="w"> </span>.../rmm/include/rmm/cuda_device.hpp:56:<span class="w"> </span>cudaErrorNoDevice<span class="w"> </span>no<span class="w"> </span>CUDA-capable<span class="w"> </span>device<span class="w"> </span>is<span class="w"> </span>detected
+Traceback<span class="w"> </span><span class="o">(</span>most<span class="w"> </span>recent<span class="w"> </span>call<span class="w"> </span>last<span class="o">)</span>:
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">741</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>wrapper
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>await<span class="w"> </span>func<span class="o">(</span>*args,<span class="w"> </span>**kwargs<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/comm/ucx.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">372</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nb">read</span>
+<span class="w">    </span><span class="nv">frames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/comm/ucx.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">373</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>&lt;listcomp&gt;
+<span class="w">    </span>device_array<span class="o">(</span>each_size<span class="o">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span>is_cuda<span class="w"> </span><span class="k">else</span><span class="w"> </span>host_array<span class="o">(</span>each_size<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/comm/ucx.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">171</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>device_array
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>rmm.DeviceBuffer<span class="o">(</span><span class="nv">size</span><span class="o">=</span>n<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;device_buffer.pyx&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">85</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>rmm._lib.device_buffer.DeviceBuffer.__cinit__
+RuntimeError:<span class="w"> </span>CUDA<span class="w"> </span>error<span class="w"> </span>at:<span class="w"> </span>.../rmm/include/rmm/cuda_device.hpp:56:<span class="w"> </span>cudaErrorNoDevice<span class="w"> </span>no<span class="w"> </span>CUDA-capable<span class="w"> </span>device<span class="w"> </span>is<span class="w"> </span>detected
+<span class="m">2023</span>-01-27<span class="w"> </span><span class="m">11</span>:01:28,263<span class="w"> </span>-<span class="w"> </span>distributed.core<span class="w"> </span>-<span class="w"> </span>ERROR<span class="w"> </span>-<span class="w"> </span>Exception<span class="w"> </span><span class="k">while</span><span class="w"> </span>handling<span class="w"> </span>op<span class="w"> </span>gather
+Traceback<span class="w"> </span><span class="o">(</span>most<span class="w"> </span>recent<span class="w"> </span>call<span class="w"> </span>last<span class="o">)</span>:
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/core.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">820</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>_handle_comm
+<span class="w">    </span><span class="nv">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>result
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/scheduler.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">5687</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>gather
+<span class="w">    </span>data,<span class="w"> </span>missing_keys,<span class="w"> </span><span class="nv">missing_workers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>gather_from_workers<span class="o">(</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils_comm.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">80</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>gather_from_workers
+<span class="w">    </span><span class="nv">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>c
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/worker.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">2872</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>get_data_from_worker
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>await<span class="w"> </span>retry_operation<span class="o">(</span>_get_data,<span class="w"> </span><span class="nv">operation</span><span class="o">=</span><span class="s2">&quot;get_data_from_worker&quot;</span><span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils_comm.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">419</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>retry_operation
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>await<span class="w"> </span>retry<span class="o">(</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils_comm.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">404</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>retry
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>await<span class="w"> </span>coro<span class="o">()</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/worker.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">2852</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>_get_data
+<span class="w">    </span><span class="nv">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>send_recv<span class="o">(</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/core.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">986</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>send_recv
+<span class="w">    </span><span class="nv">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>comm.read<span class="o">(</span><span class="nv">deserializers</span><span class="o">=</span>deserializers<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">741</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>wrapper
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>await<span class="w"> </span>func<span class="o">(</span>*args,<span class="w"> </span>**kwargs<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/comm/ucx.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">372</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nb">read</span>
+<span class="w">    </span><span class="nv">frames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/comm/ucx.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">373</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>&lt;listcomp&gt;
+<span class="w">    </span>device_array<span class="o">(</span>each_size<span class="o">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span>is_cuda<span class="w"> </span><span class="k">else</span><span class="w"> </span>host_array<span class="o">(</span>each_size<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/comm/ucx.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">171</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>device_array
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>rmm.DeviceBuffer<span class="o">(</span><span class="nv">size</span><span class="o">=</span>n<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;device_buffer.pyx&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">85</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>rmm._lib.device_buffer.DeviceBuffer.__cinit__
+RuntimeError:<span class="w"> </span>CUDA<span class="w"> </span>error<span class="w"> </span>at:<span class="w"> </span>.../rmm/include/rmm/cuda_device.hpp:56:<span class="w"> </span>cudaErrorNoDevice<span class="w"> </span>no<span class="w"> </span>CUDA-capable<span class="w"> </span>device<span class="w"> </span>is<span class="w"> </span>detected
+Traceback<span class="w"> </span><span class="o">(</span>most<span class="w"> </span>recent<span class="w"> </span>call<span class="w"> </span>last<span class="o">)</span>:
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;test.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">15</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>&lt;module&gt;
+<span class="w">    </span>print<span class="o">(</span>z<span class="o">[</span>:10<span class="o">]</span>.compute<span class="o">())</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../dask/dask/base.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">314</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>compute
+<span class="w">    </span><span class="o">(</span>result,<span class="o">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>compute<span class="o">(</span>self,<span class="w"> </span><span class="nv">traverse</span><span class="o">=</span>False,<span class="w"> </span>**kwargs<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../dask/dask/base.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">599</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>compute
+<span class="w">    </span><span class="nv">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>schedule<span class="o">(</span>dsk,<span class="w"> </span>keys,<span class="w"> </span>**kwargs<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/client.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">3144</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>get
+<span class="w">    </span><span class="nv">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>self.gather<span class="o">(</span>packed,<span class="w"> </span><span class="nv">asynchronous</span><span class="o">=</span>asynchronous,<span class="w"> </span><span class="nv">direct</span><span class="o">=</span>direct<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/client.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">2313</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>gather
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>self.sync<span class="o">(</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">338</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>sync
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>sync<span class="o">(</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">405</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>sync
+<span class="w">    </span>raise<span class="w"> </span>exc.with_traceback<span class="o">(</span>tb<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">378</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>f
+<span class="w">    </span><span class="nv">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>yield<span class="w"> </span>future
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../tornado/gen.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">769</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>run
+<span class="w">    </span><span class="nv">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>future.result<span class="o">()</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/client.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">2205</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>_gather
+<span class="w">    </span><span class="nv">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>future
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/client.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">2256</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>_gather_remote
+<span class="w">    </span><span class="nv">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>retry_operation<span class="o">(</span>self.scheduler.gather,<span class="w"> </span><span class="nv">keys</span><span class="o">=</span>keys<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils_comm.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">419</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>retry_operation
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>await<span class="w"> </span>retry<span class="o">(</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils_comm.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">404</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>retry
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>await<span class="w"> </span>coro<span class="o">()</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/core.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">1221</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>send_recv_from_rpc
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>await<span class="w"> </span>send_recv<span class="o">(</span><span class="nv">comm</span><span class="o">=</span>comm,<span class="w"> </span><span class="nv">op</span><span class="o">=</span>key,<span class="w"> </span>**kwargs<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/core.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">1011</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>send_recv
+<span class="w">    </span>raise<span class="w"> </span>exc.with_traceback<span class="o">(</span>tb<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/core.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">820</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>_handle_comm
+<span class="w">    </span><span class="nv">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>result
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/scheduler.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">5687</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>gather
+<span class="w">    </span>data,<span class="w"> </span>missing_keys,<span class="w"> </span><span class="nv">missing_workers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>gather_from_workers<span class="o">(</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils_comm.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">80</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>gather_from_workers
+<span class="w">    </span><span class="nv">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>c
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/worker.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">2872</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>get_data_from_worker
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>await<span class="w"> </span>retry_operation<span class="o">(</span>_get_data,<span class="w"> </span><span class="nv">operation</span><span class="o">=</span><span class="s2">&quot;get_data_from_worker&quot;</span><span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils_comm.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">419</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>retry_operation
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>await<span class="w"> </span>retry<span class="o">(</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils_comm.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">404</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>retry
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>await<span class="w"> </span>coro<span class="o">()</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/worker.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">2852</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>_get_data
+<span class="w">    </span><span class="nv">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>send_recv<span class="o">(</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/core.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">986</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>send_recv
+<span class="w">    </span><span class="nv">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>await<span class="w"> </span>comm.read<span class="o">(</span><span class="nv">deserializers</span><span class="o">=</span>deserializers<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/utils.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">741</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>wrapper
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>await<span class="w"> </span>func<span class="o">(</span>*args,<span class="w"> </span>**kwargs<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/comm/ucx.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">372</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nb">read</span>
+<span class="w">    </span><span class="nv">frames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/comm/ucx.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">373</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>&lt;listcomp&gt;
+<span class="w">    </span>device_array<span class="o">(</span>each_size<span class="o">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span>is_cuda<span class="w"> </span><span class="k">else</span><span class="w"> </span>host_array<span class="o">(</span>each_size<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;.../distributed/distributed/comm/ucx.py&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">171</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>device_array
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>rmm.DeviceBuffer<span class="o">(</span><span class="nv">size</span><span class="o">=</span>n<span class="o">)</span>
+<span class="w">  </span>File<span class="w"> </span><span class="s2">&quot;device_buffer.pyx&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">85</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>rmm._lib.device_buffer.DeviceBuffer.__cinit__
+RuntimeError:<span class="w"> </span>CUDA<span class="w"> </span>error<span class="w"> </span>at:<span class="w"> </span>.../rmm/include/rmm/cuda_device.hpp:56:<span class="w"> </span>cudaErrorNoDevice<span class="w"> </span>no<span class="w"> </span>CUDA-capable<span class="w"> </span>device<span class="w"> </span>is<span class="w"> </span>detected
+...
+</pre></div>
+</div>
+<p>The critical error comes from <a class="reference external" href="https://docs.rapids.ai/api/rmm/stable/">RMM</a>, we’re attempting to allocate a <a class="reference external" href="https://docs.rapids.ai/api/rmm/stable/basics.html#devicebuffers"><code class="docutils literal notranslate"><span class="pre">DeviceBuffer</span></code></a> on the scheduler, but there is no GPU available to do so:</p>
+<div class="highlight-pytb notranslate"><div class="highlight"><pre><span></span>  File <span class="nb">&quot;.../distributed/distributed/comm/ucx.py&quot;</span>, line <span class="m">171</span>, in <span class="n">device_array</span>
+<span class="w">    </span><span class="k">return</span> <span class="n">rmm</span><span class="o">.</span><span class="n">DeviceBuffer</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+  File <span class="nb">&quot;device_buffer.pyx&quot;</span>, line <span class="m">85</span>, in <span class="n">rmm._lib.device_buffer.DeviceBuffer.__cinit__</span>
+<span class="gr">RuntimeError</span>: <span class="n">CUDA error at: .../rmm/include/rmm/cuda_device.hpp:56: cudaErrorNoDevice no CUDA-capable device is detected</span>
+</pre></div>
+</div>
+</section>
+<section id="scheduler-optimizations-and-high-level-graphs">
+<h3>Scheduler optimizations and High-Level graphs<a class="headerlink" href="#scheduler-optimizations-and-high-level-graphs" title="Permalink to this heading">#</a></h3>
+<p>The Dask community is actively working on implementing high-level graphs which will both speed up client -&gt; scheduler communication and allow the scheduler to make advanced optmizations such as predicate pushdown.</p>
+<p>Much effort has been put into using existing serialization strategies to communicate the HLG but this has proven prohibitively difficult to implement. The current plan is to simplify HighLevelGraph/Layer so that the entire HLG can be pickled on the client, sent to the scheduler as a single binary blob, and then unpickled/materialized (HLG-&gt;dict) on the scheduler. The problem with this new plan is that the pickle/un-pickle convention will require the scheduler to have the same environment as the client. If any Layer logic also requires a device allocation, then this approach also requires the scheduler to have access to a GPU.</p>
+</section>
+</section>
+<section id="so-what-are-the-minimum-requirements-of-the-scheduler">
+<h2>So what are the minimum requirements of the scheduler?<a class="headerlink" href="#so-what-are-the-minimum-requirements-of-the-scheduler" title="Permalink to this heading">#</a></h2>
+<p>From a software perspective we recommend that the Python environment on the client, scheduler and workers all match. Given that the user is expected to ensure the worker has the same environment as the client it is not much of a burden to ensure the scheduler also has the same environment.</p>
+<p>From a hardware perspective we recommend that the scheduler has the same capabilities, but not necessarily the same quantity of resource. Therefore if the workers have one or more GPUs we recommend that the scheduler has access to one GPU with matching NVIDIA driver and CUDA versions. In a large multi-node cluster deployment on a cloud platform this may mean the workers are launched on VMs with 8 GPUs and the scheduler is launched on a smaller VM with one GPU. You could also select a less powerful GPU such as those intended for inferencing for your scheduler like a T4, provided it has the same CUDA capabilities, NVIDIA driver version and CUDA/CUDA Toolkit version.</p>
+<p>This balance means we can guarantee things function as intended, but reduces cost because placing the scheduler on an 8 GPU node would be a waste of resources.</p>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="azure/infiniband.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">How to Setup InfiniBand on Azure</p>
+      </div>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#what-does-the-scheduler-use-a-gpu-for">
+   What does the scheduler use a GPU for?
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#known-edge-cases">
+     Known edge cases
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#example-failure-modes">
+     Example failure modes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#scheduler-optimizations-and-high-level-graphs">
+     Scheduler optimizations and High-Level graphs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#so-what-are-the-minimum-requirements-of-the-scheduler">
+   So what are the minimum requirements of the scheduler?
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2023, NVIDIA.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="theme-version">
+    Built with the
+    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
+        PyData Sphinx Theme
+    </a>
+    0.12.0.
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>

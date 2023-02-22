@@ -252,7 +252,7 @@ Accept the default and allow conda init to run. Then start a new shell.
 Create a conda environment (see [UCX-Py](https://ucx-py.readthedocs.io/en/latest/install.html) docs)
 
 ```shell
-mamba create -n ucxpy -c rapidsai -c conda-forge -c nvidia rapids=22.10 python=3.9 cudatoolkit=11.5 ipython ucx-proc=*=gpu ucx ucx-py dask distributed numpy cupy pytest pynvml -y
+mamba create -n ucxpy {{ rapids_conda_channels }} {{ rapids_conda_packages }} ipython ucx-proc=*=gpu ucx ucx-py dask distributed numpy cupy pytest pynvml -y
 mamba activate ucxpy
 ```
 
@@ -299,7 +299,7 @@ UCX_TLS=tcp,cuda_copy,rc
 
 ## Run Benchmarks
 
-Finally, let's run the [merge benchmark](https://github.com/rapidsai/dask-cuda/blob/branch-22.12/dask_cuda/benchmarks/local_cudf_merge.py) from `dask-cuda`.
+Finally, let's run the [merge benchmark](https://github.com/rapidsai/dask-cuda/blob/HEAD/dask_cuda/benchmarks/local_cudf_merge.py) from `dask-cuda`.
 
 This benchmark uses Dask to perform a merge of two dataframes that are distributed across all the available GPUs on your
 VM. Merges are a challenging benchmark in a distributed setting since they require communication-intensive shuffle

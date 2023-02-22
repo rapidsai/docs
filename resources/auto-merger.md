@@ -27,7 +27,7 @@ Some RAPIDS repositories use an auto-merger to merge pull requests. The auto-mer
 1. Ensures all merged pull requests have consistent and useful commit messages
 2. Allows pull request merges to be scheduled to occur when all merge criteria (below) are satisfied
 
-To use the auto-merger, simply type `@gpucibot merge` as a comment on a given pull request. The auto-merger will not run if the comment includes any other text besides `@gpucibot merge`.
+To use the auto-merger, simply type `/merge` as a comment on a given pull request. The auto-merger will not run if the comment includes any other text besides `/merge`.
 
 If the merge criteria below are satisfied when the comment is left on the pull request, the pull request will merge immediately.
 
@@ -39,7 +39,7 @@ If the merge criteria below are **not satisfied** when the comment is left on th
 - Must not have merge conflicts
 - Must not be merging to the `main` branch
 - No changes have been requested from users who have `write`, `admin`, or `owner` permissions
-- Any user who left the `@gpucibot merge` comment must have `write` or `admin` privileges on the repo
+- Any user who left the `/merge` comment must have `write` or `admin` privileges on the repo
 
 The pull request will be squash merged and the commit title will be formatted like `<PR_Title> (#<PR_Number>)` . Any square brackets `[]` in the title will be automatically removed. The commit message will be formatted like ([example](https://github.com/rapidsai/cudf/commit/397bf0afb66efdf9025cc5425af422c3478f62fb)):
 
@@ -55,5 +55,3 @@ Approvers:
 URL: https://github.com/rapidsai/cudf/pull/8638/
 
 ```
-
-> **PRO TIP!** - Use GitHub's [saved replies](https://docs.github.com/en/free-pro-team@latest/github/writing-on-github/using-saved-replies) feature to avoid having to type out the `@gpucibot merge` comment by hand every time.
