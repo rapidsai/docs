@@ -35,9 +35,9 @@ mamba create -y -n rapids {{ rapids_conda_channels }} {{ rapids_conda_packages }
 conda activate rapids
 
 # optionally install AutoGluon for AutoML GPU demo
-# anaconda3/envs/rapids/bin/python -m pip install --pre autogluon
+# python -m pip install --pre autogluon
 
-anaconda3/envs/rapids/bin/python -m ipykernel install --user --name rapids
+python -m ipykernel install --user --name rapids
 echo "kernel install completed"
 EOF
 ```
@@ -68,7 +68,7 @@ All you’ll need to do is bring in your RAPIDS training script and libraries as
 
 ![Screenshot of summarized step to build Estimator](../../images/sagemaker-containerize-and-publish.png)
 
-- Having built our container [ +custom logic], compile all efforts into an Estimator instance. Test the Estimator and run parallel hyperparameter optimization tuning jobs.
+- Having built our container and custom logic, we can now assemble all components into an Estimator. We can now test the Estimator and run parallel hyperparameter optimization tuning jobs.
 
 ```python
 estimator = sagemaker.estimator.Estimator(
