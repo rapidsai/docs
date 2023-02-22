@@ -31,14 +31,14 @@ cluster = AzureVMCluster(
     resource_group=resource_group,
     vnet=vnet,
     security_group=security_group,
-    subscription_id=security_group,
+    subscription_id=subscription_id,
     location="westus2",
     vm_size="Standard_NC12s_v3",
     public_ingress=True,
     disk_size=100,
     n_workers=2,
     worker_class="dask_cuda.CUDAWorker",
-    docker_image={{rapids_container}},
+    docker_image="{{rapids_container}}",
     docker_args="-e DISABLE_JUPYTER=true -p 8787:8787 -p 8786:8786",
 )
 ```

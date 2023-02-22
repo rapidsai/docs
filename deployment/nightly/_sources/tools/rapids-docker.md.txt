@@ -1,6 +1,6 @@
-# Docker Images
+# Container Images
 
-RAPIDS docker images can be found on [Docker Hub](https://hub.docker.com/r/rapidsai/rapidsai).
+Installation instructions for Docker are hosted at the [RAPIDS Container Installation Docs Page](https://docs.rapids.ai/install#docker).
 
 ```{relatedexamples}
 
