@@ -70,7 +70,7 @@ Developers
   1. Change the minimal amount of code required
   2. Update related documentation and unit tests
   3. It is acceptable to implement a quick fix and open a new issue for a more in depth solution
-4. Once complete, create a [pull request]({% link contributing/prs.md %}) targeting `branch-M.A`
+4. Once complete, create a pull request targeting `branch-M.A`
 5. Notify the project lead
 
 Project Leads
