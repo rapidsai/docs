@@ -230,11 +230,11 @@ Windows users can now tap into GPU accelerated data science on their local machi
     ```
 <br/>
 
-###  **WSL PiP**
+###  **WSL and PiP**
 1. Install WSL2 and the Ubuntu 20.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
-4. Follow [this guide to install the CUDA Toolkit without drivers](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} into the WSL2 instance.
+4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then [install the CUDA Toolkit without drivers](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_network){: target="_blank"} into the WSL2 instance.
 5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [pip instructions](#pip).
 6. Run this code to check that the RAPIDS installation is working:
 	```
