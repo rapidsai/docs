@@ -28,4 +28,14 @@ How to setup InfiniBand on Azure.
 {bdg}`Microsoft Azure`
 ````
 
+````{grid-item-card}
+:link: scheduler-gpu-requirements
+:link-type: doc
+Does the Dask scheduler need a GPU?
+^^^
+Guidance on Dask scheduler software and hardware requirements.
+
+{bdg-primary}`Dask`
+````
+
 `````

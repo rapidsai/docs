@@ -1,6 +1,6 @@
 In the terminal we can open `ipython` and check that we can import and use RAPIDS libraries like `cudf`.
 
-```python
+```ipython
 In [1]: import cudf
 In [2]: df = cudf.datasets.timeseries()
 In [3]: df.head()

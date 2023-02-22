@@ -12,8 +12,40 @@ This helm chart can be configured to run RAPIDS by providing GPUs to the Juptyte
 
 Built on top of the Dask Helm Chart, `rapids-config.yaml` file contains additional configurations required to setup RAPIDS environment.
 
-```{literalinclude} ./dask-helm-chart/rapids-config.yaml
-:language: yaml
+```yaml
+# rapids-config.yaml
+scheduler:
+  image:
+    repository: "{{ rapids_container.split(":")[0] }}"
+    tag: "{{ rapids_container.split(":")[1] }}"
+  env:
+    - name: DISABLE_JUPYTER
+      value: "true"
+
+worker:
+  image:
+    repository: "{{ rapids_container.split(":")[0] }}"
+    tag: "{{ rapids_container.split(":")[1] }}"
+  dask_worker: "dask_cuda_worker"
+  replicas: 3
+  env:
+    - name: DISABLE_JUPYTER
+      value: "true"
+  resources:
+    limits:
+      nvidia.com/gpu: 1
+
+jupyter:
+  image:
+    repository: "{{ rapids_container.split(":")[0] }}"
+    tag: "{{ rapids_container.split(":")[1] }}"
+  servicePort: 8888
+  # Default password hash for "rapids"
+  password: "argon2:$argon2id$v=19$m=10240,t=10,p=8$TBbhubLuX7efZGRKQqIWtw$RG+jCBB2KYF2VQzxkhMNvHNyJU9MzNGTm2Eu2/f7Qpc"
+  resources:
+    limits:
+      nvidia.com/gpu: 1
+
 ```
 
 `[jupyter|scheduler|worker].image.*` is updated with the RAPIDS "runtime" image from the stable release,

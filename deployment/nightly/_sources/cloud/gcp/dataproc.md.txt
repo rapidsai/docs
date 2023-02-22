@@ -10,10 +10,9 @@ It is strongly recommended that you copy the initialization scripts into your ow
 $ REGION=<region>
 $ GCS_BUCKET=<bucket_name>
 $ gcloud storage buckets create gs://$GCS_BUCKET
-$ gsutil cp gs://goog-dataproc-initialization-actions-${REGION}/gpu/install_gpu_driver.sh,\
-            gs://goog-dataproc-initialization-actions-${REGION}/dask/dask.sh,\
-            gs://goog-dataproc-initialization-actions-${REGION}/rapids/rapids.sh\
-        gs://$GCS_BUCKET
+$ gsutil cp gs://goog-dataproc-initialization-actions-${REGION}/gpu/install_gpu_driver.sh gs://$GCS_BUCKET
+$ gsutil cp gs://goog-dataproc-initialization-actions-${REGION}/dask/dask.sh gs://$GCS_BUCKET
+$ gsutil cp gs://goog-dataproc-initialization-actions-${REGION}/rapids/rapids.sh gs://$GCS_BUCKET
 
 ```
 
@@ -29,7 +28,7 @@ $ gcloud dataproc clusters create $CLUSTER_NAME\
     --master-accelerator type=nvidia-tesla-t4,count=2\
     --worker-machine-type n1-standard-32\
     --worker-accelerator type=nvidia-tesla-t4,count=2\
-    --initialization-actions=$GCS_BUCKET/install_gpu_driver.sh,gs://$GCS_BUCKET/dask.sh,gs://$GCS_BUCKET/rapids.sh\
+    --initialization-actions=gs://$GCS_BUCKET/install_gpu_driver.sh,gs://$GCS_BUCKET/dask.sh,gs://$GCS_BUCKET/rapids.sh\
     --initialization-action-timeout 60m\
     --optional-components=JUPYTER\
     --metadata gpu-driver-provider=NVIDIA,dask-runtime=$DASK_RUNTIME,rapids-runtime=DASK\

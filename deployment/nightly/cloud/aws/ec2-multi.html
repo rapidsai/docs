@@ -1,0 +1,690 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>EC2 Cluster (via Dask) &#8212; RAPIDS Deployment Documentation  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="https://docs.rapids.ai/assets/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script defer="defer" src="../../_static/js/nav.js"></script>
+    <script defer="defer" src="../../_static/js/notebook-gallery.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cloud/aws/ec2-multi';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="AWS Elastic Kubernetes Service (EKS)" href="eks.html" />
+    <link rel="prev" title="Elastic Compute Cloud (EC2)" href="ec2.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+   
+
+
+<a class="navbar-brand logo" href="https://docs.rapids.ai/">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/RAPIDS-logo-purple.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/RAPIDS-logo-purple.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class=" navbar-header-items">
+    <div id="navbar-center" class="ml-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../examples/index.html">
+                        Workflow Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../guides/index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../examples/index.html">
+                        Workflow Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../guides/index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <p aria-level="2" class="caption" role="heading"><span class="caption-text">Cloud</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Amazon Web Services</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ec2.html">Elastic Compute Cloud (EC2)</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">EC2 Cluster (via Dask)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eks.html">AWS Elastic Kubernetes Service (EKS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ecs.html">Elastic Container Service (ECS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sagemaker.html">SageMaker</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../azure/index.html">Microsoft Azure</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../azure/azure-vm.html">Azure Virtual Machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../azure/aks.html">Azure Kubernetes Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../azure/azure-vm-multi.html">Azure VM Cluster (via Dask)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../azure/azureml.html">Azure Machine Learning (Azure ML)</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../gcp/index.html">Google Cloud Platform</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../gcp/compute-engine.html">Compute Engine Instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gcp/vertex-ai.html">Vertex AI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gcp/gke.html">Google Kubernetes Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gcp/dataproc.html">Dataproc</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ibm/index.html">IBM Cloud</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ibm/virtual-server.html">Virtual Server for VPC</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+    <div class="sidebar-start-items__item">
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="ec2-cluster-via-dask">
+<h1>EC2 Cluster (via Dask)<a class="headerlink" href="#ec2-cluster-via-dask" title="Permalink to this heading">#</a></h1>
+<p>To launch a multi-node cluster on AWS EC2 we recommend you use <a class="reference external" href="https://cloudprovider.dask.org/en/latest/">Dask Cloud Provider</a>, a native cloud integration for Dask. It helps manage Dask clusters on different cloud platforms.</p>
+<section id="local-environment-setup">
+<h2>Local Environment Setup<a class="headerlink" href="#local-environment-setup" title="Permalink to this heading">#</a></h2>
+<p>Before running these instructions, ensure you have installed RAPIDS.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method of deploying RAPIDS effectively allows you to burst beyond the node you are on into a cluster of EC2 VMs. This does come with the caveat that you are on a RAPIDS capable environment with GPUs.</p>
+</div>
+<p>If you are using a machine with an NVIDIA GPU then follow the <a class="reference internal" href="../../local.html"><span class="doc std std-doc">local install instructions</span></a>. Alternatively if you do not have a GPU locally consider using s remote environment like a <a class="reference internal" href="sagemaker.html"><span class="doc std std-doc">SageMaker Notebook Instance</span></a>.</p>
+<section id="install-the-aws-cli">
+<h3>Install the AWS CLI<a class="headerlink" href="#install-the-aws-cli" title="Permalink to this heading">#</a></h3>
+<p>Install the AWS CLI tools following the <a class="reference external" href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">official instructions</a>.</p>
+</section>
+<section id="install-dask-cloud-provider">
+<h3>Install Dask Cloud Provider<a class="headerlink" href="#install-dask-cloud-provider" title="Permalink to this heading">#</a></h3>
+<p>Also install <code class="docutils literal notranslate"><span class="pre">dask-cloudprovider</span></code> and ensure you select the <code class="docutils literal notranslate"><span class="pre">aws</span></code> optional extras.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;dask-cloudprovider[aws]&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="cluster-setup">
+<h2>Cluster setup<a class="headerlink" href="#cluster-setup" title="Permalink to this heading">#</a></h2>
+<p>We’ll now setup the <a class="reference external" href="https://cloudprovider.dask.org/en/latest/aws.html#elastic-compute-cloud-ec2">EC2Cluster</a> from Dask Cloud Provider.</p>
+<p>To do this, you’ll first need to run <code class="docutils literal notranslate"><span class="pre">aws</span> <span class="pre">configure</span></code> and ensure the credentials are updated. <a class="reference external" href="https://cloudprovider.dask.org/en/latest/aws.html#authentication">Learn more about the setup</a>. The API also expects a security group that allows access to ports 8786-8787 and all traffic between instances in the security group. If you do not pass a group here, <code class="docutils literal notranslate"><span class="pre">dask-cloudprovider</span></code> will create one for you.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_cloudprovider.aws</span> <span class="kn">import</span> <span class="n">EC2Cluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">EC2Cluster</span><span class="p">(</span>
+    <span class="n">instance_type</span><span class="o">=</span><span class="s2">&quot;g4dn.12xlarge&quot;</span><span class="p">,</span>  <span class="c1"># 4 T4 GPUs</span>
+    <span class="n">docker_image</span><span class="o">=</span><span class="s2">&quot;rapidsai/rapidsai-core-nightly:23.04-cuda11.5-runtime-ubuntu20.04-py3.10&quot;</span><span class="p">,</span>
+    <span class="n">worker_class</span><span class="o">=</span><span class="s2">&quot;dask_cuda.CUDAWorker&quot;</span><span class="p">,</span>
+    <span class="n">worker_options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rmm-managed-memory&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+    <span class="n">security_groups</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;&lt;SECURITY GROUP ID&gt;&quot;</span><span class="p">],</span>
+    <span class="n">docker_args</span><span class="o">=</span><span class="s2">&quot;--shm-size=256m -e DISABLE_JUPYTER=true&quot;</span><span class="p">,</span>
+    <span class="n">n_workers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">security</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">availability_zone</span><span class="o">=</span><span class="s2">&quot;us-east-1a&quot;</span><span class="p">,</span>
+    <span class="n">region</span><span class="o">=</span><span class="s2">&quot;us-east-1&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Instantiating this class can take upwards of 30 minutes. See the <a class="reference external" href="https://cloudprovider.dask.org/en/latest/packer.html">Dask docs</a> on prebuilding AMIs to speed this up.</p>
+</div>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-info sd-bg-text-info">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-info" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm6.5-.25A.75.75 0 017.25 7h1a.75.75 0 01.75.75v2.75h.25a.75.75 0 010 1.5h-2a.75.75 0 010-1.5h.25v-2h-.25a.75.75 0 01-.75-.75zM8 6a1 1 0 100-2 1 1 0 000 2z"></path></svg></span>If you have non-default credentials you may need to pass your credentials manually.<div class="sd-summary-down docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.72a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 00-1.06-1.06L12 14.44 6.28 8.72a.75.75 0 00-1.06 0z"></path></svg></div>
+<div class="sd-summary-up docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-up" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M18.78 15.28a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06L12 9.56l5.72 5.72a.75.75 0 001.06 0z"></path></svg></div>
+</summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Here’s a small utility for parsing credential profiles.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">configparser</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
+
+
+<span class="k">def</span> <span class="nf">get_aws_credentials</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">aws_profile</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">RawConfigParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.aws/config&quot;</span><span class="p">))</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">items</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;profile </span><span class="si">{</span><span class="n">aws_profile</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">aws_profile</span> <span class="o">!=</span> <span class="s2">&quot;default&quot;</span> <span class="k">else</span> <span class="s2">&quot;default&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.aws/credentials&quot;</span><span class="p">))</span>
+    <span class="n">credentials</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">aws_profile</span><span class="p">)</span>
+    <span class="n">all_credentials</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="n">config</span><span class="p">,</span> <span class="o">*</span><span class="n">credentials</span><span class="p">]}</span>
+    <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">suppress</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">):</span>
+        <span class="n">all_credentials</span><span class="p">[</span><span class="s2">&quot;AWS_REGION&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_credentials</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;REGION&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">all_credentials</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">EC2Cluster</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">env_vars</span><span class="o">=</span><span class="n">get_aws_credentials</span><span class="p">(</span><span class="n">aws_profile</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+<section id="connecting-a-client">
+<h2>Connecting a client<a class="headerlink" href="#connecting-a-client" title="Permalink to this heading">#</a></h2>
+<p>Once your cluster has started you can connect a Dask client to submit work.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="kn">import</span> <span class="nn">dask_cudf</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">dask_cudf</span><span class="o">.</span><span class="n">from_cudf</span><span class="p">(</span><span class="n">cudf</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">timeseries</span><span class="p">(),</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="clean-up">
+<h2>Clean up<a class="headerlink" href="#clean-up" title="Permalink to this heading">#</a></h2>
+<p>When you create your cluster Dask Cloud Provider will register a finalizer to shutdown the cluster. So when your Python process exits the cluster will be cleaned up.</p>
+<p>You can also explicitly shutdown the cluster with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">cluster</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<section id="relatedexamples">
+<h3>Related Examples<a class="headerlink" href="#relatedexamples" title="Permalink to this heading">#</a></h3>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-3 sd-g-2 sd-g-xs-2 sd-g-sm-2 sd-g-md-2 sd-g-lg-2 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text">Multi-node multi-GPU example on AWS using dask-cloudprovider</p>
+</div>
+<div class="sd-card-body docutils">
+<p class="sd-card-text"><span class="sd-sphinx-override sd-badge">cloud/aws/ec2-multi</span>
+<span class="sd-sphinx-override sd-badge">library/cuml</span>
+<span class="sd-sphinx-override sd-badge">library/dask</span>
+<span class="sd-sphinx-override sd-badge">library/numpy</span>
+<span class="sd-sphinx-override sd-badge">library/dask-ml</span>
+<span class="sd-sphinx-override sd-badge">library/cudf</span>
+<span class="sd-sphinx-override sd-badge">dataset/nyc-taxi</span>
+<span class="sd-sphinx-override sd-badge">workflow/randomforest</span>
+<span class="sd-sphinx-override sd-badge">tools/dask-cloudprovider</span></p>
+</div>
+<a class="sd-stretched-link reference internal" href="../../examples/rapids-ec2-mnmg/notebook.html"><span class="doc"></span></a></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="ec2.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Elastic Compute Cloud (EC2)</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="eks.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">AWS Elastic Kubernetes Service (EKS)</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#local-environment-setup">
+   Local Environment Setup
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#install-the-aws-cli">
+     Install the AWS CLI
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#install-dask-cloud-provider">
+     Install Dask Cloud Provider
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cluster-setup">
+   Cluster setup
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#connecting-a-client">
+   Connecting a client
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#clean-up">
+   Clean up
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#relatedexamples">
+     Related Examples
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2023, NVIDIA.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="theme-version">
+    Built with the
+    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
+        PyData Sphinx Theme
+    </a>
+    0.12.0.
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>

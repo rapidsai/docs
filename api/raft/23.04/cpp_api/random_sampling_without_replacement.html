@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
+
+    <title>Sampling Without Replacement &mdash; raft 23.04.00 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2">
+<link as="font" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2">
+<link as="font" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" rel="preload" type="font/woff2">
+
+    <link href="../_static/pygments.css" rel="stylesheet" type="text/css">
+    <link href="../_static/copybutton.css" rel="stylesheet" type="text/css">
+    <link href="../_static/references.css" rel="stylesheet" type="text/css">
+    <link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet" type="text/css">
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link as="script" href="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94" rel="preload">
+<link as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94" rel="preload">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cpp_api/random_sampling_without_replacement';</script>
+    <link href="../genindex.html" rel="index" title="Index">
+    <link href="../search.html" rel="search" title="Search">
+    <link href="solver.html" rel="next" title="Solvers">
+    <link href="random_sampling_multivariable.html" rel="prev" title="Multi-Variable Random Sampling">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="en" name="docsearch:language">
+  <script id="rapids-selector-pixel-src" src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+  
+  
+  <body data-default-mode data-offset="180" data-spy="scroll" data-target="#bd-toc-nav">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input class="sidebar-toggle" id="__primary" name="__primary" type="checkbox">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input class="sidebar-toggle" id="__secondary" name="__secondary" type="checkbox">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form action="../search.html" class="bd-search d-flex align-items-center" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input aria-label="Search the docs ..." autocapitalize="off" autocomplete="off" autocorrect="off" class="form-control" id="search-input" name="q" placeholder="Search the docs ..." spellcheck="false" type="search">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+    <p class="title logo__title">raft 23.04.00 documentation</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="navbar-header-items">
+    <div class="ml-auto" id="navbar-center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p aria-label="Site Navigation" aria-level="1" class="sidebar-header-items__title" role="heading">
+        Site Navigation
+    </p>
+    <ul class="navbar-nav" id="navbar-main-elements">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../quick_start.html">
+                        Quick Start
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../build.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../developer_guide.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../cpp_api.html">
+                        C++ API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../pylibraft_api.html">
+                        Python API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button aria-expanded="false" aria-haspopup="true" class="btn dropdown-toggle nav-item" data-toggle="dropdown" type="button">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../raft_dask_api.html">
+                        RAFT Dask API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../using_comms.html">
+                        Using RAFT Comms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../contributing.html">
+                        Contributing
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button aria-label="Search" class="btn btn-sm navbar-btn search-button search-button__button" data-toggle="tooltip" title="Search">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button aria-label="light/dark" class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" data-toggle="tooltip" title="light/dark">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul aria-label="Icon Links" class="navbar-nav" id="navbar-icon-links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" data-toggle="tooltip" href="https://github.com/rapidsai/raft" rel="noopener" target="_blank" title="GitHub"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" data-toggle="tooltip" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button aria-label="Search" class="btn btn-sm navbar-btn search-button search-button__button" data-toggle="tooltip" title="Search">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar"><div id="rapids-pydata-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">raft</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/stable/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libcuspatial/stable">libcuspatial</a><a class="rapids-selector__menu-item" href="/api/libkvikio/stable">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/raft/stable">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (23.04)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/raft/nightly">nightly (23.04)</a><a class="rapids-selector__menu-item" href="/api/raft/stable">stable (23.02)</a><a class="rapids-selector__menu-item" href="/api/raft/legacy">legacy (22.12)</a></div></div></div>
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p aria-label="Site Navigation" aria-level="1" class="sidebar-header-items__title" role="heading">
+        Site Navigation
+    </p>
+    <ul class="navbar-nav" id="navbar-main-elements">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../quick_start.html">
+                        Quick Start
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../build.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../developer_guide.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../cpp_api.html">
+                        C++ API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../pylibraft_api.html">
+                        Python API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button aria-expanded="false" aria-haspopup="true" class="btn dropdown-toggle nav-item" data-toggle="dropdown" type="button">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../raft_dask_api.html">
+                        RAFT Dask API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../using_comms.html">
+                        Using RAFT Comms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../contributing.html">
+                        Contributing
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button aria-label="light/dark" class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" data-toggle="tooltip" title="light/dark">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul aria-label="Icon Links" class="navbar-nav" id="navbar-icon-links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" data-toggle="tooltip" href="https://github.com/rapidsai/raft" rel="noopener" target="_blank" title="GitHub"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" data-toggle="tooltip" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav aria-label="Section navigation" class="bd-links" id="bd-docs-nav">
+  <p aria-level="1" class="bd-links__title" role="heading">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="core.html">Core</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="core_resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_logger.html">logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_kvp.html">Key-Value Pair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_nvtx.html">NVTX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_interruptible.html">Interruptible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_operators.html">Operators and Functors</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="cluster.html">Cluster</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="cluster_kmeans.html">K-Means</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cluster_slhc.html">Hierarchical Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cluster_spectral.html">Spectral Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="distance.html">Distance</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="distance_pairwise.html">Pairwise Distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distance_1nn.html">1-Nearest Neighbors</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="linalg.html">Linear Algebra</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="linalg_arithmetic.html">Arithmetic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linalg_blas.html">BLAS Routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linalg_map_reduce.html">Mapping and Reduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linalg_matrix.html">Matrix Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linalg_matrix_vector.html">Matrix-Vector Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linalg_solver.html">Linear Algebra Solvers</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="matrix.html">Matrix</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="matrix_arithmetic.html">Matrix Arithmetic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_manipulation.html">Matrix Manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_ordering.html">Matrix Ordering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_reduction.html">Matrix Reductions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matrix_selection.html">Matrix Selection</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mdspan.html">Multi-dimensional Data</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="mdspan_representation.html">Multi-dimensional Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mdspan_mdspan.html">mdspan: Multi-dimensional Non-owning View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mdspan_mdarray.html">mdarray: Multi-dimensional Owning Container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mdspan_span.html">span: One-dimensional Non-owning View</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mnmg.html">Multi-node Multi-GPU</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="neighbors.html">Neighbors</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="neighbors_brute_force.html">Brute-Force</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors_ivf_flat.html">IVF-Flat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors_ivf_pq.html">IVF-PQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors_epsilon_neighborhood.html">Epsilon Neighborhood</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors_ball_cover.html">Random Ball Cover</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="random.html">Random</a><input checked class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="random_datagen.html">Data Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_sampling_univariate.html">Univariate Random Sampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_sampling_multivariable.html">Multi-Variable Random Sampling</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Sampling Without Replacement</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="solver.html">Solvers</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="sparse.html">Sparse</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="sparse_distance.html">Sparse Distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sparse_linalg.html">Sparse Linear Algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sparse_matrix.html">Sparse Matrix Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sparse_neighbors.html">Sparse Neighbors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sparse_solver.html">Sparse Solvers</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="stats.html">Stats</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="stats_summary.html">Summary Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stats_probability.html">Probability &amp; Information Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stats_regression.html">Regression Model Scoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stats_classification.html">Classification Model Scoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stats_clustering.html">Clustering Model Scoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stats_neighborhood.html">Neighborhood Model Scoring</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main class="bd-main" id="main-content">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="sampling-without-replacement">
+<h1>Sampling Without Replacement<a class="headerlink" href="#sampling-without-replacement" title="Permalink to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&lt;raft/random/sample_without_replacement.cuh&gt;</span></code></p>
+<p>namespace <em>raft::random</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0000E26sample_without_replacementvRKN4raft16device_resourcesER8RngStateN4raft18device_vector_viewIK5DataT4IdxTEERR17WeightsVectorTypeN4raft18device_vector_viewI5DataT4IdxTEERR18OutIndexVectorType">
+<span id="_CPPv3I0000E26sample_without_replacementRKN4raft16device_resourcesER8RngStateN4raft18device_vector_viewIK5DataT4IdxTEERR17WeightsVectorTypeN4raft18device_vector_viewI5DataT4IdxTEERR18OutIndexVectorType"></span><span id="_CPPv2I0000E26sample_without_replacementRKN4raft16device_resourcesER8RngStateN4raft18device_vector_viewIK5DataT4IdxTEERR17WeightsVectorTypeN4raft18device_vector_viewI5DataT4IdxTEERR18OutIndexVectorType"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DataT</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IdxT</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">WeightsVectorType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutIndexVectorType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="group__sample__without__replacement_1gaebdccc619c9350c5e5ebad57b6597de6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sample_without_replacement</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="core_resources.html#_CPPv4N4raft16device_resourcesE" title="raft::device_resources"><span class="n"><span class="pre">device_resources</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">handle</span></span>, <span class="n"><span class="pre">RngState</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">rng_state</span></span>, <span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="mdspan_mdspan.html#_CPPv4I000EN4raft18device_vector_viewE" title="raft::device_vector_view"><span class="n"><span class="pre">device_vector_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000E26sample_without_replacementvRKN4raft16device_resourcesER8RngStateN4raft18device_vector_viewIK5DataT4IdxTEERR17WeightsVectorTypeN4raft18device_vector_viewI5DataT4IdxTEERR18OutIndexVectorType" title="sample_without_replacement::DataT"><span class="n"><span class="pre">DataT</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000E26sample_without_replacementvRKN4raft16device_resourcesER8RngStateN4raft18device_vector_viewIK5DataT4IdxTEERR17WeightsVectorTypeN4raft18device_vector_viewI5DataT4IdxTEERR18OutIndexVectorType" title="sample_without_replacement::IdxT"><span class="n"><span class="pre">IdxT</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="#_CPPv4I0000E26sample_without_replacementvRKN4raft16device_resourcesER8RngStateN4raft18device_vector_viewIK5DataT4IdxTEERR17WeightsVectorTypeN4raft18device_vector_viewI5DataT4IdxTEERR18OutIndexVectorType" title="sample_without_replacement::WeightsVectorType"><span class="n"><span class="pre">WeightsVectorType</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">weights_opt</span></span>, <span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="mdspan_mdspan.html#_CPPv4I000EN4raft18device_vector_viewE" title="raft::device_vector_view"><span class="n"><span class="pre">device_vector_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0000E26sample_without_replacementvRKN4raft16device_resourcesER8RngStateN4raft18device_vector_viewIK5DataT4IdxTEERR17WeightsVectorTypeN4raft18device_vector_viewI5DataT4IdxTEERR18OutIndexVectorType" title="sample_without_replacement::DataT"><span class="n"><span class="pre">DataT</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000E26sample_without_replacementvRKN4raft16device_resourcesER8RngStateN4raft18device_vector_viewIK5DataT4IdxTEERR17WeightsVectorTypeN4raft18device_vector_viewI5DataT4IdxTEERR18OutIndexVectorType" title="sample_without_replacement::IdxT"><span class="n"><span class="pre">IdxT</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">out</span></span>, <a class="reference internal" href="#_CPPv4I0000E26sample_without_replacementvRKN4raft16device_resourcesER8RngStateN4raft18device_vector_viewIK5DataT4IdxTEERR17WeightsVectorTypeN4raft18device_vector_viewI5DataT4IdxTEERR18OutIndexVectorType" title="sample_without_replacement::OutIndexVectorType"><span class="n"><span class="pre">OutIndexVectorType</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">outIdx_opt</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0000E26sample_without_replacementvRKN4raft16device_resourcesER8RngStateN4raft18device_vector_viewIK5DataT4IdxTEERR17WeightsVectorTypeN4raft18device_vector_viewI5DataT4IdxTEERR18OutIndexVectorType" title="Permalink to this definition">#</a><br></dt>
+<dd><p>Sample the input vector without replacement, optionally based on the input weight vector for each element in the array. </p>
+<p>The implementation is based on the <code class="docutils literal notranslate"><span class="pre">one-pass</span> <span class="pre">sampling</span></code> algorithm described in <a class="reference external" href="https://www.ethz.ch/content/dam/ethz/special-interest/baug/ivt/ivt-dam/vpl/reports/1101-1200/ab1141.pdf">&ldquo;Accelerating weighted random sampling without replacement,&rdquo;</a> a technical report by Kirill Mueller.</p>
+<p>If no input weight vector is provided, then input elements will be sampled uniformly. Otherwise, the elements sampled from the input vector will always appear in increasing order of their weights as computed using the exponential distribution. So, if you are particular about the order (for e.g., array permutations), then this might not be the right choice.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please do not specify template parameters explicitly, as the compiler can deduce them from the arguments.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>DataT</strong> &ndash; type of each element of the input array <code class="docutils literal notranslate"><span class="pre">in</span></code> </p></li>
+<li><p><strong>IdxT</strong> &ndash; type of the dimensions of the arrays; output index type </p></li>
+<li><p><strong>WeightsVectorType</strong> &ndash; std::optional&lt;<a class="reference internal" href="mdspan_mdspan.html#namespaceraft_1af51d94d9b952d2c16f121e815902d3e0"><span class="std std-ref">raft::device_vector_view&lt;const weight_type, IdxT&gt;</span></a>&gt; of each elements of the weights array <code class="docutils literal notranslate"><span class="pre">weights_opt</span></code> </p></li>
+<li><p><strong>OutIndexVectorType</strong> &ndash; std::optional&lt;<a class="reference internal" href="mdspan_mdspan.html#namespaceraft_1af51d94d9b952d2c16f121e815902d3e0"><span class="std std-ref">raft::device_vector_view&lt;IdxT, IdxT&gt;</span></a>&gt; of output indices <code class="docutils literal notranslate"><span class="pre">outIdx_opt</span></code> </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>handle</strong> &ndash; <strong>[in]</strong> RAFT handle containing (among other resources) the CUDA stream on which to run. </p></li>
+<li><p><strong>rng_state</strong> &ndash; <strong>[inout]</strong> Pseudorandom number generator state. </p></li>
+<li><p><strong>in</strong> &ndash; <strong>[in]</strong> Input vector to be sampled. </p></li>
+<li><p><strong>weights_opt</strong> &ndash; <strong>[in]</strong> std::optional weights vector. If not provided, uniform sampling will be used. </p></li>
+<li><p><strong>out</strong> &ndash; <strong>[out]</strong> Vector of samples from the input vector. </p></li>
+<li><p><strong>outIdx_opt</strong> &ndash; <strong>[out]</strong> std::optional vector of the indices sampled from the input array.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Pre</dt>
+<dd class="field-odd"><p>The number of samples <code class="docutils literal notranslate"><span class="pre">out.extent(0)</span></code> is less than or equal to the number of inputs <code class="docutils literal notranslate"><span class="pre">in.extent(0)</span></code>.</p>
+</dd>
+<dt class="field-even">Pre</dt>
+<dd class="field-even"><p>The number of weights <code class="docutils literal notranslate"><span class="pre">wts.extent(0)</span></code> equals the number of inputs <code class="docutils literal notranslate"><span class="pre">in.extent(0)</span></code>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4IDp0E26sample_without_replacementvDp4Args">
+<span id="_CPPv3IDp0E26sample_without_replacementDp4Args"></span><span id="_CPPv2IDp0E26sample_without_replacementDp4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">enable_if_t</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">sizeof</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv4IDp0E26sample_without_replacementvDp4Args" title="sample_without_replacement::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="o"><span class="pre">==</span></span><span class="w"> </span><span class="m"><span class="pre">5</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="group__sample__without__replacement_1gaa730af0fd3b73b1a90f693f94d2d9ff8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sample_without_replacement</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IDp0E26sample_without_replacementvDp4Args" title="sample_without_replacement::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDp0E26sample_without_replacementvDp4Args" title="Permalink to this definition">#</a><br></dt>
+<dd><p>Overload of <code class="docutils literal notranslate"><span class="pre">sample_without_replacement</span></code> to help the compiler find the above overload, in case users pass in <code class="docutils literal notranslate"><span class="pre">std::nullopt</span></code> for one or both of the optional arguments. </p>
+<p>Please see above for documentation of <code class="docutils literal notranslate"><span class="pre">sample_without_replacement</span></code>. </p>
+</dd></dl>
+
+<p><code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&lt;raft/random/permute.cuh&gt;</span></code></p>
+<p>namespace <em>raft::random</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEENSt8optionalIN4raft18device_vector_viewI7IntType7IdxTypeEEEENSt8optionalIN4raft18device_matrix_viewI20InputOutputValueType7IdxType6LayoutEEEE">
+<span id="_CPPv3I0000E7permuteRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEENSt8optionalIN4raft18device_vector_viewI7IntType7IdxTypeEEEENSt8optionalIN4raft18device_matrix_viewI20InputOutputValueType7IdxType6LayoutEEEE"></span><span id="_CPPv2I0000E7permuteRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEENSt8optionalIN4raft18device_vector_viewI7IntType7IdxTypeEEEENSt8optionalIN4raft18device_matrix_viewI20InputOutputValueType7IdxType6LayoutEEEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputOutputValueType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IntType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IdxType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Layout</span></span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="group__permute_1gaa63003a1feb774f053e697a4a8cddf09"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">permute</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="core_resources.html#_CPPv4N4raft16device_resourcesE" title="raft::device_resources"><span class="n"><span class="pre">device_resources</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">handle</span></span>, <span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="mdspan_mdspan.html#_CPPv4I000EN4raft18device_matrix_viewE" title="raft::device_matrix_view"><span class="n"><span class="pre">device_matrix_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEENSt8optionalIN4raft18device_vector_viewI7IntType7IdxTypeEEEENSt8optionalIN4raft18device_matrix_viewI20InputOutputValueType7IdxType6LayoutEEEE" title="permute::InputOutputValueType"><span class="n"><span class="pre">InputOutputValueType</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEENSt8optionalIN4raft18device_vector_viewI7IntType7IdxTypeEEEENSt8optionalIN4raft18device_matrix_viewI20InputOutputValueType7IdxType6LayoutEEEE" title="permute::IdxType"><span class="n"><span class="pre">IdxType</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEENSt8optionalIN4raft18device_vector_viewI7IntType7IdxTypeEEEENSt8optionalIN4raft18device_matrix_viewI20InputOutputValueType7IdxType6LayoutEEEE" title="permute::Layout"><span class="n"><span class="pre">Layout</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">in</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="mdspan_mdspan.html#_CPPv4I000EN4raft18device_vector_viewE" title="raft::device_vector_view"><span class="n"><span class="pre">device_vector_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEENSt8optionalIN4raft18device_vector_viewI7IntType7IdxTypeEEEENSt8optionalIN4raft18device_matrix_viewI20InputOutputValueType7IdxType6LayoutEEEE" title="permute::IntType"><span class="n"><span class="pre">IntType</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEENSt8optionalIN4raft18device_vector_viewI7IntType7IdxTypeEEEENSt8optionalIN4raft18device_matrix_viewI20InputOutputValueType7IdxType6LayoutEEEE" title="permute::IdxType"><span class="n"><span class="pre">IdxType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">permsOut</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="mdspan_mdspan.html#_CPPv4I000EN4raft18device_matrix_viewE" title="raft::device_matrix_view"><span class="n"><span class="pre">device_matrix_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEENSt8optionalIN4raft18device_vector_viewI7IntType7IdxTypeEEEENSt8optionalIN4raft18device_matrix_viewI20InputOutputValueType7IdxType6LayoutEEEE" title="permute::InputOutputValueType"><span class="n"><span class="pre">InputOutputValueType</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEENSt8optionalIN4raft18device_vector_viewI7IntType7IdxTypeEEEENSt8optionalIN4raft18device_matrix_viewI20InputOutputValueType7IdxType6LayoutEEEE" title="permute::IdxType"><span class="n"><span class="pre">IdxType</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEENSt8optionalIN4raft18device_vector_viewI7IntType7IdxTypeEEEENSt8optionalIN4raft18device_matrix_viewI20InputOutputValueType7IdxType6LayoutEEEE" title="permute::Layout"><span class="n"><span class="pre">Layout</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEENSt8optionalIN4raft18device_vector_viewI7IntType7IdxTypeEEEENSt8optionalIN4raft18device_matrix_viewI20InputOutputValueType7IdxType6LayoutEEEE" title="Permalink to this definition">#</a><br></dt>
+<dd><p>Randomly permute the rows of the input matrix. </p>
+<p>We do not support in-place permutation, so that we can compute in parallel without race conditions. This function is useful for shuffling input data sets in machine learning algorithms.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is NOT a uniform permutation generator! It only generates a small fraction of all possible random permutations. If your application needs a high-quality permutation generator, then we recommend Knuth Shuffle. </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>InputOutputValueType</strong> &ndash; Type of each element of the input matrix, and the type of each element of the output matrix (if provided) </p></li>
+<li><p><strong>IntType</strong> &ndash; Integer type of each element of <code class="docutils literal notranslate"><span class="pre">permsOut</span></code> </p></li>
+<li><p><strong>IdxType</strong> &ndash; Integer type of the extents of the mdspan parameters </p></li>
+<li><p><strong>Layout</strong> &ndash; Either <code class="docutils literal notranslate"><a class="reference internal" href="mdspan_representation.html#group__C-Contiguous_1gac8af9da37c7965a549a0855eb114ac92"><span class="std std-ref"><span class="pre">raft::row_major</span></span></a></code> or <code class="docutils literal notranslate"><a class="reference internal" href="mdspan_representation.html#group__F-Contiguous_1gac5df79ec6868cbdd1dbbb24e98e228ff"><span class="std std-ref"><span class="pre">raft::col_major</span></span></a></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>handle</strong> &ndash; <strong>[in]</strong> RAFT handle containing the CUDA stream on which to run. </p></li>
+<li><p><strong>in</strong> &ndash; <strong>[in]</strong> input matrix </p></li>
+<li><p><strong>permsOut</strong> &ndash; <strong>[out]</strong> If provided, the indices of the permutation. </p></li>
+<li><p><strong>out</strong> &ndash; <strong>[out]</strong> If provided, the output matrix, containing the permuted rows of the input matrix <code class="docutils literal notranslate"><span class="pre">in</span></code>. (Not providing this is only useful if you provide <code class="docutils literal notranslate"><span class="pre">permsOut</span></code>.)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Pre</dt>
+<dd class="field-odd"><p>If <code class="docutils literal notranslate"><span class="pre">permsOut.has_value()</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>, then <code class="docutils literal notranslate"><span class="pre">(*permsOut).extent(0)</span> <span class="pre">==</span> <span class="pre">in.extent(0)</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+</dd>
+<dt class="field-even">Pre</dt>
+<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">out.has_value()</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>, then <code class="docutils literal notranslate"><span class="pre">(*out).extents()</span> <span class="pre">==</span> <span class="pre">in.extents()</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEERR12PermsOutTypeRR7OutType">
+<span id="_CPPv3I00000E7permuteRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEERR12PermsOutTypeRR7OutType"></span><span id="_CPPv2I00000E7permuteRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEERR12PermsOutTypeRR7OutType"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputOutputValueType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IdxType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Layout</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PermsOutType</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br><span class="target" id="group__permute_1gaafff7526e95c5be23ae4e4e6d8be4181"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">permute</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="core_resources.html#_CPPv4N4raft16device_resourcesE" title="raft::device_resources"><span class="n"><span class="pre">device_resources</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">handle</span></span>, <span class="n"><span class="pre">raft</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="mdspan_mdspan.html#_CPPv4I000EN4raft18device_matrix_viewE" title="raft::device_matrix_view"><span class="n"><span class="pre">device_matrix_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEERR12PermsOutTypeRR7OutType" title="permute::InputOutputValueType"><span class="n"><span class="pre">InputOutputValueType</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEERR12PermsOutTypeRR7OutType" title="permute::IdxType"><span class="n"><span class="pre">IdxType</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEERR12PermsOutTypeRR7OutType" title="permute::Layout"><span class="n"><span class="pre">Layout</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="#_CPPv4I00000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEERR12PermsOutTypeRR7OutType" title="permute::PermsOutType"><span class="n"><span class="pre">PermsOutType</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">permsOut</span></span>, <a class="reference internal" href="#_CPPv4I00000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEERR12PermsOutTypeRR7OutType" title="permute::OutType"><span class="n"><span class="pre">OutType</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00000E7permutevRKN4raft16device_resourcesEN4raft18device_matrix_viewIK20InputOutputValueType7IdxType6LayoutEERR12PermsOutTypeRR7OutType" title="Permalink to this definition">#</a><br></dt>
+<dd><p>Overload of <code class="docutils literal notranslate"><span class="pre">permute</span></code> that compiles if users pass in <code class="docutils literal notranslate"><span class="pre">std::nullopt</span></code> for either or both of <code class="docutils literal notranslate"><span class="pre">permsOut</span></code> and <code class="docutils literal notranslate"><span class="pre">out</span></code>. </p>
+</dd></dl>
+
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class="prev-next-area">
+  <a class="left-prev" href="random_sampling_multivariable.html" id="prev-link" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Multi-Variable Random Sampling</p>
+      </div>
+  </a>
+  <a class="right-next" href="solver.html" id="next-link" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Solvers</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../_sources/cpp_api/random_sampling_without_replacement.rst.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2023, NVIDIA Corporation.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="theme-version">
+    Built with the
+    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
+        PyData Sphinx Theme
+    </a>
+    0.12.0.
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script><script id="rapids-selector-pixel-invocation" type="text/javascript">_satellite.pageBottom();</script></body></html>

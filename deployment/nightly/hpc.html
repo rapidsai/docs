@@ -96,10 +96,10 @@
   <div id="navbar-start">
     
     
-  
+   
 
 
-<a class="navbar-brand logo" href="index.html">
+<a class="navbar-brand logo" href="https://docs.rapids.ai/">
 
   
   
@@ -163,12 +163,7 @@
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
+
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="examples/index.html">
                         Workflow Examples
@@ -182,9 +177,6 @@
                       </a>
                     </li>
                 
-                </div>
-            </div>
-            
     </ul>
 </nav>
       </div>
@@ -219,19 +211,8 @@
           
           
           
-          <a href="https://github.com/rapidsai/deployment" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+          <a href="https://github.com/rapidsai/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
             <label class="sr-only">GitHub</label></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://twitter.com/rapidsai" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
-            <label class="sr-only">Twitter</label></a>
         </li>
       </ul>
       </div>
@@ -311,12 +292,7 @@
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
+
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="examples/index.html">
                         Workflow Examples
@@ -330,9 +306,6 @@
                       </a>
                     </li>
                 
-                </div>
-            </div>
-            
     </ul>
 </nav>
       </div>
@@ -362,19 +335,8 @@
           
           
           
-          <a href="https://github.com/rapidsai/deployment" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+          <a href="https://github.com/rapidsai/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
             <label class="sr-only">GitHub</label></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://twitter.com/rapidsai" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
-            <label class="sr-only">Twitter</label></a>
         </li>
       </ul>
       </div>
@@ -415,10 +377,120 @@
               
   <section id="hpc">
 <h1>HPC<a class="headerlink" href="#hpc" title="Permalink to this heading">#</a></h1>
-<p>RAPIDS works extremely well in traditional HPC environments where GPUs are often co-located with accelerated networking hardware such as InfiniBand. Deploying on HPC often means using queue management systems such as SLURM, LSF, PBS, etc.</p>
+<p>RAPIDS works extremely well in traditional HPC (High Performance Computing) environments where GPUs are often co-located with accelerated networking hardware such as InfiniBand. Deploying on HPC often means using queue management systems such as SLURM, LSF, PBS, etc.</p>
 <section id="slurm">
 <h2>SLURM<a class="headerlink" href="#slurm" title="Permalink to this heading">#</a></h2>
-<p>Installation instructions for SLURM are hosted at the <a class="reference external" href="https://rapids.ai/hpc">RAPIDS HPC page</a>.</p>
+<p>If you are unfamiliar with SLURM or need a refresher, we recommend the <a class="reference external" href="https://slurm.schedmd.com/quickstart.html">quickstart guide</a>.
+Depending on how your nodes are configured, additional settings may be required such as defining the number of GPUs <code class="docutils literal notranslate"><span class="pre">(--gpus)</span></code> desired or the number of gpus per node <code class="docutils literal notranslate"><span class="pre">(--gpus-per-node)</span></code>.
+In the following example, we assume each allocation runs on a DGX1 with access to all eight GPUs.</p>
+<section id="start-scheduler">
+<h3>Start Scheduler<a class="headerlink" href="#start-scheduler" title="Permalink to this heading">#</a></h3>
+<p>First, start the scheduler with the following SLURM script. This and the following scripts can deployed with <code class="docutils literal notranslate"><span class="pre">salloc</span></code> for interactive usage or <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> for batched run.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="c1">#SBATCH -J dask-scheduler</span>
+<span class="c1">#SBATCH -n 1</span>
+<span class="c1">#SBATCH -t 00:10:00</span>
+
+module<span class="w"> </span>load<span class="w"> </span>cuda/11.0.3
+<span class="nv">CONDA_ROOT</span><span class="o">=</span>/nfs-mount/user/miniconda3
+<span class="nb">source</span><span class="w"> </span><span class="nv">$CONDA_ROOT</span>/etc/profile.d/conda.sh
+conda<span class="w"> </span>activate<span class="w"> </span>rapids
+
+<span class="nv">LOCAL_DIRECTORY</span><span class="o">=</span>/nfs-mount/dask-local-directory
+mkdir<span class="w"> </span><span class="nv">$LOCAL_DIRECTORY</span>
+<span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>dask-scheduler<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--protocol<span class="w"> </span>tcp<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--scheduler-file<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LOCAL_DIRECTORY</span><span class="s2">/dask-scheduler.json&quot;</span><span class="w"> </span><span class="p">&amp;</span>
+
+dask-cuda-worker<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--rmm-pool-size<span class="w"> </span>14GB<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--scheduler-file<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LOCAL_DIRECTORY</span><span class="s2">/dask-scheduler.json&quot;</span>
+</pre></div>
+</div>
+<p>Notice that we configure the scheduler to write a <code class="docutils literal notranslate"><span class="pre">scheduler-file</span></code> to a NFS accessible location. This file contains metadata about the scheduler and will
+include the IP address and port for the scheduler. The file will serve as input to the workers informing them what address and port to connect.</p>
+<p>The scheduler doesn’t need the whole node to itself so we can also start a worker on this node to fill out the unused resources.</p>
+</section>
+<section id="start-dask-cuda-workers">
+<h3>Start Dask CUDA Workers<a class="headerlink" href="#start-dask-cuda-workers" title="Permalink to this heading">#</a></h3>
+<p>Next start the other <a class="reference external" href="https://dask-cuda.readthedocs.io/">dask-cuda workers</a>. Dask-CUDA extends the traditional Dask <code class="docutils literal notranslate"><span class="pre">Worker</span></code> class with specific options and enhancements for GPU environments. Unlike the scheduler and client, the workers script should be <em>scalable</em> and allow the users to tune how many workers are created.
+For example, we can scale the number of nodes to 3: <code class="docutils literal notranslate"><span class="pre">sbatch/salloc</span> <span class="pre">-N3</span> <span class="pre">dask-cuda-worker.script</span></code> . In this case, because we have 8 GPUs per node and we have 3 nodes,
+our job will have 24 workers.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="c1">#SBATCH -J dask-cuda-workers</span>
+<span class="c1">#SBATCH -t 00:10:00</span>
+
+module<span class="w"> </span>load<span class="w"> </span>cuda/11.0.3
+<span class="nv">CONDA_ROOT</span><span class="o">=</span>/nfs-mount/miniconda3
+<span class="nb">source</span><span class="w"> </span><span class="nv">$CONDA_ROOT</span>/etc/profile.d/conda.sh
+conda<span class="w"> </span>activate<span class="w"> </span>rapids
+
+<span class="nv">LOCAL_DIRECTORY</span><span class="o">=</span>/nfs-mount/dask-local-directory
+mkdir<span class="w"> </span><span class="nv">$LOCAL_DIRECTORY</span>
+dask-cuda-worker<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--rmm-pool-size<span class="w"> </span>14GB<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--scheduler-file<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LOCAL_DIRECTORY</span><span class="s2">/dask-scheduler.json&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="cudf-example-workflow">
+<h3>cuDF Example Workflow<a class="headerlink" href="#cudf-example-workflow" title="Permalink to this heading">#</a></h3>
+<p>Lastly, we can now run a job on the established Dask Cluster.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="c1">#SBATCH -J dask-client</span>
+<span class="c1">#SBATCH -n 1</span>
+<span class="c1">#SBATCH -t 00:10:00</span>
+
+module<span class="w"> </span>load<span class="w"> </span>cuda/11.0.3
+<span class="nv">CONDA_ROOT</span><span class="o">=</span>/nfs-mount/miniconda3
+<span class="nb">source</span><span class="w"> </span><span class="nv">$CONDA_ROOT</span>/etc/profile.d/conda.sh
+conda<span class="w"> </span>activate<span class="w"> </span>rapids
+
+<span class="nv">LOCAL_DIRECTORY</span><span class="o">=</span>/nfs-mount/dask-local-directory
+
+cat<span class="w"> </span><span class="s">&lt;&lt;EOF &gt;&gt;/tmp/dask-cudf-example.py</span>
+<span class="s">import cudf</span>
+<span class="s">import dask.dataframe as dd</span>
+<span class="s">from dask.distributed import Client</span>
+
+<span class="s">client = Client(scheduler_file=&quot;$LOCAL_DIRECTORY/dask-scheduler.json&quot;)</span>
+<span class="s">cdf = cudf.datasets.timeseries()</span>
+
+<span class="s">ddf = dd.from_pandas(cdf, npartitions=10)</span>
+<span class="s">res = ddf.groupby([&#39;id&#39;, &#39;name&#39;]).agg([&#39;mean&#39;, &#39;sum&#39;, &#39;count&#39;]).compute()</span>
+<span class="s">print(res)</span>
+<span class="s">EOF</span>
+
+python<span class="w"> </span>/tmp/dask-cudf-example.py
+</pre></div>
+</div>
+</section>
+<section id="confirm-output">
+<h3>Confirm Output<a class="headerlink" href="#confirm-output" title="Permalink to this heading">#</a></h3>
+<p>Putting the above together will result in the following output:</p>
+<div class="highlight-raw notranslate"><div class="highlight"><pre><span></span>                      x                          y
+                   mean        sum count      mean        sum count
+id   name
+1077 Laura     0.028305   1.868120    66 -0.098905  -6.527731    66
+1026 Frank     0.001536   1.414839   921 -0.017223 -15.862306   921
+1082 Patricia  0.072045   3.602228    50  0.081853   4.092667    50
+1007 Wendy     0.009837  11.676199  1187  0.022978  27.275216  1187
+976  Wendy    -0.003663  -3.267674   892  0.008262   7.369577   892
+...                 ...        ...   ...       ...        ...   ...
+912  Michael   0.012409   0.459119    37  0.002528   0.093520    37
+1103 Ingrid   -0.132714  -1.327142    10  0.108364   1.083638    10
+998  Tim       0.000587   0.747745  1273  0.001777   2.262094  1273
+941  Yvonne    0.050258  11.358393   226  0.080584  18.212019   226
+900  Michael  -0.134216  -1.073729     8  0.008701   0.069610     8
+
+[6449 rows x 6 columns]
+</pre></div>
+</div>
+<p><br/><br/></p>
+</section>
 </section>
 </section>
 
@@ -464,6 +536,28 @@
   <a class="reference internal nav-link" href="#slurm">
    SLURM
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#start-scheduler">
+     Start Scheduler
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#start-dask-cuda-workers">
+     Start Dask CUDA Workers
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cudf-example-workflow">
+     cuDF Example Workflow
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#confirm-output">
+     Confirm Output
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
