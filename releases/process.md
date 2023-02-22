@@ -2,7 +2,7 @@
 layout: default
 nav_order: 3
 parent: Release Docs
-grand_parent: RAPIDS Maintainer Docs
+grand_parent: Maintainer Docs
 title: Release Process
 ---
 

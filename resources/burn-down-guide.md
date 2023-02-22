@@ -2,7 +2,7 @@
 layout: default
 nav_order: 9
 parent: Resources
-grand_parent: RAPIDS Maintainer Docs
+grand_parent: Maintainer Docs
 title: Burn Down Guide
 ---
 
