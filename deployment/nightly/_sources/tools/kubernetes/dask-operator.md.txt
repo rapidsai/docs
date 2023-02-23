@@ -304,7 +304,7 @@ to connect a Dask distributed client directly.
 ```python
 from dask.distributed import Client
 
-client = Client("rapids-dask-cluster-service:8786")
+client = Client("rapids-dask-cluster-scheduler:8786")
 ```
 
 Alternatively if you are outside of the Kubernetes cluster you can change the `Service` to use [`LoadBalancer`](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) or [`NodePort`](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport) or use `kubectl` to port forward the connection locally.
@@ -322,10 +322,10 @@ client = Client("localhost:8786")
 
 ## Example using `KubeCluster`
 
-In additon to creating clusters via `kubectl` you can also do so from Python with {class}`dask_kubernetes.experimental.KubeCluster`. This class implements the Dask Cluster Manager interface and under the hood creates and manages the `DaskCluster` resource for you.
+In additon to creating clusters via `kubectl` you can also do so from Python with {class}`dask_kubernetes.operator.KubeCluster`. This class implements the Dask Cluster Manager interface and under the hood creates and manages the `DaskCluster` resource for you.
 
 ```python
-from dask_kubernetes.experimental import KubeCluster
+from dask_kubernetes.operator import KubeCluster
 
 cluster = KubeCluster(
     name="rapids-dask",

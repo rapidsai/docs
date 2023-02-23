@@ -37,7 +37,7 @@ spec:
     fsGroup: 0
   containers:
     - name: rapids-notebook
-      image: { { rapids_container } }
+      image: "{{ rapids_container }}"
       resources:
         limits:
           nvidia.com/gpu: 1

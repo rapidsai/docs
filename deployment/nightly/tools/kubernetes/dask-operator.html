@@ -448,77 +448,76 @@ create the appropriate Kubernetes resources like <code class="docutils literal n
 <section id="example-using-kubectl">
 <h2>Example using <code class="docutils literal notranslate"><span class="pre">kubectl</span></code><a class="headerlink" href="#example-using-kubectl" title="Permalink to this heading">#</a></h2>
 <p>Here is an example resource manifest for launching a RAPIDS Dask cluster.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># rapids-dask-cluster.yaml</span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubernetes.dask.org/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DaskCluster</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rapids-dask-cluster</span>
-<span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">dask.org/cluster-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rapids-dask-cluster</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">worker</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker</span>
-<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rapidsai/rapidsai-core-nightly:23.04-cuda11.5-runtime-ubuntu20.04-py3.10&quot;</span>
-<span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IfNotPresent&quot;</span>
-<span class="w">          </span><span class="nt">env</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_JUPYTER</span>
-<span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
-<span class="w">          </span><span class="nt">args</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dask-cuda-worker</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--name</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$(DASK_WORKER_NAME)</span>
-<span class="w">          </span><span class="nt">resources</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">limits</span><span class="p">:</span>
-<span class="w">              </span><span class="nt">nvidia.com/gpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
-<span class="w">  </span><span class="nt">scheduler</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scheduler</span>
-<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rapidsai/rapidsai-core-nightly:23.04-cuda11.5-runtime-ubuntu20.04-py3.10&quot;</span>
-<span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IfNotPresent&quot;</span>
-<span class="w">          </span><span class="nt">env</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_JUPYTER</span>
-<span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
-<span class="w">          </span><span class="nt">args</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dask-scheduler</span>
-<span class="w">          </span><span class="nt">ports</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tcp-comm</span>
-<span class="w">              </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8786</span>
-<span class="w">              </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span>
-<span class="w">              </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8787</span>
-<span class="w">              </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
-<span class="w">          </span><span class="nt">readinessProbe</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">httpGet</span><span class="p">:</span>
-<span class="w">              </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span>
-<span class="w">              </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/health</span>
-<span class="w">            </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-<span class="w">            </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">          </span><span class="nt">livenessProbe</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">httpGet</span><span class="p">:</span>
-<span class="w">              </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span>
-<span class="w">              </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/health</span>
-<span class="w">            </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span>
-<span class="w">            </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
-<span class="w">    </span><span class="nt">service</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterIP</span>
-<span class="w">      </span><span class="nt">selector</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">dask.org/cluster-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rapids-dask-cluster</span>
-<span class="w">        </span><span class="nt">dask.org/component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scheduler</span>
-<span class="w">      </span><span class="nt">ports</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tcp-comm</span>
-<span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
-<span class="w">          </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8786</span>
-<span class="w">          </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;tcp-comm&quot;</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span>
-<span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
-<span class="w">          </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8787</span>
-<span class="w">          </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http-dashboard&quot;</span>
-</pre></div>
-</div>
+<pre class="literal-block"># rapids-dask-cluster.yaml
+apiVersion: kubernetes.dask.org/v1
+kind: DaskCluster
+metadata:
+  name: rapids-dask-cluster
+  labels:
+    dask.org/cluster-name: rapids-dask-cluster
+spec:
+  worker:
+    replicas: 2
+    spec:
+      containers:
+        - name: worker
+          image: &quot;rapidsai/rapidsai-core-nightly:23.04-cuda11.5-runtime-ubuntu20.04-py3.10&quot;
+          imagePullPolicy: &quot;IfNotPresent&quot;
+          env:
+            - name: DISABLE_JUPYTER
+              value: &quot;true&quot;
+          args:
+            - dask-cuda-worker
+            - --name
+            - $(DASK_WORKER_NAME)
+          resources:
+            limits:
+              nvidia.com/gpu: &quot;1&quot;
+  scheduler:
+    spec:
+      containers:
+        - name: scheduler
+          image: &quot;rapidsai/rapidsai-core-nightly:23.04-cuda11.5-runtime-ubuntu20.04-py3.10&quot;
+          imagePullPolicy: &quot;IfNotPresent&quot;
+          env:
+            - name: DISABLE_JUPYTER
+              value: &quot;true&quot;
+          args:
+            - dask-scheduler
+          ports:
+            - name: tcp-comm
+              containerPort: 8786
+              protocol: TCP
+            - name: http-dashboard
+              containerPort: 8787
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: http-dashboard
+              path: /health
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              port: http-dashboard
+              path: /health
+            initialDelaySeconds: 15
+            periodSeconds: 20
+    service:
+      type: ClusterIP
+      selector:
+        dask.org/cluster-name: rapids-dask-cluster
+        dask.org/component: scheduler
+      ports:
+        - name: tcp-comm
+          protocol: TCP
+          port: 8786
+          targetPort: &quot;tcp-comm&quot;
+        - name: http-dashboard
+          protocol: TCP
+          port: 8787
+          targetPort: &quot;http-dashboard&quot;
+</pre>
 <p>You can create this cluster with <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>rapids-dask-cluster.yaml
 </pre></div>
@@ -548,29 +547,28 @@ create the appropriate Kubernetes resources like <code class="docutils literal n
 <h4>Worker<a class="headerlink" href="#worker" title="Permalink to this heading">#</a></h4>
 <p>The worker contains a <code class="docutils literal notranslate"><span class="pre">replicas</span></code> option to set how many workers you need and a <code class="docutils literal notranslate"><span class="pre">spec</span></code> that describes what each worker pod should look like.
 The spec is a nested <a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/pods/"><code class="docutils literal notranslate"><span class="pre">Pod</span></code> spec</a> that the operator will use when creating new <code class="docutils literal notranslate"><span class="pre">Pod</span></code> resources.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># ...</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">worker</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">worker</span>
-<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rapidsai/rapidsai-core-nightly:23.04-cuda11.5-runtime-ubuntu20.04-py3.10&quot;</span>
-<span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IfNotPresent&quot;</span>
-<span class="w">          </span><span class="nt">env</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_JUPYTER</span>
-<span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
-<span class="w">          </span><span class="nt">args</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dask-cuda-worker</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--name</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$(DASK_WORKER_NAME)</span>
-<span class="w">          </span><span class="nt">resources</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">limits</span><span class="p">:</span>
-<span class="w">              </span><span class="nt">nvidia.com/gpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
-<span class="w">  </span><span class="nt">scheduler</span><span class="p">:</span>
-<span class="w">    </span><span class="c1"># ...</span>
-</pre></div>
-</div>
+<pre class="literal-block"># ...
+spec:
+  worker:
+    replicas: 2
+    spec:
+      containers:
+        - name: worker
+          image: &quot;rapidsai/rapidsai-core-nightly:23.04-cuda11.5-runtime-ubuntu20.04-py3.10&quot;
+          imagePullPolicy: &quot;IfNotPresent&quot;
+          env:
+            - name: DISABLE_JUPYTER
+              value: &quot;true&quot;
+          args:
+            - dask-cuda-worker
+            - --name
+            - $(DASK_WORKER_NAME)
+          resources:
+            limits:
+              nvidia.com/gpu: &quot;1&quot;
+  scheduler:
+    # ...
+</pre>
 <p>Inside our pod spec we are configuring one container that uses the <code class="docutils literal notranslate"><span class="pre">rapidsai/rapidsai-core</span></code> container image.
 It also sets the <code class="docutils literal notranslate"><span class="pre">args</span></code> to start the <code class="docutils literal notranslate"><span class="pre">dask-cuda-worker</span></code> and configures one NVIDIA GPU.</p>
 <div class="admonition note">
@@ -581,44 +579,43 @@ It also sets the <code class="docutils literal notranslate"><span class="pre">ar
 <section id="scheduler">
 <h4>Scheduler<a class="headerlink" href="#scheduler" title="Permalink to this heading">#</a></h4>
 <p>Next we have a <code class="docutils literal notranslate"><span class="pre">scheduler</span></code> section that also contains a <code class="docutils literal notranslate"><span class="pre">spec</span></code> for the scheduler pod and a <code class="docutils literal notranslate"><span class="pre">service</span></code> which will be used by the operator to create a <code class="docutils literal notranslate"><span class="pre">Service</span></code> resource to expose the scheduler.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># ...</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">worker</span><span class="p">:</span>
-<span class="w">    </span><span class="c1"># ...</span>
-<span class="w">  </span><span class="nt">scheduler</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scheduler</span>
-<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rapidsai/rapidsai-core-nightly:23.04-cuda11.5-runtime-ubuntu20.04-py3.10&quot;</span>
-<span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IfNotPresent&quot;</span>
-<span class="w">          </span><span class="nt">env</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_JUPYTER</span>
-<span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
-<span class="w">          </span><span class="nt">args</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dask-scheduler</span>
-<span class="w">          </span><span class="nt">ports</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tcp-comm</span>
-<span class="w">              </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8786</span>
-<span class="w">              </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span>
-<span class="w">              </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8787</span>
-<span class="w">              </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TCP</span>
-<span class="w">          </span><span class="nt">readinessProbe</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">httpGet</span><span class="p">:</span>
-<span class="w">              </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span>
-<span class="w">              </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/health</span>
-<span class="w">            </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-<span class="w">            </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">          </span><span class="nt">livenessProbe</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">httpGet</span><span class="p">:</span>
-<span class="w">              </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-dashboard</span>
-<span class="w">              </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/health</span>
-<span class="w">            </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span>
-<span class="w">            </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
-<span class="w">    </span><span class="nt">service</span><span class="p">:</span>
-<span class="w">      </span><span class="c1"># ...</span>
-</pre></div>
-</div>
+<pre class="literal-block"># ...
+spec:
+  worker:
+    # ...
+  scheduler:
+    spec:
+      containers:
+        - name: scheduler
+          image: &quot;rapidsai/rapidsai-core-nightly:23.04-cuda11.5-runtime-ubuntu20.04-py3.10&quot;
+          imagePullPolicy: &quot;IfNotPresent&quot;
+          env:
+            - name: DISABLE_JUPYTER
+              value: &quot;true&quot;
+          args:
+            - dask-scheduler
+          ports:
+            - name: tcp-comm
+              containerPort: 8786
+              protocol: TCP
+            - name: http-dashboard
+              containerPort: 8787
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: http-dashboard
+              path: /health
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              port: http-dashboard
+              path: /health
+            initialDelaySeconds: 15
+            periodSeconds: 20
+    service:
+      # ...
+</pre>
 <p>For the scheduler pod we are also setting the <code class="docutils literal notranslate"><span class="pre">rapidsai/rapidsai-core</span></code> container image, mainly to ensure our Dask versions match between
 the scheduler and workers. We also disable Jupyter and ensure that the <code class="docutils literal notranslate"><span class="pre">dask-scheduler</span></code> command is configured.</p>
 <p>Then we configure both the Dask communication port on <code class="docutils literal notranslate"><span class="pre">8786</span></code> and the Dask dashboard on <code class="docutils literal notranslate"><span class="pre">8787</span></code> and add some probes so that Kubernetes can monitor
@@ -674,7 +671,7 @@ the health of the scheduler.</p>
 to connect a Dask distributed client directly.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s2">&quot;rapids-dask-cluster-service:8786&quot;</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s2">&quot;rapids-dask-cluster-scheduler:8786&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Alternatively if you are outside of the Kubernetes cluster you can change the <code class="docutils literal notranslate"><span class="pre">Service</span></code> to use <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer"><code class="docutils literal notranslate"><span class="pre">LoadBalancer</span></code></a> or <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport"><code class="docutils literal notranslate"><span class="pre">NodePort</span></code></a> or use <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> to port forward the connection locally.</p>
@@ -691,19 +688,18 @@ to connect a Dask distributed client directly.</p>
 </section>
 <section id="example-using-kubecluster">
 <h2>Example using <code class="docutils literal notranslate"><span class="pre">KubeCluster</span></code><a class="headerlink" href="#example-using-kubecluster" title="Permalink to this heading">#</a></h2>
-<p>In additon to creating clusters via <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> you can also do so from Python with <code class="xref py py-class docutils literal notranslate"><span class="pre">dask_kubernetes.experimental.KubeCluster</span></code>. This class implements the Dask Cluster Manager interface and under the hood creates and manages the <code class="docutils literal notranslate"><span class="pre">DaskCluster</span></code> resource for you.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_kubernetes.experimental</span> <span class="kn">import</span> <span class="n">KubeCluster</span>
+<p>In additon to creating clusters via <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> you can also do so from Python with <a class="reference external" href="https://kubernetes.dask.org/en/latest/operator_kubecluster.html#dask_kubernetes.operator.KubeCluster" title="(in Dask Kubernetes v2021.03.0+156.gf3807b6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dask_kubernetes.operator.KubeCluster</span></code></a>. This class implements the Dask Cluster Manager interface and under the hood creates and manages the <code class="docutils literal notranslate"><span class="pre">DaskCluster</span></code> resource for you.</p>
+<pre class="literal-block">from dask_kubernetes.operator import KubeCluster
 
-<span class="n">cluster</span> <span class="o">=</span> <span class="n">KubeCluster</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;rapids-dask&quot;</span><span class="p">,</span>
-    <span class="n">image</span><span class="o">=</span><span class="s2">&quot;rapidsai/rapidsai-core-nightly:23.04-cuda11.5-runtime-ubuntu20.04-py3.10&quot;</span><span class="p">,</span>
-    <span class="n">n_workers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-    <span class="n">resources</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;limits&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;nvidia.com/gpu&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">}},</span>
-    <span class="n">env</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;DISABLE_JUPYTER&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">},</span>
-    <span class="n">worker_command</span><span class="o">=</span><span class="s2">&quot;dask-cuda-worker&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+cluster = KubeCluster(
+    name=&quot;rapids-dask&quot;,
+    image=&quot;rapidsai/rapidsai-core-nightly:23.04-cuda11.5-runtime-ubuntu20.04-py3.10&quot;,
+    n_workers=3,
+    resources={&quot;limits&quot;: {&quot;nvidia.com/gpu&quot;: &quot;1&quot;}},
+    env={&quot;DISABLE_JUPYTER&quot;: &quot;true&quot;},
+    worker_command=&quot;dask-cuda-worker&quot;,
+)
+</pre>
 <p>If we check with <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> we can see the above Python generated the same <code class="docutils literal notranslate"><span class="pre">DaskCluster</span></code> resource as the <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> example above.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>get<span class="w"> </span>daskclusters
 <span class="go">NAME                  AGE</span>
