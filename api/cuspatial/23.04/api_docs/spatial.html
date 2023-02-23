@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.17.1: http://docutils.sourceforge.net/" name="generator">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.18.1: http://docutils.sourceforge.net/" name="generator">
 
     <title>Spatial &mdash; cuspatial 23.04.00 documentation</title>
   
@@ -348,15 +348,13 @@
 <h2>Spatial Indexing Functions<a class="headerlink" href="#spatial-indexing-functions" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="cuspatial.quadtree_on_points">
-<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">quadtree_on_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.quadtree_on_points" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">quadtree_on_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.quadtree_on_points" title="Permalink to this definition">#</a></dt>
 <dd><p>Construct a quadtree from a set of points for a given area-of-interest
 bounding box.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>xs</strong></dt><dd><p>Column of x-coordinates for each point.</p>
-</dd>
-<dt><strong>ys</strong></dt><dd><p>Column of y-coordinates for each point.</p>
+<dt><strong>points</strong></dt><dd><p>Series of points.</p>
 </dd>
 <dt><strong>x_min</strong></dt><dd><p>The lower-left x-coordinate of the area of interest bounding box.</p>
 </dd>
@@ -375,7 +373,7 @@ bounding box.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt><strong>result</strong><span class="classifier">tuple (cudf.Series, cudf.DataFrame)</span></dt><dd><dl>
 <dt>keys_to_points<span class="classifier">cudf.Series(dtype=np.int32)</span></dt><dd><p>A column of sorted keys to original point indices</p>
@@ -411,19 +409,15 @@ quadrant&rsquo;s first point.</p>
 <ul class="simple">
 <li><p>Swaps <code class="docutils literal notranslate"><span class="pre">min_x</span></code> and <code class="docutils literal notranslate"><span class="pre">max_x</span></code> if <code class="docutils literal notranslate"><span class="pre">min_x</span> <span class="pre">&gt;</span> <span class="pre">max_x</span></code></p></li>
 <li><p>Swaps <code class="docutils literal notranslate"><span class="pre">min_y</span></code> and <code class="docutils literal notranslate"><span class="pre">max_y</span></code> if <code class="docutils literal notranslate"><span class="pre">min_y</span> <span class="pre">&gt;</span> <span class="pre">max_y</span></code></p></li>
-<li><p>2D coordinates are converted into a 1D Morton code by dividing each x/y</p></li>
+<li><p>2D coordinates are converted into a 1D Morton code by dividing each x/y
+by the <code class="docutils literal notranslate"><span class="pre">scale</span></code>: (<code class="docutils literal notranslate"><span class="pre">(x</span> <span class="pre">-</span> <span class="pre">min_x)</span> <span class="pre">/</span> <span class="pre">scale</span></code> and <code class="docutils literal notranslate"><span class="pre">(y</span> <span class="pre">-</span> <span class="pre">min_y)</span> <span class="pre">/</span> <span class="pre">scale</span></code>).</p></li>
+<li><p><cite>max_depth</cite> should be less than 16, since Morton codes are represented
+as <cite>uint32_t</cite>. The eventual number of levels may be less than <cite>max_depth</cite>
+if the number of points is small or <cite>max_size</cite> is large.</p></li>
+<li><p>All intermediate quadtree nodes will have fewer than <cite>max_size</cite> number of
+points. Leaf nodes are permitted (but not guaranteed) to have &gt;=
+<cite>max_size</cite> number of points.</p></li>
 </ul>
-<p>by the <code class="docutils literal notranslate"><span class="pre">scale</span></code>: (<code class="docutils literal notranslate"><span class="pre">(x</span> <span class="pre">-</span> <span class="pre">min_x)</span> <span class="pre">/</span> <span class="pre">scale</span></code> and <code class="docutils literal notranslate"><span class="pre">(y</span> <span class="pre">-</span> <span class="pre">min_y)</span> <span class="pre">/</span> <span class="pre">scale</span></code>).</p>
-<ul class="simple">
-<li><p><cite>max_depth</cite> should be less than 16, since Morton codes are represented</p></li>
-</ul>
-<p>as <cite>uint32_t</cite>. The eventual number of levels may be less than <cite>max_depth</cite>
-if the number of points is small or <cite>max_size</cite> is large.</p>
-<ul class="simple">
-<li><p>All intermediate quadtree nodes will have fewer than <cite>max_size</cite> number of</p></li>
-</ul>
-<p>points. Leaf nodes are permitted (but not guaranteed) to have &gt;= <cite>max_size</cite>
-number of points.</p>
 <p class="rubric">Examples</p>
 <p>An example of selecting the <code class="docutils literal notranslate"><span class="pre">max_size</span></code> and <code class="docutils literal notranslate"><span class="pre">scale</span></code> based on input:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -509,7 +503,7 @@ within which polygons. Note that <cite>polygons_(x,y)</cite> must be specified a
 closed polygons: the first and last coordinate of each polygon must be
 the same.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>test_points_x</strong></dt><dd><p>x-coordinate of test points</p>
 </dd>
@@ -525,7 +519,7 @@ the same.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>A DataFrame of boolean values indicating whether each point falls
 within each polygon.</p>
@@ -535,15 +529,13 @@ within each polygon.</p>
 </dl>
 <p class="rubric">Notes</p>
 <ul class="simple">
-<li><p>input Series x and y will not be index aligned, but computed as</p></li>
-</ul>
-<p>sequential arrays.</p>
-<ul class="simple">
-<li><p>poly_ring_offsets must contain only the rings that make up the polygons</p></li>
-</ul>
-<p>indexed by poly_offsets. If there are rings in poly_ring_offsets that
+<li><p>input Series x and y will not be index aligned, but computed as
+sequential arrays.</p></li>
+<li><p>poly_ring_offsets must contain only the rings that make up the polygons
+indexed by poly_offsets. If there are rings in poly_ring_offsets that
 are not part of the polygons in poly_offsets, results are likely to be
-incorrect and behavior is undefined.</p>
+incorrect and behavior is undefined.</p></li>
+</ul>
 <p class="rubric">Examples</p>
 <p>Test whether 3 points fall within either of two polygons</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">point_in_polygon</span><span class="p">(</span>
@@ -581,7 +573,7 @@ in the same quadrant as each polygon are tested for intersection.</p>
 polygon, enabling faster intersection-testing at the expense of extra
 memory allocated to store the quadtree and sorted point_indices.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>poly_quad_pairs: cudf.DataFrame</strong></dt><dd><p>Table of (polygon, quadrant) index pairs returned by
 <code class="docutils literal notranslate"><span class="pre">cuspatial.join_quadtree_and_bounding_boxes</span></code>.</p>
@@ -604,7 +596,7 @@ memory allocated to store the quadtree and sorted point_indices.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Indices for each intersecting point and polygon pair.</p>
 <dl class="simple">
@@ -629,7 +621,7 @@ the distances between each point and linestring.</p>
 <code class="docutils literal notranslate"><span class="pre">cuspatial.join_quadtree_and_bounding_boxes</span></code> to ensure distances are
 computed only for the points in the same quadrant as each linestring.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>linestring_quad_pairs: cudf.DataFrame</strong></dt><dd><p>Table of (linestring, quadrant) index pairs returned by
 <code class="docutils literal notranslate"><span class="pre">cuspatial.join_quadtree_and_bounding_boxes</span></code>.</p>
@@ -650,7 +642,7 @@ computed only for the points in the same quadrant as each linestring.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Indices for each point and its nearest linestring, and the distance
 between the two.</p>
@@ -674,7 +666,7 @@ an index to an index.</p>
 <span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">join_quadtree_and_bounding_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quadtree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounding_boxes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.join_quadtree_and_bounding_boxes" title="Permalink to this definition">#</a></dt>
 <dd><p>Search a quadtree for polygon or linestring bounding box intersections.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>quadtree</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>A complete quadtree for a given area-of-interest bounding box.</p>
 </dd>
@@ -694,7 +686,7 @@ an index to an index.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>Indices for each intersecting bounding box and leaf quadrant.</p>
 <dl class="simple">
@@ -719,25 +711,21 @@ an index to an index.</p>
 <h2>Measurement Functions<a class="headerlink" href="#measurement-functions" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="cuspatial.directed_hausdorff_distance">
-<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">directed_hausdorff_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space_offsets</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.directed_hausdorff_distance" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">directed_hausdorff_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multipoints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.directed_hausdorff_distance" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the directed Hausdorff distances between all pairs of
 spaces.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>xs</strong></dt><dd><p>column of x-coordinates</p>
-</dd>
-<dt><strong>ys</strong></dt><dd><p>column of y-coordinates</p>
-</dd>
-<dt><strong>space_offsets</strong></dt><dd><p>beginning index of each space, plus the last space&rsquo;s end offset.</p>
+<dt><strong>multipoints: GeoSeries</strong></dt><dd><p>A column of multipoint, where each multipoint indicates an input space
+to compute its hausdorff distance to the rest of input spaces.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>The pairwise directed distance matrix with one row and one
-column per input space; the value at row i, column j represents the
-hausdorff distance from space i to space j.</p>
+<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>result[i, j] indicates the hausdorff distance between multipoints[i]
+and multipoint[j].</p>
 </dd>
 </dl>
 </dd>
@@ -762,40 +750,35 @@ x<sub>0</sub> to the farthest point in <code class="docutils literal notranslate
 <p>y<sub>0</sub> is the closest point in <code class="docutils literal notranslate"><span class="pre">y</span></code> to <code class="docutils literal notranslate"><span class="pre">x</span></code>. The distance from
 y<sub>0</sub> to the farthest point in <code class="docutils literal notranslate"><span class="pre">x</span></code> is 1.414.</p>
 <p>Compute the directed hausdorff distances between a set of spaces</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">directed_hausdorff_distance</span><span class="p">(</span>
-<span class="go">        [0, 1, 0, 0], # xs</span>
-<span class="go">        [0, 0, 1, 2], # ys</span>
-<span class="go">        [0, 2],    # space_offsets</span>
-<span class="go">    )</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-<span class="go">         0         1</span>
-<span class="go">    0  0.0  1.414214</span>
-<span class="go">    1  2.0  0.000000</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pts</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">([</span>
+<span class="gp">... </span>    <span class="n">MultiPoint</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]),</span>
+<span class="gp">... </span>    <span class="n">MultiPoint</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)])</span>
+<span class="gp">... </span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cuspatial</span><span class="o">.</span><span class="n">directed_hausdorff_distance</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+<span class="go">    0         1</span>
+<span class="go">0  0.0  1.414214</span>
+<span class="go">1  2.0  0.000000</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cuspatial.haversine_distance">
-<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">haversine_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1_lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p1_lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2_lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2_lat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.haversine_distance" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">haversine_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.haversine_distance" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the haversine distances in kilometers between an arbitrary
 list of lon/lat pairs</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>p1_lon</strong></dt><dd><p>longitude of first set of coords</p>
+<dt><strong>p1: GeoSeries</strong></dt><dd><p>Series of points</p>
 </dd>
-<dt><strong>p1_lat</strong></dt><dd><p>latitude of first set of coords</p>
-</dd>
-<dt><strong>p2_lon</strong></dt><dd><p>longitude of second set of coords</p>
-</dd>
-<dt><strong>p2_lat</strong></dt><dd><p>latitude of second set of coords</p>
+<dt><strong>p2: GeoSeries</strong></dt><dd><p>Series of points</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>result</strong><span class="classifier">cudf.Series</span></dt><dd><p>The distance between all pairs of lon/lat coordinates</p>
+<dt><strong>result</strong><span class="classifier">cudf.Series</span></dt><dd><p>The distance between pairs of points between <cite>p1</cite> and <cite>p2</cite></p>
 </dd>
 </dl>
 </dd>
@@ -810,7 +793,7 @@ list of lon/lat pairs</p>
 multipoints. Mixing points and multipoints in the same series is
 unsupported.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>points1</strong><span class="classifier">GeoSeries</span></dt><dd><p>A GeoSeries of (multi)points</p>
 </dd>
@@ -818,7 +801,7 @@ unsupported.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>distance</strong><span class="classifier">cudf.Series</span></dt><dd><p>the distance between each pair of (multi)points</p>
 </dd>
@@ -850,7 +833,7 @@ unsupported.</p>
 distance between all pairs of segments of the two linestrings. If any of
 the segments intersect, the distance is 0.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>multilinestrings1</strong><span class="classifier">GeoSeries</span></dt><dd><p>A GeoSeries of (multi)linestrings</p>
 </dd>
@@ -858,7 +841,7 @@ the segments intersect, the distance is 0.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>distance</strong><span class="classifier">cudf.Series</span></dt><dd><p>the distance between each pair of linestrings</p>
 </dd>
@@ -900,7 +883,7 @@ multipoint and every line segment in the multilinestring.</p>
 the distance between the ith (multi)point in <cite>points</cite> and the ith
 (multi)linestring in <cite>linestrings</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>points</strong><span class="classifier">GeoSeries</span></dt><dd><p>The (multi)points to compute the distance from.</p>
 </dd>
@@ -908,7 +891,7 @@ the distance between the ith (multi)point in <cite>points</cite> and the ith
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>distance</strong><span class="classifier">cudf.Series</span></dt><dd></dd>
 </dl>
@@ -992,7 +975,7 @@ linestrings.</p>
 <p>Multipoints and Multilinestrings are also supported. With restriction that
 the <cite>points</cite> series must contain either only points or only multipoints.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>points</strong><span class="classifier">GeoSeries</span></dt><dd><p>A GeoSeries of points. Currently either only a series of points or
 a series of multipoints is supported.</p>
@@ -1001,7 +984,7 @@ a series of multipoints is supported.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>GeoDataFrame</dt><dd><p>A GeoDataFrame with four columns.</p>
 <ul class="simple">
@@ -1028,7 +1011,7 @@ point on the linestring.</p></li>
 <span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">polygon_bounding_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poly_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ring_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.polygon_bounding_boxes" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the minimum bounding-boxes for a set of polygons.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>poly_offsets</strong></dt><dd><p>Begin indices of the first ring in each polygon (i.e. prefix-sum)</p>
 </dd>
@@ -1040,7 +1023,7 @@ point on the linestring.</p></li>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>minimum bounding boxes for each polygon</p>
 <dl class="simple">
@@ -1064,7 +1047,7 @@ point on the linestring.</p></li>
 <span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">linestring_bounding_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linestring_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expansion_radius</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.linestring_bounding_boxes" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the minimum bounding boxes for a set of linestrings.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>linestring_offsets</strong></dt><dd><p>Begin indices of the each linestring</p>
 </dd>
@@ -1076,7 +1059,7 @@ point on the linestring.</p></li>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>minimum bounding boxes for each linestring</p>
 <dl class="simple">
@@ -1109,7 +1092,7 @@ Error increases with distance from the origin. Results are scaled
 relative to the size of the Earth in kilometers. See
 <a class="reference external" href="https://en.wikipedia.org/wiki/Sinusoidal_projection">https://en.wikipedia.org/wiki/Sinusoidal_projection</a> for more detail.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>origin_lon</strong><span class="classifier"><code class="docutils literal notranslate"><span class="pre">number</span></code></span></dt><dd><p>longitude offset  (this is subtracted from each input before
 converting to x,y)</p>
@@ -1123,7 +1106,7 @@ converting to x,y)</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><dl class="simple">
 <dt>x<span class="classifier">cudf.Series</span></dt><dd><p>x-coordinate of the input relative to the size of the Earth in
@@ -1144,7 +1127,7 @@ kilometers.</p>
 <h2>Spatial Filtering Functions<a class="headerlink" href="#spatial-filtering-functions" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="cuspatial.points_in_spatial_window">
-<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">points_in_spatial_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.points_in_spatial_window" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">points_in_spatial_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.points_in_spatial_window" title="Permalink to this definition">#</a></dt>
 <dd><p>Return only the subset of coordinates that fall within a
 rectangular window.</p>
 <p>A point <cite>(x, y)</cite> is inside the query window if and only if
@@ -1152,25 +1135,23 @@ rectangular window.</p>
 <p>The window is specified by minimum and maximum x and y
 coordinates.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>min_x</strong></dt><dd><p>lower x-coordinate of the query window</p>
+<dt><strong>points: GeoSeries</strong></dt><dd><p>A geoseries of points</p>
 </dd>
-<dt><strong>max_x</strong></dt><dd><p>upper x-coordinate of the query window</p>
+<dt><strong>min_x: float</strong></dt><dd><p>lower x-coordinate of the query window</p>
 </dd>
-<dt><strong>min_y</strong></dt><dd><p>lower y-coordinate of the query window</p>
+<dt><strong>max_x: float</strong></dt><dd><p>upper x-coordinate of the query window</p>
 </dd>
-<dt><strong>max_y</strong></dt><dd><p>upper y-coordinate of the query window</p>
+<dt><strong>min_y: float</strong></dt><dd><p>lower y-coordinate of the query window</p>
 </dd>
-<dt><strong>xs</strong></dt><dd><p>column of x-coordinates that may fall within the window</p>
-</dd>
-<dt><strong>ys</strong></dt><dd><p>column of y-coordinates that may fall within the window</p>
+<dt><strong>max_y: float</strong></dt><dd><p>upper y-coordinate of the query window</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>subset of <cite>(x, y)</cite> pairs above that fall within the window</p>
+<dt><strong>result</strong><span class="classifier">GeoSeries</span></dt><dd><p>subset of <cite>points</cite> above that fall within the window</p>
 </dd>
 </dl>
 </dd>
