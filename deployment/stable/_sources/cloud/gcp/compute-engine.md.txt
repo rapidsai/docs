@@ -57,3 +57,7 @@ Next we need to connect to the VM.
 ## Clean up
 
 Once you are finished head back to the [Deployments](https://console.cloud.google.com/dm/deployments) page and delete the marketplace deployment you created.
+
+```{relatedexamples}
+
+```

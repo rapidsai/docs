@@ -73,7 +73,7 @@ spec:
     spec:
       containers:
         - name: worker
-          image: "rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9"
+          image: "{{ rapids_container }}"
           imagePullPolicy: "IfNotPresent"
           env:
             - name: DISABLE_JUPYTER
@@ -89,7 +89,7 @@ spec:
     spec:
       containers:
         - name: scheduler
-          image: "rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9"
+          image: "{{ rapids_container }}"
           imagePullPolicy: "IfNotPresent"
           env:
             - name: DISABLE_JUPYTER
@@ -174,7 +174,7 @@ spec:
     spec:
       containers:
         - name: worker
-          image: "rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9"
+          image: "{{ rapids_container }}"
           imagePullPolicy: "IfNotPresent"
           env:
             - name: DISABLE_JUPYTER
@@ -210,7 +210,7 @@ spec:
     spec:
       containers:
         - name: scheduler
-          image: "rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9"
+          image: "{{ rapids_container }}"
           imagePullPolicy: "IfNotPresent"
           env:
             - name: DISABLE_JUPYTER
@@ -304,7 +304,7 @@ to connect a Dask distributed client directly.
 ```python
 from dask.distributed import Client
 
-client = Client("rapids-dask-cluster-service:8786")
+client = Client("rapids-dask-cluster-scheduler:8786")
 ```
 
 Alternatively if you are outside of the Kubernetes cluster you can change the `Service` to use [`LoadBalancer`](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) or [`NodePort`](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport) or use `kubectl` to port forward the connection locally.
@@ -322,17 +322,19 @@ client = Client("localhost:8786")
 
 ## Example using `KubeCluster`
 
-In additon to creating clusters via `kubectl` you can also do so from Python with {class}`dask_kubernetes.experimental.KubeCluster`. This class implements the Dask Cluster Manager interface and under the hood creates and manages the `DaskCluster` resource for you.
+In additon to creating clusters via `kubectl` you can also do so from Python with {class}`dask_kubernetes.operator.KubeCluster`. This class implements the Dask Cluster Manager interface and under the hood creates and manages the `DaskCluster` resource for you.
 
 ```python
-from dask_kubernetes.experimental import KubeCluster
+from dask_kubernetes.operator import KubeCluster
 
-cluster = KubeCluster(name="rapids-dask",
-                      image="rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9",
-                      n_workers=3,
-                      resources={"limit": {"nvidia.com/gpu": "1"}},
-                      env={"DISABLE_JUPYTER": "true"},
-                      worker_command="dask-cuda-worker")
+cluster = KubeCluster(
+    name="rapids-dask",
+    image="{{ rapids_container }}",
+    n_workers=3,
+    resources={"limits": {"nvidia.com/gpu": "1"}},
+    env={"DISABLE_JUPYTER": "true"},
+    worker_command="dask-cuda-worker",
+)
 ```
 
 If we check with `kubectl` we can see the above Python generated the same `DaskCluster` resource as the `kubectl` example above.
@@ -379,4 +381,8 @@ By default the `KubeCluster` command registers an exit hook so when the Python p
 This is useful if you have a multi-stage pipeline made up of multiple Python processes and you want your Dask cluster to persist between them.
 
 You can also connect a `KubeCluster` object to your existing cluster with `cluster = KubeCluster.from_name(name="rapids-dask")` if you wish to use the cluster or manually call `cluster.close()` in the future.
+```
+
+```{relatedexamples}
+
 ```

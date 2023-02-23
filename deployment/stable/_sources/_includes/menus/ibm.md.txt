@@ -8,7 +8,7 @@ IBM Virtual Server
 ^^^
 Launch a virtual server and run RAPIDS.
 
-{bdg-primary}`single-node`
+{bdg}`single-node`
 ````
 
 `````

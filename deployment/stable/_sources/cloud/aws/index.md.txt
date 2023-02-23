@@ -35,6 +35,7 @@ list of accelerated instance types below:
 hidden: true
 ---
 ec2
+ec2-multi
 eks
 ecs
 sagemaker

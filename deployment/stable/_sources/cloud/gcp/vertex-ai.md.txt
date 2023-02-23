@@ -9,7 +9,7 @@ For new, user-managed notebooks, it is recommended to use a RAPIDS docker image 
 Before configuring a new notebook, the [RAPIDS Docker image](#rapids-docker) will need to be built to expose port 8080 to be used as a notebook service.
 
 ```dockerfile
-FROM rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9
+FROM {{ rapids_container }}
 EXPOSE 8080
 
 ENTRYPOINT ["jupyter-lab", "--allow-root", "--ip=0.0.0.0", "--port=8080", "--no-browser", "--NotebookApp.token=''", "--NotebookApp.allow_origin='*'"]
@@ -18,8 +18,8 @@ ENTRYPOINT ["jupyter-lab", "--allow-root", "--ip=0.0.0.0", "--port=8080", "--no-
 Once you have built this image, it needs to be pushed to [Google Container Registry](https://cloud.google.com/container-registry/docs/pushing-and-pulling) for Vertex AI to access.
 
 ```console
-$ docker build -t gcr.io/<project>/<folder>/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9 .
-$ docker push gcr.io/<project>/<folder>/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9
+$ docker build -t gcr.io/<project>/<folder>/{{ rapids_container.replace('rapidsai/', '') }} .
+$ docker push gcr.io/<project>/<folder>/{{ rapids_container.replace('rapidsai/', '') }}
 ```
 
 ## Create a New Notebook
@@ -36,10 +36,11 @@ Once the managed notebook is fully configured, you can click **OPEN JUPYTERLAB**
 
 For example we could import and use RAPIDS libraries like `cudf`.
 
-```python
-import cudf
-df = cudf.datasets.timeseries()
-df.head()
+```ipython
+In [1]: import cudf
+In [2]: df = cudf.datasets.timeseries()
+In [3]: df.head()
+Out[3]:
                        id     name         x         y
 timestamp
 2000-01-01 00:00:00  1020    Kevin  0.091536  0.664482
@@ -47,4 +48,8 @@ timestamp
 2000-01-01 00:00:02  1000  Charlie  0.419740 -0.796866
 2000-01-01 00:00:03  1019    Edith  0.488411  0.731661
 2000-01-01 00:00:04   998    Quinn  0.651381 -0.525398
+```
+
+```{relatedexamples}
+
 ```

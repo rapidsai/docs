@@ -2,7 +2,7 @@
 
 ## Packages
 
-`````{grid} 1 2 2 3
+`````{gridtoctree} 1 2 2 3
 :gutter: 2 2 2 2
 
 ````{grid-item-card}
@@ -17,7 +17,7 @@ Container images containing the RAPIDS software environment.
 
 ## Kubernetes
 
-`````{grid} 1 2 2 3
+`````{gridtoctree} 1 2 2 3
 :gutter: 2 2 2 2
 
 ````{grid-item-card}
@@ -45,14 +45,3 @@ Install a single user notebook and cluster on Kubernetes with the Dask Helm Char
 ````
 
 `````
-
-```{toctree}
-:hidden:
-:maxdepth: 2
-:caption: Tools
-
-rapids-docker
-kubernetes/dask-kubernetes
-kubernetes/dask-operator
-kubernetes/dask-helm-chart
-```
