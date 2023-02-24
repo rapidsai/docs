@@ -1,0 +1,2071 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Autoscaling multi-tenant Kubernetes Deep-Dive &#8212; RAPIDS Deployment Documentation  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="https://docs.rapids.ai/assets/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script defer="defer" src="../../_static/js/nav.js"></script>
+    <script defer="defer" src="../../_static/js/notebook-gallery.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/rapids-autoscaling-multi-tenant-kubernetes/notebook';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Guides" href="../../guides/index.html" />
+    <link rel="prev" title="Multi-node multi-GPU example on AWS using dask-cloudprovider" href="../rapids-ec2-mnmg/notebook.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+   
+
+
+<a class="navbar-brand logo" href="https://docs.rapids.ai/">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/RAPIDS-logo-purple.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/RAPIDS-logo-purple.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class=" navbar-header-items">
+    <div id="navbar-center" class="ml-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../cloud/index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Workflow Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../guides/index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../cloud/index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Workflow Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../guides/index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../xgboost-gpu-hpo-job-parallel-k8s/notebook.html">Scaling up hyperparameter optimization with Kubernetes and XGBoost GPU algorithm</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../rapids-sagemaker-higgs/notebook.html">Running RAPIDS hyperparameter experiments at scale on Amazon SageMaker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rapids-sagemaker-hpo/notebook.html">Deep Dive into running Hyper Parameter Optimization on AWS SageMaker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rapids-ec2-mnmg/notebook.html">Multi-node multi-GPU example on AWS using dask-cloudprovider</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Autoscaling multi-tenant Kubernetes Deep-Dive</a></li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+    <div class="sidebar-start-items__item">
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="autoscaling-multi-tenant-kubernetes-deep-dive">
+<h1>Autoscaling multi-tenant Kubernetes Deep-Dive<a class="headerlink" href="#autoscaling-multi-tenant-kubernetes-deep-dive" title="Permalink to this heading">#</a></h1>
+<p>In this example we are going to take a deep-dive into launching an autoscaling multi-tenant RAPIDS environment on Kubernetes.</p>
+<p>Being able to scale out your workloads and only pay for the resources you use is a fantastic way to save costs when using RAPIDS. If you have many folks in your organization who all want to be able to do this you can get added benefits by pooling your resources into an autoscaling Kubernetes cluster.</p>
+<p>Let’s run through the steps required to launch a Kubernetes cluster on <a class="reference external" href="https://cloud.google.com">Google Cloud</a>, then simulate the workloads of many users sharing the cluster. Then we can explore what that experience was like both from a user perspective and also from a cost perspective.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">#</a></h2>
+<p>Before we get started you’ll need to ensure you have a few CLI tools installed.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://cloud.google.com/sdk/gcloud"><code class="docutils literal notranslate"><span class="pre">gcloud</span></code></a> (and make sure you run <a class="reference external" href="https://cloud.google.com/sdk/gcloud/reference/auth/login"><code class="docutils literal notranslate"><span class="pre">gcloud</span> <span class="pre">auth</span> <span class="pre">login</span></code></a>)</p></li>
+<li><p><a class="reference external" href="https://kubernetes.io/docs/tasks/tools/"><code class="docutils literal notranslate"><span class="pre">kubectl</span></code></a></p></li>
+<li><p><a class="reference external" href="https://helm.sh/docs/intro/install/"><code class="docutils literal notranslate"><span class="pre">helm</span></code></a></p></li>
+</ul>
+</section>
+<section id="get-a-kubernetes-cluster">
+<h2>Get a Kubernetes Cluster<a class="headerlink" href="#get-a-kubernetes-cluster" title="Permalink to this heading">#</a></h2>
+<p>For this example we are going to use <a class="reference external" href="https://cloud.google.com/kubernetes-engine">Google Cloud’s Google Kubernetes Engine (GKE)</a> to launch a cluster.</p>
+<div class="docref admonition">
+<p class="admonition-title">See Documentation</p>
+<p>We are going to follow the RAPIDS GKE deployment instructions but we will modify our cluster creation command to enable Kubernetes cluster autoscaling out of the box.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">enable</span><span class="o">-</span><span class="n">autoscaling</span> <span class="o">--</span><span class="n">autoscaling</span><span class="o">-</span><span class="n">profile</span> <span class="n">optimize</span><span class="o">-</span><span class="n">utilization</span> \
+<span class="o">--</span><span class="n">num</span><span class="o">-</span><span class="n">nodes</span> <span class="mi">1</span> <span class="o">--</span><span class="nb">min</span><span class="o">-</span><span class="n">nodes</span> <span class="mi">1</span> <span class="o">--</span><span class="nb">max</span><span class="o">-</span><span class="n">nodes</span> <span class="mi">20</span>
+</pre></div>
+</div>
+<p>Data science container images are also notiriously large so we will enable image streaming to speed up our container creation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">image</span><span class="o">-</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;COS_CONTAINERD&quot;</span> <span class="o">--</span><span class="n">enable</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">streaming</span>
+</pre></div>
+</div>
+<p class="visit-link"><a class="reference internal" href="../../cloud/gcp/gke.html"><span class="doc std std-doc">Visit the documentation &gt;&gt;</span></a></p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>! gcloud container clusters create multi-tenant-rapids \
+    --accelerator type=nvidia-tesla-t4,count=2 --machine-type n1-standard-4 \
+    --region us-central1 --node-locations us-central1-b,us-central1-c \
+    --release-channel stable \
+    --enable-autoscaling --autoscaling-profile optimize-utilization \
+    --num-nodes 1 --min-nodes 1 --max-nodes 20 \
+    --image-type=&quot;COS_CONTAINERD&quot; --enable-image-streaming
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Default change: VPC-native is the default mode during cluster creation for versions greater than 1.21.0-gke.1500. To create advanced routes based clusters, please pass the `--no-enable-ip-alias` flag
+Default change: During creation of nodepools or autoscaling configuration changes for cluster versions greater than 1.24.1-gke.800 a default location policy is applied. For Spot and PVM it defaults to ANY, and for all other VM kinds a BALANCED policy is used. To change the default values use the `--location-policy` flag.
+Note: Your Pod address range (`--cluster-ipv4-cidr`) can accommodate at most 1008 node(s).
+Note: Machines with GPUs have certain limitations which may affect your workflow. Learn more at https://cloud.google.com/kubernetes-engine/docs/how-to/gpus
+Creating cluster multi-tenant-rapids in us-central1... Cluster is being configu
+red...⠼                                                                        
+Creating cluster multi-tenant-rapids in us-central1... Cluster is being deploye
+d...⠏                                                                          
+Creating cluster multi-tenant-rapids in us-central1... Cluster is being health-
+checked (master is healthy)...done.                                            
+Created [https://container.googleapis.com/v1/projects/nv-ai-infra/zones/us-central1/clusters/multi-tenant-rapids].
+To inspect the contents of your cluster, go to: https://console.cloud.google.com/kubernetes/workload_/gcloud/us-central1/multi-tenant-rapids?project=nv-ai-infra
+kubeconfig entry generated for multi-tenant-rapids.
+NAME                 LOCATION     MASTER_VERSION    MASTER_IP       MACHINE_TYPE   NODE_VERSION      NUM_NODES  STATUS
+multi-tenant-rapids  us-central1  1.23.14-gke.1800  104.197.37.225  n1-standard-4  1.23.14-gke.1800  2          RUNNING
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now that we have our cluster let’s <a class="reference external" href="https://cloud.google.com/kubernetes-engine/docs/how-to/gpus#installing_drivers">install the NVIDIA Drivers</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/GoogleCloudPlatform/container-engine-accelerators/master/nvidia-driver-installer/cos/daemonset-preloaded-latest.yaml
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>daemonset.apps/nvidia-driver-installer created
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="observability">
+<h2>Observability<a class="headerlink" href="#observability" title="Permalink to this heading">#</a></h2>
+<p>Once we have run some workloads on our Kubernetes cluster we will want to be able to go back through the cluster telemetry data to see how our autoscaling behaved. To do this let’s install <a class="reference external" href="https://prometheus.io/">Prometheus</a> so that we are recording cluster metrics and can explore them later.</p>
+<section id="prometheus-stack">
+<h3>Prometheus stack<a class="headerlink" href="#prometheus-stack" title="Permalink to this heading">#</a></h3>
+<p>Let’s start by installing the <a class="reference external" href="https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack">Kubernetes Prometheus Stack</a> which includes everything we need to run Prometheus on our cluster.</p>
+<p>We need to add a couple of extra configuration options to ensure Prometheus is collecting data frequently enough to analyse, which you will find in <code class="docutils literal notranslate"><span class="pre">prometheus-stack-values.yaml</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>cat<span class="w"> </span>prometheus-stack-values.yaml
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span># prometheus-stack-values.yaml
+serviceMonitorSelectorNilUsesHelmValues: false
+
+prometheus:
+  prometheusSpec:
+    # Setting this to a high frequency so that we have richer data for analysis later
+    scrapeInterval: 1s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>! helm install --repo https://prometheus-community.github.io/helm-charts kube-prometheus-stack kube-prometheus-stack \
+   --create-namespace --namespace prometheus \
+   --values prometheus-stack-values.yaml
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NAME: kube-prometheus-stack
+LAST DEPLOYED: Tue Feb 21 09:19:39 2023
+NAMESPACE: prometheus
+STATUS: deployed
+REVISION: 1
+NOTES:
+kube-prometheus-stack has been installed. Check its status by running:
+  kubectl --namespace prometheus get pods -l &quot;release=kube-prometheus-stack&quot;
+
+Visit https://github.com/prometheus-operator/kube-prometheus for instructions on how to create &amp; configure Alertmanager and Prometheus instances using the Operator.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now that we have Prometheus running and collecting data we can move on and install RAPIDS and run some workloads. We will come back to these tools later when we want to explore the data we have collected.</p>
+</section>
+</section>
+<section id="install-rapids">
+<h2>Install RAPIDS<a class="headerlink" href="#install-rapids" title="Permalink to this heading">#</a></h2>
+<p>For this RAPIDS installation we are going to use a single <a class="reference internal" href="../../platforms/kubernetes.html"><span class="doc std std-doc">Jupyter Notebook Pod</span></a> and the <a class="reference internal" href="../../tools/kubernetes/dask-operator.html"><span class="doc std std-doc">Dask Operator</span></a>. In a real deployment you would use something like <a class="reference external" href="https://jupyter.org/hub">JupyterHub</a> or <a class="reference external" href="https://www.kubeflow.org/docs/components/notebooks/">Kubeflow Notebooks</a> to create a notebook spawning service with user authentication, but that is out of scope for this example.</p>
+<div class="docref admonition">
+<p class="admonition-title">See Documentation</p>
+<p>There are many ways to install RAPIDS on Kubernetes. You can find detailed instructions on all of the various methods in the documentation.</p>
+<p class="visit-link"><a class="reference internal" href="../../platforms/kubernetes.html"><span class="doc std std-doc">Visit the documentation &gt;&gt;</span></a></p>
+</div>
+<section id="image-steaming-optional">
+<h3>Image steaming (optional)<a class="headerlink" href="#image-steaming-optional" title="Permalink to this heading">#</a></h3>
+<p>In order to steam the container image to the GKE nodes our image needs to be stored in <a class="reference external" href="https://cloud.google.com/artifact-registry/">Google Cloud Artifact Registry</a> in the same region as our cluster.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>pull<span class="w"> </span>rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9
+
+<span class="gp">$ </span>docker<span class="w"> </span>tag<span class="w"> </span>rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9<span class="w"> </span>REGION-docker.pkg.dev/PROJECT/REPO/IMAGE:TAG
+
+<span class="gp">$ </span>docker<span class="w"> </span>push<span class="w"> </span>REGION-docker.pkg.dev/PROJECT/REPO/IMAGE:TAG
+</pre></div>
+</div>
+<p>Be sure to replace the image throughout the notebook with the one that you have pushed to your own Google Cloud project.</p>
+</section>
+<section id="image-prepuller-optional">
+<h3>Image prepuller (optional)<a class="headerlink" href="#image-prepuller-optional" title="Permalink to this heading">#</a></h3>
+<p>If you know that many users are going to want to frequently pull a specific container image I like to run a small <code class="docutils literal notranslate"><span class="pre">DaemonSet</span></code> which ensures that image starts streaming onto a node as soon as it joins the cluster. This is optional but can reduce wait time for users.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>cat<span class="w"> </span>image-prepuller.yaml
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span># image-prepuller.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: prepull-rapids
+spec:
+  selector:
+    matchLabels:
+      name: prepull-rapids
+  template:
+    metadata:
+      labels:
+        name: prepull-rapids
+    spec:
+      initContainers:
+        - name: prepull-rapids
+          image: rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9
+          command: [&quot;sh&quot;, &quot;-c&quot;, &quot;&#39;true&#39;&quot;]
+      containers:
+        - name: pause
+          image: gcr.io/google_containers/pause
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>image-prepuller.yaml
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>daemonset.apps/prepull-rapids created
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="rapids-notebook-pod">
+<h3>RAPIDS Notebook Pod<a class="headerlink" href="#rapids-notebook-pod" title="Permalink to this heading">#</a></h3>
+<p>Now let’s launch a Notebook Pod.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>From this Pod we are going to want to be able to spawn Dask cluster resources on Kubernetes, so we need to ensure the Pod has the appropriate permissions to interact with the Kubernetes API.</p>
+<div class="docref admonition">
+<p class="admonition-title">See Documentation</p>
+<p>Check out the extended notebook contiguration documentation for more details.</p>
+<p class="visit-link"><a class="reference internal" href="../../platforms/kubernetes.html"><span class="doc std std-doc">Visit the documentation &gt;&gt;</span></a></p>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>rapids-notebook.yaml
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>serviceaccount/rapids-dask created
+role.rbac.authorization.k8s.io/rapids-dask created
+rolebinding.rbac.authorization.k8s.io/rapids-dask created
+configmap/jupyter-server-proxy-config created
+service/rapids-notebook created
+pod/rapids-notebook created
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="install-the-dask-operator">
+<h3>Install the Dask Operator<a class="headerlink" href="#install-the-dask-operator" title="Permalink to this heading">#</a></h3>
+<p>Lastly we need to install the Dask Operator so we can spawn RAPIDS Dask cluster from our Notebook session.</p>
+<div class="docref admonition">
+<p class="admonition-title">See Documentation</p>
+<p>See the RAPIDS Dask Operator documentation for more information.</p>
+<p class="visit-link"><a class="reference internal" href="../../tools/kubernetes/dask-operator.html"><span class="doc std std-doc">Visit the documentation &gt;&gt;</span></a></p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>! helm install --repo https://helm.dask.org dask-kubernetes-operator \
+    --generate-name --create-namespace --namespace dask-operator 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NAME: dask-kubernetes-operator-1676971371
+LAST DEPLOYED: Tue Feb 21 09:23:06 2023
+NAMESPACE: dask-operator
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+Operator has been installed successfully.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="running-some-work">
+<h2>Running some work<a class="headerlink" href="#running-some-work" title="Permalink to this heading">#</a></h2>
+<p>Next let’s connect to the Jupyter session and run some work on our cluster. You can do this by port forwarding the Jupyter service to your local machine.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>port-forward<span class="w"> </span>svc/rapids-notebook<span class="w"> </span><span class="m">8888</span>:8888<span class="w">                                                                                                                        </span>
+<span class="go">Forwarding from 127.0.0.1:8888 -&gt; 8888</span>
+<span class="go">Forwarding from [::1]:8888 -&gt; 8888</span>
+</pre></div>
+</div>
+<p>Then open http://localhost:8888 in your browser.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are following along with this notebook locally you will also want to upload it to the Jupyter session and continue running the cells from there.</p>
+</div>
+<section id="check-our-capabilities">
+<h3>Check our capabilities<a class="headerlink" href="#check-our-capabilities" title="Permalink to this heading">#</a></h3>
+<p>Let’s make sure our environment is all set up correctly by checking out our capabilities. We can start by running <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> to inspect our Notebook GPU.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>nvidia-smi
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tue Feb 21 14:50:01 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 510.47.03    Driver Version: 510.47.03    CUDA Version: 11.6     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla T4            Off  | 00000000:00:04.0 Off |                    0 |
+| N/A   41C    P8    14W /  70W |      0MiB / 15360MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Great we can see our notebook has an NVIDIA T4. Now let’s use <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> to inspect our cluster. We won’t actually have <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> installed in our remote Jupyter environment so let’s do that first.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>mamba<span class="w"> </span>install<span class="w"> </span>--quiet<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>kubernetes-client<span class="w"> </span>-y
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>pods
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NAME                   READY   STATUS    RESTARTS   AGE
+prepull-rapids-l5qgt   1/1     Running   0          3m24s
+prepull-rapids-w8xcj   1/1     Running   0          3m24s
+rapids-notebook        1/1     Running   0          2m54s
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can see our prepull Pods we created earlier alongside our <code class="docutils literal notranslate"><span class="pre">rapids-notebook</span></code> Pod that we are currently in. As we created the prepull Pod via a <code class="docutils literal notranslate"><span class="pre">DaemonSet</span></code> we also know that there are two nodes in our Kubernetes cluster because there are two prepull Pods. As our cluster scales we will see more of them appear.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>daskclusters
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No resources found in default namespace.
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also see that we currently have no <code class="docutils literal notranslate"><span class="pre">DaskCluster</span></code> resources, but this is good because we didn’t get a <code class="docutils literal notranslate"><span class="pre">server</span> <span class="pre">doesn't</span> <span class="pre">have</span> <span class="pre">a</span> <span class="pre">resource</span> <span class="pre">type</span> <span class="pre">&quot;daskclusters&quot;</span></code> error so we know the Dask Operator also installed successfully.</p>
+</section>
+<section id="small-workload">
+<h3>Small workload<a class="headerlink" href="#small-workload" title="Permalink to this heading">#</a></h3>
+<p>Let’s run a small RAPIDS workload that stretches our Kubernetes cluster a little and causes it to scale.</p>
+<p>We know that we have two nodes in our Kubernetes cluster and we selected a node type with 2 GPUs when we launched it on GKE. Our Notebook Pod is taking up one GPU so we have three remaining. If we launch a Dask Cluster we will need one GPU for the scheduler and one for each worker. So let’s create a Dask cluster with four workers which will cause our Kubernetes to add one more node.</p>
+<p>First let’s install <code class="docutils literal notranslate"><span class="pre">dask-kubernetes</span></code> so we can create our <code class="docutils literal notranslate"><span class="pre">DaskCluster</span></code> resources from Python. We will also install <code class="docutils literal notranslate"><span class="pre">gcsfs</span></code> so that our workload can read data from <a class="reference external" href="https://cloud.google.com/storage">Google Cloud Storage</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>mamba<span class="w"> </span>install<span class="w"> </span>--quiet<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>dask-kubernetes<span class="w"> </span>gcsfs<span class="w"> </span>-y
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_kubernetes.operator</span> <span class="kn">import</span> <span class="n">KubeCluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">KubeCluster</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;rapids-dask-1&quot;</span><span class="p">,</span>
+    <span class="n">image</span><span class="o">=</span><span class="s2">&quot;rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9&quot;</span><span class="p">,</span>  <span class="c1"># Replace me with your cached image</span>
+    <span class="n">n_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">resources</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;limits&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;nvidia.com/gpu&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">}},</span>
+    <span class="n">env</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;DISABLE_JUPYTER&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="s2">&quot;EXTRA_PIP_PACKAGES&quot;</span><span class="p">:</span> <span class="s2">&quot;gcsfs&quot;</span><span class="p">},</span>
+    <span class="n">worker_command</span><span class="o">=</span><span class="s2">&quot;dask-cuda-worker&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Unclosed client session
+client_session: &lt;aiohttp.client.ClientSession object at 0x7f81225ac820&gt;
+Unclosed connection
+client_connection: Connection&lt;ConnectionKey(host=&#39;10.32.0.1&#39;, port=443, is_ssl=True, ssl=None, proxy=None, proxy_auth=None, proxy_headers_hash=None)&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Great our Dask cluster was created but right now we just have a scheduler with half of our workers. We can use <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> to see what is happening.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>pods
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NAME                                      READY   STATUS    RESTARTS   AGE
+prepull-rapids-l5qgt                      1/1     Running   0          6m18s
+prepull-rapids-w8xcj                      1/1     Running   0          6m18s
+rapids-dask-1-default-worker-5f59bc8e7a   0/1     Pending   0          68s
+rapids-dask-1-default-worker-88ab088b7c   0/1     Pending   0          68s
+rapids-dask-1-default-worker-b700343afe   1/1     Running   0          68s
+rapids-dask-1-default-worker-e0bb7fff2d   1/1     Running   0          68s
+rapids-dask-1-scheduler                   1/1     Running   0          69s
+rapids-notebook                           1/1     Running   0          5m48s
+</pre></div>
+</div>
+</div>
+</div>
+<p>We see here that most of our Pods are <code class="docutils literal notranslate"><span class="pre">Running</span></code> but two workers are <code class="docutils literal notranslate"><span class="pre">Pending</span></code>. This is because we don’t have enough GPUs for them right now. We can look at the events on our pending pods for more information.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>event<span class="w"> </span>--field-selector<span class="w"> </span>involvedObject.name<span class="o">=</span>rapids-dask-1-default-worker-5f59bc8e7a
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>LAST SEEN   TYPE      REASON             OBJECT                                        MESSAGE
+50s         Warning   FailedScheduling   pod/rapids-dask-1-default-worker-5f59bc8e7a   0/2 nodes are available: 2 Insufficient nvidia.com/gpu.
+12s         Normal    TriggeredScaleUp   pod/rapids-dask-1-default-worker-5f59bc8e7a   pod triggered scale-up: [{https://www.googleapis.com/compute/v1/projects/nv-ai-infra/zones/us-central1-b/instanceGroups/gke-multi-tenant-rapids-default-pool-3a6a793f-grp 1-&gt;2 (max: 20)}]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here we can see that our Pod triggered the cluster to scale from one to two nodes. If we wait for our new node to come online we should see a few things happen.</p>
+<ul class="simple">
+<li><p>First there will be a new prepull Pod scheduled on the new node which will start streaming the RAPIDS container image.</p></li>
+<li><p>Other Pods in the <code class="docutils literal notranslate"><span class="pre">kube-system</span></code> namespace will be scheduled to install NVIDIA drivers and update the Kubernetes API.</p></li>
+<li><p>Then once the GPU drivers have finished installing the worker Pods will be scheduled onto our new node</p></li>
+<li><p>Then once the image is ready our Pods move into a <code class="docutils literal notranslate"><span class="pre">Running</span></code> phase.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-w
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NAME                                      READY   STATUS    RESTARTS   AGE
+prepull-rapids-l5qgt                      1/1     Running   0          6m41s
+prepull-rapids-w8xcj                      1/1     Running   0          6m41s
+rapids-dask-1-default-worker-5f59bc8e7a   0/1     Pending   0          91s
+rapids-dask-1-default-worker-88ab088b7c   0/1     Pending   0          91s
+rapids-dask-1-default-worker-b700343afe   1/1     Running   0          91s
+rapids-dask-1-default-worker-e0bb7fff2d   1/1     Running   0          91s
+rapids-dask-1-scheduler                   1/1     Running   0          92s
+rapids-notebook                           1/1     Running   0          6m11s
+prepull-rapids-69pbq                      0/1     Pending   0          0s
+prepull-rapids-69pbq                      0/1     Pending   0          0s
+prepull-rapids-69pbq                      0/1     Init:0/1   0          4s
+rapids-dask-1-default-worker-88ab088b7c   0/1     Pending    0          2m3s
+prepull-rapids-69pbq                      0/1     Init:0/1   0          9s
+prepull-rapids-69pbq                      0/1     PodInitializing   0          15s
+rapids-dask-1-default-worker-5f59bc8e7a   0/1     Pending           0          2m33s
+prepull-rapids-69pbq                      1/1     Running           0          3m7s
+rapids-dask-1-default-worker-5f59bc8e7a   0/1     Pending           0          5m13s
+rapids-dask-1-default-worker-88ab088b7c   0/1     Pending           0          5m13s
+rapids-dask-1-default-worker-5f59bc8e7a   0/1     ContainerCreating   0          5m14s
+rapids-dask-1-default-worker-88ab088b7c   0/1     ContainerCreating   0          5m14s
+rapids-dask-1-default-worker-5f59bc8e7a   1/1     Running             0          5m26s
+rapids-dask-1-default-worker-88ab088b7c   1/1     Running             0          5m26s
+^C
+</pre></div>
+</div>
+</div>
+</div>
+<p>Awesome we can now run some work on our Dask cluster.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">wait</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+<span class="n">client</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+    <div style="width: 24px; height: 24px; background-color: #e1e1e1; border: 3px solid #9D9D9D; border-radius: 5px; position: absolute;"> </div>
+    <div style="margin-left: 48px;">
+        <h3 style="margin-bottom: 0px;">Client</h3>
+        <p style="color: #9D9D9D; margin-bottom: 0px;">Client-3722820c-b1f8-11ed-8042-fa6ca111b70e</p>
+        <table style="width: 100%; text-align: left;">
+
+        <tr>
+        
+            <td style="text-align: left;"><strong>Connection method:</strong> Cluster object</td>
+            <td style="text-align: left;"><strong>Cluster type:</strong> dask_kubernetes.KubeCluster</td>
+        
+        </tr>
+
+        
+            <tr>
+                <td style="text-align: left;">
+                    <strong>Dashboard: </strong> <a href="/proxy/rapids-dask-1-scheduler.default:8787/status" target="_blank">/proxy/rapids-dask-1-scheduler.default:8787/status</a>
+                </td>
+                <td style="text-align: left;"></td>
+            </tr>
+        
+
+        </table>
+
+        
+            <button style="margin-bottom: 12px;" data-commandlinker-command="dask:populate-and-launch-layout" data-commandlinker-args='{"url": "/proxy/rapids-dask-1-scheduler.default:8787/status" }'>
+                Launch dashboard in JupyterLab
+            </button>
+        
+
+        
+            <details>
+            <summary style="margin-bottom: 20px;"><h3 style="display: inline;">Cluster Info</h3></summary>
+            <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-mod-trusted jp-OutputArea-output">
+    <div style="width: 24px; height: 24px; background-color: #e1e1e1; border: 3px solid #9D9D9D; border-radius: 5px; position: absolute;">
+    </div>
+    <div style="margin-left: 48px;">
+        <h3 style="margin-bottom: 0px; margin-top: 0px;">KubeCluster</h3>
+        <p style="color: #9D9D9D; margin-bottom: 0px;">rapids-dask-1</p>
+        <table style="width: 100%; text-align: left;">
+            <tr>
+                <td style="text-align: left;">
+                    <strong>Dashboard:</strong> <a href="/proxy/rapids-dask-1-scheduler.default:8787/status" target="_blank">/proxy/rapids-dask-1-scheduler.default:8787/status</a>
+                </td>
+                <td style="text-align: left;">
+                    <strong>Workers:</strong> 2
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">
+                    <strong>Total threads:</strong> 2
+                </td>
+                <td style="text-align: left;">
+                    <strong>Total memory:</strong> 29.30 GiB
+                </td>
+            </tr>
+            
+        </table>
+
+        <details>
+            <summary style="margin-bottom: 20px;">
+                <h3 style="display: inline;">Scheduler Info</h3>
+            </summary>
+
+            <div style="">
+    <div>
+        <div style="width: 24px; height: 24px; background-color: #FFF7E5; border: 3px solid #FF6132; border-radius: 5px; position: absolute;"> </div>
+        <div style="margin-left: 48px;">
+            <h3 style="margin-bottom: 0px;">Scheduler</h3>
+            <p style="color: #9D9D9D; margin-bottom: 0px;">Scheduler-5ef1a738-4ae1-4f07-ab68-160cfda35431</p>
+            <table style="width: 100%; text-align: left;">
+                <tr>
+                    <td style="text-align: left;">
+                        <strong>Comm:</strong> tcp://10.28.1.6:8786
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>Workers:</strong> 2
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">
+                        <strong>Dashboard:</strong> <a href="/proxy/10.28.1.6:8787/status" target="_blank">/proxy/10.28.1.6:8787/status</a>
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>Total threads:</strong> 2
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">
+                        <strong>Started:</strong> 5 minutes ago
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>Total memory:</strong> 29.30 GiB
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <details style="margin-left: 48px;">
+        <summary style="margin-bottom: 20px;">
+            <h3 style="display: inline;">Workers</h3>
+        </summary>
+
+        
+        <div style="margin-bottom: 20px;">
+            <div style="width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;"> </div>
+            <div style="margin-left: 48px;">
+            <details>
+                <summary>
+                    <h4 style="margin-bottom: 0px; display: inline;">Worker: rapids-dask-1-default-worker-b700343afe</h4>
+                </summary>
+                <table style="width: 100%; text-align: left;">
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Comm: </strong> tcp://10.28.0.24:35501
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Total threads: </strong> 1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Dashboard: </strong> <a href="/proxy/10.28.0.24:44477/status" target="_blank">/proxy/10.28.0.24:44477/status</a>
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Memory: </strong> 14.65 GiB
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Nanny: </strong> tcp://10.28.0.24:41347
+                        </td>
+                        <td style="text-align: left;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: left;">
+                            <strong>Local directory: </strong> /tmp/dask-worker-space/worker-x_t6bef5
+                        </td>
+                    </tr>
+
+                    
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>GPU: </strong>Tesla T4
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>GPU memory: </strong> 15.00 GiB
+                        </td>
+                    </tr>
+                    
+
+                    
+
+                </table>
+            </details>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <div style="width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;"> </div>
+            <div style="margin-left: 48px;">
+            <details>
+                <summary>
+                    <h4 style="margin-bottom: 0px; display: inline;">Worker: rapids-dask-1-default-worker-e0bb7fff2d</h4>
+                </summary>
+                <table style="width: 100%; text-align: left;">
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Comm: </strong> tcp://10.28.0.23:46035
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Total threads: </strong> 1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Dashboard: </strong> <a href="/proxy/10.28.0.23:42637/status" target="_blank">/proxy/10.28.0.23:42637/status</a>
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Memory: </strong> 14.65 GiB
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Nanny: </strong> tcp://10.28.0.23:38783
+                        </td>
+                        <td style="text-align: left;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: left;">
+                            <strong>Local directory: </strong> /tmp/dask-worker-space/worker-8z3017h5
+                        </td>
+                    </tr>
+
+                    
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>GPU: </strong>Tesla T4
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>GPU memory: </strong> 15.00 GiB
+                        </td>
+                    </tr>
+                    
+
+                    
+
+                </table>
+            </details>
+            </div>
+        </div>
+        
+
+    </details>
+</div>
+
+        </details>
+    </div>
+</div>
+            </details>
+        
+
+    </div>
+</div></div></div>
+</div>
+<p>Let’s load some data from GCS into memory on our GPUs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="kn">import</span> <span class="nn">dask.config</span>
+<span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
+
+<span class="n">dask</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">({</span><span class="s2">&quot;dataframe.backend&quot;</span><span class="p">:</span> <span class="s2">&quot;cudf&quot;</span><span class="p">})</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span>
+    <span class="s2">&quot;gcs://anaconda-public-data/nyc-taxi/2015.parquet&quot;</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;token&quot;</span><span class="p">:</span> <span class="s2">&quot;cloud&quot;</span><span class="p">},</span>
+<span class="p">)</span><span class="o">.</span><span class="n">persist</span><span class="p">()</span>
+<span class="n">wait</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we can do some calculation. This can be whatever you want to do with your data, for this example let’s do something quick like calculating the haversine distance between the pickup and dropoff locations (yes calculating this on ~100M rows is a quick task for RAPIDS 😁).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cuspatial</span> <span class="kn">import</span> <span class="n">haversine_distance</span>
+
+
+<span class="k">def</span> <span class="nf">map_haversine</span><span class="p">(</span><span class="n">part</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">haversine_distance</span><span class="p">(</span>
+        <span class="n">part</span><span class="p">[</span><span class="s2">&quot;pickup_longitude&quot;</span><span class="p">],</span>
+        <span class="n">part</span><span class="p">[</span><span class="s2">&quot;pickup_latitude&quot;</span><span class="p">],</span>
+        <span class="n">part</span><span class="p">[</span><span class="s2">&quot;dropoff_longitude&quot;</span><span class="p">],</span>
+        <span class="n">part</span><span class="p">[</span><span class="s2">&quot;dropoff_latitude&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+
+
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;haversine_distance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">map_partitions</span><span class="p">(</span><span class="n">map_haversine</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;haversine_distance&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CPU times: user 1.44 s, sys: 853 ms, total: 2.29 s
+Wall time: 4.66 s
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tpep_pickup_datetime
+2015-01-01 00:00:00       4.326464
+2015-01-01 00:00:00    8666.633292
+2015-01-01 00:00:00       1.285498
+2015-01-01 00:00:01       0.827326
+2015-01-01 00:00:03       2.267110
+                          ...     
+2015-12-31 23:59:56       1.570824
+2015-12-31 23:59:58       2.340270
+2015-12-31 23:59:59       2.801575
+2015-12-31 23:59:59       5.091840
+2015-12-31 23:59:59       0.927577
+Name: haversine_distance, Length: 146112989, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Great, so we now have a little toy workloads that opens some data, does some calculation and takes a bit of time.</p>
+<p>Let’s remove our single Dask cluster and switch to simulating many workloads running at once.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">cluster</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="simulating-many-multi-tenant-workloads">
+<h2>Simulating many multi-tenant workloads<a class="headerlink" href="#simulating-many-multi-tenant-workloads" title="Permalink to this heading">#</a></h2>
+<p>Now we have a toy workload which we can use to represent one user on our multi-tenant cluster.</p>
+<p>Let’s now construct a larger graph to simulate lots of users spinning up Dask clusters and running workloads.</p>
+<p>First let’s create a function that contains our whole workload including our cluster setup.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dask.delayed</span>
+
+
+<span class="nd">@dask</span><span class="o">.</span><span class="n">delayed</span>
+<span class="k">def</span> <span class="nf">run_haversine</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">dask_kubernetes.operator</span> <span class="kn">import</span> <span class="n">KubeCluster</span>
+    <span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">wait</span>
+    <span class="kn">import</span> <span class="nn">uuid</span>
+    <span class="kn">import</span> <span class="nn">dask.config</span>
+    <span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
+
+    <span class="n">dask</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">({</span><span class="s2">&quot;dataframe.backend&quot;</span><span class="p">:</span> <span class="s2">&quot;cudf&quot;</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">map_haversine</span><span class="p">(</span><span class="n">part</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">cuspatial</span> <span class="kn">import</span> <span class="n">haversine_distance</span>
+
+        <span class="k">return</span> <span class="n">haversine_distance</span><span class="p">(</span>
+            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;pickup_longitude&quot;</span><span class="p">],</span>
+            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;pickup_latitude&quot;</span><span class="p">],</span>
+            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;dropoff_longitude&quot;</span><span class="p">],</span>
+            <span class="n">part</span><span class="p">[</span><span class="s2">&quot;dropoff_latitude&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">KubeCluster</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;rapids-dask-&quot;</span> <span class="o">+</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">[:</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">image</span><span class="o">=</span><span class="s2">&quot;rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9&quot;</span><span class="p">,</span>  <span class="c1"># Replace me with your cached image</span>
+        <span class="n">n_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">resources</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;limits&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;nvidia.com/gpu&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">}},</span>
+        <span class="n">env</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;DISABLE_JUPYTER&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="s2">&quot;EXTRA_PIP_PACKAGES&quot;</span><span class="p">:</span> <span class="s2">&quot;gcsfs&quot;</span><span class="p">},</span>
+        <span class="n">worker_command</span><span class="o">=</span><span class="s2">&quot;dask-cuda-worker&quot;</span><span class="p">,</span>
+        <span class="n">resource_timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">cluster</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+            <span class="n">client</span><span class="o">.</span><span class="n">wait_for_workers</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span>
+                <span class="s2">&quot;gcs://anaconda-public-data/nyc-taxi/2015.parquet&quot;</span><span class="p">,</span>
+                <span class="n">storage_options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;token&quot;</span><span class="p">:</span> <span class="s2">&quot;cloud&quot;</span><span class="p">},</span>
+            <span class="p">)</span>
+            <span class="n">client</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">map_partitions</span><span class="p">(</span><span class="n">map_haversine</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now if we run this function we will launch a Dask cluster and run our workload. We will use context managers to ensure our Dask cluster gets cleaned up when the work is complete. Given that we have no active Dask clusters this function will be executed on the Notebook Pod.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">run_haversine</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Unclosed client session
+client_session: &lt;aiohttp.client.ClientSession object at 0x7fd0f4b8b340&gt;
+Unclosed connection
+client_connection: Connection&lt;ConnectionKey(host=&#39;10.32.0.1&#39;, port=443, is_ssl=True, ssl=None, proxy=None, proxy_auth=None, proxy_headers_hash=None)&gt;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CPU times: user 194 ms, sys: 30 ms, total: 224 ms
+Wall time: 23.6 s
+</pre></div>
+</div>
+</div>
+</div>
+<p>Great that works, so we have a self contained RAPIDS workload that launches its own Dask cluster and performs some work.</p>
+<section id="simulating-our-multi-tenant-workloads">
+<h3>Simulating our multi-tenant workloads<a class="headerlink" href="#simulating-our-multi-tenant-workloads" title="Permalink to this heading">#</a></h3>
+<p>To see how our Kubernetes cluster behaves when many users are sharing it we want to run our haversine workload a bunch of times.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you’re not interested in how we simulate this workload feel free to skip onto the analysis section.</p>
+</div>
+<p>To do this we can create another Dask cluster which we will use to pilot our workloads. This cluster will be a proxy for the Jupyter sessions our users would be interacting with. Then we will construct a Dask graph which runs our haversine workload many times in various configurations to simulate different users submitting different workloads on an ad-hoc basis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask_kubernetes.operator</span> <span class="kn">import</span> <span class="n">KubeCluster</span><span class="p">,</span> <span class="n">make_cluster_spec</span>
+
+<span class="n">cluster_spec</span> <span class="o">=</span> <span class="n">make_cluster_spec</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;mock-jupyter-cluster&quot;</span><span class="p">,</span>
+    <span class="n">image</span><span class="o">=</span><span class="s2">&quot;rapidsai/rapidsai-core:22.12-cuda11.5-runtime-ubuntu20.04-py3.9&quot;</span><span class="p">,</span>  <span class="c1"># Replace me with your cached image</span>
+    <span class="n">n_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">resources</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;limits&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;nvidia.com/gpu&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">},</span> <span class="s2">&quot;requests&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;cpu&quot;</span><span class="p">:</span> <span class="s2">&quot;50m&quot;</span><span class="p">}},</span>
+    <span class="n">env</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;DISABLE_JUPYTER&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="s2">&quot;EXTRA_PIP_PACKAGES&quot;</span><span class="p">:</span> <span class="s2">&quot;gcsfs dask-kubernetes&quot;</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="n">cluster_spec</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">][</span><span class="s2">&quot;worker&quot;</span><span class="p">][</span><span class="s2">&quot;spec&quot;</span><span class="p">][</span><span class="s2">&quot;serviceAccountName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;rapids-dask&quot;</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">KubeCluster</span><span class="p">(</span><span class="n">custom_cluster_spec</span><span class="o">=</span><span class="n">cluster_spec</span><span class="p">)</span>
+<span class="n">cluster</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Unclosed client session
+client_session: &lt;aiohttp.client.ClientSession object at 0x7f80300cfd30&gt;
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ebd78135bcbd4e449eaa0736556e8e60", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p>We need to ensure our workers have the same dependencies as our Notebook session here so that it can spawn more Dask clusters so we install <code class="docutils literal notranslate"><span class="pre">gcsfs</span></code> and <code class="docutils literal notranslate"><span class="pre">dask-kubernetes</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+<span class="n">client</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+    <div style="width: 24px; height: 24px; background-color: #e1e1e1; border: 3px solid #9D9D9D; border-radius: 5px; position: absolute;"> </div>
+    <div style="margin-left: 48px;">
+        <h3 style="margin-bottom: 0px;">Client</h3>
+        <p style="color: #9D9D9D; margin-bottom: 0px;">Client-85a16987-b1f9-11ed-8042-fa6ca111b70e</p>
+        <table style="width: 100%; text-align: left;">
+
+        <tr>
+        
+            <td style="text-align: left;"><strong>Connection method:</strong> Cluster object</td>
+            <td style="text-align: left;"><strong>Cluster type:</strong> dask_kubernetes.KubeCluster</td>
+        
+        </tr>
+
+        
+            <tr>
+                <td style="text-align: left;">
+                    <strong>Dashboard: </strong> <a href="/proxy/mock-jupyter-cluster-scheduler.default:8787/status" target="_blank">/proxy/mock-jupyter-cluster-scheduler.default:8787/status</a>
+                </td>
+                <td style="text-align: left;"></td>
+            </tr>
+        
+
+        </table>
+
+        
+            <button style="margin-bottom: 12px;" data-commandlinker-command="dask:populate-and-launch-layout" data-commandlinker-args='{"url": "/proxy/mock-jupyter-cluster-scheduler.default:8787/status" }'>
+                Launch dashboard in JupyterLab
+            </button>
+        
+
+        
+            <details>
+            <summary style="margin-bottom: 20px;"><h3 style="display: inline;">Cluster Info</h3></summary>
+            <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-mod-trusted jp-OutputArea-output">
+    <div style="width: 24px; height: 24px; background-color: #e1e1e1; border: 3px solid #9D9D9D; border-radius: 5px; position: absolute;">
+    </div>
+    <div style="margin-left: 48px;">
+        <h3 style="margin-bottom: 0px; margin-top: 0px;">KubeCluster</h3>
+        <p style="color: #9D9D9D; margin-bottom: 0px;">mock-jupyter-cluster</p>
+        <table style="width: 100%; text-align: left;">
+            <tr>
+                <td style="text-align: left;">
+                    <strong>Dashboard:</strong> <a href="/proxy/mock-jupyter-cluster-scheduler.default:8787/status" target="_blank">/proxy/mock-jupyter-cluster-scheduler.default:8787/status</a>
+                </td>
+                <td style="text-align: left;">
+                    <strong>Workers:</strong> 0
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">
+                    <strong>Total threads:</strong> 0
+                </td>
+                <td style="text-align: left;">
+                    <strong>Total memory:</strong> 0 B
+                </td>
+            </tr>
+            
+        </table>
+
+        <details>
+            <summary style="margin-bottom: 20px;">
+                <h3 style="display: inline;">Scheduler Info</h3>
+            </summary>
+
+            <div style="">
+    <div>
+        <div style="width: 24px; height: 24px; background-color: #FFF7E5; border: 3px solid #FF6132; border-radius: 5px; position: absolute;"> </div>
+        <div style="margin-left: 48px;">
+            <h3 style="margin-bottom: 0px;">Scheduler</h3>
+            <p style="color: #9D9D9D; margin-bottom: 0px;">Scheduler-f6d55e0c-a7b1-4dfd-80b4-be0566b14cce</p>
+            <table style="width: 100%; text-align: left;">
+                <tr>
+                    <td style="text-align: left;">
+                        <strong>Comm:</strong> tcp://10.28.1.12:8786
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>Workers:</strong> 0
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">
+                        <strong>Dashboard:</strong> <a href="/proxy/10.28.1.12:8787/status" target="_blank">/proxy/10.28.1.12:8787/status</a>
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>Total threads:</strong> 0
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">
+                        <strong>Started:</strong> Just now
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>Total memory:</strong> 0 B
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <details style="margin-left: 48px;">
+        <summary style="margin-bottom: 20px;">
+            <h3 style="display: inline;">Workers</h3>
+        </summary>
+
+        
+
+    </details>
+</div>
+
+        </details>
+    </div>
+</div>
+            </details>
+        
+
+    </div>
+</div></div></div>
+</div>
+<p>Now lets submit our workload again but this time to our cluster. Our function will be sent to our “Jupyter” worker which will then spawn another Dask cluster to run the workload. We don’t have enough GPUs in our cluster to do this so it will trigger another scale operation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">run_haversine</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CPU times: user 950 ms, sys: 9.1 ms, total: 959 ms
+Wall time: 27.1 s
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now let’s write a small function which we can use to build up arbitrarily complex workloads. We can define how many stages we have, how many concurrent Dask clusters their should be, how quickly to vary width over time, etc.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randrange</span>
+
+
+<span class="k">def</span> <span class="nf">generate_workload</span><span class="p">(</span>
+    <span class="n">stages</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">min_width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">variation</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">input_workload</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_workload</span><span class="p">]</span> <span class="k">if</span> <span class="n">input_workload</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[</span><span class="n">run_haversine</span><span class="p">()]</span>
+    <span class="n">last_width</span> <span class="o">=</span> <span class="n">min_width</span>
+    <span class="k">for</span> <span class="n">stage</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">stages</span><span class="p">):</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">randrange</span><span class="p">(</span>
+            <span class="nb">max</span><span class="p">(</span><span class="n">min_width</span><span class="p">,</span> <span class="n">last_width</span> <span class="o">-</span> <span class="n">variation</span><span class="p">),</span>
+            <span class="nb">min</span><span class="p">(</span><span class="n">max_width</span><span class="p">,</span> <span class="n">last_width</span> <span class="o">+</span> <span class="n">variation</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="p">[</span><span class="n">run_haversine</span><span class="p">(</span><span class="o">*</span><span class="n">graph</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">)]</span>
+        <span class="n">last_width</span> <span class="o">=</span> <span class="n">width</span>
+    <span class="k">return</span> <span class="n">run_haversine</span><span class="p">(</span><span class="o">*</span><span class="n">graph</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Let&#39;s also bump up our user cluster to show more users logging in.</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To visualize our graphs let’s check that we have <code class="docutils literal notranslate"><span class="pre">graphviz</span></code> installed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>mamba<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>--quiet<span class="w"> </span>graphviz<span class="w"> </span>python-graphviz<span class="w"> </span>-y
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... 
+
+done
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s start with a small workload which will run a couple of stages and trigger a scale up.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">workload</span> <span class="o">=</span> <span class="n">generate_workload</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">workload</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/cccc976825e9ae4a19bbbfb8e30993d047df658a2730c0537310768bdb2d353c.png" src="../../_images/cccc976825e9ae4a19bbbfb8e30993d047df658a2730c0537310768bdb2d353c.png" />
+</div>
+</div>
+<p>This is great we have multiple stages where one or two users are running workloads at the same time. Now lets chain a bunch of these workloads together to simulate varying demands over a larger period of time.</p>
+<p>We will also track the start and end times of the run so that we can grab the right data from Prometheus later.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datetime</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The next cell will take around 1h to run.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">start_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">15</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+    <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span>
+<span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># Start with a couple of concurrent workloads</span>
+    <span class="n">workload</span> <span class="o">=</span> <span class="n">generate_workload</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1"># Then increase demand as more users appear</span>
+    <span class="n">workload</span> <span class="o">=</span> <span class="n">generate_workload</span><span class="p">(</span>
+        <span class="n">stages</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">variation</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">input_workload</span><span class="o">=</span><span class="n">workload</span>
+    <span class="p">)</span>
+    <span class="c1"># Now reduce the workload for a longer period of time, this could be over a lunchbreak or something</span>
+    <span class="n">workload</span> <span class="o">=</span> <span class="n">generate_workload</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">input_workload</span><span class="o">=</span><span class="n">workload</span><span class="p">)</span>
+    <span class="c1"># Everyone is back from lunch and it hitting the cluster hard</span>
+    <span class="n">workload</span> <span class="o">=</span> <span class="n">generate_workload</span><span class="p">(</span>
+        <span class="n">stages</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">min_width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">variation</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">input_workload</span><span class="o">=</span><span class="n">workload</span>
+    <span class="p">)</span>
+    <span class="c1"># The after lunch rush is easing</span>
+    <span class="n">workload</span> <span class="o">=</span> <span class="n">generate_workload</span><span class="p">(</span>
+        <span class="n">stages</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">variation</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">input_workload</span><span class="o">=</span><span class="n">workload</span>
+    <span class="p">)</span>
+    <span class="c1"># As we get towards the end of the day demand slows off again</span>
+    <span class="n">workload</span> <span class="o">=</span> <span class="n">generate_workload</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">input_workload</span><span class="o">=</span><span class="n">workload</span><span class="p">)</span>
+    <span class="n">workload</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">cluster</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">15</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+        <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task exception was never retrieved
+future: &lt;Task finished name=&#39;Task-724&#39; coro=&lt;Client._gather.&lt;locals&gt;.wait() done, defined at /opt/conda/envs/rapids/lib/python3.9/site-packages/distributed/client.py:2119&gt; exception=AllExit()&gt;
+Traceback (most recent call last):
+  File &quot;/opt/conda/envs/rapids/lib/python3.9/site-packages/distributed/client.py&quot;, line 2128, in wait
+    raise AllExit()
+distributed.client.AllExit
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CPU times: user 2min 43s, sys: 3.04 s, total: 2min 46s
+Wall time: 1h 18min 18s
+</pre></div>
+</div>
+</div>
+</div>
+<p>Ok great, our large graph of workloads resulted in ~200 clusters launching throughout the run with varying capacity demands and took just over an hour to run.</p>
+</section>
+</section>
+<section id="analysis">
+<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this heading">#</a></h2>
+<p>Let’s explore the data we’ve been collecting with Prometheus to see how our cluster perforumed during our simulated workload. We could do this in <a class="reference external" href="https://grafana.com/">Grafana</a>, but instead let’s stay in the notebook and use <code class="docutils literal notranslate"><span class="pre">prometheus-pandas</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>prometheus-pandas
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting prometheus-pandas
+  Downloading prometheus_pandas-0.3.2-py3-none-any.whl (6.1 kB)
+Requirement already satisfied: numpy in /opt/conda/envs/rapids/lib/python3.9/site-packages (from prometheus-pandas) (1.23.5)
+Requirement already satisfied: pandas in /opt/conda/envs/rapids/lib/python3.9/site-packages (from prometheus-pandas) (1.5.2)
+Requirement already satisfied: python-dateutil&gt;=2.8.1 in /opt/conda/envs/rapids/lib/python3.9/site-packages (from pandas-&gt;prometheus-pandas) (2.8.2)
+Requirement already satisfied: pytz&gt;=2020.1 in /opt/conda/envs/rapids/lib/python3.9/site-packages (from pandas-&gt;prometheus-pandas) (2022.6)
+Requirement already satisfied: six&gt;=1.5 in /opt/conda/envs/rapids/lib/python3.9/site-packages (from python-dateutil&gt;=2.8.1-&gt;pandas-&gt;prometheus-pandas) (1.16.0)
+Installing collected packages: prometheus-pandas
+Successfully installed prometheus-pandas-0.3.2
+<span class=" -Color -Color-Yellow">WARNING: Running pip as the &#39;root&#39; user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Connect to the prometheus endpoint within our cluster.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prometheus_pandas</span> <span class="kn">import</span> <span class="n">query</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">Prometheus</span><span class="p">(</span><span class="s2">&quot;http://kube-prometheus-stack-prometheus.prometheus:9090&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="pending-pods">
+<h3>Pending pods<a class="headerlink" href="#pending-pods" title="Permalink to this heading">#</a></h3>
+<p>First let’s see how long each of our Pods spent in a <code class="docutils literal notranslate"><span class="pre">Pending</span></code> phase. This is the amount of time users would have to wait for their work to start running when they create their Dask clusters.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pending_pods</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">query_range</span><span class="p">(</span>
+    <span class="s1">&#39;kube_pod_status_phase{phase=&quot;Pending&quot;,namespace=&quot;default&quot;}&#39;</span><span class="p">,</span>
+    <span class="n">start_time</span><span class="p">,</span>
+    <span class="n">end_time</span><span class="p">,</span>
+    <span class="s2">&quot;1s&quot;</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.utils</span> <span class="kn">import</span> <span class="n">format_time</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Average time for Pod creation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">format_time</span><span class="p">(</span><span class="n">pending_pods</span><span class="o">.</span><span class="n">median</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;2.00 s&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">format_time</span><span class="p">(</span><span class="n">pending_pods</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;22.35 s&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>99th percentile time for Pod creation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">format_time</span><span class="p">(</span><span class="n">pending_pods</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.99</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;326.00 s&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>These numbers seem great, the most common start time for a cluster is two seconds! With the average being around 20 seconds. If your cluster triggers Kubernetes to scale up you could be waiting for 5 minutes though. Let’s see how many users would end up in that situation.</p>
+<p>What percentage of users get workers in less than 2 seconds, 5 seconds, 60 seconds, etc?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+
+<span class="n">stats</span><span class="o">.</span><span class="n">percentileofscore</span><span class="p">(</span><span class="n">pending_pods</span><span class="p">,</span> <span class="mf">2.01</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>59.70873786407767
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">percentileofscore</span><span class="p">(</span><span class="n">pending_pods</span><span class="p">,</span> <span class="mf">5.01</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>72.00647249190939
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">percentileofscore</span><span class="p">(</span><span class="n">pending_pods</span><span class="p">,</span> <span class="mf">60.01</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>91.10032362459548
+</pre></div>
+</div>
+</div>
+</div>
+<p>Ok this looks pretty reasonable. Nearly 75% of users get a cluster in less than 5 seconds, and over 90% get it in under a minute. But if you’re in the other 10% you may have to wait for 5 minutes.</p>
+<p>Let’s bucket this data to see the distribution of startup times visually.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pending_pods</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Dask Worker Pod wait times&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Seconds&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Pods&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Pods&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/cb4518978697fbadfb789dd0bcd8fcc9545f47b04f716994df629617f10192c1.png" src="../../_images/cb4518978697fbadfb789dd0bcd8fcc9545f47b04f716994df629617f10192c1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pending_pods</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Dask Worker Pod wait times (First minute)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Seconds&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Pods&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Pods&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/ef5611bf4440096e680ecdeab85d730669a282ef604914eaf2a9eb50998e2273.png" src="../../_images/ef5611bf4440096e680ecdeab85d730669a282ef604914eaf2a9eb50998e2273.png" />
+</div>
+</div>
+<p>Here we can see clearly that most users get their worker Pods scheduled in less than 5 seconds.</p>
+</section>
+<section id="cluster-scaling-and-efficiency">
+<h3>Cluster scaling and efficiency<a class="headerlink" href="#cluster-scaling-and-efficiency" title="Permalink to this heading">#</a></h3>
+<p>Ok so our users are getting clusters nice and quick, that’s because there is some warm capacity in the Kubernetes cluster that they are able to grab. When the limit is reached GKE autoscales to add new nodes. When demand drops for a while capacity is released again to save cost.</p>
+<p>Lets query to see how many nodes there were during the run and combine that with the number of running GPU Pods there were to see how efficiently we were using our resources.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">running_pods</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">query_range</span><span class="p">(</span>
+    <span class="s1">&#39;kube_pod_status_phase{phase=~&quot;Running|ContainerCreating&quot;,namespace=&quot;default&quot;}&#39;</span><span class="p">,</span>
+    <span class="n">start_time</span><span class="p">,</span>
+    <span class="n">end_time</span><span class="p">,</span>
+    <span class="s2">&quot;1s&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">running_pods</span> <span class="o">=</span> <span class="n">running_pods</span><span class="p">[</span>
+    <span class="n">running_pods</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">running_pods</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s2">&quot;prepull&quot;</span><span class="p">)))</span>
+<span class="p">]</span>
+<span class="n">nodes</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">query_range</span><span class="p">(</span><span class="s2">&quot;count(kube_node_info)&quot;</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="s2">&quot;1s&quot;</span><span class="p">)</span>
+<span class="n">nodes</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Available GPUs&quot;</span><span class="p">]</span>
+<span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;Available GPUs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;Available GPUs&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="p">)</span>  <span class="c1"># We know our nodes each had 2 GPUs</span>
+<span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;Utilized GPUs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">running_pods</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nodes</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot: &gt;
+</pre></div>
+</div>
+<img alt="../../_images/76df8517c91f33fb0b85d111c482c0ec9fabbdd46af4a4d8659698b41c98186b.png" src="../../_images/76df8517c91f33fb0b85d111c482c0ec9fabbdd46af4a4d8659698b41c98186b.png" />
+</div>
+</div>
+<p>Excellent so we can see our cluster adding and removing nodes as our workload demand changed. The space between the orange and blue lines is our warm capacity. Ideally we want this to be as small as possible. Let’s calculate what the gap is.</p>
+<p>How many GPU hours did our users utilize?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gpu_hours_utilized</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;Utilized GPUs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">60</span>
+<span class="n">gpu_hours_utilized</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>15.208055555555555
+</pre></div>
+</div>
+</div>
+</div>
+<p>How many GPU hours were we charged for?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gpu_hours_cost</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;Available GPUs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">60</span>
+<span class="n">gpu_hours_cost</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>23.938333333333333
+</pre></div>
+</div>
+</div>
+</div>
+<p>What was the overhead?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">overhead</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">gpu_hours_utilized</span> <span class="o">/</span> <span class="n">gpu_hours_cost</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">overhead</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">% o</span><span class="s2">verhead&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;36% overhead&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Ok not bad, so on our interactive cluster we managed 64% utilization of our GPU resources. Compared to non-autoscaling workloads where users interactively use long running workstations and clusters this is fantastic.</p>
+<p>If we measured batch workloads that ran for longer periods we would see this utilization clumb much higher.</p>
+</section>
+</section>
+<section id="closing-thoughts">
+<h2>Closing thoughts<a class="headerlink" href="#closing-thoughts" title="Permalink to this heading">#</a></h2>
+<p>By sharing a Kubernetes cluster between many users who are all launching many ephemeral Dask Clusters to perform their work we are able to balance cost vs user time. Peaks in individual user demands get smoothed out over time in a multi-tenant model, and the overall peaks and troughs of the day are accomodated by the Kubernetes cluster autoscaler.</p>
+<p>We managed to create a responsive experience for our users where they generally got Dask clusters in a few seconds. We also managed to hit 64% utilization of the GPUs in our cluster, a very respectable number for an interactive cluster.</p>
+<p>There are more things we could tune to increase utilization, but there are also some tradeoffs to be made here. If we scale down more aggressively then we would end up needing to scale back up more often resulting in more users waiting longer for their clusters.</p>
+<p>We can also see there there is some unused capacity between the nodes starting and our workload running. This is the time when image pulling happens, drivers get installed, etc. There are definitely things we could do to improve this so that nodes are ready to go as soon as they have booted.</p>
+<p>Compared to every user spinning up dedicated nodes for their individual workloads and paying the driver install and environment pull wait time and overhead cost every time, we are pooling our resources and reusing our capacity effectively.</p>
+</section>
+<section id="teardown">
+<h2>Teardown<a class="headerlink" href="#teardown" title="Permalink to this heading">#</a></h2>
+<p>Finally to clean everything up we can delete our GKE cluster by running the following command locally.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>gcloud<span class="w"> </span>container<span class="w"> </span>clusters<span class="w"> </span>delete<span class="w"> </span>multi-tenant-rapids<span class="w"> </span>--region<span class="w"> </span>us-central1<span class="w"> </span>--quiet
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Deleting cluster multi-tenant-rapids...done.                                   
+Deleted [https://container.googleapis.com/v1/projects/nv-ai-infra/zones/us-central1/clusters/multi-tenant-rapids].
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="../rapids-ec2-mnmg/notebook.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Multi-node multi-GPU example on AWS using dask-cloudprovider</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="../../guides/index.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Guides</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#prerequisites">
+   Prerequisites
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#get-a-kubernetes-cluster">
+   Get a Kubernetes Cluster
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#observability">
+   Observability
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#prometheus-stack">
+     Prometheus stack
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#install-rapids">
+   Install RAPIDS
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#image-steaming-optional">
+     Image steaming (optional)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#image-prepuller-optional">
+     Image prepuller (optional)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#rapids-notebook-pod">
+     RAPIDS Notebook Pod
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#install-the-dask-operator">
+     Install the Dask Operator
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#running-some-work">
+   Running some work
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#check-our-capabilities">
+     Check our capabilities
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#small-workload">
+     Small workload
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#simulating-many-multi-tenant-workloads">
+   Simulating many multi-tenant workloads
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#simulating-our-multi-tenant-workloads">
+     Simulating our multi-tenant workloads
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#analysis">
+   Analysis
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pending-pods">
+     Pending pods
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cluster-scaling-and-efficiency">
+     Cluster scaling and efficiency
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#closing-thoughts">
+   Closing thoughts
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#teardown">
+   Teardown
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+  <i class="fa-regular fa-file"></i> Related files
+</div>
+<nav id="bd-toc-nav" class="page-toc related-files">
+  <ul class="visible nav section-nav flex-column">
+    
+    <li class="toc-h2 nav-item toc-entry">
+      <a class="reference external nav-link" href="https://github.com/rapidsai/deployment/blob/main/source/examples/rapids-autoscaling-multi-tenant-kubernetes/rapids-notebook.yaml"> rapids-notebook.yaml </a>
+    </li>
+    
+    <li class="toc-h2 nav-item toc-entry">
+      <a class="reference external nav-link" href="https://github.com/rapidsai/deployment/blob/main/source/examples/rapids-autoscaling-multi-tenant-kubernetes/prometheus-stack-values.yaml"> prometheus-stack-values.yaml </a>
+    </li>
+    
+    <li class="toc-h2 nav-item toc-entry">
+      <a class="reference external nav-link" href="https://github.com/rapidsai/deployment/blob/main/source/examples/rapids-autoscaling-multi-tenant-kubernetes/image-prepuller.yaml"> image-prepuller.yaml </a>
+    </li>
+    
+  </ul>
+</nav>
+
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2023, NVIDIA.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="theme-version">
+    Built with the
+    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
+        PyData Sphinx Theme
+    </a>
+    0.12.0.
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>

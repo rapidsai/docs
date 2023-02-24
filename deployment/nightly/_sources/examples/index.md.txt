@@ -9,4 +9,5 @@ xgboost-gpu-hpo-job-parallel-k8s/notebook
 rapids-sagemaker-higgs/notebook
 rapids-sagemaker-hpo/notebook
 rapids-ec2-mnmg/notebook
+rapids-autoscaling-multi-tenant-kubernetes/notebook
 ```
