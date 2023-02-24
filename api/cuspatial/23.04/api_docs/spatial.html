@@ -497,7 +497,7 @@ points. Leaf nodes are permitted (but not guaranteed) to have &gt;=
 <h2>Spatial Join Functions<a class="headerlink" href="#spatial-join-functions" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="cuspatial.point_in_polygon">
-<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">point_in_polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_points_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_ring_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_points_y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.point_in_polygon" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">point_in_polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">polygons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.point_in_polygon" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute from a set of points and a set of polygons which points fall
 within which polygons. Note that <cite>polygons_(x,y)</cite> must be specified as
 closed polygons: the first and last coordinate of each polygon must be
@@ -505,17 +505,9 @@ the same.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>test_points_x</strong></dt><dd><p>x-coordinate of test points</p>
+<dt><strong>points</strong><span class="classifier">GeoSeries</span></dt><dd><p>A Series of points to test</p>
 </dd>
-<dt><strong>test_points_y</strong></dt><dd><p>y-coordinate of test points</p>
-</dd>
-<dt><strong>poly_offsets</strong></dt><dd><p>beginning index of the first ring in each polygon</p>
-</dd>
-<dt><strong>poly_ring_offsets</strong></dt><dd><p>beginning index of the first point in each ring</p>
-</dd>
-<dt><strong>poly_points_x</strong></dt><dd><p>x closed-coordinate of polygon points</p>
-</dd>
-<dt><strong>poly_points_y</strong></dt><dd><p>y closed-coordinate of polygon points</p>
+<dt><strong>polygons: GeoSeries</strong></dt><dd><p>A Series of polygons to test</p>
 </dd>
 </dl>
 </dd>
@@ -527,24 +519,14 @@ within each polygon.</p>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>input Series x and y will not be index aligned, but computed as
-sequential arrays.</p></li>
-<li><p>poly_ring_offsets must contain only the rings that make up the polygons
-indexed by poly_offsets. If there are rings in poly_ring_offsets that
-are not part of the polygons in poly_offsets, results are likely to be
-incorrect and behavior is undefined.</p></li>
-</ul>
 <p class="rubric">Examples</p>
 <p>Test whether 3 points fall within either of two polygons</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">point_in_polygon</span><span class="p">(</span>
-<span class="go">    [0, -8, 6.0],                             # test_points_x</span>
-<span class="go">    [0, -8, 6.0],                             # test_points_y</span>
-<span class="go">    cudf.Series([0, 1], index=['nyc', 'hudson river']), # poly_offsets</span>
-<span class="go">    [0, 3],                                   # ring_offsets</span>
-<span class="go">    [-10, 5, 5, -10, 0, 10, 10, 0],           # poly_points_x</span>
-<span class="go">    [-10, -10, 5, 5, 0, 0, 10, 10],           # poly_points_y</span>
+<span class="go">    GeoSeries([Point(0, 0), Point(-8, -8), Point(6, 6)]),</span>
+<span class="go">    GeoSeries([</span>
+<span class="go">        Polygon([(-10, -10), (5, -10), (5, 5), (-10, 5), (-10, -10)]),</span>
+<span class="go">        Polygon([(0, 0), (10, 0), (10, 10), (0, 10), (0, 0)])</span>
+<span class="go">    ], index=['nyc', 'hudson river'])</span>
 <span class="go">)</span>
 <span class="go"># The result of point_in_polygon is a DataFrame of Boolean</span>
 <span class="go"># values indicating whether each point (rows) falls within</span>
@@ -563,7 +545,7 @@ incorrect and behavior is undefined.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cuspatial.quadtree_point_in_polygon">
-<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">quadtree_point_in_polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poly_quad_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quadtree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ring_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poly_points_y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.quadtree_point_in_polygon" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">quadtree_point_in_polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poly_quad_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quadtree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">polygons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.quadtree_point_in_polygon" title="Permalink to this definition">#</a></dt>
 <dd><p>Test whether the specified points are inside any of the specified
 polygons.</p>
 <p>Uses the table of (polygon, quadrant) pairs returned by
@@ -582,17 +564,9 @@ memory allocated to store the quadtree and sorted point_indices.</p>
 </dd>
 <dt><strong>point_indices</strong><span class="classifier">cudf.Series</span></dt><dd><p>Sorted point indices returned by <code class="docutils literal notranslate"><span class="pre">cuspatial.quadtree_on_points</span></code></p>
 </dd>
-<dt><strong>points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>x-coordinates of points used to construct the quadtree.</p>
+<dt><strong>points: GeoSeries</strong></dt><dd><p>Points used to build the quadtree</p>
 </dd>
-<dt><strong>points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>y-coordinates of points used to construct the quadtree.</p>
-</dd>
-<dt><strong>poly_offsets</strong><span class="classifier">cudf.Series</span></dt><dd><p>Begin index of the first ring in each polygon.</p>
-</dd>
-<dt><strong>ring_offsets</strong><span class="classifier">cudf.Series</span></dt><dd><p>Begin index of the first point in each ring.</p>
-</dd>
-<dt><strong>poly_points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>Polygon point x-coodinates.</p>
-</dd>
-<dt><strong>poly_points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>Polygon point y-coodinates.</p>
+<dt><strong>polygons: GeoSeries</strong></dt><dd><p>Polygons to test against</p>
 </dd>
 </dl>
 </dd>
@@ -614,7 +588,7 @@ so it is an index to an index.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cuspatial.quadtree_point_to_nearest_linestring">
-<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">quadtree_point_to_nearest_linestring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linestring_quad_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quadtree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestring_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestring_points_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestring_points_y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.quadtree_point_to_nearest_linestring" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">quadtree_point_to_nearest_linestring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linestring_quad_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quadtree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestrings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.quadtree_point_to_nearest_linestring" title="Permalink to this definition">#</a></dt>
 <dd><p>Finds the nearest linestring to each point in a quadrant, and computes
 the distances between each point and linestring.</p>
 <p>Uses the table of (linestring, quadrant) pairs returned by
@@ -630,15 +604,9 @@ computed only for the points in the same quadrant as each linestring.</p>
 </dd>
 <dt><strong>point_indices</strong><span class="classifier">cudf.Series</span></dt><dd><p>Sorted point indices returned by <code class="docutils literal notranslate"><span class="pre">cuspatial.quadtree_on_points</span></code></p>
 </dd>
-<dt><strong>points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>x-coordinates of points used to construct the quadtree.</p>
+<dt><strong>points: GeoSeries</strong></dt><dd><p>Points to find nearest linestring for</p>
 </dd>
-<dt><strong>points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>y-coordinates of points used to construct the quadtree.</p>
-</dd>
-<dt><strong>linestring_offsets</strong><span class="classifier">cudf.Series</span></dt><dd><p>Begin index of the first point in each linestring.</p>
-</dd>
-<dt><strong>poly_points_x</strong><span class="classifier">cudf.Series</span></dt><dd><p>Linestring point x-coordinates.</p>
-</dd>
-<dt><strong>poly_points_y</strong><span class="classifier">cudf.Series</span></dt><dd><p>Linestring point y-coordinates.</p>
+<dt><strong>linestrings: GeoSeries</strong></dt><dd><p>Linestrings to test for</p>
 </dd>
 </dl>
 </dd>
@@ -1008,18 +976,12 @@ point on the linestring.</p></li>
 <h2>Bounding Boxes<a class="headerlink" href="#bounding-boxes" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="cuspatial.polygon_bounding_boxes">
-<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">polygon_bounding_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poly_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ring_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.polygon_bounding_boxes" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">polygon_bounding_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polygons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.polygon_bounding_boxes" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the minimum bounding-boxes for a set of polygons.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>poly_offsets</strong></dt><dd><p>Begin indices of the first ring in each polygon (i.e. prefix-sum)</p>
-</dd>
-<dt><strong>ring_offsets</strong></dt><dd><p>Begin indices of the first point in each ring (i.e. prefix-sum)</p>
-</dd>
-<dt><strong>xs</strong></dt><dd><p>Polygon point x-coordinates</p>
-</dd>
-<dt><strong>ys</strong></dt><dd><p>Polygon point y-coordinates</p>
+<dt><strong>polygons: GeoSeries</strong></dt><dd><p>A series of polygons</p>
 </dd>
 </dl>
 </dd>
@@ -1027,13 +989,13 @@ point on the linestring.</p></li>
 <dd class="field-even"><dl>
 <dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>minimum bounding boxes for each polygon</p>
 <dl class="simple">
-<dt>x_min<span class="classifier">cudf.Series</span></dt><dd><p>the minimum x-coordinate of each bounding box</p>
+<dt>minx<span class="classifier">cudf.Series</span></dt><dd><p>the minimum x-coordinate of each bounding box</p>
 </dd>
-<dt>y_min<span class="classifier">cudf.Series</span></dt><dd><p>the minimum y-coordinate of each bounding box</p>
+<dt>miny<span class="classifier">cudf.Series</span></dt><dd><p>the minimum y-coordinate of each bounding box</p>
 </dd>
-<dt>x_max<span class="classifier">cudf.Series</span></dt><dd><p>the maximum x-coordinate of each bounding box</p>
+<dt>maxx<span class="classifier">cudf.Series</span></dt><dd><p>the maximum x-coordinate of each bounding box</p>
 </dd>
-<dt>y_max<span class="classifier">cudf.Series</span></dt><dd><p>the maximum y-coordinate of each bounding box</p>
+<dt>maxy<span class="classifier">cudf.Series</span></dt><dd><p>the maximum y-coordinate of each bounding box</p>
 </dd>
 </dl>
 </dd>
@@ -1044,16 +1006,12 @@ point on the linestring.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cuspatial.linestring_bounding_boxes">
-<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">linestring_bounding_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linestring_offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expansion_radius</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.linestring_bounding_boxes" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cuspatial.</span></span><span class="sig-name descname"><span class="pre">linestring_bounding_boxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linestrings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geopandas_compatibility.html#cuspatial.GeoSeries" title="cuspatial.core.geoseries.GeoSeries"><span class="pre">GeoSeries</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">expansion_radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.linestring_bounding_boxes" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the minimum bounding boxes for a set of linestrings.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>linestring_offsets</strong></dt><dd><p>Begin indices of the each linestring</p>
-</dd>
-<dt><strong>xs</strong></dt><dd><p>Linestring point x-coordinates</p>
-</dd>
-<dt><strong>ys</strong></dt><dd><p>Linestring point y-coordinates</p>
+<dt><strong>linestrings: GeoSeries</strong></dt><dd><p>A series of linestrings</p>
 </dd>
 <dt><strong>expansion_radius</strong></dt><dd><p>radius of each linestring point</p>
 </dd>
@@ -1063,13 +1021,13 @@ point on the linestring.</p></li>
 <dd class="field-even"><dl>
 <dt><strong>result</strong><span class="classifier">cudf.DataFrame</span></dt><dd><p>minimum bounding boxes for each linestring</p>
 <dl class="simple">
-<dt>x_min<span class="classifier">cudf.Series</span></dt><dd><p>the minimum x-coordinate of each bounding box</p>
+<dt>minx<span class="classifier">cudf.Series</span></dt><dd><p>the minimum x-coordinate of each bounding box</p>
 </dd>
-<dt>y_min<span class="classifier">cudf.Series</span></dt><dd><p>the minimum y-coordinate of each bounding box</p>
+<dt>miny<span class="classifier">cudf.Series</span></dt><dd><p>the minimum y-coordinate of each bounding box</p>
 </dd>
-<dt>x_max<span class="classifier">cudf.Series</span></dt><dd><p>the maximum x-coordinate of each bounding box</p>
+<dt>maxx<span class="classifier">cudf.Series</span></dt><dd><p>the maximum x-coordinate of each bounding box</p>
 </dd>
-<dt>y_max<span class="classifier">cudf.Series</span></dt><dd><p>the maximum y-coordinate of each bounding box</p>
+<dt>maxy<span class="classifier">cudf.Series</span></dt><dd><p>the maximum y-coordinate of each bounding box</p>
 </dd>
 </dl>
 </dd>
