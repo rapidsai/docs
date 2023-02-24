@@ -38,8 +38,8 @@ The below libraries directly use RAPIDS cuDF/Dask-cuDF and/or cuSpatial to creat
 - **[cuxfilter GitHub](https://github.com/rapidsai/cuxfilter)**
 
 
-### **Note: Web Hosted Chart Interaction** 
-When interacting with this page through a website, the interactive examples below are all **static and use pre-computed data.** To run a true interactive version, host through an **active** notebook instance.
+### **Note:** Web Hosted vs Local Hosted Chart Interaction 
+When interacting with this page through a website, the interactive examples below are all **static and use pre-computed data.** To run a true interactive version, host through the **active** instance found on our [cuxfilter GitHub Notebooks](https://github.com/rapidsai/cuxfilter/tree/branch-{{ site.data.releases.stable.version }}/notebooks/RAPIDS%20Visualization%20Guide).
 
 {% include viz-cdn-js-css.html %}
 
