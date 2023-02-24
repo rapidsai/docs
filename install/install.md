@@ -32,7 +32,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 <i class="fas fa-microchip"></i> **GPU:** NVIDIA Pascal™ or better with [compute capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} 6.0+
 
 <i class="fas fa-desktop"></i> **OS:** One of the following OS versions:
-- <i class="fas fa-check-circle"></i> Ubuntu 18.04/20.04 or CentOS 7 / Rocky Linux 8 with <code>gcc/++</code> 9.0+
+- <i class="fas fa-check-circle"></i> Ubuntu 20.04/22.04 or CentOS 7 / Rocky Linux 8 with <code>gcc/++</code> 9.0+
 - <i class="fas fa-check-circle"></i> Windows 11 using a [WSL2 specific install](#WSL2)
 - <i class="fas fa-check-circle"></i> RHEL 7/8 support is provided through CentOS 7 / Rocky Linux 8 builds/installs
 
@@ -42,6 +42,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 - <i class="fas fa-check-circle"></i> [CUDA 11.2](https://developer.nvidia.com/cuda-11.2.0-download-archive){: target="_blank"} with Driver 460.27.03 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.4](https://developer.nvidia.com/cuda-11-4-0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.5](https://developer.nvidia.com/cuda-11-5-0-download-archive){: target="_blank"} with Driver 495.29.05 or newer
+- <i class="fas fa-check-circle"></i> [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 520.61.05 or newer
  
  **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details.
 
@@ -84,7 +85,12 @@ For most installations, you will need a Conda or Docker environments installed f
 <div id="conda"></div>
 
 ### **Conda**
-RAPIDS can use either a minimal conda installation with [Miniconda](https://conda.io/miniconda.html){: target="_blank"} or a full installation of [Anaconda](https://www.anaconda.com/download){: target="_blank"}. Below is a quick installation guide using miniconda.
+RAPIDS can use several version of conda: 
+- Full installation with [Anaconda](https://www.anaconda.com/download){: target="_blank"}. 
+- Minimal installation with [Miniconda](https://conda.io/miniconda.html){: target="_blank"}
+- Faster environment solving installation with [Mamba](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}. 
+
+Below is a quick installation guide using miniconda.
 
 **1. Download and Run Install Script**. Copy the command below to download and run the miniconda install script:
 ```
@@ -96,10 +102,6 @@ bash Miniconda3-latest-Linux-x86_64.sh
 
 **3. Start Conda.** Open a new terminal window, which should now show Conda initialized.
 
-**JupyterLab.** Start JupyterLab as below:
-```
-jupyter-lab --allow-root --ip='0.0.0.0' --NotebookApp.token='**your token**'
-```
 
 <br/>
 <div id="docker"></div>
@@ -113,14 +115,12 @@ RAPIDS requires both Docker CE v19.03+ and [nvidia-container-toolkit](https://gi
 curl https://get.docker.com | sh
 ```
 
-**2. Install Latest NVIDIA Docker.** For example, this is the Ubuntu Example:
+**2. Install Latest NVIDIA Docker.** Select the [appropriate supported distribution](https://nvidia.github.io/nvidia-container-runtime/){: target="_blank"}:
 ```
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
-curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
-curl -s -L https://nvidia.github.io/libnvidia-container/experimental/$distribution/libnvidia-container-experimental.list | sudo tee /etc/apt/sources.list.d/libnvidia-container-experimental.list
+curl -s -L https://nvidia.github.io/nvidia-container-runtime/gpgkey | \ sudo apt-key add - distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-container-runtime/$distribution/nvidia-container-runtime.list | \ sudo tee /etc/apt/sources.list.d/nvidia-container-runtime.list
 sudo apt-get update
-sudo apt-get install -y nvidia-docker2
+sudo apt-get install nvidia-container-runtime
 ```
 
 **3. Start Docker.** In new terminal window run:
@@ -135,10 +135,7 @@ docker run --gpus all nvcr.io/nvidia/k8s/cuda-sample:nbody nbody -gpu -benchmark
 ```
 
 **4b. Legacy Docker Users.** Docker CE v18 & [nvidia-docker2](https://github.com/NVIDIA/nvidia-docker/wiki/Installation-(version-2.0)){: target="_blank"} users will need to replace the following for compatibility:
-```
-'docker run --gpus all' with 'docker run --runtime=nvidia'
-```
-
+`docker run --gpus all` with `docker run --runtime=nvidia`
 <br/>
 
 **JupyterLab.** Defaults will run [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/){: target="_blank"} on your host machine at port: `8888`.
@@ -186,7 +183,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 <br/>
 
 ### **WSL Enhanced Prerequisites**
-<i class="fas fa-desktop text-white"></i> **OS:** Windows 11 with Ubuntu 20.04 instance for WSL2. <br/>
+<i class="fas fa-desktop text-white"></i> **OS:** Windows 11 with Ubuntu 22.04 instance for WSL2. <br/>
 <i class="fas fa-info-circle text-white"></i> **WSL Version:** WSL12 (WSL1 not supported). <br/>
 <i class="fas fa-microchip text-white"></i> **GPU:** GPUs with [Compute Capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} 7.0 or higher (16GB+ GPU RAM is recommended).
 
@@ -204,7 +201,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 <br/>
 
 ### **WSL Conda (Preferred Method)**
-1. Install WSL2 and the Ubuntu 20.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
+1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
 4. Install Conda in the WSL2 Linux Instance using our [Conda instructions](#conda).
@@ -218,7 +215,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 <br/>
 
 ### **WSL Docker Desktop**
-1. Install WSL2 and the Ubuntu 20.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
+1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Install latest Docker Desktop for Windows [according to your applicable licensing terms](https://docs.docker.com/desktop/install/windows-install/){: target="_blank"}.
 4. Log in to the WSL2 Linux instance.
@@ -231,7 +228,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 <br/>
 
 ###  **WSL and PiP**
-1. Install WSL2 and the Ubuntu 20.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
+1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
 4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then [install the CUDA Toolkit without drivers](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_network){: target="_blank"} into the WSL2 instance.
@@ -265,17 +262,17 @@ This is an experimental release supporting single GPU usage. cuDF, dask-cuDF, cu
 ### **PiP Enhanced Prerequisites**
 <i class="fas fa-info-circle"></i> **Glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
 <i class="fas fa-info-circle"></i> **Glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.31 (only ARM Server Base System Architecture is supported). <br/>
-<i class="fas fa-download"></i> **CUDA >= 11.5**, with at least the v495.29.05 driver. To use CUDA 11.2, 11.3, or 11.4, please see Troubleshooting and Known Issues. <br/>
-<i class="fab fa-python"></i> **Python and pip version:** Python 3.8 or 3.9 using pip 20.3+ with [PEP600 support](https://peps.python.org/pep-0600/){: target="_blank"}.
+<i class="fas fa-download"></i> **CUDA >= 11.8**, with at least the **v520.61.05** driver. To use older CUDA 11.x versions, please see Troubleshooting and Known Issues. <br/>
+<i class="fab fa-python"></i> **Python and pip version:** Python 3.8 or 3.10 using pip 20.3+ with [PEP600 support](https://peps.python.org/pep-0600/){: target="_blank"}.
 
 <br/>
 
 ### **PiP Install**
 The RAPIDS pip packages are hosted on NVIDIA NGC index via:
 ```
-pip install cudf-cu11 dask-cudf-cu11 --extra-index-url=https://pypi.ngc.nvidia.com
-pip install cuml-cu11 --extra-index-url=https://pypi.ngc.nvidia.com
-pip install cugraph-cu11 --extra-index-url=https://pypi.ngc.nvidia.com
+pip install cudf-cu11 dask-cudf-cu11 --extra-index-url=https://pypi.nvidia.com
+pip install cuml-cu11 --extra-index-url=https://pypi.nvidia.com
+pip install cugraph-cu11 --extra-index-url=https://pypi.nvidia.com
 ```
 
 On ARM architecture (aarch64), cupy needs to be installed separately: <br/>
@@ -286,8 +283,7 @@ pip install cupy-cuda11x -f https://pip.cupy.dev/aarch64
 ### **Troubleshooting and Known Issues**
 <i class="fas fa-info-circle"></i> Infiniband is not supported yet. <br/>
 <i class="fas fa-info-circle"></i> These packages are not compatible with Tensorflow pip packages. Please use the [NGC containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow){: target="_blank"} or conda packages instead. <br/>
-<i class="fas fa-info-circle"></i> When installing these packages with CUDA 11.2, 11.3, or 11.4, you may experience a "Failed to import CuPy" error.<br/>
-To resolve this error, please uninstall cupy-cuda115 and install cupy-cuda11x:
+<i class="fas fa-info-circle"></i> If you experience a “Failed to import CuPy” error, please uninstall any existing versions of cupy and install cupy-cuda11x. For example:
 ```
 pip uninstall cupy-cuda115; pip install cupy-cuda11x
 ```
@@ -298,7 +294,7 @@ ERROR: Could not find a version that satisfies the requirement cudf-cu11 (from v
 ERROR: No matching distribution found for cudf-cu11
 ```
 Check the suggestions below for possible resolutions:
-- Your Python version must be 3.8 or 3.9.
+- Your Python version must be 3.8 or 3.10.
 - RAPIDS pip packages require a recent version of pip that [supports PEP600](https://peps.python.org/pep-0600/){: target="_blank"}. Some users may need to update pip: `pip install -U pip` <br/>
 
 <i class="fas fa-info-circle"></i> Dask / Jupyter / Tornado 6.2 dependency conflicts can occur. Install jupyter-client 7.3.4 if the error below occurs: <br/>
