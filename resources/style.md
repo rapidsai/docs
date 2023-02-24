@@ -33,3 +33,10 @@ Individual projects should configure `flake8` to suit their needs, for example t
 Git commit messages should convey the change succinctly, but with enough detail to be understood without extra context.
 
 See the [Git Methodology]({% link resources/git.md %}#git-commits) for further details.
+
+## GitHub Pull Requests
+
+Draft Pull Requests should be opened while work is in progress. This lets other
+developers know draft changes are coming without initialing a the review process
+immediately. Once the pull request is ready, click "Ready for review" to get
+feedback on the changes.
