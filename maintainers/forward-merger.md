@@ -11,7 +11,8 @@ title: Forward Mergers
 
 The forward mergers are automated pull requests to merge a branch in burndown into the next versioned branch. For example merging `branch-22.12` into `branch-23.02`. This ensures all changes to the current branch are reflected in the next version.
 
-The forward merger jobs are located here: https://gpuci.gpuopenanalytics.com/job/rapidsai/job/forward-mergers/
+The forward merger jobs are located here: 
+[https://gpuci.gpuopenanalytics.com/job/rapidsai/job/forward-mergers/](https://gpuci.gpuopenanalytics.com/job/rapidsai/job/forward-mergers/)
 
 ### Intended audience
 
