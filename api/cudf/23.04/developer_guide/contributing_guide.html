@@ -369,16 +369,16 @@ Specifically, cuDF uses the following tools:</p>
 In conjunction with <a class="reference external" href="https://docs.python.org/3/library/typing.html">type hints</a>,
 <code class="docutils literal notranslate"><span class="pre">mypy</span></code> can help catch various bugs that are otherwise difficult to find.</p></li>
 <li><p><a class="reference external" href="https://github.com/PyCQA/pydocstyle/"><code class="docutils literal notranslate"><span class="pre">pydocstyle</span></code></a> lints docstring style.</p></li>
+<li><p><a class="reference external" href="https://github.com/codespell-project/codespell"><code class="docutils literal notranslate"><span class="pre">codespell</span></code></a> finds spelling errors.</p></li>
 </ul>
 <p>Linter config data is stored in a number of files.
-We generally use <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> over <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> and avoid project-specific files (e.g. <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">python/cudf/setup.cfg</span></code>).
+We generally use <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> over <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> and avoid project-specific files (e.g. <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">python/cudf/pyproject.toml</span></code>).
 However, differences between tools and the different packages in the repo result in the following caveats:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">flake8</span></code> has no plans to support <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, so it must live in <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">flake8</span></code> has no plans to support <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, so it must live in <code class="docutils literal notranslate"><span class="pre">.flake8</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">isort</span></code> must be configured per project to set which project is the &ldquo;first party&rdquo; project.</p></li>
 </ul>
-<p>Additionally, our use of <code class="docutils literal notranslate"><span class="pre">versioneer</span></code> means that each project must have a <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code>.
-As a result, we currently maintain both root and project-level <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> and <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> files.</p>
+<p>As a result, we currently maintain both root and project-level <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> files as well as a <code class="docutils literal notranslate"><span class="pre">.flake8</span></code> file.</p>
 <p>For more information on how to use pre-commit hooks, see the code formatting section of the
 <a class="reference external" href="https://github.com/rapidsai/cudf/blob/main/CONTRIBUTING.md#python--pre-commit-hooks">overall contributing guide</a>.</p>
 </section>
@@ -463,17 +463,13 @@ raise <code class="docutils literal notranslate"><span class="pre">NotImplemente
 There is no need to mention when the argument will be supported in the future.</p>
 <section id="handling-libcudf-exceptions">
 <h3>Handling libcudf Exceptions<a class="headerlink" href="#handling-libcudf-exceptions" title="Permalink to this heading">#</a></h3>
-<p>Currently libcudf raises <code class="docutils literal notranslate"><span class="pre">cudf::logic_error</span></code> and <code class="docutils literal notranslate"><span class="pre">cudf::cuda_error</span></code>.
-These error types are mapped to <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code> in python.
-Several APIs use the exception payload <code class="docutils literal notranslate"><span class="pre">what()</span></code> message to determine the exception type raised by libcudf.</p>
-<p>Determining error type based on exception payload is brittle since libcudf does not maintain API stability on exception messages.
-This is a compromise due to libcudf only raising a limited number of error types.
-Only adopt this strategy when necessary.</p>
-<p>The projected roadmap is to diversify the exception types raised by libcudf.
-Standard C++ natively supports various <a class="reference external" href="https://en.cppreference.com/w/cpp/error/exception">exception types</a>,
+<p>Standard C++ natively supports various <a class="reference external" href="https://en.cppreference.com/w/cpp/error/exception">exception types</a>,
 which Cython maps to <a class="reference external" href="https://docs.cython.org/en/latest/src/userguide/wrapping_CPlusPlus.html#exceptions">these Python exception types</a>.
-In the future, libcudf may employ custom C++ exception types.
-If that occurs, this section will be updated to reflect how these may be mapped to desired Python exception types.</p>
+In addition to built-in exceptions, libcudf also raises a few additional types of exceptions.
+cuDF extends Cython&rsquo;s default mapping to account for these exception types.
+When a new libcudf exception type is added, a suitable except clause should be added to cuDF&rsquo;s
+<a class="reference external" href="https://github.com/rapidsai/cudf/blob/main/python/cudf/cudf/_lib/cpp/exception_handler.hpp">exception handler</a>.
+If no built-in Python exception seems like a good match, a new Python exception should be created.</p>
 </section>
 <section id="raising-warnings">
 <h3>Raising warnings<a class="headerlink" href="#raising-warnings" title="Permalink to this heading">#</a></h3>

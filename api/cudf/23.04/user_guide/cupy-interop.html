@@ -361,9 +361,10 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">timeit</span>
-<span class="kn">from</span> <span class="nn">packaging</span> <span class="kn">import</span> <span class="n">version</span>
 
 <span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
+<span class="kn">from</span> <span class="nn">packaging</span> <span class="kn">import</span> <span class="n">version</span>
+
 <span class="kn">import</span> <span class="nn">cudf</span>
 
 <span class="k">if</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">"10.0.0"</span><span class="p">):</span>
@@ -385,10 +386,13 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nelem</span> <span class="o">=</span> <span class="mi">10000</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'a'</span><span class="p">:</span><span class="nb">range</span><span class="p">(</span><span class="n">nelem</span><span class="p">),</span>
-                     <span class="s1">'b'</span><span class="p">:</span><span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">nelem</span> <span class="o">+</span> <span class="mi">500</span><span class="p">),</span>
-                     <span class="s1">'c'</span><span class="p">:</span><span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nelem</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">)}</span>
-                   <span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">"a"</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="n">nelem</span><span class="p">),</span>
+        <span class="s2">"b"</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">nelem</span> <span class="o">+</span> <span class="mi">500</span><span class="p">),</span>
+        <span class="s2">"c"</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nelem</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">),</span>
+    <span class="p">}</span>
+<span class="p">)</span>
 
 <span class="o">%</span><span class="k">timeit</span> arr_cupy = cupy_from_dlpack(df.to_dlpack())
 <span class="o">%</span><span class="k">timeit</span> arr_cupy = df.values
@@ -397,13 +401,13 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>213 &micro;s &plusmn; 941 ns per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>239 &micro;s &plusmn; 11.7 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>641 &micro;s &plusmn; 11.1 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>714 &micro;s &plusmn; 8.12 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>637 &micro;s &plusmn; 4.01 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>689 &micro;s &plusmn; 11.4 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
 </pre></div>
 </div>
 </div>
@@ -438,7 +442,7 @@
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">col</span> <span class="o">=</span> <span class="s1">'a'</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">col</span> <span class="o">=</span> <span class="s2">"a"</span>
 
 <span class="o">%</span><span class="k">timeit</span> cola_cupy = cp.asarray(df[col])
 <span class="o">%</span><span class="k">timeit</span> cola_cupy = cupy_from_dlpack(df[col].to_dlpack())
@@ -447,13 +451,13 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>90.5 &micro;s &plusmn; 161 ns per loop (mean &plusmn; std. dev. of 7 runs, 10000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>99 &micro;s &plusmn; 1.67 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 10000 loops each)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>227 &micro;s &plusmn; 713 ns per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>246 &micro;s &plusmn; 7 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>196 &micro;s &plusmn; 1.99 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 10000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>211 &micro;s &plusmn; 2.03 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 1000 loops each)
 </pre></div>
 </div>
 </div>
@@ -536,7 +540,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>30.2 ms &plusmn; 198 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 10 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31.6 ms &plusmn; 593 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 10 loops each)
 </pre></div>
 </div>
 </div>
@@ -740,7 +744,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>12.8 ms &plusmn; 176 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 1 loop each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>13.2 ms &plusmn; 210 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 1 loop each)
 </pre></div>
 </div>
 </div>
@@ -755,7 +759,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.06 ms &plusmn; 119 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 100 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.04 ms &plusmn; 79.6 &micro;s per loop (mean &plusmn; std. dev. of 7 runs, 100 loops each)
 </pre></div>
 </div>
 </div>
@@ -1165,14 +1169,16 @@ dtype: int64
 <p>The sparse matrix data structure is defined by three dense arrays. We&rsquo;ll define a small helper function for cleanliness.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cudf_to_cupy_sparse_matrix</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sparseformat</span><span class="o">=</span><span class="s1">'column'</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Converts a cuDF object to a CuPy Sparse Column matrix.</span>
-<span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">sparseformat</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">'row'</span><span class="p">,</span> <span class="s1">'column'</span><span class="p">,):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cudf_to_cupy_sparse_matrix</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sparseformat</span><span class="o">=</span><span class="s2">"column"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Converts a cuDF object to a CuPy Sparse Column matrix."""</span>
+    <span class="k">if</span> <span class="n">sparseformat</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span>
+        <span class="s2">"row"</span><span class="p">,</span>
+        <span class="s2">"column"</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Let's focus on column and row formats for now."</span><span class="p">)</span>
-    
+
     <span class="n">_sparse_constructor</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csc_matrix</span>
-    <span class="k">if</span> <span class="n">sparseformat</span> <span class="o">==</span> <span class="s1">'row'</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">sparseformat</span> <span class="o">==</span> <span class="s2">"row"</span><span class="p">:</span>
         <span class="n">_sparse_constructor</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span>
 
     <span class="k">return</span> <span class="n">_sparse_constructor</span><span class="p">(</span><span class="n">cupy_from_dlpack</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">to_dlpack</span><span class="p">()))</span>
@@ -1188,8 +1194,8 @@ dtype: int64
 <span class="n">nonzero</span> <span class="o">=</span> <span class="mi">1000</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
     <span class="n">arr</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">nelem</span><span class="p">)</span>
-    <span class="n">arr</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nelem</span><span class="o">-</span><span class="n">nonzero</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">'a'</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">arr</span>
+    <span class="n">arr</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nelem</span> <span class="o">-</span> <span class="n">nonzero</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">"a"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">arr</span>
 </pre></div>
 </div>
 </div>
@@ -1244,118 +1250,118 @@ dtype: int64
   <tbody>
     <tr>
       <th>0</th>
-      <td>4.012225</td>
-      <td>2.830882</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>-1.336999</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
       <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.000000</td>
+      <td>0.0</td>
       <td>0.000000</td>
-      <td>0.000000</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.000000</td>
-      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>7.687545</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>13.866269</td>
       <td>0.0</td>
       <td>0.000000</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>4.919923</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>9.674035</td>
-      <td>0.000000</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.000000</td>
-      <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>-2.765674</td>
-      <td>10.165516</td>
-      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
-      <td>5.746187</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
       <td>0.0</td>
-      <td>11.060594</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
+      <td>-0.371624</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0.000000</td>
-      <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
-      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
       <td>0.0</td>
       <td>0.000000</td>
-      <td>5.371621</td>
-      <td>0.000000</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0.000000</td>
-      <td>0.000000</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>2.173474</td>
-      <td>0.0</td>
-      <td>10.140401</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-3.144647</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.000000</td>
       <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
       <td>0.000000</td>
+      <td>0.0</td>
       <td>0.000000</td>
-      <td>5.628873</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -1369,57 +1375,57 @@ dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  (0, 0)	4.012225329677796
-  (385, 0)	3.4955012609105482
-  (515, 0)	9.96634752657294
-  (1156, 0)	9.805115032765478
-  (647, 0)	0.10734083818507767
-  (520, 0)	1.8726012553947906
-  (393, 0)	0.1253073481915823
-  (395, 0)	10.992972435101713
-  (524, 0)	4.4896541562301095
-  (397, 0)	1.3143335814043866
-  (1038, 0)	11.27854776254592
-  (271, 0)	7.845846403285356
-  (144, 0)	-3.8180801835005127
-  (400, 0)	7.690638975248974
-  (145, 0)	0.4045673411223294
-  (274, 0)	4.579776554343128
-  (1171, 0)	11.87762827746917
-  (276, 0)	0.12595357723855782
-  (404, 0)	9.408203647813815
-  (532, 0)	1.9655605825819182
-  (277, 0)	7.599699253014793
-  (22, 0)	9.12461984509911
-  (278, 0)	9.473892243327583
-  (24, 0)	-0.19639515718623102
-  (792, 0)	10.424403221856931
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  (768, 0)	6.41614831913522
+  (257, 0)	0.4621313348554029
+  (1665, 0)	3.414291323647034
+  (1538, 0)	10.461345583217883
+  (259, 0)	13.579922939440115
+  (1027, 0)	10.704679591616733
+  (1668, 0)	3.931612020298289
+  (261, 0)	1.8941310188178102
+  (901, 0)	9.281691055775074
+  (1029, 0)	7.924808104161355
+  (1158, 0)	6.892771642007596
+  (1031, 0)	-3.52678259335911
+  (1673, 0)	6.421584907792215
+  (266, 0)	3.294142824024805
+  (1034, 0)	9.486544435282765
+  (1546, 0)	-3.1109708736030695
+  (1802, 0)	-0.669568520249666
+  (395, 0)	3.0415010521826265
+  (1291, 0)	-0.5957506543431745
+  (1675, 0)	1.7012673905174935
+  (268, 0)	5.125617069314614
+  (13, 0)	1.939946850501919
+  (1805, 0)	9.757546826184205
+  (1038, 0)	4.123249048469449
+  (1294, 0)	1.5845290877586282
   :	:
-  (9322, 19)	1.4673703299736751
-  (9706, 19)	1.3929693879080558
-  (8299, 19)	5.90821811377735
-  (8811, 19)	17.22677084715007
-  (8813, 19)	3.3729518137878127
-  (8944, 19)	11.064017033695073
-  (9585, 19)	11.04788171358242
-  (8691, 19)	0.861876115137119
-  (9843, 19)	8.294794802535513
-  (9332, 19)	4.343051793151585
-  (9460, 19)	11.10993312773118
-  (8822, 19)	8.270365073506403
-  (8695, 19)	1.6392816267413095
-  (9207, 19)	10.374732230346778
-  (9719, 19)	9.348289143286944
-  (9847, 19)	-1.2894521918137047
-  (9336, 19)	5.629756457304197
-  (8825, 19)	6.490787109625042
-  (9849, 19)	2.587102941099226
-  (8442, 19)	10.251157954376831
-  (9085, 19)	0.6556913456204799
-  (8318, 19)	1.9792537444828655
-  (8831, 19)	2.941632582838129
-  (9855, 19)	0.16092980464100848
-  (9976, 19)	10.068928271180472
+  (8575, 19)	7.106095242914472
+  (8703, 19)	3.291730358271031
+  (9184, 19)	4.848128041342283
+  (9824, 19)	11.0716521989878
+  (9570, 19)	1.6197601835839759
+  (9699, 19)	12.808706983975156
+  (9061, 19)	4.22081051690925
+  (9445, 19)	9.75955991341711
+  (9573, 19)	8.483596398142517
+  (9957, 19)	-2.2977285963338954
+  (9958, 19)	8.663816491612568
+  (9959, 19)	4.5102548475628215
+  (9964, 19)	5.185043434515297
+  (9197, 19)	-3.2745010218849813
+  (9198, 19)	9.768552481608449
+  (9329, 19)	5.113626972577162
+  (9460, 19)	8.334674363816323
+  (9077, 19)	-0.6127321541863284
+  (9078, 19)	12.196480853955578
+  (9846, 19)	6.135371108552671
+  (9207, 19)	7.513777117497945
+  (9976, 19)	7.445840483523578
+  (9341, 19)	7.750801506578913
+  (9343, 19)	7.080327942167893
+  (9727, 19)	4.95177285391808
 </pre></div>
 </div>
 </div>

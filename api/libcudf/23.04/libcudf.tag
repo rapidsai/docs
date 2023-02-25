@@ -2183,6 +2183,7 @@
     <class kind="struct">cudf::logic_error</class>
     <class kind="struct">cudf::cuda_error</class>
     <class kind="struct">cudf::fatal_cuda_error</class>
+    <class kind="struct">cudf::data_type_error</class>
     <namespace>cudf</namespace>
     <member kind="define">
       <type>#define</type>
@@ -10249,6 +10250,24 @@
       <arglist>() const noexcept</arglist>
     </member>
   </compound>
+  <compound kind="struct">
+    <name>cudf::data_type_error</name>
+    <filename>structcudf_1_1data__type__error.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>data_type_error</name>
+      <anchorfile>structcudf_1_1data__type__error.html</anchorfile>
+      <anchor>a9d1f408df1fecbdaf4095b336f68be16</anchor>
+      <arglist>(char const *const message)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>data_type_error</name>
+      <anchorfile>structcudf_1_1data__type__error.html</anchorfile>
+      <anchor>a1c27b858e1cc213bf1fffa4d9c4af3b4</anchor>
+      <arglist>(std::string const &amp;message)</arglist>
+    </member>
+  </compound>
   <compound kind="class">
     <name>cudf::io::datasource</name>
     <filename>classcudf_1_1io_1_1datasource.html</filename>
@@ -14751,6 +14770,32 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>cudf::list_device_view::pair_accessor</name>
+    <filename>structcudf_1_1list__device__view_1_1pair__accessor.html</filename>
+    <templarg></templarg>
+    <member kind="function">
+      <type>CUDF_HOST_DEVICE</type>
+      <name>pair_accessor</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
+      <anchor>a14b2b90c570fd87997eed3cb731393ad</anchor>
+      <arglist>(list_device_view const &amp;_list)</arglist>
+    </member>
+    <member kind="function">
+      <type>thrust::pair&lt; T, bool &gt;</type>
+      <name>operator()</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
+      <anchor>a95483245b84735ba74f8c11f916c86f3</anchor>
+      <arglist>(cudf::size_type i) const</arglist>
+    </member>
+    <member kind="variable">
+      <type>list_device_view const  &amp;</type>
+      <name>list</name>
+      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
+      <anchor>a1a9ded6b481d0ff1ebcd69d256d6dcd0</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>cudf::detail::pair_accessor</name>
     <filename>structcudf_1_1detail_1_1pair__accessor.html</filename>
     <templarg></templarg>
@@ -14774,32 +14819,6 @@
       <name>col</name>
       <anchorfile>structcudf_1_1detail_1_1pair__accessor.html</anchorfile>
       <anchor>a5c93941a91871e3e4116b7f848b87c7d</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
-    <name>cudf::list_device_view::pair_accessor</name>
-    <filename>structcudf_1_1list__device__view_1_1pair__accessor.html</filename>
-    <templarg></templarg>
-    <member kind="function">
-      <type>CUDF_HOST_DEVICE</type>
-      <name>pair_accessor</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
-      <anchor>a14b2b90c570fd87997eed3cb731393ad</anchor>
-      <arglist>(list_device_view const &amp;_list)</arglist>
-    </member>
-    <member kind="function">
-      <type>thrust::pair&lt; T, bool &gt;</type>
-      <name>operator()</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
-      <anchor>a95483245b84735ba74f8c11f916c86f3</anchor>
-      <arglist>(cudf::size_type i) const</arglist>
-    </member>
-    <member kind="variable">
-      <type>list_device_view const  &amp;</type>
-      <name>list</name>
-      <anchorfile>structcudf_1_1list__device__view_1_1pair__accessor.html</anchorfile>
-      <anchor>a1a9ded6b481d0ff1ebcd69d256d6dcd0</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -15611,38 +15630,6 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>cudf::experimental::row::lexicographic::preprocessed_table</name>
-    <filename>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</filename>
-    <member kind="typedef">
-      <type>std::invoke_result_t&lt; decltype(table_device_view::create), table_view, rmm::cuda_stream_view &gt;</type>
-      <name>table_device_view_owner</name>
-      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
-      <anchor>a97a458d753e0a883a421e2b32bc73ab1</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="function" static="yes">
-      <type>static std::shared_ptr&lt; preprocessed_table &gt;</type>
-      <name>create</name>
-      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
-      <anchor>adf82787431bb2d0dc608fdd527435cdf</anchor>
-      <arglist>(table_view const &amp;table, host_span&lt; order const &gt; column_order, host_span&lt; null_order const &gt; null_precedence, rmm::cuda_stream_view stream)</arglist>
-    </member>
-    <member kind="friend" protection="private">
-      <type>friend class</type>
-      <name>self_comparator</name>
-      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
-      <anchor>a745e9b8d7da1d6d9b182ca09b3c09f4c</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="friend" protection="private">
-      <type>friend class</type>
-      <name>two_table_comparator</name>
-      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
-      <anchor>a806631930baf594ec533ccc30fe6069d</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
     <name>cudf::experimental::row::equality::preprocessed_table</name>
     <filename>structcudf_1_1experimental_1_1row_1_1equality_1_1preprocessed__table.html</filename>
     <member kind="function" static="yes">
@@ -15671,6 +15658,38 @@
       <name>hash::row_hasher</name>
       <anchorfile>structcudf_1_1experimental_1_1row_1_1equality_1_1preprocessed__table.html</anchorfile>
       <anchor>aba4b2ca772e0808dc9d4c86871ec463e</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>cudf::experimental::row::lexicographic::preprocessed_table</name>
+    <filename>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</filename>
+    <member kind="typedef">
+      <type>std::invoke_result_t&lt; decltype(table_device_view::create), table_view, rmm::cuda_stream_view &gt;</type>
+      <name>table_device_view_owner</name>
+      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
+      <anchor>a97a458d753e0a883a421e2b32bc73ab1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static std::shared_ptr&lt; preprocessed_table &gt;</type>
+      <name>create</name>
+      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
+      <anchor>adf82787431bb2d0dc608fdd527435cdf</anchor>
+      <arglist>(table_view const &amp;table, host_span&lt; order const &gt; column_order, host_span&lt; null_order const &gt; null_precedence, rmm::cuda_stream_view stream)</arglist>
+    </member>
+    <member kind="friend" protection="private">
+      <type>friend class</type>
+      <name>self_comparator</name>
+      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
+      <anchor>a745e9b8d7da1d6d9b182ca09b3c09f4c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="friend" protection="private">
+      <type>friend class</type>
+      <name>two_table_comparator</name>
+      <anchorfile>structcudf_1_1experimental_1_1row_1_1lexicographic_1_1preprocessed__table.html</anchorfile>
+      <anchor>a806631930baf594ec533ccc30fe6069d</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -19235,6 +19254,7 @@
     <class kind="class">cudf::column_view</class>
     <class kind="struct">cudf::cuda_error</class>
     <class kind="class">cudf::data_type</class>
+    <class kind="struct">cudf::data_type_error</class>
     <class kind="struct">cudf::device_span</class>
     <class kind="class">cudf::dictionary_column_view</class>
     <class kind="struct">cudf::dictionary_wrapper</class>
@@ -29105,6 +29125,7 @@
     <class kind="struct">cudf::logic_error</class>
     <class kind="struct">cudf::cuda_error</class>
     <class kind="struct">cudf::fatal_cuda_error</class>
+    <class kind="struct">cudf::data_type_error</class>
     <member kind="define">
       <type>#define</type>
       <name>CUDF_EXPECTS</name>
