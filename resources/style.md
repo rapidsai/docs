@@ -36,7 +36,5 @@ See the [Git Methodology]({% link resources/git.md %}#git-commits) for further d
 
 ## GitHub Pull Requests
 
-Draft Pull Requests should be opened while work is in progress. This lets other
-developers know draft changes are coming without initialing a the review process
-immediately. Once the pull request is ready, click "Ready for review" to get
+[Draft pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests#draft-pull-requests) should be opened while work is in progress. This prevents review notifications from being sent to code owners before a pull request is ready to be reviewed. Once the pull request is ready, click "Ready for review" to get
 feedback on the changes.
