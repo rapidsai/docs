@@ -55,8 +55,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#using-rmm">Using RMM</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#devicebuffers">DeviceBuffers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#memoryresource-objects">MemoryResource objects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-rmm-with-third-party-libraries">Using RMM with third-party libraries</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#using-rmm-with-cupy">Using RMM with CuPy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#using-rmm-with-numba">Using RMM with Numba</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-rmm-with-pytorch">Using RMM with PyTorch</a></li>
 </ul>
 </li>
 </ul>
@@ -226,34 +230,57 @@ resources</p></li>
 <p>MemoryResources are highly configurable and can be composed together in different ways.
 See <code class="docutils literal notranslate"><span class="pre">help(rmm.mr)</span></code> for more information.</p>
 </section>
+</section>
+<section id="using-rmm-with-third-party-libraries">
+<h2>Using RMM with third-party libraries<a class="headerlink" href="#using-rmm-with-third-party-libraries" title="Permalink to this heading">&para;</a></h2>
+<p>A number of libraries provide hooks to control their device
+allocations. RMM provides implementations of these for
+<a class="reference external" href="https://cupy.dev">CuPy</a>,
+<a class="reference external" href="https://numba.readthedocs.io/en/stable/">numba</a>, and <a class="reference external" href="https://pytorch.org">PyTorch</a> in the
+<code class="docutils literal notranslate"><span class="pre">rmm.allocators</span></code> submodule. All these approaches configure the library
+to use the <em>current</em> RMM memory resource for device
+allocations.</p>
 <section id="using-rmm-with-cupy">
 <h3>Using RMM with CuPy<a class="headerlink" href="#using-rmm-with-cupy" title="Permalink to this heading">&para;</a></h3>
 <p>You can configure <a class="reference external" href="https://cupy.dev/">CuPy</a> to use RMM for memory
 allocations by setting the CuPy CUDA allocator to
-<code class="docutils literal notranslate"><span class="pre">rmm_cupy_allocator</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">rmm</span>
+<code class="docutils literal notranslate"><span class="pre">rmm.allocators.cupy.rmm_cupy_allocator</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rmm.allocators.cupy</span> <span class="kn">import</span> <span class="n">rmm_cupy_allocator</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cupy</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cupy</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">set_allocator</span><span class="p">(</span><span class="n">rmm</span><span class="o">.</span><span class="n">rmm_cupy_allocator</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cupy</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">set_allocator</span><span class="p">(</span><span class="n">rmm_cupy_allocator</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="using-rmm-with-numba">
 <h3>Using RMM with Numba<a class="headerlink" href="#using-rmm-with-numba" title="Permalink to this heading">&para;</a></h3>
-<p>You can configure Numba to use RMM for memory allocations using the
+<p>You can configure <a class="reference external" href="https://numba.readthedocs.io/en/stable/">Numba</a> to use RMM for memory allocations using the
 Numba <a class="reference external" href="https://numba.readthedocs.io/en/stable/cuda/external-memory.html#setting-emm-plugin">EMM Plugin</a>.</p>
 <p>This can be done in two ways:</p>
 <ol class="simple">
 <li><p>Setting the environment variable <code class="docutils literal notranslate"><span class="pre">NUMBA_CUDA_MEMORY_MANAGER</span></code>:</p></li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nv">NUMBA_CUDA_MEMORY_MANAGER</span><span class="o">=</span>rmm<span class="w"> </span>python<span class="w"> </span><span class="o">(</span>args<span class="o">)</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nv">NUMBA_CUDA_MEMORY_MANAGER</span><span class="o">=</span>rmm.allocators.numba<span class="w"> </span>python<span class="w"> </span><span class="o">(</span>args<span class="o">)</span>
 </pre></div>
 </div>
 <ol class="simple">
 <li><p>Using the <code class="docutils literal notranslate"><span class="pre">set_memory_manager()</span></code> function provided by Numba:</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">cuda</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">rmm</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cuda</span><span class="o">.</span><span class="n">set_memory_manager</span><span class="p">(</span><span class="n">rmm</span><span class="o">.</span><span class="n">RMMNumbaManager</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rmm.allocators.numba</span> <span class="kn">import</span> <span class="n">RMMNumbaManager</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cuda</span><span class="o">.</span><span class="n">set_memory_manager</span><span class="p">(</span><span class="n">RMMNumbaManager</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="using-rmm-with-pytorch">
+<h3>Using RMM with PyTorch<a class="headerlink" href="#using-rmm-with-pytorch" title="Permalink to this heading">&para;</a></h3>
+<p>You can configure
+<a class="reference external" href="https://pytorch.org/docs/stable/notes/cuda.html">PyTorch</a> to use RMM
+for memory allocations using their by configuring the current
+allocator.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rmm.allocators.torch</span> <span class="kn">import</span> <span class="n">rmm_torch_allocator</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">change_current_allocator</span><span class="p">(</span><span class="n">rmm_torch_allocator</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
