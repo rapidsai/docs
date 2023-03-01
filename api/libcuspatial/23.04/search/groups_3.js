@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['factory_20methods_350',['Factory Methods',['../group__type__factories.html',1,'']]]
+  ['factory_20methods_340',['Factory Methods',['../group__type__factories.html',1,'']]]
 ];
