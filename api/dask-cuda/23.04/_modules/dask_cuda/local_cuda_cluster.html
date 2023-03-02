@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en"><head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>dask_cuda.local_cuda_cluster &mdash; dask-cuda 23.04.00a0+gaf0f3ef documentation</title>
+  <title>dask_cuda.local_cuda_cluster &mdash; dask-cuda 23.04.00a0+g3fadc30 documentation</title>
       <link href="../../_static/pygments.css" rel="stylesheet" type="text/css">
       <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css">
       <link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet" type="text/css">
@@ -217,6 +217,14 @@
 <span class="sd">            The asynchronous allocator requires CUDA Toolkit 11.2 or newer. It is also</span>
 <span class="sd">            incompatible with RMM pools and managed memory. Trying to enable both will</span>
 <span class="sd">            result in an exception.</span>
+<span class="sd">    rmm_release_threshold: int, str or None, default None</span>
+<span class="sd">        When ``rmm.async is True`` and the pool size grows beyond this value, unused</span>
+<span class="sd">        memory held by the pool will be released at the next synchronization point.</span>
+<span class="sd">        Can be an integer (bytes), float (fraction of total device memory), string (like</span>
+<span class="sd">        ``"5GB"`` or ``"5000M"``) or ``None``. By default, this feature is disabled.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            This size is a per-worker configuration, and not cluster-wide.</span>
 <span class="sd">    rmm_log_directory : str or None, default None</span>
 <span class="sd">        Directory to write per-worker RMM log files to. The client and scheduler are not</span>
 <span class="sd">        logged here. Can be a string (like ``"/path/to/logs/"``) or ``None`` to</span>
@@ -264,8 +272,12 @@
 <span class="sd">    TypeError</span>
 <span class="sd">        If InfiniBand or NVLink are enabled and ``protocol!="ucx"``.</span>
 <span class="sd">    ValueError</span>
-<span class="sd">        If NVLink and RMM managed memory are both enabled, or if RMM pools / managed</span>
-<span class="sd">        memory and asynchronous allocator are both enabled.</span>
+<span class="sd">        If RMM pool, RMM managed memory or RMM async allocator are requested but RMM</span>
+<span class="sd">        cannot be imported.</span>
+<span class="sd">        If RMM managed memory and asynchronous allocator are both enabled.</span>
+<span class="sd">        If RMM maximum pool size is set but RMM pool size is not.</span>
+<span class="sd">        If RMM maximum pool size is set but RMM async allocator is used.</span>
+<span class="sd">        If RMM release threshold is set but the RMM async allocator is not being used.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -291,6 +303,7 @@
         <span class="n">rmm_maximum_pool_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">rmm_managed_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">rmm_async</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">rmm_release_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">rmm_log_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">rmm_track_allocations</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">jit_unspill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -333,7 +346,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rmm_maximum_pool_size</span> <span class="o">=</span> <span class="n">rmm_maximum_pool_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rmm_managed_memory</span> <span class="o">=</span> <span class="n">rmm_managed_memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rmm_async</span> <span class="o">=</span> <span class="n">rmm_async</span>
-        <span class="k">if</span> <span class="n">rmm_pool_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">rmm_managed_memory</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rmm_release_threshold</span> <span class="o">=</span> <span class="n">rmm_release_threshold</span>
+        <span class="k">if</span> <span class="n">rmm_pool_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">rmm_managed_memory</span> <span class="ow">or</span> <span class="n">rmm_async</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="kn">import</span> <span class="nn">rmm</span>  <span class="c1"># noqa F401</span>
             <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -342,11 +356,6 @@
                     <span class="s2">"is not available. For installation instructions, please "</span>
                     <span class="s2">"see https://github.com/rapidsai/rmm"</span>
                 <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
-            <span class="k">if</span> <span class="n">rmm_async</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">"RMM pool and managed memory are incompatible with asynchronous "</span>
-                    <span class="s2">"allocator"</span>
-                <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">enable_nvlink</span><span class="p">:</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
@@ -471,12 +480,13 @@
                         <span class="n">get_cpu_affinity</span><span class="p">(</span><span class="n">nvml_device_index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">visible_devices</span><span class="p">))</span>
                     <span class="p">),</span>
                     <span class="n">RMMSetup</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">rmm_pool_size</span><span class="p">,</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">rmm_maximum_pool_size</span><span class="p">,</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">rmm_managed_memory</span><span class="p">,</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">rmm_async</span><span class="p">,</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">rmm_log_directory</span><span class="p">,</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">rmm_track_allocations</span><span class="p">,</span>
+                        <span class="n">initial_pool_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rmm_pool_size</span><span class="p">,</span>
+                        <span class="n">maximum_pool_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rmm_maximum_pool_size</span><span class="p">,</span>
+                        <span class="n">managed_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rmm_managed_memory</span><span class="p">,</span>
+                        <span class="n">async_alloc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rmm_async</span><span class="p">,</span>
+                        <span class="n">release_threshold</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rmm_release_threshold</span><span class="p">,</span>
+                        <span class="n">log_directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rmm_log_directory</span><span class="p">,</span>
+                        <span class="n">track_allocations</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rmm_track_allocations</span><span class="p">,</span>
                     <span class="p">),</span>
                     <span class="n">PreImport</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pre_import</span><span class="p">),</span>
                 <span class="p">},</span>
