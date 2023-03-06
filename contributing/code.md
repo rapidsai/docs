@@ -54,7 +54,7 @@ All RAPIDS projects have project boards for triaging [issues]({% link releases/t
 
 ### What do I work on?
 
-__Note:__ If you are have been assigned issues, work on those issues first.
+__Note:__ If you have been assigned issues, work on those issues first.
 
 For all others:
 
