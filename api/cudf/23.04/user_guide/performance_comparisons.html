@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.18.1: http://docutils.sourceforge.net/" name="generator">
+
+    <title>Performance comparison &mdash; cudf 23.04.00 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet">
+<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet">
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet">
+  <link as="font" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2">
+<link as="font" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2">
+<link as="font" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" rel="preload" type="font/woff2">
+
+    <link href="../_static/pygments.css" rel="stylesheet" type="text/css">
+    <link href="../_static/copybutton.css" rel="stylesheet" type="text/css">
+    <link href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" rel="stylesheet" type="text/css">
+    <link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet" type="text/css">
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" rel="preload">
+<link as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" rel="preload">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/performance_comparisons';</script>
+    <link href="../genindex.html" rel="index" title="Index">
+    <link href="../search.html" rel="search" title="Search">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="en" name="docsearch:language">
+  <script id="rapids-selector-pixel-src" src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+  
+  
+  <body data-bs-root-margin="0px 0px -60%" data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-default-mode data-offset="180">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input class="sidebar-toggle" id="__primary" name="__primary" type="checkbox">
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input class="sidebar-toggle" id="__secondary" name="__secondary" type="checkbox">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form action="../search.html" class="bd-search d-flex align-items-center" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input aria-label="Search the docs ..." autocapitalize="off" autocomplete="off" autocorrect="off" class="form-control" id="search-input" name="q" placeholder="Search the docs ..." spellcheck="false" type="search">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img alt="Logo image" class="logo__image only-light" src="../_static/RAPIDS-logo-purple.png">
+    <script>document.write(`<img src="../_static/RAPIDS-logo-purple.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="navbar-header-items">
+    
+    <div class="ms-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p aria-label="Site Navigation" aria-level="1" class="sidebar-header-items__title" role="heading">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api_docs/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../developer_guide/index.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul aria-label="Icon Links" class="navbar-icon-links navbar-nav">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" data-bs-placement="bottom" data-bs-toggle="tooltip" href="https://github.com/rapidsai/cudf" rel="noopener" target="_blank" title="GitHub"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" data-bs-placement="bottom" data-bs-toggle="tooltip" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide"><div id="rapids-pydata-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">cudf</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/stable/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libcuspatial/stable">libcuspatial</a><a class="rapids-selector__menu-item" href="/api/libkvikio/stable">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item" href="/api/raft/stable">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (23.04)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/cudf/nightly/index.html">nightly (23.04)</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">stable (23.02)</a><a class="rapids-selector__menu-item" href="/api/cudf/legacy/index.html">legacy (22.12)</a></div></div></div>
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p aria-label="Site Navigation" aria-level="1" class="sidebar-header-items__title" role="heading">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api_docs/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../developer_guide/index.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul aria-label="Icon Links" class="navbar-icon-links navbar-nav">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" data-bs-placement="bottom" data-bs-toggle="tooltip" href="https://github.com/rapidsai/cudf" rel="noopener" target="_blank" title="GitHub"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" data-bs-placement="bottom" data-bs-toggle="tooltip" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main class="bd-main" id="main-content">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul aria-label="Breadcrumb" class="bd-breadcrumbs" role="navigation">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a aria-label="Home" class="nav-link" href="../index.html">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li aria-current="page" class="breadcrumb-item active">Performance comparison</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="performance-comparison">
+<h1>Performance comparison<a class="headerlink" href="#performance-comparison" title="Permalink to this heading">#</a></h1>
+<p>This notebook compares the performance of <code class="docutils literal notranslate"><span class="pre">cuDF</span></code> and <code class="docutils literal notranslate"><span class="pre">pandas</span></code>. The comparisons performed are on identical data sizes. This notebook primarily showcases the factor
+of speedups users can have when the similar <code class="docutils literal notranslate"><span class="pre">pandas</span></code> APIs are run on GPUs using <code class="docutils literal notranslate"><span class="pre">cudf</span></code>.</p>
+<p>The hardware details used to run these performance comparisons are at the end of this page.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">timeit</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">cudf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="concat-count-joins-performance">
+<h2>Concat, count &amp; joins performance<a class="headerlink" href="#concat-count-joins-performance" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_rows</span> <span class="o">=</span> <span class="mi">300_000_000</span>
+<span class="n">pdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">"numbers"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int64"</span><span class="p">),</span>
+        <span class="s2">"business"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+            <span class="p">[</span><span class="s2">"McD"</span><span class="p">,</span> <span class="s2">"Buckees"</span><span class="p">,</span> <span class="s2">"Walmart"</span><span class="p">,</span> <span class="s2">"Costco"</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">num_rows</span>
+        <span class="p">),</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+<span class="n">pdf</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>numbers</th>
+      <th>business</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-316</td>
+      <td>Costco</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-441</td>
+      <td>Costco</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>653</td>
+      <td>Buckees</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>216</td>
+      <td>Buckees</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-165</td>
+      <td>Walmart</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>299999995</th>
+      <td>-395</td>
+      <td>Walmart</td>
+    </tr>
+    <tr>
+      <th>299999996</th>
+      <td>-653</td>
+      <td>Buckees</td>
+    </tr>
+    <tr>
+      <th>299999997</th>
+      <td>364</td>
+      <td>Buckees</td>
+    </tr>
+    <tr>
+      <th>299999998</th>
+      <td>159</td>
+      <td>Buckees</td>
+    </tr>
+    <tr>
+      <th>299999999</th>
+      <td>-501</td>
+      <td>Walmart</td>
+    </tr>
+  </tbody>
+</table>
+<p>300000000 rows &times; 2 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+<span class="n">gdf</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>numbers</th>
+      <th>business</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-316</td>
+      <td>Costco</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-441</td>
+      <td>Costco</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>653</td>
+      <td>Buckees</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>216</td>
+      <td>Buckees</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-165</td>
+      <td>Walmart</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>299999995</th>
+      <td>-395</td>
+      <td>Walmart</td>
+    </tr>
+    <tr>
+      <th>299999996</th>
+      <td>-653</td>
+      <td>Buckees</td>
+    </tr>
+    <tr>
+      <th>299999997</th>
+      <td>364</td>
+      <td>Buckees</td>
+    </tr>
+    <tr>
+      <th>299999998</th>
+      <td>159</td>
+      <td>Buckees</td>
+    </tr>
+    <tr>
+      <th>299999999</th>
+      <td>-501</td>
+      <td>Walmart</td>
+    </tr>
+  </tbody>
+</table>
+<p>300000000 rows &times; 2 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">timeit_pandas_cudf</span><span class="p">(</span><span class="n">pd_obj</span><span class="p">,</span> <span class="n">gd_obj</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    A utility function to measure execution time of an</span>
+<span class="sd">    API(`func`) in pandas &amp; cudf.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pd_obj : Pandas object</span>
+<span class="sd">    gd_obj : cuDF object</span>
+<span class="sd">    func : callable</span>
+<span class="sd">    """</span>
+    <span class="n">pandas_time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">func</span><span class="p">(</span><span class="n">pd_obj</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">cudf_time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">func</span><span class="p">(</span><span class="n">gd_obj</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pandas_time</span><span class="p">,</span> <span class="n">cudf_time</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pandas_value_counts</span><span class="p">,</span> <span class="n">cudf_value_counts</span> <span class="o">=</span> <span class="n">timeit_pandas_cudf</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">,</span> <span class="n">gdf</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(),</span> <span class="n">number</span><span class="o">=</span><span class="mi">30</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdf</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">100_000_000</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">100_000_000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pandas_concat</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pdf</span><span class="p">,</span> <span class="n">pdf</span><span class="p">,</span> <span class="n">pdf</span><span class="p">]),</span> <span class="n">number</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cudf_concat</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">cudf</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">gdf</span><span class="p">,</span> <span class="n">gdf</span><span class="p">,</span> <span class="n">gdf</span><span class="p">]),</span> <span class="n">number</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pandas_groupby</span><span class="p">,</span> <span class="n">cudf_groupby</span> <span class="o">=</span> <span class="n">timeit_pandas_cudf</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">,</span>
+    <span class="n">gdf</span><span class="p">,</span>
+    <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"business"</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">"min"</span><span class="p">,</span> <span class="s2">"max"</span><span class="p">,</span> <span class="s2">"mean"</span><span class="p">]),</span>
+    <span class="n">number</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_rows</span> <span class="o">=</span> <span class="mi">1_000_000</span>
+<span class="n">pdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">"numbers"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int64"</span><span class="p">),</span>
+        <span class="s2">"business"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+            <span class="p">[</span><span class="s2">"McD"</span><span class="p">,</span> <span class="s2">"Buckees"</span><span class="p">,</span> <span class="s2">"Walmart"</span><span class="p">,</span> <span class="s2">"Costco"</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">num_rows</span>
+        <span class="p">),</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pandas_merge</span><span class="p">,</span> <span class="n">cudf_merge</span> <span class="o">=</span> <span class="n">timeit_pandas_cudf</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">,</span> <span class="n">gdf</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">number</span><span class="o">=</span><span class="mi">30</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">performance_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">"cudf speedup vs. pandas"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">pandas_value_counts</span> <span class="o">/</span> <span class="n">cudf_value_counts</span><span class="p">,</span>
+            <span class="n">pandas_concat</span> <span class="o">/</span> <span class="n">cudf_concat</span><span class="p">,</span>
+            <span class="n">pandas_groupby</span> <span class="o">/</span> <span class="n">cudf_groupby</span><span class="p">,</span>
+            <span class="n">pandas_merge</span> <span class="o">/</span> <span class="n">cudf_merge</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">},</span>
+    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"value_counts"</span><span class="p">,</span> <span class="s2">"concat"</span><span class="p">,</span> <span class="s2">"groupby"</span><span class="p">,</span> <span class="s2">"merge"</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">performance_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cudf speedup vs. pandas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>value_counts</th>
+      <td>282.901300</td>
+    </tr>
+    <tr>
+      <th>concat</th>
+      <td>203.624680</td>
+    </tr>
+    <tr>
+      <th>groupby</th>
+      <td>138.495762</td>
+    </tr>
+    <tr>
+      <th>merge</th>
+      <td>136.519031</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">performance_df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"#7400ff"</span><span class="p">,</span>
+    <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">400</span><span class="p">),</span>
+    <span class="n">rot</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s2">"Operation"</span><span class="p">,</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="s2">"Speedup factor"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">bar_label</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">containers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"</span><span class="si">%.0f</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/862ef1ccb0cc1924c07261f2c2cc5aa1dc22b66d055e4448b6bde8d1793030ed.png" src="../_images/862ef1ccb0cc1924c07261f2c2cc5aa1dc22b66d055e4448b6bde8d1793030ed.png">
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cleaning up used memory for later benchmarks</span>
+<span class="k">del</span> <span class="n">pdf</span>
+<span class="k">del</span> <span class="n">gdf</span>
+<span class="kn">import</span> <span class="nn">gc</span>
+
+<span class="n">_</span> <span class="o">=</span> <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="strings-performance">
+<h2>Strings Performance<a class="headerlink" href="#strings-performance" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd_series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">"123"</span><span class="p">,</span> <span class="s2">"56.234"</span><span class="p">,</span> <span class="s2">"Walmart"</span><span class="p">,</span> <span class="s2">"Costco"</span><span class="p">,</span> <span class="s2">"rapids ai"</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">300_000_000</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gd_series</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">pd_series</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pandas_upper</span><span class="p">,</span> <span class="n">cudf_upper</span> <span class="o">=</span> <span class="n">timeit_pandas_cudf</span><span class="p">(</span>
+    <span class="n">pd_series</span><span class="p">,</span> <span class="n">gd_series</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">number</span><span class="o">=</span><span class="mi">20</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pandas_contains</span><span class="p">,</span> <span class="n">cudf_contains</span> <span class="o">=</span> <span class="n">timeit_pandas_cudf</span><span class="p">(</span>
+    <span class="n">pd_series</span><span class="p">,</span> <span class="n">gd_series</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="sa">r</span><span class="s2">"[0-9][a-z]"</span><span class="p">),</span> <span class="n">number</span><span class="o">=</span><span class="mi">20</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pandas_isalpha</span><span class="p">,</span> <span class="n">cudf_isalpha</span> <span class="o">=</span> <span class="n">timeit_pandas_cudf</span><span class="p">(</span>
+    <span class="n">pd_series</span><span class="p">,</span> <span class="n">gd_series</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">isalpha</span><span class="p">(),</span> <span class="n">number</span><span class="o">=</span><span class="mi">20</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">performance_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">"cudf speedup vs. pandas"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">pandas_upper</span> <span class="o">/</span> <span class="n">cudf_upper</span><span class="p">,</span>
+            <span class="n">pandas_contains</span> <span class="o">/</span> <span class="n">cudf_contains</span><span class="p">,</span>
+            <span class="n">pandas_isalpha</span> <span class="o">/</span> <span class="n">cudf_isalpha</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">},</span>
+    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"upper"</span><span class="p">,</span> <span class="s2">"contains"</span><span class="p">,</span> <span class="s2">"isalpha"</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">performance_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cudf speedup vs. pandas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>upper</th>
+      <td>1832.120875</td>
+    </tr>
+    <tr>
+      <th>contains</th>
+      <td>1311.758332</td>
+    </tr>
+    <tr>
+      <th>is_alpha</th>
+      <td>5752.301339</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">performance_df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"#7400ff"</span><span class="p">,</span>
+    <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7000</span><span class="p">),</span>
+    <span class="n">rot</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s2">"String method"</span><span class="p">,</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="s2">"Speedup factor"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">bar_label</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">containers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"</span><span class="si">%.0f</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/9252e87f815c8b2637e7834ab8f97a7522b1f7a2b2060e5cb67f1a0d69796f91.png" src="../_images/9252e87f815c8b2637e7834ab8f97a7522b1f7a2b2060e5cb67f1a0d69796f91.png">
+</div>
+</div>
+</section>
+<section id="user-defined-function-udf-performance-with-jit-overhead">
+<h2>User-defined function (UDF) performance (with JIT overhead)<a class="headerlink" href="#user-defined-function-udf-performance-with-jit-overhead" title="Permalink to this heading">#</a></h2>
+<p>The first UDF runs include JIT compilation overhead, due to which the performance of first run and average of next few runs are compared separately.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_rows</span> <span class="o">=</span> <span class="mi">10_000_000</span>
+<span class="n">pdf_age</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">"age"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">),</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+<span class="n">pdf_age</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>age</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>87</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>71</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>63</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>40</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>92</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>9999995</th>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>9999996</th>
+      <td>28</td>
+    </tr>
+    <tr>
+      <th>9999997</th>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>9999998</th>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>9999999</th>
+      <td>47</td>
+    </tr>
+  </tbody>
+</table>
+<p>10000000 rows &times; 1 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gdf_age</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">pdf_age</span><span class="p">)</span>
+<span class="n">gdf_age</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>age</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>87</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>71</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>63</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>40</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>92</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>9999995</th>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>9999996</th>
+      <td>28</td>
+    </tr>
+    <tr>
+      <th>9999997</th>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>9999998</th>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>9999999</th>
+      <td>47</td>
+    </tr>
+  </tbody>
+</table>
+<p>10000000 rows &times; 1 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">age_udf</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">"age"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">18</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="mi">18</span> <span class="o">&lt;=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"age"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="mi">20</span> <span class="o">&lt;=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"age"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="mi">30</span> <span class="o">&lt;=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"age"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">3</span>
+    <span class="k">elif</span> <span class="mi">40</span> <span class="o">&lt;=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"age"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">4</span>
+    <span class="k">elif</span> <span class="mi">50</span> <span class="o">&lt;=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"age"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">5</span>
+    <span class="k">elif</span> <span class="mi">60</span> <span class="o">&lt;=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"age"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">70</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">6</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">7</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pandas_int_udf</span><span class="p">,</span> <span class="n">cudf_int_udf</span> <span class="o">=</span> <span class="n">timeit_pandas_cudf</span><span class="p">(</span>
+    <span class="n">pdf_age</span><span class="p">,</span> <span class="n">gdf_age</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">age_udf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">number</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">str_isupper_udf</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">isupper</span><span class="p">():</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd_series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s2">"ABC"</span><span class="p">,</span> <span class="s2">"abc"</span><span class="p">,</span> <span class="s2">"hello world"</span><span class="p">,</span> <span class="s2">"AI"</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">100_000_000</span><span class="p">),</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"strings"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">pd_series</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0                    AI
+1                   ABC
+2           hello world
+3                   abc
+4           hello world
+               ...     
+99999995             AI
+99999996             AI
+99999997            abc
+99999998            abc
+99999999    hello world
+Name: strings, Length: 100000000, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gd_series</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">pd_series</span><span class="p">)</span>
+<span class="n">gd_series</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0                    AI
+1                   ABC
+2           hello world
+3                   abc
+4           hello world
+               ...     
+99999995             AI
+99999996             AI
+99999997            abc
+99999998            abc
+99999999    hello world
+Name: strings, Length: 100000000, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pandas_str_udf</span><span class="p">,</span> <span class="n">cudf_str_udf</span> <span class="o">=</span> <span class="n">timeit_pandas_cudf</span><span class="p">(</span>
+    <span class="n">pd_series</span><span class="p">,</span> <span class="n">gd_series</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">str_isupper_udf</span><span class="p">),</span> <span class="n">number</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">performance_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">"cudf speedup vs. pandas"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">pandas_int_udf</span> <span class="o">/</span> <span class="n">cudf_int_udf</span><span class="p">,</span>
+            <span class="n">pandas_str_udf</span> <span class="o">/</span> <span class="n">cudf_str_udf</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"Numeric"</span><span class="p">,</span> <span class="s2">"String"</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">performance_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cudf speedup vs. pandas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Numeric</th>
+      <td>362.091673</td>
+    </tr>
+    <tr>
+      <th>String</th>
+      <td>204.865789</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Below is the plot showing performance speedup in case of Numeric UDFs &amp; String UDFs on their first runs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">performance_df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"#7400ff"</span><span class="p">,</span>
+    <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">550</span><span class="p">),</span>
+    <span class="n">rot</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s2">"UDF Kind"</span><span class="p">,</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="s2">"Speedup factor"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">bar_label</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">containers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"</span><span class="si">%.0f</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8d925e83c199d518d2a2683424860f326feafed9ff4b60d9284669b0cd64142e.png" src="../_images/8d925e83c199d518d2a2683424860f326feafed9ff4b60d9284669b0cd64142e.png">
+</div>
+</div>
+</section>
+<section id="user-defined-function-udf-performance-without-jit-overhead">
+<h2>User-defined function (UDF) performance (without JIT overhead)<a class="headerlink" href="#user-defined-function-udf-performance-without-jit-overhead" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pandas_int_udf</span><span class="p">,</span> <span class="n">cudf_int_udf</span> <span class="o">=</span> <span class="n">timeit_pandas_cudf</span><span class="p">(</span>
+    <span class="n">pdf_age</span><span class="p">,</span> <span class="n">gdf_age</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">age_udf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">number</span><span class="o">=</span><span class="mi">10</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pandas_str_udf</span><span class="p">,</span> <span class="n">cudf_str_udf</span> <span class="o">=</span> <span class="n">timeit_pandas_cudf</span><span class="p">(</span>
+    <span class="n">pd_series</span><span class="p">,</span> <span class="n">gd_series</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">str_isupper_udf</span><span class="p">),</span> <span class="n">number</span><span class="o">=</span><span class="mi">10</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">performance_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">"cudf speedup vs. pandas"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">pandas_int_udf</span> <span class="o">/</span> <span class="n">cudf_int_udf</span><span class="p">,</span>
+            <span class="n">pandas_str_udf</span> <span class="o">/</span> <span class="n">cudf_str_udf</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"Numeric"</span><span class="p">,</span> <span class="s2">"String"</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">performance_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cudf speedup vs. pandas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Numeric</th>
+      <td>95448.144630</td>
+    </tr>
+    <tr>
+      <th>String</th>
+      <td>2587.570338</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Below is the plot showing performance speedup in case of Numeric UDFs &amp; String UDFs on their consequent runs. In this case the speedup is massive because of no JIT overhead present.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">performance_df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"#7400ff"</span><span class="p">,</span>
+    <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100000</span><span class="p">),</span>
+    <span class="n">rot</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s2">"UDF Kind"</span><span class="p">,</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="s2">"Speedup factor"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">bar_label</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">containers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"</span><span class="si">%.0f</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/aabffeb60a2bb913f517ca947e645d991526140b7ce4e33aa0ee30e9ae7a87b6.png" src="../_images/aabffeb60a2bb913f517ca947e645d991526140b7ce4e33aa0ee30e9ae7a87b6.png">
+</div>
+</div>
+</section>
+<section id="udf-performance-in-groupby">
+<h2>UDF Performance in GroupBy<a class="headerlink" href="#udf-performance-in-groupby" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">size</span> <span class="o">=</span> <span class="mi">100_000_000</span>
+<span class="n">pdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="n">pdf</span><span class="p">[</span><span class="s2">"key"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+<span class="n">pdf</span><span class="p">[</span><span class="s2">"val"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">custom_formula_udf</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">"out"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"key"</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">"val"</span><span class="p">]</span> <span class="o">-</span> <span class="mi">10</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pandas_udf_groupby</span><span class="p">,</span> <span class="n">cudf_udf_groupby</span> <span class="o">=</span> <span class="n">timeit_pandas_cudf</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">,</span>
+    <span class="n">gdf</span><span class="p">,</span>
+    <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"key"</span><span class="p">],</span> <span class="n">group_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">custom_formula_udf</span><span class="p">),</span>
+    <span class="n">number</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">performance_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">"cudf speedup vs. pandas"</span><span class="p">:</span> <span class="p">[</span><span class="n">pandas_udf_groupby</span> <span class="o">/</span> <span class="n">cudf_udf_groupby</span><span class="p">]},</span>
+    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"Grouped UDF"</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">performance_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cudf speedup vs. pandas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Grouped UDF</th>
+      <td>423.83606</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">performance_df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"#7400ff"</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">rot</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">"Speedup factor"</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">bar_label</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">containers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"</span><span class="si">%.0f</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bd02445339b74eedecf8497bbcf59ae2d5fc7b088c738d0617e7900ac5907fae.png" src="../_images/bd02445339b74eedecf8497bbcf59ae2d5fc7b088c738d0617e7900ac5907fae.png">
+</div>
+</div>
+</section>
+</section>
+<section id="system-configuration">
+<h1>System Configuration<a class="headerlink" href="#system-configuration" title="Permalink to this heading">#</a></h1>
+<section id="cpu-configuration">
+<h2>CPU Configuration<a class="headerlink" href="#cpu-configuration" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>lscpu
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Byte Order:                      Little Endian
+Address sizes:                   46 bits physical, 48 bits virtual
+CPU(s):                          80
+On-line CPU(s) list:             0-79
+Thread(s) per core:              2
+Core(s) per socket:              20
+Socket(s):                       2
+NUMA node(s):                    2
+Vendor ID:                       GenuineIntel
+CPU family:                      6
+Model:                           85
+Model name:                      Intel(R) Xeon(R) Gold 6230 CPU @ 2.10GHz
+Stepping:                        7
+CPU MHz:                         800.049
+CPU max MHz:                     3900.0000
+CPU min MHz:                     800.0000
+BogoMIPS:                        4200.00
+Virtualization:                  VT-x
+L1d cache:                       1.3 MiB
+L1i cache:                       1.3 MiB
+L2 cache:                        40 MiB
+L3 cache:                        55 MiB
+NUMA node0 CPU(s):               0-19,40-59
+NUMA node1 CPU(s):               20-39,60-79
+Vulnerability Itlb multihit:     KVM: Mitigation: Split huge pages
+Vulnerability L1tf:              Not affected
+Vulnerability Mds:               Not affected
+Vulnerability Meltdown:          Not affected
+Vulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled v
+                                 ia prctl and seccomp
+Vulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user
+                                  pointer sanitization
+Vulnerability Spectre v2:        Mitigation; Enhanced IBRS, IBPB conditional, RS
+                                 B filling
+Vulnerability Srbds:             Not affected
+Vulnerability Tsx async abort:   Mitigation; TSX disabled
+Flags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtr
+                                 r pge mca cmov pat pse36 clflush dts acpi mmx f
+                                 xsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rd
+                                 tscp lm constant_tsc art arch_perfmon pebs bts 
+                                 rep_good nopl xtopology nonstop_tsc cpuid aperf
+                                 mperf pni pclmulqdq dtes64 monitor ds_cpl vmx s
+                                 mx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid d
+                                 ca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadli
+                                 ne_timer aes xsave avx f16c rdrand lahf_lm abm 
+                                 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 inv
+                                 pcid_single intel_ppin ssbd mba ibrs ibpb stibp
+                                  ibrs_enhanced tpr_shadow vnmi flexpriority ept
+                                  vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep
+                                  bmi2 erms invpcid cqm mpx rdt_a avx512f avx512
+                                 dq rdseed adx smap clflushopt clwb intel_pt avx
+                                 512cd avx512bw avx512vl xsaveopt xsavec xgetbv1
+                                  xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm
+                                 _mbm_local dtherm ida arat pln pts hwp hwp_act_
+                                 window hwp_epp hwp_pkg_req pku ospke avx512_vnn
+                                 i md_clear flush_l1d arch_capabilities
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gpu-configuration">
+<h2>GPU Configuration<a class="headerlink" href="#gpu-configuration" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>nvidia-smi
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mon Feb  6 17:43:52 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 525.60.04    Driver Version: 525.60.04    CUDA Version: 12.0     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  H100 80GB HBM2e     On   | 00000000:1E:00.0 Off |                    0 |
+| N/A   30C    P0    60W / 700W |      0MiB / 81559MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+|   1  H100 80GB HBM2e     On   | 00000000:22:00.0 Off |                    0 |
+| N/A   30C    P0    60W / 700W |      0MiB / 81559MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Performance comparison</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#concat-count-joins-performance">Concat, count &amp; joins performance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#strings-performance">Strings Performance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user-defined-function-udf-performance-with-jit-overhead">User-defined function (UDF) performance (with JIT overhead)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user-defined-function-udf-performance-without-jit-overhead">User-defined function (UDF) performance (without JIT overhead)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#udf-performance-in-groupby">UDF Performance in GroupBy</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#system-configuration">System Configuration</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cpu-configuration">CPU Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gpu-configuration">GPU Configuration</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../_sources/user_guide/performance_comparisons.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner"></div>
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      &copy; Copyright 2018-2023, NVIDIA Corporation.
+      <br>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script><script id="rapids-selector-pixel-invocation" type="text/javascript">_satellite.pageBottom();</script></body></html>

@@ -1200,14 +1200,26 @@ document.write(`
 <h1>cudf.factorize<a class="headerlink" href="#cudf-factorize" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="cudf.factorize">
-<span class="sig-prename descclassname"><span class="pre">cudf.</span></span><span class="sig-name descname"><span class="pre">factorize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">na_sentinel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_hint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cudf.factorize" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">cudf.</span></span><span class="sig-name descname"><span class="pre">factorize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">na_sentinel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_na_sentinel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_hint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cudf.factorize" title="Permalink to this definition">#</a></dt>
 <dd><p>Encode the input values as integer labels</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
+<dd class="field-odd"><dl>
 <dt><strong>values: Series, Index, or CuPy array</strong></dt><dd><p>The data to be factorized.</p>
 </dd>
+<dt><strong>sort</strong><span class="classifier">bool, default True</span></dt><dd><p>Sort uniques and shuffle codes to maintain the relationship.</p>
+</dd>
 <dt><strong>na_sentinel</strong><span class="classifier">number, default -1</span></dt><dd><p>Value to indicate missing category.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 23.04: </span>The na_sentinel argument is deprecated and will be removed in
+a future version of cudf. Specify use_na_sentinel as
+either True or False.</p>
+</div>
+</dd>
+<dt><strong>use_na_sentinel</strong><span class="classifier">bool, default True</span></dt><dd><p>If True, the sentinel -1 will be used for NA values.
+If False, NA values will be encoded as non-negative
+integers and will not drop the NA from the uniques
+of the values.</p>
 </dd>
 </dl>
 </dd>
@@ -1234,12 +1246,38 @@ document.write(`
 </div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span><span class="p">,</span> <span class="n">uniques</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">factorize</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span>
 <span class="go">array([0, 1, 1], dtype=int8)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">uniques</span>
 <span class="go">StringIndex(['a' 'c'], dtype='object')</span>
+</pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">use_na_sentinel=True</span></code> (the default), missing values are indicated
+in the <cite>codes</cite> with the sentinel value <code class="docutils literal notranslate"><span class="pre">-1</span></code> and missing values are not
+included in <cite>uniques</cite>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span><span class="p">,</span> <span class="n">uniques</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">factorize</span><span class="p">([</span><span class="s1">'b'</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span>
+<span class="go">array([ 1, -1,  0,  2,  1], dtype=int8)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uniques</span>
+<span class="go">StringIndex(['a' 'b' 'c'], dtype='object')</span>
+</pre></div>
+</div>
+<p>If NA is in the values, and we want to include NA in the uniques of the
+values, it can be achieved by setting <code class="docutils literal notranslate"><span class="pre">use_na_sentinel=False</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span><span class="p">,</span> <span class="n">uniques</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">factorize</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span>
+<span class="go">array([ 0,  1,  0, -1], dtype=int8)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uniques</span>
+<span class="go">Float64Index([1.0, 2.0], dtype='float64')</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span><span class="p">,</span> <span class="n">uniques</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">factorize</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">use_na_sentinel</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span>
+<span class="go">array([1, 2, 1, 0], dtype=int8)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uniques</span>
+<span class="go">Float64Index([&lt;NA&gt;, 1.0, 2.0], dtype='float64')</span>
 </pre></div>
 </div>
 </dd></dl>
