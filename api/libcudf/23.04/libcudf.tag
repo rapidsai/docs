@@ -21816,6 +21816,13 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
+      <type>spdlog::logger &amp;</type>
+      <name>logger</name>
+      <anchorfile>namespacecudf.html</anchorfile>
+      <anchor>a13c348b5355fe1d307bbec3b8e6f6e36</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
       <type>constexpr bool</type>
       <name>has_atomic_support</name>
       <anchorfile>group__utility__types.html</anchorfile>
