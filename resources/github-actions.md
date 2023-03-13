@@ -118,7 +118,7 @@ Cells with multiple labels in the table above are aliases which represent the sa
 The GPU label names consist of the following components:
 
 ```text
-gpu-a100-520-1
+gpu-a100-525-1
     ^    ^   ^
     |    |   |
     |    |   Number of GPUs Available
@@ -146,7 +146,7 @@ jobs:
       - name: hello
         run: echo "hello"
   job2_gpu:
-    runs-on: [self-hosted, linux, amd64, gpu-v100-520-1]
+    runs-on: [self-hosted, linux, amd64, gpu-v100-525-1]
     container: # GPU jobs must run in a container
       image: nvidia/cuda:11.8.0-base-ubuntu22.04
       env:
