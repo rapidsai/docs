@@ -63,8 +63,8 @@ If you do not have access to GPU hardware, there are several cloud service provi
 
 Several services also offer **free and limited** trials with GPU resources:
 - [Amazon SageMaker Studio Lab](https://studiolab.sagemaker.aws/)
-- [Google CoLab w/ PiP](https://colab.research.google.com/drive/1TAAi_szMfWqRfHVfjGSqnGVLr_ztzUM9)
-- [Google CoLab w/ Conda](https://colab.research.google.com/drive/13sspqiEZwso4NYTbsflpPyNFaVAAxUgr)
+- [Google CoLab w/ PiP](https://colab.research.google.com/drive/13sspqiEZwso4NYTbsflpPyNFaVAAxUgr)
+- [Google CoLab w/ Conda](https://colab.research.google.com/drive/1TAAi_szMfWqRfHVfjGSqnGVLr_ztzUM9)
 - [PaperSpace](https://www.paperspace.com/gpu-cloud)
 
 <hr/>
