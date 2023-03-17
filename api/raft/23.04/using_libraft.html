@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.18.1: http://docutils.sourceforge.net/" name="generator">
 
-    <title>Using RAFT Comms &mdash; raft 23.04.00 documentation</title>
+    <title>Using The Pre-Compiled Binary &mdash; raft 23.04.00 documentation</title>
   
   
   
@@ -41,11 +41,11 @@
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
     <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'using_comms';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'using_libraft';</script>
     <link href="genindex.html" rel="index" title="Index">
     <link href="search.html" rel="search" title="Search">
-    <link href="using_libraft.html" rel="next" title="Using The Pre-Compiled Binary">
-    <link href="raft_dask_api.html" rel="prev" title="RAFT Dask API">
+    <link href="contributing.html" rel="next" title="Contributing">
+    <link href="using_comms.html" rel="prev" title="Using RAFT Comms">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="en" name="docsearch:language">
   <script id="rapids-selector-pixel-src" src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
@@ -154,15 +154,15 @@
                     </li>
                 
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="#">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="using_comms.html">
                         Using RAFT Comms
                       </a>
                     </li>
                 
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="using_libraft.html">
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
                         Using The Pre-Compiled Binary
                       </a>
                     </li>
@@ -325,15 +325,15 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="#">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="using_comms.html">
                         Using RAFT Comms
                       </a>
                     </li>
                 
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="using_libraft.html">
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
                         Using The Pre-Compiled Binary
                       </a>
                     </li>
@@ -431,7 +431,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li aria-current="page" class="breadcrumb-item active">Using RAFT Comms</li>
+    <li aria-current="page" class="breadcrumb-item active">Using The Pre-Compiled Binary</li>
   </ul>
 </nav>
 </div>
@@ -448,101 +448,61 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="using-raft-comms">
-<h1>Using RAFT Comms<a class="headerlink" href="#using-raft-comms" title="Permalink to this heading">#</a></h1>
-<p>RAFT provides a communications abstraction for writing distributed algorithms which can scale up to multiple GPUs and scale out to multiple nodes. The communications abstraction is largely based on MPI and NCCL, and allows the user to decouple the design of algorithms from the environments where the algorithms are executed, enabling &ldquo;write-once deploy everywhere&rdquo; semantics. Currently, the distributed algorithms in both cuGraph and cuML are being deployed in both MPI and Dask clusters while cuML&rsquo;s distributed algorithms are also being deployed on GPUs in Apache Spark clusters. This is a powerful concept as distributed algorithms can be non-trivial to write and so maintainability is eased and bug fixes reach further by increasing reuse as much as possible.</p>
-<p>While users of RAFT&rsquo;s communications layer largely get MPI integration for free just by installing MPI and using <code class="xref py py-obj docutils literal notranslate"><span class="pre">mpirun</span></code> to run their applications, the <code class="xref py py-obj docutils literal notranslate"><span class="pre">raft-dask</span></code> Python package provides a mechanism for executing algorithms written using RAFT&rsquo;s communications layer in a Dask cluster. It will help to walk through a small example of how one would build an algorithm with RAFT&rsquo;s communications layer.</p>
-<p>First, an instance of <code class="xref py py-obj docutils literal notranslate"><span class="pre">raft::comms_t</span></code> is passed through the <code class="xref py py-obj docutils literal notranslate"><span class="pre">raft::device_resources</span></code> instance and code is written to utilize collective and/or point-to-point communications as needed.</p>
-<div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">Example function written with the RAFT comms API</span><a class="headerlink" href="#id1" title="Permalink to this code">#</a></div>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;raft/core/comms.hpp&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;raft/core/device_mdspan.hpp&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;raft/util/cudart_utils.hpp&gt;</span>
+  <section id="using-the-pre-compiled-binary">
+<h1>Using The Pre-Compiled Binary<a class="headerlink" href="#using-the-pre-compiled-binary" title="Permalink to this heading">#</a></h1>
+<p>At its core, RAFT is a header-only template library, which makes it very powerful in that APIs can be called with various different combinations of data types and only the templates which are actually used will be compiled into your binaries. This increased flexibility comes with a drawback that all the APIs need to be declared inline and thus calls which are made frequently in your code could be compiled again each source file for which they are invoked.</p>
+<p>For most functions, this overhead is pretty minimal and not noticeable but some of RAFT&rsquo;s APIs consist of very complex hierarchies of function calls that ultimately end up dispatching to device code that&rsquo;s executed on the GPU. The compile times for these APIs may still be bearable when compiling for only a single compute architecture but could end up becoming extremely slow to compile for all of the supported architectures at once.</p>
+<p>There are three ways to solve this problem and speed up compile times:</p>
+<ol class="simple">
+<li><p>Continue to use RAFT as a header-only library and create a CUDA source file in your project to explicitly instantiate the templates which are slow to compile. This can be tedious and will still require compiling the slow code at least once, but it&rsquo;s the most flexible option if you are using types that aren&rsquo;t already compiled into <code class="docutils literal notranslate"><span class="pre">libraft</span></code></p></li>
+<li><p>If you are able to use one of the template types that are already being compiled into <code class="docutils literal notranslate"><span class="pre">libraft</span></code>, you can use the pre-compiled template specializations, which I will describe in more detail in the following section.</p></li>
+<li><p>If you would like to use RAFT but either cannot or would prefer not to compile any CUDA code yourself, you can simply add <code class="docutils literal notranslate"><span class="pre">libraft</span></code> to your link libraries and use the growing set of runtime APIs.</p></li>
+</ol>
+<section id="using-template-specializations">
+<h2>Using Template Specializations<a class="headerlink" href="#using-template-specializations" title="Permalink to this heading">#</a></h2>
+<p>As mentioned above, the pre-compiled template instantiations can save a lot of time if you are able to use the type combinations for the templates which are already specialized in the <code class="docutils literal notranslate"><span class="pre">libraft</span></code> binary. This will, of course, mean that you will need to add <code class="docutils literal notranslate"><span class="pre">libraft</span></code> to your link libraries.</p>
+<p>At the top level of each namespace containing pre-compiled template specializations is a header file called <code class="docutils literal notranslate"><span class="pre">specializations.cuh</span></code>. This header file includes <code class="docutils literal notranslate"><span class="pre">extern</span> <span class="pre">template</span></code> directives for all the specializations which are compiled into libraft. As an example, including <code class="docutils literal notranslate"><span class="pre">raft/neighbors/specializations.cuh</span></code> in one of your source files will effectively tell the compiler to skip over any of the template specializations that are already compiled into the <code class="docutils literal notranslate"><span class="pre">libraft</span></code> binary.</p>
+<section id="how-do-i-verify-template-specializations-didn-t-compile-into-my-binary">
+<h3>How do I verify template specializations didn&rsquo;t compile into my binary?<a class="headerlink" href="#how-do-i-verify-template-specializations-didn-t-compile-into-my-binary" title="Permalink to this heading">#</a></h3>
+<p>Which specializations were chosen to instantiations were based on compile time analysis and reuse. This means you can&rsquo;t assume that all specializations are for the public API itself. Take the following example in <code class="docutils literal notranslate"><span class="pre">raft/neighbors/specializations/detail/ivf_pq_compute_similarity.cuh</span></code>:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">raft</span><span class="o">::</span><span class="nn">neighbors</span><span class="o">::</span><span class="nn">ivf_pq</span><span class="o">::</span><span class="nn">detail</span><span class="w"> </span><span class="p">{</span>
 
-<span class="kt">void</span><span class="w"> </span><span class="nf">test_allreduce</span><span class="p">(</span><span class="n">raft</span><span class="o">::</span><span class="n">device_resources</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">&amp;</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">root</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">raft</span><span class="o">::</span><span class="n">comms</span><span class="o">::</span><span class="n">comms_t</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">communicator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">handle</span><span class="p">.</span><span class="n">get_comms</span><span class="p">();</span>
-<span class="w">  </span><span class="n">cudaStream_t</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">handle</span><span class="p">.</span><span class="n">get_stream</span><span class="p">();</span>
-<span class="w">  </span><span class="n">raft</span><span class="o">::</span><span class="n">device_scalar</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">temp_scalar</span><span class="p">(</span><span class="n">stream</span><span class="p">);</span>
+<span class="k">namespace</span><span class="w"> </span><span class="p">{</span>
+<span class="k">using</span><span class="w"> </span><span class="n">fp8s_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fp_8bit</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">fp8u_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fp_8bit</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace</span>
 
-<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">to_send</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">  </span><span class="n">raft</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">temp_scalar</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">to_send</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">stream</span><span class="p">);</span>
-<span class="w">  </span><span class="n">communicator</span><span class="p">.</span><span class="n">allreduce</span><span class="p">(</span><span class="n">temp_scalar</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">temp_scalar</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                         </span><span class="n">raft</span><span class="o">::</span><span class="n">comms</span><span class="o">::</span><span class="n">opt_t</span><span class="o">::</span><span class="n">SUM</span><span class="p">,</span><span class="w"> </span><span class="n">stream</span><span class="p">);</span>
-<span class="w">  </span><span class="n">handle</span><span class="p">.</span><span class="n">sync_stream</span><span class="p">();</span>
-<span class="p">}</span>
+<span class="cp">#define RAFT_INST(OutT, LutT)                                                                     \</span>
+<span class="cp">  extern template auto get_compute_similarity_kernel&lt;OutT, LutT, true, true&gt;(uint32_t, uint32_t)  \</span>
+<span class="cp">    -&gt;compute_similarity_kernel_t&lt;OutT, LutT&gt;;                                                    \</span>
+<span class="cp">  extern template auto get_compute_similarity_kernel&lt;OutT, LutT, true, false&gt;(uint32_t, uint32_t) \</span>
+<span class="cp">    -&gt;compute_similarity_kernel_t&lt;OutT, LutT&gt;;                                                    \</span>
+<span class="cp">  extern template auto get_compute_similarity_kernel&lt;OutT, LutT, false, true&gt;(uint32_t, uint32_t) \</span>
+<span class="cp">    -&gt;compute_similarity_kernel_t&lt;OutT, LutT&gt;;</span>
+
+<span class="cp">#define RAFT_INST_ALL_OUT_T(LutT) \</span>
+<span class="cp">  RAFT_INST(float, LutT)          \</span>
+<span class="cp">  RAFT_INST(half, LutT)</span>
+
+<span class="n">RAFT_INST_ALL_OUT_T</span><span class="p">(</span><span class="kt">float</span><span class="p">)</span>
+<span class="n">RAFT_INST_ALL_OUT_T</span><span class="p">(</span><span class="n">half</span><span class="p">)</span>
+<span class="n">RAFT_INST_ALL_OUT_T</span><span class="p">(</span><span class="n">fp8s_t</span><span class="p">)</span>
+<span class="n">RAFT_INST_ALL_OUT_T</span><span class="p">(</span><span class="n">fp8u_t</span><span class="p">)</span>
+
+<span class="cp">#undef RAFT_INST</span>
+<span class="cp">#undef RAFT_INST_ALL_OUT_T</span>
+
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace raft::neighbors::ivf_pq::detail</span>
 </pre></div>
 </div>
-</div>
-<p>This exact function can now be executed in several different types of GPU clusters. For example, it can be executed with MPI by initializing an instance of <code class="xref py py-obj docutils literal notranslate"><span class="pre">raft::comms::mpi_comms</span></code> with the <code class="xref py py-obj docutils literal notranslate"><span class="pre">MPI_Comm</span></code>:</p>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">Example of running test_allreduce() in MPI</span><a class="headerlink" href="#id2" title="Permalink to this code">#</a></div>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;raft/core/mpi_comms.hpp&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;raft/core/device_resources.hpp&gt;</span>
-
-<span class="n">raft</span><span class="o">::</span><span class="n">device_resources</span><span class="w"> </span><span class="n">resource_handle</span><span class="p">;</span>
-<span class="c1">// ...</span>
-<span class="c1">// initialize MPI_Comm</span>
-<span class="c1">// ...</span>
-<span class="n">raft</span><span class="o">::</span><span class="n">comms</span><span class="o">::</span><span class="n">initialize_mpi_comms</span><span class="p">(</span><span class="n">resource_handle</span><span class="p">,</span><span class="w">  </span><span class="n">mpi_comm</span><span class="p">);</span>
-<span class="c1">// ...</span>
-<span class="n">test_allreduce</span><span class="p">(</span><span class="n">resource_handle</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-</pre></div>
-</div>
-</div>
-<p>Deploying our`test_allreduce` function in Dask requires a lightweight Python interface, which we can accomplish using <code class="xref py py-obj docutils literal notranslate"><span class="pre">pylibraft</span></code> and exposing the function through Cython:</p>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">Example of wrapping test_allreduce() w/ cython</span><a class="headerlink" href="#id3" title="Permalink to this code">#</a></div>
-<div class="highlight-cython notranslate"><div class="highlight"><pre><span></span>from pylibraft.common.handle cimport device_resources
-from cython.operator cimport dereference as deref
-
-cdef extern from &ldquo;allreduce_test.hpp&rdquo;:
-    void test_allreduce(device_resources const &amp;handle, int root) except +
-
-def run_test_allreduce(handle, root):
-    cdef const device_resources* h = &lt;device_resources*&gt;&lt;size_t&gt;handle.getHandle()
-
-test_allreduce(deref(h), root)
-</pre></div>
-</div>
-</div>
-<p>Finally, we can use <code class="xref py py-obj docutils literal notranslate"><span class="pre">raft_dask</span></code> to execute our new algorithm in a Dask cluster (please note this also uses <code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalCUDACluster</span></code> from the RAPIDS dask-cuda library):</p>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">Example of running test_allreduce() in Dask</span><a class="headerlink" href="#id4" title="Permalink to this code">#</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">raft_dask.common</span> <span class="kn">import</span> <span class="n">Comms</span><span class="p">,</span> <span class="n">local_handle</span>
-<span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">wait</span>
-<span class="kn">from</span> <span class="nn">dask_cuda</span> <span class="kn">import</span> <span class="n">LocalCUDACluster</span>
-<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCUDACluster</span><span class="p">()</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
-
-<span class="c1"># Create and initialize Comms instance</span>
-<span class="n">comms</span> <span class="o">=</span> <span class="n">Comms</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
-<span class="n">comms</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
-
-<span class="k">def</span> <span class="nf">func_run_allreduce</span><span class="p">(</span><span class="n">sessionId</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
-  <span class="n">handle</span> <span class="o">=</span> <span class="n">local_handle</span><span class="p">(</span><span class="n">sessionId</span><span class="p">)</span>
-  <span class="n">run_test_allreduce</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">root</span><span class="p">)</span>
-
-<span class="c1"># Invoke run_test_allreduce on all workers</span>
-<span class="n">dfs</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
-    <span class="n">func_run_allreduce</span><span class="p">,</span>
-    <span class="n">comms</span><span class="o">.</span><span class="n">sessionId</span><span class="p">,</span>
-    <span class="mi">0</span><span class="p">,</span>
-    <span class="n">pure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">workers</span><span class="o">=</span><span class="p">[</span><span class="n">w</span><span class="p">]</span>
-  <span class="p">)</span>
-  <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">comms</span><span class="o">.</span><span class="n">worker_addresses</span>
-<span class="p">]</span>
-
-<span class="c1"># Wait until processing is done</span>
-<span class="n">wait</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-
-<span class="n">comms</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="n">cluster</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
+<p>We can see here that the function <code class="docutils literal notranslate"><span class="pre">raft::neighbors::ivf_pq::detail::get_compute_similarity_kernel</span></code> is being instantiated for the cartesian product of <code class="docutils literal notranslate"><span class="pre">OutT={float,</span> <span class="pre">half,</span> <span class="pre">fp8s_t,</span> <span class="pre">fp8u_t}</span></code> and <code class="docutils literal notranslate"><span class="pre">LutT={float,</span> <span class="pre">half}</span></code>. After linking against the <code class="docutils literal notranslate"><span class="pre">libraft</span></code> binary and including <code class="docutils literal notranslate"><span class="pre">raft/neighbors/specializations.cuh</span></code> in your source file, you can invoke the <code class="docutils literal notranslate"><span class="pre">raft::neighbors::ivf_pq</span></code> functions and compile your code. If the specializations are working, you should be able to use <code class="docutils literal notranslate"><span class="pre">nm</span> <span class="pre">-g</span> <span class="pre">-C</span> <span class="pre">--defined-only</span> <span class="pre">/path/to/your/binary</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">raft::neighbors::ivf_pq::detail::get_compute_similarity::kernel</span></code> and you shouldn&rsquo;t see any results, because those symbols should be coming from the <code class="docutils literal notranslate"><span class="pre">libraft</span></code> binary and skipped from compiling into your binary.</p>
+</section>
+</section>
+<section id="runtime-apis">
+<h2>Runtime APIs<a class="headerlink" href="#runtime-apis" title="Permalink to this heading">#</a></h2>
+<p>RAFT contains a growing list of runtime APIs that, unlike the pre-compiled template specializations, allow you to link against <code class="docutils literal notranslate"><span class="pre">libraft</span></code> and invoke RAFT directly from <code class="docutils literal notranslate"><span class="pre">cpp</span></code> files. The benefit to RAFT&rsquo;s runtime APIs are two-fold- unlike the template specializations, which still require your code be compiled with the CUDA compiler (<code class="docutils literal notranslate"><span class="pre">nvcc</span></code>), the <code class="docutils literal notranslate"><span class="pre">runtime</span></code> APIs are the lightweight wrappers which enable <code class="docutils literal notranslate"><span class="pre">pylibraft</span></code>.</p>
+<p>Similar to the pre-compiled template specializations, RAFT&rsquo;s runtime APIs</p>
+</section>
 </section>
 
 
@@ -553,17 +513,17 @@ test_allreduce(deref(h), root)
                 <footer class="bd-footer-article">
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
-    <a class="left-prev" href="raft_dask_api.html" title="previous page">
+    <a class="left-prev" href="using_comms.html" title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">RAFT Dask API</p>
+        <p class="prev-next-title">Using RAFT Comms</p>
       </div>
     </a>
-    <a class="right-next" href="using_libraft.html" title="next page">
+    <a class="right-next" href="contributing.html" title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Using The Pre-Compiled Binary</p>
+        <p class="prev-next-title">Contributing</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -577,8 +537,22 @@ test_allreduce(deref(h), root)
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
   <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-template-specializations">Using Template Specializations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-verify-template-specializations-didn-t-compile-into-my-binary">How do I verify template specializations didn&rsquo;t compile into my binary?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime-apis">Runtime APIs</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
-    <a href="_sources/using_comms.rst.txt">
+    <a href="_sources/using_libraft.md.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
