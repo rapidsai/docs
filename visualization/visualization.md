@@ -156,7 +156,7 @@ When interacting with this page through a website, the interactive examples belo
 
 
 <a id='cuxfilter'></a><br/>
-<img src="https://rapids.ai/assets/images/RAPIDS-logo-white.png" style="width:150px; display:inline-block; vertical-align:middle;">
+<img src="/assets/images/rapids_logo.png" style="width:150px; display:inline-block; vertical-align:middle;">
 <span style="color:#7400ff; font-size:2.5em; vertical-align: middle;">cuxfilter</span>
 <a href="https://docs.rapids.ai/api/cuxfilter/nightly/examples/examples.html" target="_blank" title="cuxfilter example page">
 <img src="/assets/images/cuxfilter-demo.gif" style="width:220px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
@@ -167,7 +167,7 @@ When interacting with this page through a website, the interactive examples belo
 
 
 <a id='noderapids'></a><br/>
-<img src="https://rapids.ai/assets/images/RAPIDS-logo-white.png" style="width:150px; display:inline-block; vertical-align:middle;">
+<img src="/assets/images/rapids_logo.png" style="width:150px; display:inline-block; vertical-align:middle;">
 <span style="color:#7400ff; font-size:2.5em; vertical-align: middle;">nodeRAPIDS</span>
 <a href="https://github.com/rapidsai/node/tree/main/modules/demo" target="_blank" title="nodeRAPIDS demo page">
 <img src="/assets/images/nodeRAPIDS-streaming.png" style="width:200px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
