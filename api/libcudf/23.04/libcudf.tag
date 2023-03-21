@@ -291,22 +291,22 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>count_characters</name>
       <anchorfile>group__strings__apis.html</anchorfile>
-      <anchor>gad0f8aa0ccf96c950fd4ec0b7a89b8c90</anchor>
-      <arglist>(strings_column_view const &amp;strings, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga438773a05a284590fcb714d4feedebc7</anchor>
+      <arglist>(strings_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>count_bytes</name>
       <anchorfile>group__strings__apis.html</anchorfile>
-      <anchor>ga8b5c924853b8ee6e3fccb3a30b4da877</anchor>
-      <arglist>(strings_column_view const &amp;strings, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga7c3eecf03d6f74d1092f351904458cea</anchor>
+      <arglist>(strings_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>code_points</name>
       <anchorfile>group__strings__apis.html</anchorfile>
-      <anchor>ga7d1a095a392be81fcb3f9877804d422d</anchor>
-      <arglist>(strings_column_view const &amp;strings, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaa5a7e29e8feb5000df90d66201237ad9</anchor>
+      <arglist>(strings_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -22928,22 +22928,22 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>count_characters</name>
       <anchorfile>group__strings__apis.html</anchorfile>
-      <anchor>gad0f8aa0ccf96c950fd4ec0b7a89b8c90</anchor>
-      <arglist>(strings_column_view const &amp;strings, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga438773a05a284590fcb714d4feedebc7</anchor>
+      <arglist>(strings_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>count_bytes</name>
       <anchorfile>group__strings__apis.html</anchorfile>
-      <anchor>ga8b5c924853b8ee6e3fccb3a30b4da877</anchor>
-      <arglist>(strings_column_view const &amp;strings, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga7c3eecf03d6f74d1092f351904458cea</anchor>
+      <arglist>(strings_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>code_points</name>
       <anchorfile>group__strings__apis.html</anchorfile>
-      <anchor>ga7d1a095a392be81fcb3f9877804d422d</anchor>
-      <arglist>(strings_column_view const &amp;strings, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaa5a7e29e8feb5000df90d66201237ad9</anchor>
+      <arglist>(strings_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
@@ -26716,22 +26716,22 @@
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>count_characters</name>
       <anchorfile>group__strings__apis.html</anchorfile>
-      <anchor>gad0f8aa0ccf96c950fd4ec0b7a89b8c90</anchor>
-      <arglist>(strings_column_view const &amp;strings, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga438773a05a284590fcb714d4feedebc7</anchor>
+      <arglist>(strings_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>count_bytes</name>
       <anchorfile>group__strings__apis.html</anchorfile>
-      <anchor>ga8b5c924853b8ee6e3fccb3a30b4da877</anchor>
-      <arglist>(strings_column_view const &amp;strings, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>ga7c3eecf03d6f74d1092f351904458cea</anchor>
+      <arglist>(strings_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>code_points</name>
       <anchorfile>group__strings__apis.html</anchorfile>
-      <anchor>ga7d1a095a392be81fcb3f9877804d422d</anchor>
-      <arglist>(strings_column_view const &amp;strings, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+      <anchor>gaa5a7e29e8feb5000df90d66201237ad9</anchor>
+      <arglist>(strings_column_view const &amp;input, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
     </member>
   </compound>
   <compound kind="group">

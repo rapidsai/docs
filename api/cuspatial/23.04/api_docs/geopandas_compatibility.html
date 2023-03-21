@@ -700,7 +700,7 @@ stored in the <cite>GeoArrowBuffers</cite> object, accessible with the <cite>poi
 <tr class="row-odd"><td><p><a class="reference internal" href="#cuspatial.GeoSeries.align" title="cuspatial.GeoSeries.align"><code class="xref py py-obj docutils literal notranslate"><span class="pre">align</span></code></a>(other)</p></td>
 <td><p>Align the rows of two GeoSeries using outer join.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#cuspatial.GeoSeries.contains_properly" title="cuspatial.GeoSeries.contains_properly"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contains_properly</span></code></a>(other[,&nbsp;align])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#cuspatial.GeoSeries.contains_properly" title="cuspatial.GeoSeries.contains_properly"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contains_properly</span></code></a>(other[,&nbsp;align,&nbsp;allpairs])</p></td>
 <td><p>Returns a <cite>Series</cite> of <cite>dtype('bool')</cite> with value <cite>True</cite> for each aligned geometry that contains _other_.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#cuspatial.GeoSeries.from_arrow" title="cuspatial.GeoSeries.from_arrow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_arrow</span></code></a>()</p></td>
@@ -843,13 +843,20 @@ dtype: geometry)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cuspatial.GeoSeries.contains_properly">
-<span class="sig-name descname"><span class="pre">contains_properly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">align</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.GeoSeries.contains_properly" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">contains_properly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">align</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allpairs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cuspatial.GeoSeries.contains_properly" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns a <cite>Series</cite> of <cite>dtype(&lsquo;bool&rsquo;)</cite> with value <cite>True</cite> for each
 aligned geometry that contains _other_.</p>
 <p>Compute from a GeoSeries of points and a GeoSeries of polygons which
 points are properly contained within the corresponding polygon. Polygon
 A contains Point B properly if B intersects the interior of A but not
 the boundary (or exterior).</p>
+<p>If <cite>allpairs=False</cite>, the result will be a <cite>Series</cite> of <cite>dtype(&lsquo;bool&rsquo;)</cite>.
+If <cite>allpairs=True</cite>, the result will be a <cite>DataFrame</cite> containing two
+columns, <cite>point_indices</cite> and <cite>polygon_indices</cite>, each of which is a
+<cite>Series</cite> of <cite>dtype(&lsquo;int32&rsquo;)</cite>. The <cite>point_indices</cite> <cite>Series</cite> contains
+the indices of the points in the right GeoSeries, and the
+<cite>polygon_indices</cite> <cite>Series</cite> contains the indices of the polygons in the
+left GeoSeries.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -859,60 +866,74 @@ the boundary (or exterior).</p>
 indices are not aligned, they will be compared based on their
 implicit row order.</p>
 </dd>
+<dt><strong>allpairs=False</strong></dt><dd><p>True computes the contains for all pairs of geometries
+between the two GeoSeries. False computes the contains for
+each geometry in the left GeoSeries against the corresponding
+geometry in the right GeoSeries. Defaults to False.</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>result</strong><span class="classifier">cudf.Series</span></dt><dd><p>A Series of boolean values indicating whether each point falls
-within the corresponding polygon in the input.</p>
+<dt><strong>result</strong><span class="classifier">cudf.Series or cudf.DataFrame</span></dt><dd><p>A Series of boolean values indicating whether each point falls
+within the corresponding polygon in the input in the case of
+<cite>allpairs=False</cite>. A DataFrame containing two columns,
+<cite>point_indices</cite> and <cite>polygon_indices</cite>, each of which is a
+<cite>Series</cite> of <cite>dtype(&lsquo;int32&rsquo;)</cite> in the case of <cite>allpairs=True</cite>.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <p>Test if a polygon is inside another polygon:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">point</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">(</span>
-<span class="go">    [Point(0.5, 0.5)],</span>
-<span class="go">    )</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">polygon</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">(</span>
-<span class="go">    [</span>
-<span class="go">        Polygon([[0, 0], [1, 0], [1, 1], [0, 0]]),</span>
-<span class="go">    ]</span>
-<span class="go">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">point</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">([</span><span class="n">Point</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">polygon</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">([</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">Polygon</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">polygon</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
 <span class="go">0    False</span>
 <span class="go">dtype: bool</span>
 </pre></div>
 </div>
-<p>Test whether three points fall within either of two polygons</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">point</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">(</span>
-<span class="go">    [Point(0, 0)],</span>
-<span class="go">    [Point(-1, 0)],</span>
-<span class="go">    [Point(-2, 0)],</span>
-<span class="go">    [Point(0, 0)],</span>
-<span class="go">    [Point(-1, 0)],</span>
-<span class="go">    [Point(-2, 0)],</span>
-<span class="go">    )</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">polygon</span> <span class="o">=</span> <span class="n">cuspatial</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">(</span>
-<span class="go">    [</span>
-<span class="go">        Polygon([[0, 0], [1, 0], [1, 1], [0, 0]]),</span>
-<span class="go">        Polygon([[0, 0], [1, 0], [1, 1], [0, 0]]),</span>
-<span class="go">        Polygon([[0, 0], [1, 0], [1, 1], [0, 0]]),</span>
-<span class="go">        Polygon([[-2, -2], [-2, 2], [2, 2], [-2, -2]]),</span>
-<span class="go">        Polygon([[-2, -2], [-2, 2], [2, 2], [-2, -2]]),</span>
-<span class="go">        Polygon([[-2, -2], [-2, 2], [2, 2], [-2, -2]]),</span>
-<span class="go">    ]</span>
-<span class="go">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">polygon</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
-<span class="go">0    False</span>
-<span class="go">1    False</span>
-<span class="go">2    False</span>
-<span class="go">3    False</span>
-<span class="go">4    False</span>
-<span class="go">5     True</span>
-<span class="go">dtype: bool</span>
-</pre></div>
-</div>
+<p>Test whether three points fall within either of two polygons
+&gt;&gt;&gt; point = cuspatial.GeoSeries([
+&gt;&gt;&gt;     Point(0, 0),
+&gt;&gt;&gt;     Point(-1, 0),
+&gt;&gt;&gt;     Point(-2, 0),
+&gt;&gt;&gt;     Point(0, 0),
+&gt;&gt;&gt;     Point(-1, 0),
+&gt;&gt;&gt;     Point(-2, 0),
+&gt;&gt;&gt; ])
+&gt;&gt;&gt; polygon = cuspatial.GeoSeries([
+&gt;&gt;&gt;     Polygon([[0, 0], [1, 0], [1, 1], [0, 0]]),
+&gt;&gt;&gt;     Polygon([[0, 0], [1, 0], [1, 1], [0, 0]]),
+&gt;&gt;&gt;     Polygon([[0, 0], [1, 0], [1, 1], [0, 0]]),
+&gt;&gt;&gt;     Polygon([[-2, -2], [-2, 2], [2, 2], [-2, -2]]),
+&gt;&gt;&gt;     Polygon([[-2, -2], [-2, 2], [2, 2], [-2, -2]]),
+&gt;&gt;&gt;     Polygon([[-2, -2], [-2, 2], [2, 2], [-2, -2]]),
+&gt;&gt;&gt; ])
+&gt;&gt;&gt; print(polygon.contains(point))
+0    False
+1     True
+2    False
+3    False
+4     True
+5    False
+dtype: bool</p>
+<p>Test whether three points fall within either of two polygons using
+<cite>allpairs</cite> mode:
+&gt;&gt;&gt; point = cuspatial.GeoSeries([
+&gt;&gt;&gt;     Point(0, 0),
+&gt;&gt;&gt;     Point(-1, 0),
+&gt;&gt;&gt;     Point(-2, 0),
+&gt;&gt;&gt; ])
+&gt;&gt;&gt; polygon = cuspatial.GeoSeries([
+&gt;&gt;&gt;     Polygon([[0, 0], [1, 0], [1, 1], [0, 0]]),
+&gt;&gt;&gt;     Polygon([[-2, -2], [-2, 2], [2, 2], [-2, -2]]),
+&gt;&gt;&gt; ])
+&gt;&gt;&gt; print(polygon.contains(point, allpairs=True))
+index point_indices  polygon_indices
+0                 2                1</p>
 </dd></dl>
 
 <dl class="py method">
@@ -954,8 +975,8 @@ within the corresponding polygon in the input.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cuspatial.GeoSeries.from_linestrings_xy">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_linestrings_xy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linestrings_xy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">part_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometry_offset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#cuspatial.GeoSeries.from_linestrings_xy" title="Permalink to this definition">#</a></dt>
-<dd><p>Construct a GeoSeries of MULTILINESTRINGs from an array of interleaved
-xy coordinates.</p>
+<dd><p>Construct a GeoSeries of MULTILINESTRINGs from an array of
+interleaved xy coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -1028,8 +1049,8 @@ coordinates.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cuspatial.GeoSeries.from_polygons_xy">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_polygons_xy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polygons_xy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ring_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">part_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometry_offset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&rarr;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="headerlink" href="#cuspatial.GeoSeries.from_polygons_xy" title="Permalink to this definition">#</a></dt>
-<dd><p>Construct a GeoSeries of MULTIPOLYGONs from an array of interleaved xy
-coordinates.</p>
+<dd><p>Construct a GeoSeries of MULTIPOLYGONs from an array of
+interleaved xy coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
