@@ -10,14 +10,14 @@ description: |
 # RAPIDS Installation Guide
 {: .fs-8 }
 
-RAPIDS has several methods for installation, depending on the preferred environment and versioning. Get started by following these four steps:
+RAPIDS has several methods for installation, depending on the preferred environment and versioning. Returning users can jump straight to our **[release selector](#selector)** and new users can get started with these four steps:
 {: .fs-6 .fw-300 }
 
 **[1. Provision System](#provision)** <br/>
 **[2A. Setup Environment](#setup)** <br/>
 **[2B. Setup WSL2 Environment](#WSL2)** <br/>
-**[3A. Install RAPIDS](#selector)** <br/>
-**[3B. Install RAPIDS (PiP)](#pip)** <br/>
+**[3A. Install RAPIDS (Release Selector)](#selector)** <br/>
+**[3B. Install RAPIDS (pip)](#pip)** <br/>
 **[4. Getting Started](#start)**  
 
 <hr/>
@@ -63,7 +63,7 @@ If you do not have access to GPU hardware, there are several cloud service provi
 
 Several services also offer **free and limited** trials with GPU resources:
 - [Amazon SageMaker Studio Lab](https://studiolab.sagemaker.aws/)
-- [Google CoLab w/ PiP](https://colab.research.google.com/drive/13sspqiEZwso4NYTbsflpPyNFaVAAxUgr)
+- [Google CoLab w/ pip](https://colab.research.google.com/drive/13sspqiEZwso4NYTbsflpPyNFaVAAxUgr)
 - [Google CoLab w/ Conda](https://colab.research.google.com/drive/1TAAi_szMfWqRfHVfjGSqnGVLr_ztzUM9)
 - [PaperSpace](https://www.paperspace.com/gpu-cloud)
 
@@ -75,7 +75,7 @@ Several services also offer **free and limited** trials with GPU resources:
 For most installations, you will need a Conda or Docker environments installed for RAPIDS. Note, these examples are structured for installing on **Ubuntu**. Please modify appropriately for CentOS / Rocky Linux. **Windows 11** has a [WSL2 specific install](#WSL2). Jump to your preferred environment:
 - [Conda](#conda) 
 - [Docker](#docker)
-- [PiP (Experimental)](#pip)
+- [pip (Experimental)](#pip)
 - [Build from Source](#source)
 - [Within WSL2](#WSL2)
 
@@ -163,8 +163,8 @@ bash /rapids/utils/stop-jupyter.sh
 
 <br/>
 
-### **PiP (Experimental)**
-The package installer for python (PiP) is currently in experimental mode, but available to try in both WSL2 or Ubuntu. See below for details.
+### **pip (Experimental)**
+The package installer for python (pip) is currently in experimental mode, but available to try in both WSL2 or Ubuntu. See below for details.
 
 
 <br/>
@@ -227,7 +227,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
     ```
 <br/>
 
-###  **WSL and PiP**
+###  **WSL and pip**
 1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
@@ -254,12 +254,12 @@ Use the selector tool below to select your preferred method, packages, and envir
 <br/>
 <div id="pip"></div>
 
-## 3B. Install RAPIDS with PiP (Experimental)
+## 3B. Install RAPIDS with pip (Experimental)
 This is an experimental release supporting single GPU usage. cuDF, dask-cuDF, cuML, cuGraph, RMM and RAFT release 22.10 pip packages are now available. The team is excited to get these packages out into the wild and see the RAPIDS community uses them.
 
 <br/>
 
-### **PiP Enhanced Prerequisites**
+### **pip Enhanced Prerequisites**
 <i class="fas fa-info-circle"></i> **Glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
 <i class="fas fa-info-circle"></i> **Glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.31 (only ARM Server Base System Architecture is supported). <br/>
 <i class="fas fa-download"></i> **CUDA >= 11.8**, with at least the **v520.61.05** driver. To use older CUDA 11.x versions, please see Troubleshooting and Known Issues. <br/>
@@ -267,7 +267,7 @@ This is an experimental release supporting single GPU usage. cuDF, dask-cuDF, cu
 
 <br/>
 
-### **PiP Install**
+### **pip Install**
 The RAPIDS pip packages are hosted on NVIDIA NGC index via:
 ```
 pip install cudf-cu11 dask-cudf-cu11 --extra-index-url=https://pypi.nvidia.com
