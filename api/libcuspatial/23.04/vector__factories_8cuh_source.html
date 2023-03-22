@@ -75,201 +75,283 @@ $(function() {
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&nbsp;<span class="comment"> * limitations under the License.</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&nbsp;<span class="comment"> */</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&nbsp; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&nbsp;<span class="preprocessor">#include &lt;<a class="code" href="multilinestring__range_8cuh.html">cuspatial/experimental/ranges/multilinestring_range.cuh</a>&gt;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&nbsp;<span class="preprocessor">#include &lt;<a class="code" href="multipoint__range_8cuh.html">cuspatial/experimental/ranges/multipoint_range.cuh</a>&gt;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&nbsp;<span class="preprocessor">#include &lt;cuspatial/experimental/ranges/multipolygon_range.cuh&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp;<span class="preprocessor">#include &lt;<a class="code" href="range_8cuh.html">cuspatial/experimental/ranges/range.cuh</a>&gt;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="preprocessor">#include &lt;cuspatial/traits.hpp&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp;<span class="preprocessor">#include &lt;<a class="code" href="vec__2d_8hpp.html">cuspatial/vec_2d.hpp</a>&gt;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp;<span class="preprocessor">#include &lt;rmm/device_vector.hpp&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&nbsp;<span class="preprocessor">#include &lt;cuspatial_test/test_util.cuh&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&nbsp; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&nbsp;<span class="preprocessor">#include &lt;<a class="code" href="multilinestring__range_8cuh.html">cuspatial/experimental/ranges/multilinestring_range.cuh</a>&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp;<span class="preprocessor">#include &lt;<a class="code" href="multipoint__range_8cuh.html">cuspatial/experimental/ranges/multipoint_range.cuh</a>&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="preprocessor">#include &lt;cuspatial/experimental/ranges/multipolygon_range.cuh&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp;<span class="preprocessor">#include &lt;<a class="code" href="range_8cuh.html">cuspatial/experimental/ranges/range.cuh</a>&gt;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp;<span class="preprocessor">#include &lt;cuspatial/traits.hpp&gt;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp;<span class="preprocessor">#include &lt;<a class="code" href="vec__2d_8hpp.html">cuspatial/vec_2d.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&nbsp; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp;<span class="preprocessor">#include &lt;initializer_list&gt;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp;<span class="preprocessor">#include &lt;numeric&gt;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&nbsp;<span class="preprocessor">#include &lt;rmm/cuda_stream_view.hpp&gt;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&nbsp;<span class="preprocessor">#include &lt;rmm/device_uvector.hpp&gt;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&nbsp;<span class="preprocessor">#include &lt;rmm/device_vector.hpp&gt;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp;<span class="keyword">namespace </span>cuspatial {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp;<span class="keyword">namespace </span>test {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp;<span class="preprocessor">#include &lt;thrust/device_vector.h&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp;<span class="preprocessor">#include &lt;thrust/host_vector.h&gt;</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Range&gt;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;<span class="keyword">auto</span> make_device_vector(Range rng)</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp;{</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;  <span class="keyword">using</span> T = <span class="keyword">typename</span> Range::value_type;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp;  <span class="keywordflow">return</span> rmm::device_vector&lt;T&gt;(rng.begin(), rng.end());</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;}</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;<span class="keyword">auto</span> make_device_vector(std::initializer_list&lt;T&gt; inl)</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;{</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;  <span class="keywordflow">return</span> rmm::device_vector&lt;T&gt;(inl.begin(), inl.end());</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;}</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp;<span class="keyword">auto</span> make_device_uvector(std::initializer_list&lt;T&gt; inl,</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;                         rmm::cuda_stream_view stream,</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp;                         rmm::mr::device_memory_resource* mr)</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp;<span class="preprocessor">#include &lt;initializer_list&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp;<span class="preprocessor">#include &lt;numeric&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp;<span class="preprocessor">#include &lt;tuple&gt;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&nbsp;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&nbsp; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&nbsp;<span class="keyword">namespace </span>cuspatial {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp;<span class="keyword">namespace </span>test {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&nbsp; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Range&gt;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;<span class="keyword">auto</span> make_device_vector(Range rng)</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp;{</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;  <span class="keyword">using</span> T = <span class="keyword">typename</span> Range::value_type;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;  <span class="keywordflow">return</span> rmm::device_vector&lt;T&gt;(rng.begin(), rng.end());</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;}</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&nbsp;<span class="keyword">auto</span> make_device_vector(std::initializer_list&lt;T&gt; inl)</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&nbsp;{</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;  std::vector&lt;T&gt; hvec(inl.begin(), inl.end());</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;  <span class="keyword">auto</span> res = rmm::device_uvector&lt;T&gt;(inl.size(), stream, mr);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp;  cudaMemcpyAsync(res.data(),</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;                  hvec.data(),</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;                  hvec.size() * <span class="keyword">sizeof</span>(T),</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;                  cudaMemcpyKind::cudaMemcpyHostToDevice,</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;                  stream.value());</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;  <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;}</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> GeometryArray, <span class="keyword">typename</span> PartArray, <span class="keyword">typename</span> RingArray, <span class="keyword">typename</span> CoordinateArray&gt;</div>
-<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipolygon__array.html">   70</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classcuspatial_1_1test_1_1multipolygon__array.html">multipolygon_array</a> {</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&nbsp; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&nbsp;  <a class="code" href="classcuspatial_1_1test_1_1multipolygon__array.html">multipolygon_array</a>(GeometryArray geometry_offsets_array,</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&nbsp;                     PartArray part_offsets_array,</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&nbsp;                     RingArray ring_offsets_array,</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&nbsp;                     CoordinateArray coordinate_offsets_array)</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&nbsp;    : _geometry_offsets_array(geometry_offsets_array),</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;      _part_offsets_array(part_offsets_array),</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&nbsp;      _ring_offsets_array(ring_offsets_array),</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp;      _coordinate_offsets_array(coordinate_offsets_array)</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;  {</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp;  }</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp; </div>
-<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipolygon__array.html#ae1c5cdc811afe7c99d78e463d5e2d1c6">   84</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multipolygon__array.html#ae1c5cdc811afe7c99d78e463d5e2d1c6">size</a>() { <span class="keywordflow">return</span> _geometry_offsets_array.size() - 1; }</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp; </div>
-<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipolygon__array.html#a05e870fb41377afc7951271a58ad5f67">   87</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multipolygon__array.html#a05e870fb41377afc7951271a58ad5f67">range</a>()</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp;  {</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;    <span class="keywordflow">return</span> <a class="code" href="classcuspatial_1_1multipolygon__range.html">multipolygon_range</a>(_geometry_offsets_array.begin(),</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;                              _geometry_offsets_array.end(),</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;                              _part_offsets_array.begin(),</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp;                              _part_offsets_array.end(),</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp;                              _ring_offsets_array.begin(),</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&nbsp;                              _ring_offsets_array.end(),</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&nbsp;                              _coordinate_offsets_array.begin(),</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&nbsp;                              _coordinate_offsets_array.end());</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp;  }</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp; <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp;  GeometryArray _geometry_offsets_array;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&nbsp;  PartArray _part_offsets_array;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp;  RingArray _ring_offsets_array;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&nbsp;  CoordinateArray _coordinate_offsets_array;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&nbsp;};</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> IndexRange, <span class="keyword">typename</span> CoordRange&gt;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&nbsp;<span class="keyword">auto</span> make_multipolygon_array(IndexRange geometry_inl,</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&nbsp;                             IndexRange part_inl,</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&nbsp;                             IndexRange ring_inl,</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&nbsp;                             CoordRange coord_inl)</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&nbsp;{</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp;  <span class="keywordflow">return</span> multipolygon_array{make_device_vector(geometry_inl),</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp;                            make_device_vector(part_inl),</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp;                            make_device_vector(ring_inl),</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&nbsp;                            make_device_vector(coord_inl)};</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&nbsp;}</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&nbsp; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> GeometryArray, <span class="keyword">typename</span> PartArray, <span class="keyword">typename</span> CoordinateArray&gt;</div>
-<div class="line"><a name="l00126"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multilinestring__array.html">  126</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classcuspatial_1_1test_1_1multilinestring__array.html">multilinestring_array</a> {</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&nbsp; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&nbsp;  <a class="code" href="classcuspatial_1_1test_1_1multilinestring__array.html">multilinestring_array</a>(GeometryArray geometry_offsets_array,</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&nbsp;                        PartArray part_offsets_array,</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp;                        CoordinateArray coordinate_offset_array)</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp;    : _geometry_offset_array(geometry_offsets_array),</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp;      _part_offset_array(part_offsets_array),</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&nbsp;      _coordinate_offset_array(coordinate_offset_array)</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&nbsp;  {</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&nbsp;  }</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&nbsp; </div>
-<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multilinestring__array.html#a2aab737876d9d3de2ed13eeb618b52fc">  138</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multilinestring__array.html#a2aab737876d9d3de2ed13eeb618b52fc">size</a>() { <span class="keywordflow">return</span> _geometry_offset_array.size() - 1; }</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&nbsp; </div>
-<div class="line"><a name="l00141"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multilinestring__array.html#ac9415a0d19cd81a01c16f0bb5d061ed2">  141</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multilinestring__array.html#ac9415a0d19cd81a01c16f0bb5d061ed2">range</a>()</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&nbsp;  <span class="keywordflow">return</span> rmm::device_vector&lt;T&gt;(inl.begin(), inl.end());</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&nbsp;}</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&nbsp; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&nbsp;<span class="keyword">auto</span> make_device_uvector(std::initializer_list&lt;T&gt; inl,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&nbsp;                         rmm::cuda_stream_view stream,</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&nbsp;                         rmm::mr::device_memory_resource* mr)</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;{</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp;  std::vector&lt;T&gt; hvec(inl.begin(), inl.end());</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&nbsp;  <span class="keyword">auto</span> res = rmm::device_uvector&lt;T&gt;(inl.size(), stream, mr);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&nbsp;  cudaMemcpyAsync(res.data(),</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&nbsp;                  hvec.data(),</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&nbsp;                  hvec.size() * <span class="keyword">sizeof</span>(T),</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&nbsp;                  cudaMemcpyKind::cudaMemcpyHostToDevice,</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&nbsp;                  stream.value());</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&nbsp;  <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&nbsp;}</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&nbsp; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> GeometryArray, <span class="keyword">typename</span> PartArray, <span class="keyword">typename</span> RingArray, <span class="keyword">typename</span> CoordinateArray&gt;</div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipolygon__array.html">   78</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classcuspatial_1_1test_1_1multipolygon__array.html">multipolygon_array</a> {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&nbsp; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;  <span class="keyword">using</span> geometry_t = <span class="keyword">typename</span> GeometryArray::value_type;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&nbsp;  <span class="keyword">using</span> part_t     = <span class="keyword">typename</span> PartArray::value_type;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;  <span class="keyword">using</span> ring_t     = <span class="keyword">typename</span> RingArray::value_type;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;  <span class="keyword">using</span> coord_t    = <span class="keyword">typename</span> CoordinateArray::value_type;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;  <a class="code" href="classcuspatial_1_1test_1_1multipolygon__array.html">multipolygon_array</a>(thrust::device_vector&lt;geometry_t&gt; geometry_offsets_array,</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;                     thrust::device_vector&lt;part_t&gt; part_offsets_array,</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&nbsp;                     thrust::device_vector&lt;ring_t&gt; ring_offsets_array,</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&nbsp;                     thrust::device_vector&lt;coord_t&gt; coordinate_offsets_array)</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&nbsp;    : _geometry_offsets_array(geometry_offsets_array),</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&nbsp;      _part_offsets_array(part_offsets_array),</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&nbsp;      _ring_offsets_array(ring_offsets_array),</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&nbsp;      _coordinate_offsets_array(coordinate_offsets_array)</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&nbsp;  {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&nbsp;  }</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&nbsp; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&nbsp;  <a class="code" href="classcuspatial_1_1test_1_1multipolygon__array.html">multipolygon_array</a>(rmm::device_uvector&lt;geometry_t&gt;&amp;&amp; geometry_offsets_array,</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&nbsp;                     rmm::device_uvector&lt;part_t&gt;&amp;&amp; part_offsets_array,</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&nbsp;                     rmm::device_uvector&lt;ring_t&gt;&amp;&amp; ring_offsets_array,</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&nbsp;                     rmm::device_uvector&lt;coord_t&gt;&amp;&amp; coordinate_offsets_array)</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&nbsp;    : _geometry_offsets_array(std::move(geometry_offsets_array)),</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&nbsp;      _part_offsets_array(std::move(part_offsets_array)),</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&nbsp;      _ring_offsets_array(std::move(ring_offsets_array)),</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&nbsp;      _coordinate_offsets_array(std::move(coordinate_offsets_array))</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&nbsp;  {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&nbsp;  }</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&nbsp; </div>
+<div class="line"><a name="l00108"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipolygon__array.html#ae1c5cdc811afe7c99d78e463d5e2d1c6">  108</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multipolygon__array.html#ae1c5cdc811afe7c99d78e463d5e2d1c6">size</a>() { <span class="keywordflow">return</span> _geometry_offsets_array.size() - 1; }</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&nbsp; </div>
+<div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipolygon__array.html#a05e870fb41377afc7951271a58ad5f67">  111</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multipolygon__array.html#a05e870fb41377afc7951271a58ad5f67">range</a>()</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&nbsp;  {</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&nbsp;    <span class="keywordflow">return</span> <a class="code" href="classcuspatial_1_1multipolygon__range.html">multipolygon_range</a>(_geometry_offsets_array.begin(),</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&nbsp;                              _geometry_offsets_array.end(),</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&nbsp;                              _part_offsets_array.begin(),</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&nbsp;                              _part_offsets_array.end(),</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&nbsp;                              _ring_offsets_array.begin(),</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&nbsp;                              _ring_offsets_array.end(),</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&nbsp;                              _coordinate_offsets_array.begin(),</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&nbsp;                              _coordinate_offsets_array.end());</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&nbsp;  }</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&nbsp; </div>
+<div class="line"><a name="l00126"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipolygon__array.html#a1e8e376e97a8e2745ec7df7f99da7dab">  126</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multipolygon__array.html#a1e8e376e97a8e2745ec7df7f99da7dab">to_host</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&nbsp;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&nbsp;    <span class="keyword">auto</span> geometry_offsets   = cuspatial::test::to_host&lt;geometry_t&gt;(_geometry_offsets_array);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&nbsp;    <span class="keyword">auto</span> part_offsets       = cuspatial::test::to_host&lt;part_t&gt;(_part_offsets_array);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&nbsp;    <span class="keyword">auto</span> ring_offsets       = cuspatial::test::to_host&lt;ring_t&gt;(_ring_offsets_array);</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&nbsp;    <span class="keyword">auto</span> coordinate_offsets = cuspatial::test::to_host&lt;coord_t&gt;(_coordinate_offsets_array);</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&nbsp; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&nbsp;    <span class="keywordflow">return</span> std::tuple{geometry_offsets, part_offsets, ring_offsets, coordinate_offsets};</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&nbsp;  }</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&nbsp; </div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipolygon__array.html#a4485c8f36ea983440e0ca3e194adbbce">  139</a></span>&nbsp;  <span class="keyword">friend</span> std::ostream&amp; <a class="code" href="classcuspatial_1_1test_1_1multipolygon__array.html#a4485c8f36ea983440e0ca3e194adbbce">operator&lt;&lt;</a>(</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&nbsp;    std::ostream&amp; os,</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&nbsp;    <a class="code" href="classcuspatial_1_1test_1_1multipolygon__array.html">multipolygon_array&lt;GeometryArray, PartArray, RingArray, CoordinateArray&gt;</a> <span class="keyword">const</span>&amp; arr)</div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&nbsp;  {</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&nbsp;    <span class="keywordflow">return</span> <a class="code" href="classcuspatial_1_1multilinestring__range.html">multilinestring_range</a>(_geometry_offset_array.begin(),</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&nbsp;                                 _geometry_offset_array.end(),</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&nbsp;                                 _part_offset_array.begin(),</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&nbsp;                                 _part_offset_array.end(),</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&nbsp;                                 _coordinate_offset_array.begin(),</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&nbsp;                                 _coordinate_offset_array.end());</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&nbsp;    <span class="keyword">auto</span> [geometry_offsets, part_offsets, ring_offsets, coordinates] = arr.<a class="code" href="classcuspatial_1_1test_1_1multipolygon__array.html#a1e8e376e97a8e2745ec7df7f99da7dab">to_host</a>();</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&nbsp; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&nbsp;    <span class="keywordflow">return</span> os &lt;&lt; <span class="stringliteral">"Geometry Offsets:\n\t{"</span> &lt;&lt; geometry_offsets &lt;&lt; <span class="stringliteral">"}\n"</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&nbsp;              &lt;&lt; <span class="stringliteral">"Part Offsets:\n\t{"</span> &lt;&lt; part_offsets &lt;&lt; <span class="stringliteral">"}\n"</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&nbsp;              &lt;&lt; <span class="stringliteral">"Ring Offsets: \n\t{"</span> &lt;&lt; ring_offsets &lt;&lt; <span class="stringliteral">"}\n"</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&nbsp;              &lt;&lt; <span class="stringliteral">"Coordinates: \n\t{"</span> &lt;&lt; coordinates &lt;&lt; <span class="stringliteral">"}\n"</span>;</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&nbsp;  }</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&nbsp; </div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&nbsp; <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&nbsp;  GeometryArray _geometry_offset_array;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&nbsp;  PartArray _part_offset_array;</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&nbsp;  CoordinateArray _coordinate_offset_array;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&nbsp;};</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&nbsp; </div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&nbsp;<span class="keyword">auto</span> make_multilinestring_array(std::initializer_list&lt;std::size_t&gt; geometry_inl,</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&nbsp;                                std::initializer_list&lt;std::size_t&gt; part_inl,</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&nbsp;                                std::initializer_list&lt;<a class="code" href="classcuspatial_1_1vec__2d.html">vec_2d&lt;T&gt;</a>&gt; coord_inl)</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&nbsp;{</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&nbsp;  <span class="keywordflow">return</span> multilinestring_array(</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&nbsp;    rmm::device_vector&lt;std::size_t&gt;(</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&nbsp;      std::vector&lt;std::size_t&gt;(geometry_inl.begin(), geometry_inl.end())),</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&nbsp;    rmm::device_vector&lt;std::size_t&gt;(std::vector&lt;unsigned int&gt;(part_inl.begin(), part_inl.end())),</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&nbsp;    rmm::device_vector&lt;<a class="code" href="classcuspatial_1_1vec__2d.html">vec_2d&lt;T&gt;</a>&gt;(std::vector&lt;<a class="code" href="classcuspatial_1_1vec__2d.html">vec_2d&lt;T&gt;</a>&gt;(coord_inl.begin(), coord_inl.end())));</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&nbsp;}</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&nbsp; </div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> GeometryArray, <span class="keyword">typename</span> CoordinateArray&gt;</div>
-<div class="line"><a name="l00185"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipoint__array.html">  185</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classcuspatial_1_1test_1_1multipoint__array.html">multipoint_array</a> {</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&nbsp; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&nbsp;  <a class="code" href="classcuspatial_1_1test_1_1multipoint__array.html">multipoint_array</a>(GeometryArray geometry_offsets_array, CoordinateArray coordinate_array)</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&nbsp;    : _geometry_offsets(geometry_offsets_array), _coordinates(coordinate_array)</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&nbsp;  {</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&nbsp;  }</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&nbsp; </div>
-<div class="line"><a name="l00193"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipoint__array.html#a588c9513d3caca0ffde46610f35207fa">  193</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multipoint__array.html#a588c9513d3caca0ffde46610f35207fa">size</a>() { <span class="keywordflow">return</span> _geometry_offsets.size() - 1; }</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&nbsp; </div>
-<div class="line"><a name="l00196"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipoint__array.html#a9a70b34800445b169fccb5cbebead937">  196</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multipoint__array.html#a9a70b34800445b169fccb5cbebead937">range</a>()</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&nbsp;  {</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&nbsp;    <span class="keywordflow">return</span> <a class="code" href="classcuspatial_1_1multipoint__range.html">multipoint_range</a>{</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&nbsp;      _geometry_offsets.begin(), _geometry_offsets.end(), _coordinates.begin(), _coordinates.end()};</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&nbsp;  }</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&nbsp; </div>
-<div class="line"><a name="l00203"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipoint__array.html#a8e9dc2ca626a50c7cf6753beaa514e5d">  203</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multipoint__array.html#a8e9dc2ca626a50c7cf6753beaa514e5d">release</a>() { <span class="keywordflow">return</span> std::pair{std::move(_geometry_offsets), std::move(_coordinates)}; }</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&nbsp; </div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&nbsp; <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&nbsp;  GeometryArray _geometry_offsets;</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&nbsp;  CoordinateArray _coordinates;</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&nbsp;};</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&nbsp; </div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&nbsp;<span class="keyword">auto</span> make_multipoints_array(std::initializer_list&lt;std::initializer_list&lt;<a class="code" href="classcuspatial_1_1vec__2d.html">vec_2d&lt;T&gt;</a>&gt;&gt; inl)</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&nbsp;{</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&nbsp;  std::vector&lt;std::size_t&gt; offsets{0};</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&nbsp;  std::transform(inl.begin(), inl.end(), std::back_inserter(offsets), [](<span class="keyword">auto</span> multipoint) {</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&nbsp;    return multipoint.size();</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&nbsp;  });</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&nbsp;  std::inclusive_scan(offsets.begin(), offsets.end(), offsets.begin());</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&nbsp; </div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&nbsp;  std::vector&lt;vec_2d&lt;T&gt;&gt; coordinates = std::accumulate(</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&nbsp;    inl.begin(), inl.end(), std::vector&lt;vec_2d&lt;T&gt;&gt;{}, [](std::vector&lt;vec_2d&lt;T&gt;&gt;&amp; init, <span class="keyword">auto</span> cur) {</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&nbsp;      init.insert(init.end(), cur.begin(), cur.end());</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&nbsp;      return init;</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&nbsp;    });</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&nbsp; </div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&nbsp;  <span class="keywordflow">return</span> multipoint_array{rmm::device_vector&lt;std::size_t&gt;(offsets),</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&nbsp;                          rmm::device_vector&lt;vec_2d&lt;T&gt;&gt;(coordinates)};</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&nbsp;}</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&nbsp;  GeometryArray _geometry_offsets_array;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&nbsp;  PartArray _part_offsets_array;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&nbsp;  RingArray _ring_offsets_array;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&nbsp;  CoordinateArray _coordinate_offsets_array;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&nbsp;};</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&nbsp; </div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> IndexRange,</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&nbsp;          <span class="keyword">typename</span> CoordRange,</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&nbsp;          <span class="keyword">typename</span> IndexType = <span class="keyword">typename</span> IndexRange::value_type&gt;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&nbsp;<span class="keyword">auto</span> make_multipolygon_array(IndexRange geometry_inl,</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&nbsp;                             IndexRange part_inl,</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&nbsp;                             IndexRange ring_inl,</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&nbsp;                             CoordRange coord_inl)</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&nbsp;{</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&nbsp;  <span class="keyword">using</span> CoordType         = <span class="keyword">typename</span> CoordRange::value_type;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&nbsp;  <span class="keyword">using</span> DeviceIndexVector = thrust::device_vector&lt;IndexType&gt;;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&nbsp;  <span class="keyword">using</span> DeviceCoordVector = thrust::device_vector&lt;CoordType&gt;;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&nbsp; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&nbsp;  <span class="keywordflow">return</span> multipolygon_array&lt;DeviceIndexVector,</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&nbsp;                            DeviceIndexVector,</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&nbsp;                            DeviceIndexVector,</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&nbsp;                            DeviceCoordVector&gt;(make_device_vector(geometry_inl),</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&nbsp;                                               make_device_vector(part_inl),</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&nbsp;                                               make_device_vector(ring_inl),</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&nbsp;                                               make_device_vector(coord_inl));</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&nbsp;}</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&nbsp; </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&nbsp;<span class="keyword">auto</span> make_multipolygon_array(std::initializer_list&lt;std::size_t&gt; geometry_inl,</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&nbsp;                             std::initializer_list&lt;std::size_t&gt; part_inl,</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&nbsp;                             std::initializer_list&lt;std::size_t&gt; ring_inl,</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&nbsp;                             std::initializer_list&lt;vec_2d&lt;T&gt;&gt; coord_inl)</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&nbsp;{</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&nbsp;  <span class="keywordflow">return</span> make_multipolygon_array(range(geometry_inl.begin(), geometry_inl.end()),</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&nbsp;                                 range(part_inl.begin(), part_inl.end()),</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&nbsp;                                 range(ring_inl.begin(), ring_inl.end()),</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&nbsp;                                 range(coord_inl.begin(), coord_inl.end()));</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&nbsp;}</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&nbsp; </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> IndexType, <span class="keyword">typename</span> CoordType&gt;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&nbsp;<span class="keyword">auto</span> make_multipolygon_array(rmm::device_uvector&lt;IndexType&gt; geometry_inl,</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&nbsp;                             rmm::device_uvector&lt;IndexType&gt; part_inl,</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&nbsp;                             rmm::device_uvector&lt;IndexType&gt; ring_inl,</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&nbsp;                             rmm::device_uvector&lt;CoordType&gt; coord_inl)</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&nbsp;{</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&nbsp;  <span class="keywordflow">return</span> multipolygon_array&lt;rmm::device_uvector&lt;IndexType&gt;,</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&nbsp;                            rmm::device_uvector&lt;IndexType&gt;,</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&nbsp;                            rmm::device_uvector&lt;IndexType&gt;,</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&nbsp;                            rmm::device_uvector&lt;CoordType&gt;&gt;(</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&nbsp;    std::move(geometry_inl), std::move(part_inl), std::move(ring_inl), std::move(coord_inl));</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&nbsp;}</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&nbsp; </div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> GeometryArray, <span class="keyword">typename</span> PartArray, <span class="keyword">typename</span> CoordinateArray&gt;</div>
+<div class="line"><a name="l00212"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multilinestring__array.html">  212</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classcuspatial_1_1test_1_1multilinestring__array.html">multilinestring_array</a> {</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&nbsp; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&nbsp;  <a class="code" href="classcuspatial_1_1test_1_1multilinestring__array.html">multilinestring_array</a>(GeometryArray geometry_offsets_array,</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&nbsp;                        PartArray part_offsets_array,</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&nbsp;                        CoordinateArray coordinate_offset_array)</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&nbsp;    : _geometry_offset_array(geometry_offsets_array),</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&nbsp;      _part_offset_array(part_offsets_array),</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&nbsp;      _coordinate_offset_array(coordinate_offset_array)</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&nbsp;  {</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&nbsp;  }</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&nbsp; </div>
+<div class="line"><a name="l00224"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multilinestring__array.html#a2aab737876d9d3de2ed13eeb618b52fc">  224</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multilinestring__array.html#a2aab737876d9d3de2ed13eeb618b52fc">size</a>() { <span class="keywordflow">return</span> _geometry_offset_array.size() - 1; }</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&nbsp; </div>
+<div class="line"><a name="l00227"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multilinestring__array.html#ac9415a0d19cd81a01c16f0bb5d061ed2">  227</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multilinestring__array.html#ac9415a0d19cd81a01c16f0bb5d061ed2">range</a>()</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&nbsp;  {</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&nbsp;    <span class="keywordflow">return</span> <a class="code" href="classcuspatial_1_1multilinestring__range.html">multilinestring_range</a>(_geometry_offset_array.begin(),</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&nbsp;                                 _geometry_offset_array.end(),</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&nbsp;                                 _part_offset_array.begin(),</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&nbsp;                                 _part_offset_array.end(),</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&nbsp;                                 _coordinate_offset_array.begin(),</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&nbsp;                                 _coordinate_offset_array.end());</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&nbsp;  }</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&nbsp; </div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&nbsp; <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&nbsp;  GeometryArray _geometry_offset_array;</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&nbsp;  PartArray _part_offset_array;</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&nbsp;  CoordinateArray _coordinate_offset_array;</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&nbsp;};</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&nbsp; </div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&nbsp;}  <span class="comment">// namespace test</span></div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&nbsp;}  <span class="comment">// namespace cuspatial</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&nbsp;<span class="keyword">auto</span> make_multilinestring_array(std::initializer_list&lt;std::size_t&gt; geometry_inl,</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&nbsp;                                std::initializer_list&lt;std::size_t&gt; part_inl,</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&nbsp;                                std::initializer_list&lt;<a class="code" href="classcuspatial_1_1vec__2d.html">vec_2d&lt;T&gt;</a>&gt; coord_inl)</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&nbsp;{</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&nbsp;  <span class="keywordflow">return</span> multilinestring_array(</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&nbsp;    rmm::device_vector&lt;std::size_t&gt;(</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&nbsp;      std::vector&lt;std::size_t&gt;(geometry_inl.begin(), geometry_inl.end())),</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&nbsp;    rmm::device_vector&lt;std::size_t&gt;(std::vector&lt;unsigned int&gt;(part_inl.begin(), part_inl.end())),</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&nbsp;    rmm::device_vector&lt;<a class="code" href="classcuspatial_1_1vec__2d.html">vec_2d&lt;T&gt;</a>&gt;(std::vector&lt;<a class="code" href="classcuspatial_1_1vec__2d.html">vec_2d&lt;T&gt;</a>&gt;(coord_inl.begin(), coord_inl.end())));</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&nbsp;}</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&nbsp; </div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> GeometryArray, <span class="keyword">typename</span> CoordinateArray&gt;</div>
+<div class="line"><a name="l00271"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipoint__array.html">  271</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classcuspatial_1_1test_1_1multipoint__array.html">multipoint_array</a> {</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&nbsp; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&nbsp;  <a class="code" href="classcuspatial_1_1test_1_1multipoint__array.html">multipoint_array</a>(GeometryArray geometry_offsets_array, CoordinateArray coordinate_array)</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&nbsp;    : _geometry_offsets(geometry_offsets_array), _coordinates(coordinate_array)</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&nbsp;  {</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&nbsp;  }</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&nbsp; </div>
+<div class="line"><a name="l00279"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipoint__array.html#a588c9513d3caca0ffde46610f35207fa">  279</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multipoint__array.html#a588c9513d3caca0ffde46610f35207fa">size</a>() { <span class="keywordflow">return</span> _geometry_offsets.size() - 1; }</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&nbsp; </div>
+<div class="line"><a name="l00282"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipoint__array.html#a9a70b34800445b169fccb5cbebead937">  282</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multipoint__array.html#a9a70b34800445b169fccb5cbebead937">range</a>()</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&nbsp;  {</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&nbsp;    <span class="keywordflow">return</span> <a class="code" href="classcuspatial_1_1multipoint__range.html">multipoint_range</a>{</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&nbsp;      _geometry_offsets.begin(), _geometry_offsets.end(), _coordinates.begin(), _coordinates.end()};</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&nbsp;  }</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&nbsp; </div>
+<div class="line"><a name="l00289"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1multipoint__array.html#a8e9dc2ca626a50c7cf6753beaa514e5d">  289</a></span>&nbsp;  <span class="keyword">auto</span> <a class="code" href="classcuspatial_1_1test_1_1multipoint__array.html#a8e9dc2ca626a50c7cf6753beaa514e5d">release</a>() { <span class="keywordflow">return</span> std::pair{std::move(_geometry_offsets), std::move(_coordinates)}; }</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&nbsp; </div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&nbsp; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&nbsp;  GeometryArray _geometry_offsets;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&nbsp;  CoordinateArray _coordinates;</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&nbsp;};</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&nbsp; </div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&nbsp;<span class="keyword">auto</span> make_multipoints_array(std::initializer_list&lt;std::initializer_list&lt;<a class="code" href="classcuspatial_1_1vec__2d.html">vec_2d&lt;T&gt;</a>&gt;&gt; inl)</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&nbsp;{</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&nbsp;  std::vector&lt;std::size_t&gt; offsets{0};</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&nbsp;  std::transform(inl.begin(), inl.end(), std::back_inserter(offsets), [](<span class="keyword">auto</span> multipoint) {</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&nbsp;    return multipoint.size();</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&nbsp;  });</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&nbsp;  std::inclusive_scan(offsets.begin(), offsets.end(), offsets.begin());</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&nbsp; </div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&nbsp;  std::vector&lt;vec_2d&lt;T&gt;&gt; coordinates = std::accumulate(</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&nbsp;    inl.begin(), inl.end(), std::vector&lt;vec_2d&lt;T&gt;&gt;{}, [](std::vector&lt;vec_2d&lt;T&gt;&gt;&amp; init, <span class="keyword">auto</span> cur) {</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&nbsp;      init.insert(init.end(), cur.begin(), cur.end());</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&nbsp;      return init;</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&nbsp;    });</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&nbsp; </div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&nbsp;  <span class="keywordflow">return</span> multipoint_array{rmm::device_vector&lt;std::size_t&gt;(offsets),</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&nbsp;                          rmm::device_vector&lt;vec_2d&lt;T&gt;&gt;(coordinates)};</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&nbsp;}</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&nbsp; </div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&nbsp;}  <span class="comment">// namespace test</span></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&nbsp;}  <span class="comment">// namespace cuspatial</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasscuspatial_1_1multipolygon__range_html"><div class="ttname"><a href="classcuspatial_1_1multipolygon__range.html">cuspatial::multipolygon_range</a></div><div class="ttdoc">Non-owning range-based interface to multipolygon data.</div><div class="ttdef"><b>Definition:</b> <a href="multipolygon__range_8cuh_source.html#l00057">multipolygon_range.cuh:57</a></div></div>
-<div class="ttc" id="aclasscuspatial_1_1test_1_1multipoint__array_html"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipoint__array.html">cuspatial::test::multipoint_array</a></div><div class="ttdoc">Owning object of a multipoint array following geoarrow format.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00185">vector_factories.cuh:185</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1multipoint__array_html"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipoint__array.html">cuspatial::test::multipoint_array</a></div><div class="ttdoc">Owning object of a multipoint array following geoarrow format.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00271">vector_factories.cuh:271</a></div></div>
 <div class="ttc" id="amultilinestring__range_8cuh_html"><div class="ttname"><a href="multilinestring__range_8cuh.html">multilinestring_range.cuh</a></div></div>
-<div class="ttc" id="aclasscuspatial_1_1test_1_1multilinestring__array_html_ac9415a0d19cd81a01c16f0bb5d061ed2"><div class="ttname"><a href="classcuspatial_1_1test_1_1multilinestring__array.html#ac9415a0d19cd81a01c16f0bb5d061ed2">cuspatial::test::multilinestring_array::range</a></div><div class="ttdeci">auto range()</div><div class="ttdoc">Return range object of the multilinestring array.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00141">vector_factories.cuh:141</a></div></div>
-<div class="ttc" id="aclasscuspatial_1_1test_1_1multipoint__array_html_a9a70b34800445b169fccb5cbebead937"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipoint__array.html#a9a70b34800445b169fccb5cbebead937">cuspatial::test::multipoint_array::range</a></div><div class="ttdeci">auto range()</div><div class="ttdoc">Return range object of the multipoint array.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00196">vector_factories.cuh:196</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1multilinestring__array_html_ac9415a0d19cd81a01c16f0bb5d061ed2"><div class="ttname"><a href="classcuspatial_1_1test_1_1multilinestring__array.html#ac9415a0d19cd81a01c16f0bb5d061ed2">cuspatial::test::multilinestring_array::range</a></div><div class="ttdeci">auto range()</div><div class="ttdoc">Return range object of the multilinestring array.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00227">vector_factories.cuh:227</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1multipoint__array_html_a9a70b34800445b169fccb5cbebead937"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipoint__array.html#a9a70b34800445b169fccb5cbebead937">cuspatial::test::multipoint_array::range</a></div><div class="ttdeci">auto range()</div><div class="ttdoc">Return range object of the multipoint array.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00282">vector_factories.cuh:282</a></div></div>
 <div class="ttc" id="amultipoint__range_8cuh_html"><div class="ttname"><a href="multipoint__range_8cuh.html">multipoint_range.cuh</a></div></div>
-<div class="ttc" id="aclasscuspatial_1_1test_1_1multipolygon__array_html_a05e870fb41377afc7951271a58ad5f67"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipolygon__array.html#a05e870fb41377afc7951271a58ad5f67">cuspatial::test::multipolygon_array::range</a></div><div class="ttdeci">auto range()</div><div class="ttdoc">Return range object of the multipolygon array.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00087">vector_factories.cuh:87</a></div></div>
-<div class="ttc" id="aclasscuspatial_1_1multipoint__range_html"><div class="ttname"><a href="classcuspatial_1_1multipoint__range.html">cuspatial::multipoint_range</a></div><div class="ttdoc">Non-owning range-based interface to multipoint data.</div><div class="ttdef"><b>Definition:</b> <a href="multipoint__range_8cuh_source.html#l00046">multipoint_range.cuh:46</a></div></div>
-<div class="ttc" id="aclasscuspatial_1_1test_1_1multipolygon__array_html"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipolygon__array.html">cuspatial::test::multipolygon_array</a></div><div class="ttdoc">Owning object of a multipolygon array following geoarrow layout.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00070">vector_factories.cuh:70</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1multipolygon__array_html_a05e870fb41377afc7951271a58ad5f67"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipolygon__array.html#a05e870fb41377afc7951271a58ad5f67">cuspatial::test::multipolygon_array::range</a></div><div class="ttdeci">auto range()</div><div class="ttdoc">Return range object of the multipolygon array.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00111">vector_factories.cuh:111</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1multipoint__range_html"><div class="ttname"><a href="classcuspatial_1_1multipoint__range.html">cuspatial::multipoint_range</a></div><div class="ttdoc">Non-owning range-based interface to multipoint data.</div><div class="ttdef"><b>Definition:</b> <a href="multipoint__range_8cuh_source.html#l00047">multipoint_range.cuh:47</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1multipolygon__array_html"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipolygon__array.html">cuspatial::test::multipolygon_array</a></div><div class="ttdoc">Owning object of a multipolygon array following geoarrow layout.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00078">vector_factories.cuh:78</a></div></div>
 <div class="ttc" id="aclasscuspatial_1_1multilinestring__range_html"><div class="ttname"><a href="classcuspatial_1_1multilinestring__range.html">cuspatial::multilinestring_range</a></div><div class="ttdoc">Non-owning range-based interface to multilinestring data.</div><div class="ttdef"><b>Definition:</b> <a href="multilinestring__range_8cuh_source.html#l00053">multilinestring_range.cuh:53</a></div></div>
-<div class="ttc" id="aclasscuspatial_1_1test_1_1multilinestring__array_html"><div class="ttname"><a href="classcuspatial_1_1test_1_1multilinestring__array.html">cuspatial::test::multilinestring_array</a></div><div class="ttdoc">Owning object of a multilinestring array following geoarrow layout.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00126">vector_factories.cuh:126</a></div></div>
-<div class="ttc" id="aclasscuspatial_1_1test_1_1multipoint__array_html_a8e9dc2ca626a50c7cf6753beaa514e5d"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipoint__array.html#a8e9dc2ca626a50c7cf6753beaa514e5d">cuspatial::test::multipoint_array::release</a></div><div class="ttdeci">auto release()</div><div class="ttdoc">Release ownership.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00203">vector_factories.cuh:203</a></div></div>
-<div class="ttc" id="aclasscuspatial_1_1test_1_1multilinestring__array_html_a2aab737876d9d3de2ed13eeb618b52fc"><div class="ttname"><a href="classcuspatial_1_1test_1_1multilinestring__array.html#a2aab737876d9d3de2ed13eeb618b52fc">cuspatial::test::multilinestring_array::size</a></div><div class="ttdeci">auto size()</div><div class="ttdoc">Return the number of multilinestrings.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00138">vector_factories.cuh:138</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1multilinestring__array_html"><div class="ttname"><a href="classcuspatial_1_1test_1_1multilinestring__array.html">cuspatial::test::multilinestring_array</a></div><div class="ttdoc">Owning object of a multilinestring array following geoarrow layout.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00212">vector_factories.cuh:212</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1multipolygon__array_html_a4485c8f36ea983440e0ca3e194adbbce"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipolygon__array.html#a4485c8f36ea983440e0ca3e194adbbce">cuspatial::test::multipolygon_array::operator&lt;&lt;</a></div><div class="ttdeci">friend std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, multipolygon_array&lt; GeometryArray, PartArray, RingArray, CoordinateArray &gt; const &amp;arr)</div><div class="ttdoc">Output stream operator for multipolygon_array for human-readable formatting.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00139">vector_factories.cuh:139</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1multipoint__array_html_a8e9dc2ca626a50c7cf6753beaa514e5d"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipoint__array.html#a8e9dc2ca626a50c7cf6753beaa514e5d">cuspatial::test::multipoint_array::release</a></div><div class="ttdeci">auto release()</div><div class="ttdoc">Release ownership.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00289">vector_factories.cuh:289</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1multilinestring__array_html_a2aab737876d9d3de2ed13eeb618b52fc"><div class="ttname"><a href="classcuspatial_1_1test_1_1multilinestring__array.html#a2aab737876d9d3de2ed13eeb618b52fc">cuspatial::test::multilinestring_array::size</a></div><div class="ttdeci">auto size()</div><div class="ttdoc">Return the number of multilinestrings.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00224">vector_factories.cuh:224</a></div></div>
 <div class="ttc" id="arange_8cuh_html"><div class="ttname"><a href="range_8cuh.html">range.cuh</a></div></div>
-<div class="ttc" id="aclasscuspatial_1_1test_1_1multipoint__array_html_a588c9513d3caca0ffde46610f35207fa"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipoint__array.html#a588c9513d3caca0ffde46610f35207fa">cuspatial::test::multipoint_array::size</a></div><div class="ttdeci">auto size()</div><div class="ttdoc">Return the number of multipoints.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00193">vector_factories.cuh:193</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1multipoint__array_html_a588c9513d3caca0ffde46610f35207fa"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipoint__array.html#a588c9513d3caca0ffde46610f35207fa">cuspatial::test::multipoint_array::size</a></div><div class="ttdeci">auto size()</div><div class="ttdoc">Return the number of multipoints.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00279">vector_factories.cuh:279</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1multipolygon__array_html_a1e8e376e97a8e2745ec7df7f99da7dab"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipolygon__array.html#a1e8e376e97a8e2745ec7df7f99da7dab">cuspatial::test::multipolygon_array::to_host</a></div><div class="ttdeci">auto to_host() const</div><div class="ttdoc">Copy the offset arrays to host.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00126">vector_factories.cuh:126</a></div></div>
 <div class="ttc" id="avec__2d_8hpp_html"><div class="ttname"><a href="vec__2d_8hpp.html">vec_2d.hpp</a></div></div>
-<div class="ttc" id="aclasscuspatial_1_1test_1_1multipolygon__array_html_ae1c5cdc811afe7c99d78e463d5e2d1c6"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipolygon__array.html#ae1c5cdc811afe7c99d78e463d5e2d1c6">cuspatial::test::multipolygon_array::size</a></div><div class="ttdeci">auto size()</div><div class="ttdoc">Return the number of multipolygons.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00084">vector_factories.cuh:84</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1multipolygon__array_html_ae1c5cdc811afe7c99d78e463d5e2d1c6"><div class="ttname"><a href="classcuspatial_1_1test_1_1multipolygon__array.html#ae1c5cdc811afe7c99d78e463d5e2d1c6">cuspatial::test::multipolygon_array::size</a></div><div class="ttdeci">auto size()</div><div class="ttdoc">Return the number of multipolygons.</div><div class="ttdef"><b>Definition:</b> <a href="vector__factories_8cuh_source.html#l00108">vector_factories.cuh:108</a></div></div>
 <div class="ttc" id="aclasscuspatial_1_1vec__2d_html"><div class="ttname"><a href="classcuspatial_1_1vec__2d.html">cuspatial::vec_2d</a></div><div class="ttdoc">A generic 2D vector type.</div><div class="ttdef"><b>Definition:</b> <a href="vec__2d_8hpp_source.html#l00041">vec_2d.hpp:41</a></div></div>
 <!-- start footer part -->
 <hr class="footer"><address class="footer"><small>

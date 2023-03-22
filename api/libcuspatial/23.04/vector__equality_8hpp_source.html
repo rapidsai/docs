@@ -221,82 +221,83 @@ $(function() {
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&nbsp;  }</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&nbsp;}</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&nbsp; </div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Vector1, <span class="keyword">typename</span> Vector2, <span class="keyword">typename</span> T = <span class="keyword">typename</span> Vector1::value_type&gt;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">void</span> expect_vector_equivalent(Vector1 <span class="keyword">const</span>&amp; lhs, Vector2 <span class="keyword">const</span>&amp; rhs, T abs_error)</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Vector1, <span class="keyword">typename</span> Vector2, <span class="keyword">typename</span> U&gt;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&nbsp;<span class="keyword">inline</span> <span class="keywordtype">void</span> expect_vector_equivalent(Vector1 <span class="keyword">const</span>&amp; lhs, Vector2 <span class="keyword">const</span>&amp; rhs, U abs_error)</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&nbsp;{</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&nbsp;  static_assert(std::is_same_v&lt;T, typename Vector2::value_type&gt;, <span class="stringliteral">"Value type mismatch."</span>);</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&nbsp;  static_assert(!std::is_integral_v&lt;T&gt;, <span class="stringliteral">"Integral types cannot be compared with an error."</span>);</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&nbsp; </div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&nbsp;  <span class="keywordflow">if</span> constexpr (cuspatial::is_vec_2d&lt;T&gt;()) {</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&nbsp;                ::testing::Pointwise(vec_2d_near_matcher(abs_error), to_host&lt;T&gt;(rhs)));</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (std::is_floating_point_v&lt;T&gt;) {</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&nbsp;                ::testing::Pointwise(float_near_matcher(abs_error), to_host&lt;T&gt;(rhs)));</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (cuspatial::is_optional&lt;T&gt;) {</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&nbsp;    <span class="keywordflow">if</span> constexpr (cuspatial::is_vec_2d&lt;typename T::value_type&gt;()) {</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&nbsp;      EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&nbsp;                  ::testing::Pointwise(optional_matcher(vec_2d_matcher()), to_host&lt;T&gt;(rhs)));</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&nbsp;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (std::is_floating_point_v&lt;typename T::value_type&gt;) {</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&nbsp;      EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&nbsp;                  ::testing::Pointwise(optional_matcher(float_matcher()), to_host&lt;T&gt;(rhs)));</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&nbsp;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&nbsp;      EXPECT_EQ(lhs, rhs);</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&nbsp;    }</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&nbsp;  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&nbsp;    EXPECT_EQ(lhs, rhs);</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&nbsp;  }</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&nbsp;}</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&nbsp; </div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&nbsp;<span class="preprocessor">#define CUSPATIAL_EXPECT_VECTORS_EQUIVALENT(lhs, rhs, ...)              \</span></div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&nbsp;<span class="preprocessor">  do {                                                                  \</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&nbsp;<span class="preprocessor">    SCOPED_TRACE(" &lt;--  line of failure\n");                            \</span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&nbsp;<span class="preprocessor">    cuspatial::test::expect_vector_equivalent(lhs, rhs, ##__VA_ARGS__); \</span></div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&nbsp;<span class="preprocessor">  } while (0)</span></div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&nbsp; </div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&nbsp;<span class="comment">// unpack a `device_vector of structs comprising two `vec_2d`s each into two vectors of `vec_2d`.</span></div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&nbsp;<span class="comment">// Works, e.g., with `cuspatial::box` or `cuspatial::segment`.</span></div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> PairVector, <span class="keyword">typename</span> T = <span class="keyword">typename</span> PairVector::value_type::value_type&gt;</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&nbsp;std::pair&lt;rmm::device_vector&lt;vec_2d&lt;T&gt;&gt;, rmm::device_vector&lt;vec_2d&lt;T&gt;&gt;&gt; unpack_vec2d_pair_vector(</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&nbsp;  PairVector <span class="keyword">const</span>&amp; pairs)</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&nbsp;{</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&nbsp;  <span class="keyword">using</span> Pair = <span class="keyword">typename</span> PairVector::value_type;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&nbsp; </div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&nbsp;  <span class="keyword">auto</span> first  = rmm::device_vector&lt;vec_2d&lt;T&gt;&gt;(pairs.size());</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&nbsp;  <span class="keyword">auto</span> second = rmm::device_vector&lt;vec_2d&lt;T&gt;&gt;(pairs.size());</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&nbsp; </div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&nbsp;  <span class="keyword">auto</span> zipped_output = thrust::make_zip_iterator(first.begin(), second.begin());</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&nbsp; </div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&nbsp;  thrust::transform(pairs.begin(), pairs.end(), zipped_output, [] __device__(Pair <span class="keyword">const</span>&amp; pair) {</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&nbsp;    <span class="keyword">auto</span> [a, b] = pair;</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&nbsp;    <span class="keywordflow">return</span> thrust::make_tuple(a, b);</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&nbsp;  });</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&nbsp;  <span class="keywordflow">return</span> {std::move(first), std::move(second)};</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&nbsp;}</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&nbsp; </div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> PairVector1, <span class="keyword">typename</span> PairVector2&gt;</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&nbsp;<span class="keywordtype">void</span> expect_vec_2d_pair_equivalent(PairVector1 <span class="keyword">const</span>&amp; expected, PairVector2 <span class="keyword">const</span>&amp; got)</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&nbsp;{</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&nbsp;  <span class="keyword">auto</span> [expected_first, expected_second] = unpack_vec2d_pair_vector(expected);</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&nbsp;  <span class="keyword">auto</span> [got_first, got_second]           = unpack_vec2d_pair_vector(got);</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&nbsp;  CUSPATIAL_EXPECT_VECTORS_EQUIVALENT(expected_first, got_first);</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&nbsp;  CUSPATIAL_EXPECT_VECTORS_EQUIVALENT(expected_second, got_second);</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&nbsp;}</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&nbsp; </div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&nbsp;<span class="preprocessor">#define CUSPATIAL_EXPECT_VEC2D_PAIRS_EQUIVALENT(lhs, rhs)     \</span></div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&nbsp;<span class="preprocessor">  do {                                                        \</span></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&nbsp;<span class="preprocessor">    SCOPED_TRACE(" &lt;--  line of failure\n");                  \</span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&nbsp;<span class="preprocessor">    cuspatial::test::expect_vec_2d_pair_equivalent(lhs, rhs); \</span></div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&nbsp;<span class="preprocessor">  } while (0)</span></div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&nbsp; </div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&nbsp;<span class="preprocessor">#define CUSPATIAL_RUN_TEST(FUNC, ...)        \</span></div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&nbsp;<span class="preprocessor">  do {                                       \</span></div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&nbsp;<span class="preprocessor">    SCOPED_TRACE(" &lt;--  line of failure\n"); \</span></div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&nbsp;<span class="preprocessor">    FUNC(__VA_ARGS__);                       \</span></div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&nbsp;<span class="preprocessor">  } while (0)</span></div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&nbsp; </div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&nbsp;}  <span class="comment">// namespace test</span></div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&nbsp;}  <span class="comment">// namespace cuspatial</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&nbsp;  <span class="keyword">using</span> T = <span class="keyword">typename</span> Vector1::value_type;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&nbsp;  static_assert(std::is_same_v&lt;T, typename Vector2::value_type&gt;, <span class="stringliteral">"Value type mismatch."</span>);</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&nbsp;  static_assert(!std::is_integral_v&lt;T&gt;, <span class="stringliteral">"Integral types cannot be compared with an error."</span>);</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&nbsp; </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&nbsp;  <span class="keywordflow">if</span> constexpr (cuspatial::is_vec_2d&lt;T&gt;()) {</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&nbsp;                ::testing::Pointwise(vec_2d_near_matcher(abs_error), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (std::is_floating_point_v&lt;T&gt;) {</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&nbsp;    EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&nbsp;                ::testing::Pointwise(float_near_matcher(abs_error), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&nbsp;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (cuspatial::is_optional&lt;T&gt;) {</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&nbsp;    <span class="keywordflow">if</span> constexpr (cuspatial::is_vec_2d&lt;typename T::value_type&gt;()) {</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&nbsp;      EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&nbsp;                  ::testing::Pointwise(optional_matcher(vec_2d_matcher()), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&nbsp;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr (std::is_floating_point_v&lt;typename T::value_type&gt;) {</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&nbsp;      EXPECT_THAT(to_host&lt;T&gt;(lhs),</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&nbsp;                  ::testing::Pointwise(optional_matcher(float_matcher()), to_host&lt;T&gt;(rhs)));</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&nbsp;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&nbsp;      EXPECT_EQ(lhs, rhs);</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&nbsp;    }</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&nbsp;  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&nbsp;    EXPECT_EQ(lhs, rhs);</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&nbsp;  }</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&nbsp;}</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&nbsp; </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&nbsp;<span class="preprocessor">#define CUSPATIAL_EXPECT_VECTORS_EQUIVALENT(lhs, rhs, ...)              \</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&nbsp;<span class="preprocessor">  do {                                                                  \</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&nbsp;<span class="preprocessor">    SCOPED_TRACE(" &lt;--  line of failure\n");                            \</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&nbsp;<span class="preprocessor">    cuspatial::test::expect_vector_equivalent(lhs, rhs, ##__VA_ARGS__); \</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&nbsp;<span class="preprocessor">  } while (0)</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&nbsp; </div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&nbsp;<span class="comment">// unpack a `device_vector of structs comprising two `vec_2d`s each into two vectors of `vec_2d`.</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&nbsp;<span class="comment">// Works, e.g., with `cuspatial::box` or `cuspatial::segment`.</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> PairVector, <span class="keyword">typename</span> T = <span class="keyword">typename</span> PairVector::value_type::value_type&gt;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&nbsp;std::pair&lt;rmm::device_vector&lt;vec_2d&lt;T&gt;&gt;, rmm::device_vector&lt;vec_2d&lt;T&gt;&gt;&gt; unpack_vec2d_pair_vector(</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&nbsp;  PairVector <span class="keyword">const</span>&amp; pairs)</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&nbsp;{</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&nbsp;  <span class="keyword">using</span> Pair = <span class="keyword">typename</span> PairVector::value_type;</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&nbsp; </div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&nbsp;  <span class="keyword">auto</span> first  = rmm::device_vector&lt;vec_2d&lt;T&gt;&gt;(pairs.size());</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&nbsp;  <span class="keyword">auto</span> second = rmm::device_vector&lt;vec_2d&lt;T&gt;&gt;(pairs.size());</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&nbsp; </div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&nbsp;  <span class="keyword">auto</span> zipped_output = thrust::make_zip_iterator(first.begin(), second.begin());</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&nbsp; </div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&nbsp;  thrust::transform(pairs.begin(), pairs.end(), zipped_output, [] __device__(Pair <span class="keyword">const</span>&amp; pair) {</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&nbsp;    <span class="keyword">auto</span> [a, b] = pair;</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&nbsp;    <span class="keywordflow">return</span> thrust::make_tuple(a, b);</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&nbsp;  });</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&nbsp;  <span class="keywordflow">return</span> {std::move(first), std::move(second)};</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&nbsp;}</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&nbsp; </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> PairVector1, <span class="keyword">typename</span> PairVector2&gt;</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&nbsp;<span class="keywordtype">void</span> expect_vec_2d_pair_equivalent(PairVector1 <span class="keyword">const</span>&amp; expected, PairVector2 <span class="keyword">const</span>&amp; got)</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&nbsp;{</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&nbsp;  <span class="keyword">auto</span> [expected_first, expected_second] = unpack_vec2d_pair_vector(expected);</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&nbsp;  <span class="keyword">auto</span> [got_first, got_second]           = unpack_vec2d_pair_vector(got);</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&nbsp;  CUSPATIAL_EXPECT_VECTORS_EQUIVALENT(expected_first, got_first);</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&nbsp;  CUSPATIAL_EXPECT_VECTORS_EQUIVALENT(expected_second, got_second);</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&nbsp;}</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&nbsp; </div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&nbsp;<span class="preprocessor">#define CUSPATIAL_EXPECT_VEC2D_PAIRS_EQUIVALENT(lhs, rhs)     \</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&nbsp;<span class="preprocessor">  do {                                                        \</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&nbsp;<span class="preprocessor">    SCOPED_TRACE(" &lt;--  line of failure\n");                  \</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&nbsp;<span class="preprocessor">    cuspatial::test::expect_vec_2d_pair_equivalent(lhs, rhs); \</span></div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&nbsp;<span class="preprocessor">  } while (0)</span></div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&nbsp; </div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&nbsp;<span class="preprocessor">#define CUSPATIAL_RUN_TEST(FUNC, ...)        \</span></div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&nbsp;<span class="preprocessor">  do {                                       \</span></div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&nbsp;<span class="preprocessor">    SCOPED_TRACE(" &lt;--  line of failure\n"); \</span></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&nbsp;<span class="preprocessor">    FUNC(__VA_ARGS__);                       \</span></div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&nbsp;<span class="preprocessor">  } while (0)</span></div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&nbsp; </div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&nbsp;}  <span class="comment">// namespace test</span></div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&nbsp;}  <span class="comment">// namespace cuspatial</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="avec__2d_8hpp_html"><div class="ttname"><a href="vec__2d_8hpp.html">vec_2d.hpp</a></div></div>
 <!-- start footer part -->

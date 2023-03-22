@@ -60,7 +60,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&nbsp;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&nbsp;<span class="comment"> * Copyright (c) 2022, NVIDIA CORPORATION.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&nbsp;<span class="comment"> * Copyright (c) 2022-2023, NVIDIA CORPORATION.</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&nbsp;<span class="comment"> *</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&nbsp;<span class="comment"> * Licensed under the Apache License, Version 2.0 (the "License");</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&nbsp;<span class="comment"> * you may not use this file except in compliance with the License.</span></div>
@@ -75,25 +75,40 @@ $(function() {
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&nbsp;<span class="comment"> * limitations under the License.</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&nbsp;<span class="comment"> */</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&nbsp; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&nbsp;<span class="preprocessor">#include &lt;rmm/mr/device/per_device_resource.hpp&gt;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&nbsp; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&nbsp;<span class="preprocessor">#include &lt;gtest/gtest.h&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp;<span class="keyword">namespace </span>cuspatial {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp;<span class="keyword">namespace </span>test {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp; </div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1BaseFixture.html">   32</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classcuspatial_1_1test_1_1BaseFixture.html">BaseFixture</a> : <span class="keyword">public</span> ::testing::Test {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&nbsp;  rmm::mr::device_memory_resource* _mr{rmm::mr::get_current_device_resource()};</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&nbsp; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&nbsp; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1BaseFixture.html#afd9c61cfb744a9b84b5ff0c56b7939f5">   41</a></span>&nbsp;  rmm::mr::device_memory_resource* <a class="code" href="classcuspatial_1_1test_1_1BaseFixture.html#afd9c61cfb744a9b84b5ff0c56b7939f5">mr</a>() { <span class="keywordflow">return</span> _mr; }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&nbsp;};</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&nbsp; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&nbsp;}  <span class="comment">// namespace test</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&nbsp;}  <span class="comment">// namespace cuspatial</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&nbsp;<span class="preprocessor">#include &lt;rmm/cuda_stream_view.hpp&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&nbsp;<span class="preprocessor">#include &lt;rmm/mr/device/per_device_resource.hpp&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&nbsp; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&nbsp;<span class="preprocessor">#include &lt;gtest/gtest.h&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&nbsp; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&nbsp;<span class="keyword">namespace </span>cuspatial {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&nbsp;<span class="keyword">namespace </span>test {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&nbsp; </div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1RMMResourceMixin.html">   28</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classcuspatial_1_1test_1_1RMMResourceMixin.html">RMMResourceMixin</a> {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&nbsp;  rmm::mr::device_memory_resource* _mr{rmm::mr::get_current_device_resource()};</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&nbsp;  rmm::cuda_stream_view _stream{rmm::cuda_stream_default};</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&nbsp; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&nbsp; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1RMMResourceMixin.html#a5c2dbed9af75be6271db6b17537024c8">   38</a></span>&nbsp;  rmm::mr::device_memory_resource* <a class="code" href="classcuspatial_1_1test_1_1RMMResourceMixin.html#a5c2dbed9af75be6271db6b17537024c8">mr</a>() { <span class="keywordflow">return</span> _mr; }</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&nbsp; </div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1RMMResourceMixin.html#a8366af776a0fee462421eb65d14ceef8">   45</a></span>&nbsp;  rmm::cuda_stream_view <a class="code" href="classcuspatial_1_1test_1_1RMMResourceMixin.html#a8366af776a0fee462421eb65d14ceef8">stream</a>() { <span class="keywordflow">return</span> _stream; }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&nbsp;};</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&nbsp; </div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1BaseFixture.html">   57</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classcuspatial_1_1test_1_1BaseFixture.html">BaseFixture</a> : <span class="keyword">public</span> <a class="code" href="classcuspatial_1_1test_1_1RMMResourceMixin.html">RMMResourceMixin</a>, <span class="keyword">public</span> ::testing::Test {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&nbsp;};</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&nbsp; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&nbsp;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Ts&gt;</div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classcuspatial_1_1test_1_1BaseFixtureWithParam.html">   81</a></span>&nbsp;<span class="keyword">class </span><a class="code" href="classcuspatial_1_1test_1_1BaseFixtureWithParam.html">BaseFixtureWithParam</a> : <span class="keyword">public</span> <a class="code" href="classcuspatial_1_1test_1_1RMMResourceMixin.html">RMMResourceMixin</a>,</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&nbsp;                             <span class="keyword">public</span> ::testing::TestWithParam&lt;std::tuple&lt;Ts...&gt;&gt; {</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&nbsp;};</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&nbsp; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&nbsp;}  <span class="comment">// namespace test</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&nbsp;}  <span class="comment">// namespace cuspatial</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasscuspatial_1_1test_1_1BaseFixture_html"><div class="ttname"><a href="classcuspatial_1_1test_1_1BaseFixture.html">cuspatial::test::BaseFixture</a></div><div class="ttdoc">Base test fixture class from which all libcuspatial tests should inherit.</div><div class="ttdef"><b>Definition:</b> <a href="base__fixture_8hpp_source.html#l00032">base_fixture.hpp:32</a></div></div>
-<div class="ttc" id="aclasscuspatial_1_1test_1_1BaseFixture_html_afd9c61cfb744a9b84b5ff0c56b7939f5"><div class="ttname"><a href="classcuspatial_1_1test_1_1BaseFixture.html#afd9c61cfb744a9b84b5ff0c56b7939f5">cuspatial::test::BaseFixture::mr</a></div><div class="ttdeci">rmm::mr::device_memory_resource * mr()</div><div class="ttdoc">Returns pointer to device_memory_resource that should be used for all tests inheriting from this fixt...</div><div class="ttdef"><b>Definition:</b> <a href="base__fixture_8hpp_source.html#l00041">base_fixture.hpp:41</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1BaseFixtureWithParam_html"><div class="ttname"><a href="classcuspatial_1_1test_1_1BaseFixtureWithParam.html">cuspatial::test::BaseFixtureWithParam</a></div><div class="ttdoc">Base test fixture class from which libcuspatial test with only value parameterization should inherit.</div><div class="ttdef"><b>Definition:</b> <a href="base__fixture_8hpp_source.html#l00081">base_fixture.hpp:82</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1RMMResourceMixin_html"><div class="ttname"><a href="classcuspatial_1_1test_1_1RMMResourceMixin.html">cuspatial::test::RMMResourceMixin</a></div><div class="ttdoc">Mixin to supply rmm resources for fixtures.</div><div class="ttdef"><b>Definition:</b> <a href="base__fixture_8hpp_source.html#l00028">base_fixture.hpp:28</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1RMMResourceMixin_html_a8366af776a0fee462421eb65d14ceef8"><div class="ttname"><a href="classcuspatial_1_1test_1_1RMMResourceMixin.html#a8366af776a0fee462421eb65d14ceef8">cuspatial::test::RMMResourceMixin::stream</a></div><div class="ttdeci">rmm::cuda_stream_view stream()</div><div class="ttdoc">Returns cuda_stream_view that should be used for computation in tests inheriting from this fixture.</div><div class="ttdef"><b>Definition:</b> <a href="base__fixture_8hpp_source.html#l00045">base_fixture.hpp:45</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1RMMResourceMixin_html_a5c2dbed9af75be6271db6b17537024c8"><div class="ttname"><a href="classcuspatial_1_1test_1_1RMMResourceMixin.html#a5c2dbed9af75be6271db6b17537024c8">cuspatial::test::RMMResourceMixin::mr</a></div><div class="ttdeci">rmm::mr::device_memory_resource * mr()</div><div class="ttdoc">Returns pointer to device_memory_resource that should be used for all tests inheriting from this fixt...</div><div class="ttdef"><b>Definition:</b> <a href="base__fixture_8hpp_source.html#l00038">base_fixture.hpp:38</a></div></div>
+<div class="ttc" id="aclasscuspatial_1_1test_1_1BaseFixture_html"><div class="ttname"><a href="classcuspatial_1_1test_1_1BaseFixture.html">cuspatial::test::BaseFixture</a></div><div class="ttdoc">Base test fixture class from which libcuspatial test with no parameterization or only with type param...</div><div class="ttdef"><b>Definition:</b> <a href="base__fixture_8hpp_source.html#l00057">base_fixture.hpp:57</a></div></div>
 <!-- start footer part -->
 <hr class="footer"><address class="footer"><small>
 Generated by&nbsp;<a href="http://www.doxygen.org/index.html"><img alt="doxygen" class="footer" height="31" src="doxygen.svg" width="104"></a> 1.8.20
