@@ -21613,6 +21613,13 @@
       <arglist>(table_view const &amp;source, std::vector&lt; size_type &gt; const &amp;map, table_view const &amp;target)</arglist>
     </member>
     <member kind="function">
+      <type>std::unique_ptr&lt; table &gt;</type>
+      <name>make_timezone_transition_table</name>
+      <anchorfile>namespacecudf.html</anchorfile>
+      <anchor>ab0981f182f6a3558a9a887d3dee07c03</anchor>
+      <arglist>(std::optional&lt; std::string_view &gt; tzif_dir, std::string_view timezone_name, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</arglist>
+    </member>
+    <member kind="function">
       <type>std::unique_ptr&lt; column &gt;</type>
       <name>transform</name>
       <anchorfile>group__transformation__transform.html</anchorfile>
@@ -22093,6 +22100,13 @@
       <name>column_types_equal</name>
       <anchorfile>namespacecudf.html</anchorfile>
       <anchor>a840f61a0eccd339fd42fc7c12e02dbe3</anchor>
+      <arglist>(column_view const &amp;lhs, column_view const &amp;rhs)</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>column_types_equivalent</name>
+      <anchorfile>namespacecudf.html</anchorfile>
+      <anchor>a113dcd67d38107ed8e9df25a12a9486c</anchor>
       <arglist>(column_view const &amp;lhs, column_view const &amp;rhs)</arglist>
     </member>
     <member kind="function">
