@@ -527,8 +527,8 @@ pip<span class="w"> </span>install<span class="w"> </span>raft-dask-cu11<span cl
 </pre></div>
 </div>
 </section>
-<section id="c-shared-libraries-optional">
-<h3>C++ Shared Libraries (optional)<a class="headerlink" href="#c-shared-libraries-optional" title="Permalink to this heading">#</a></h3>
+<section id="c-shared-library-optional">
+<h3>C++ Shared Library (optional)<a class="headerlink" href="#c-shared-library-optional" title="Permalink to this heading">#</a></h3>
 <p>A shared library can be built for speeding up compile times. The shared library also contains a runtime API that allows you to invoke RAFT APIs directly from C++ source files (without <code class="docutils literal notranslate"><span class="pre">nvcc</span></code>). The shared library can also significantly improve re-compile times both while developing RAFT and using its APIs to develop applications. Pass the <code class="docutils literal notranslate"><span class="pre">--compile-lib</span></code> flag to <code class="docutils literal notranslate"><span class="pre">build.sh</span></code> to build the library:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build.sh<span class="w"> </span>libraft<span class="w"> </span>--compile-lib
 </pre></div>
@@ -553,7 +553,7 @@ pip<span class="w"> </span>install<span class="w"> </span>raft-dask-cu11<span cl
 </pre></div>
 </div>
 <p>Test compile times can be improved significantly by using the optional shared libraries. If installed, they will be used automatically when building the tests but <code class="docutils literal notranslate"><span class="pre">--compile-libs</span></code> can be used to add additional compilation units and compile them with the tests.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build.sh<span class="w"> </span>libraft<span class="w"> </span>tests<span class="w"> </span>--compile-libs
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build.sh<span class="w"> </span>libraft<span class="w"> </span>tests<span class="w"> </span>--compile-lib
 </pre></div>
 </div>
 <p>The tests are broken apart by algorithm category, so you will find several binaries in <code class="docutils literal notranslate"><span class="pre">cpp/build/</span></code> named <code class="docutils literal notranslate"><span class="pre">*_TEST</span></code>.</p>
@@ -612,27 +612,15 @@ make<span class="w"> </span>-j&lt;parallel_level&gt;<span class="w"> </span>inst
 </tr>
 <tr>
 <td>raft_FIND_COMPONENTS</td>
-<td>nn distance</td>
+<td>compiled distributed</td>
 <td></td>
 <td>Configures the optional components as a space-separated list</td>
 </tr>
 <tr>
-<td>RAFT_COMPILE_LIBRARIES</td>
+<td>RAFT_COMPILE_LIBRARY</td>
 <td>ON, OFF</td>
 <td>ON if either BUILD_TESTS or BUILD_BENCH is ON; otherwise OFF</td>
 <td>Compiles all <code>libraft</code> shared libraries (these are required for Googletests)</td>
-</tr>
-<tr>
-<td>RAFT_COMPILE_NN_LIBRARY</td>
-<td>ON, OFF</td>
-<td>OFF</td>
-<td>Compiles the <code>libraft-nn</code> shared library</td>
-</tr>
-<tr>
-<td>RAFT_COMPILE_DIST_LIBRARY</td>
-<td>ON, OFF</td>
-<td>OFF</td>
-<td>Compiles the <code>libraft-distance</code> shared library</td>
 </tr>
 <tr>
 <td>DETECT_CONDA_ENV</td>
@@ -734,9 +722,9 @@ py.test<span class="w"> </span>-s<span class="w"> </span>-v
 <span class="w">           </span><span class="s">INTERFACE_POSITION_INDEPENDENT_CODE</span><span class="w"> </span><span class="s">ON</span><span class="p">)</span>
 </pre></div>
 </div>
-<section id="c-header-only-integration">
-<h3>C++ header-only integration<a class="headerlink" href="#c-header-only-integration" title="Permalink to this heading">#</a></h3>
-<p>When the needed <a class="reference external" href="#build-dependencies">build dependencies</a> are already satisfied, RAFT can be trivially integrated into downstream projects by cloning the repository and adding <code class="docutils literal notranslate"><span class="pre">cpp/include</span></code> from RAFT to the include path:</p>
+<section id="c-header-only-integration-without-cmake">
+<h3>C++ header-only integration (without cmake)<a class="headerlink" href="#c-header-only-integration-without-cmake" title="Permalink to this heading">#</a></h3>
+<p>While not a highly suggested method for building against RAFT, when all of the needed <a class="reference external" href="#build-dependencies">build dependencies</a> are already satisfied, RAFT can be integrated into downstream projects by cloning the repository and adding <code class="docutils literal notranslate"><span class="pre">cpp/include</span></code> from RAFT to the include path:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">RAFT_GIT_DIR</span><span class="w"> </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="s">/raft</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">STRING</span><span class="w"> </span><span class="s2">"Path to RAFT repo"</span><span class="p">)</span>
 <span class="nb">ExternalProject_Add</span><span class="p">(</span><span class="s">raft</span>
 <span class="w">  </span><span class="s">GIT_REPOSITORY</span><span class="w">    </span><span class="s">git@github.com:rapidsai/raft.git</span>
@@ -748,78 +736,70 @@ py.test<span class="w"> </span>-s<span class="w"> </span>-v
 <span class="nb">set</span><span class="p">(</span><span class="s">RAFT_INCLUDE_DIR</span><span class="w"> </span><span class="o">${</span><span class="nv">RAFT_GIT_DIR</span><span class="o">}</span><span class="s">/raft/cpp/include</span><span class="w"> </span><span class="s">CACHE</span><span class="w"> </span><span class="s">STRING</span><span class="w"> </span><span class="s2">"RAFT include variable"</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If RAFT has already been installed, such as by using the <code class="docutils literal notranslate"><span class="pre">build.sh</span></code> script, use <code class="docutils literal notranslate"><span class="pre">find_package(raft)</span></code> and the <code class="docutils literal notranslate"><span class="pre">raft::raft</span></code> target.</p>
+</section>
+<section id="c-header-only-integration-with-cmake">
+<h3>C++ header-only integration (with cmake)<a class="headerlink" href="#c-header-only-integration-with-cmake" title="Permalink to this heading">#</a></h3>
+<p>When using cmake, you can install RAFT headers into your environment with <code class="docutils literal notranslate"><span class="pre">./build.sh</span> <span class="pre">libraft</span></code>.</p>
+<p>If the RAFT headers have already been installed into your environment with cmake or through conda, such as by using the <code class="docutils literal notranslate"><span class="pre">build.sh</span></code> script, use <code class="docutils literal notranslate"><span class="pre">find_package(raft)</span></code> and the <code class="docutils literal notranslate"><span class="pre">raft::raft</span></code> target.</p>
 </section>
 <section id="using-c-pre-compiled-shared-libraries">
 <h3>Using C++ pre-compiled shared libraries<a class="headerlink" href="#using-c-pre-compiled-shared-libraries" title="Permalink to this heading">#</a></h3>
 <p>Use <code class="docutils literal notranslate"><span class="pre">find_package(raft</span> <span class="pre">COMPONENTS</span> <span class="pre">compiled</span> <span class="pre">distributed)</span></code> to enable the shared library and transitively pass dependencies through separate targets for each component. In this example, the <code class="docutils literal notranslate"><span class="pre">raft::compiled</span></code> and <code class="docutils literal notranslate"><span class="pre">raft::distributed</span></code> targets will be available for configuring linking paths in addition to <code class="docutils literal notranslate"><span class="pre">raft::raft</span></code>. These targets will also pass through any transitive dependencies (such as NCCL for the <code class="docutils literal notranslate"><span class="pre">distributed</span></code> component).</p>
 <p>The pre-compiled libraries contain template specializations for commonly used types, such as single- and double-precision floating-point. In order to use the symbols in the pre-compiled libraries, the compiler needs to be told not to instantiate templates that are already contained in the shared libraries. By convention, these header files are named <code class="docutils literal notranslate"><span class="pre">specializations.cuh</span></code> and located in the base directory for the packages that contain specializations.</p>
-<p>The following example tells the compiler to ignore the pre-compiled templates for the <code class="docutils literal notranslate"><span class="pre">raft::distance</span></code> API so any symbols already compiled into the <code class="docutils literal notranslate"><span class="pre">libraft</span></code> shared library will be used instead:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;raft/distance/distance.cuh&gt;</span>
+<p>The following example tells the compiler to ignore the pre-compiled templates for the <code class="docutils literal notranslate"><span class="pre">raft::distance</span></code> API so any symbols already compiled into the <code class="docutils literal notranslate"><span class="pre">libraft</span></code> shared library will be used instead. RAFT&rsquo;s cmake creates a variable <code class="docutils literal notranslate"><span class="pre">RAFT_COMPILED</span></code> which can be used to ignore the pre-compiled template specializations only when the shared library has been enabled through cmake (such as by specifying the <code class="docutils literal notranslate"><span class="pre">compiled</span></code> component in <code class="docutils literal notranslate"><span class="pre">find_package</span></code>):</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifdef RAFT_COMPILED</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;raft/distance/distance.cuh&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;raft/distance/specializations.cuh&gt;</span>
+<span class="cp">#endif</span>
 </pre></div>
 </div>
 </section>
 <section id="building-raft-c-from-source-in-cmake">
 <h3>Building RAFT C++ from source in cmake<a class="headerlink" href="#building-raft-c-from-source-in-cmake" title="Permalink to this heading">#</a></h3>
 <p>RAFT uses the <a class="reference external" href="https://github.com/rapidsai/rapids-cmake">RAPIDS-CMake</a> library so it can be more easily included into downstream projects. RAPIDS cmake provides a convenience layer around the <a class="reference external" href="https://github.com/cpm-cmake/CPM.cmake">CMake Package Manager (CPM)</a>.</p>
-<p>The following example is similar to invoking <code class="docutils literal notranslate"><span class="pre">find_package(raft)</span></code> but uses <code class="docutils literal notranslate"><span class="pre">rapids_cpm_find</span></code>, which provides a richer and more flexible configuration landscape by using CPM to fetch any dependencies not already available to the build. The <code class="docutils literal notranslate"><span class="pre">raft::raft</span></code> link target will be made available and it&rsquo;s recommended that it be used as a <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code> link dependency in downstream projects. The <code class="docutils literal notranslate"><span class="pre">COMPILE_LIBRARIES</span></code> option enables the building the shared libraries.</p>
+<p>The following example is similar to invoking <code class="docutils literal notranslate"><span class="pre">find_package(raft)</span></code> but uses <code class="docutils literal notranslate"><span class="pre">rapids_cpm_find</span></code>, which provides a richer and more flexible configuration landscape by using CPM to fetch any dependencies not already available to the build. The <code class="docutils literal notranslate"><span class="pre">raft::raft</span></code> link target will be made available and it&rsquo;s recommended that it be used as a <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code> link dependency in downstream projects. The <code class="docutils literal notranslate"><span class="pre">COMPILE_LIBRARY</span></code> option enables the building the shared libraries.</p>
 <p>The following <code class="docutils literal notranslate"><span class="pre">cmake</span></code> snippet enables a flexible configuration of RAFT:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span>
-set(RAFT_VERSION "23.04")
-set(RAFT_FORK "rapidsai")
-set(RAFT_PINNED_TAG "branch-${RAFT_VERSION}")
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">RAFT_VERSION</span><span class="w"> </span><span class="s2">"23.04"</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">RAFT_FORK</span><span class="w"> </span><span class="s2">"rapidsai"</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">RAFT_PINNED_TAG</span><span class="w"> </span><span class="s2">"branch-${RAFT_VERSION}"</span><span class="p">)</span>
 
-function(find_and_configure_raft)
-  set(oneValueArgs VERSION FORK PINNED_TAG COMPILE_LIBRARY CLONE_ON_PIN)
-  cmake_parse_arguments(PKG "${options}" "${oneValueArgs}"
-                            "${multiValueArgs}" ${ARGN} )
+<span class="nb">function</span><span class="p">(</span><span class="s">find_and_configure_raft</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">set</span><span class="p">(</span><span class="s">oneValueArgs</span><span class="w"> </span><span class="s">VERSION</span><span class="w"> </span><span class="s">FORK</span><span class="w"> </span><span class="s">PINNED_TAG</span><span class="w"> </span><span class="s">COMPILE_LIBRARY</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">cmake_parse_arguments</span><span class="p">(</span><span class="s">PKG</span><span class="w"> </span><span class="s2">"${options}"</span><span class="w"> </span><span class="s2">"${oneValueArgs}"</span>
+<span class="w">                            </span><span class="s2">"${multiValueArgs}"</span><span class="w"> </span><span class="o">${</span><span class="nv">ARGN</span><span class="o">}</span><span class="w"> </span><span class="p">)</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="c">#-----------------------------------------------------</span>
+<span class="w">  </span><span class="c"># Invoke CPM find_package()</span>
+<span class="w">  </span><span class="c">#-----------------------------------------------------</span>
 
-  #-----------------------------------------------------
-  # Clone RAFT locally if PINNED_TAG has been changed
-  #-----------------------------------------------------
-  if(PKG_CLONE_ON_PIN AND NOT PKG_PINNED_TAG STREQUAL "branch-${RAFT_VERSION}")
-    message("Pinned tag found: ${PKG_PINNED_TAG}. Cloning raft locally.")
-    set(CPM_DOWNLOAD_raft ON)
-    set(CMAKE_IGNORE_PATH "${CMAKE_INSTALL_PREFIX}/include/raft;${CMAKE_IGNORE_PATH})
-  endif()
+<span class="w">  </span><span class="nb">rapids_cpm_find</span><span class="p">(</span><span class="s">raft</span><span class="w"> </span><span class="o">${</span><span class="nv">PKG_VERSION</span><span class="o">}</span>
+<span class="w">          </span><span class="s">GLOBAL_TARGETS</span><span class="w">      </span><span class="s">raft::raft</span>
+<span class="w">          </span><span class="s">BUILD_EXPORT_SET</span><span class="w">    </span><span class="s">projname-exports</span>
+<span class="w">          </span><span class="s">INSTALL_EXPORT_SET</span><span class="w">  </span><span class="s">projname-exports</span>
+<span class="w">          </span><span class="s">CPM_ARGS</span>
+<span class="w">          </span><span class="s">GIT_REPOSITORY</span><span class="w"> </span><span class="s">https://github.com/</span><span class="o">${</span><span class="nv">PKG_FORK</span><span class="o">}</span><span class="s">/raft.git</span>
+<span class="w">          </span><span class="s">GIT_TAG</span><span class="w">        </span><span class="o">${</span><span class="nv">PKG_PINNED_TAG</span><span class="o">}</span>
+<span class="w">          </span><span class="s">SOURCE_SUBDIR</span><span class="w">  </span><span class="s">cpp</span>
+<span class="w">          </span><span class="s">FIND_PACKAGE_ARGUMENTS</span><span class="w"> </span><span class="s2">"COMPONENTS compiled distributed"</span>
+<span class="w">          </span><span class="s">OPTIONS</span>
+<span class="w">          </span><span class="s2">"BUILD_TESTS OFF"</span>
+<span class="w">          </span><span class="s2">"BUILD_BENCH OFF"</span>
+<span class="w">          </span><span class="s2">"RAFT_COMPILE_LIBRARY ${PKG_COMPILE_LIBRARY}"</span>
+<span class="w">  </span><span class="p">)</span>
 
-  #-----------------------------------------------------
-  # Invoke CPM find_package()
-  #-----------------------------------------------------
+<span class="nb">endfunction</span><span class="p">()</span>
 
-  rapids_cpm_find(raft ${PKG_VERSION}
-          GLOBAL_TARGETS      raft::raft
-          BUILD_EXPORT_SET    projname-exports
-          INSTALL_EXPORT_SET  projname-exports
-          CPM_ARGS
-          GIT_REPOSITORY https://github.com/${PKG_FORK}/raft.git
-          GIT_TAG        ${PKG_PINNED_TAG}
-          SOURCE_SUBDIR  cpp
-          FIND_PACKAGE_ARGUMENTS "COMPONENTS compiled distributed"
-          OPTIONS
-          "BUILD_TESTS OFF"
-          "BUILD_BENCH OFF"
-          "RAFT_COMPILE_LIBRARY ${PKG_COMPILE_LIBRARY}"
-  )
-
-endfunction()
-
-# Change pinned tag here to test a commit in CI
-# To use a different RAFT locally, set the CMake variable
-# CPM_raft_SOURCE=/path/to/local/raft
-find_and_configure_raft(VERSION    ${RAFT_VERSION}.00
-        FORK             ${RAFT_FORK}
-        PINNED_TAG       ${RAFT_PINNED_TAG}
-
-        # When PINNED_TAG above doesn't match cuml,
-        # force local raft clone in build directory
-        # even if it's already installed.
-        CLONE_ON_PIN     ON
-        COMPILE_LIBRARY          NO
-)
+<span class="c"># Change pinned tag here to test a commit in CI</span>
+<span class="c"># To use a different RAFT locally, set the CMake variable</span>
+<span class="c"># CPM_raft_SOURCE=/path/to/local/raft</span>
+<span class="nb">find_and_configure_raft</span><span class="p">(</span><span class="s">VERSION</span><span class="w">    </span><span class="o">${</span><span class="nv">RAFT_VERSION</span><span class="o">}</span><span class="s">.00</span>
+<span class="w">        </span><span class="s">FORK</span><span class="w">             </span><span class="o">${</span><span class="nv">RAFT_FORK</span><span class="o">}</span>
+<span class="w">        </span><span class="s">PINNED_TAG</span><span class="w">       </span><span class="o">${</span><span class="nv">RAFT_PINNED_TAG</span><span class="o">}</span>
+<span class="w">        </span><span class="s">COMPILE_LIBRARY</span><span class="w">          </span><span class="s">NO</span>
+<span class="p">)</span>
 </pre></div>
 </div>
+<p>You can find a fully-functioning <a class="reference external" href="../../cpp/template/README">example template project</a> in the <code class="docutils literal notranslate"><span class="pre">cpp/template</span></code> directory, which provides everything you need to build a new application with RAFT or incorporate RAFT Into your existing libraries.</p>
 </section>
 </section>
 <section id="uninstall">
@@ -882,7 +862,7 @@ find_and_configure_raft(VERSION    ${RAFT_VERSION}.00
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#header-only-c">Header-only C++</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-shared-libraries-optional">C++ Shared Libraries (optional)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-shared-library-optional">C++ Shared Library (optional)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ccache-and-sccache">ccache and sccache</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tests">Tests</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmarks">Benchmarks</a></li>
@@ -892,7 +872,8 @@ find_and_configure_raft(VERSION    ${RAFT_VERSION}.00
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-raft-in-downstream-projects">Using RAFT in downstream projects</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-header-only-integration">C++ header-only integration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-header-only-integration-without-cmake">C++ header-only integration (without cmake)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-header-only-integration-with-cmake">C++ header-only integration (with cmake)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-c-pre-compiled-shared-libraries">Using C++ pre-compiled shared libraries</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building-raft-c-from-source-in-cmake">Building RAFT C++ from source in cmake</a></li>
 </ul>
