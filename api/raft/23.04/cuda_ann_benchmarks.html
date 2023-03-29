@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="Docutils 0.18.1: http://docutils.sourceforge.net/" name="generator">
+
+    <title>CUDA ANN Benchmarks &mdash; raft 23.04.00 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet">
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet">
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet">
+  <link as="font" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2">
+<link as="font" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2">
+<link as="font" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" rel="preload" type="font/woff2">
+
+    <link href="_static/pygments.css" rel="stylesheet" type="text/css">
+    <link href="_static/copybutton.css" rel="stylesheet" type="text/css">
+    <link href="_static/references.css" rel="stylesheet" type="text/css">
+    <link href="https://docs.rapids.ai/assets/css/custom.css" rel="stylesheet" type="text/css">
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" rel="preload">
+<link as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" rel="preload">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cuda_ann_benchmarks';</script>
+    <link href="genindex.html" rel="index" title="Index">
+    <link href="search.html" rel="search" title="Search">
+    <link href="raft_dask_api.html" rel="next" title="RAFT Dask API">
+    <link href="pylibraft_api/random.html" rel="prev" title="Random">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="en" name="docsearch:language">
+  <script id="rapids-selector-pixel-src" src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script><link href="/assets/css/custom.css" id="rapids-selector-css" rel="stylesheet"></head>
+  
+  
+  <body data-bs-root-margin="0px 0px -60%" data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-default-mode data-offset="180">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input class="sidebar-toggle" id="__primary" name="__primary" type="checkbox">
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input class="sidebar-toggle" id="__secondary" name="__secondary" type="checkbox">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form action="search.html" class="bd-search d-flex align-items-center" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input aria-label="Search the docs ..." autocapitalize="off" autocomplete="off" autocorrect="off" class="form-control" id="search-input" name="q" placeholder="Search the docs ..." spellcheck="false" type="search">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">raft 23.04.00 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="navbar-header-items">
+    
+    <div class="ms-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p aria-label="Site Navigation" aria-level="1" class="sidebar-header-items__title" role="heading">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="quick_start.html">
+                        Quick Start
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="build.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="developer_guide.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="cpp_api.html">
+                        C++ API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="pylibraft_api.html">
+                        Python API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button aria-expanded="false" aria-haspopup="true" class="btn dropdown-toggle nav-item" data-bs-toggle="dropdown" type="button">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        CUDA ANN Benchmarks
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="raft_dask_api.html">
+                        RAFT Dask API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="using_comms.html">
+                        Using RAFT Comms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="using_libraft.html">
+                        Using The Pre-Compiled Binary
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="contributing.html">
+                        Contributing
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul aria-label="Icon Links" class="navbar-icon-links navbar-nav">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" data-bs-placement="bottom" data-bs-toggle="tooltip" href="https://github.com/rapidsai/raft" rel="noopener" target="_blank" title="GitHub"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" data-bs-placement="bottom" data-bs-toggle="tooltip" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide"><div id="rapids-pydata-container"><div class="rapids-home-container"><a class="rapids-home-container__home-btn" href="/api">Home</a></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">raft</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item" href="/api/clx/stable/api.html">clx</a><a class="rapids-selector__menu-item" href="/api/cucim/stable/api.html">cucim</a><a class="rapids-selector__menu-item" href="/api/cudf/stable/index.html">cudf</a><a class="rapids-selector__menu-item" href="/api/cudf-java/stable">cudf-java</a><a class="rapids-selector__menu-item" href="/api/cugraph/stable">cugraph</a><a class="rapids-selector__menu-item" href="/api/cuml/stable/api.html">cuml</a><a class="rapids-selector__menu-item" href="/api/cusignal/stable/api.html">cusignal</a><a class="rapids-selector__menu-item" href="/api/cuspatial/stable">cuspatial</a><a class="rapids-selector__menu-item" href="/api/cuxfilter/stable">cuxfilter</a><a class="rapids-selector__menu-item" href="/api/dask-cuda/stable/api.html">dask-cuda</a><a class="rapids-selector__menu-item" href="/api/kvikio/stable/api.html">kvikio</a><a class="rapids-selector__menu-item" href="/api/libcudf/stable/namespacecudf.html">libcudf</a><a class="rapids-selector__menu-item" href="/api/libcugraph/stable">libcugraph</a><a class="rapids-selector__menu-item" href="/api/libcuml/stable">libcuml</a><a class="rapids-selector__menu-item" href="/api/libcuspatial/stable">libcuspatial</a><a class="rapids-selector__menu-item" href="/api/libkvikio/stable">libkvikio</a><a class="rapids-selector__menu-item" href="/api/librmm/stable/annotated.html">librmm</a><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/raft/stable">raft</a><a class="rapids-selector__menu-item" href="/api/rapids-cmake/stable/api.html">rapids-cmake</a><a class="rapids-selector__menu-item" href="/api/rmm/stable/api.html">rmm</a></div></div><div class="rapids-selector__container rapids-selector--hidden"><div class="rapids-selector__selected">nightly (23.04)</div><div class="rapids-selector__menu"><a class="rapids-selector__menu-item rapids-selector__menu-item--selected" href="/api/raft/nightly">nightly (23.04)</a><a class="rapids-selector__menu-item" href="/api/raft/stable">stable (23.02)</a><a class="rapids-selector__menu-item" href="/api/raft/legacy">legacy (22.12)</a></div></div></div>
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p aria-label="Site Navigation" aria-level="1" class="sidebar-header-items__title" role="heading">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="quick_start.html">
+                        Quick Start
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="build.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="developer_guide.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="cpp_api.html">
+                        C++ API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="pylibraft_api.html">
+                        Python API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button aria-expanded="false" aria-haspopup="true" class="btn dropdown-toggle nav-item" data-bs-toggle="dropdown" type="button">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        CUDA ANN Benchmarks
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="raft_dask_api.html">
+                        RAFT Dask API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="using_comms.html">
+                        Using RAFT Comms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="using_libraft.html">
+                        Using The Pre-Compiled Binary
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="contributing.html">
+                        Contributing
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul aria-label="Icon Links" class="navbar-icon-links navbar-nav">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" data-bs-placement="bottom" data-bs-toggle="tooltip" href="https://github.com/rapidsai/raft" rel="noopener" target="_blank" title="GitHub"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a class="nav-link" data-bs-placement="bottom" data-bs-toggle="tooltip" href="https://twitter.com/rapidsai" rel="noopener" target="_blank" title="Twitter"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main class="bd-main" id="main-content">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul aria-label="Breadcrumb" class="bd-breadcrumbs" role="navigation">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a aria-label="Home" class="nav-link" href="index.html">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li aria-current="page" class="breadcrumb-item active">CUDA ANN Benchmarks</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="cuda-ann-benchmarks">
+<h1>CUDA ANN Benchmarks<a class="headerlink" href="#cuda-ann-benchmarks" title="Permalink to this heading">#</a></h1>
+<p>This project provides a benchmark program for various ANN search implementations. It&rsquo;s especially suitable for comparing GPU implementations as well as comparing GPU against CPU.</p>
+<section id="benchmark">
+<h2>Benchmark<a class="headerlink" href="#benchmark" title="Permalink to this heading">#</a></h2>
+<section id="dependencies">
+<h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">#</a></h3>
+<p>CUDA 11 and a GPU with Pascal architecture or later are required to run the benchmarks.</p>
+<p>Please refer to the  <a class="reference external" href="https://docs.rapids.ai/api/raft/stable/build.html#cuda-gpu-requirements">installation docs</a> for the base requirements to build RAFT.</p>
+<p>In addition to the base requirements for building RAFT, additional dependencies needed to build the ANN benchmarks include:</p>
+<ol class="simple">
+<li><p>FAISS GPU &gt;= 1.7.1</p></li>
+<li><p>Google Logging (GLog)</p></li>
+<li><p>H5Py</p></li>
+<li><p>HNSWLib</p></li>
+<li><p>nlohmann_json</p></li>
+<li><p>GGNN</p></li>
+</ol>
+<p><a class="reference external" href="https://github.com/rapidsai/rapids-cmake">rapids-cmake</a> is used to build the ANN benchmarks so the code for dependencies not already supplied in the CUDA toolkit will be downloaded and built automatically.</p>
+<p>The easiest (and most reproducible) way to install the dependencies needed to build the ANN benchmarks is to use the conda environment file located in the <code class="docutils literal notranslate"><span class="pre">conda/environments</span></code> directory of the RAFT repository. The following command will use <code class="docutils literal notranslate"><span class="pre">mamba</span></code> (which is preferred over <code class="docutils literal notranslate"><span class="pre">conda</span></code>) to build and activate a new environment for compiling the benchmarks:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mamba<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>raft_ann_benchmarks<span class="w"> </span>-f<span class="w"> </span>conda/environments/bench_ann_cuda-118_arch-x86_64.yaml
+conda<span class="w"> </span>activate<span class="w"> </span>raft_ann_benchmarks
+</pre></div>
+</div>
+<p>The above conda environment will also reduce the compile times as dependencies like FAISS will already be installed and not need to be compiled with <code class="docutils literal notranslate"><span class="pre">rapids-cmake</span></code>.</p>
+</section>
+<section id="compiling-the-benchmarks">
+<h3>Compiling the Benchmarks<a class="headerlink" href="#compiling-the-benchmarks" title="Permalink to this heading">#</a></h3>
+<p>After the needed dependencies are satisfied, the easiest way to compile ANN benchmarks is through the <code class="docutils literal notranslate"><span class="pre">build.sh</span></code> script in the root of the RAFT source code repository. The following will build the executables for all the support algorithms:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build.sh<span class="w"> </span>bench-ann
+</pre></div>
+</div>
+<p>You can limit the algorithms that are built by providing a semicolon-delimited list of executable names (each algorithm is suffixed with <code class="docutils literal notranslate"><span class="pre">_ANN_BENCH</span></code>):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build.sh<span class="w"> </span>bench-ann<span class="w"> </span>--limit-bench-ann<span class="o">=</span>HNSWLIB_ANN_BENCH<span class="p">;</span>RAFT_IVF_PQ_ANN_BENCH
+</pre></div>
+</div>
+<p>Available targets to use with <code class="docutils literal notranslate"><span class="pre">--limit-bench-ann</span></code> are:</p>
+<ul class="simple">
+<li><p>FAISS_IVF_FLAT_ANN_BENCH</p></li>
+<li><p>FAISS_IVF_PQ_ANN_BENCH</p></li>
+<li><p>FAISS_BFKNN_ANN_BENCH</p></li>
+<li><p>GGNN_ANN_BENCH</p></li>
+<li><p>HNSWLIB_ANN_BENCH</p></li>
+<li><p>RAFT_IVF_PQ_ANN_BENCH</p></li>
+<li><p>RAFT_IVF_FLAT_ANN_BENCH</p></li>
+<li><p>RAFT_BFKNN_ANN_BENCH</p></li>
+</ul>
+<p>By default, the <code class="docutils literal notranslate"><span class="pre">*_ANN_BENCH</span></code> executables program infer the dataset&rsquo;s datatype from the filename&rsquo;s extension. For example, an extension of <code class="docutils literal notranslate"><span class="pre">fbin</span></code> uses a <code class="docutils literal notranslate"><span class="pre">float</span></code> datatype, <code class="docutils literal notranslate"><span class="pre">f16bin</span></code> uses a <code class="docutils literal notranslate"><span class="pre">float16</span></code> datatype, extension of <code class="docutils literal notranslate"><span class="pre">i8bin</span></code> uses <code class="docutils literal notranslate"><span class="pre">int8_t</span></code> datatype, and <code class="docutils literal notranslate"><span class="pre">u8bin</span></code> uses <code class="docutils literal notranslate"><span class="pre">uint8_t</span></code> type. Currently, only <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">float16</span></code>, int8_t<code class="docutils literal notranslate"><span class="pre">,</span> <span class="pre">and</span> </code>unit8_t` are supported.</p>
+</section>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h3>
+<p>There are 4 general steps to running the benchmarks:</p>
+<ol class="simple">
+<li><p>Prepare Dataset</p></li>
+<li><p>Build Index</p></li>
+<li><p>Search Using Built Index</p></li>
+<li><p>Evaluate Result</p></li>
+</ol>
+<section id="end-to-end-example">
+<h4>End-to-end Example<a class="headerlink" href="#end-to-end-example" title="Permalink to this heading">#</a></h4>
+<p>An end-to-end example (run from the RAFT source code root directory):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># (1) prepare a dataset</span>
+<span class="nb">pushd</span>
+
+<span class="nb">cd</span><span class="w"> </span>cpp/bench/ann
+mkdir<span class="w"> </span>data<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>data
+wget<span class="w"> </span>http://ann-benchmarks.com/glove-100-angular.hdf5
+
+<span class="c1"># option -n is used here to normalize vectors so cosine distance is converted</span>
+<span class="c1"># to inner product; don't use -n for l2 distance</span>
+python<span class="w"> </span>scripts/hdf5_to_fbin.py<span class="w"> </span>-n<span class="w"> </span>glove-100-angular.hdf5
+
+mkdir<span class="w"> </span>glove-100-inner
+mv<span class="w"> </span>glove-100-angular.base.fbin<span class="w"> </span>glove-100-inner/base.fbin
+mv<span class="w"> </span>glove-100-angular.query.fbin<span class="w"> </span>glove-100-inner/query.fbin
+mv<span class="w"> </span>glove-100-angular.groundtruth.neighbors.ibin<span class="w"> </span>glove-100-inner/groundtruth.neighbors.ibin
+mv<span class="w"> </span>glove-100-angular.groundtruth.distances.fbin<span class="w"> </span>glove-100-inner/groundtruth.distances.fbin
+<span class="nb">popd</span>
+
+<span class="c1"># (2) build index</span>
+./cpp/build/RAFT_IVF_FLAT_ANN_BENCH<span class="w"> </span>-b<span class="w"> </span>-i<span class="w"> </span>raft_ivf_flat.nlist1024<span class="w"> </span>conf/glove-100-inner.json
+
+<span class="c1"># (3) search</span>
+./cpp/build/RAFT_IVF_FLAT_ANN_BENCH<span class="w"> </span>-s<span class="w"> </span>-i<span class="w"> </span>raft_ivf_flat.nlist1024<span class="w"> </span>conf/glove-100-inner.json
+
+<span class="c1"># (4) evaluate result</span>
+<span class="nb">pushd</span>
+<span class="nb">cd</span><span class="w"> </span>cpp/bench/ann
+./scripts/eval.pl<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span>result.csv<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>data/glove-100-inner/groundtruth.neighbors.ibin<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>result/glove-100-inner/faiss_ivf_flat
+<span class="nb">popd</span><span class="w"> </span>
+
+<span class="c1"># optional step: plot QPS-Recall figure using data in result.csv with your favorite tool</span>
+</pre></div>
+</div>
+<section id="step-1-prepare-dataset">
+<h5>Step 1: Prepare Dataset<a class="headerlink" href="#step-1-prepare-dataset" title="Permalink to this heading">#</a></h5>
+<p>A dataset usually has 4 binary files containing database vectors, query vectors, ground truth neighbors and their corresponding distances. For example, Glove-100 dataset has files <code class="docutils literal notranslate"><span class="pre">base.fbin</span></code> (database vectors), <code class="docutils literal notranslate"><span class="pre">query.fbin</span></code> (query vectors), <code class="docutils literal notranslate"><span class="pre">groundtruth.neighbors.ibin</span></code> (ground truth neighbors), and <code class="docutils literal notranslate"><span class="pre">groundtruth.distances.fbin</span></code> (ground truth distances). The first two files are for index building and searching, while the other two are associated with a particular distance and are used for evaluation.</p>
+<p>The file suffixes <code class="docutils literal notranslate"><span class="pre">.fbin</span></code>, <code class="docutils literal notranslate"><span class="pre">.f16bin</span></code>, <code class="docutils literal notranslate"><span class="pre">.ibin</span></code>, <code class="docutils literal notranslate"><span class="pre">.u8bin</span></code>, and <code class="docutils literal notranslate"><span class="pre">.i8bin</span></code> denote that the data type of vectors stored in the file are <code class="docutils literal notranslate"><span class="pre">float32</span></code>, <code class="docutils literal notranslate"><span class="pre">float16</span></code>(a.k.a <code class="docutils literal notranslate"><span class="pre">half</span></code>), <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">uint8</span></code>, and <code class="docutils literal notranslate"><span class="pre">int8</span></code>, respectively.
+These binary files are little-endian and the format is: the first 8 bytes are <code class="docutils literal notranslate"><span class="pre">num_vectors</span></code> (<code class="docutils literal notranslate"><span class="pre">uint32_t</span></code>) and <code class="docutils literal notranslate"><span class="pre">num_dimensions</span></code> (<code class="docutils literal notranslate"><span class="pre">uint32_t</span></code>), and the following <code class="docutils literal notranslate"><span class="pre">num_vectors</span> <span class="pre">*</span> <span class="pre">num_dimensions</span> <span class="pre">*</span> <span class="pre">sizeof(type)</span></code> bytes are vectors stored in row-major order.</p>
+<p>Some implementation can take <code class="docutils literal notranslate"><span class="pre">float16</span></code> database and query vectors as inputs and will have better performance. Use <code class="docutils literal notranslate"><span class="pre">script/fbin_to_f16bin.py</span></code> to transform dataset from <code class="docutils literal notranslate"><span class="pre">float32</span></code> to <code class="docutils literal notranslate"><span class="pre">float16</span></code> type.</p>
+<p>Commonly used datasets can be downloaded from two websites:</p>
+<ol>
+<li><p>Million-scale datasets can be found at the <a class="reference external" href="https://github.com/erikbern/ann-benchmarks#data-sets">Data sets</a> section of <a class="reference external" href="https://github.com/erikbern/ann-benchmarks"><code class="docutils literal notranslate"><span class="pre">ann-benchmarks</span></code></a>.</p>
+<p>However, these datasets are in HDF5 format. Use <code class="docutils literal notranslate"><span class="pre">cpp/bench/ann/scripts/hdf5_to_fbin.py</span></code> to transform the format. A few Python packages are required to run it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>h5py
+</pre></div>
+</div>
+<p>The usage of this script is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cpp/bench/ann/scripts/hdf5_to_fbin.py
+usage:<span class="w"> </span>scripts/hdf5_to_fbin.py<span class="w"> </span><span class="o">[</span>-n<span class="o">]</span><span class="w"> </span>&lt;input&gt;.hdf5
+<span class="w">   </span>-n:<span class="w"> </span>normalize<span class="w"> </span>base/query<span class="w"> </span><span class="nb">set</span>
+<span class="w"> </span>outputs:<span class="w"> </span>&lt;input&gt;.base.fbin
+<span class="w">          </span>&lt;input&gt;.query.fbin
+<span class="w">          </span>&lt;input&gt;.groundtruth.neighbors.ibin
+<span class="w">          </span>&lt;input&gt;.groundtruth.distances.fbin
+</pre></div>
+</div>
+<p>So for an input <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> file, four output binary files will be produced. See previous section for an example of prepossessing GloVe dataset.</p>
+<p>Most datasets provided by <code class="docutils literal notranslate"><span class="pre">ann-benchmarks</span></code> use <code class="docutils literal notranslate"><span class="pre">Angular</span></code> or <code class="docutils literal notranslate"><span class="pre">Euclidean</span></code> distance. <code class="docutils literal notranslate"><span class="pre">Angular</span></code> denotes cosine distance. However, computing cosine distance reduces to computing inner product by normalizing vectors beforehand. In practice, we can always do the normalization to decrease computation cost, so it&rsquo;s better to measure the performance of inner product rather than cosine distance. The <code class="docutils literal notranslate"><span class="pre">-n</span></code> option of <code class="docutils literal notranslate"><span class="pre">hdf5_to_fbin.py</span></code> can be used to normalize the dataset.</p>
+</li>
+<li><p>Billion-scale datasets can be found at <a class="reference external" href="http://big-ann-benchmarks.com"><code class="docutils literal notranslate"><span class="pre">big-ann-benchmarks</span></code></a>. The ground truth file contains both neighbors and distances, thus should be split. A script is provided for this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cpp/bench/ann/scripts/split_groundtruth.pl
+usage:<span class="w"> </span>script/split_groundtruth.pl<span class="w"> </span>input<span class="w"> </span>output_prefix
+</pre></div>
+</div>
+<p>Take Deep-1B dataset as an example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">pushd</span>
+<span class="nb">cd</span><span class="w"> </span>cpp/bench/ann
+mkdir<span class="w"> </span>-p<span class="w"> </span>data/deep-1B<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>data/deep-1B
+<span class="c1"># download manually "Ground Truth" file of "Yandex DEEP"</span>
+<span class="c1"># suppose the file name is deep_new_groundtruth.public.10K.bin</span>
+../../scripts/split_groundtruth.pl<span class="w"> </span>deep_new_groundtruth.public.10K.bin<span class="w"> </span>groundtruth
+<span class="c1"># two files 'groundtruth.neighbors.ibin' and 'groundtruth.distances.fbin' should be produced</span>
+<span class="nb">popd</span>
+</pre></div>
+</div>
+<p>Besides ground truth files for the whole billion-scale datasets, this site also provides ground truth files for the first 10M or 100M vectors of the base sets. This mean we can use these billion-scale datasets as million-scale datasets. To facilitate this, an optional parameter <code class="docutils literal notranslate"><span class="pre">subset_size</span></code> for dataset can be used. See the next step for further explanation.</p>
+</li>
+</ol>
+</section>
+<section id="step-2-build-index">
+<h5>Step 2: Build Index<a class="headerlink" href="#step-2-build-index" title="Permalink to this heading">#</a></h5>
+<p>An index is a data structure to facilitate searching. Different algorithms may use different data structures for their index. We can use <code class="docutils literal notranslate"><span class="pre">RAFT_IVF_FLAT_ANN_BENCH</span> <span class="pre">-b</span></code> to build an index and save it to disk.</p>
+<p>To run a benchmark executable, like <code class="docutils literal notranslate"><span class="pre">RAFT_IVF_FLAT_ANN_BENCH</span></code>, a JSON configuration file is required. Refer to <a class="reference external" href="../../cpp/cpp/bench/ann/conf/glove-100-inner.json"><code class="docutils literal notranslate"><span class="pre">cpp/bench/ann/conf/glove-100-inner.json</span></code></a> as an example. Configuration file has 3 sections:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dataset</span></code> section specifies the name and files of a dataset, and also the distance in use. Since the <code class="docutils literal notranslate"><span class="pre">*_ANN_BENCH</span></code> programs are for index building and searching, only <code class="docutils literal notranslate"><span class="pre">base_file</span></code> for database vectors and <code class="docutils literal notranslate"><span class="pre">query_file</span></code> for query vectors are needed. Ground truth files are for evaluation thus not needed.</p>
+<ul>
+<li><p>To use only a subset of the base dataset, an optional parameter <code class="docutils literal notranslate"><span class="pre">subset_size</span></code> can be specified. It means using only the first <code class="docutils literal notranslate"><span class="pre">subset_size</span></code> vectors of <code class="docutils literal notranslate"><span class="pre">base_file</span></code> as the base dataset.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">search_basic_param</span></code> section specifies basic parameters for searching:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">k</span></code> is the &ldquo;k&rdquo; in &ldquo;k-nn&rdquo;, that is, the number of neighbors (or results) we want from the searching.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run_count</span></code> means how many times we run the searching. A single run of searching will search neighbors for all vectors in <code class="docutils literal notranslate"><span class="pre">test</span></code> set. The total time used for a run is recorded, and the final searching time is the smallest one among these runs.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code> section specifies an array of configurations for index building and searching:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">build_param</span></code> and <code class="docutils literal notranslate"><span class="pre">search_params</span></code> are parameters for building and searching, respectively. <code class="docutils literal notranslate"><span class="pre">search_params</span></code> is an array since we will search with different parameters to get different recall values.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">file</span></code> is the file name of index. Building will save built index to this file, while searching will load this file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">search_result_file</span></code> is the file name prefix of searching results. Searching will save results to these files, and plotting script will read these files to plot results. Note this is a prefix rather than a whole file name. Suppose its value is <code class="docutils literal notranslate"><span class="pre">${prefix}</span></code>, then the real file names are like <code class="docutils literal notranslate"><span class="pre">${prefix}.0.{ibin|txt}</span></code>, <code class="docutils literal notranslate"><span class="pre">${prefix}.1.{ibin|txt}</span></code>, etc. Each of them corresponds to an item in <code class="docutils literal notranslate"><span class="pre">search_params</span></code> array. That is, for one searching parameter, there will be some corresponding search result files.</p></li>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">multigpu</span></code> is specified, multiple GPUs will be used for index build and search.</p></li>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">refine_ratio</span></code> is specified, refinement, as a post-processing step of search, will be done. It&rsquo;s for algorithms that compress vectors. For example, if <code class="docutils literal notranslate"><span class="pre">"refine_ratio"</span> <span class="pre">:</span> <span class="pre">2</span></code> is set, 2<code class="docutils literal notranslate"><span class="pre">k</span></code> results are first computed, then exact distances of them are computed using original uncompressed vectors, and finally top <code class="docutils literal notranslate"><span class="pre">k</span></code> results among them are kept.</p></li>
+</ul>
+</li>
+</ul>
+<p>The usage of <code class="docutils literal notranslate"><span class="pre">*_ANN_BENCH</span></code> can be found by running <code class="docutils literal notranslate"><span class="pre">*_ANN_BENCH</span> <span class="pre">-h</span></code> on one of the executables:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./cpp/build/*_ANN_BENCH<span class="w"> </span>-h
+usage:<span class="w"> </span>./cpp/build/*_ANN_BENCH<span class="w"> </span>-b<span class="p">|</span>s<span class="w"> </span><span class="o">[</span>-f<span class="o">]</span><span class="w"> </span><span class="o">[</span>-i<span class="w"> </span>index_names<span class="o">]</span><span class="w"> </span>conf.json
+<span class="w">   </span>-b:<span class="w"> </span>build<span class="w"> </span>mode,<span class="w"> </span>will<span class="w"> </span>build<span class="w"> </span>index
+<span class="w">   </span>-s:<span class="w"> </span>search<span class="w"> </span>mode,<span class="w"> </span>will<span class="w"> </span>search<span class="w"> </span>using<span class="w"> </span>built<span class="w"> </span>index
+<span class="w">       </span>one<span class="w"> </span>and<span class="w"> </span>only<span class="w"> </span>one<span class="w"> </span>of<span class="w"> </span>-b<span class="w"> </span>and<span class="w"> </span>-s<span class="w"> </span>should<span class="w"> </span>be<span class="w"> </span>specified
+<span class="w">   </span>-f:<span class="w"> </span>force<span class="w"> </span>overwriting<span class="w"> </span>existing<span class="w"> </span>output<span class="w"> </span>files
+<span class="w">   </span>-i:<span class="w"> </span>by<span class="w"> </span>default<span class="w"> </span>will<span class="w"> </span>build/search<span class="w"> </span>all<span class="w"> </span>the<span class="w"> </span>indices<span class="w"> </span>found<span class="w"> </span><span class="k">in</span><span class="w"> </span>conf.json
+<span class="w">       </span><span class="s1">'-i'</span><span class="w"> </span>can<span class="w"> </span>be<span class="w"> </span>used<span class="w"> </span>to<span class="w"> </span><span class="k">select</span><span class="w"> </span>a<span class="w"> </span>subset<span class="w"> </span>of<span class="w"> </span>indices
+<span class="w">       </span><span class="s1">'index_names'</span><span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>list<span class="w"> </span>of<span class="w"> </span>comma-separated<span class="w"> </span>index<span class="w"> </span>names
+<span class="w">       </span><span class="s1">'*'</span><span class="w"> </span>is<span class="w"> </span>allowed<span class="w"> </span>as<span class="w"> </span>the<span class="w"> </span>last<span class="w"> </span>character<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>name<span class="w"> </span>to<span class="w"> </span><span class="k">select</span><span class="w"> </span>all<span class="w"> </span>matched<span class="w"> </span>indices
+<span class="w">       </span><span class="k">for</span><span class="w"> </span>example,<span class="w"> </span>-i<span class="w"> </span><span class="s2">"hnsw1,hnsw2,faiss"</span><span class="w"> </span>or<span class="w"> </span>-i<span class="w"> </span><span class="s2">"hnsw*,faiss"</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-b</span></code>: build index.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-s</span></code>: do the searching with built index.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-f</span></code>: before doing the real task, the program checks that needed input files exist and output files don&rsquo;t exist. If these conditions are not met, it quits so no file would be overwritten accidentally. To ignore existing output files and force overwrite them, use the <code class="docutils literal notranslate"><span class="pre">-f</span></code> option.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-i</span></code>: by default, the <code class="docutils literal notranslate"><span class="pre">-b</span></code> flag will build all indices found in the configuration file, and <code class="docutils literal notranslate"><span class="pre">-s</span></code> will search using all the indices. To select a subset of indices to build or search, we can use the <code class="docutils literal notranslate"><span class="pre">-i</span></code> option.</p></li>
+</ul>
+<p>It&rsquo;s easier to describe the usage of <code class="docutils literal notranslate"><span class="pre">-i</span></code> option with an example. Suppose we have a configuration file <code class="docutils literal notranslate"><span class="pre">a.json</span></code>, and it contains:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>  "index" : [
+    {
+      "name" : "hnsw1",
+      ...
+    },
+    {
+      "name" : "hnsw1",
+      ...
+    },
+    {
+      "name" : "faiss",
+      ...
+    }
+  ]
+</pre></div>
+</div>
+<p>Then,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># build all indices: hnsw1, hnsw2 and faiss</span>
+./cpp/build/HNSWLIB_ANN_BENCH<span class="w"> </span>-b<span class="w"> </span>a.json
+
+<span class="c1"># build only hnsw1</span>
+./cpp/build/HNSWLIB_ANN_BENCH<span class="w"> </span>-b<span class="w"> </span>-i<span class="w"> </span>hnsw1<span class="w"> </span>a.json
+
+<span class="c1"># build hnsw1 and hnsw2</span>
+./cpp/build/HNSWLIB_ANN_BENCH<span class="w"> </span>-b<span class="w"> </span>-i<span class="w"> </span>hnsw1,hnsw2<span class="w"> </span>a.json
+
+<span class="c1"># build hnsw1 and hnsw2</span>
+./cpp/build/HNSWLIB_ANN_BENCH<span class="w"> </span>-b<span class="w"> </span>-i<span class="w"> </span><span class="s1">'hnsw*'</span><span class="w"> </span>a.json
+
+<span class="c1"># build faiss</span>
+./cpp/build/FAISS_IVF_FLAT_ANN_BENCH<span class="w"> </span>-b<span class="w"> </span>-i<span class="w"> </span><span class="s1">'faiss'</span><span class="w"> </span>a.json
+</pre></div>
+</div>
+<p>In the last two commands, we use wildcard &ldquo;<code class="docutils literal notranslate"><span class="pre">*</span></code>&rdquo; to match both <code class="docutils literal notranslate"><span class="pre">hnsw1</span></code> and <code class="docutils literal notranslate"><span class="pre">hnsw2</span></code>. Note the use of &ldquo;<code class="docutils literal notranslate"><span class="pre">*</span></code>&rdquo; is quite limited. It can occur only at the end of a pattern, so both &ldquo;<code class="docutils literal notranslate"><span class="pre">*nsw1</span></code>&rdquo; and &ldquo;<code class="docutils literal notranslate"><span class="pre">h*sw1</span></code>&rdquo; are interpreted literally and will not match anything. Also note that quotation marks must be used to prevent &ldquo;<code class="docutils literal notranslate"><span class="pre">*</span></code>&rdquo; from being interpreted by the shell.</p>
+</section>
+<section id="step-3-searching">
+<h5>Step 3: Searching<a class="headerlink" href="#step-3-searching" title="Permalink to this heading">#</a></h5>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">-s</span></code> flag on any of the <code class="docutils literal notranslate"><span class="pre">*_ANN_BENCH</span></code> executables. Other options are the same as in step 2.</p>
+</section>
+<section id="step-4-evaluating-results">
+<h5>Step 4: Evaluating Results<a class="headerlink" href="#step-4-evaluating-results" title="Permalink to this heading">#</a></h5>
+<p>Use <code class="docutils literal notranslate"><span class="pre">cpp/bench/ann/scripts/eval.pl</span></code> to evaluate benchmark results. The usage is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cpp/bench/ann/scripts/eval.pl
+usage: [-f] [-o output.csv] groundtruth.neighbors.ibin result_paths...
+  result_paths... are paths to the search result files.
+    Can specify multiple paths.
+    For each of them, if it's a directory, all the .txt files found under
+    it recursively will be regarded as inputs.
+
+  -f: force to recompute recall and update it in result file if needed
+  -o: also write result to a csv file
+</pre></div>
+</div>
+<p>Note that there can be multiple arguments for paths of result files. Each argument can be either a file name or a path. If it&rsquo;s a directory, all files found under it recursively will be used as input files.
+An example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cpp/bench/ann/scripts/eval.pl<span class="w"> </span>groundtruth.neighbors.ibin<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>result/glove-100-angular/10/hnsw/angular_M_24_*.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>result/glove-100-angular/10/faiss/
+</pre></div>
+</div>
+<p>The search result files used by this command are files matching <code class="docutils literal notranslate"><span class="pre">result/glove-100-angular/10/hnsw/angular_M_24_*.txt</span></code>, and all <code class="docutils literal notranslate"><span class="pre">.txt</span></code> files under directory <code class="docutils literal notranslate"><span class="pre">result/glove-100-angular/10/faiss/</span></code> recursively.</p>
+<p>This script prints recall and QPS for every result file. Also, it outputs estimated &ldquo;recall at QPS=2000&rdquo; and &ldquo;QPS at recall=0.9&rdquo;, which can be used to compare performance quantitatively.</p>
+<p>It saves recall value in result txt file, so avoids to recompute recall if the same command is run again. To force to recompute recall, option <code class="docutils literal notranslate"><span class="pre">-f</span></code> can be used. If option <code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">&lt;output.csv&gt;</span></code> is specified, a csv output file will be produced. This file can be used to plot Throughput-Recall curves.</p>
+</section>
+</section>
+</section>
+</section>
+<section id="adding-a-new-ann-algorithm">
+<h2>Adding a new ANN algorithm<a class="headerlink" href="#adding-a-new-ann-algorithm" title="Permalink to this heading">#</a></h2>
+<p>Implementation of a new algorithm should be a class that inherits <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">ANN</span></code> (defined in <code class="docutils literal notranslate"><span class="pre">cpp/bench/ann/src/ann.h</span></code>) and implements all the pure virtual functions.</p>
+<p>In addition, it should define two <code class="docutils literal notranslate"><span class="pre">struct</span></code>s for building and searching parameters. The searching parameter class should inherit <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">ANN&lt;T&gt;::AnnSearchParam</span></code>. Take <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">HnswLib</span></code> as an example, its definition is:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">HnswLib</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ANN</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">BuildParam</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">M</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ef_construction</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">num_threads</span><span class="p">;</span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">ANN</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">AnnSearchParam</span><span class="p">;</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">SearchParam</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">AnnSearchParam</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ef</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">num_threads</span><span class="p">;</span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>The benchmark program uses JSON configuration file. To add the new algorithm to the benchmark, need be able to specify <code class="docutils literal notranslate"><span class="pre">build_param</span></code>, whose value is a JSON object, and <code class="docutils literal notranslate"><span class="pre">search_params</span></code>, whose value is an array of JSON objects, for this algorithm in configuration file. Still take the configuration for <code class="docutils literal notranslate"><span class="pre">HnswLib</span></code> as an example:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"algo"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"hnswlib"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"build_param"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"M"</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="nt">"efConstruction"</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span><span class="w"> </span><span class="nt">"numThreads"</span><span class="p">:</span><span class="mi">32</span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"file"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"/path/to/file"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"search_params"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">"ef"</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">"numThreads"</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">"ef"</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="nt">"numThreads"</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">"ef"</span><span class="p">:</span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="nt">"numThreads"</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"search_result_file"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"/path/to/file"</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>How to interpret these JSON objects is totally left to the implementation and should be specified in <code class="docutils literal notranslate"><span class="pre">cpp/bench/ann/src/factory.cuh</span></code>:</p>
+<ol>
+<li><p>First, add two functions for parsing JSON object to <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">BuildParam</span></code> and <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">SearchParam</span></code>, respectively:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">parse_build_param</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">nlohmann</span><span class="o">::</span><span class="n">json</span><span class="o">&amp;</span><span class="w"> </span><span class="n">conf</span><span class="p">,</span>
+<span class="w">                       </span><span class="k">typename</span><span class="w"> </span><span class="nc">cuann</span><span class="o">::</span><span class="n">HnswLib</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">BuildParam</span><span class="o">&amp;</span><span class="w"> </span><span class="n">param</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">param</span><span class="p">.</span><span class="n">ef_construction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conf</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="s">"efConstruction"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">param</span><span class="p">.</span><span class="n">M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conf</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="s">"M"</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">conf</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"numThreads"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">param</span><span class="p">.</span><span class="n">num_threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conf</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="s">"numThreads"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">parse_search_param</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">nlohmann</span><span class="o">::</span><span class="n">json</span><span class="o">&amp;</span><span class="w"> </span><span class="n">conf</span><span class="p">,</span>
+<span class="w">                        </span><span class="k">typename</span><span class="w"> </span><span class="nc">cuann</span><span class="o">::</span><span class="n">HnswLib</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">SearchParam</span><span class="o">&amp;</span><span class="w"> </span><span class="n">param</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">param</span><span class="p">.</span><span class="n">ef</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conf</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="s">"ef"</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">conf</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="s">"numThreads"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">param</span><span class="p">.</span><span class="n">num_threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conf</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="s">"numThreads"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>Next, add corresponding <code class="docutils literal notranslate"><span class="pre">if</span></code> case to functions <code class="docutils literal notranslate"><span class="pre">create_algo()</span></code> and <code class="docutils literal notranslate"><span class="pre">create_search_param()</span></code> by calling parsing functions. The string literal in <code class="docutils literal notranslate"><span class="pre">if</span></code> condition statement must be the same as the value of <code class="docutils literal notranslate"><span class="pre">algo</span></code> in configuration file. For example,</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="c1">// JSON configuration file contains a line like:  "algo" : "hnswlib"</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">algo</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"hnswlib"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="c1">// ...</span>
+<span class="w">  </span><span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev" href="pylibraft_api/random.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Random</p>
+      </div>
+    </a>
+    <a class="right-next" href="raft_dask_api.html" title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">RAFT Dask API</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark">Benchmark</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compiling-the-benchmarks">Compiling the Benchmarks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#end-to-end-example">End-to-end Example</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-prepare-dataset">Step 1: Prepare Dataset</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-build-index">Step 2: Build Index</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-searching">Step 3: Searching</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-evaluating-results">Step 4: Evaluating Results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-new-ann-algorithm">Adding a new ANN algorithm</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="_sources/cuda_ann_benchmarks.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner"></div>
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      &copy; Copyright 2023, NVIDIA Corporation.
+      <br>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  
+<script defer id="rapids-selector-js" src="/assets/js/custom.js"></script><script id="rapids-selector-pixel-invocation" type="text/javascript">_satellite.pageBottom();</script></body></html>
