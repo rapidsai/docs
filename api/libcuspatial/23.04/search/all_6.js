@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['geometric_5fdistribution_34',['geometric_distribution',['../classgeometric__distribution.html',1,'']]],
+  ['geometric_5fdistribution_34',['geometric_distribution',['../classcuspatial_1_1test_1_1geometric__distribution.html',1,'cuspatial::test']]],
   ['geometry_5fcollection_5foffset_35',['geometry_collection_offset',['../structcuspatial_1_1linestring__intersection__result.html#a4cab0c37d8c996703e5667baf9a255b1',1,'cuspatial::linestring_intersection_result::geometry_collection_offset()'],['../structcuspatial_1_1linestring__intersection__column__result.html#a121165d157cf645ca20db3761d147772',1,'cuspatial::linestring_intersection_column_result::geometry_collection_offset()']]],
   ['geometry_5fcolumn_5fview_36',['geometry_column_view',['../classcuspatial_1_1geometry__column__view.html',1,'cuspatial']]],
   ['geometry_5fcolumn_5fview_2ehpp_37',['geometry_column_view.hpp',['../geometry__column__view_8hpp.html',1,'']]],
