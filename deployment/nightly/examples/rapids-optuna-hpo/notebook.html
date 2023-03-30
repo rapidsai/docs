@@ -1,0 +1,1409 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Getting Started with Optuna and RAPIDS for HPO &#8212; RAPIDS Deployment Documentation  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="https://docs.rapids.ai/assets/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script defer="defer" src="../../_static/js/nav.js"></script>
+    <script defer="defer" src="../../_static/js/notebook-gallery.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/rapids-optuna-hpo/notebook';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Running RAPIDS hyperparameter experiments at scale on Amazon SageMaker" href="../rapids-sagemaker-higgs/notebook.html" />
+    <link rel="prev" title="Scaling up hyperparameter optimization with Kubernetes and XGBoost GPU algorithm" href="../xgboost-gpu-hpo-job-parallel-k8s/notebook.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+   
+
+<a class="navbar-brand logo" href="https://docs.rapids.ai/">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/RAPIDS-logo-purple.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/RAPIDS-logo-purple.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class=" navbar-header-items">
+    
+    <div class="ms-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../cloud/index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Workflow Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../guides/index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../cloud/index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Workflow Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../guides/index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../xgboost-gpu-hpo-job-parallel-k8s/notebook.html">Scaling up hyperparameter optimization with Kubernetes and XGBoost GPU algorithm</a></li>
+
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Getting Started with Optuna and RAPIDS for HPO</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../rapids-sagemaker-higgs/notebook.html">Running RAPIDS hyperparameter experiments at scale on Amazon SageMaker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rapids-sagemaker-hpo/notebook.html">Deep Dive into running Hyper Parameter Optimization on AWS SageMaker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rapids-ec2-mnmg/notebook.html">Multi-node multi-GPU example on AWS using dask-cloudprovider</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rapids-autoscaling-multi-tenant-kubernetes/notebook.html">Autoscaling multi-tenant Kubernetes Deep-Dive</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Workflow Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Getting Started with Optuna and RAPIDS for HPO</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="getting-started-with-optuna-and-rapids-for-hpo">
+<h1>Getting Started with Optuna and RAPIDS for HPO<a class="headerlink" href="#getting-started-with-optuna-and-rapids-for-hpo" title="Permalink to this heading">#</a></h1>
+<p>Hyperparameter optimization (HPO) automates the process of picking values for the hyperparameters of a machine learning algorithm to improve model performance. This can help boost the model accuracy, but can be resource-intensive, as it may require training the model for hundreds of hyperparameter combinations. Let’s take a look at how we can use Optuna and RAPIDS to make HPO less time-consuming.</p>
+<section id="rapids">
+<h2>RAPIDS<a class="headerlink" href="#rapids" title="Permalink to this heading">#</a></h2>
+<p>The RAPIDS framework provides a suite of libraries to execute end-to-end data science pipelines entirely on GPUs. One of the libraries in this framework is cuML, which implements common machine learning models with a scikit-learn-compatible API and a GPU-accelerated backend. You can learn more about RAPIDS <a class="reference external" href="https://rapids.ai/about.html">here</a>.</p>
+</section>
+<section id="optuna">
+<h2>Optuna<a class="headerlink" href="#optuna" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://optuna.readthedocs.io/en/stable/">Optuna</a> is a lightweight framework for automatic hyperparameter optimization. It provides a define-by-run API, which makes it easy to adapt to any already existing code that we have and enables high modularity along with the flexibility to construct hyperparameter spaces dynamically. By simply wrapping the objective function with Optuna, we can perform a parallel-distributed HPO search over a search space as we’ll see in this notebook.</p>
+<p>In this notebook, we’ll use BNP Paribas Cardif Claims Management dataset from Kaggle to predict if a claim will receive accelerated approval or not. We’ll explore how to use Optuna with RAPIDS in combination with Dask to run multi-GPU HPO experiments that can yield results faster than CPU.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Run this cell to install optuna</span>
+<span class="c1"># !pip install optuna</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cudf</span>
+<span class="kn">import</span> <span class="nn">cuml</span>
+<span class="kn">import</span> <span class="nn">dask_cudf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">optuna</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">dask</span>
+
+<span class="kn">from</span> <span class="nn">cuml</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span> <span class="nn">cuml.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">cuml.metrics</span> <span class="kn">import</span> <span class="n">log_loss</span>
+
+<span class="kn">from</span> <span class="nn">dask_cuda</span> <span class="kn">import</span> <span class="n">LocalCUDACluster</span>
+<span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">wait</span><span class="p">,</span> <span class="n">performance_report</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="set-up-cuda-cluster">
+<h2>Set up CUDA Cluster<a class="headerlink" href="#set-up-cuda-cluster" title="Permalink to this heading">#</a></h2>
+<p>We start a local cluster and keep it ready for running distributed tasks with dask. The dask scheduler can help leverage multiple nodes available on the cluster.</p>
+<p><a class="reference external" href="https://github.com/rapidsai/dask-cuda">LocalCUDACluster</a> launches one Dask worker for each GPU in the current systems. It’s developed as a part of the RAPIDS project. Learn More:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.dask.org/en/latest/setup.html">Setting up Dask</a></p></li>
+<li><p><a class="reference external" href="https://distributed.dask.org/en/latest/client.html">Dask Client</a></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This will use all GPUs on the local host by default</span>
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCUDACluster</span><span class="p">(</span><span class="n">threads_per_worker</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ip</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">dashboard_address</span><span class="o">=</span><span class="s2">&quot;8081&quot;</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+
+<span class="c1"># Query the client for all connected workers</span>
+<span class="n">workers</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">has_what</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="n">n_workers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">workers</span><span class="p">)</span>
+<span class="n">c</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-02-17 10:37:50,019 - distributed.preloading - INFO - Creating preload: dask_cuda.initialize
+2023-02-17 10:37:50,019 - distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+2023-02-17 10:37:50,042 - distributed.preloading - INFO - Creating preload: dask_cuda.initialize
+2023-02-17 10:37:50,043 - distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+2023-02-17 10:37:50,169 - distributed.preloading - INFO - Creating preload: dask_cuda.initialize
+2023-02-17 10:37:50,169 - distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+2023-02-17 10:37:50,169 - distributed.preloading - INFO - Creating preload: dask_cuda.initialize
+2023-02-17 10:37:50,169 - distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+</pre></div>
+</div>
+<div class="output text_html"><div>
+    <div style="width: 24px; height: 24px; background-color: #e1e1e1; border: 3px solid #9D9D9D; border-radius: 5px; position: absolute;"> </div>
+    <div style="margin-left: 48px;">
+        <h3 style="margin-bottom: 0px;">Client</h3>
+        <p style="color: #9D9D9D; margin-bottom: 0px;">Client-208a573f-aeaf-11ed-838c-98039b8174ae</p>
+        <table style="width: 100%; text-align: left;">
+
+        <tr>
+        
+            <td style="text-align: left;"><strong>Connection method:</strong> Cluster object</td>
+            <td style="text-align: left;"><strong>Cluster type:</strong> dask_cuda.LocalCUDACluster</td>
+        
+        </tr>
+
+        
+            <tr>
+                <td style="text-align: left;">
+                    <strong>Dashboard: </strong> <a href="http://10.136.7.105:8081/status" target="_blank">http://10.136.7.105:8081/status</a>
+                </td>
+                <td style="text-align: left;"></td>
+            </tr>
+        
+
+        </table>
+
+        
+
+        
+            <details>
+            <summary style="margin-bottom: 20px;"><h3 style="display: inline;">Cluster Info</h3></summary>
+            <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-mod-trusted jp-OutputArea-output">
+    <div style="width: 24px; height: 24px; background-color: #e1e1e1; border: 3px solid #9D9D9D; border-radius: 5px; position: absolute;">
+    </div>
+    <div style="margin-left: 48px;">
+        <h3 style="margin-bottom: 0px; margin-top: 0px;">LocalCUDACluster</h3>
+        <p style="color: #9D9D9D; margin-bottom: 0px;">3295963d</p>
+        <table style="width: 100%; text-align: left;">
+            <tr>
+                <td style="text-align: left;">
+                    <strong>Dashboard:</strong> <a href="http://10.136.7.105:8081/status" target="_blank">http://10.136.7.105:8081/status</a>
+                </td>
+                <td style="text-align: left;">
+                    <strong>Workers:</strong> 4
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">
+                    <strong>Total threads:</strong> 4
+                </td>
+                <td style="text-align: left;">
+                    <strong>Total memory:</strong> 376.54 GiB
+                </td>
+            </tr>
+            
+            <tr>
+    <td style="text-align: left;"><strong>Status:</strong> running</td>
+    <td style="text-align: left;"><strong>Using processes:</strong> True</td>
+</tr>
+
+            
+        </table>
+
+        <details>
+            <summary style="margin-bottom: 20px;">
+                <h3 style="display: inline;">Scheduler Info</h3>
+            </summary>
+
+            <div style="">
+    <div>
+        <div style="width: 24px; height: 24px; background-color: #FFF7E5; border: 3px solid #FF6132; border-radius: 5px; position: absolute;"> </div>
+        <div style="margin-left: 48px;">
+            <h3 style="margin-bottom: 0px;">Scheduler</h3>
+            <p style="color: #9D9D9D; margin-bottom: 0px;">Scheduler-251b634e-1d2a-452c-82e6-ca8e9685c065</p>
+            <table style="width: 100%; text-align: left;">
+                <tr>
+                    <td style="text-align: left;">
+                        <strong>Comm:</strong> tcp://10.136.7.105:32955
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>Workers:</strong> 4
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">
+                        <strong>Dashboard:</strong> <a href="http://10.136.7.105:8081/status" target="_blank">http://10.136.7.105:8081/status</a>
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>Total threads:</strong> 4
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">
+                        <strong>Started:</strong> Just now
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>Total memory:</strong> 376.54 GiB
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <details style="margin-left: 48px;">
+        <summary style="margin-bottom: 20px;">
+            <h3 style="display: inline;">Workers</h3>
+        </summary>
+
+        
+        <div style="margin-bottom: 20px;">
+            <div style="width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;"> </div>
+            <div style="margin-left: 48px;">
+            <details>
+                <summary>
+                    <h4 style="margin-bottom: 0px; display: inline;">Worker: 0</h4>
+                </summary>
+                <table style="width: 100%; text-align: left;">
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Comm: </strong> tcp://10.136.7.105:43509
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Total threads: </strong> 1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Dashboard: </strong> <a href="http://10.136.7.105:39899/status" target="_blank">http://10.136.7.105:39899/status</a>
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Memory: </strong> 94.13 GiB
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Nanny: </strong> tcp://10.136.7.105:39141
+                        </td>
+                        <td style="text-align: left;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: left;">
+                            <strong>Local directory: </strong> /tmp/dask-worker-space/worker-x_wwwz34
+                        </td>
+                    </tr>
+
+                    
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>GPU: </strong>Tesla T4
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>GPU memory: </strong> 14.76 GiB
+                        </td>
+                    </tr>
+                    
+
+                    
+
+                </table>
+            </details>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <div style="width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;"> </div>
+            <div style="margin-left: 48px;">
+            <details>
+                <summary>
+                    <h4 style="margin-bottom: 0px; display: inline;">Worker: 1</h4>
+                </summary>
+                <table style="width: 100%; text-align: left;">
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Comm: </strong> tcp://10.136.7.105:37595
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Total threads: </strong> 1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Dashboard: </strong> <a href="http://10.136.7.105:32887/status" target="_blank">http://10.136.7.105:32887/status</a>
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Memory: </strong> 94.13 GiB
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Nanny: </strong> tcp://10.136.7.105:39781
+                        </td>
+                        <td style="text-align: left;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: left;">
+                            <strong>Local directory: </strong> /tmp/dask-worker-space/worker-m8xv2btv
+                        </td>
+                    </tr>
+
+                    
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>GPU: </strong>Tesla T4
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>GPU memory: </strong> 14.76 GiB
+                        </td>
+                    </tr>
+                    
+
+                    
+
+                </table>
+            </details>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <div style="width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;"> </div>
+            <div style="margin-left: 48px;">
+            <details>
+                <summary>
+                    <h4 style="margin-bottom: 0px; display: inline;">Worker: 2</h4>
+                </summary>
+                <table style="width: 100%; text-align: left;">
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Comm: </strong> tcp://10.136.7.105:36879
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Total threads: </strong> 1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Dashboard: </strong> <a href="http://10.136.7.105:33629/status" target="_blank">http://10.136.7.105:33629/status</a>
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Memory: </strong> 94.13 GiB
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Nanny: </strong> tcp://10.136.7.105:44079
+                        </td>
+                        <td style="text-align: left;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: left;">
+                            <strong>Local directory: </strong> /tmp/dask-worker-space/worker-h5js3ipb
+                        </td>
+                    </tr>
+
+                    
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>GPU: </strong>Tesla T4
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>GPU memory: </strong> 14.76 GiB
+                        </td>
+                    </tr>
+                    
+
+                    
+
+                </table>
+            </details>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <div style="width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;"> </div>
+            <div style="margin-left: 48px;">
+            <details>
+                <summary>
+                    <h4 style="margin-bottom: 0px; display: inline;">Worker: 3</h4>
+                </summary>
+                <table style="width: 100%; text-align: left;">
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Comm: </strong> tcp://10.136.7.105:36985
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Total threads: </strong> 1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Dashboard: </strong> <a href="http://10.136.7.105:45625/status" target="_blank">http://10.136.7.105:45625/status</a>
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>Memory: </strong> 94.13 GiB
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>Nanny: </strong> tcp://10.136.7.105:40643
+                        </td>
+                        <td style="text-align: left;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: left;">
+                            <strong>Local directory: </strong> /tmp/dask-worker-space/worker-ql9e3i4f
+                        </td>
+                    </tr>
+
+                    
+                    <tr>
+                        <td style="text-align: left;">
+                            <strong>GPU: </strong>Tesla T4
+                        </td>
+                        <td style="text-align: left;">
+                            <strong>GPU memory: </strong> 14.76 GiB
+                        </td>
+                    </tr>
+                    
+
+                    
+
+                </table>
+            </details>
+            </div>
+        </div>
+        
+
+    </details>
+</div>
+
+        </details>
+    </div>
+</div>
+            </details>
+        
+
+    </div>
+</div></div></div>
+</div>
+</section>
+</section>
+<section id="loading-the-data">
+<h1>Loading the data<a class="headerlink" href="#loading-the-data" title="Permalink to this heading">#</a></h1>
+<section id="data-acquisition">
+<h2>Data Acquisition<a class="headerlink" href="#data-acquisition" title="Permalink to this heading">#</a></h2>
+<p>Dataset can be acquired from Kaggle: <a class="reference external" href="https://www.kaggle.com/c/bnp-paribas-cardif-claims-management/data">BNP Paribas Cardif Claims Management</a>. To download the dataset:</p>
+<ol class="arabic">
+<li><p>Create a <code class="docutils literal notranslate"><span class="pre">data</span></code> folder in the current directory. If you’re downloading it elsewhere, be sure to change <code class="docutils literal notranslate"><span class="pre">data_dir</span></code> to point to the approproate location.</p></li>
+<li><p>Follow the instructions here to: <a class="reference external" href="https://github.com/Kaggle/kaggle-api">Set-up the Kaggle API</a></p></li>
+<li><p>Run the following command in the command line in the <code class="docutils literal notranslate"><span class="pre">data</span></code> folder.</p>
+<p><code class="docutils literal notranslate"><span class="pre">kaggle</span> <span class="pre">competitions</span> <span class="pre">download</span> <span class="pre">-c</span> <span class="pre">bnp-paribas-cardif-claims-management</span></code></p>
+</li>
+</ol>
+<p>This is an anonymized dataset containing categorical and numerical values for claims received by BNP Paribas Cardif.  The “target” column in the train set is the variable to predict. It is equal to 1 for claims suitable for an accelerated approval. The task is to predict whether a claim will be suitable for accelerated approval or not. We’ll only use the <code class="docutils literal notranslate"><span class="pre">train.csv</span></code> file as <code class="docutils literal notranslate"><span class="pre">test.csv</span></code> does not have a target column.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;train.csv&quot;</span>
+
+<span class="n">data_dir</span> <span class="o">=</span> <span class="s2">&quot;data/&quot;</span>
+<span class="n">INPUT_FILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Select the <code class="docutils literal notranslate"><span class="pre">N_TRIALS</span></code> for the number of runs of HPO trials.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">N_TRIALS</span> <span class="o">=</span> <span class="mi">150</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">INPUT_FILE</span><span class="p">)</span>
+
+<span class="c1"># Drop ID column</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Drop non-numerical data and fill NaNs before passing to cuML RF</span>
+<span class="n">CAT_COLS</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="s2">&quot;object&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">CAT_COLS</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;target&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+
+<span class="n">study_name</span> <span class="o">=</span> <span class="s2">&quot;dask_optuna_lr_log_loss_tpe&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="training-and-evaluation">
+<h1>Training and Evaluation<a class="headerlink" href="#training-and-evaluation" title="Permalink to this heading">#</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">train_and_eval</span></code> function accepts the different parameters to try out. This function should look very similar to any ML workflow. We’ll use this function within the Optuna <code class="docutils literal notranslate"><span class="pre">objective</span></code> function to show how easily we can fit an existing workflow into the Optuna work.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train_and_eval</span><span class="p">(</span>
+    <span class="n">X_param</span><span class="p">,</span> <span class="n">y_param</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="s2">&quot;l2&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">l1_ratio</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_intercept</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Splits the given data into train and test split to train and evaluate the model</span>
+<span class="sd">    for the params parameters.</span>
+
+<span class="sd">    Params</span>
+<span class="sd">    ______</span>
+
+<span class="sd">    X_param:  DataFrame.</span>
+<span class="sd">              The data to use for training and testing.</span>
+<span class="sd">    y_param:  Series.</span>
+<span class="sd">              The label for training</span>
+<span class="sd">    penalty, C, l1_ratio, fit_intercept: The parameter values for Logistic Regression.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    score: log loss of the fitted model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+        <span class="n">X_param</span><span class="p">,</span> <span class="n">y_param</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+    <span class="p">)</span>
+    <span class="n">classifier</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span>
+        <span class="n">penalty</span><span class="o">=</span><span class="n">penalty</span><span class="p">,</span>
+        <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span>
+        <span class="n">l1_ratio</span><span class="o">=</span><span class="n">l1_ratio</span><span class="p">,</span>
+        <span class="n">fit_intercept</span><span class="o">=</span><span class="n">fit_intercept</span><span class="p">,</span>
+        <span class="n">max_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_valid</span><span class="p">)</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">log_loss</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">score</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For a baseline number, let’s see what the default performance of the model is.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Score with default parameters : &quot;</span><span class="p">,</span> <span class="n">train_and_eval</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Score with default parameters :  8.206788138572605
+</pre></div>
+</div>
+</div>
+</div>
+<section id="objective-function">
+<h2>Objective Function<a class="headerlink" href="#objective-function" title="Permalink to this heading">#</a></h2>
+<p>We will optimize the objective function using <a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/study.html">Optuna Study</a>. The objective function tries out specified values for the parameters that we are tuning and returns the score obtained with those parameters. These results will be aggregated in <code class="docutils literal notranslate"><span class="pre">study.trials_dataframes()</span></code>.</p>
+<p>Let’s define the objective function for this HPO task by making use of the <code class="docutils literal notranslate"><span class="pre">train_and_eval()</span></code>. You can see that we simply choose a value for the parameters and call the <code class="docutils literal notranslate"><span class="pre">train_and_eval</span></code> method, making Optuna very easy to use in an existing workflow.</p>
+<p>The objective function does not need to be changed when switching to different <a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/samplers.html">samplers</a>, which are built-in options in Optuna to enable the selection of different sampling algorithms that optuna provides. Some of the available ones include - GridSampler, RandomSampler, TPESampler, etc. We’ll use TPESampler for this demo, but feel free to try different samplers to notice the changes in performance.</p>
+<p><a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/generated/optuna.samplers.TPESampler.html#optuna.samplers.TPESampler">Tree-Structured Parzen Estimators</a> or TPE works by fitting two  Gaussian Mixture Model during each trial - one to the set of parameter values associated with the best objective values,
+and another to the remaining parameter values. It chooses the parameter value that maximizes the ratio between the two GMMs</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">trial</span><span class="p">,</span> <span class="n">X_param</span><span class="p">,</span> <span class="n">y_param</span><span class="p">):</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">penalty</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_categorical</span><span class="p">(</span><span class="s2">&quot;penalty&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;l1&quot;</span><span class="p">,</span> <span class="s2">&quot;l2&quot;</span><span class="p">])</span>
+    <span class="n">fit_intercept</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_categorical</span><span class="p">(</span><span class="s2">&quot;fit_intercept&quot;</span><span class="p">,</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+
+    <span class="n">score</span> <span class="o">=</span> <span class="n">train_and_eval</span><span class="p">(</span>
+        <span class="n">X_param</span><span class="p">,</span> <span class="n">y_param</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="n">penalty</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">fit_intercept</span><span class="o">=</span><span class="n">fit_intercept</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">score</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="hpo-trials-and-study">
+<h2>HPO Trials and Study<a class="headerlink" href="#hpo-trials-and-study" title="Permalink to this heading">#</a></h2>
+<p>Optuna uses <a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/study.html">studies</a> and <a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/trial.html">trials</a> to keep track of the HPO experiments. Put simply, a trial is a single call of the objective function while a set of trials make up a study. We will pick the best observed trial from a study to get the best parameters that were used in that run.</p>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">DaskStorage</span></code> class is used to set up a storage shared by all workers in the cluster. Learn more about what storages can be used <a class="reference external" href="https://optuna.readthedocs.io/en/stable/tutorial/distributed.html">here</a></p>
+<p><code class="docutils literal notranslate"><span class="pre">optuna.create_study</span></code> is used to set up the study. As you can see, it specifies the study name, sampler to be used, the direction of the study, and the storage.
+With just a few lines of code, we have set up a distributed HPO experiment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">storage</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">integration</span><span class="o">.</span><span class="n">DaskStorage</span><span class="p">()</span>
+<span class="n">study</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">create_study</span><span class="p">(</span>
+    <span class="n">sampler</span><span class="o">=</span><span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">TPESampler</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">142</span><span class="p">),</span>
+    <span class="n">study_name</span><span class="o">=</span><span class="n">study_name</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;minimize&quot;</span><span class="p">,</span>
+    <span class="n">storage</span><span class="o">=</span><span class="n">storage</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># Optimize in parallel on your Dask cluster</span>
+<span class="c1">#</span>
+<span class="c1"># Submit `n_workers` optimization tasks, where each task runs about 40 optimization trials</span>
+<span class="c1"># for a total of about N_TRIALS trials in all</span>
+<span class="n">futures</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+        <span class="n">study</span><span class="o">.</span><span class="n">optimize</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">trial</span><span class="p">:</span> <span class="n">objective</span><span class="p">(</span><span class="n">trial</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span>
+        <span class="n">n_trials</span><span class="o">=</span><span class="n">N_TRIALS</span> <span class="o">//</span> <span class="n">n_workers</span><span class="p">,</span>
+        <span class="n">pure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_workers</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="n">wait</span><span class="p">(</span><span class="n">futures</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best params: </span><span class="si">{</span><span class="n">study</span><span class="o">.</span><span class="n">best_params</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of finished trials: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">study</span><span class="o">.</span><span class="n">trials</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1049484/2672349610.py:1: ExperimentalWarning: DaskStorage is experimental (supported from v3.1.0). The interface can change in the future.
+  storage = optuna.integration.DaskStorage()
+<span class=" -Color -Color-Green">[I 2023-02-17 10:37:57,870]</span> A new study created in memory with name: dask_optuna_lr_log_loss_tpe
+/nvme/0/thead/miniconda/envs/cloud-ml-deploy-optuna/lib/python3.10/site-packages/distributed/worker.py:2990: UserWarning: Large object of size 49.31 MiB detected in task graph: 
+  [&lt;function &lt;listcomp&gt;.&lt;lambda&gt; at 0x7fad203a3d90&gt;]
+Consider scattering large objects ahead of time
+with client.scatter to reduce scheduler burden and 
+keep data on workers
+
+    future = client.submit(func, big_data)    # bad
+
+    big_future = client.scatter(big_data)     # good
+    future = client.submit(func, big_future)  # good
+  warnings.warn(
+/nvme/0/thead/miniconda/envs/cloud-ml-deploy-optuna/lib/python3.10/site-packages/distributed/protocol/pickle.py:73: ExperimentalWarning: DaskStorage is experimental (supported from v3.1.0). The interface can change in the future.
+  return pickle.loads(x)
+/nvme/0/thead/miniconda/envs/cloud-ml-deploy-optuna/lib/python3.10/site-packages/distributed/protocol/pickle.py:73: ExperimentalWarning: DaskStorage is experimental (supported from v3.1.0). The interface can change in the future.
+  return pickle.loads(x)
+/nvme/0/thead/miniconda/envs/cloud-ml-deploy-optuna/lib/python3.10/site-packages/distributed/protocol/pickle.py:73: ExperimentalWarning: DaskStorage is experimental (supported from v3.1.0). The interface can change in the future.
+  return pickle.loads(x)
+/nvme/0/thead/miniconda/envs/cloud-ml-deploy-optuna/lib/python3.10/site-packages/distributed/protocol/pickle.py:73: ExperimentalWarning: DaskStorage is experimental (supported from v3.1.0). The interface can change in the future.
+  return pickle.loads(x)
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:07,033]</span> Trial 0 finished with value: 8.247875378327683 and parameters: {&#39;C&#39;: 40.573838784392514, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 0 with value: 8.247875378327683.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:07,953]</span> Trial 3 finished with value: 8.221289538703516 and parameters: {&#39;C&#39;: 12.183061292316713, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 3 with value: 8.221289538703516.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:08,041]</span> Trial 2 finished with value: 8.253917695992195 and parameters: {&#39;C&#39;: 40.573838784392514, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 3 with value: 8.221289538703516.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:08,169]</span> Trial 1 finished with value: 8.228540336686851 and parameters: {&#39;C&#39;: 40.573838784392514, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 3 with value: 8.221289538703516.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:08,605]</span> Trial 6 finished with value: 8.250292310988796 and parameters: {&#39;C&#39;: 12.183061292316713, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 3 with value: 8.221289538703516.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:08,664]</span> Trial 5 finished with value: 8.241833396381626 and parameters: {&#39;C&#39;: 0.028870434982716877, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 3 with value: 8.221289538703516.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:09,044]</span> Trial 4 finished with value: 8.245458781385024 and parameters: {&#39;C&#39;: 40.573838784392514, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 3 with value: 8.221289538703516.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:09,099]</span> Trial 8 finished with value: 8.25029236694187 and parameters: {&#39;C&#39;: 0.028870434982716877, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 3 with value: 8.221289538703516.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:09,251]</span> Trial 9 finished with value: 8.247875294398069 and parameters: {&#39;C&#39;: 67.82426496348721, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 3 with value: 8.221289538703516.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:09,455]</span> Trial 11 finished with value: 8.251500763331082 and parameters: {&#39;C&#39;: 67.82426496348721, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 3 with value: 8.221289538703516.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:09,566]</span> Trial 12 finished with value: 8.24304134514623 and parameters: {&#39;C&#39;: 6.682974952480256, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: False}. Best is trial 3 with value: 8.221289538703516.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:09,619]</span> Trial 7 finished with value: 8.21403885262633 and parameters: {&#39;C&#39;: 12.183061292316713, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:09,722]</span> Trial 10 finished with value: 8.25029236694187 and parameters: {&#39;C&#39;: 12.183061292316713, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:09,818]</span> Trial 13 finished with value: 8.253917612062581 and parameters: {&#39;C&#39;: 2.0030868464433764, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: False}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:09,872]</span> Trial 14 finished with value: 8.251500679401468 and parameters: {&#39;C&#39;: 2.0030868464433764, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: False}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:10,092]</span> Trial 16 finished with value: 8.24787526642153 and parameters: {&#39;C&#39;: 2.0030868464433764, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: False}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:10,099]</span> Trial 15 finished with value: 8.252709243649907 and parameters: {&#39;C&#39;: 2.0030868464433764, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: False}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:10,557]</span> Trial 17 finished with value: 8.249084278294575 and parameters: {&#39;C&#39;: 0.9459046834713561, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: False}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:10,581]</span> Trial 18 finished with value: 8.247875769999213 and parameters: {&#39;C&#39;: 0.4428829638044645, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: False}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:11,477]</span> Trial 19 finished with value: 8.21524817224129 and parameters: {&#39;C&#39;: 0.34118772696334027, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:11,684]</span> Trial 20 finished with value: 8.214039719899006 and parameters: {&#39;C&#39;: 0.34118772696334027, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:12,541]</span> Trial 22 finished with value: 8.215248116288217 and parameters: {&#39;C&#39;: 7.20323151375873, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:12,603]</span> Trial 21 finished with value: 8.21524817224129 and parameters: {&#39;C&#39;: 7.20323151375873, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:12,780]</span> Trial 23 finished with value: 8.214039775852083 and parameters: {&#39;C&#39;: 0.15587899286863757, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:13,189]</span> Trial 24 finished with value: 8.214039775852083 and parameters: {&#39;C&#39;: 0.15587899286863757, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:13,946]</span> Trial 25 finished with value: 8.220082205422743 and parameters: {&#39;C&#39;: 0.13331995152410292, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:14,425]</span> Trial 26 finished with value: 8.218873697127382 and parameters: {&#39;C&#39;: 0.13331995152410292, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 7 with value: 8.21403885262633.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:14,506]</span> Trial 27 finished with value: 8.211622731284818 and parameters: {&#39;C&#39;: 0.13317405504008187, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 27 with value: 8.211622731284818.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:14,754]</span> Trial 28 finished with value: 8.218873753080457 and parameters: {&#39;C&#39;: 0.09161974779967816, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 27 with value: 8.211622731284818.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:14,932]</span> Trial 30 finished with value: 8.217665356691247 and parameters: {&#39;C&#39;: 0.01161870199450424, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 27 with value: 8.211622731284818.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:15,511]</span> Trial 29 finished with value: 8.218873781056995 and parameters: {&#39;C&#39;: 0.0834294717814003, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 27 with value: 8.211622731284818.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:15,538]</span> Trial 31 finished with value: 8.217665496573938 and parameters: {&#39;C&#39;: 0.01161870199450424, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 27 with value: 8.211622731284818.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:15,802]</span> Trial 32 finished with value: 8.21645704423165 and parameters: {&#39;C&#39;: 0.01161870199450424, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 27 with value: 8.211622731284818.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:16,028]</span> Trial 33 finished with value: 8.210414362872145 and parameters: {&#39;C&#39;: 0.5889161850687648, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 33 with value: 8.210414362872145.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:16,593]</span> Trial 34 finished with value: 8.211622787237895 and parameters: {&#39;C&#39;: 0.29039065153275884, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 33 with value: 8.210414362872145.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:17,556]</span> Trial 36 finished with value: 8.214039635969392 and parameters: {&#39;C&#39;: 0.29039065153275884, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 33 with value: 8.210414362872145.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:17,762]</span> Trial 38 finished with value: 8.214039747875544 and parameters: {&#39;C&#39;: 0.6356655062780381, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 33 with value: 8.210414362872145.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:17,906]</span> Trial 37 finished with value: 8.214039719899006 and parameters: {&#39;C&#39;: 0.40506074358435035, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 33 with value: 8.210414362872145.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:17,938]</span> Trial 35 finished with value: 8.215248200217829 and parameters: {&#39;C&#39;: 0.29039065153275884, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 33 with value: 8.210414362872145.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:18,033]</span> Trial 39 finished with value: 8.247875574163448 and parameters: {&#39;C&#39;: 0.7211398436523727, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 33 with value: 8.210414362872145.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:18,215]</span> Trial 40 finished with value: 8.250292338965332 and parameters: {&#39;C&#39;: 0.8988603430698667, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 33 with value: 8.210414362872145.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:18,357]</span> Trial 42 finished with value: 8.252709215673368 and parameters: {&#39;C&#39;: 0.8562976914659627, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 33 with value: 8.210414362872145.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:18,521]</span> Trial 43 finished with value: 8.246667177774237 and parameters: {&#39;C&#39;: 1.1735421529699095, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 33 with value: 8.210414362872145.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:18,759]</span> Trial 41 finished with value: 8.203162697616131 and parameters: {&#39;C&#39;: 1.0180328243030141, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:18,875]</span> Trial 45 finished with value: 8.249083998529198 and parameters: {&#39;C&#39;: 1.470107035818969, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:19,078]</span> Trial 44 finished with value: 8.209204903374491 and parameters: {&#39;C&#39;: 1.215885094202452, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:19,122]</span> Trial 47 finished with value: 8.244249853441593 and parameters: {&#39;C&#39;: 3.1251012068006196, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:19,212]</span> Trial 48 finished with value: 8.241832892803943 and parameters: {&#39;C&#39;: 3.1251012068006196, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:19,607]</span> Trial 49 finished with value: 8.249083802693432 and parameters: {&#39;C&#39;: 0.5247083049626469, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:19,787]</span> Trial 51 finished with value: 8.250292283012255 and parameters: {&#39;C&#39;: 0.594672049508206, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:19,883]</span> Trial 50 finished with value: 8.215246941273623 and parameters: {&#39;C&#39;: 0.594672049508206, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:19,924]</span> Trial 52 finished with value: 8.245458417690031 and parameters: {&#39;C&#39;: 0.6982022429771052, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:20,141]</span> Trial 53 finished with value: 8.247875322374606 and parameters: {&#39;C&#39;: 0.6982022429771052, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: False}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:20,364]</span> Trial 55 finished with value: 8.252709187696832 and parameters: {&#39;C&#39;: 23.88860256720992, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: False}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:20,631]</span> Trial 46 finished with value: 8.220082093516593 and parameters: {&#39;C&#39;: 0.18943289702535804, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:20,707]</span> Trial 56 finished with value: 8.243041568958532 and parameters: {&#39;C&#39;: 23.88860256720992, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:21,054]</span> Trial 59 finished with value: 8.249083886623046 and parameters: {&#39;C&#39;: 0.2304567118696556, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:21,190]</span> Trial 54 finished with value: 8.217664153700117 and parameters: {&#39;C&#39;: 28.94484897140112, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:21,320]</span> Trial 57 finished with value: 8.209205099210257 and parameters: {&#39;C&#39;: 0.2304567118696556, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:21,667]</span> Trial 61 finished with value: 8.247875602139985 and parameters: {&#39;C&#39;: 1.3083983229057563, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:21,697]</span> Trial 60 finished with value: 8.217664041793965 and parameters: {&#39;C&#39;: 1.3350093383986137, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:22,213]</span> Trial 64 finished with value: 8.25150079130762 and parameters: {&#39;C&#39;: 0.44802419204313526, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 41 with value: 8.203162697616131.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:22,283]</span> Trial 62 finished with value: 8.198328832293907 and parameters: {&#39;C&#39;: 0.46570264632805103, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:22,632]</span> Trial 65 finished with value: 8.24908397055266 and parameters: {&#39;C&#39;: 0.24456030311795268, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:22,636]</span> Trial 58 finished with value: 8.205579714206857 and parameters: {&#39;C&#39;: 0.22786149466321445, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:22,719]</span> Trial 66 finished with value: 8.245458277807343 and parameters: {&#39;C&#39;: 0.2562139315011522, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:22,864]</span> Trial 63 finished with value: 8.210413383693316 and parameters: {&#39;C&#39;: 0.42963908148132157, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:23,059]</span> Trial 68 finished with value: 8.255126148334481 and parameters: {&#39;C&#39;: 0.4325592525072435, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: False}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:23,092]</span> Trial 67 finished with value: 8.251500763331082 and parameters: {&#39;C&#39;: 0.400363407043762, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: False}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:23,111]</span> Trial 69 finished with value: 8.250292283012257 and parameters: {&#39;C&#39;: 0.45811082432017874, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: False}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:23,202]</span> Trial 70 finished with value: 8.252709215673368 and parameters: {&#39;C&#39;: 0.3366950282604448, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: False}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:23,447]</span> Trial 73 finished with value: 8.24666687003232 and parameters: {&#39;C&#39;: 1.001276433559266, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:23,497]</span> Trial 72 finished with value: 8.249083830669969 and parameters: {&#39;C&#39;: 0.9465587879326931, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:23,539]</span> Trial 74 finished with value: 8.244249881418131 and parameters: {&#39;C&#39;: 0.17498501865193736, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:23,762]</span> Trial 75 finished with value: 8.234582010890993 and parameters: {&#39;C&#39;: 0.09676716520222205, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:23,875]</span> Trial 76 finished with value: 8.251500875237234 and parameters: {&#39;C&#39;: 0.11796046210672348, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:23,882]</span> Trial 71 finished with value: 8.252709243649907 and parameters: {&#39;C&#39;: 0.35804471299010093, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:24,158]</span> Trial 78 finished with value: 8.247875602139986 and parameters: {&#39;C&#39;: 0.5360163523983655, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:24,554]</span> Trial 77 finished with value: 8.214038628814027 and parameters: {&#39;C&#39;: 0.11385001891151933, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:24,605]</span> Trial 81 finished with value: 8.252709383532595 and parameters: {&#39;C&#39;: 0.19199360495534568, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:24,616]</span> Trial 80 finished with value: 8.247875378327683 and parameters: {&#39;C&#39;: 0.2180889828523076, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:25,238]</span> Trial 79 finished with value: 8.215247640687073 and parameters: {&#39;C&#39;: 0.19199360495534568, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:25,394]</span> Trial 82 finished with value: 8.222498746412327 and parameters: {&#39;C&#39;: 0.20307546518876748, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:26,112]</span> Trial 84 finished with value: 8.206788865962592 and parameters: {&#39;C&#39;: 0.32564474352266887, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:26,431]</span> Trial 83 finished with value: 8.215248116288217 and parameters: {&#39;C&#39;: 0.2765570042119916, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:26,634]</span> Trial 85 finished with value: 8.215248200217832 and parameters: {&#39;C&#39;: 0.3226259801946211, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:26,877]</span> Trial 86 finished with value: 8.214039719899006 and parameters: {&#39;C&#39;: 0.2819874675157722, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:27,817]</span> Trial 88 finished with value: 8.214039775852081 and parameters: {&#39;C&#39;: 0.31458836735455475, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:27,949]</span> Trial 87 finished with value: 8.217665104902405 and parameters: {&#39;C&#39;: 0.3065189818970442, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:28,018]</span> Trial 89 finished with value: 8.220082149469668 and parameters: {&#39;C&#39;: 0.15565170050074784, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:28,294]</span> Trial 90 finished with value: 8.215248228194367 and parameters: {&#39;C&#39;: 0.7506376168835345, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:28,558]</span> Trial 92 finished with value: 8.249083774716894 and parameters: {&#39;C&#39;: 0.5051732837836762, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:28,952]</span> Trial 91 finished with value: 8.21041427894253 and parameters: {&#39;C&#39;: 0.8065457520463032, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:29,007]</span> Trial 94 finished with value: 8.246667709328458 and parameters: {&#39;C&#39;: 0.560374893711422, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:29,057]</span> Trial 93 finished with value: 8.204371205911494 and parameters: {&#39;C&#39;: 0.8065457520463032, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:29,665]</span> Trial 98 finished with value: 8.250292338965332 and parameters: {&#39;C&#39;: 0.7337233638654149, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:30,198]</span> Trial 97 finished with value: 8.21283126755672 and parameters: {&#39;C&#39;: 0.8412756142236871, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:30,235]</span> Trial 96 finished with value: 8.211622815214431 and parameters: {&#39;C&#39;: 0.562054482682929, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:30,414]</span> Trial 95 finished with value: 8.216456652560117 and parameters: {&#39;C&#39;: 0.5851560435116105, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:30,716]</span> Trial 99 finished with value: 8.21283031635443 and parameters: {&#39;C&#39;: 1.0461855157044002, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:30,837]</span> Trial 102 finished with value: 8.244249853441593 and parameters: {&#39;C&#39;: 1.1835595334965499, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:30,837]</span> Trial 101 finished with value: 8.216455617428215 and parameters: {&#39;C&#39;: 1.0461855157044002, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:31,278]</span> Trial 103 finished with value: 8.222497655327349 and parameters: {&#39;C&#39;: 1.4806853519511822, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:31,285]</span> Trial 100 finished with value: 8.212830260401352 and parameters: {&#39;C&#39;: 1.0867788142619192, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:31,549]</span> Trial 105 finished with value: 8.22733194029764 and parameters: {&#39;C&#39;: 0.3745168254537794, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:31,652]</span> Trial 106 finished with value: 8.250292338965332 and parameters: {&#39;C&#39;: 0.4276855478215523, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:32,137]</span> Trial 107 finished with value: 8.207996590914894 and parameters: {&#39;C&#39;: 0.385747857973403, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:32,157]</span> Trial 104 finished with value: 8.216455701357829 and parameters: {&#39;C&#39;: 1.4996076633665074, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:32,288]</span> Trial 108 finished with value: 8.23216533001872 and parameters: {&#39;C&#39;: 0.43235250787942997, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:32,990]</span> Trial 109 finished with value: 8.215248256170906 and parameters: {&#39;C&#39;: 0.7633220953391018, &#39;penalty&#39;: &#39;l1&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:33,010]</span> Trial 112 finished with value: 8.233373950220235 and parameters: {&#39;C&#39;: 0.6895329552551867, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:33,280]</span> Trial 110 finished with value: 8.214038656790564 and parameters: {&#39;C&#39;: 0.7956169312610232, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:33,317]</span> Trial 113 finished with value: 8.238207507800542 and parameters: {&#39;C&#39;: 0.6334264079574883, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:33,560]</span> Trial 111 finished with value: 8.210413439646391 and parameters: {&#39;C&#39;: 0.8065508826459779, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:33,755]</span> Trial 116 finished with value: 8.255126232264095 and parameters: {&#39;C&#39;: 0.2513108574682647, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:33,837]</span> Trial 115 finished with value: 8.26237680643513 and parameters: {&#39;C&#39;: 0.22712407979701488, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:33,850]</span> Trial 114 finished with value: 8.215247249015542 and parameters: {&#39;C&#39;: 0.2585858272339558, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:34,373]</span> Trial 117 finished with value: 8.210413187857553 and parameters: {&#39;C&#39;: 0.4718385150774379, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:34,413]</span> Trial 120 finished with value: 8.246666786102704 and parameters: {&#39;C&#39;: 0.37448244554979354, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:34,548]</span> Trial 119 finished with value: 8.230956905652974 and parameters: {&#39;C&#39;: 0.4900985680950606, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:34,730]</span> Trial 122 finished with value: 8.246666786102704 and parameters: {&#39;C&#39;: 0.49870893747744915, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: False}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:34,824]</span> Trial 121 finished with value: 8.255126092381406 and parameters: {&#39;C&#39;: 0.49284965645764406, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: False}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:34,895]</span> Trial 118 finished with value: 8.21524727699208 and parameters: {&#39;C&#39;: 0.4832324710781941, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:35,010]</span> Trial 123 finished with value: 8.252709131743755 and parameters: {&#39;C&#39;: 0.49547914281942596, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: False}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:35,307]</span> Trial 124 finished with value: 8.249083942576123 and parameters: {&#39;C&#39;: 0.8573213288225163, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:35,358]</span> Trial 125 finished with value: 8.25029236694187 and parameters: {&#39;C&#39;: 0.9150325602275309, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:35,399]</span> Trial 126 finished with value: 8.251500875237234 and parameters: {&#39;C&#39;: 0.8573213288225163, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:35,892]</span> Trial 129 finished with value: 8.247875518210373 and parameters: {&#39;C&#39;: 0.6422634169492649, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:35,906]</span> Trial 127 finished with value: 8.211621696152916 and parameters: {&#39;C&#39;: 0.9044711611615769, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:35,921]</span> Trial 128 finished with value: 8.252709243649907 and parameters: {&#39;C&#39;: 0.35612096813530547, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:36,336]</span> Trial 131 finished with value: 8.247875518210373 and parameters: {&#39;C&#39;: 0.6348982306281373, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:37,029]</span> Trial 132 finished with value: 8.216455645404753 and parameters: {&#39;C&#39;: 0.3879975753305631, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:37,137]</span> Trial 130 finished with value: 8.205579658253782 and parameters: {&#39;C&#39;: 1.7492428217117773, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:37,497]</span> Trial 133 finished with value: 8.209205155163334 and parameters: {&#39;C&#39;: 0.38584940993610345, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:37,966]</span> Trial 134 finished with value: 8.216455393615911 and parameters: {&#39;C&#39;: 1.270310588632334, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:38,063]</span> Trial 136 finished with value: 8.244249993324283 and parameters: {&#39;C&#39;: 1.6903129048405776, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:38,308]</span> Trial 135 finished with value: 8.210413355716778 and parameters: {&#39;C&#39;: 1.743501860802611, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:38,530]</span> Trial 138 finished with value: 8.251500903213772 and parameters: {&#39;C&#39;: 1.7228365993625243, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:39,186]</span> Trial 139 finished with value: 8.244250049277358 and parameters: {&#39;C&#39;: 2.004047082657374, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:39,847]</span> Trial 137 finished with value: 8.211622003894833 and parameters: {&#39;C&#39;: 1.6881329891557173, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:41,105]</span> Trial 140 finished with value: 8.209204903374491 and parameters: {&#39;C&#39;: 0.32273955285610206, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:41,614]</span> Trial 141 finished with value: 8.247875574163448 and parameters: {&#39;C&#39;: 0.32068692350825667, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:42,102]</span> Trial 142 finished with value: 8.238207479824005 and parameters: {&#39;C&#39;: 0.22677737647344867, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:42,744]</span> Trial 143 finished with value: 8.221289175008522 and parameters: {&#39;C&#39;: 0.33183468485179807, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:43,434]</span> Trial 144 finished with value: 8.246666953961933 and parameters: {&#39;C&#39;: 0.1648049730677063, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:44,646]</span> Trial 145 finished with value: 8.216455393615913 and parameters: {&#39;C&#39;: 0.3859354935049987, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+<span class=" -Color -Color-Green">[I 2023-02-17 10:38:45,849]</span> Trial 146 finished with value: 8.207996451032203 and parameters: {&#39;C&#39;: 0.2871110323573213, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Best params: {&#39;C&#39;: 0.46570264632805103, &#39;penalty&#39;: &#39;none&#39;, &#39;fit_intercept&#39;: True}
+Number of finished trials:  148
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Green">[I 2023-02-17 10:38:46,575]</span> Trial 147 finished with value: 8.249083886623046 and parameters: {&#39;C&#39;: 0.2843200519404071, &#39;penalty&#39;: &#39;l2&#39;, &#39;fit_intercept&#39;: True}. Best is trial 62 with value: 8.198328832293907.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualization">
+<h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this heading">#</a></h2>
+<p>Optuna provides an easy way to visualize the trials via builtin graphs. Read more about visualizations <a class="reference external" href="https://optuna.readthedocs.io/en/stable/tutorial/10_key_features/005_visualization.html">here</a>.</p>
+</section>
+<section id="conluding-remarks">
+<h2>Conluding Remarks<a class="headerlink" href="#conluding-remarks" title="Permalink to this heading">#</a></h2>
+<p>This notebook shows how RAPIDS and Optuna can be used along with dask to run multi-GPU HPO jobs, and can be used as a starting point for anyone wanting to get started with the framework. We have seen how by just adding a few lines of code we were able to integrate the libraries for a muli-GPU HPO runs. This can also be scaled to multiple nodes.</p>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">#</a></h2>
+<p>This is done on a small dataset, you are encouraged to test out on larger data with more range for the parameters too. These experiments can yield performance improvements. Refer to other examples in the <a class="reference external" href="https://github.com/rapidsai/cloud-ml-examples">rapidsai/cloud-ml-examples</a> repository.</p>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://towardsdatascience.com/hyperparameter-tuning-c5619e7e6624">Hyperparameter Tuning in Python</a></p>
+<p><a class="reference external" href="https://cloud.google.com/ai-platform/training/docs/hyperparameter-tuning-overview">Overview of Hyperparameter tuning</a></p>
+<p><a class="reference external" href="https://towardsdatascience.com/how-to-make-your-model-awesome-with-optuna-b56d490368af">How to make your model awesome with Optuna</a></p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../xgboost-gpu-hpo-job-parallel-k8s/notebook.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Scaling up hyperparameter optimization with Kubernetes and XGBoost GPU algorithm</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../rapids-sagemaker-higgs/notebook.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Running RAPIDS hyperparameter experiments at scale on Amazon SageMaker</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Getting Started with Optuna and RAPIDS for HPO</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rapids">RAPIDS</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optuna">Optuna</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-cuda-cluster">Set up CUDA Cluster</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-data">Loading the data</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-acquisition">Data Acquisition</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#training-and-evaluation">Training and Evaluation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective-function">Objective Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hpo-trials-and-study">HPO Trials and Study</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization">Visualization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conluding-remarks">Conluding Remarks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item"> 
+<div class="tocsection onthispage">
+  <i class="fa-regular fa-file"></i> Related files
+</div>
+<nav id="bd-toc-nav" class="page-toc related-files">
+  
+<ul class="visible nav section-nav flex-column">
+  
+  <li class="toc-h2 nav-item toc-entry">
+    
+    <a
+      class="reference external nav-link"
+      href="notebook.ipynb"
+    >
+      notebook.ipynb
+    </a>
+    
+  </li>
+  
+</ul> 
+</nav>
+</div>
+
+  <div class="sidebar-secondary-item">
+<div class="tocsection onthispage"><i class="fa-solid fa-tags"></i> Tags</div>
+<nav id="bd-toc-nav" class="page-toc">
+  <div class="tagwrapper">
+    
+    <a href="../?filters=library/optuna">
+      <span class="sd-sphinx-override sd-badge">library/optuna</span>
+    </a>
+    
+    <a href="../?filters=library/dask">
+      <span class="sd-sphinx-override sd-badge">library/dask</span>
+    </a>
+    
+    <a href="../?filters=workflow/hpo">
+      <span class="sd-sphinx-override sd-badge">workflow/hpo</span>
+    </a>
+    
+    <a href="../?filters=library/cuml">
+      <span class="sd-sphinx-override sd-badge">library/cuml</span>
+    </a>
+    
+    <a href="../?filters=library/numpy">
+      <span class="sd-sphinx-override sd-badge">library/numpy</span>
+    </a>
+    
+    <a href="../?filters=dataset/bnp-claims">
+      <span class="sd-sphinx-override sd-badge">dataset/bnp-claims</span>
+    </a>
+    
+  </div>
+</nav>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, NVIDIA.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
