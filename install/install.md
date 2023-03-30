@@ -75,7 +75,7 @@ Several services also offer **free and limited** trials with GPU resources:
 For most installations, you will need a Conda or Docker environments installed for RAPIDS. Note, these examples are structured for installing on **Ubuntu**. Please modify appropriately for CentOS / Rocky Linux. **Windows 11** has a [WSL2 specific install](#WSL2). Jump to your preferred environment:
 - [Conda](#conda) 
 - [Docker](#docker)
-- [pip (Experimental)](#pip)
+- [pip](#pip)
 - [Build from Source](#source)
 - [Within WSL2](#WSL2)
 
@@ -163,8 +163,8 @@ bash /rapids/utils/stop-jupyter.sh
 
 <br/>
 
-### **pip (Experimental)**
-The package installer for python (pip) is currently in experimental mode, but available to try in both WSL2 or Ubuntu. See below for details.
+### **pip**
+The package installer for python (pip) is generally available as of RAPIDS release 23.04. See below for details.
 
 
 <br/>
@@ -184,7 +184,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 
 ### **WSL Enhanced Prerequisites**
 <i class="fas fa-desktop text-white"></i> **OS:** Windows 11 with Ubuntu 22.04 instance for WSL2. <br/>
-<i class="fas fa-info-circle text-white"></i> **WSL Version:** WSL12 (WSL1 not supported). <br/>
+<i class="fas fa-info-circle text-white"></i> **WSL Version:** WSL2 (WSL1 not supported). <br/>
 <i class="fas fa-microchip text-white"></i> **GPU:** GPUs with [Compute Capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} 7.0 or higher (16GB+ GPU RAM is recommended).
 
 <br/>
@@ -197,6 +197,8 @@ Windows users can now tap into GPU accelerated data science on their local machi
 
 ### **Troubleshooting**
 <i class="fas fa-info-circle text-white"></i> When installing with conda, if an `http 000 connection error` occurs when accessing the repository data, run `wsl --shutdown` and then [restart the WSL instance](https://stackoverflow.com/questions/67923183/miniconda-on-wsl2-ubuntu-20-04-fails-with-condahttperror-http-000-connection){: target="_blank"}.
+
+<i class="fas fa-info-circle text-white"></i> When installing with Docker Desktop, if the container pull command is successful, but the run command hangs indefinitely, [ensure you're on Docker Desktop <= 4.15](https://github.com/docker/for-win/issues/13165){: target="_blank"}.
 
 <br/>
 
@@ -231,7 +233,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
-4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then [install the CUDA Toolkit without drivers](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_network){: target="_blank"} into the WSL2 instance.
+4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then [install the CUDA Toolkit without drivers](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} into the WSL2 instance.
 5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [pip instructions](#pip).
 6. Run this code to check that the RAPIDS installation is working:
 	```
@@ -254,8 +256,8 @@ Use the selector tool below to select your preferred method, packages, and envir
 <br/>
 <div id="pip"></div>
 
-## 3B. Install RAPIDS with pip (Experimental)
-This is an experimental release supporting single GPU usage. cuDF, dask-cuDF, cuML, cuGraph, RMM and RAFT release 22.10 pip packages are now available. The team is excited to get these packages out into the wild and see the RAPIDS community uses them.
+## 3B. Install RAPIDS with pip
+Beginning with the release of 23.04: cuDF, dask-cuDF, cuML, cuGraph, RMM, RAFT, and cuSpatial CUDA 11 pip packages are generally available.
 
 <br/>
 
@@ -263,12 +265,12 @@ This is an experimental release supporting single GPU usage. cuDF, dask-cuDF, cu
 <i class="fas fa-info-circle"></i> **Glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
 <i class="fas fa-info-circle"></i> **Glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.31 (only ARM Server Base System Architecture is supported). <br/>
 <i class="fas fa-download"></i> **CUDA >= 11.8**, with at least the **v520.61.05** driver. To use older CUDA 11.x versions, please see Troubleshooting and Known Issues. <br/>
-<i class="fab fa-python"></i> **Python and pip version:** Python 3.8 or 3.10 using pip 20.3+ with [PEP600 support](https://peps.python.org/pep-0600/){: target="_blank"}.
+<i class="fab fa-python"></i> **Python and pip version:** Python 3.8, 3.9, or 3.10 using pip 20.3+ with [PEP600 support](https://peps.python.org/pep-0600/){: target="_blank"}.
 
 <br/>
 
 ### **pip Install**
-The RAPIDS pip packages are hosted on NVIDIA NGC index via:
+RAPIDS pip packages are hosted on the NVIDIA index via:
 ```
 pip install cudf-cu11 dask-cudf-cu11 --extra-index-url=https://pypi.nvidia.com
 pip install cuml-cu11 --extra-index-url=https://pypi.nvidia.com
@@ -294,7 +296,8 @@ ERROR: Could not find a version that satisfies the requirement cudf-cu11 (from v
 ERROR: No matching distribution found for cudf-cu11
 ```
 Check the suggestions below for possible resolutions:
-- Your Python version must be 3.8 or 3.10.
+- The pip index has moved from the initial experimental release! Ensure the correct `--extra-index-url=https://pypi.nvidia.com`
+- Your Python version must be 3.8, 3.9, or 3.10.
 - RAPIDS pip packages require a recent version of pip that [supports PEP600](https://peps.python.org/pep-0600/){: target="_blank"}. Some users may need to update pip: `pip install -U pip` <br/>
 
 <i class="fas fa-info-circle"></i> Dask / Jupyter / Tornado 6.2 dependency conflicts can occur. Install jupyter-client 7.3.4 if the error below occurs: <br/>
