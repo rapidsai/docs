@@ -217,7 +217,9 @@ Windows users can now tap into GPU accelerated data science on their local machi
 ### **WSL Docker Desktop**
 1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
-3. Install latest Docker Desktop for Windows [according to your applicable licensing terms](https://docs.docker.com/desktop/install/windows-install/){: target="_blank"}.
+3. Install latest Docker Desktop for Windows 
+   - If running WSL2's Ubuntu 20.04 and earlier, CentOS, or Rocky Linux 8, install [according to your applicable licensing terms on Windows](https://docs.docker.com/desktop/install/windows-install/){: target="_blank"}.  
+   - If running WSL2's Ubuntu 22.04.2 LTS containers, it already has Docker installed.  Log into your WSL2 machine and run `sudo service docker start`, skip Step #4 and go to Step #5.
 4. Log in to the WSL2 Linux instance.
 5. Generate and run the RAPIDS `docker pull` and `docker run` commands based on your desired configuration using the RAPIDS [Release Selector](#selector).
 6. Inside the Docker instance, run this code to check that the RAPIDS installation is working:
