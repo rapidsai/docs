@@ -258,6 +258,10 @@ document.write(`
   
 
   
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
 </div>
 
     </nav>
@@ -439,7 +443,78 @@ document.write(`
                   
   <section id="coiled">
 <h1>Coiled<a class="headerlink" href="#coiled" title="Permalink to this heading">#</a></h1>
-<p>You can deploy RAPIDS on a multi-node Dask cluster with GPUs using <a class="reference external" href="https://www.coiled.io/">Coiled</a>. By using the <a class="reference external" href="https://anaconda.org/conda-forge/coiled"><code class="docutils literal notranslate"><span class="pre">coiled</span></code></a> Python library, you can setup and manage Dask clusters with GPUs and RAPIDs on cloud computing environments such as GCP or AWS. Please visit Coiled’s <a class="reference external" href="https://docs.coiled.io/user_guide/getting_started.html">getting started guide</a> for setting up the service and the <a class="reference external" href="https://docs.coiled.io/user_guide/gpu.html">GPU quickstart guide</a> to learn how to deploy and use Dask clusters with GPUs and RAPIDS.</p>
+<p>You can deploy RAPIDS on a multi-node Dask cluster with GPUs using <a class="reference external" href="https://www.coiled.io/">Coiled</a>.</p>
+<p>By using the <a class="reference external" href="https://anaconda.org/conda-forge/coiled"><code class="docutils literal notranslate"><span class="pre">coiled</span></code></a> Python library, you can setup and manage Dask clusters with GPUs and RAPIDs on cloud computing environments such as GCP or AWS.</p>
+<p>Coiled clusters can also run Jupyter which is useful if you don’t have a local GPU.</p>
+<section id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading">#</a></h2>
+<section id="login">
+<h3>Login<a class="headerlink" href="#login" title="Permalink to this heading">#</a></h3>
+<p>To get started you need to install Coiled and login.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>coiled
+<span class="gp">$ </span>coiled<span class="w"> </span>setup
+</pre></div>
+</div>
+<p>For more information see the <a class="reference external" href="https://docs.coiled.io/user_guide/getting_started.html">Coiled Getting Started documentation</a>.</p>
+</section>
+<section id="software-environment">
+<h3>Software Environment<a class="headerlink" href="#software-environment" title="Permalink to this heading">#</a></h3>
+<p>Next you’ll need to register a RAPIDS software environment with Coiled.</p>
+<p>You can either build this from the official RAPIDS Container images.</p>
+<pre class="literal-block">import coiled
+
+coiled.create_software_environment(
+    name=&quot;rapids-23-04-nightly&quot;,
+    container=&quot;rapidsai/rapidsai-core-nightly:23.04-cuda11.8-runtime-ubuntu22.04-py3.10&quot;,
+)
+</pre>
+<p>Or you can create it with a list of conda packages in case you want to customize the environment further.</p>
+<pre class="literal-block">import coiled
+
+coiled.create_software_environment(
+    name=&quot;rapids-23-04-nightly&quot;,
+    gpu_enabled=True,  # sets CUDA version for Conda to ensure GPU version of packages get installed
+    conda={
+        &quot;channels&quot;: ['rapidsai-nightly', 'conda-forge', 'nvidia'],
+        &quot;dependencies&quot;: ['rapids=23.04', 'python=3.10', 'cudatoolkit=11.5', 'jupyterlab'],
+    },
+)
+</pre>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to use the remote Jupyter feature you’ll need to ensure your environment has <code class="docutils literal notranslate"><span class="pre">jupyterlab</span></code> installed which is included in the container image but not the conda package so it needs to be specified.</p>
+</div>
+</section>
+<section id="cluster-creation">
+<h3>Cluster creation<a class="headerlink" href="#cluster-creation" title="Permalink to this heading">#</a></h3>
+<p>Now you can launch a cluster with this environment.</p>
+<pre class="literal-block">cluster = coiled.Cluster(
+    software=&quot;rapids-23-04-nightly&quot;,  # specify the software env you just created
+    jupyter=True,  # run Jupyter server on scheduler
+    scheduler_gpu=True,  # add GPU to scheduler
+    n_workers=4,
+    worker_gpu=1,  # single T4 per worker
+    worker_class=&quot;dask_cuda.CUDAWorker&quot;,  # recommended
+    environ={&quot;DISABLE_JUPYTER&quot;: &quot;true&quot;},  # needed if using environment built from RAPIDS container image
+)
+</pre>
+<p>Once the cluster has started you can also get the Jupyter URL and navigate to Jupyter Lab running on the Dask Scheduler node.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">jupyter_link</span><span class="p">)</span>
+<span class="go">https://cluster-abc123.dask.host/jupyter/lab?token=dddeeefff444555666</span>
+</pre></div>
+</div>
+<p>We can run <code class="docutils literal notranslate"><span class="pre">!nvidia-smi</span></code> in our notebook to see information on the GPU available to Jupyter.</p>
+<p>We can also connect a Dask client to see that information for the workers too.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span>
+<span class="n">client</span>
+</pre></div>
+</div>
+<p><img alt="Screenshot of Jupyter Lab running on a Coiled Dask Cluster with GPUs" src="../_images/jupyter-on-coiled.png" /></p>
+<p>From this Jupyter session we can see that our notebook server has a GPU and we can connect to the Dask cluster with no configuration and see all the Dask Workers have GPUs too.</p>
+</section>
+</section>
 </section>
 
 
@@ -480,6 +555,25 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quickstart">Quickstart</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#login">Login</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software-environment">Software Environment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cluster-creation">Cluster creation</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
@@ -522,7 +616,7 @@ document.write(`
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.2.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
 </p></div>
       
     </div>
