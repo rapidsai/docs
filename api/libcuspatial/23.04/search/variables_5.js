@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['segments_402',['segments',['../structcuspatial_1_1linestring__intersection__column__result.html#a0767025154c82b61e192c5ec71354258',1,'cuspatial::linestring_intersection_column_result']]],
-  ['segments_5fcoords_403',['segments_coords',['../structcuspatial_1_1linestring__intersection__result.html#a4c655a68da7a97af779c6884e15ce9df',1,'cuspatial::linestring_intersection_result']]]
+  ['segments_404',['segments',['../structcuspatial_1_1linestring__intersection__column__result.html#a0767025154c82b61e192c5ec71354258',1,'cuspatial::linestring_intersection_column_result']]],
+  ['segments_5fcoords_405',['segments_coords',['../structcuspatial_1_1linestring__intersection__result.html#a4c655a68da7a97af779c6884e15ce9df',1,'cuspatial::linestring_intersection_result']]]
 ];

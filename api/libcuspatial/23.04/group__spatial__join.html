@@ -77,6 +77,10 @@ Functions</h2></td></tr>
 <tr class="memitem:ga18ad7b5c2a584c96e79215aa1e848c9d"><td align="right" class="memTemplItemLeft" valign="top">std::pair&lt; rmm::device_uvector&lt; IndexType &gt;, rmm::device_uvector&lt; IndexType &gt; &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__spatial__join.html#ga18ad7b5c2a584c96e79215aa1e848c9d">cuspatial::quadtree_point_in_polygon</a> (PolyIndexIterator poly_indices_first, PolyIndexIterator poly_indices_last, QuadIndexIterator quad_indices_first, <a class="el" href="structcuspatial_1_1point__quadtree__ref.html">point_quadtree_ref</a> quadtree, PointIndexIterator point_indices_first, PointIndexIterator point_indices_last, PointIterator points_first, MultiPolygonRange polygons, rmm::cuda_stream_view stream=rmm::cuda_stream_default, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</td></tr>
 <tr class="memdesc:ga18ad7b5c2a584c96e79215aa1e848c9d"><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Test whether the specified points are inside any of the specified polygons.  <a href="group__spatial__join.html#ga18ad7b5c2a584c96e79215aa1e848c9d">More...</a><br></td></tr>
 <tr class="separator:ga18ad7b5c2a584c96e79215aa1e848c9d"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
+<tr class="memitem:ga779ca8d60e7abf807fe93ab7ed9d6eca"><td class="memTemplParams" colspan="2">template&lt;class LinestringIndexIterator , class QuadIndexIterator , class PointIndexIterator , class PointIterator , class MultiLinestringRange , typename IndexType  = iterator_value_type&lt;PointIndexIterator&gt;, typename T  = iterator_vec_base_type&lt;PointIterator&gt;&gt; </td></tr>
+<tr class="memitem:ga779ca8d60e7abf807fe93ab7ed9d6eca"><td align="right" class="memTemplItemLeft" valign="top">std::tuple&lt; rmm::device_uvector&lt; IndexType &gt;, rmm::device_uvector&lt; IndexType &gt;, rmm::device_uvector&lt; T &gt; &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__spatial__join.html#ga779ca8d60e7abf807fe93ab7ed9d6eca">cuspatial::quadtree_point_to_nearest_linestring</a> (LinestringIndexIterator linestring_indices_first, LinestringIndexIterator linestring_indices_last, QuadIndexIterator quad_indices_first, <a class="el" href="structcuspatial_1_1point__quadtree__ref.html">point_quadtree_ref</a> quadtree, PointIndexIterator point_indices_first, PointIndexIterator point_indices_last, PointIterator points_first, MultiLinestringRange linestrings, rmm::cuda_stream_view stream=rmm::cuda_stream_default, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</td></tr>
+<tr class="memdesc:ga779ca8d60e7abf807fe93ab7ed9d6eca"><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Finds the nearest linestring to each point in a quadrant, and computes the distances between each point and linestring.  <a href="group__spatial__join.html#ga779ca8d60e7abf807fe93ab7ed9d6eca">More...</a><br></td></tr>
+<tr class="separator:ga779ca8d60e7abf807fe93ab7ed9d6eca"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
 <tr class="memitem:ga75975acec94fcc51c7b92d51cdceb365"><td align="right" class="memItemLeft" valign="top">std::unique_ptr&lt; cudf::table &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__spatial__join.html#ga75975acec94fcc51c7b92d51cdceb365">cuspatial::join_quadtree_and_bounding_boxes</a> (cudf::table_view const &amp;quadtree, cudf::table_view const &amp;bbox, double x_min, double x_max, double y_min, double y_max, double scale, int8_t max_depth, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())</td></tr>
 <tr class="memdesc:ga75975acec94fcc51c7b92d51cdceb365"><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Search a quadtree for polygon or linestring bounding box intersections.  <a href="group__spatial__join.html#ga75975acec94fcc51c7b92d51cdceb365">More...</a><br></td></tr>
 <tr class="separator:ga75975acec94fcc51c7b92d51cdceb365"><td class="memSeparator" colspan="2">&nbsp;</td></tr>
@@ -509,7 +513,7 @@ The returned polygon and point indices are offsets into the <code>poly_quad_pair
 </div>
 </div>
 <a id="gabf7127077534ee29fdc63e6219710779"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gabf7127077534ee29fdc63e6219710779">◆&nbsp;</a></span>quadtree_point_to_nearest_linestring()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#gabf7127077534ee29fdc63e6219710779">◆&nbsp;</a></span>quadtree_point_to_nearest_linestring() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -578,6 +582,114 @@ The returned polygon and point indices are offsets into the <code>poly_quad_pair
 
 <p>Finds the nearest linestring to each point in a quadrant, and computes the distances between each point and linestring. </p>
 <p>Uses the table of (linestring, quadrant) pairs returned by <code>cuspatial::join_quadtree_and_bounding_boxes</code> to ensure distances are computed only for the points in the same quadrant as each linestring.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tbody><tr><td class="paramname">linestring_quad_pairs</td><td>cudf table of (linestring, quadrant) index pairs returned by <code>cuspatial::join_quadtree_and_bounding_boxes</code> </td></tr>
+    <tr><td class="paramname">quadtree</td><td>cudf table representing a quadtree (key, level, is_internal_node, length, offset). </td></tr>
+    <tr><td class="paramname">point_indices</td><td>Sorted point indices returned by <code>cuspatial::quadtree_on_points</code> </td></tr>
+    <tr><td class="paramname">point_x</td><td>x-coordinates of points to test </td></tr>
+    <tr><td class="paramname">point_y</td><td>y-coordinates of points to test </td></tr>
+    <tr><td class="paramname">linestring_offsets</td><td>Begin indices of the first point in each linestring (i.e. prefix-sum) </td></tr>
+    <tr><td class="paramname">linestring_points_x</td><td>Linestring point x-coordinates </td></tr>
+    <tr><td class="paramname">linestring_points_y</td><td>Linestring point y-coordinates </td></tr>
+    <tr><td class="paramname">mr</td><td>The optional resource to use for output device memory allocations.</td></tr>
+  </tbody></table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tbody><tr><td class="paramname"><a class="el" href="structcuspatial_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cuspatial::logic_error</a></td><td>If the linestring_quad_pairs table is malformed. </td></tr>
+    <tr><td class="paramname"><a class="el" href="structcuspatial_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cuspatial::logic_error</a></td><td>If the quadtree table is malformed. </td></tr>
+    <tr><td class="paramname"><a class="el" href="structcuspatial_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cuspatial::logic_error</a></td><td>If the number of point indices doesn't match the number of points. </td></tr>
+    <tr><td class="paramname"><a class="el" href="structcuspatial_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cuspatial::logic_error</a></td><td>If any linestring has fewer than two vertices. </td></tr>
+    <tr><td class="paramname"><a class="el" href="structcuspatial_1_1logic__error.html" title="Exception thrown when logical precondition is violated.">cuspatial::logic_error</a></td><td>If the types of point and linestring vertices are different.</td></tr>
+  </tbody></table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A cudf table with three columns, where each row represents a point/linestring pair and the distance between the two:</dd></dl>
+<p>point_offset - UINT32 column of point indices linestring_offset - UINT32 column of linestring indices distance - FLOAT or DOUBLE column (based on input point data type) of distances between each point and linestring</p>
+<dl class="section note"><dt>Note</dt><dd>The returned point and linestring indices are offsets into the <code>point_indices</code> and <code>linestring_quad_pairs</code> inputs, respectively. </dd></dl>
+
+</div>
+</div>
+<a id="ga779ca8d60e7abf807fe93ab7ed9d6eca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga779ca8d60e7abf807fe93ab7ed9d6eca">◆&nbsp;</a></span>quadtree_point_to_nearest_linestring() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class LinestringIndexIterator , class QuadIndexIterator , class PointIndexIterator , class PointIterator , class MultiLinestringRange , typename IndexType  = iterator_value_type&lt;PointIndexIterator&gt;, typename T  = iterator_vec_base_type&lt;PointIterator&gt;&gt; </div>
+      <table class="memname">
+        <tbody><tr>
+          <td class="memname">std::tuple&lt;rmm::device_uvector&lt;IndexType&gt;, rmm::device_uvector&lt;IndexType&gt;, rmm::device_uvector&lt;T&gt; &gt; cuspatial::quadtree_point_to_nearest_linestring </td>
+          <td>(</td>
+          <td class="paramtype">LinestringIndexIterator&nbsp;</td>
+          <td class="paramname"><em>linestring_indices_first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">LinestringIndexIterator&nbsp;</td>
+          <td class="paramname"><em>linestring_indices_last</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QuadIndexIterator&nbsp;</td>
+          <td class="paramname"><em>quad_indices_first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcuspatial_1_1point__quadtree__ref.html">point_quadtree_ref</a>&nbsp;</td>
+          <td class="paramname"><em>quadtree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PointIndexIterator&nbsp;</td>
+          <td class="paramname"><em>point_indices_first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PointIndexIterator&nbsp;</td>
+          <td class="paramname"><em>point_indices_last</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PointIterator&nbsp;</td>
+          <td class="paramname"><em>points_first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MultiLinestringRange&nbsp;</td>
+          <td class="paramname"><em>linestrings</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">rmm::cuda_stream_view&nbsp;</td>
+          <td class="paramname"><em>stream</em> = <code>rmm::cuda_stream_default</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">rmm::mr::device_memory_resource *&nbsp;</td>
+          <td class="paramname"><em>mr</em> = <code>rmm::mr::get_current_device_resource()</code>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </tbody></table>
+</div><div class="memdoc">
+
+<p>Finds the nearest linestring to each point in a quadrant, and computes the distances between each point and linestring. </p>
+<p>Uses the (linestring, quadrant) pairs returned by <code>cuspatial::join_quadtree_and_bounding_boxes</code> to ensure distances are computed only for the points in the same quadrant as each linestring.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tbody><tr><td class="paramname">linestring_quad_pairs</td><td>cudf table of (linestring, quadrant) index pairs returned by <code>cuspatial::join_quadtree_and_bounding_boxes</code> </td></tr>
