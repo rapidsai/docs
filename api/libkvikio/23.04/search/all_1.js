@@ -4,5 +4,6 @@ var searchData=
   ['compat_5fmode_3',['compat_mode',['../classkvikio_1_1defaults.html#a98755e7e923ded703943426a549e39da',1,'kvikio::defaults']]],
   ['compat_5fmode_5freset_4',['compat_mode_reset',['../classkvikio_1_1defaults.html#a36d4dad8b8879c0f63f25be49bc88354',1,'kvikio::defaults']]],
   ['cudaapi_5',['cudaAPI',['../classkvikio_1_1cudaAPI.html',1,'kvikio']]],
-  ['cufileexception_6',['CUfileException',['../structkvikio_1_1CUfileException.html',1,'kvikio']]]
+  ['cudaprimarycontext_6',['CudaPrimaryContext',['../classkvikio_1_1CudaPrimaryContext.html',1,'kvikio']]],
+  ['cufileexception_7',['CUfileException',['../structkvikio_1_1CUfileException.html',1,'kvikio']]]
 ];
