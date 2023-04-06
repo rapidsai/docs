@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['decompress_5fto_5fedgelist_1048',['decompress_to_edgelist',['../namespacecugraph.html#a68745aaad112e92b613b0d64b8fb4e89',1,'cugraph']]],
-  ['degree_1049',['degree',['../classcugraph_1_1legacy_1_1GraphCOOView.html#a61e28454bbc875622f196439f9814bcd',1,'cugraph::legacy::GraphCOOView::degree()'],['../classcugraph_1_1legacy_1_1GraphCompressedSparseBaseView.html#ae9b7ac754135ed5857125efc43a54f08',1,'cugraph::legacy::GraphCompressedSparseBaseView::degree()']]]
+  ['exception_912',['Exception',['../classMLCommon_1_1Exception.html#a73085f61eda50c16667293722c5c5e30',1,'MLCommon::Exception::Exception()'],['../classMLCommon_1_1Exception.html#a3b535887e3e45b33bfeefe5dafdae4d8',1,'MLCommon::Exception::Exception(const Exception &amp;src)'],['../classMLCommon_1_1Exception.html#a058d8d9ac7c0a67ea01ea5814bcf58a2',1,'MLCommon::Exception::Exception(const std::string &amp;_msg)']]]
 ];

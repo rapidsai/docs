@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['fill_5fedge_5fdst_5fproperty_1059',['fill_edge_dst_property',['../namespacecugraph.html#a52304cf0c823e6fa9f27ccaa6d838cb1',1,'cugraph']]],
-  ['fill_5fedge_5fsrc_5fproperty_1060',['fill_edge_src_property',['../namespacecugraph.html#a121925612ca336a146a3865e894f1c9b',1,'cugraph']]],
-  ['flatten_5fdendrogram_1061',['flatten_dendrogram',['../namespacecugraph.html#a14ff99325a9b1360a3ae2a3b3ff30c58',1,'cugraph']]],
-  ['force_5fatlas2_1062',['force_atlas2',['../namespacecugraph.html#ad32a4d3984264ce62bf617164930fa4d',1,'cugraph']]]
+  ['has_5fedge_5fmask_923',['has_edge_mask',['../structcugraph_1_1graph__mask__view__t.html#af6b45b1445c2019bf3cd43a084a1f259',1,'cugraph::graph_mask_view_t::has_edge_mask()'],['../structcugraph_1_1graph__mask__t.html#a36f0c1ebf39098a506f59dc674b0564b',1,'cugraph::graph_mask_t::has_edge_mask()']]],
+  ['has_5fvertex_5fmask_924',['has_vertex_mask',['../structcugraph_1_1graph__mask__view__t.html#a55a64cd2ca10c97ff24c265eeb4324bb',1,'cugraph::graph_mask_view_t::has_vertex_mask()'],['../structcugraph_1_1graph__mask__t.html#a807edf8833b93e3da6f3e288bec05e30',1,'cugraph::graph_mask_t::has_vertex_mask()']]]
 ];
