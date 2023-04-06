@@ -13,7 +13,7 @@ ENV PYTHONUNBUFFERED=True
 # add sagemaker-training-toolkit [ requires build tools ], flask [ serving ], and dask-ml
 RUN apt-get update && apt-get install -y --no-install-recommends build-essential \
     && source activate rapids \
-    && pip3 install sagemaker-training cupy-cuda115 flask dask-ml \
+    && pip3 install sagemaker-training cupy-cuda11x flask dask-ml \
     && pip3 install --upgrade protobuf
 
 # path where SageMaker looks for code when container runs in the cloud
