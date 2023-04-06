@@ -1,9 +1,15 @@
 var searchData=
 [
-  ['derive_5ftrajectories_23',['derive_trajectories',['../group__trajectory__api.html#gaf73e75bcbdceecca930c591111df2bf3',1,'cuspatial::derive_trajectories(IdInputIt ids_first, IdInputIt ids_last, PointInputIt points_first, TimestampInputIt timestamps_first, IdOutputIt ids_output_first, PointOutputIt points_output_first, TimestampOutputIt timestamps_output_first, rmm::cuda_stream_view stream=rmm::cuda_stream_default, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())'],['../group__trajectory__api.html#ga1e55f81a9e88f7a6aceea1df81afa72b',1,'cuspatial::derive_trajectories(cudf::column_view const &amp;object_id, cudf::column_view const &amp;x, cudf::column_view const &amp;y, cudf::column_view const &amp;timestamp, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())']]],
-  ['det_24',['det',['../group__types.html#ga072dcd4e0f0cd741d6628605732f72ef',1,'cuspatial']]],
-  ['directed_5fhausdorff_5fdistance_25',['directed_hausdorff_distance',['../group__distance.html#gad2d736b3abceec8182154e2b6a426abb',1,'cuspatial::directed_hausdorff_distance(cudf::column_view const &amp;xs, cudf::column_view const &amp;ys, cudf::column_view const &amp;space_offsets, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())'],['../group__distance.html#ga3e108295c74ce5f5f02801d355e87add',1,'cuspatial::directed_hausdorff_distance(PointIt points_first, PointIt points_last, OffsetIt space_offsets_first, OffsetIt space_offsets_last, OutputIt distance_first, rmm::cuda_stream_view stream=rmm::cuda_stream_default)']]],
-  ['distance_26',['Distance',['../group__distance.html',1,'']]],
-  ['dot_27',['dot',['../group__types.html#ga9cce1c8e41f7545327175be5c21fc24f',1,'cuspatial']]],
-  ['doxygen_5fgroups_2eh_28',['doxygen_groups.h',['../doxygen__groups_8h.html',1,'']]]
+  ['center_12',['center',['../group__types.html#gabbaa14bca93a3f313089f2fb84e4b267',1,'cuspatial::segment']]],
+  ['collection_5ftype_5fid_13',['collection_type_id',['../types_8hpp.html#aab1504255b3b578041aa5d929d2a6723',1,'cuspatial']]],
+  ['constants_2ehpp_14',['constants.hpp',['../constants_8hpp.html',1,'']]],
+  ['copy_5fpoints_5fin_5frange_15',['copy_points_in_range',['../group__spatial__relationship.html#gaabc1e4b45fbe5c8bd0473b97fe94d5fd',1,'cuspatial']]],
+  ['count_5fpoints_5fin_5frange_16',['count_points_in_range',['../group__spatial__relationship.html#ga3dddce88ff610262003b49d68b6d51cc',1,'cuspatial']]],
+  ['cuda_5ferror_17',['cuda_error',['../structcuspatial_1_1cuda__error.html',1,'cuspatial']]],
+  ['cuspatial_5fcheck_5fcuda_18',['CUSPATIAL_CHECK_CUDA',['../error_8hpp.html#afe9dae1e532c6d6925fff60b1a1b80d7',1,'error.hpp']]],
+  ['constants_19',['Constants',['../group__cuspatial__constants.html',1,'']]],
+  ['cuspatial_5fcuda_5ftry_20',['CUSPATIAL_CUDA_TRY',['../error_8hpp.html#acfc1039c29661ff7f37f5b83b2b7a6fd',1,'error.hpp']]],
+  ['cuspatial_5fexpects_21',['CUSPATIAL_EXPECTS',['../error_8hpp.html#ac62b6e15da5763cd1ae65f3845a697bc',1,'error.hpp']]],
+  ['cuspatial_5ffail_22',['CUSPATIAL_FAIL',['../error_8hpp.html#ae11b6562fe29fefbd9255c33b879c0b3',1,'error.hpp']]],
+  ['cuspatial_20c_2b_2b_20api_20refactoring_20guide_23',['cuSpatial C++ API Refactoring Guide',['../md_developer_guide_REFACTORING_GUIDE.html',1,'']]]
 ];

@@ -1,15 +1,10 @@
 var searchData=
 [
-  ['center_11',['center',['../group__types.html#gabbaa14bca93a3f313089f2fb84e4b267',1,'cuspatial::segment']]],
-  ['collection_5ftype_5fid_12',['collection_type_id',['../types_8hpp.html#aab1504255b3b578041aa5d929d2a6723',1,'cuspatial']]],
-  ['constants_2ehpp_13',['constants.hpp',['../constants_8hpp.html',1,'']]],
-  ['copy_5fpoints_5fin_5frange_14',['copy_points_in_range',['../group__spatial__relationship.html#gaabc1e4b45fbe5c8bd0473b97fe94d5fd',1,'cuspatial']]],
-  ['count_5fpoints_5fin_5frange_15',['count_points_in_range',['../group__spatial__relationship.html#ga3dddce88ff610262003b49d68b6d51cc',1,'cuspatial']]],
-  ['cuda_5ferror_16',['cuda_error',['../structcuspatial_1_1cuda__error.html',1,'cuspatial']]],
-  ['cuspatial_5fcheck_5fcuda_17',['CUSPATIAL_CHECK_CUDA',['../error_8hpp.html#afe9dae1e532c6d6925fff60b1a1b80d7',1,'error.hpp']]],
-  ['constants_18',['Constants',['../group__cuspatial__constants.html',1,'']]],
-  ['cuspatial_5fcuda_5ftry_19',['CUSPATIAL_CUDA_TRY',['../error_8hpp.html#acfc1039c29661ff7f37f5b83b2b7a6fd',1,'error.hpp']]],
-  ['cuspatial_5fexpects_20',['CUSPATIAL_EXPECTS',['../error_8hpp.html#ac62b6e15da5763cd1ae65f3845a697bc',1,'error.hpp']]],
-  ['cuspatial_5ffail_21',['CUSPATIAL_FAIL',['../error_8hpp.html#ae11b6562fe29fefbd9255c33b879c0b3',1,'error.hpp']]],
-  ['cuspatial_20c_2b_2b_20api_20refactoring_20guide_22',['cuSpatial C++ API Refactoring Guide',['../md_developer_guide_REFACTORING_GUIDE.html',1,'']]]
+  ['basefixture_5',['BaseFixture',['../classcuspatial_1_1test_1_1BaseFixture.html',1,'cuspatial::test']]],
+  ['basefixturewithparam_6',['BaseFixtureWithParam',['../classcuspatial_1_1test_1_1BaseFixtureWithParam.html',1,'cuspatial::test']]],
+  ['begin_7',['begin',['../classcuspatial_1_1linestring__ref.html#ab4fb264e08f4dd3f2705f0d120bc3c62',1,'cuspatial::linestring_ref::begin()'],['../classcuspatial_1_1polygon__ref.html#a94a7974532e8dbe9f3b95f025eb75192',1,'cuspatial::polygon_ref::begin()'],['../classcuspatial_1_1multilinestring__ref.html#a6b7ae32f2dafd0f2e134e061e67c3abc',1,'cuspatial::multilinestring_ref::begin()'],['../classcuspatial_1_1multipoint__ref.html#a9460cec41a6ed6832db117940d99f498',1,'cuspatial::multipoint_ref::begin()'],['../classcuspatial_1_1multipolygon__ref.html#a64477907249fe5059400a77eab799749',1,'cuspatial::multipolygon_ref::begin()'],['../classcuspatial_1_1multilinestring__range.html#af6eae0c13826212992649353600d44dc',1,'cuspatial::multilinestring_range::begin()'],['../classcuspatial_1_1multipoint__range.html#a20ab209eb072b7dbec49b146c594d671',1,'cuspatial::multipoint_range::begin()'],['../classcuspatial_1_1multipolygon__range.html#aae438a88088a092987594499347b6256',1,'cuspatial::multipolygon_range::begin()'],['../classcuspatial_1_1range.html#a25ed6e312b96e9b3b00309ef0a438e7d',1,'cuspatial::range::begin()']]],
+  ['box_8',['box',['../classcuspatial_1_1box.html',1,'cuspatial']]],
+  ['box_5fmax_9',['box_max',['../group__types.html#ga5a76f02a90610f43b08fc5cdab49ef19',1,'cuspatial']]],
+  ['box_5fmin_10',['box_min',['../group__types.html#ga0f8514e5b39a97fd18d32c191bad3b3f',1,'cuspatial']]],
+  ['box_5fto_5ftuple_11',['box_to_tuple',['../structcuspatial_1_1detail_1_1box__to__tuple.html',1,'cuspatial::detail']]]
 ];

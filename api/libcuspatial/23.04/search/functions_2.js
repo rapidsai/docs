@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['derive_5ftrajectories_294',['derive_trajectories',['../group__trajectory__api.html#gaf73e75bcbdceecca930c591111df2bf3',1,'cuspatial::derive_trajectories(IdInputIt ids_first, IdInputIt ids_last, PointInputIt points_first, TimestampInputIt timestamps_first, IdOutputIt ids_output_first, PointOutputIt points_output_first, TimestampOutputIt timestamps_output_first, rmm::cuda_stream_view stream=rmm::cuda_stream_default, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())'],['../group__trajectory__api.html#ga1e55f81a9e88f7a6aceea1df81afa72b',1,'cuspatial::derive_trajectories(cudf::column_view const &amp;object_id, cudf::column_view const &amp;x, cudf::column_view const &amp;y, cudf::column_view const &amp;timestamp, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())']]],
-  ['det_295',['det',['../group__types.html#ga072dcd4e0f0cd741d6628605732f72ef',1,'cuspatial']]],
-  ['directed_5fhausdorff_5fdistance_296',['directed_hausdorff_distance',['../group__distance.html#gad2d736b3abceec8182154e2b6a426abb',1,'cuspatial::directed_hausdorff_distance(cudf::column_view const &amp;xs, cudf::column_view const &amp;ys, cudf::column_view const &amp;space_offsets, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())'],['../group__distance.html#ga3e108295c74ce5f5f02801d355e87add',1,'cuspatial::directed_hausdorff_distance(PointIt points_first, PointIt points_last, OffsetIt space_offsets_first, OffsetIt space_offsets_last, OutputIt distance_first, rmm::cuda_stream_view stream=rmm::cuda_stream_default)']]],
-  ['dot_297',['dot',['../group__types.html#ga9cce1c8e41f7545327175be5c21fc24f',1,'cuspatial']]]
+  ['center_307',['center',['../group__types.html#gabbaa14bca93a3f313089f2fb84e4b267',1,'cuspatial::segment']]],
+  ['copy_5fpoints_5fin_5frange_308',['copy_points_in_range',['../group__spatial__relationship.html#gaabc1e4b45fbe5c8bd0473b97fe94d5fd',1,'cuspatial']]],
+  ['count_5fpoints_5fin_5frange_309',['count_points_in_range',['../group__spatial__relationship.html#ga3dddce88ff610262003b49d68b6d51cc',1,'cuspatial']]]
 ];

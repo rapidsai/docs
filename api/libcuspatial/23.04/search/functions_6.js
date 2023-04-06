@@ -1,8 +1,4 @@
 var searchData=
 [
-  ['internal_5fnode_5fflag_5fbegin_305',['internal_node_flag_begin',['../structcuspatial_1_1point__quadtree__ref.html#a691976b5fb216465afd8ccd2ad2ae8f3',1,'cuspatial::point_quadtree_ref']]],
-  ['internal_5fnode_5fflag_5fend_306',['internal_node_flag_end',['../structcuspatial_1_1point__quadtree__ref.html#a8caddf7d7ec61842e2ada0bbd091a41e',1,'cuspatial::point_quadtree_ref']]],
-  ['is_5ffirst_5fpoint_5fof_5fmultipolygon_307',['is_first_point_of_multipolygon',['../classcuspatial_1_1multipolygon__range.html#a5284dc9d9edf546823486764b507b1db',1,'cuspatial::multipolygon_range']]],
-  ['is_5fsingle_5fpoint_5frange_308',['is_single_point_range',['../classcuspatial_1_1multipoint__range.html#ab6b642555951dd49313ed54f307240c6',1,'cuspatial::multipoint_range']]],
-  ['is_5fvalid_5fsegment_5fid_309',['is_valid_segment_id',['../classcuspatial_1_1multilinestring__range.html#a3b039490b88c78343bcfc904a897fb7a',1,'cuspatial::multilinestring_range']]]
+  ['haversine_5fdistance_321',['haversine_distance',['../group__distance.html#ga84eb7a8d22b290107e00e9000effe374',1,'cuspatial::haversine_distance(cudf::column_view const &amp;a_lon, cudf::column_view const &amp;a_lat, cudf::column_view const &amp;b_lon, cudf::column_view const &amp;b_lat, double const radius=EARTH_RADIUS_KM, rmm::mr::device_memory_resource *mr=rmm::mr::get_current_device_resource())'],['../group__distance.html#gabcc3f2edbf4d84139779ada72c530aee',1,'cuspatial::haversine_distance(LonLatItA a_lonlat_first, LonLatItA a_lonlat_last, LonLatItB b_lonlat_first, OutputIt distance_first, T const radius=EARTH_RADIUS_KM, rmm::cuda_stream_view stream=rmm::cuda_stream_default)']]]
 ];
