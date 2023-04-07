@@ -257,7 +257,7 @@ Use the selector tool below to select your preferred method, packages, and envir
 <div id="pip"></div>
 
 ## 3B. Install RAPIDS with pip
-Beginning with the release of 23.04: cuDF, dask-cuDF, cuML, cuGraph, RMM, RAFT, and cuSpatial CUDA 11 pip packages are generally available.
+Beginning with the release of 23.04: cuDF, dask-cuDF, cuML, cuGraph, RMM, and RAFT CUDA 11 pip packages are available on the NVIDIA Index.
 
 <br/>
 
