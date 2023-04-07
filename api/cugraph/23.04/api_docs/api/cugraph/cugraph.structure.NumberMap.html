@@ -714,7 +714,7 @@ document.write(`
 <h1>cugraph.structure.NumberMap<a class="headerlink" href="#cugraph-structure-numbermap" title="Permalink to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="cugraph.structure.NumberMap">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cugraph.structure.</span></span><span class="sig-name descname"><span class="pre">NumberMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">renumber_id_type=&lt;class</span> <span class="pre">'numpy.int32'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unrenumbered_id_type=&lt;class</span> <span class="pre">'numpy.int32'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/72cffc1/python/cugraph/structure/number_map.py#L51"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.structure.NumberMap" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cugraph.structure.</span></span><span class="sig-name descname"><span class="pre">NumberMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">renumber_id_type=&lt;class</span> <span class="pre">'numpy.int32'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unrenumbered_id_type=&lt;class</span> <span class="pre">'numpy.int32'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_renumbered=False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/72cffc1/python/cugraph/structure/number_map.py#L24"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.structure.NumberMap" title="Permalink to this definition">#</a></dt>
 <dd><p class="rubric">Methods</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
@@ -733,13 +733,16 @@ document.write(`
 <tr class="row-odd"><td><p><a class="reference internal" href="cugraph.structure.NumberMap.generate_unused_column_name.html#cugraph.structure.NumberMap.generate_unused_column_name" title="cugraph.structure.NumberMap.generate_unused_column_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_unused_column_name</span></code></a>(column_names[,&nbsp;...])</p></td>
 <td><p>Helper function to generate an unused column name</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="cugraph.structure.NumberMap.set_renumbered_col_names.html#cugraph.structure.NumberMap.set_renumbered_col_names" title="cugraph.structure.NumberMap.set_renumbered_col_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_renumbered_col_names</span></code></a>(...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="cugraph.structure.NumberMap.renumber_and_segment.html#cugraph.structure.NumberMap.renumber_and_segment" title="cugraph.structure.NumberMap.renumber_and_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">renumber_and_segment</span></code></a>(df,&nbsp;src_col_names,&nbsp;...)</p></td>
+<td><p>Given an input dataframe with its column names, this function returns the renumbered dataframe(if renumbering occured) along with a mapping from internal to external vertex IDs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cugraph.structure.NumberMap.set_renumbered_col_names.html#cugraph.structure.NumberMap.set_renumbered_col_names" title="cugraph.structure.NumberMap.set_renumbered_col_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_renumbered_col_names</span></code></a>(...)</p></td>
 <td><p>Sets self.renumbered_src_col_name and self.renumbered_dst_col_name to values that can be used to replace src_col_names_to_replace and dst_col_names_to_replace to values that will not collide with any other column names in all_col_names.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="cugraph.structure.NumberMap.to_internal_vertex_id.html#cugraph.structure.NumberMap.to_internal_vertex_id" title="cugraph.structure.NumberMap.to_internal_vertex_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_internal_vertex_id</span></code></a>(df[,&nbsp;col_names])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="cugraph.structure.NumberMap.to_internal_vertex_id.html#cugraph.structure.NumberMap.to_internal_vertex_id" title="cugraph.structure.NumberMap.to_internal_vertex_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_internal_vertex_id</span></code></a>(df[,&nbsp;col_names])</p></td>
 <td><p>Given a collection of external vertex ids, return the internal vertex ids</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="cugraph.structure.NumberMap.unrenumber.html#cugraph.structure.NumberMap.unrenumber" title="cugraph.structure.NumberMap.unrenumber"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unrenumber</span></code></a>(df,&nbsp;column_name[,&nbsp;...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="cugraph.structure.NumberMap.unrenumber.html#cugraph.structure.NumberMap.unrenumber" title="cugraph.structure.NumberMap.unrenumber"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unrenumber</span></code></a>(df,&nbsp;column_name[,&nbsp;...])</p></td>
 <td><p>Given a DataFrame containing internal vertex ids in the identified column, replace this with external vertex ids.</p></td>
 </tr>
 </tbody>
@@ -755,17 +758,14 @@ document.write(`
 <tr class="row-odd"><td><p><strong>renumber</strong></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><strong>renumber_and_segment</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><strong>vertex_column_size</strong></p></td>
+<tr class="row-even"><td><p><strong>vertex_column_size</strong></p></td>
 <td></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="cugraph.structure.NumberMap.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">renumber_id_type=&lt;class</span> <span class="pre">'numpy.int32'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unrenumbered_id_type=&lt;class</span> <span class="pre">'numpy.int32'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/72cffc1/python/cugraph/structure/number_map.py#L269"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.structure.NumberMap.__init__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">renumber_id_type=&lt;class</span> <span class="pre">'numpy.int32'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unrenumbered_id_type=&lt;class</span> <span class="pre">'numpy.int32'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_renumbered=False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/rapidsai/cugraph/blob/72cffc1/python/cugraph/structure/number_map.py#L242"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cugraph.structure.NumberMap.__init__" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
@@ -793,7 +793,7 @@ document.write(`
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="cugraph.structure.NumberMap.renumber_and_segment.html#cugraph.structure.NumberMap.renumber_and_segment" title="cugraph.structure.NumberMap.renumber_and_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">renumber_and_segment</span></code></a>(df,&nbsp;src_col_names,&nbsp;...)</p></td>
-<td><p></p></td>
+<td><p>Given an input dataframe with its column names, this function returns the renumbered dataframe(if renumbering occured) along with a mapping from internal to external vertex IDs.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="cugraph.structure.NumberMap.set_renumbered_col_names.html#cugraph.structure.NumberMap.set_renumbered_col_names" title="cugraph.structure.NumberMap.set_renumbered_col_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_renumbered_col_names</span></code></a>(...)</p></td>
 <td><p>Sets self.renumbered_src_col_name and self.renumbered_dst_col_name to values that can be used to replace src_col_names_to_replace and dst_col_names_to_replace to values that will not collide with any other column names in all_col_names.</p></td>
