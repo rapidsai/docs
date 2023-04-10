@@ -164,7 +164,7 @@ bash /rapids/utils/stop-jupyter.sh
 <br/>
 
 ### **pip**
-The package installer for python (pip) is generally available as of RAPIDS release 23.04. See below for details.
+The package installer for python (pip) is available as of RAPIDS release 23.04. See below for details.
 
 
 <br/>
@@ -264,7 +264,7 @@ Beginning with the release of 23.04: cuDF, dask-cuDF, cuML, cuGraph, RMM, and RA
 ### **pip Enhanced Prerequisites**
 <i class="fas fa-info-circle"></i> **Glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
 <i class="fas fa-info-circle"></i> **Glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.31 (only ARM Server Base System Architecture is supported). <br/>
-<i class="fas fa-download"></i> **CUDA >= 11.8**, with at least the **v520.61.05** driver. To use older CUDA 11.x versions, please see Troubleshooting and Known Issues. <br/>
+<i class="fas fa-download"></i> **CUDA >= 11.2**, with at least the **v460.27.03** driver. <br/>
 <i class="fab fa-python"></i> **Python and pip version:** Python 3.8, 3.9, or 3.10 using pip 20.3+ with [PEP600 support](https://peps.python.org/pep-0600/){: target="_blank"}.
 
 <br/>
