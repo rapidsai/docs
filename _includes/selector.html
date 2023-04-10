@@ -252,7 +252,7 @@
                         </div>
                     </template>
                 </div>
-                <div class="options-section" x-show="active_method != 'pip'">
+                <div class="options-section" x-show="active_method !== 'pip'">
                     <div class="option-label">CUDA</div>
                     <template x-for="version in cuda_vers">
                         <div x-on:click="(e) => cudaClickHandler(e, version)"
@@ -260,7 +260,7 @@
                             class="option" x-text="'CUDA ' + version"></div>
                     </template>
                 </div>
-                <div class="options-section" x-show="active_method != 'pip'">
+                <div class="options-section" x-show="active_method !== 'pip'">
                     <div class="option-label">Python</div>
                     <template x-for="version in python_vers">
                         <div x-on:click="(e) => pythonClickHandler(e, version)"
@@ -498,13 +498,15 @@
             getpipCmdHtml() {
                 var pip_install = "pip install ";
                 var index_url = " --extra_index_url=https://pypi.nvidia.com";
-                var pkgs = String(this.active_packages).replaceAll(",", "-cu11 ").toLowerCase() + "-cu11";
+                var libraryToPkg = (pkg) => {
+                    pkg = pkg.toLowerCase();
+                    if (pkg === "cucim") return pkg;
+                    return pkg + "-cu11"
+                }
+                var pkgs = this.active_packages.map(libraryToPkg).join(" ");
                 var isArm = this.active_arch === "arm";
                 var cupy_inst = "";
 
-                if (pkgs.includes("cucim")) {
-                    pkgs = pkgs.replaceAll("cucim-cu11", "cucim");
-                }
                 if (pkgs === "cucim") {
                     index_url = "";
                 }
