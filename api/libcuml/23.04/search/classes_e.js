@@ -1,13 +1,9 @@
 var searchData=
 [
-  ['simpledensemat_1314',['SimpleDenseMat',['../structML_1_1SimpleDenseMat.html',1,'ML']]],
-  ['simplemat_1315',['SimpleMat',['../structML_1_1SimpleMat.html',1,'ML']]],
-  ['simplematowning_1316',['SimpleMatOwning',['../structML_1_1SimpleMatOwning.html',1,'ML']]],
-  ['simplesparsemat_1317',['SimpleSparseMat',['../structML_1_1SimpleSparseMat.html',1,'ML']]],
-  ['simplevec_1318',['SimpleVec',['../structML_1_1SimpleVec.html',1,'ML']]],
-  ['simplevecowning_1319',['SimpleVecOwning',['../structML_1_1SimpleVecOwning.html',1,'ML']]],
-  ['sparsetreenode_1320',['SparseTreeNode',['../structSparseTreeNode.html',1,'']]],
-  ['svc_1321',['SVC',['../classML_1_1SVM_1_1SVC.html',1,'ML::SVM']]],
-  ['svmmodel_1322',['SvmModel',['../structML_1_1SVM_1_1SvmModel.html',1,'ML::SVM']]],
-  ['svmparameter_1323',['SvmParameter',['../structML_1_1SVM_1_1SvmParameter.html',1,'ML::SVM']]]
+  ['rand_5fmat_1595',['rand_mat',['../structML_1_1rand__mat.html',1,'ML']]],
+  ['randomforestmetadata_1596',['RandomForestMetaData',['../structML_1_1RandomForestMetaData.html',1,'ML']]],
+  ['rf_5fmetrics_1597',['RF_metrics',['../structML_1_1RF__metrics.html',1,'ML']]],
+  ['rf_5fparams_1598',['RF_params',['../structML_1_1RF__params.html',1,'ML']]],
+  ['robust_5fsingle_5flinkage_5foutput_1599',['robust_single_linkage_output',['../classML_1_1HDBSCAN_1_1Common_1_1robust__single__linkage__output.html',1,'ML::HDBSCAN::Common']]],
+  ['robustsinglelinkageparams_1600',['RobustSingleLinkageParams',['../classML_1_1HDBSCAN_1_1Common_1_1RobustSingleLinkageParams.html',1,'ML::HDBSCAN::Common']]]
 ];

@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['task_5fcategory_2426',['task_category',['../namespaceML.html#af60801cb5c9adac3f6f5bd4bd43aa2f7',1,'ML']]],
-  ['transformer_5ft_2427',['transformer_t',['../namespacecuml_1_1genetic.html#a983fa2445e848becbdd431eda7b45c94',1,'cuml::genetic']]],
-  ['tsne_5falgorithm_2428',['TSNE_ALGORITHM',['../namespaceML.html#aacbc7e98d26a8d5e8b51055651d423e2',1,'ML']]],
-  ['type_2429',['type',['../structcuml_1_1genetic_1_1node.html#a6c31af9f9ecb13165e25632908e94d77',1,'cuml::genetic::node']]]
+  ['random_5fmatrix_5ftype_2947',['random_matrix_type',['../group__paramsRPROJ.html#ga134c8dc1d94a4ee420679aec61849e2b',1,'ML']]],
+  ['rf_5ftype_2948',['RF_type',['../namespaceML.html#a4d83b99fe769e2e9bf3596bb1604ab4f',1,'ML']]],
+  ['row_5fop_2949',['row_op',['../namespaceML_1_1experimental_1_1fil.html#abfa9889141b3f8c089ccd7537bfd3c84',1,'ML::experimental::fil']]]
 ];

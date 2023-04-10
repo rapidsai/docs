@@ -1,10 +1,8 @@
 var searchData=
 [
-  ['floatpointer_2364',['FloatPointer',['../namespaceML_1_1Explainer.html#ac9f6a50f143629269f13f0872b6e05c7',1,'ML::Explainer']]],
-  ['forest32_5ft_2365',['forest32_t',['../namespaceML_1_1fil.html#ab902ee8f1eb9048bc84e3db2b379f68d',1,'ML::fil']]],
-  ['forest64_5ft_2366',['forest64_t',['../namespaceML_1_1fil.html#af55ed2548249908ddb3c11b2ecb276a9',1,'ML::fil']]],
-  ['forest_5ft_2367',['forest_t',['../namespaceML_1_1fil.html#aa3a074eb424be89ab69c968e4f540d4c',1,'ML::fil']]],
-  ['forest_5fvariant_2368',['forest_variant',['../namespaceML_1_1fil.html#ae637a1d8a1338933a94a22395a82e166',1,'ML::fil']]],
-  ['fragmenta_2369',['FragmentA',['../structMLCommon_1_1LinAlg_1_1ThreadDiffSquaredAdd.html#af352fe5e0476bd7b85a991dc5944fb22',1,'MLCommon::LinAlg::ThreadDiffSquaredAdd::FragmentA()'],['../structMLCommon_1_1LinAlg_1_1ThreadL1NormAdd.html#a0a3a86fde537db8245b1e04b24130800',1,'MLCommon::LinAlg::ThreadL1NormAdd::FragmentA()']]],
-  ['fragmentb_2370',['FragmentB',['../structMLCommon_1_1LinAlg_1_1ThreadDiffSquaredAdd.html#a4876355754f7be69de55693f6e898920',1,'MLCommon::LinAlg::ThreadDiffSquaredAdd::FragmentB()'],['../structMLCommon_1_1LinAlg_1_1ThreadL1NormAdd.html#a529f28e1e35fc231617c572707c54c03',1,'MLCommon::LinAlg::ThreadL1NormAdd::FragmentB()']]]
+  ['data_5fstore_2867',['data_store',['../structraft__proto_1_1buffer.html#aa8fd67e032c74f88a523511cc44cf44e',1,'raft_proto::buffer']]],
+  ['decision_5fforest_5fvariant_2868',['decision_forest_variant',['../namespaceML_1_1experimental_1_1fil.html#a06276748c51db42817634b8432093433',1,'ML::experimental::fil']]],
+  ['device_5fid_2869',['device_id',['../namespaceraft__proto.html#ac62326a034a04c0a7856f60531c394e1',1,'raft_proto']]],
+  ['device_5fid_5fvariant_2870',['device_id_variant',['../namespaceraft__proto.html#abdc82bb69d0ad85ab76fc7360ffa7799',1,'raft_proto']]],
+  ['device_5fsetter_2871',['device_setter',['../namespaceraft__proto.html#ab1df282a5b362c3bcc52aece7aa4ff9c',1,'raft_proto']]]
 ];

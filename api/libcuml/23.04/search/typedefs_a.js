@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['randomforestclassifierd_2385',['RandomForestClassifierD',['../namespaceML.html#acbf0352d6a255f990fcdf949b898d6af',1,'ML']]],
-  ['randomforestclassifierf_2386',['RandomForestClassifierF',['../namespaceML.html#a36df48edc11fcd68dd8b6f4a76526e7b',1,'ML']]],
-  ['randomforestregressord_2387',['RandomForestRegressorD',['../namespaceML.html#a64f2117024176a6fab67a1a6b8925243',1,'ML']]],
-  ['randomforestregressorf_2388',['RandomForestRegressorF',['../namespaceML.html#a79048a796facf156e926834d97bec78f',1,'ML']]]
+  ['node_5ftype_2892',['node_type',['../structML_1_1experimental_1_1fil_1_1decision__forest.html#a035b5490973e32fc1d7cca43b99ee7f5',1,'ML::experimental::fil::decision_forest::node_type()'],['../structML_1_1experimental_1_1fil_1_1detail_1_1decision__forest__builder.html#a21c3cd7b0cd3eb82b37c081358befb3c',1,'ML::experimental::fil::detail::decision_forest_builder::node_type()'],['../structML_1_1experimental_1_1fil_1_1forest.html#abfbf73d892ac3ad6f2a60748283b8e4a',1,'ML::experimental::fil::forest::node_type()']]],
+  ['non_5fowning_5fbuffer_2893',['non_owning_buffer',['../namespaceraft__proto.html#a7e2ef874810474bc5a99414f3795db25',1,'raft_proto']]]
 ];

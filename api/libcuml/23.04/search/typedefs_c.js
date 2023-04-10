@@ -1,9 +1,10 @@
 var searchData=
 [
-  ['threadsperwarp_2393',['ThreadsPerWarp',['../structMLCommon_1_1LinAlg_1_1ThreadDiffSquaredAdd.html#a11840b326f2ac8319f8efac2a5914429',1,'MLCommon::LinAlg::ThreadDiffSquaredAdd::ThreadsPerWarp()'],['../structMLCommon_1_1LinAlg_1_1ThreadL1NormAdd.html#a2dd59ba9c62ebf7f687d27a6e461fbdf',1,'MLCommon::LinAlg::ThreadL1NormAdd::ThreadsPerWarp()']]],
-  ['treeclassifierd_2394',['TreeClassifierD',['../namespaceML_1_1DT.html#a79a47bac63d9de96e9c6cc887619f863',1,'ML::DT']]],
-  ['treeclassifierf_2395',['TreeClassifierF',['../namespaceML_1_1DT.html#ad55509f3ba092c856700d3ee9993351a',1,'ML::DT']]],
-  ['treepathhandle_2396',['TreePathHandle',['../namespaceML_1_1Explainer.html#af17a4003620e34c9e26c010868e90a39',1,'ML::Explainer']]],
-  ['treeregressord_2397',['TreeRegressorD',['../namespaceML_1_1DT.html#a20ef38b4d6e391c60b2255d1e942de27',1,'ML::DT']]],
-  ['treeregressorf_2398',['TreeRegressorF',['../namespaceML_1_1DT.html#aac6368ef5925ee1b409c8315a7740292',1,'ML::DT']]]
+  ['paramspca_2896',['paramsPCA',['../namespaceML.html#a239d146c5a5545dd84e3d0b6e305f631',1,'ML']]],
+  ['paramspcamg_2897',['paramsPCAMG',['../namespaceML.html#a9ff6828291243eca3956818d2f309339',1,'ML']]],
+  ['paramstsvd_2898',['paramsTSVD',['../namespaceML.html#ab2bffedf6f8d520e216a6542ebf6a0f1',1,'ML']]],
+  ['paramstsvdmg_2899',['paramsTSVDMG',['../namespaceML.html#ae3b799705dfc8991beaf24c9a906bc76',1,'ML']]],
+  ['postprocessor_5ftype_2900',['postprocessor_type',['../structML_1_1experimental_1_1fil_1_1decision__forest.html#a5f9ab6c121011efcb80dce24ee3b1cf2',1,'ML::experimental::fil::decision_forest']]],
+  ['preset_5fdecision_5fforest_2901',['preset_decision_forest',['../namespaceML_1_1experimental_1_1fil_1_1detail.html#a6dbe0067d925077f8821903798907f12',1,'ML::experimental::fil::detail']]],
+  ['program_5ft_2902',['program_t',['../namespacecuml_1_1genetic.html#adadc409fb1644ac0a495b4de880073af',1,'cuml::genetic']]]
 ];

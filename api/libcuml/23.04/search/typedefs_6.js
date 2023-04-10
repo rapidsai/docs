@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['logcallback_2376',['LogCallback',['../namespacespdlog_1_1sinks.html#a355dc363f9fe1326f759f07083ec3e8b',1,'spdlog::sinks']]]
+  ['index_5ftype_2881',['index_type',['../structML_1_1experimental_1_1fil_1_1detail_1_1bitset.html#a10e55fec5c7aa1541c83094f84f6c370',1,'ML::experimental::fil::detail::bitset::index_type()'],['../structML_1_1experimental_1_1fil_1_1node.html#ae4ac7bd96f4c288e19ceeedb213d765c',1,'ML::experimental::fil::node::index_type()'],['../structraft__proto_1_1buffer.html#abcbe3fe02be7ee20f3338222b7f0af03',1,'raft_proto::buffer::index_type()'],['../structML_1_1experimental_1_1fil_1_1detail_1_1specialization__types.html#a39628763d91da9ff2daf443838daa3b7',1,'ML::experimental::fil::detail::specialization_types::index_type()'],['../namespaceML_1_1experimental_1_1fil.html#a264c7eebac158a4a8c288e29711cdf81',1,'ML::experimental::fil::index_type()']]],
+  ['instructionshape_2882',['InstructionShape',['../structMLCommon_1_1LinAlg_1_1ThreadDiffSquaredAdd.html#a274b5674fe0ed6bc94ae1c899767867d',1,'MLCommon::LinAlg::ThreadDiffSquaredAdd::InstructionShape()'],['../structMLCommon_1_1LinAlg_1_1ThreadL1NormAdd.html#ad7c2f64f8fecdb8b9998fb0470ad5d08',1,'MLCommon::LinAlg::ThreadL1NormAdd::InstructionShape()']]],
+  ['io_5ftype_2883',['io_type',['../structML_1_1experimental_1_1fil_1_1decision__forest.html#a9f33edcae70a8b61ee37c507468fdf6e',1,'ML::experimental::fil::decision_forest::io_type()'],['../structML_1_1experimental_1_1fil_1_1forest.html#a4f499fdb5e1c56440308f6ff6ab35989',1,'ML::experimental::fil::forest::io_type()']]]
 ];

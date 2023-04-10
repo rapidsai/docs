@@ -1,15 +1,8 @@
 var searchData=
 [
-  ['pack_1294',['Pack',['../structML_1_1Dbscan_1_1AdjGraph_1_1Pack.html',1,'ML::Dbscan::AdjGraph::Pack&lt; Index_ &gt;'],['../structML_1_1Dbscan_1_1VertexDeg_1_1Pack.html',1,'ML::Dbscan::VertexDeg::Pack&lt; Type, Index_ &gt;']]],
-  ['param_1295',['param',['../structcuml_1_1genetic_1_1param.html',1,'cuml::genetic']]],
-  ['params_1296',['params',['../classML_1_1params.html',1,'ML']]],
-  ['paramspcatemplate_1297',['paramsPCATemplate',['../classML_1_1paramsPCATemplate.html',1,'ML']]],
-  ['paramsrproj_1298',['paramsRPROJ',['../structML_1_1paramsRPROJ.html',1,'ML']]],
-  ['paramssolver_1299',['paramsSolver',['../classML_1_1paramsSolver.html',1,'ML']]],
-  ['paramstsvdtemplate_1300',['paramsTSVDTemplate',['../classML_1_1paramsTSVDTemplate.html',1,'ML']]],
-  ['paramstsvdtemplate_3c_20solver_20_3e_1301',['paramsTSVDTemplate&lt; solver &gt;',['../classML_1_1paramsTSVDTemplate.html',1,'ML']]],
-  ['patternsetter_1302',['PatternSetter',['../classML_1_1PatternSetter.html',1,'ML']]],
-  ['pinned_5fhost_5fvector_1303',['pinned_host_vector',['../classML_1_1pinned__host__vector.html',1,'ML']]],
-  ['predictiondata_1304',['PredictionData',['../classML_1_1HDBSCAN_1_1Common_1_1PredictionData.html',1,'ML::HDBSCAN::Common']]],
-  ['program_1305',['program',['../structcuml_1_1genetic_1_1program.html',1,'cuml::genetic']]]
+  ['optimparams_1574',['OptimParams',['../structML_1_1OptimParams.html',1,'ML']]],
+  ['out_5fof_5fbounds_1575',['out_of_bounds',['../structraft__proto_1_1out__of__bounds.html',1,'raft_proto']]],
+  ['owning_5fbuffer_1576',['owning_buffer',['../structraft__proto_1_1detail_1_1owning__buffer.html',1,'raft_proto::detail']]],
+  ['owning_5fbuffer_3c_20device_5ftype_3a_3acpu_2c_20t_20_3e_1577',['owning_buffer&lt; device_type::cpu, T &gt;',['../structraft__proto_1_1detail_1_1owning__buffer_3_01device__type_1_1cpu_00_01T_01_4.html',1,'raft_proto::detail']]],
+  ['owning_5fbuffer_3c_20device_5ftype_3a_3agpu_2c_20t_20_3e_1578',['owning_buffer&lt; device_type::gpu, T &gt;',['../structraft__proto_1_1detail_1_1owning__buffer_3_01device__type_1_1gpu_00_01T_01_4.html',1,'raft_proto::detail']]]
 ];

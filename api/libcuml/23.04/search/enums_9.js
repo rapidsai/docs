@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['random_5fmatrix_5ftype_2419',['random_matrix_type',['../group__paramsRPROJ.html#ga134c8dc1d94a4ee420679aec61849e2b',1,'ML']]],
-  ['rf_5ftype_2420',['RF_type',['../namespaceML.html#a4d83b99fe769e2e9bf3596bb1604ab4f',1,'ML']]]
+  ['penalty_2944',['Penalty',['../structML_1_1SVM_1_1LinearSVMParams.html#abbd6124e29e9f448836213e127d2324c',1,'ML::SVM::LinearSVMParams::Penalty()'],['../namespaceML.html#a899c5f26e201a81a2c12bb7eed9b015d',1,'ML::penalty()']]],
+  ['precision_5ft_2945',['precision_t',['../namespaceML_1_1fil.html#a9c85a4b7a15c50c57b6f147248efd8f9',1,'ML::fil']]]
 ];

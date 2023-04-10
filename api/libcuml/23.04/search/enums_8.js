@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['qn_5floss_5ftype_2418',['qn_loss_type',['../qn_8h.html#a9a02dab808d5c64a4b185ff09ab53dc1',1,'qn.h']]]
+  ['optimcriterion_2943',['OptimCriterion',['../namespaceML.html#a85e691126b37f5e1dc834841cad1479c',1,'ML']]]
 ];

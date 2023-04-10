@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['flatnode_5fhd_2562',['FLATNODE_HD',['../flatnode_8h.html#a47f15a714cff5c1151291a5ad44aae7d',1,'flatnode.h']]]
+  ['device_3121',['DEVICE',['../gpu__support_8hpp.html#a775d096fbc3988fb7ed858b79ef44e22',1,'gpu_support.hpp']]]
 ];

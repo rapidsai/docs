@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['init_5fmethod_5ft_2405',['init_method_t',['../namespacecuml_1_1genetic.html#abf70754d771748ccedc1b92708658ba6',1,'cuml::genetic']]]
+  ['device_5ftype_2930',['device_type',['../namespaceraft__proto.html#aaf12bf239de1163eb2eba9718b6bc1b1',1,'raft_proto']]]
 ];
