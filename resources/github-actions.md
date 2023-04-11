@@ -84,69 +84,92 @@ At this time there are no alternative ways to rerun tests with GitHub Actions be
 
 The RAPIDS Ops team provides a set of self-hosted runners that can be used in GitHub Action workflows throughout supported organizations. The tables below outline the labels that can be utilized and their related specifications.
 
-### CPU Label Combinations
+### CPU Labels
 
 The CPU labeled runners are backed by various EC2 instances and do not have any GPUs installed.
 
-| Label Combination       | EC2 Machine Type            |
-| ----------------------- | --------------------------- |
-| `[linux, amd64, cpu4]`  | `m5d.xlarge` <sub>1</sub>   |
-| `[linux, amd64, cpu8]`  | `m5d.2xlarge` <sub>1</sub>  |
-| `[linux, amd64, cpu16]` | `m5d.4xlarge` <sub>1</sub>  |
-| `[linux, arm64, cpu4]`  | `m6gd.xlarge` <sub>2</sub>  |
-| `[linux, arm64, cpu8]`  | `m6gd.2xlarge` <sub>2</sub> |
-| `[linux, arm64, cpu16]` | `m6gd.4xlarge` <sub>2</sub> |
+| Label               | EC2 Machine Type            |
+| ------------------- | --------------------------- |
+| `linux-amd64-cpu4`  | `m5d.xlarge` <sub>1</sub>   |
+| `linux-amd64-cpu8`  | `m5d.2xlarge` <sub>1</sub>  |
+| `linux-amd64-cpu16` | `m5d.4xlarge` <sub>1</sub>  |
+| `linux-arm64-cpu4`  | `m6gd.xlarge` <sub>2</sub>  |
+| `linux-arm64-cpu8`  | `m6gd.2xlarge` <sub>2</sub> |
+| `linux-arm64-cpu16` | `m6gd.4xlarge` <sub>2</sub> |
 
 Additional specifications:
 
 1. [https://aws.amazon.com/ec2/instance-types/m5/](https://aws.amazon.com/ec2/instance-types/m5/)
 2. [https://aws.amazon.com/ec2/instance-types/m6g/](https://aws.amazon.com/ec2/instance-types/m6g/)
 
-### GPU Label Combinations
+The CPU label names consist of the following components:
+
+```text
+linux-amd64-cpu4
+^     ^     ^  ^
+|     |     |  |
+|     |     |  CPU Core Count
+|     |     CPU Designator
+|     Architecture
+Operating System
+```
+
+### GPU Labels
+
+{% assign earliest_driver_version = "450" %}
+{% assign latest_driver_version = "525" %}
 
 The GPU labeled runners are backed by lab machines and have the GPUs specified in the table below installed.
 
 **IMPORTANT**: GPU jobs have two requirements. If these requirements aren't met, the GitHub Actions job will fail. See the _Usage_ section below for an example.
 
 1. They must run in a container (i.e. `nvidia/cuda:11.8.0-base-ubuntu22.04`)
-2. They must set the {% raw %}`NVIDIA_VISIBLE_DEVICES: ${{ env.NVIDIA_VISIBLE_DEVICES }}`{% endraw %} container environment variable.
+2. They must set the {% raw %}`NVIDIA_VISIBLE_DEVICES: ${{ env.NVIDIA_VISIBLE_DEVICES }}`{% endraw %} container environment variable
 
 {% include gpu-labels-table.html %}
-
-Cells with multiple labels in the table above are aliases which represent the same runner type.
 
 The GPU label names consist of the following components:
 
 ```text
-gpu-a100-525-1
-    ^    ^   ^
-    |    |   |
-    |    |   Number of GPUs Available
-    |    Driver Version
-    GPU Type
+linux-amd64-gpu-t4-latest-1
+^     ^     ^   ^  ^      ^
+|     |     |   |  |      |
+|     |     |   |  |      Number of GPUs Available
+|     |     |   |  GPU Driver Version
+|     |     |   GPU Type
+|     |     GPU Designator
+|     Architecture
+Operating System
 ```
 
-The driver version may also be `latest`, which is a moving tag for the latest CUDA version supported by RAPIDS at any given time.
+Due to our limited GPU capacity and the overhead associated with manually rotating self-hosted runner labels when GPU drivers are updated, there are no driver-specific self-hosted runner labels (e.g. `linux-amd64-gpu-t4-525-1`).
 
-Since we will periodically deprecate runners that use old driver versions, the `latest` tag is useful for users who are not concerned with the driver version used by their jobs.
+Instead, the driver-version designators `earliest` and `latest` are used. The values of these designators represent the GPU driver version that RAPIDS uses for testing.
+
+The chart below will be kept up-to-date with the corresponding driver versions at any given time.
+
+| Version Designator | Corresponding GPU Driver Version |
+| ------------------ | -------------------------------- |
+| `earliest`         | `{{ earliest_driver_version }}`  |
+| `latest`           | `{{ latest_driver_version }}`    |
+
+Supported organizations will be notified whenever these versions are scheduled to be updated.
 
 ### Usage
 
 The code snippet below shows how the labels above may be utilized in a GitHub Action workflow.
-
-**Note**: It is important to add the `self-hosted` label **in addition to** the labels described in the tables above.
 
 ```yaml
 name: Test Self Hosted Runners
 on: push
 jobs:
   job1_cpu:
-    runs-on: [self-hosted, linux, amd64, cpu8]
+    runs-on: linux-amd64-cpu8
     steps:
       - name: hello
         run: echo "hello"
   job2_gpu:
-    runs-on: [self-hosted, linux, amd64, gpu-v100-525-1]
+    runs-on: linux-amd64-gpu-v100-latest-1
     container: # GPU jobs must run in a container
       image: nvidia/cuda:11.8.0-base-ubuntu22.04
       env:
