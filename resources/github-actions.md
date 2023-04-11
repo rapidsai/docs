@@ -126,6 +126,14 @@ The GPU labeled runners are backed by lab machines and have the GPUs specified i
 1. They must run in a container (i.e. `nvidia/cuda:11.8.0-base-ubuntu22.04`)
 2. They must set the {% raw %}`NVIDIA_VISIBLE_DEVICES: ${{ env.NVIDIA_VISIBLE_DEVICES }}`{% endraw %} container environment variable
 
+Due to our limited GPU capacity and the overhead associated with manually rotating self-hosted runner labels when GPU drivers are updated, there are no driver-specific self-hosted runner labels (e.g. `linux-amd64-gpu-t4-525-1`).
+
+Instead, the driver-version designators `earliest` and `latest` are used. The values of these designators represent the GPU driver version that RAPIDS uses for testing.
+
+The chart below will be kept up-to-date with the corresponding driver versions at any given time.
+
+Supported organizations will be notified whenever these versions are scheduled to be updated.
+
 {% include gpu-labels-table.html %}
 
 The GPU label names consist of the following components:
@@ -141,19 +149,6 @@ linux-amd64-gpu-t4-latest-1
 |     Architecture
 Operating System
 ```
-
-Due to our limited GPU capacity and the overhead associated with manually rotating self-hosted runner labels when GPU drivers are updated, there are no driver-specific self-hosted runner labels (e.g. `linux-amd64-gpu-t4-525-1`).
-
-Instead, the driver-version designators `earliest` and `latest` are used. The values of these designators represent the GPU driver version that RAPIDS uses for testing.
-
-The chart below will be kept up-to-date with the corresponding driver versions at any given time.
-
-| Version Designator | Corresponding GPU Driver Version |
-| ------------------ | -------------------------------- |
-| `earliest`         | `{{ earliest_driver_version }}`  |
-| `latest`           | `{{ latest_driver_version }}`    |
-
-Supported organizations will be notified whenever these versions are scheduled to be updated.
 
 ### Usage
 
