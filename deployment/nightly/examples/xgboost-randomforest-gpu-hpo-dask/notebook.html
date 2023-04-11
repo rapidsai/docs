@@ -1,0 +1,1225 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>HPO with dask-ml and cuml &#8212; RAPIDS Deployment Documentation  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="https://docs.rapids.ai/assets/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script defer="defer" src="https://docs.rapids.ai/assets/js/custom.js"></script>
+    <script defer="defer" src="../../_static/js/nav.js"></script>
+    <script defer="defer" src="../../_static/js/notebook-gallery.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/xgboost-randomforest-gpu-hpo-dask/notebook';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Guides" href="../../guides/index.html" />
+    <link rel="prev" title="Autoscaling multi-tenant Kubernetes Deep-Dive" href="../rapids-autoscaling-multi-tenant-kubernetes/notebook.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+   
+
+<a class="navbar-brand logo" href="https://docs.rapids.ai/">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/RAPIDS-logo-purple.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/RAPIDS-logo-purple.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class=" navbar-header-items">
+    
+    <div class="ms-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../cloud/index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Workflow Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../guides/index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../local.html">
+                        Local
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../cloud/index.html">
+                        Cloud
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../hpc.html">
+                        HPC
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../platforms/index.html">
+                        Platforms
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tools/index.html">
+                        Tools
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Workflow Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../guides/index.html">
+                        Guides
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/rapidsai/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../xgboost-gpu-hpo-job-parallel-k8s/notebook.html">Scaling up hyperparameter optimization with Kubernetes and XGBoost GPU algorithm</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../rapids-optuna-hpo/notebook.html">Getting Started with Optuna and RAPIDS for HPO</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../rapids-sagemaker-higgs/notebook.html">Running RAPIDS hyperparameter experiments at scale on Amazon SageMaker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rapids-sagemaker-hpo/notebook.html">Deep Dive into running Hyper Parameter Optimization on AWS SageMaker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rapids-ec2-mnmg/notebook.html">Multi-node multi-GPU example on AWS using dask-cloudprovider</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rapids-autoscaling-multi-tenant-kubernetes/notebook.html">Autoscaling multi-tenant Kubernetes Deep-Dive</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">HPO with dask-ml and cuml</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Workflow Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">HPO with dask-ml and cuml</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="hpo-with-dask-ml-and-cuml">
+<h1>HPO with dask-ml and cuml<a class="headerlink" href="#hpo-with-dask-ml-and-cuml" title="Permalink to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p>      <a class="reference external" href="https://cloud.google.com/ai-platform/training/docs/hyperparameter-tuning-overview">Hyperparameter optimization</a> is the task of picking hyperparameters values of the model that provide the optimal results for the problem, as measured on a specific test dataset. This is often a crucial step and can help boost the model accuracy when done correctly. Cross-validation is often used to more accurately estimate the performance of the models in the search process. Cross-validation is the method of splitting the training set into complementary subsets and performing training on one of the subsets, then predicting the models performance on the other. This is a potential indication of how the model will generalise to data it has not seen before.</p>
+<p>Despite its theoretical importance, HPO has been difficult to implement in practical applications because of the resources needed to run so many distinct training jobs.</p>
+<p>The two approaches that we will be exploring in this notebook are :</p>
+<section id="gridsearch">
+<h3>1. GridSearch<a class="headerlink" href="#gridsearch" title="Permalink to this heading">#</a></h3>
+<p>      As the name suggests, the “search” is done over each possible combination in a grid of parameters that the user provides. The user must manually define this grid.. For each parameter that needs to be tuned, a set of values are given and the final grid search is performed with tuple having one element from each set, thus resulting in a Catersian Product of the elements.</p>
+<p>     For example, assume we want to perform HPO on XGBoost. For simplicity lets tune only <code class="docutils literal notranslate"><span class="pre">n_estimators</span></code> and <code class="docutils literal notranslate"><span class="pre">max_depth</span></code></p>
+<p>     <code class="docutils literal notranslate"><span class="pre">n_estimators:</span> <span class="pre">[50,</span> <span class="pre">100,</span> <span class="pre">150]</span></code></p>
+<p>     <code class="docutils literal notranslate"><span class="pre">max_depth:</span> <span class="pre">[6,</span> <span class="pre">7,</span> <span class="pre">,8]</span></code></p>
+<p>      The grid search will take place over |n_estimators| x |max_depth| which is 3 x 3 = 9. As you have probably guessed, the grid size grows rapidly as the number of parameters and their search space increases.</p>
+</section>
+<section id="randomsearch">
+<h3>2. RandomSearch<a class="headerlink" href="#randomsearch" title="Permalink to this heading">#</a></h3>
+<p>      <a class="reference external" href="http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf">Random Search</a> replaces the exhaustive nature of the search from before with a random selection of parameters over the specified space. This method can outperform GridSearch in cases where the number of parameters affecting the model’s performance is small (low-dimension optimization problems). Since this does not pick every tuple from the cartesian product, it tends to yield results faster, and the performance can be comparable to that of the Grid Search approach. It’s worth keeping in mind that the random nature of this search means, the results with each run might differ.</p>
+<p>Some of the other methods used for HPO include:</p>
+<ol class="arabic simple">
+<li><p>Bayesian Optimization</p></li>
+<li><p>Gradient-based Optimization</p></li>
+<li><p>Evolutionary Optimization</p></li>
+</ol>
+<p>To learn more about HPO, some papers are linked to at the end of the notebook for further reading.</p>
+<p>Now that we have a basic understanding of what HPO is, let’s discuss what we wish to achieve with this demo. The aim of this notebook is to show the importance of hyper parameter optimisation and the performance of dask-ml GPU for xgboost and cuML-RF.</p>
+<p>For this demo, we will be using the <a class="reference external" href="http://kt.ijs.si/elena_ikonomovska/data.html">Airline dataset</a>. The aim of the problem is to predict the arrival delay. It has about 116 million entries with 13 attributes that are used to determine the delay for a given airline. We have modified this problem to serve as a binary classification problem to determine if the airline will be delayed (True) or not.</p>
+<p>Let’s get started!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>  <span class="c1"># Reduce number of messages/warnings displayed</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_workflow/randomforest tag_library/sklearn tag_library/cuml tag_library/dask-ml tag_workflows/hpo tag_cloud/aws/ec2 tag_workflow/xgboost tag_library/dask tag_dataset/airline docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">cudf</span>
+<span class="kn">import</span> <span class="nn">cuml</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
+
+<span class="kn">import</span> <span class="nn">dask_ml.model_selection</span> <span class="k">as</span> <span class="nn">dcv</span>
+<span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">wait</span>
+<span class="kn">from</span> <span class="nn">dask_cuda</span> <span class="kn">import</span> <span class="n">LocalCUDACluster</span>
+
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">make_score</span>
+<span class="kn">from</span> <span class="nn">cuml.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">cuml.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">cuml.metrics.accuracy</span> <span class="kn">import</span> <span class="n">accuracy_score</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="spinning-up-a-cuda-cluster">
+<h3>Spinning up a CUDA Cluster<a class="headerlink" href="#spinning-up-a-cuda-cluster" title="Permalink to this heading">#</a></h3>
+<p>This notebook is designed to run on a single node with multiple GPUs, you can get multi-GPU VMs from <a class="reference external" href="https://docs.rapids.ai/deployment/stable/cloud/aws/ec2-multi.html">AWS</a>, <a class="reference external" href="https://docs.rapids.ai/deployment/stable/cloud/gcp/dataproc.html">GCP</a>, <a class="reference external" href="https://docs.rapids.ai/deployment/stable/cloud/azure/azure-vm-multi.html">Azure</a>, <a class="reference external" href="https://docs.rapids.ai/deployment/stable/cloud/ibm/virtual-server.html">IBM</a> and more.</p>
+<p>We start a <a class="reference internal" href="../../guides/cuda/localcluster.html"><span class="doc std std-doc">local cluster</span></a> and keep it ready for running distributed tasks with dask.</p>
+<p>Below, <a class="reference external" href="https://github.com/rapidsai/dask-cuda">LocalCUDACluster</a> launches one Dask worker for each GPU in the current systems. It’s developed as a part of the RAPIDS project.
+Learn More:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.dask.org/en/latest/setup.html">Setting up Dask</a></p></li>
+<li><p><a class="reference external" href="https://distributed.dask.org/en/latest/client.html">Dask Client</a></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCUDACluster</span><span class="p">()</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+
+<span class="n">client</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="data-preparation">
+<h2>Data Preparation<a class="headerlink" href="#data-preparation" title="Permalink to this heading">#</a></h2>
+<p>We download the Airline <a class="reference external" href="https://s3.console.aws.amazon.com/s3/buckets/rapidsai-cloud-ml-sample-data?region=us-west-2&amp;tab=objects">dataset</a> and save it to local directory specific by <code class="docutils literal notranslate"><span class="pre">data_dir</span></code> and <code class="docutils literal notranslate"><span class="pre">file_name</span></code>. In this step, we also want to convert the input data into appropriate dtypes. For this, we will use the <code class="docutils literal notranslate"><span class="pre">prepare_dataset</span></code> function.</p>
+<p>Note: To ensure that this example runs quickly on a modest machine, we default to using a small subset of the airline dataset. To use the full dataset, pass the argument <code class="docutils literal notranslate"><span class="pre">use_full_dataset=True</span></code> to the <code class="docutils literal notranslate"><span class="pre">prepare_dataset</span></code> function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s2">&quot;~/rapids_hpo/data/&quot;</span>
+<span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;airlines.parquet&quot;</span>
+<span class="n">parquet_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parquet_name</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_library/cudf docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">prepare_dataset</span><span class="p">(</span><span class="n">use_full_dataset</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">data_dir</span>
+
+    <span class="k">if</span> <span class="n">use_full_dataset</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://rapidsai-cloud-ml-sample-data.s3-us-west-2.amazonaws.com/airline_20000000.parquet&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://rapidsai-cloud-ml-sample-data.s3-us-west-2.amazonaws.com/airline_small.parquet&quot;</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">parquet_name</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; &gt; File already exists. Ready to load at </span><span class="si">{</span><span class="n">parquet_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Ensure folder exists</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">data_progress_hook</span><span class="p">(</span><span class="n">block_number</span><span class="p">,</span> <span class="n">read_size</span><span class="p">,</span> <span class="n">total_filesize</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">block_number</span> <span class="o">%</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot; &gt; percent complete: </span><span class="si">{</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">block_number</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">read_size</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">total_filesize</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">urlretrieve</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">filename</span><span class="o">=</span><span class="n">parquet_name</span><span class="p">,</span>
+            <span class="n">reporthook</span><span class="o">=</span><span class="n">data_progress_hook</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; &gt; Download complete </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">input_cols</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;Year&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Month&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;DayofMonth&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;DayofWeek&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CRSDepTime&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CRSArrTime&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;UniqueCarrier&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FlightNum&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ActualElapsedTime&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Origin&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Dest&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Distance&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Diverted&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">cudf</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">parquet_name</span><span class="p">)</span>
+
+    <span class="c1"># encode categoricals as numeric</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">([</span><span class="s2">&quot;object&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">dataset</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+    <span class="c1"># cast all columns to int32</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">dataset</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>  <span class="c1"># needed for random forest</span>
+
+    <span class="c1"># put target/label column first [ classic XGBoost standard ]</span>
+    <span class="n">output_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ArrDelayBinary&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">input_cols</span>
+
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">output_cols</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dataset</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">prepare_dataset</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+
+<span class="c1"># Helping time blocks of code</span>
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">timed</span><span class="p">(</span><span class="n">txt</span><span class="p">):</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">yield</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%32s</span><span class="s2"> time:  </span><span class="si">%8.5f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">txt</span><span class="p">,</span> <span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define some default values to make use of across the notebook for a fair comparison</span>
+<span class="n">N_FOLDS</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">N_ITER</span> <span class="o">=</span> <span class="mi">25</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;ArrDelayBinary&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="splitting-data">
+<h2>Splitting Data<a class="headerlink" href="#splitting-data" title="Permalink to this heading">#</a></h2>
+<p>We split the data randomnly into train and test sets using the <a class="reference external" href="https://docs.rapids.ai/api/cuml/stable/api.html#cuml.model_selection.train_test_split">cuml train_test_split</a> and create CPU versions of the data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_cpu</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+<span class="n">y_cpu</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+<span class="n">X_test_cpu</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+<span class="n">y_test_cpu</span> <span class="o">=</span> <span class="n">y_test</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="setup-custom-cuml-scorers">
+<h2>Setup Custom cuML scorers<a class="headerlink" href="#setup-custom-cuml-scorers" title="Permalink to this heading">#</a></h2>
+<p>The search functions (such as GridSearchCV) for scikit-learn and dask-ml expect the metric functions (such as accuracy_score) to match the “scorer” API. This can be achieved using the scikit-learn’s <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.make_scorer.html">make_scorer</a> function.</p>
+<p>We will generate a <code class="docutils literal notranslate"><span class="pre">cuml_scorer</span></code> with the cuML <code class="docutils literal notranslate"><span class="pre">accuracy_score</span></code> function.  You’ll also notice an <code class="docutils literal notranslate"><span class="pre">accuracy_score_wrapper</span></code> which primarily converts the y label into a <code class="docutils literal notranslate"><span class="pre">float32</span></code> type. This is because some cuML models only accept this type for now and in order to make it compatible, we perform this conversion.</p>
+<p>We also create helper functions for performing HPO in 2 different modes:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gpu-grid</span></code>: Perform GPU based GridSearchCV</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gpu-random</span></code>: Perform GPU based RandomizedSearchCV</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">accuracy_score_wrapper</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_hat</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A wrapper function to convert labels to float32,</span>
+<span class="sd">    and pass it to accuracy_score.</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">    - y: The y labels that need to be converted</span>
+<span class="sd">    - y_hat: The predictions made by the model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>  <span class="c1"># cuML RandomForest needs the y labels to be float32</span>
+    <span class="k">return</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_hat</span><span class="p">,</span> <span class="n">convert_dtype</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="n">accuracy_wrapper_scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">accuracy_score_wrapper</span><span class="p">)</span>
+<span class="n">cuml_accuracy_scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">accuracy_score</span><span class="p">,</span> <span class="n">convert_dtype</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_HPO</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">gridsearch_params</span><span class="p">,</span> <span class="n">scorer</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;gpu-Grid&quot;</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform HPO based on the mode specified</span>
+
+<span class="sd">    mode: default gpu-Grid. The possible options are:</span>
+<span class="sd">    1. gpu-grid: Perform GPU based GridSearchCV</span>
+<span class="sd">    2. gpu-random: Perform GPU based RandomizedSearchCV</span>
+
+<span class="sd">    n_iter: specified with Random option for number of parameter settings sampled</span>
+
+<span class="sd">    Returns the best estimator and the results of the search</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;gpu-grid&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gpu-grid selected&quot;</span><span class="p">)</span>
+        <span class="n">clf</span> <span class="o">=</span> <span class="n">dcv</span><span class="o">.</span><span class="n">GridSearchCV</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">gridsearch_params</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">N_FOLDS</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scorer</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;gpu-random&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gpu-random selected&quot;</span><span class="p">)</span>
+        <span class="n">clf</span> <span class="o">=</span> <span class="n">dcv</span><span class="o">.</span><span class="n">RandomizedSearchCV</span><span class="p">(</span>
+            <span class="n">model</span><span class="p">,</span> <span class="n">gridsearch_params</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">N_FOLDS</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scorer</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="n">n_iter</span>
+        <span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unknown Option, please choose one of [gpu-grid, gpu-random]&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;Best clf and score </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="se">\n</span><span class="s2">---</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">best_score_</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">,</span> <span class="n">res</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">print_acc</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">mode_str</span><span class="o">=</span><span class="s2">&quot;Default&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Trains a model on the train data provided, and prints the accuracy of the trained model.</span>
+<span class="sd">    mode_str: User specifies what model it is to print the value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_test</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">convert_dtype</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> model accuracy: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode_str</span><span class="p">,</span> <span class="n">score</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="launch-hpo">
+<h2>Launch HPO<a class="headerlink" href="#launch-hpo" title="Permalink to this heading">#</a></h2>
+<p>We will first see the model’s performances without the gridsearch and then compare it with the performance after searching.</p>
+<section id="xgboost">
+<h3>XGBoost<a class="headerlink" href="#xgboost" title="Permalink to this heading">#</a></h3>
+<p>To perform the Hyperparameter Optimization, we make use of the sklearn version of the <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/python/python_api.html#module-xgboost.sklearn">XGBClassifier</a>.We’re making use of this version to make it compatible and easily comparable to the scikit-learn version. The model takes a set of parameters that can be found in the documentation. We’re primarily interested in the <code class="docutils literal notranslate"><span class="pre">max_depth</span></code>, <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code>, <code class="docutils literal notranslate"><span class="pre">min_child_weight</span></code>, <code class="docutils literal notranslate"><span class="pre">reg_alpha</span></code> and <code class="docutils literal notranslate"><span class="pre">num_round</span></code> as these affect the performance of XGBoost the most.</p>
+<p>Read more about what these parameters are useful for <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/parameter.html">here</a></p>
+<section id="default-performance">
+<h4>Default Performance<a class="headerlink" href="#default-performance" title="Permalink to this heading">#</a></h4>
+<p>We first use the model with it’s default parameters and see the accuracy of the model. In this case, it is 84%</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_gpu_xgb_</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBClassifier</span><span class="p">(</span><span class="n">tree_method</span><span class="o">=</span><span class="s2">&quot;gpu_hist&quot;</span><span class="p">)</span>
+
+<span class="n">print_acc</span><span class="p">(</span><span class="n">model_gpu_xgb_</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_cpu</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test_cpu</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="parameter-distributions">
+<h4>Parameter Distributions<a class="headerlink" href="#parameter-distributions" title="Permalink to this heading">#</a></h4>
+<p>The way we define the grid to perform the search is by including ranges of parameters that need to be used for the search. In this example we make use of <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html">np.arange</a> which returns an ndarray of even spaced values, <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.logspace.html#numpy.logspace">np.logspace</a> returns a specified number of ssamples that are equally spaced on the log scale. We can also specify as lists, NumPy arrays or make use of any random variate sample that gives a sample when called. SciPy provides various functions for this too.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For xgb_model</span>
+<span class="n">model_gpu_xgb</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBClassifier</span><span class="p">(</span><span class="n">tree_method</span><span class="o">=</span><span class="s2">&quot;gpu_hist&quot;</span><span class="p">)</span>
+
+<span class="c1"># More range</span>
+<span class="n">params_xgb</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;max_depth&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>  <span class="c1"># Default = 6</span>
+    <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>  <span class="c1"># default = 0</span>
+    <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">],</span>  <span class="c1"># default = 0.3</span>
+    <span class="s2">&quot;min_child_weight&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>  <span class="c1"># default = 1</span>
+    <span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">1000</span><span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="randomizedsearchcv">
+<h4>RandomizedSearchCV<a class="headerlink" href="#randomizedsearchcv" title="Permalink to this heading">#</a></h4>
+<p>We’ll now try <a class="reference external" href="https://ml.dask.org/modules/generated/dask_ml.model_selection.RandomizedSearchCV.html">RandomizedSearchCV</a>.
+<code class="docutils literal notranslate"><span class="pre">n_iter</span></code> specifies the number of parameters points theat the search needs to perform. Here we will search <code class="docutils literal notranslate"><span class="pre">N_ITER</span></code> (defined earlier) points for the best performance.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;gpu-random&quot;</span>
+
+<span class="k">with</span> <span class="n">timed</span><span class="p">(</span><span class="s2">&quot;XGB-&quot;</span> <span class="o">+</span> <span class="n">mode</span><span class="p">):</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">do_HPO</span><span class="p">(</span>
+        <span class="n">model_gpu_xgb</span><span class="p">,</span>
+        <span class="n">params_xgb</span><span class="p">,</span>
+        <span class="n">cuml_accuracy_scorer</span><span class="p">,</span>
+        <span class="n">X_train</span><span class="p">,</span>
+        <span class="n">y_cpu</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="n">n_iter</span><span class="o">=</span><span class="n">N_ITER</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Searched over </span><span class="si">{}</span><span class="s2"> parameters&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s2">&quot;mean_test_score&quot;</span><span class="p">])))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">print_acc</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_cpu</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test_cpu</span><span class="p">,</span> <span class="n">mode_str</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;gpu-grid&quot;</span>
+
+<span class="k">with</span> <span class="n">timed</span><span class="p">(</span><span class="s2">&quot;XGB-&quot;</span> <span class="o">+</span> <span class="n">mode</span><span class="p">):</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">do_HPO</span><span class="p">(</span>
+        <span class="n">model_gpu_xgb</span><span class="p">,</span> <span class="n">params_xgb</span><span class="p">,</span> <span class="n">cuml_accuracy_scorer</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_cpu</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span>
+    <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Searched over </span><span class="si">{}</span><span class="s2"> parameters&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s2">&quot;mean_test_score&quot;</span><span class="p">])))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">print_acc</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_cpu</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test_cpu</span><span class="p">,</span> <span class="n">mode_str</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="improved-performance">
+<h3>Improved performance<a class="headerlink" href="#improved-performance" title="Permalink to this heading">#</a></h3>
+<p>There’s a 5% improvement in the performance.</p>
+<p>We notice that performing grid search and random search yields similar performance improvements even though random search used just 25 combination of parameters. We will stick to performing Random Search for the rest of the notebook with RF with the assumption that there will not be a major difference in performance if the ranges are large enough.</p>
+</section>
+<section id="visualizing-the-search">
+<h3>Visualizing the Search<a class="headerlink" href="#visualizing-the-search" title="Permalink to this heading">#</a></h3>
+<p>Let’s plot some graphs to get an understanding how the parameters affect the accuracy. The code for these plots are included in <code class="docutils literal notranslate"><span class="pre">cuml/experimental/hyperopt_utils/plotting_utils.py</span></code></p>
+<section id="mean-std-of-test-scores">
+<h4>Mean/Std of test scores<a class="headerlink" href="#mean-std-of-test-scores" title="Permalink to this heading">#</a></h4>
+<p>We fix all parameters except one for each of these graphs and plot the effect the parameter has on the mean test score with the error bar indicating the standard deviation</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cuml.experimental.hyperopt_utils</span> <span class="kn">import</span> <span class="n">plotting_utils</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plotting_utils</span><span class="o">.</span><span class="n">plot_search_results</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="heatmaps">
+<h4>Heatmaps<a class="headerlink" href="#heatmaps" title="Permalink to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Between parameter pairs (we can do a combination of all possible pairs, but only one are shown in this notebook)</p></li>
+<li><p>This gives a visual representation of how the pair affect the test score</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_gridsearch</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">)</span>
+<span class="n">plotting_utils</span><span class="o">.</span><span class="n">plot_heatmap</span><span class="p">(</span><span class="n">df_gridsearch</span><span class="p">,</span> <span class="s2">&quot;param_max_depth&quot;</span><span class="p">,</span> <span class="s2">&quot;param_n_estimators&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="randomforest">
+<h2>RandomForest<a class="headerlink" href="#randomforest" title="Permalink to this heading">#</a></h2>
+<p>Let’s use RandomForest Classifier to perform a hyper-parameter search. We’ll make use of the cuml RandomForestClassifier and visualize the results using heatmap.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Random Forest</span>
+<span class="n">model_rf_</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">()</span>
+
+<span class="n">params_rf</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;max_depth&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>  <span class="c1"># Default = 6</span>
+    <span class="s2">&quot;max_features&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="s2">&quot;auto&quot;</span><span class="p">],</span>  <span class="c1"># default = 0.3</span>
+    <span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">X_train</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="n">X_train</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span>
+    <span class="s2">&quot;Default acc: &quot;</span><span class="p">,</span>
+    <span class="n">accuracy_score</span><span class="p">(</span><span class="n">model_rf_</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">y_test</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;gpu-random&quot;</span>
+<span class="n">model_rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">()</span>
+
+
+<span class="k">with</span> <span class="n">timed</span><span class="p">(</span><span class="s2">&quot;RF-&quot;</span> <span class="o">+</span> <span class="n">mode</span><span class="p">):</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">do_HPO</span><span class="p">(</span>
+        <span class="n">model_rf</span><span class="p">,</span>
+        <span class="n">params_rf</span><span class="p">,</span>
+        <span class="n">cuml_accuracy_scorer</span><span class="p">,</span>
+        <span class="n">X_train</span><span class="p">,</span>
+        <span class="n">y_cpu</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="n">n_iter</span><span class="o">=</span><span class="n">N_ITER</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Searched over </span><span class="si">{}</span><span class="s2"> parameters&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s2">&quot;mean_test_score&quot;</span><span class="p">])))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Improved acc: &quot;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">y_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_gridsearch</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">)</span>
+
+<span class="n">plotting_utils</span><span class="o">.</span><span class="n">plot_heatmap</span><span class="p">(</span><span class="n">df_gridsearch</span><span class="p">,</span> <span class="s2">&quot;param_max_depth&quot;</span><span class="p">,</span> <span class="s2">&quot;param_n_estimators&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="conclusion-and-next-steps">
+<h2>Conclusion and Next Steps<a class="headerlink" href="#conclusion-and-next-steps" title="Permalink to this heading">#</a></h2>
+<p>We notice improvements in the performance for a really basic version of the GridSearch and RandomizedSearch. Generally, the more data we use, the better the model performs, so you are encouraged to try for larger data and broader range of parameters.</p>
+<p>This experiment can also be repeated with different classifiers and different ranges of parameters to notice how HPO can help improve the performance metric. In this example, we have chosen a basic metric - accuracy, but you can use more interesting metrics that help in determining the usefulness of a model. You can even send a list of parameters to the scoring function. This makes HPO really powerful, and it can add a significant boost to the model that we generate.</p>
+<section id="further-reading">
+<h3>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://towardsdatascience.com/the-5-classification-evaluation-metrics-you-must-know-aa97784ff226">The 5 Classification Evaluation Metrics You Must Know</a></p></li>
+<li><p><a class="reference external" href="https://www.analyticsvidhya.com/blog/2019/08/11-important-model-evaluation-error-metrics/">11 Important Model Evaluation Metrics for Machine Learning Everyone should know</a></p></li>
+<li><p><a class="reference external" href="http://papers.nips.cc/paper/4443-algorithms-for-hyper-parameter-optimization.pdf">Algorithms for Hyper-Parameter Optimisation</a></p></li>
+<li><p><a class="reference external" href="http://proceedings.mlr.press/v70/franceschi17a/franceschi17a-supp.pdf">Forward and Reverse Gradient-Based Hyperparameter Optimization</a></p></li>
+<li><p><a class="reference external" href="http://papers.nips.cc/paper/4522-practical-bayesian-optimization-of-machine-learning-algorithms.pdf">Practical Bayesian Optimization of Machine
+Learning Algorithms</a></p></li>
+<li><p><a class="reference external" href="http://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf">Random Search for Hyper-Parameter Optimization</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../rapids-autoscaling-multi-tenant-kubernetes/notebook.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Autoscaling multi-tenant Kubernetes Deep-Dive</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../guides/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Guides</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gridsearch">1. GridSearch</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#randomsearch">2. RandomSearch</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spinning-up-a-cuda-cluster">Spinning up a CUDA Cluster</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preparation">Data Preparation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#splitting-data">Splitting Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-custom-cuml-scorers">Setup Custom cuML scorers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#launch-hpo">Launch HPO</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#xgboost">XGBoost</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#default-performance">Default Performance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-distributions">Parameter Distributions</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#randomizedsearchcv">RandomizedSearchCV</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#improved-performance">Improved performance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-search">Visualizing the Search</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mean-std-of-test-scores">Mean/Std of test scores</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#heatmaps">Heatmaps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#randomforest">RandomForest</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-and-next-steps">Conclusion and Next Steps</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item"> 
+<div class="tocsection onthispage">
+  <i class="fa-regular fa-file"></i> Related files
+</div>
+<nav id="bd-toc-nav" class="page-toc related-files">
+  
+<ul class="visible nav section-nav flex-column">
+  
+  <li class="toc-h2 nav-item toc-entry">
+    
+    <a
+      class="reference external nav-link"
+      href="notebook.ipynb"
+    >
+      notebook.ipynb
+    </a>
+    
+  </li>
+  
+</ul> 
+</nav>
+</div>
+
+  <div class="sidebar-secondary-item">
+<div class="tocsection onthispage"><i class="fa-solid fa-tags"></i> Tags</div>
+<nav id="bd-toc-nav" class="page-toc">
+  <div class="tagwrapper">
+    
+    <a href="../?filters=dataset/airline">
+      <span class="sd-sphinx-override sd-badge">dataset/airline</span>
+    </a>
+    
+    <a href="../?filters=library/numpy">
+      <span class="sd-sphinx-override sd-badge">library/numpy</span>
+    </a>
+    
+    <a href="../?filters=library/pandas">
+      <span class="sd-sphinx-override sd-badge">library/pandas</span>
+    </a>
+    
+    <a href="../?filters=library/xgboost">
+      <span class="sd-sphinx-override sd-badge">library/xgboost</span>
+    </a>
+    
+    <a href="../?filters=library/dask">
+      <span class="sd-sphinx-override sd-badge">library/dask</span>
+    </a>
+    
+    <a href="../?filters=library/dask-cuda">
+      <span class="sd-sphinx-override sd-badge">library/dask-cuda</span>
+    </a>
+    
+    <a href="../?filters=library/dask-ml">
+      <span class="sd-sphinx-override sd-badge">library/dask-ml</span>
+    </a>
+    
+    <a href="../?filters=storage/s3">
+      <span class="sd-sphinx-override sd-badge">storage/s3</span>
+    </a>
+    
+    <a href="../?filters=workflows/hpo">
+      <span class="sd-sphinx-override sd-badge">workflows/hpo</span>
+    </a>
+    
+    <a href="../?filters=library/cuml">
+      <span class="sd-sphinx-override sd-badge">library/cuml</span>
+    </a>
+    
+    <a href="../?filters=cloud/aws/ec2">
+      <span class="sd-sphinx-override sd-badge">cloud/aws/ec2</span>
+    </a>
+    
+    <a href="../?filters=cloud/azure/azure-vm">
+      <span class="sd-sphinx-override sd-badge">cloud/azure/azure-vm</span>
+    </a>
+    
+    <a href="../?filters=cloud/gcp/compute-engine">
+      <span class="sd-sphinx-override sd-badge">cloud/gcp/compute-engine</span>
+    </a>
+    
+    <a href="../?filters=cloud/ibm/virtual-server">
+      <span class="sd-sphinx-override sd-badge">cloud/ibm/virtual-server</span>
+    </a>
+    
+    <a href="../?filters=library/sklearn">
+      <span class="sd-sphinx-override sd-badge">library/sklearn</span>
+    </a>
+    
+  </div>
+</nav>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, NVIDIA.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

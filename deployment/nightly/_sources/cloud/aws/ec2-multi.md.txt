@@ -10,7 +10,7 @@ Before running these instructions, ensure you have installed RAPIDS.
 This method of deploying RAPIDS effectively allows you to burst beyond the node you are on into a cluster of EC2 VMs. This does come with the caveat that you are on a RAPIDS capable environment with GPUs.
 ```
 
-If you are using a machine with an NVIDIA GPU then follow the [local install instructions](../../local). Alternatively if you do not have a GPU locally consider using s remote environment like a [SageMaker Notebook Instance](./sagemaker).
+If you are using a machine with an NVIDIA GPU then follow the [local install instructions](https://docs.rapids.ai/install). Alternatively if you do not have a GPU locally consider using a remote environment like a [SageMaker Notebook Instance](https://docs.aws.amazon.com/sagemaker/latest/dg/nbi.html).
 
 ### Install the AWS CLI
 
