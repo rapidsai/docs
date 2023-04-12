@@ -19,12 +19,12 @@ $ gcloud init
 Now we can launch a GPU enabled GKE cluster.
 
 ```console
-$ gcloud container clusters create rapids \
+$ gcloud container clusters create rapids-gpu-kubeflow \
   --accelerator type=nvidia-tesla-a100,count=2 --machine-type a2-highgpu-2g \
   --zone us-central1-c --release-channel stable
 ```
 
-With this command, you’ve launched a GKE cluster called rapids-gpu-kubeflow. You’ve specified that it should use nodes of type a2-highgpu-2g, each with two A100 GPUs.
+With this command, you’ve launched a GKE cluster called `rapids-gpu-kubeflow`. You’ve specified that it should use nodes of type a2-highgpu-2g, each with two A100 GPUs.
 
 ## Install drivers
 
