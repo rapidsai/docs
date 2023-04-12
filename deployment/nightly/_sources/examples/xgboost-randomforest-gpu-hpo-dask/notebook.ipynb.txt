@@ -26,7 +26,7 @@
     "\n",
     "## Introduction\n",
     "\n",
-    "&emsp; &emsp; &emsp; [Hyperparameter optimization](https://cloud.google.com/ai-platform/training/docs/hyperparameter-tuning-overview) is the task of picking hyperparameters values of the model that provide the optimal results for the problem, as measured on a specific test dataset. This is often a crucial step and can help boost the model accuracy when done correctly. Cross-validation is often used to more accurately estimate the performance of the models in the search process. Cross-validation is the method of splitting the training set into complementary subsets and performing training on one of the subsets, then predicting the models performance on the other. This is a potential indication of how the model will generalise to data it has not seen before.\n",
+    "[Hyperparameter optimization](https://cloud.google.com/ai-platform/training/docs/hyperparameter-tuning-overview) is the task of picking hyperparameters values of the model that provide the optimal results for the problem, as measured on a specific test dataset. This is often a crucial step and can help boost the model accuracy when done correctly. Cross-validation is often used to more accurately estimate the performance of the models in the search process. Cross-validation is the method of splitting the training set into complementary subsets and performing training on one of the subsets, then predicting the models performance on the other. This is a potential indication of how the model will generalise to data it has not seen before.\n",
     "\n",
     "Despite its theoretical importance, HPO has been difficult to implement in practical applications because of the resources needed to run so many distinct training jobs.\n",
     "\n",
@@ -35,20 +35,18 @@
     "\n",
     "#### 1. GridSearch\n",
     "\n",
-    "&emsp; &emsp; &emsp; As the name suggests, the \"search\" is done over each possible combination in a grid of parameters that the user provides. The user must manually define this grid.. For each parameter that needs to be tuned, a set of values are given and the final grid search is performed with tuple having one element from each set, thus resulting in a Catersian Product of the elements.\n",
+    "As the name suggests, the \"search\" is done over each possible combination in a grid of parameters that the user provides. The user must manually define this grid.. For each parameter that needs to be tuned, a set of values are given and the final grid search is performed with tuple having one element from each set, thus resulting in a Catersian Product of the elements.\n",
     "\n",
-    "&emsp; &emsp; &emsp;For example, assume we want to perform HPO on XGBoost. For simplicity lets tune only `n_estimators` and `max_depth`\n",
+    "For example, assume we want to perform HPO on XGBoost. For simplicity lets tune only `n_estimators` and `max_depth`\n",
+    "- `n_estimators: [50, 100, 150]`\n",
+    "- `max_depth: [6, 7, ,8]`\n",
     "\n",
-    "&emsp; &emsp; &emsp;`n_estimators: [50, 100, 150]`\n",
-    "\n",
-    "&emsp; &emsp; &emsp;`max_depth: [6, 7, ,8]`\n",
-    "    \n",
-    "&emsp; &emsp; &emsp; The grid search will take place over |n_estimators| x |max_depth| which is 3 x 3 = 9. As you have probably guessed, the grid size grows rapidly as the number of parameters and their search space increases.\n",
+    "The grid search will take place over |n_estimators| x |max_depth| which is 3 x 3 = 9. As you have probably guessed, the grid size grows rapidly as the number of parameters and their search space increases.\n",
     "\n",
     "#### 2. RandomSearch\n",
     "\n",
     "\n",
-    "&emsp; &emsp; &emsp; [Random Search](http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf) replaces the exhaustive nature of the search from before with a random selection of parameters over the specified space. This method can outperform GridSearch in cases where the number of parameters affecting the model's performance is small (low-dimension optimization problems). Since this does not pick every tuple from the cartesian product, it tends to yield results faster, and the performance can be comparable to that of the Grid Search approach. It's worth keeping in mind that the random nature of this search means, the results with each run might differ.\n",
+    "[Random Search](http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf) replaces the exhaustive nature of the search from before with a random selection of parameters over the specified space. This method can outperform GridSearch in cases where the number of parameters affecting the model's performance is small (low-dimension optimization problems). Since this does not pick every tuple from the cartesian product, it tends to yield results faster, and the performance can be comparable to that of the Grid Search approach. It's worth keeping in mind that the random nature of this search means, the results with each run might differ.\n",
     "\n",
     "Some of the other methods used for HPO include:\n",
     "\n",
@@ -71,7 +69,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "import warnings\n",
@@ -110,7 +110,7 @@
     "from dask_cuda import LocalCUDACluster\n",
     "\n",
     "from sklearn import datasets\n",
-    "from sklearn.metrics import make_score\n",
+    "from sklearn.metrics import make_scorer\n",
     "from cuml.ensemble import RandomForestClassifier\n",
     "from cuml.model_selection import train_test_split\n",
     "from cuml.metrics.accuracy import accuracy_score\n",
@@ -141,7 +141,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "cluster = LocalCUDACluster()\n",
@@ -165,10 +167,12 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
-    "data_dir = \"~/rapids_hpo/data/\"\n",
+    "data_dir = \"./rapids_hpo/data/\"\n",
     "file_name = \"airlines.parquet\"\n",
     "parquet_name = os.path.join(data_dir, file_name)"
    ]
@@ -176,7 +180,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "parquet_name"
@@ -196,9 +202,9 @@
     "    global file_path, data_dir\n",
     "\n",
     "    if use_full_dataset:\n",
-    "        url = \"https://rapidsai-cloud-ml-sample-data.s3-us-west-2.amazonaws.com/airline_20000000.parquet\"\n",
+    "        url = \"https://data.rapids.ai/cloud-ml/airline_20000000.parquet\"\n",
     "    else:\n",
-    "        url = \"https://rapidsai-cloud-ml-sample-data.s3-us-west-2.amazonaws.com/airline_small.parquet\"\n",
+    "        url = \"https://data.rapids.ai/cloud-ml/airline_small.parquet\"\n",
     "\n",
     "    if os.path.isfile(parquet_name):\n",
     "        print(f\" > File already exists. Ready to load at {parquet_name}\")\n",
@@ -258,7 +264,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "df = prepare_dataset()"
@@ -267,7 +275,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "import time\n",
@@ -286,7 +296,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "# Define some default values to make use of across the notebook for a fair comparison\n",
@@ -297,7 +309,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "label = \"ArrDelayBinary\""
@@ -315,7 +329,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "X_train, X_test, y_train, y_test = train_test_split(df, label, test_size=0.2)"
@@ -324,7 +340,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "X_cpu = X_train.to_pandas()\n",
@@ -352,7 +370,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "def accuracy_score_wrapper(y, y_hat):\n",
@@ -375,7 +395,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "def do_HPO(model, gridsearch_params, scorer, X, y, mode=\"gpu-Grid\", n_iter=10):\n",
@@ -412,7 +434,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "def print_acc(model, X_train, y_train, X_test, y_test, mode_str=\"Default\"):\n",
@@ -428,7 +452,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "X_train.shape"
@@ -456,7 +482,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "model_gpu_xgb_ = xgb.XGBClassifier(tree_method=\"gpu_hist\")\n",
@@ -476,7 +504,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "# For xgb_model\n",
@@ -505,7 +535,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "mode = \"gpu-random\"\n",
@@ -526,7 +558,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "print_acc(res, X_train, y_cpu, X_test, y_test_cpu, mode_str=mode)"
@@ -535,7 +569,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "mode = \"gpu-grid\"\n",
@@ -550,7 +586,9 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "metadata": {},
+   "metadata": {
+    "tags": []
+   },
    "outputs": [],
    "source": [
     "print_acc(res, X_train, y_cpu, X_test, y_test_cpu, mode_str=mode)"
@@ -731,9 +769,9 @@
  ],
  "metadata": {
   "kernelspec": {
-   "display_name": "rapids-23.02",
+   "display_name": "Python 3 (ipykernel)",
    "language": "python",
-   "name": "rapids-23.02"
+   "name": "python3"
   },
   "language_info": {
    "codemirror_mode": {
@@ -745,7 +783,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.10.9"
+   "version": "3.10.10"
   }
  },
  "nbformat": 4,

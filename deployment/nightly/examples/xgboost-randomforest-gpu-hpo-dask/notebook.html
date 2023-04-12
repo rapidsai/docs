@@ -455,20 +455,22 @@ document.write(`
 <h1>HPO with dask-ml and cuml<a class="headerlink" href="#hpo-with-dask-ml-and-cuml" title="Permalink to this heading">#</a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
-<p>      <a class="reference external" href="https://cloud.google.com/ai-platform/training/docs/hyperparameter-tuning-overview">Hyperparameter optimization</a> is the task of picking hyperparameters values of the model that provide the optimal results for the problem, as measured on a specific test dataset. This is often a crucial step and can help boost the model accuracy when done correctly. Cross-validation is often used to more accurately estimate the performance of the models in the search process. Cross-validation is the method of splitting the training set into complementary subsets and performing training on one of the subsets, then predicting the models performance on the other. This is a potential indication of how the model will generalise to data it has not seen before.</p>
+<p><a class="reference external" href="https://cloud.google.com/ai-platform/training/docs/hyperparameter-tuning-overview">Hyperparameter optimization</a> is the task of picking hyperparameters values of the model that provide the optimal results for the problem, as measured on a specific test dataset. This is often a crucial step and can help boost the model accuracy when done correctly. Cross-validation is often used to more accurately estimate the performance of the models in the search process. Cross-validation is the method of splitting the training set into complementary subsets and performing training on one of the subsets, then predicting the models performance on the other. This is a potential indication of how the model will generalise to data it has not seen before.</p>
 <p>Despite its theoretical importance, HPO has been difficult to implement in practical applications because of the resources needed to run so many distinct training jobs.</p>
 <p>The two approaches that we will be exploring in this notebook are :</p>
 <section id="gridsearch">
 <h3>1. GridSearch<a class="headerlink" href="#gridsearch" title="Permalink to this heading">#</a></h3>
-<p>      As the name suggests, the “search” is done over each possible combination in a grid of parameters that the user provides. The user must manually define this grid.. For each parameter that needs to be tuned, a set of values are given and the final grid search is performed with tuple having one element from each set, thus resulting in a Catersian Product of the elements.</p>
-<p>     For example, assume we want to perform HPO on XGBoost. For simplicity lets tune only <code class="docutils literal notranslate"><span class="pre">n_estimators</span></code> and <code class="docutils literal notranslate"><span class="pre">max_depth</span></code></p>
-<p>     <code class="docutils literal notranslate"><span class="pre">n_estimators:</span> <span class="pre">[50,</span> <span class="pre">100,</span> <span class="pre">150]</span></code></p>
-<p>     <code class="docutils literal notranslate"><span class="pre">max_depth:</span> <span class="pre">[6,</span> <span class="pre">7,</span> <span class="pre">,8]</span></code></p>
-<p>      The grid search will take place over |n_estimators| x |max_depth| which is 3 x 3 = 9. As you have probably guessed, the grid size grows rapidly as the number of parameters and their search space increases.</p>
+<p>As the name suggests, the “search” is done over each possible combination in a grid of parameters that the user provides. The user must manually define this grid.. For each parameter that needs to be tuned, a set of values are given and the final grid search is performed with tuple having one element from each set, thus resulting in a Catersian Product of the elements.</p>
+<p>For example, assume we want to perform HPO on XGBoost. For simplicity lets tune only <code class="docutils literal notranslate"><span class="pre">n_estimators</span></code> and <code class="docutils literal notranslate"><span class="pre">max_depth</span></code></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n_estimators:</span> <span class="pre">[50,</span> <span class="pre">100,</span> <span class="pre">150]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_depth:</span> <span class="pre">[6,</span> <span class="pre">7,</span> <span class="pre">,8]</span></code></p></li>
+</ul>
+<p>The grid search will take place over |n_estimators| x |max_depth| which is 3 x 3 = 9. As you have probably guessed, the grid size grows rapidly as the number of parameters and their search space increases.</p>
 </section>
 <section id="randomsearch">
 <h3>2. RandomSearch<a class="headerlink" href="#randomsearch" title="Permalink to this heading">#</a></h3>
-<p>      <a class="reference external" href="http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf">Random Search</a> replaces the exhaustive nature of the search from before with a random selection of parameters over the specified space. This method can outperform GridSearch in cases where the number of parameters affecting the model’s performance is small (low-dimension optimization problems). Since this does not pick every tuple from the cartesian product, it tends to yield results faster, and the performance can be comparable to that of the Grid Search approach. It’s worth keeping in mind that the random nature of this search means, the results with each run might differ.</p>
+<p><a class="reference external" href="http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf">Random Search</a> replaces the exhaustive nature of the search from before with a random selection of parameters over the specified space. This method can outperform GridSearch in cases where the number of parameters affecting the model’s performance is small (low-dimension optimization problems). Since this does not pick every tuple from the cartesian product, it tends to yield results faster, and the performance can be comparable to that of the Grid Search approach. It’s worth keeping in mind that the random nature of this search means, the results with each run might differ.</p>
 <p>Some of the other methods used for HPO include:</p>
 <ol class="arabic simple">
 <li><p>Bayesian Optimization</p></li>
@@ -503,7 +505,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">dask_cuda</span> <span class="kn">import</span> <span class="n">LocalCUDACluster</span>
 
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">make_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">make_scorer</span>
 <span class="kn">from</span> <span class="nn">cuml.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
 <span class="kn">from</span> <span class="nn">cuml.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span> <span class="nn">cuml.metrics.accuracy</span> <span class="kn">import</span> <span class="n">accuracy_score</span>
@@ -544,7 +546,7 @@ Learn More:</p>
 <p>Note: To ensure that this example runs quickly on a modest machine, we default to using a small subset of the airline dataset. To use the full dataset, pass the argument <code class="docutils literal notranslate"><span class="pre">use_full_dataset=True</span></code> to the <code class="docutils literal notranslate"><span class="pre">prepare_dataset</span></code> function.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s2">&quot;~/rapids_hpo/data/&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s2">&quot;./rapids_hpo/data/&quot;</span>
 <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;airlines.parquet&quot;</span>
 <span class="n">parquet_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
 </pre></div>
@@ -564,9 +566,9 @@ Learn More:</p>
     <span class="k">global</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">data_dir</span>
 
     <span class="k">if</span> <span class="n">use_full_dataset</span><span class="p">:</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://rapidsai-cloud-ml-sample-data.s3-us-west-2.amazonaws.com/airline_20000000.parquet&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://data.rapids.ai/cloud-ml/airline_20000000.parquet&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://rapidsai-cloud-ml-sample-data.s3-us-west-2.amazonaws.com/airline_small.parquet&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://data.rapids.ai/cloud-ml/airline_small.parquet&quot;</span>
 
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">parquet_name</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; &gt; File already exists. Ready to load at </span><span class="si">{</span><span class="n">parquet_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1114,12 +1116,16 @@ Learning Algorithms</a></p></li>
       <span class="sd-sphinx-override sd-badge">library/cuml</span>
     </a>
     
-    <a href="../?filters=dataset/airline">
-      <span class="sd-sphinx-override sd-badge">dataset/airline</span>
-    </a>
-    
     <a href="../?filters=library/numpy">
       <span class="sd-sphinx-override sd-badge">library/numpy</span>
+    </a>
+    
+    <a href="../?filters=library/dask-ml">
+      <span class="sd-sphinx-override sd-badge">library/dask-ml</span>
+    </a>
+    
+    <a href="../?filters=dataset/airline">
+      <span class="sd-sphinx-override sd-badge">dataset/airline</span>
     </a>
     
     <a href="../?filters=library/pandas">
@@ -1132,10 +1138,6 @@ Learning Algorithms</a></p></li>
     
     <a href="../?filters=library/dask-cuda">
       <span class="sd-sphinx-override sd-badge">library/dask-cuda</span>
-    </a>
-    
-    <a href="../?filters=library/dask-ml">
-      <span class="sd-sphinx-override sd-badge">library/dask-ml</span>
     </a>
     
     <a href="../?filters=storage/s3">
