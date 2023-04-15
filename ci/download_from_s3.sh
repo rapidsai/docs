@@ -63,9 +63,9 @@ download_lib_docs() {
         SRC VERSION_MAP VERSION_NAME \
         VERSION_NUMBER
 
-      # "legacy": .legacy.version,
   VERSION_MAP=$(
     jq '{
+      "legacy": .legacy.version,
       "stable": .stable.version,
       "nightly": .nightly.version
     }' _data/releases.json
@@ -77,8 +77,7 @@ download_lib_docs() {
 
 
   for VERSION_NAME in $(jq -nr 'env.VERSION_MAP | fromjson | keys | .[]'); do
-    # REMOVE 1 INDEX BEFORE COMMITTING!!!
-    for PROJECT in $(yq -n 'env(PROJECT_MAP) | keys | .[:6] | .[]'); do
+    for PROJECT in $(yq -n 'env(PROJECT_MAP) | keys | .[]'); do
       export VERSION_NAME PROJECT
       VERSION_NUMBER=$(jq -nr 'env.VERSION_MAP | fromjson | .[env.VERSION_NAME]')
 
