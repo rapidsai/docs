@@ -36,9 +36,7 @@ check_dirs() {
 # Helper function for the `aws cp` command. Checks to ensure that the source
 # directory has contents before attempting the copy.
 aws_cp() {
-  local \
-    SRC \
-    DST
+  local SRC DST
 
   SRC=$1
   DST=$2
@@ -61,14 +59,9 @@ aws_cp() {
 # "_data/releases.json" and the libraries that should be copied are read from
 # "_data/docs.yml".
 download_lib_docs() {
-  local \
-    DST \
-    PROJECT \
-    PROJECT_MAP \
-    SRC \
-    VERSION_MAP \
-    VERSION_NAME \
-    VERSION_NUMBER
+  local DST PROJECT PROJECT_MAP \
+        SRC VERSION_MAP VERSION_NAME \
+        VERSION_NUMBER
 
       # "legacy": .legacy.version,
   VERSION_MAP=$(
@@ -105,10 +98,7 @@ download_lib_docs() {
 # Downloads the deployment docs from S3 and places them in the
 # "_site/deployment" directory.
 download_deployment_docs() {
-  local \
-    DST \
-    SRC \
-    VERSION
+  local DST SRC VERSION
 
   for VERSION in nightly stable; do
     SRC="s3://${DOCS_BUCKET}/deployment/${VERSION}/html/"
