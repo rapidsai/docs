@@ -1,8 +1,10 @@
 name: Deploy site
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
+      - ghas-build
 
 defaults:
   run:
@@ -13,7 +15,7 @@ permissions:
   contents: read
 
 jobs:
-  conda:
+  build:
     name: Build (and deploy)
     runs-on: ubuntu-latest
     steps:
@@ -25,7 +27,9 @@ jobs:
       - uses: ruby/setup-ruby@v1
 
       - name: Build Jekyll Site
-        run: bundle exec jekyll build
+        run: |
+          bundle install
+          bundle exec jekyll build
 
       - uses: aws-actions/configure-aws-credentials@v1-node16
         with:
@@ -36,7 +40,15 @@ jobs:
       - name: Fetch doc files from S3
         run: ci/download_from_s3.sh
 
-      # TODO:
-      # - post-process docs
-      # - setup npm for Netlify CLI
-      # - deploy site to Netlify
+      - name: Post-process docs
+        run: ci/post-process.sh
+
+      - name: Deploy site
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_DOCS_SITE_ID }}
+        # TODO: add "--prod" flag when ready
+        run: |
+          npm install --global netlify-cli
+          netlify deploy \
+            --dir=_site
