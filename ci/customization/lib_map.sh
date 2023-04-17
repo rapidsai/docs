@@ -13,13 +13,13 @@
 #     "nightly": "/cuspatial/en/nightly/api.html",
 #     "legacy": null
 #    }, ...}
-set -e
+set -euo pipefail
 
 SCRIPT_SRC_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" # directory where this script is located
 PROJ_ROOT=$(pwd)
 FOLDER_MAP="{}"
 
-for FOLDER in api/*/ ; do
+for FOLDER in _site/api/*/ ; do
 
   LIB=$(basename ${FOLDER}) # remove api/ & trailing slash from folder
   DEFAULT_PATH=${LIB}
@@ -35,14 +35,14 @@ for FOLDER in api/*/ ; do
     if [ -d "${VERSION}" ]; then
       DEFAULT_PATH+="/${VERSION}"
 
-      if [[ "${LIB}" =~ ^(librmm|libnvstrings)$ ]]; then
-        DEFAULT_PATH+="/annotated.html"
+      if [[ "${LIB}" = librmm ]]; then
+        DEFAULT_PATH+="/annotated/"
 
       elif [ "${LIB}" = libcudf ]; then
-        DEFAULT_PATH+="/namespacecudf.html"
+        DEFAULT_PATH+="/namespacecudf/"
 
       elif [ "${LIB}" = cudf ]; then
-        DEFAULT_PATH+="/index.html"
+        DEFAULT_PATH+="/"
 
       elif [ -f "${VERSION}/api.html" ]; then
         DEFAULT_PATH+="/api.html"

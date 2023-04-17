@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 FILEPATH = sys.argv[1]
 
 LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
-RELEASES_PATH = os.path.join(os.path.dirname(__file__), "../", "_data", "releases.json")
+RELEASES_PATH = os.path.join(os.path.dirname(__file__), "../", "../", "_data", "releases.json")
 
 with open(LIB_MAP_PATH) as fp:
     LIB_PATH_DICT = json.load(fp)

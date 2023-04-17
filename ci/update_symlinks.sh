@@ -2,29 +2,9 @@
 #######################################
 # Updates or removes all symlinked folders based on the given positional parameter
 #######################################
-set -eEo pipefail
+set -euEo pipefail
 
-display_usage() {
-  echo "Usage:"
-  echo " - update_symlinks        # updates symlinks to match versions in _data/releases.json"
-  echo " - update_symlinks rm     # removes all current symlinks"
-}
-
-# If there is more than one argument, or if there is one argument that's not "rm"
-# then show usage info and exit.
-if [[ $# -eq "1" && "$1" != "rm" ]] || [[ $# -gt 1 ]]; then
-  display_usage
-  exit 1
-fi
-
-PROJ_ROOT=$(dirname $(realpath $0))
-
-echo "Removing existing symlinks..."
-find ${PROJ_ROOT} -type l -ls -delete > /dev/null
-
-if [[ "$1" == "rm" ]]; then
-  exit 0
-fi
+PROJ_ROOT=$(realpath "$(dirname $(realpath $0))/../")
 
 STABLE_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.stable.version')
 LEGACY_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.legacy.version')
@@ -32,7 +12,7 @@ NIGHTLY_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.nightly.versi
 
 echo "Updating symlinks..."
 echo ""
-for FOLDER in api/*/ ; do
+for FOLDER in _site/api/*/ ; do
 
   cd ${FOLDER}
   echo ""
