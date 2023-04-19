@@ -52,8 +52,12 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_DOCS_SITE_ID }}
-        # TODO: add "--prod" flag when ready
         run: |
           npm install --global --force @aschmidt8/netlify-cli
-          netlify deploy \
+
+          ARGS=""
+          if [ "$GITHUB_REF_NAME" = "main" ]; then
+            ARGS="--prod"
+          fi
+          netlify deploy "$ARGS" \
             --dir=_site
