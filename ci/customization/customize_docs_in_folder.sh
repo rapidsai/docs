@@ -44,6 +44,7 @@ for FILE in $(grep "${JTD_SEARCH_TERM}\|${DOXYGEN_SEARCH_TERM}\|${PYDATA_SEARCH_
   --exclude-dir=nightly \
   --exclude-dir=latest \
   --exclude-dir=legacy \
+  --exclude-dir=cudf-java \
   ${FOLDER_TO_CUSTOMIZE} ); do
   python ${SCRIPT_SRC_FOLDER}/customize_doc.py $(realpath ${FILE})
   echo "" # line break for readability

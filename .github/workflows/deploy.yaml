@@ -1,0 +1,61 @@
+name: Deploy site
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    name: Build (and deploy)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.1.0
+        with:
+          fetch-depth: 0
+
+      # this step uses the `.ruby-version` file
+      - uses: ruby/setup-ruby@v1
+
+      - name: Build Jekyll Site
+        run: |
+          bundle install
+          bundle exec jekyll build
+
+      - uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-duration-seconds: 7200 # 2h
+
+      - name: Fetch doc files from S3
+        run: ci/download_from_s3.sh
+
+      - name: Post-process docs
+        run: ci/post-process.sh
+
+      - name: Deploy site
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_DOCS_SITE_ID }}
+        run: |
+          npm install --global --force @aschmidt8/netlify-cli
+
+          ARGS=""
+          if [ "$GITHUB_REF_NAME" = "main" ]; then
+            ARGS="--prod"
+          fi
+          netlify deploy "$ARGS" \
+            --dir=_site

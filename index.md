@@ -21,7 +21,7 @@ This site serves to unify the documentation for RAPIDS. Whether you're new to RA
 [<i class="fa-solid fa-file-circle-info"></i> API Documentation]({% link api.md %}){: .btn.fs-4 .mb-4 .mb-md-04 .mr-2 }
 [<i class="fa-solid fa-file-circle-info"></i> Visualization Guide]({% link visualization/visualization.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
 <br/>
-[<i class="fa-solid fa-file-circle-info"></i> Deployment Guides]({% link deployment/stable/index.html %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
+[<i class="fa-solid fa-file-circle-info"></i> Deployment Guides](/deployment/stable/){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
 [<i class="fa-solid fa-file-circle-info"></i> Maintainer Documentation]({% link maintainers/maintainers.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
 <br/>
 [<i class="fas fa-bullhorn"></i> RAPIDS Notices]({% link notices/notices.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
