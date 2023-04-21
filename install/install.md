@@ -14,8 +14,8 @@ RAPIDS has several methods for installation, depending on the preferred environm
 {: .fs-6 .fw-300 }
 
 **[1. Provision System](#provision)** <br/>
-**[2A. Setup Environment](#setup)** <br/>
-**[2B. Setup WSL2 Environment](#WSL2)** <br/>
+**[2A. Set up Environment](#set-up)** <br/>
+**[2B. Set up WSL2 Environment](#WSL2)** <br/>
 **[3A. Install RAPIDS (Release Selector)](#selector)** <br/>
 **[3B. Install RAPIDS (pip)](#pip-install)** <br/>
 **[4. Getting Started](#start)**  
@@ -69,9 +69,9 @@ Several services also offer **free and limited** trials with GPU resources:
 
 <hr/>
 <br/>
-<div id="setup"></div>
+<div id="set-up"></div>
 
-## 2A. Setup Environment
+## 2A. Set up Environment
 For most installations, you will need a Conda or Docker environments installed for RAPIDS. Note, these examples are structured for installing on **Ubuntu**. Please modify appropriately for CentOS / Rocky Linux. **Windows 11** has a [WSL2 specific install](#WSL2). Jump to your preferred environment:
 - [Conda](#conda) 
 - [Docker](#docker)
@@ -171,7 +171,7 @@ The package installer for python (pip) is available as of RAPIDS release 23.04. 
 <div id="source"></div>
 
 ### **Build from Source**
-To build from source, check each [RAPIDS GitHub](https://github.com/rapidsai){: target="_blank"} README, such as the [cuDF's](https://github.com/rapidsai/cudf#buildinstall-from-source){: target="_blank"} source environment setup and build instructions. Further links are provided in the selector tool. If additional help is needed reach out on our Slack Channel.
+To build from source, check each [RAPIDS GitHub](https://github.com/rapidsai){: target="_blank"} README, such as the [cuDF's](https://github.com/rapidsai/cudf#buildinstall-from-source){: target="_blank"} source environment set up and build instructions. Further links are provided in the selector tool. If additional help is needed reach out on our Slack Channel.
 
 <hr/>
 <br/>
