@@ -14,8 +14,8 @@ RAPIDS has several methods for installation, depending on the preferred environm
 {: .fs-6 .fw-300 }
 
 **[1. Provision System](#provision)** <br/>
-**[2A. Set up Environment](#set-up)** <br/>
-**[2B. Set up WSL2 Environment](#WSL2)** <br/>
+**[2A. Set Up Environment](#set-up)** <br/>
+**[2B. Set Up WSL2 Environment](#WSL2)** <br/>
 **[3A. Install RAPIDS (Release Selector)](#selector)** <br/>
 **[3B. Install RAPIDS (pip)](#pip-install)** <br/>
 **[4. Getting Started](#start)**  
@@ -71,7 +71,7 @@ Several services also offer **free and limited** trials with GPU resources:
 <br/>
 <div id="set-up"></div>
 
-## 2A. Set up Environment
+## 2A. Set Up Environment
 For most installations, you will need a Conda or Docker environments installed for RAPIDS. Note, these examples are structured for installing on **Ubuntu**. Please modify appropriately for CentOS / Rocky Linux. **Windows 11** has a [WSL2 specific install](#WSL2). Jump to your preferred environment:
 - [Conda](#conda) 
 - [Docker](#docker)
