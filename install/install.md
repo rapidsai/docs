@@ -17,7 +17,7 @@ RAPIDS has several methods for installation, depending on the preferred environm
 **[2A. Setup Environment](#setup)** <br/>
 **[2B. Setup WSL2 Environment](#WSL2)** <br/>
 **[3A. Install RAPIDS (Release Selector)](#selector)** <br/>
-**[3B. Install RAPIDS (pip)](#pip)** <br/>
+**[3B. Install RAPIDS (pip)](#pip-install)** <br/>
 **[4. Getting Started](#start)**  
 
 <hr/>
@@ -236,7 +236,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
 4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then [install the CUDA Toolkit without drivers](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} into the WSL2 instance.
-5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [pip instructions](#pip).
+5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [pip instructions](#pip-install).
 6. Run this code to check that the RAPIDS installation is working:
 	```
 	import cudf
@@ -256,7 +256,7 @@ Use the selector tool below to select your preferred method, packages, and envir
 
 <hr/>
 <br/>
-<div id="pip"></div>
+<div id="pipnstall"></div>
 
 ## 3B. Install RAPIDS with pip
 Beginning with the release of 23.04: cuDF, dask-cuDF, cuML, cuGraph, RMM, and RAFT CUDA 11 pip packages are available on the NVIDIA Index.
