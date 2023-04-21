@@ -14,10 +14,10 @@ RAPIDS has several methods for installation, depending on the preferred environm
 {: .fs-6 .fw-300 }
 
 **[1. Provision System](#provision)** <br/>
-**[2A. Setup Environment](#setup)** <br/>
-**[2B. Setup WSL2 Environment](#WSL2)** <br/>
+**[2A. Set Up Environment](#set-up)** <br/>
+**[2B. Set Up WSL2 Environment](#WSL2)** <br/>
 **[3A. Install RAPIDS (Release Selector)](#selector)** <br/>
-**[3B. Install RAPIDS (pip)](#pip)** <br/>
+**[3B. Install RAPIDS (pip)](#pip-install)** <br/>
 **[4. Getting Started](#start)**  
 
 <hr/>
@@ -69,9 +69,9 @@ Several services also offer **free and limited** trials with GPU resources:
 
 <hr/>
 <br/>
-<div id="setup"></div>
+<div id="set-up"></div>
 
-## 2A. Setup Environment
+## 2A. Set Up Environment
 For most installations, you will need a Conda or Docker environments installed for RAPIDS. Note, these examples are structured for installing on **Ubuntu**. Please modify appropriately for CentOS / Rocky Linux. **Windows 11** has a [WSL2 specific install](#WSL2). Jump to your preferred environment:
 - [Conda](#conda) 
 - [Docker](#docker)
@@ -171,7 +171,7 @@ The package installer for python (pip) is available as of RAPIDS release 23.04. 
 <div id="source"></div>
 
 ### **Build from Source**
-To build from source, check each [RAPIDS GitHub](https://github.com/rapidsai){: target="_blank"} README, such as the [cuDF's](https://github.com/rapidsai/cudf#buildinstall-from-source){: target="_blank"} source environment setup and build instructions. Further links are provided in the selector tool. If additional help is needed reach out on our Slack Channel.
+To build from source, check each [RAPIDS GitHub](https://github.com/rapidsai){: target="_blank"} README, such as the [cuDF's](https://github.com/rapidsai/cudf#buildinstall-from-source){: target="_blank"} source environment set up and build instructions. Further links are provided in the selector tool. If additional help is needed reach out on our Slack Channel.
 
 <hr/>
 <br/>
@@ -236,7 +236,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
 4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then [install the CUDA Toolkit without drivers](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} into the WSL2 instance.
-5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [pip instructions](#pip).
+5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [pip instructions](#pip-install).
 6. Run this code to check that the RAPIDS installation is working:
 	```
 	import cudf
@@ -256,7 +256,7 @@ Use the selector tool below to select your preferred method, packages, and envir
 
 <hr/>
 <br/>
-<div id="pip"></div>
+<div id="pip-install"></div>
 
 ## 3B. Install RAPIDS with pip
 Beginning with the release of 23.04: cuDF, dask-cuDF, cuML, cuGraph, RMM, and RAFT CUDA 11 pip packages are available on the NVIDIA Index.
