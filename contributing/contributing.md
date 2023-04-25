@@ -22,10 +22,11 @@ Welcome! We are excited you are here! Before you begin, we ask that everyone rev
 2. Find an issue to work on. The best way is to look for the <span class="label" style="background: #7057ff; color: #ffffff; text-transform: none">good first issue</span> or <span class="label" style="background: #008672; color: #ffffff; text-transform: none">help wanted</span> labels
 3. Comment on the issue saying you are going to work on it
 4. Code! Make sure to update unit tests!
-5. When done, [create your pull request]({% link contributing/prs.md %})
-6. Verify that CI passes all [status checks](https://help.github.com/articles/about-status-checks/). Fix if needed
-7. Wait for other developers to review your code and update code as needed
-8. Once reviewed and approved, a RAPIDS developer will merge your pull request
+5. All RAPIDS projects are released under the Apache-2.0 license, and all source files that support comments must include a copyright and the Apache-2.0 license text.
+6. When done, [create your pull request]({% link contributing/prs.md %})
+7. Verify that CI passes all [status checks](https://help.github.com/articles/about-status-checks/). Fix if needed
+8. Wait for other developers to review your code and update code as needed
+9. Once reviewed and approved, a RAPIDS developer will merge your pull request
 
 Remember, if you are unsure about anything, don't hesitate to comment on issues and ask for clarifications!
 
