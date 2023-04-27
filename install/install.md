@@ -231,8 +231,8 @@ bash /rapids/utils/stop-jupyter.sh
 Beginning with the release of 23.04: cuDF, dask-cuDF, cuML, cuGraph, RMM, and RAFT CUDA 11 pip packages are available on the NVIDIA Index.
 
 ### **Pip Enhanced Prerequisites**
-<i class="fas fa-info-circle"></i> **Glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
-<i class="fas fa-info-circle"></i> **Glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.31 (only ARM Server Base System Architecture is supported).
+<i class="fas fa-info-circle"></i> **glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
+<i class="fas fa-info-circle"></i> **glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.31 (only ARM Server Base System Architecture is supported).
 
 
 <br/>
