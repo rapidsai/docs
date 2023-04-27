@@ -45,7 +45,7 @@ Use the selector tool below to select your preferred method, packages, and envir
 
 ## Installation Troubleshooting
 
-### **PiP Issues**
+### **pip Issues**
 <i class="fas fa-info-circle"></i> Infiniband is not supported yet. <br/>
 <i class="fas fa-info-circle"></i> These packages are not compatible with Tensorflow pip packages. Please use the [NGC containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow){: target="_blank"} or conda packages instead. <br/>
 <i class="fas fa-info-circle"></i> If you experience a “Failed to import CuPy” error, please uninstall any existing versions of cupy and install cupy-cuda11x. For example:
