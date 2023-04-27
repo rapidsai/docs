@@ -238,7 +238,7 @@ Beginning with the release of 23.04: cuDF, dask-cuDF, cuML, cuGraph, RMM, and RA
 <br/>
 <div id="wsl2"></div>
 
-## **WINDOWS WSL2**
+## **Windows WSL2**
 Windows users can now tap into GPU accelerated data science on their local machines using RAPIDS on [Windows Subsystem for Linux 2](https://learn.microsoft.com/en-us/windows/wsl/install){: target="_blank"}. WSL2 is a Windows feature that enables users to run native Linux command line tools directly on Windows. Using this feature does not require a dual boot environment, removing complexity and saving you time.
 
 ### **WSL2 Enhanced Prerequisites**
