@@ -66,7 +66,7 @@ Check the suggestions below for possible resolutions:
 
 <br/>
 
-<i class="fas fa-info-circle"></i> Dask / Jupyter / Tornado 6.2 dependency conflicts can occur. Install jupyter-client 7.3.4 if the error below occurs: <br/>
+<i class="fas fa-info-circle"></i> Dask / Jupyter / Tornado 6.2 dependency conflicts can occur. Install `jupyter-client` 7.3.4 if the error below occurs: <br/>
 ```
     ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behavior is the source of the following dependency conflicts.
     jupyter-client 7.4.2 requires tornado>=6.2, but you have tornado 6.1 which is incompatible.
