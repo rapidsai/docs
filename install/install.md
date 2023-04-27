@@ -43,7 +43,7 @@ Use the selector tool below to select your preferred method, packages, and envir
 
 <div id="troubleshooting"></div>
 
-## Install Troubleshooting
+## Installation Troubleshooting
 
 ### **PiP Issues**
 <i class="fas fa-info-circle"></i> Infiniband is not supported yet. <br/>
