@@ -260,7 +260,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 
 <i class="fas fa-info-circle text-white"></i> When installing with conda, if an `http 000 connection error` occurs when accessing the repository data, run `wsl --shutdown` and then [restart the WSL instance](https://stackoverflow.com/questions/67923183/miniconda-on-wsl2-ubuntu-20-04-fails-with-condahttperror-http-000-connection){: target="_blank"}.
 
-<i class="fas fa-info-circle text-white"></i> When installing with Docker Desktop, if the container pull command is successful, but the run command hangs indefinitely, [ensure you're on Docker Desktop <= 4.15](https://github.com/docker/for-win/issues/13165){: target="_blank"}.
+<i class="fas fa-info-circle text-white"></i> When installing with Docker Desktop, if the container pull command is successful, but the run command hangs indefinitely, [ensure you're on Docker Desktop >= 4.18](https://docs.docker.com/desktop/release-notes/){: target="_blank"}.
 
 <br/>
 <div id="wsl2-conda"></div>
