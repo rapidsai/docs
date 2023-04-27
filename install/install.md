@@ -10,7 +10,8 @@ description: |
 # RAPIDS Installation Guide
 {: .fs-8 }
 
-RAPIDS has several methods for installation, depending on the preferred environment and versioning. **New Users** should be mindful of the system and environment prerequisites. 
+RAPIDS has several methods for installation, depending on the preferred environment and version. <br/>
+*New Users* should be mindful of the system and environment prerequisites. 
 {: .fs-6 .fw-300 }
 
 **[Install RAPIDS with Release Selector](#selector)** <br/>
@@ -24,11 +25,11 @@ RAPIDS has several methods for installation, depending on the preferred environm
 **[Environment Setup](#environment)** <br/>
 - [Conda](#conda)
 - [Docker](#docker)
-- [Pip](#pip)
+- [pip](#pip)
 - [Within WSL2](#wsl2)
 	- [Conda](#wsl2-conda)
 	- [Docker](#wsl2-docker)
-	- [Pip](#wsl2-pip)
+	- [pip](#wsl2-pip)
 - [Build From Source](#source)
 
 **[Next Steps](#next-steps)**  
@@ -41,9 +42,22 @@ Use the selector tool below to select your preferred method, packages, and envir
 
 {% include selector.html %}
 
+<br/>
 <div id="troubleshooting"></div>
 
 ## Installation Troubleshooting
+
+### **Conda Issues**
+<i class="fas fa-info-circle"></i> The dependency solver takes too long or never resolves: <br/>
+Update conda to use the new [libmamba solver](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="blank"} or use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}. 
+
+<br/>
+
+### **Docker Issues**
+<i class="fas fa-info-circle"></i> Jupyter Lab is not accessible:<br/>
+If the server has not started or needs to be restarted / stop, use the included [start/stop script](#docker-startstop). Note this may change in the near future releases. 
+
+<br/>
 
 ### **pip Issues**
 <i class="fas fa-info-circle"></i> Infiniband is not supported yet. <br/>
@@ -71,18 +85,6 @@ Check the suggestions below for possible resolutions:
     ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behavior is the source of the following dependency conflicts.
     jupyter-client 7.4.2 requires tornado>=6.2, but you have tornado 6.1 which is incompatible.
 ```
-
-<br/>
-
-### **Conda Issues**
-<i class="fas fa-info-circle"></i> The dependency solver takes too long or never resolves: <br/>
-Update conda to use the new [libmamba solver](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="blank"} or use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}. 
-
-<br/>
-
-### **Docker Issues**
-<i class="fas fa-info-circle"></i> Jupyter Lab is not accessible:<br/>
-If the server has not started or needs to be restarted / stop, use the included [start/stop script](#docker-startstop).
 
 <br/>
 
@@ -147,10 +149,10 @@ For most installations, you will need a Conda or Docker environments installed f
 <div id="conda"></div>
 
 ## **Conda**
-RAPIDS can use several version of conda: 
-- Full installation with [Anaconda](https://www.anaconda.com/download){: target="_blank"}. 
+RAPIDS can use several versions of conda: 
+- Full installation with [Anaconda](https://www.anaconda.com/download){: target="_blank"} (with optional faster [libmamba solver](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}).
 - Minimal installation with [Miniconda](https://conda.io/miniconda.html){: target="_blank"}
-- Faster environment solving installation with [Mamba](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}. 
+- Faster environment solving installation with standalone [Mamba](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}. 
 
 Below is a quick installation guide using miniconda.
 
@@ -221,16 +223,16 @@ If, for whatever reason, you need to shut down the Jupyter Lab server, use:
 bash /rapids/utils/stop-jupyter.sh
 ```
 
-**Custom Datasets.** See the[RAPIDS Container README](https://hub.docker.com/r/rapidsai/rapidsai){: target="_blank"} for more information about using custom datasets. [Docker Hub](https://hub.docker.com/r/rapidsai/rapidsai/){: target="_blank"} and [NVIDIA GPU Cloud](https://ngc.nvidia.com/catalog/containers/nvidia:rapidsai:rapidsai){: target="_blank"} host RAPIDS containers with a full list of [available tags](https://hub.docker.com/r/rapidsai/rapidsai#full-tag-list){: target="_blank"}.
+**Custom Datasets.** See the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/rapidsai){: target="_blank"} for more information about using custom datasets. [Docker Hub](https://hub.docker.com/r/rapidsai/rapidsai/){: target="_blank"} and [NVIDIA GPU Cloud](https://ngc.nvidia.com/catalog/containers/nvidia:rapidsai:rapidsai){: target="_blank"} host RAPIDS containers with a full list of [available tags](https://hub.docker.com/r/rapidsai/rapidsai/tags){: target="_blank"}.
 
 
 <br/>
 <div id="pip"></div>
 
-## **Pip**
+## **pip**
 Beginning with the release of 23.04: cuDF, dask-cuDF, cuML, cuGraph, RMM, and RAFT CUDA 11 pip packages are available on the NVIDIA Index.
 
-### **Pip Enhanced Prerequisites**
+### **pip Additional Prerequisites**
 <i class="fas fa-info-circle"></i> **glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
 <i class="fas fa-info-circle"></i> **glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.31 (only ARM Server Base System Architecture is supported).
 
@@ -299,13 +301,13 @@ Windows users can now tap into GPU accelerated data science on their local machi
 <br/>
 <div id="wsl2-pip"></div>
 
-### **WSL2 Pip Install**
+### **WSL2 pip Install**
 
 1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
 4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then [install the CUDA Toolkit without drivers](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} into the WSL2 instance.
-5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [pip instructions](#pip-install).
+5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [release selector](#selector) commands.
 6. Run this code to check that the RAPIDS installation is working:
 	```
 	import cudf
