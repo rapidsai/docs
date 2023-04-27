@@ -61,7 +61,7 @@ ERROR: No matching distribution found for cudf-cu11
 ```
 Check the suggestions below for possible resolutions:
 - The pip index has moved from the initial experimental release! Ensure the correct `--extra-index-url=https://pypi.nvidia.com`
-- Your Python version must be 3.8, 3.9, or 3.10.
+- Only Python versions 3.8, 3.9, or 3.10 are supported
 - RAPIDS pip packages require a recent version of pip that [supports PEP600](https://peps.python.org/pep-0600/){: target="_blank"}. Some users may need to update pip: `pip install -U pip`
 
 <br/>
