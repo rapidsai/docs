@@ -18,8 +18,8 @@ RAPIDS has several methods for installation, depending on the preferred environm
 
 **[System Requirements](#system-req)** <br/>
 - [OS, NVIDIA GPU Driver, and CUDA Versions](#system-req)
-- [(Optional) System Recommendations](#system-recommendations)
-- [(Optional) Cloud Instance GPUs](#cloud-gpu)
+- [System Recommendations](#system-recommendations)
+- [Cloud Instance GPUs](#cloud-gpu)
 
 **[Environment Setup](#environment)** <br/>
 - [Conda](#conda)
