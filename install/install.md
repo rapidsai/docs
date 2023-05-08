@@ -10,7 +10,7 @@ description: |
 # RAPIDS Installation Guide
 {: .fs-8 }
 
-RAPIDS has several methods for installation, depending on the preferred environment and version. <br/>
+RAPIDS has several methods for installation, depending on the preferred environment and version.
 *New Users* should review the system and environment prerequisites.
 
 **[Install RAPIDS with Release Selector](#selector)** <br/>
