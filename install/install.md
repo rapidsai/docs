@@ -10,9 +10,8 @@ description: |
 # RAPIDS Installation Guide
 {: .fs-8 }
 
-RAPIDS has several methods for installation, depending on the preferred environment and version. <br/>
-*New Users* should be mindful of the system and environment prerequisites. 
-{: .fs-6 .fw-300 }
+RAPIDS has several methods for installation, depending on the preferred environment and version.
+*New Users* should review the system and environment prerequisites.
 
 **[Install RAPIDS with Release Selector](#selector)** <br/>
 - [Installation Troubleshooting](#troubleshooting)
@@ -32,13 +31,13 @@ RAPIDS has several methods for installation, depending on the preferred environm
 	- [pip](#wsl2-pip)
 - [Build From Source](#source)
 
-**[Next Steps](#next-steps)**  
+**[Next Steps](#next-steps)**
 
 <hr/>
 <div id="selector"></div>
 
 # Install RAPIDS
-Use the selector tool below to select your preferred method, packages, and environment to install RAPIDS. Certain combinations may not be possible and are dimmed automatically. 
+Use the selector tool below to select your preferred method, packages, and environment to install RAPIDS. Certain combinations may not be possible and are dimmed automatically.
 
 {% include selector.html %}
 
@@ -49,13 +48,13 @@ Use the selector tool below to select your preferred method, packages, and envir
 
 ### **Conda Issues**
 <i class="fas fa-info-circle"></i> The dependency solver takes too long or never resolves: <br/>
-Update conda to use the new [libmamba solver](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="blank"} or use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}. 
+Update conda to use the new [libmamba solver](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="blank"} or use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}.
 
 <br/>
 
 ### **Docker Issues**
 <i class="fas fa-info-circle"></i> Jupyter Lab is not accessible:<br/>
-If the server has not started or needs to be restarted / stop, use the included [start/stop script](#docker-startstop). Note this may change in the near future releases. 
+If the server has not started or needs to be restarted / stop, use the included [start/stop script](#docker-startstop). Note this may change in the near future releases.
 
 <br/>
 
@@ -68,7 +67,7 @@ pip uninstall cupy-cuda115; pip install cupy-cuda11x
 ```
 <br/>
 
-<i class="fas fa-info-circle"></i> The following error message indicates a problem with your environment: 
+<i class="fas fa-info-circle"></i> The following error message indicates a problem with your environment:
 ```
 ERROR: Could not find a version that satisfies the requirement cudf-cu11 (from versions: 0.0.1, 22.10.0)
 ERROR: No matching distribution found for cudf-cu11
@@ -113,7 +112,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 - <i class="fas fa-check-circle"></i> [CUDA 11.4](https://developer.nvidia.com/cuda-11-4-0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.5](https://developer.nvidia.com/cuda-11-5-0-download-archive){: target="_blank"} with Driver 495.29.05 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 520.61.05 or newer
- 
+
  **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details.
 
 <br/>
@@ -149,10 +148,10 @@ For most installations, you will need a Conda or Docker environments installed f
 <div id="conda"></div>
 
 ## **Conda**
-RAPIDS can use several versions of conda: 
+RAPIDS can use several versions of conda:
 - Full installation with [Anaconda](https://www.anaconda.com/download){: target="_blank"} (with optional faster [libmamba solver](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}).
 - Minimal installation with [Miniconda](https://conda.io/miniconda.html){: target="_blank"}
-- Faster environment solving installation with standalone [Mamba](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}. 
+- Faster environment solving installation with standalone [Mamba](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}.
 
 Below is a quick installation guide using miniconda.
 
@@ -243,7 +242,7 @@ Beginning with the release of 23.04: cuDF, dask-cuDF, cuML, cuGraph, RMM, and RA
 ## **Windows WSL2**
 Windows users can now tap into GPU accelerated data science on their local machines using RAPIDS on [Windows Subsystem for Linux 2](https://learn.microsoft.com/en-us/windows/wsl/install){: target="_blank"}. WSL2 is a Windows feature that enables users to run native Linux command line tools directly on Windows. Using this feature does not require a dual boot environment, removing complexity and saving you time.
 
-### **WSL2 Enhanced Prerequisites**
+### **WSL2 Additional Prerequisites**
 
 <i class="fas fa-desktop text-white"></i> **OS:** Windows 11 with Ubuntu 22.04 instance for WSL2. <br/>
 <i class="fas fa-info-circle text-white"></i> **WSL Version:** WSL2 (WSL1 not supported). <br/>
@@ -287,7 +286,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 
 1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
-3. Install latest Docker Desktop for Windows 
+3. Install latest Docker Desktop for Windows
 4. Log in to the WSL2 Linux instance.
 5. Generate and run the RAPIDS `docker pull` and `docker run` commands based on your desired configuration using the RAPIDS [Release Selector](#selector).
 6. Inside the Docker instance, run this code to check that the RAPIDS installation is working:
@@ -304,7 +303,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
-4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then [install the CUDA Toolkit without drivers](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} into the WSL2 instance.
+4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then [install the CUDA Toolkit without drivers](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} into the WSL2 instance. It's important to execute `sudo apt-get -y install cuda-toolkit` instead of `sudo apt-get -y install cuda` to avoid installing a GPU driver into WSL2. The Windows host system provides the driver to WSL2.
 5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [release selector](#selector) commands.
 6. Run this code to check that the RAPIDS installation is working:
 	```
