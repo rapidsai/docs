@@ -50,6 +50,7 @@ docker run \
   --rm \
   -it \
   --gpus all \
+  --pull=always \
   --network=host \
   --volume $PWD:/repo \
   --workdir /repo \
