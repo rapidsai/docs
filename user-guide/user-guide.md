@@ -25,7 +25,7 @@ A collection of examples and tutorials used to introduce new users to the featur
 
 
 ### <i class="fa-light fa-cloud"></i> Machine Learning Services Integration for [RAPIDS Cloud](https://github.com/rapidsai/cloud-ml-examples){: target="_blank"}
-A repository with example notebooks and "getting started" code samples to help you integrate RAPIDS with the hyperparameter optimization services from Azure ML, AWS Sagemaker, Google Cloud, and Databricks. 
+A repository with example notebooks and "getting started" code samples to help you integrate RAPIDS with the hyperparameter optimization services from Azure ML, AWS Sagemaker, Google Cloud, and Databricks.
 {: .mb-8 }
 
 
@@ -73,11 +73,12 @@ Start with the [Quick Start](/api/raft/stable/quick_start/){: target="_blank"} g
 {: .mb-8 }
 
 
-### <i class="fa-light fa-hat-wizard"></i> Cyber Security Analytic Workflows with [CLX](https://github.com/rapidsai/clx){: target="_blank"}
-Start with [10 Minutes to CLX](/api/clx/stable/10min-clx/){: target="_blank"} for an guide to accelerated cyber security log analytics as well as the [introduction](/api/clx/stable/intro-clx-predictive-maintenance/#Introduction){: target="_blank"}.
+### <i class="fa-light fa-hat-wizard"></i> Cyber Security Analytic Workflows with [CLX](https://github.com/rapidsai/clx){: target="_blank"} [deprecated]
+<i class="fas fa-info-circle"></i> As of release 23.04, CLX has been deprecated in favor of [Morpheus](https://github.com/nv-morpheus/Morpheus). Full documentation for the latest official Morpheus release can be found [here](https://docs.nvidia.com/morpheus).
+<br><br>Start with [10 Minutes to CLX](/api/clx/legacy/10min-clx/){: target="_blank"} for a guide to accelerated cyber security log analytics as well as the [introduction](/api/clx/legacy/intro-clx-predictive-maintenance/#Introduction){: target="_blank"}.
 {: .mb-8 }
 
 
 ### <i class="fa-light fa-bolt"></i> Accelerated Apache Spark with [Spark RAPIDS](https://nvidia.github.io/spark-rapids/){: target="_blank"}
-Start with [the Examples Repository](https://github.com/NVIDIA/spark-rapids-examples){: target="_blank"} for Spark related utilities and examples using the RAPIDS Accelerator, including ETL, ML/DL, and more. A good [overview](https://nvidia.github.io/spark-rapids/){: target="_blank"} is available on their docs introduction. 
+Start with [the Examples Repository](https://github.com/NVIDIA/spark-rapids-examples){: target="_blank"} for Spark related utilities and examples using the RAPIDS Accelerator, including ETL, ML/DL, and more. A good [overview](https://nvidia.github.io/spark-rapids/){: target="_blank"} is available on their docs introduction.
 {: .mb-8 }
