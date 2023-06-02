@@ -85,6 +85,12 @@ Check the suggestions below for possible resolutions:
     jupyter-client 7.4.2 requires tornado>=6.2, but you have tornado 6.1 which is incompatible.
 ```
 
+<i class="fas fa-info-circle"></i> cuSpatial installation may yield the error below:<br/>
+```
+    ERROR: GDAL >= 3.2 is required for fiona. Please upgrade GDAL.
+```
+To resolve, either <code>GDAL</code> needs to be updated, or <code>fiona</code> needs to be pinned to specific versions depending on the installation OS. please see the [cuSpatial README](https://github.com/rapidsai/cuspatial/tree/branch-23.06#install-with-pip){: target="_blank"} to resolve this error.
+
 <br/>
 
 ### **WSL2 Issues**
