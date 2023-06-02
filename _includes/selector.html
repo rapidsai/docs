@@ -256,13 +256,13 @@
                     <div class="option-label">Method</div>
                     <template x-for="method in methods">
                         <div x-on:click="(e) => methodClickHandler(e, method)"
-                            x-bind:class="{'active': method === active_method}" class="option"
+                            x-bind:class="{'active': method === active_method, 'disabled': disableUnsupportedMethod(method)}" class="option"
                             x-html="getMethodHTML(method)">
                         </div>
                     </template>
                 </div>
-                <div class="options-section" x-show="active_method !== 'pip'">
-                    <div class="option-label">CUDA</div>
+                <div class="options-section" x-show="active_method !== 'pip' && active_method !== 'Source'">
+                    <div class="option-label">ENV. CUDA</div>
                     <template x-for="version in cuda_vers">
                         <div x-on:click="(e) => cudaClickHandler(e, version)"
                             x-bind:class="{'active': version === active_cuda_ver, 'disabled': disableUnsupportedCuda(version)}"
@@ -270,14 +270,14 @@
                     </template>
                 </div>
                 <div class="options-section" x-show="active_method === 'pip'">
-                    <div class="option-label">CUDA</div>
+                    <div class="option-label">System CUDA</div>
                     <template x-for="version in pip_cuda_vers">
                         <div x-on:click="(e) => pipCUDAClickHandler(e, version)"
                             x-bind:class="{'active': version === active_pip_cuda_ver}"
                             class="option" x-text="'CUDA ' + version"></div>
                     </template>
                 </div>
-                <div class="options-section" x-show="active_method !== 'pip'">
+                <div class="options-section" x-show="active_method !== 'pip' && active_method !== 'Source'">
                     <div class="option-label">Python</div>
                     <template x-for="version in python_vers">
                         <div x-on:click="(e) => pythonClickHandler(e, version)"
@@ -721,12 +721,20 @@
                 var isDisabled = false;
                 return isDisabled;
             },
+            disableUnsupportedMethod(method) {
+                var isDisabled = false;
+                if (this.active_release === "Nightly" && method === "pip") isDisabled = true;
+                return isDisabled;
+            },
             isDisabled(e) {
                 return e.classList.contains("disabled");
             },
             releaseClickHandler(e, release) {
                 if (this.isDisabled(e.target)) return;
                 this.active_release = release;
+                if (release === 'Stable') {
+                        this.active_img_loc = 'NGC';
+                    }
             },
             imgTypeClickHandler(e, type) {
                 if (this.isDisabled(e.target)) return;
@@ -768,7 +776,9 @@
                     this.active_packages = ['cuDF']
                 }
                 if (method === "Docker") {
-                    this.active_release = "Stable"
+                    if (this.active_release === 'Nightly') {
+                        this.active_img_loc = 'Dockerhub';
+                    }
                     if (this.active_os_ver === 'Ubuntu 22.04') {
                         this.active_cuda_ver = '11.8';
                     }
