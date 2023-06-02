@@ -74,7 +74,7 @@ ERROR: No matching distribution found for cudf-cu11
 ```
 Check the suggestions below for possible resolutions:
 - The pip index has moved from the initial experimental release! Ensure the correct `--extra-index-url=https://pypi.nvidia.com`
-- Only Python versions 3.8, 3.9, or 3.10 are supported
+- Only Python versions 3.9 and 3.10 are supported
 - RAPIDS pip packages require a recent version of pip that [supports PEP600](https://peps.python.org/pep-0600/){: target="_blank"}. Some users may need to update pip: `pip install -U pip`
 
 <br/>
@@ -112,8 +112,11 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 - <i class="fas fa-check-circle"></i> [CUDA 11.4](https://developer.nvidia.com/cuda-11-4-0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.5](https://developer.nvidia.com/cuda-11-5-0-download-archive){: target="_blank"} with Driver 495.29.05 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 520.61.05 or newer
+- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 525.60.13 or newer for pip installations only
 
- **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details.
+ **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details. 
+ 
+ **Note**: Docker and Conda CUDA 11.x installations function as expected on a CUDA 12.x machine. pip installations require using the matching wheel to the system's installed CUDA. For CUDA 11.x machines, install the <code>-cu11</code> wheels, and for CUDA 12.x machines install the <code>-cu12</code> wheels.
 
 <br/>
 <div id="system-recommendations"></div>
@@ -229,7 +232,7 @@ bash /rapids/utils/stop-jupyter.sh
 <div id="pip"></div>
 
 ## **pip**
-Beginning with the release of 23.04: cuDF, dask-cuDF, cuML, cuGraph, RMM, and RAFT CUDA 11 pip packages are available on the NVIDIA Index.
+Beginning with the release of 23.06: cuDF, dask-cuDF, cuML, cuGraph, cuSpatial, RMM, and RAFT CUDA 11 and CUDA 12 pip packages are available on the NVIDIA Index.
 
 ### **pip Additional Prerequisites**
 <i class="fas fa-info-circle"></i> **glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
