@@ -59,6 +59,11 @@ If the server has not started or needs to be restarted / stop, use the included 
 <br/>
 
 ### **pip Issues**
+<i class="fas fa-info-circle"></i> The CUDA version on your system must match the pip CUDA version you install (`-cu11` or `-cu12`). If you're unsure of your system CUDA version, the code below automatically determines it:<br/>
+```
+CUDA_MAJOR_VERSION="$(nvidia-smi | head -n3 | tail -n1 | tr -d '[:space:]' | cut -d':' -f3 | cut -d '.' -f1)"
+pip install --extra-index-url=https://pypi.nvidia.com cudf-cu${CUDA_MAJOR_VERSION}
+```
 <i class="fas fa-info-circle"></i> Infiniband is not supported yet. <br/>
 <i class="fas fa-info-circle"></i> These packages are not compatible with Tensorflow pip packages. Please use the [NGC containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow){: target="_blank"} or conda packages instead. <br/>
 <i class="fas fa-info-circle"></i> If you experience a "Failed to import CuPy" error, please uninstall any existing versions of cupy and install `cupy-cuda11x`. For example:
@@ -118,7 +123,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 - <i class="fas fa-check-circle"></i> [CUDA 11.4](https://developer.nvidia.com/cuda-11-4-0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.5](https://developer.nvidia.com/cuda-11-5-0-download-archive){: target="_blank"} with Driver 495.29.05 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 520.61.05 or newer
-- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 525.60.13 or newer for pip installations only
+- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 525.60.13 or newer **for pip installations only**
 
  **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details. 
  
@@ -241,6 +246,7 @@ bash /rapids/utils/stop-jupyter.sh
 Beginning with the release of 23.06: cuDF, dask-cuDF, cuML, cuGraph, cuSpatial, RMM, and RAFT CUDA 11 and CUDA 12 pip packages are available on the NVIDIA Index.
 
 ### **pip Additional Prerequisites**
+<i class="fas fa-info-circle"></i> The CUDA version on your system must match the pip CUDA version you install (`-cu11` or `-cu12`). <br/>
 <i class="fas fa-info-circle"></i> **glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
 <i class="fas fa-info-circle"></i> **glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.31 (only ARM Server Base System Architecture is supported).
 
@@ -312,7 +318,8 @@ Windows users can now tap into GPU accelerated data science on their local machi
 1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
-4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then [install the CUDA Toolkit without drivers](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} into the WSL2 instance. It's important to execute `sudo apt-get -y install cuda-toolkit` instead of `sudo apt-get -y install cuda` to avoid installing a GPU driver into WSL2. The Windows host system provides the driver to WSL2.
+4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then install the WSL-specific [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} or [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} Toolkit without drivers into the WSL2 instance.
+	- The CUDA version you install must match the pip CUDA version you select for pip (`-cu11` or `-cu12`)
 5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [release selector](#selector) commands.
 6. Run this code to check that the RAPIDS installation is working:
 	```
