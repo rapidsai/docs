@@ -48,6 +48,6 @@ git push <personal fork> branch-{{ site.data.releases.nightly.version }}-merge-{
 
 Once this is done, open a PR that targets the new default branch (`branch-{{ site.data.releases.nightly.version }}` in this example) with your changes. 
 
-**IMPORTANT**: When merging this PR, do not use the [auto-merger]({% link resources/auto-merger.md %}) (i.e. the `/merge` comment). Instead, manually merge by changing the merging strategy to `Create a Merge Commit`. Otherwise, history will be lost and the branches become incompatible. Note: merging this way typically requires admin privileges.
+**IMPORTANT**: When merging this PR, do not use the [auto-merger]({% link resources/auto-merger.md %}) (i.e. the `/merge` comment). Instead, an admin must manually merge by changing the merging strategy to `Create a Merge Commit`. Otherwise, history will be lost and the branches become incompatible.
 
 Once this PR is approved and merged, the original forward-merger PR should automatically be merged since it will contain the same commit hashes.
