@@ -123,9 +123,9 @@ The screenshot below shows an example.
 You can enter these values preemptively to suppress the prompts. For example:
 
 ```sh
-export RAPIDS_BUILD_TYPE=pull-request
+export RAPIDS_BUILD_TYPE=pull-request # or "branch" or "nightly"
 export RAPIDS_REPOSITORY=rapidsai/cugraph
-export RAPIDS_REF_NAME=pull-request/3258
+export RAPIDS_REF_NAME=pull-request/3258 # or "branch-YY.MM" for "branch"/"nightly" builds
 
 ./ci/test_python.sh
 ```
