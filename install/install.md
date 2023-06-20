@@ -123,7 +123,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 - <i class="fas fa-check-circle"></i> [CUDA 11.4](https://developer.nvidia.com/cuda-11-4-0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.5](https://developer.nvidia.com/cuda-11-5-0-download-archive){: target="_blank"} with Driver 495.29.05 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 520.61.05 or newer
-- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 525.60.13 or newer **for pip installations only**
+- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive){: target="_blank"} with Driver 525.60.13 or newer **for pip installations only**
 
  **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details. 
  
@@ -246,7 +246,7 @@ bash /rapids/utils/stop-jupyter.sh
 Beginning with the release of 23.06: cuDF, dask-cuDF, cuML, cuGraph, cuSpatial, RMM, and RAFT CUDA 11 and CUDA 12 pip packages are available on the NVIDIA Index.
 
 ### **pip Additional Prerequisites**
-<i class="fas fa-info-circle"></i> The CUDA version on your system must match the pip CUDA version you install (`-cu11` or `-cu12`). <br/>
+<i class="fas fa-info-circle"></i> The CUDA toolkit version on your system must match the pip CUDA version you install (`-cu11` or `-cu12`). <br/>
 <i class="fas fa-info-circle"></i> **glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
 <i class="fas fa-info-circle"></i> **glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.31 (only ARM Server Base System Architecture is supported).
 
