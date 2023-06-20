@@ -59,7 +59,7 @@ If the server has not started or needs to be restarted / stop, use the included 
 <br/>
 
 ### **pip Issues**
-<i class="fas fa-info-circle"></i> The CUDA toolkit major version on your system must match the pip CUDA version you install (CUDA Toolkit 11 -> `-cu11` wheels and CUDA Toolkit 12 -> `-cu12` wheels). <br/>
+<i class="fas fa-info-circle"></i> pip installations require using the matching wheel to the system’s installed CUDA toolkit. For CUDA 11 toolkits, install the `-cu11` wheels, and for CUDA 12 tookits install the `-cu12` wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the `-cu11` wheels. <br/>
 <i class="fas fa-info-circle"></i> Infiniband is not supported yet. <br/>
 <i class="fas fa-info-circle"></i> These packages are not compatible with Tensorflow pip packages. Please use the [NGC containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow){: target="_blank"} or conda packages instead. <br/>
 <i class="fas fa-info-circle"></i> If you experience a "Failed to import CuPy" error, please uninstall any existing versions of cupy and install `cupy-cuda11x`. For example:
