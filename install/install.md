@@ -59,11 +59,7 @@ If the server has not started or needs to be restarted / stop, use the included 
 <br/>
 
 ### **pip Issues**
-<i class="fas fa-info-circle"></i> The CUDA version on your system must match the pip CUDA version you install (`-cu11` or `-cu12`). If you're unsure of your system CUDA version, the code below automatically determines it:<br/>
-```
-CUDA_MAJOR_VERSION="$(nvidia-smi | head -n3 | tail -n1 | tr -d '[:space:]' | cut -d':' -f3 | cut -d '.' -f1)"
-pip install --extra-index-url=https://pypi.nvidia.com cudf-cu${CUDA_MAJOR_VERSION}
-```
+<i class="fas fa-info-circle"></i> The CUDA toolkit major version on your system must match the pip CUDA version you install (CUDA Toolkit 11 -> `-cu11` wheels and CUDA Toolkit 12 -> `-cu12` wheels). <br/>
 <i class="fas fa-info-circle"></i> Infiniband is not supported yet. <br/>
 <i class="fas fa-info-circle"></i> These packages are not compatible with Tensorflow pip packages. Please use the [NGC containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow){: target="_blank"} or conda packages instead. <br/>
 <i class="fas fa-info-circle"></i> If you experience a "Failed to import CuPy" error, please uninstall any existing versions of cupy and install `cupy-cuda11x`. For example:
@@ -127,7 +123,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
  **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details. 
  
- **Note**: Docker and Conda CUDA 11.x installations function as expected on a CUDA 12.x machine. pip installations require using the matching wheel to the system's installed CUDA. For CUDA 11.x machines, install the <code>-cu11</code> wheels, and for CUDA 12.x machines install the <code>-cu12</code> wheels.
+ **Note**: RAPIDS Docker and Conda CUDA 11 environments function as expected on a system with a CUDA 12 driver and they include their own toolkit. pip installations require using the matching wheel to the system's installed CUDA toolkit. For CUDA 11 toolkits, install the <code>-cu11</code> wheels, and for CUDA 12 tookits install the <code>-cu12</code> wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the <code>-cu11</code> wheels.
 
 <br/>
 <div id="system-recommendations"></div>
