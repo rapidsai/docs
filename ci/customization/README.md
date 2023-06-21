@@ -47,11 +47,6 @@ An excerpt of the generated JSON file is shown below:
 
 ```json
 {
-  "clx": {
-    "nightly": "/clx/en/nightly/api.html",
-    "stable": "/clx/en/stable/api.html",
-    "legacy": null
-  },
   "cuml": {
     "nightly": "/cuml/en/nightly/api.html",
     "stable": "/cuml/en/stable/api.html",
