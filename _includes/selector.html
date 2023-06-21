@@ -252,29 +252,37 @@
                         </div>
                     </template>
                 </div>
-                <div class="options-section" x-show="active_method !== 'pip'">
-                    <div class="option-label">CUDA</div>
+                <div class="options-section">
+                    <div class="option-label">Method</div>
+                    <template x-for="method in methods">
+                        <div x-on:click="(e) => methodClickHandler(e, method)"
+                            x-bind:class="{'active': method === active_method, 'disabled': disableUnsupportedMethod(method)}" class="option"
+                            x-html="getMethodHTML(method)">
+                        </div>
+                    </template>
+                </div>
+                <div class="options-section" x-show="active_method !== 'pip' && active_method !== 'Source'">
+                    <div class="option-label">ENV. CUDA</div>
                     <template x-for="version in cuda_vers">
                         <div x-on:click="(e) => cudaClickHandler(e, version)"
                             x-bind:class="{'active': version === active_cuda_ver, 'disabled': disableUnsupportedCuda(version)}"
                             class="option" x-text="'CUDA ' + version"></div>
                     </template>
                 </div>
-                <div class="options-section" x-show="active_method !== 'pip'">
+                <div class="options-section" x-show="active_method === 'pip'">
+                    <div class="option-label">System CUDA</div>
+                    <template x-for="version in pip_cuda_vers">
+                        <div x-on:click="(e) => pipCUDAClickHandler(e, version)"
+                            x-bind:class="{'active': version === active_pip_cuda_ver}"
+                            class="option" x-text="'CUDA ' + version"></div>
+                    </template>
+                </div>
+                <div class="options-section" x-show="active_method !== 'pip' && active_method !== 'Source'">
                     <div class="option-label">Python</div>
                     <template x-for="version in python_vers">
                         <div x-on:click="(e) => pythonClickHandler(e, version)"
                             x-bind:class="{'active': version === active_python_ver, 'disabled': disableUnsupportedPython(version)}"
                             class="option" x-text="'Python ' + version"></div>
-                    </template>
-                </div>
-                <div class="options-section">
-                    <div class="option-label">Method</div>
-                    <template x-for="method in methods">
-                        <div x-on:click="(e) => methodClickHandler(e, method)"
-                            x-bind:class="{'active': method === active_method}" class="option"
-                            x-html="getMethodHTML(method)">
-                        </div>
                     </template>
                 </div>
                 <div class="conda-options-container" x-show="active_method === 'Conda'">
@@ -370,6 +378,7 @@
             // default values
             active_python_ver: "3.10",
             active_cuda_ver: "11.8",
+            active_pip_cuda_ver: "12.0",
             active_os_ver: "Ubuntu 22.04",
             active_method: "Conda",
             active_release: "Stable",
@@ -381,16 +390,17 @@
             active_additional_packages: [],
 
             // all possible values
-            python_vers: ["3.8", "3.10"],
-            cuda_vers: ["11.2", "11.4", "11.5", "11.8"],
+            python_vers: ["3.9", "3.10"],
+            cuda_vers: ["11.2", "11.4", "11.5", "11.8", "12.0"],
+            pip_cuda_vers: ["11.2 - 11.8", "12.0"],
             os_vers: ["Ubuntu 20.04", "Ubuntu 22.04", "CentOS 7", "Rocky Linux 8"],
             methods: ["Conda", "pip", "Docker", "Source"],
             releases: ["Stable", "Nightly"],
             arches: ["amd", "arm"],
             img_loc: ["NGC", "Dockerhub"],
-            img_types: ["core", "standard", "clx"],
+            img_types: ["core", "standard"],
             packages: ["Standard", "cuDF", "cuML", "cuGraph", "cuSpatial", "cuXFilter", "cuSignal", "cuCIM"],
-            pip_packages: ["cuDF", "cuML", "cuGraph", "cuCIM"],
+            pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph", "cuSpatial", "cuCIM"],
             additional_packages: ["Dask SQL", "JupyterLab", "Plotly Dash", "Graphistry", "PyCaret", "TensorFlow", "Xarray-Spatial"], // , "RTXpy" will return later
             img_options: ["notebooks", "development"],
             note_prefix: "<i class='fas fa-info-circle text-blue'></i>",
@@ -498,10 +508,15 @@
             getpipCmdHtml() {
                 var pip_install = "pip install ";
                 var index_url = " --extra-index-url=https://pypi.nvidia.com";
+                var cuda_suffix = "-cu12";
+                
+                if (this.active_pip_cuda_ver === "11.2 - 11.8") {
+                    cuda_suffix = "-cu11";
+                }
                 var libraryToPkg = (pkg) => {
                     pkg = pkg.toLowerCase();
                     if (pkg === "cucim") return pkg;
-                    return pkg + "-cu11"
+                    return pkg + cuda_suffix;
                 }
                 var pkgs = this.active_packages.map(libraryToPkg).join(" ");
                 var isArm = this.active_arch === "arm";
@@ -509,11 +524,6 @@
 
                 if (pkgs === "cucim") {
                     index_url = "";
-                }
-
-                // This should be unnecessary and removed after 23.06
-                if (isArm) {
-                    cupy_inst = "\npip install cupy-cuda11x -f https://pip.cupy.dev/aarch64";
                 }
                 
                 return pip_install + pkgs + index_url + cupy_inst;
@@ -527,7 +537,6 @@
                 if (this.active_img_loc === "NGC") imgLoc = "nvcr.io/nvidia/"
                 var imgVariant = "";
                 if (this.active_img_type === "core") imgVariant = "core";
-                if (this.active_img_type === "clx") imgVariant = "clx";
                 var imgType = "base";
                 if (hasNotebooks) imgType = "runtime";
                 if (isDevel) imgType = "devel";
@@ -586,7 +595,6 @@
             getImgTypeText(type) {
                 if (type === "core") return "Basic"
                 if (type === "standard") return "Basic w/ Dask-SQL"
-                if (type === "clx") return "Basic w/ CLX"
                 return type;
             },
             getImgOptionText(option) {
@@ -604,9 +612,6 @@
 
                 if (this.active_img_type === "standard") {
                     core_pkgs = [...core_pkgs, "dask-sql"];
-                }
-                if (this.active_img_type === "clx") {
-                    core_pkgs = [...core_pkgs, "clx"];
                 }
                 var pkgs_html = core_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                 return [this.note_prefix + " The selected image contains the following packages:<br>" + pkgs_html];
@@ -631,9 +636,8 @@
             },
             getpipNotes() {
                 var notes = [];
-                notes = [...notes, "<code>cuDF</code>, <code>cuML</code>, and <code>cuGraph</code> pip packages are hosted on the NVIDIA Index<br>",
-                         'pip installation supports Python <code>3.8</code>, <code>3.9</code>, and <code>3.10</code><br>',
-                         'pip installation supports CUDA <code>11.2</code> - <code>11.8</code>'];
+                notes = [...notes, "<code>cuDF</code>, <code>dask-cuDF</code>, <code>cuML</code>, <code>cuGraph</code>, and <code>cuSpatial</code> pip packages are hosted on the NVIDIA Python Package Index<br>",
+                         'pip installation supports Python <code>3.9</code>, and <code>3.10</code><br>'];
 
                 return notes.map(note => this.note_prefix + " " + note);
             },
@@ -673,7 +677,8 @@
                 return "Not implemented yet!";
             },
             getNewestCudaVer() {
-                return this.cuda_vers[this.cuda_vers.length - 1];
+                // TODO: When we support CUDA 12 on developer images, revert to this.cuda_vers.length - 1
+                return this.cuda_vers[this.cuda_vers.length - 2];
             },
             disableUnsupportedRelease(release) {
                 var isDisabled = false;
@@ -688,7 +693,7 @@
                 }
                 if (this.active_additional_packages.includes("TensorFlow") && cuda_version !== "11.2") isDisabled = true;
                 if (this.active_os_ver === 'Ubuntu 22.04' && cuda_version !== '11.8' && this.active_method === 'Docker') isDisabled = true;
-                if (this.active_method === 'pip' && cuda_version !== '11.8') isDisabled = true;
+                if (this.active_method !== 'pip' && cuda_version === '12.0') isDisabled = true;
 
                 return isDisabled;
             },
@@ -700,6 +705,7 @@
                 var isDisabled = false;
                 if (this.active_arch === "arm" && os === "CentOS 7") isDisabled = true;
                 if (this.active_cuda_ver !== '11.8' && os === 'Ubuntu 22.04' && this.active_method === 'Docker') isDisabled = true;
+                if (this.active_arch === "arm" && os === 'Ubuntu 20.04' && this.active_method === 'Docker') isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedImgType(type) {
@@ -717,12 +723,20 @@
                 var isDisabled = false;
                 return isDisabled;
             },
+            disableUnsupportedMethod(method) {
+                var isDisabled = false;
+                if (this.active_release === "Nightly" && method === "pip") isDisabled = true;
+                return isDisabled;
+            },
             isDisabled(e) {
                 return e.classList.contains("disabled");
             },
             releaseClickHandler(e, release) {
                 if (this.isDisabled(e.target)) return;
                 this.active_release = release;
+                if (release === 'Stable') {
+                        this.active_img_loc = 'NGC';
+                    }
             },
             imgTypeClickHandler(e, type) {
                 if (this.isDisabled(e.target)) return;
@@ -738,6 +752,10 @@
                 if (this.isDisabled(e.target)) return;
                 this.active_cuda_ver = version;
             },
+            pipCUDAClickHandler(e, version) {
+                if (this.isDisabled(e.target)) return;
+                this.active_pip_cuda_ver = version;
+            },
             pythonClickHandler(e, version) {
                 if (this.isDisabled(e.target)) return;
                 this.active_python_ver = version;
@@ -751,13 +769,18 @@
                 if (method !== "Conda") {
                     this.active_additional_packages = [];
                 }
+                if (method === 'Conda') {
+                    this.active_packages = ['Standard'];
+                }
                 if (method === "pip") {
-                    this.active_cuda_ver = '11.8';
+                    this.active_pip_cuda_ver = '12.0';
                     this.active_release = 'Stable';
                     this.active_packages = ['cuDF']
                 }
                 if (method === "Docker") {
-                    this.active_release = "Stable"
+                    if (this.active_release === 'Nightly') {
+                        this.active_img_loc = 'Dockerhub';
+                    }
                     if (this.active_os_ver === 'Ubuntu 22.04') {
                         this.active_cuda_ver = '11.8';
                     }
