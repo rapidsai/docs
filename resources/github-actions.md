@@ -116,7 +116,7 @@ Operating System
 
 ### GPU Labels
 
-{% assign earliest_driver_version = "450" %}
+{% assign earliest_driver_version = "470" %}
 {% assign latest_driver_version = "525" %}
 
 The GPU labeled runners are backed by lab machines and have the GPUs specified in the table below installed.
