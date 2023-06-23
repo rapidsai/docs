@@ -235,6 +235,15 @@
         <div class="selector">
             <div class="options">
                 <div class="options-section">
+                    <div class="option-label">Selector Type</div>
+                    <template x-for="selector_type in selector_types">
+                        <div x-on:click="(e) => selectorTypeClickHandler(e, selector_type)"
+                            x-bind:class="{'active': selector_type === active_selector_type}"
+                            class="option" x-text="selector_type">
+                        </div>
+                    </template>
+                </div>
+                <div class="options-section" x-show="active_selector_type !== 'Basic'">
                     <div class="option-label">Release</div>
                     <template x-for="release in releases">
                         <div x-on:click="(e) => releaseClickHandler(e, release)"
@@ -243,7 +252,7 @@
                         </div>
                     </template>
                 </div>
-                <div class="options-section">
+                <div class="options-section" x-show="active_selector_type !== 'Basic'">
                     <div class="option-label">Arch</div>
                     <template x-for="arch in arches">
                         <div x-on:click="(e) => archClickHandler(e, arch)"
@@ -261,7 +270,7 @@
                         </div>
                     </template>
                 </div>
-                <div class="options-section" x-show="active_method !== 'pip' && active_method !== 'Source'">
+                <div class="options-section" x-show="active_method !== 'pip' && active_method !== 'Source' && active_selector_type !== 'Basic'">
                     <div class="option-label">ENV. CUDA</div>
                     <template x-for="version in cuda_vers">
                         <div x-on:click="(e) => cudaClickHandler(e, version)"
@@ -270,7 +279,7 @@
                     </template>
                 </div>
                 <div class="options-section" x-show="active_method === 'pip'">
-                    <div class="option-label">System CUDA</div>
+                    <div class="option-label">CUDA Toolkit</div>
                     <template x-for="version in pip_cuda_vers">
                         <div x-on:click="(e) => pipCUDAClickHandler(e, version)"
                             x-bind:class="{'active': version === active_pip_cuda_ver}"
@@ -285,7 +294,7 @@
                             class="option" x-text="'Python ' + version"></div>
                     </template>
                 </div>
-                <div class="conda-options-container" x-show="active_method === 'Conda'">
+                <div class="conda-options-container" x-show="active_method === 'Conda' && active_selector_type !== 'Basic'">
                     <div class="options-section">
                         <div class="option-label">Packages</div>
                         <template x-for="package in packages">
@@ -304,7 +313,7 @@
                         </template>
                     </div>
                 </div>
-                <div class="pip-options-container" x-show="active_method === 'pip'">
+                <div class="pip-options-container" x-show="active_method === 'pip' && active_selector_type !== 'Basic'">
                     <div class="options-section">
                         <div class="option-label">Packages</div>
                         <template x-for="package in pip_packages">
@@ -315,7 +324,7 @@
                         </template>
                     </div>
                 </div>
-                <div class="docker-options-container" x-show="active_method === 'Docker'">
+                <div class="docker-options-container" x-show="active_method === 'Docker' && active_selector_type !== 'Basic'">
                     <div class="options-section">
                         <div class="option-label">Image Location</div>
                         <template x-for="loc in img_loc">
@@ -325,7 +334,7 @@
                             </div>
                         </template>
                     </div>
-                    <div class="options-section">
+                    <div class="options-section" x-show="active_selector_type !== 'Basic'">
                         <div class="option-label">Image OS</div>
                         <template x-for="version in os_vers">
                             <div x-on:click="(e) => imgOSClickHandler(e, version)"
@@ -334,7 +343,7 @@
                             </div>
                         </template>
                     </div>
-                    <div class="options-section">
+                    <div class="options-section" x-show="active_selector_type !== 'Basic'">
                         <div class="option-label">Image Type</div>
                         <template x-for="type in img_types">
                             <div x-on:click="(e) => imgTypeClickHandler(e, type)"
@@ -342,7 +351,7 @@
                                 class="option" x-text="getImgTypeText(type)"></div>
                         </template>
                     </div>
-                    <div class="options-section">
+                    <div class="options-section" x-show="active_selector_type !== 'Basic'">
                         <div class="option-label">Image Options</div>
                         <template x-for="option in img_options">
                             <div x-on:click="(e) => imgOptionClickHandler(e, option)"
@@ -388,6 +397,7 @@
             active_packages: ["Standard"],
             active_img_options: ["notebooks"],
             active_additional_packages: [],
+            active_selector_type: "Basic",
 
             // all possible values
             python_vers: ["3.9", "3.10"],
@@ -405,6 +415,7 @@
             img_options: ["notebooks", "development"],
             note_prefix: "<i class='fas fa-info-circle text-blue'></i>",
             rapids_meta_pkgs: ["cuDF", "cuML", "cuGraph", "cuSpatial", "cuXFilter", "cuSignal", "cuCIM"],
+            selector_types: ["Basic", "Advanced"],
             getStableVersion() {
                 return "{{ site.data.releases.stable.version }}";
             },
@@ -775,7 +786,12 @@
                 if (method === "pip") {
                     this.active_pip_cuda_ver = '12.0';
                     this.active_release = 'Stable';
-                    this.active_packages = ['cuDF']
+                    if (this.active_selector_type === "Basic") {
+                        this.active_packages = this.pip_packages
+                    }
+                    else {
+                        this.active_packages = ['cuDF']
+                    }
                 }
                 if (method === "Docker") {
                     if (this.active_release === 'Nightly') {
@@ -854,6 +870,9 @@
                 }
                 this.active_additional_packages = [...this.active_additional_packages, package];
                 if (this.active_additional_packages.includes("TensorFlow") && this.active_cuda_ver !== "11.2") this.active_cuda_ver = "11.2";
+            },
+            selectorTypeClickHandler(e, selector) {
+                this.active_selector_type = selector;
             },
             copyToClipboard() {
                 var range = document.createRange();
