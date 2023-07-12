@@ -44,10 +44,10 @@ Code Freeze/Testing | {{ release.codefreeze.start | date: "%a, %b %e, %Y" }} | {
 Release | {{ release.release.start | date: "%a, %b %e, %Y" }} | {{ release.release.end | date: "%a, %b %e, %Y" }} | {{ release.release.days }} days
 
 {% else %}
-{% if release.version < '0.9' %}
+{% if release.date %}
 Phase | Date
 -- | --
-Release | {{ release.release | date: "%a, %b %e, %Y" }}
+Release | {{ release.date | date: "%a, %b %e, %Y" }}
 {% else %}
 Phase | Start | End | Duration
 -- | -- | -- | --
