@@ -239,7 +239,7 @@ bash /rapids/utils/stop-jupyter.sh
 <div id="pip"></div>
 
 ## **pip**
-RAPIDS 23.06 pip packages of cuDF, dask-cuDF, cuML, cuGraph, cuSpatial, RMM, and RAFT are available for CUDA 11 and CUDA 12 on the NVIDIA Python Package Index.
+RAPIDS pip packages are available for CUDA 11 and CUDA 12 on the NVIDIA Python Package Index.
 
 ### **pip Additional Prerequisites**
 <i class="fas fa-info-circle"></i> The CUDA toolkit version on your system must match the pip CUDA version you install (`-cu11` or `-cu12`). <br/>
