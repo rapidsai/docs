@@ -326,31 +326,13 @@
                         </template>
                     </div>
                     <div class="options-section">
-                        <div class="option-label">Image OS</div>
-                        <template x-for="version in os_vers">
-                            <div x-on:click="(e) => imgOSClickHandler(e, version)"
-                                x-bind:class="{'active': version === active_os_ver, 'disabled': disableUnsupportedImgOS(version)}"
-                                class="option" x-html="getOSHTML(version)">
-                            </div>
-                        </template>
-                    </div>
-                    <div class="options-section">
                         <div class="option-label">Image Type</div>
                         <template x-for="type in img_types">
                             <div x-on:click="(e) => imgTypeClickHandler(e, type)"
                                 x-bind:class="{'active': type === active_img_type, 'disabled': disableUnsupportedImgType(type)}"
-                                class="option" x-text="getImgTypeText(type)"></div>
+                                class="option" x-text="type"></div>
                         </template>
                     </div>
-                    <div class="options-section">
-                        <div class="option-label">Image Options</div>
-                        <template x-for="option in img_options">
-                            <div x-on:click="(e) => imgOptionClickHandler(e, option)"
-                                x-bind:class="{'active': active_img_options.includes(option), 'disabled': disableUnsupportedImgOption(option)}"
-                                class="option" x-text="getImgOptionText(option)"></div>
-                        </template>
-                    </div>
-                </div>
                 <div class="note" x-show="getNoteHtml()">
                     <div class="option-label"></div>
                     <div class="option-blank">
@@ -379,30 +361,26 @@
             active_python_ver: "3.10",
             active_cuda_ver: "11.8",
             active_pip_cuda_ver: "12.0",
-            active_os_ver: "Ubuntu 22.04",
             active_method: "Conda",
             active_release: "Stable",
             active_arch: "amd",
-            active_img_type: "core",
+            active_img_type: "Base",
             active_img_loc: "NGC",
             active_packages: ["Standard"],
-            active_img_options: ["notebooks"],
             active_additional_packages: [],
 
             // all possible values
             python_vers: ["3.9", "3.10"],
             cuda_vers: ["11.2", "11.4", "11.5", "11.8", "12.0"],
             pip_cuda_vers: ["11.2 - 11.8", "12.0"],
-            os_vers: ["Ubuntu 20.04", "Ubuntu 22.04", "CentOS 7", "Rocky Linux 8"],
             methods: ["Conda", "pip", "Docker", "Source"],
             releases: ["Stable", "Nightly"],
             arches: ["amd", "arm"],
             img_loc: ["NGC", "Dockerhub"],
-            img_types: ["core", "standard"],
+            img_types: ["Base", "Notebook"],
             packages: ["Standard", "cuDF", "cuML", "cuGraph", "cuSpatial", "cuXFilter", "cuSignal", "cuCIM"],
             pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph", "cuSpatial", "cuCIM"],
             additional_packages: ["Dask SQL", "JupyterLab", "Plotly Dash", "Graphistry", "TensorFlow", "Xarray-Spatial"], // , "RTXpy" will return later
-            img_options: ["notebooks", "development"],
             note_prefix: "<i class='fas fa-info-circle text-blue'></i>",
             rapids_meta_pkgs: ["cuDF", "cuML", "cuGraph", "cuSpatial", "cuXFilter", "cuSignal", "cuCIM"],
             getStableVersion() {
@@ -410,12 +388,6 @@
             },
             getNightlyVersion() {
                 return "{{ site.data.releases.nightly.version }}";
-            },
-            getOSHTML(os_ver) {
-                var icon_class = "ubuntu"
-                if (os_ver.includes("CentOS")) icon_class = "centos";
-                if (os_ver.includes("Rocky Linux")) icon_class = "linux";
-                return os_ver + "&nbsp;<i class='fab fa-" + icon_class + "'></i>";
             },
             getMethodHTML(method) {
                 var icon_class = "box-open fas";
@@ -529,33 +501,24 @@
                 return pip_install + pkgs + index_url + cupy_inst;
             },
             getDockerCmdHtml() {
-                var hasNotebooks = this.active_img_options.includes("notebooks");
-                var isDevel = this.active_img_options.includes("development");
+                var hasNotebooks = this.active_img_type === "Notebook";
                 var isNightly = this.active_release === "Nightly";
-                var isArm = this.active_arch === "arm";
                 var imgLoc = "";
-                if (this.active_img_loc === "NGC") imgLoc = "nvcr.io/nvidia/"
-                var imgVariant = "";
-                if (this.active_img_type === "core") imgVariant = "core";
-                var imgType = "base";
-                if (hasNotebooks) imgType = "runtime";
-                if (isDevel) imgType = "devel";
+                if (this.active_img_loc === "NGC") imgLoc = "nvcr.io/nvidia/";
+                var imgVariant = this.active_img_type;
+
                 var portOptions = (hasNotebooks ? ["8888:8888", "8787:8787", "8786:8786"] : [])
                     .map(opt => this.highlightFlag("-p") + " " + opt + " ").join("");
 
                 var imgRepo = [
                     imgLoc + "rapidsai/rapidsai",
                     imgVariant,
-                    (isDevel ? "dev" : ""),
                     (isNightly ? "nightly" : ""),
-                    (isArm ? "arm64" : ""),
                 ].filter(Boolean).join("-");
 
                 var imgTag = [
                     (isNightly ? this.getNightlyVersion() : this.getStableVersion()),
                     "cuda" + this.active_cuda_ver,
-                    imgType,
-                    this.active_os_ver.replaceAll(" ", ""),
                     "py" + this.active_python_ver
                 ].join("-");
 
@@ -591,16 +554,6 @@
                 }
                 cmd += "</ul>";
                 return cmd;
-            },
-            getImgTypeText(type) {
-                if (type === "core") return "Basic"
-                if (type === "standard") return "Basic w/ Dask-SQL"
-                return type;
-            },
-            getImgOptionText(option) {
-                if (option === "notebooks") return "Include Jupyter Notebooks";
-                if (option === "development") return "Development Image (only on Docker Hub)";
-                return option;
             },
             getImgLoc(loc) {
                 if (loc === "NGC") return 'NGC (Stable Only) <i class="fa-regular fa-share-nodes"></i>';
@@ -694,11 +647,7 @@
             },
             disableUnsupportedCuda(cuda_version) {
                 var isDisabled = false;
-                if (this.active_img_options.includes("development") && cuda_version !== this.getNewestCudaVer()) {
-                    isDisabled = true;
-                }
                 if (this.active_additional_packages.includes("TensorFlow") && cuda_version !== "11.2") isDisabled = true;
-                if (this.active_os_ver === 'Ubuntu 22.04' && cuda_version !== '11.8' && this.active_method === 'Docker') isDisabled = true;
                 if (this.active_arch === "arm" && cuda_version === "12.0") isDisabled = true;
 
                 return isDisabled;
