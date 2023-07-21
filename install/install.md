@@ -51,7 +51,8 @@ Use the selector tool below to select your preferred method, packages, and envir
 Conda-forge doesn't yet support the minimum required glibc (2.27) for CUDA 12 on arm. For arm support, please use an 11.x installation.
 
 <i class="fas fa-info-circle"></i> CUDA 12.0 packages don't work with stable PyTorch packages: <br/>
-PyTorch currently only has nightly builds for CUDA 12.1, stable builds are limited to CUDA 11.x. For stability we recommend using a CUDA 11.x RAPIDS installation. The installation method below may function if there is a hard-requirement of CUDA 12 but it is currently unsupported:
+PyTorch currently only has nightly builds for CUDA 12.1, stable builds are limited to CUDA 11.x. <br/>
+The installation method below may function if there is a hard-requirement of CUDA 12 but it is currently unsupported:
 ```
 mamba create -n rapids-pytorch-cu12 -c rapidsai -c pytorch-nightly -c conda-forge -c nvidia cuml pytorch pytorch-cuda=12.1 cuda-version=12.0
 ```
