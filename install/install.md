@@ -47,6 +47,12 @@ Use the selector tool below to select your preferred method, packages, and envir
 ## Installation Troubleshooting
 
 ### **Conda Issues**
+<i class="fas fa-info-circle"></i> CUDA 12.0 arm packages don't exist:<br/>
+Conda-forge doesn't yet support the minimum required glibc (2.27) for CUDA 12 on arm. For arm support, please use an 11.x installation.
+
+<i class="fas fa-info-circle"></i> CUDA 12.0 packages don't work with stable PyTorch packages: <br/>
+PyTorch currently only has nightly builds for CUDA 12.1, stable builds are limited to CUDA 11.x. For stability we recommend using a CUDA 11.x RAPIDS installation, however at your own risk you may 
+
 <i class="fas fa-info-circle"></i> The dependency solver takes too long or never resolves: <br/>
 Update conda to use the new [libmamba solver](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="blank"} or use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}.
 

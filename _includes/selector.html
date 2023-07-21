@@ -247,7 +247,7 @@
                     <div class="option-label">Arch</div>
                     <template x-for="arch in arches">
                         <div x-on:click="(e) => archClickHandler(e, arch)"
-                            x-bind:class="{'active': arch === active_arch}" class="option" x-text="arch"
+                            x-bind:class="{'active': arch === active_arch, 'disabled': disableUnsupportedArch(arch)}" class="option" x-text="arch"
                             x-text="getArchText(arch)">
                         </div>
                     </template>
@@ -290,7 +290,7 @@
                         <div class="option-label">Packages</div>
                         <template x-for="package in packages">
                             <div x-on:click="(e) => packagesClickHandler(e, package)"
-                                x-bind:class="{'active': active_packages.includes(package)}" class="option"
+                                x-bind:class="{'active': active_packages.includes(package), 'disabled': disableUnsupportedPackage(package)}" class="option"
                                 x-html="getPackageHTML(package)">
                             </div>
                         </template>
@@ -401,7 +401,7 @@
             img_types: ["core", "standard"],
             packages: ["Standard", "cuDF", "cuML", "cuGraph", "cuSpatial", "cuXFilter", "cuSignal", "cuCIM"],
             pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph", "cuSpatial", "cuCIM"],
-            additional_packages: ["Dask SQL", "JupyterLab", "Plotly Dash", "Graphistry", "PyCaret", "TensorFlow", "Xarray-Spatial"], // , "RTXpy" will return later
+            additional_packages: ["Dask SQL", "JupyterLab", "Plotly Dash", "Graphistry", "TensorFlow", "Xarray-Spatial"], // , "RTXpy" will return later
             img_options: ["notebooks", "development"],
             note_prefix: "<i class='fas fa-info-circle text-blue'></i>",
             rapids_meta_pkgs: ["cuDF", "cuML", "cuGraph", "cuSpatial", "cuXFilter", "cuSignal", "cuCIM"],
@@ -474,7 +474,7 @@
                 var python_version = this.active_python_ver;
                 var cuda_version = this.active_cuda_ver;
                 var pkgs = this.active_packages;
-                var py_cuda_pkgs = [this.highlightPkgOrImg("python") + "=" + python_version, this.highlightPkgOrImg("cudatoolkit") + "=" + cuda_version].join(" ");
+                var py_cuda_pkgs = [this.highlightPkgOrImg("python") + "=" + python_version, this.highlightPkgOrImg("cuda-version") + "=" + cuda_version].join(" ");
                 var conda_channels = [rapids_channel, "conda-forge", "nvidia"]
                     .map(ch => this.highlightFlag("-c") + " " + ch + " ")
                     .join("");
@@ -620,8 +620,14 @@
                 var notes = [];
                 notes = [...notes, "RAPIDS currently doesn't support <code>channel_priority: strict</code>; use <code>channel_priority: flexible</code> instead"];
                 if (this.active_packages.length === 1 && this.active_packages[0] === "Standard") {
-                    var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
-                    notes = [...notes, "The <code>Standard</code> selection contains the following packages:<br>" + pkgs_html];
+                    if (this.active_cuda_ver === "12.0") {
+                        var pkgs_html = this.rapids_meta_pkgs.filter(pkg => pkg !== "cuSignal").map(pkg => "<code>" + pkg + "</code>").join(", ");
+                    }
+                    else {
+                        var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
+                    }
+                    notes = [...notes, "The CUDA " + this.active_cuda_ver + 
+                             " <code>Standard</code> selection contains the following packages:<br>" + pkgs_html];
                 }
 
                 if (this.active_additional_packages.length) {
@@ -693,7 +699,7 @@
                 }
                 if (this.active_additional_packages.includes("TensorFlow") && cuda_version !== "11.2") isDisabled = true;
                 if (this.active_os_ver === 'Ubuntu 22.04' && cuda_version !== '11.8' && this.active_method === 'Docker') isDisabled = true;
-                if (this.active_method !== 'pip' && cuda_version === '12.0') isDisabled = true;
+                if (this.active_arch === "arm" && cuda_version === "12.0") isDisabled = true;
 
                 return isDisabled;
             },
@@ -726,6 +732,16 @@
             disableUnsupportedMethod(method) {
                 var isDisabled = false;
                 if (this.active_release === "Nightly" && method === "pip") isDisabled = true;
+                return isDisabled;
+            },
+            disableUnsupportedArch(arch) {
+                var isDisabled = false;
+                if (this.active_method === "Conda" && this.active_cuda_ver === "12.0" && arch === "arm") isDisabled = true;
+                return isDisabled;
+            },
+            disableUnsupportedPackage(package) {
+                var isDisabled = false;
+                if (this.active_cuda_ver === "12.0" && this.active_method === "Conda" && package === "cuSignal") isDisabled = true;
                 return isDisabled;
             },
             isDisabled(e) {
