@@ -378,7 +378,7 @@
             releases: ["Stable", "Nightly"],
             arches: ["amd", "arm"],
             img_loc: ["NGC", "Dockerhub"],
-            img_types: ["Base", "Notebook"],
+            img_types: ["Base", "Notebooks"],
             packages: ["Standard", "cuDF", "cuML", "cuGraph", "cuSpatial", "cuXFilter", "cuSignal", "cuCIM"],
             pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph", "cuSpatial", "cuCIM"],
             additional_packages: ["Dask SQL", "JupyterLab", "Plotly Dash", "Graphistry", "TensorFlow", "Xarray-Spatial"], // , "RTXpy" will return later
@@ -562,12 +562,13 @@
                 return loc;
             },
             getDockerNotes() {
-                var core_pkgs = this.rapids_meta_pkgs;
+                if (this.active_cuda_ver === "12.0") {
+                        var pkgs_html = this.rapids_meta_pkgs.filter(pkg => pkg !== "cuSignal").map(pkg => "<code>" + pkg + "</code>").join(", ");
+                    }
+                else {
+                        var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
+                    }
 
-                if (this.active_img_type === "standard") {
-                    core_pkgs = [...core_pkgs, "dask-sql"];
-                }
-                var pkgs_html = core_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                 return [this.note_prefix + " The selected image contains the following packages:<br>" + pkgs_html];
             },
             getCondaNotes() {
@@ -657,22 +658,9 @@
                 var isDisabled = false;
                 return isDisabled;
             },
-            disableUnsupportedImgOS(os) {
-                var isDisabled = false;
-                if (this.active_arch === "arm" && os === "CentOS 7") isDisabled = true;
-                if (this.active_cuda_ver !== '11.8' && os === 'Ubuntu 22.04' && this.active_method === 'Docker') isDisabled = true;
-                if (this.active_arch === "arm" && os === 'Ubuntu 20.04' && this.active_method === 'Docker') isDisabled = true;
-                return isDisabled;
-            },
             disableUnsupportedImgType(type) {
                 var isDisabled = false;
                 if (this.active_arch === "arm" && type !== "core") isDisabled = true;
-                return isDisabled;
-            },
-            disableUnsupportedImgOption(option) {
-                var isDisabled = false;
-                var isNGC = this.active_img_loc === "NGC"
-                if (isNGC && option === "development") isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedImgLoc(loc) {
@@ -687,6 +675,7 @@
             disableUnsupportedArch(arch) {
                 var isDisabled = false;
                 if (this.active_method === "Conda" && this.active_cuda_ver === "12.0" && arch === "arm") isDisabled = true;
+                if (this.active_method === "Docker" && this.active_cuda_ver === "12.0" && arch === "arm") isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedPackage(package) {
@@ -753,46 +742,12 @@
                 }
                 this.active_method = method;
             },
-            imgOSClickHandler(e, version) {
-                if (this.isDisabled(e.target)) return;
-                this.active_os_ver = version;
-            },
             imgLocClickHandler(e, loc) {
                 if (this.isDisabled(e.target)) return;
 
                 if (loc === "NGC" && this.active_release !== "Stable") this.active_release = "Stable";
 
-                // Disable development option when clicking NGC
-                if (loc === "NGC" && this.active_img_options.includes("development")) {
-                    this.active_img_options = this.active_img_options.filter(el => el !== "development")
-                }
-
                 this.active_img_loc = loc;
-            },
-            imgOptionClickHandler(e, option) {
-                if (this.isDisabled(e.target)) return;
-
-                // development images have notebooks
-                if (option === "development" && this.active_img_options.length === 0) {
-                    this.active_img_options = ["notebooks", "development"];
-                    this.active_cuda_ver = this.getNewestCudaVer();
-                    return;
-                }
-
-                if (option === "notebooks" && this.active_img_options.length === 2) {
-                    this.active_img_options = [];
-                    return;
-                }
-
-                if (this.active_img_options.includes(option)) {
-                    this.active_img_options = this.active_img_options.filter(el => el !== option);
-                    return;
-                }
-
-                this.active_img_options = [...this.active_img_options, option];
-                if (this.active_img_options.includes("development")) {
-                    this.active_cuda_ver = this.getNewestCudaVer();
-                }
             },
             /**
             * Determines which packages are selected. "Standard" can only be
