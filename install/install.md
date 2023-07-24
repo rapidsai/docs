@@ -133,18 +133,18 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
  **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details. 
 
- ### **CUDA 12 Compatibility**
+### **CUDA 12 Compatibility**
  
- #### **Docker and Conda**
+#### **Docker and Conda**
 
- - <i class="fas fa-check-circle"></i> CUDA 12 packages and images currently support CUDA 12.0
- - <i class="fas fa-check-circle"></i> CUDA 11 packages and images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
- - <i class="fas fa-check-circle"></i> arm is not currently supported on CUDA 12 packages and images, use CUDA 11 or pip for arm support
+- <i class="fas fa-check-circle"></i> CUDA 12 packages and images currently support CUDA 12.0
+- <i class="fas fa-check-circle"></i> CUDA 11 packages and images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
+- <i class="fas fa-check-circle"></i> arm is not currently supported on CUDA 12 packages and images, use CUDA 11 or pip for arm support
  
- #### **pip**
+#### **pip**
 
- - <i class="fas fa-check-circle"></i> pip installations require using a wheel matching the system's installed CUDA toolkit. 
- - <i class="fas fa-check-circle"></i> For CUDA 11 toolkits, install the <code>-cu11</code> wheels, and for CUDA 12 toolkits install the <code>-cu12</code> wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the <code>-cu11</code> wheels.
+- <i class="fas fa-check-circle"></i> pip installations require using a wheel matching the system's installed CUDA toolkit. 
+- <i class="fas fa-check-circle"></i> For CUDA 11 toolkits, install the <code>-cu11</code> wheels, and for CUDA 12 toolkits install the <code>-cu12</code> wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the <code>-cu11</code> wheels.
 
 <br/>
 <div id="system-recommendations"></div>
