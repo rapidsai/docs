@@ -47,6 +47,19 @@ Use the selector tool below to select your preferred method, packages, and envir
 ## Installation Troubleshooting
 
 ### **Conda Issues**
+<i class="fas fa-info-circle"></i> A `conda create error` occurs:<br/>
+RAPIDS has switched the default solver recommendation to [libmamba](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}, a Mamba-powered conda solver that is [now included with all Conda/Miniconda installations](https://www.anaconda.com/blog/new-release-anaconda-distribution-2023-07-miniconda-23-5-0-and-more){: target="_blank"} to significantly accelerate environment solving. If the error below occurs:
+```
+conda create: error: argument --solver: invalid choice: 'libmamba' (choose from 'classic')
+```
+
+Please resolve by updating your conda installation to at least `23.5.2` as it include the `libmamba` solver.
+```
+conda install conda=23.5.2
+```
+
+Alternatively, either use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"} or use the classic solver by removing `--solver=libmamba` from the `conda create` command provided by the selector.
+
 <i class="fas fa-info-circle"></i> CUDA 12.0 ARM packages are not yet available:<br/>
 Conda-forge does not yet support the minimum required glibc (2.27) for CUDA 12 on ARM. For ARM support, please use CUDA 11.
 
@@ -56,9 +69,6 @@ The installation method below may allow RAPIDS CUDA 12.0 packages to coexist wit
 ```
 mamba create -n rapids-pytorch-cu12 -c rapidsai -c pytorch-nightly -c conda-forge -c nvidia rapids={{ site.data.releases.stable.version }} cuda-version=12.0 pytorch pytorch-cuda=12.1
 ```
-
-<i class="fas fa-info-circle"></i> The dependency solver takes too long or never resolves: <br/>
-Update conda to use the new [libmamba solver](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="blank"} or use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}.
 
 <br/>
 
