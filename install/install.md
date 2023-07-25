@@ -55,7 +55,7 @@ conda create: error: argument --solver: invalid choice: 'libmamba' (choose from 
 
 Please resolve by updating your conda installation to at least `23.5.2` as it include the `libmamba` solver.
 ```
-conda install conda=23.5.2
+conda update -n base -c defaults conda
 ```
 
 Alternatively, either use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"} or use the classic solver by removing `--solver=libmamba` from the `conda create` command provided by the selector.
