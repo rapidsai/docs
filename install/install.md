@@ -48,19 +48,19 @@ Use the selector tool below to select your preferred method, packages, and envir
 
 ### **Conda Issues**
 <i class="fas fa-info-circle"></i> A `conda create error` occurs:<br/>
-RAPIDS has switched the default solver recommendation to [libmamba](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}, a Mamba-powered conda solver that is [now included with all Conda/Miniconda installations](https://www.anaconda.com/blog/new-release-anaconda-distribution-2023-07-miniconda-23-5-0-and-more){: target="_blank"} to significantly accelerate environment solving. If the error below occurs:
+RAPIDS has switched the default solver recommendation to [libmamba](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}, a Mamba-powered Conda solver that is [now included with all Conda/Miniconda installations](https://www.anaconda.com/blog/new-release-anaconda-distribution-2023-07-miniconda-23-5-0-and-more){: target="_blank"} to significantly accelerate environment solving. If the error below occurs:
 ```
 conda create: error: argument --solver: invalid choice: 'libmamba' (choose from 'classic')
 ```
 
 To resolve this error please follow one of these steps:
-- If the conda installation is version `22.11` or newer, run: `conda install -n base conda-libmamba-solver`
-- If the conda installtion is older than `22.11` please update your [Conda or Miniconda to the latest version](https://conda.io/projects/conda/en/stable/user-guide/install/index.html){: target="_blank"}
+- If the Conda installation is version `22.11` or newer, run: `conda install -n base conda-libmamba-solver`
+- If the Conda installtion is older than `22.11`, please update your [Conda or Miniconda to the latest version](https://conda.io/projects/conda/en/stable/user-guide/install/index.html){: target="_blank"}
 - Use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}
-- Use the classic solver by removing `--solver=libmamba` from the `conda create` command provided by the selector.
+- Use the classic solver by removing `--solver=libmamba` from the `conda create` command provided by the selector
 
 <i class="fas fa-info-circle"></i> CUDA 12.0 ARM packages are not yet available:<br/>
-Conda-forge does not yet support the minimum required glibc (2.27) for CUDA 12 on ARM. For ARM support, please use CUDA 11.
+Conda-forge does not yet support the minimum required glibc (2.32) for CUDA 12 on ARM. For ARM support, please use CUDA 11.
 
 <i class="fas fa-info-circle"></i> At the time of writing, there is no stable CUDA 12 release of PyTorch: <br/>
 PyTorch currently only has nightly builds for CUDA 12.1, stable builds are limited to CUDA 11. <br/>
@@ -274,7 +274,7 @@ RAPIDS 23.06 pip packages of cuDF, dask-cuDF, cuML, cuGraph, cuSpatial, RMM, and
 ### **pip Additional Prerequisites**
 <i class="fas fa-info-circle"></i> The CUDA toolkit version on your system must match the pip CUDA version you install (`-cu11` or `-cu12`). <br/>
 <i class="fas fa-info-circle"></i> **glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
-<i class="fas fa-info-circle"></i> **glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.31 (only ARM Server Base System Architecture is supported).
+<i class="fas fa-info-circle"></i> **glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.32 (only ARM Server Base System Architecture is supported).
 
 
 <br/>
