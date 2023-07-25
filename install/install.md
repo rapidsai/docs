@@ -54,7 +54,7 @@ Conda-forge does not yet support the minimum required glibc (2.27) for CUDA 12 o
 PyTorch currently only has nightly builds for CUDA 12.1, stable builds are limited to CUDA 11. <br/>
 The installation method below may allow RAPIDS CUDA 12.0 packages to coexist with PyTorch CUDA 12.1 nightly packages if there is a hard-requirement of CUDA 12 but it is currently unsupported:
 ```
-mamba create -n rapids-pytorch-cu12 -c rapidsai -c pytorch-nightly -c conda-forge -c nvidia cuml pytorch pytorch-cuda=12.1 cuda-version=12.0
+mamba create -n rapids-pytorch-cu12 -c rapidsai -c pytorch-nightly -c conda-forge -c nvidia rapids={{ site.data.releases.stable.version }} cuda-version=12.0 pytorch pytorch-cuda=12.1
 ```
 
 <i class="fas fa-info-circle"></i> The dependency solver takes too long or never resolves: <br/>
