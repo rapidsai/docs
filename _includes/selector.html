@@ -563,10 +563,9 @@
                 return loc;
             },
             getDockerNotes() {
-                if (this.active_cuda_ver === "12.0") {
+                if (this.active_cuda_ver.startsWith("12")) {
                         var pkgs_html = this.rapids_meta_pkgs.filter(pkg => pkg !== "cuSignal").map(pkg => "<code>" + pkg + "</code>").join(", ");
-                    }
-                else {
+                } else {
                         var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                     }
 
@@ -576,10 +575,9 @@
                 var notes = [];
                 notes = [...notes, "RAPIDS currently doesn't support <code>channel_priority: strict</code>; use <code>channel_priority: flexible</code> instead"];
                 if (this.active_packages.length === 1 && this.active_packages[0] === "Standard") {
-                    if (this.active_cuda_ver === "12.0") {
+                    if (this.active_cuda_ver.startsWith("12")) {
                         var pkgs_html = this.rapids_meta_pkgs.filter(pkg => pkg !== "cuSignal").map(pkg => "<code>" + pkg + "</code>").join(", ");
-                    }
-                    else {
+                    } else {
                         var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                     }
                     notes = [...notes, "The CUDA " + this.active_cuda_ver + 
@@ -671,13 +669,12 @@
             },
             disableUnsupportedArch(arch) {
                 var isDisabled = false;
-                if (this.active_method === "Conda" && this.active_cuda_ver === "12.0" && arch === "arm") isDisabled = true;
-                if (this.active_method === "Docker" && this.active_cuda_ver === "12.0" && arch === "arm") isDisabled = true;
+                if (["Conda", "Docker"].includes(this.active_method) && this.active_cuda_ver.startsWith("12") && arch === "arm") isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedPackage(package) {
                 var isDisabled = false;
-                if (this.active_cuda_ver === "12.0" && this.active_method === "Conda" && package === "cuSignal") isDisabled = true;
+                if (this.active_cuda_ver.startsWith("12") && this.active_method === "Conda" && package === "cuSignal") isDisabled = true;
                 return isDisabled;
             },
             isDisabled(e) {

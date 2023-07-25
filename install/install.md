@@ -47,12 +47,12 @@ Use the selector tool below to select your preferred method, packages, and envir
 ## Installation Troubleshooting
 
 ### **Conda Issues**
-<i class="fas fa-info-circle"></i> CUDA 12.0 arm packages don't exist:<br/>
-Conda-forge doesn't yet support the minimum required glibc (2.27) for CUDA 12 on arm. For arm support, please use an 11.x installation.
+<i class="fas fa-info-circle"></i> CUDA 12.0 ARM packages are not yet available:<br/>
+Conda-forge does not yet support the minimum required glibc (2.27) for CUDA 12 on ARM. For ARM support, please use CUDA 11.
 
-<i class="fas fa-info-circle"></i> CUDA 12.0 packages don't work with stable PyTorch packages: <br/>
-PyTorch currently only has nightly builds for CUDA 12.1, stable builds are limited to CUDA 11.x. <br/>
-The installation method below may function if there is a hard-requirement of CUDA 12 but it is currently unsupported:
+<i class="fas fa-info-circle"></i> At the time of writing, there is no stable CUDA 12 release of PyTorch: <br/>
+PyTorch currently only has nightly builds for CUDA 12.1, stable builds are limited to CUDA 11. <br/>
+The installation method below may allow RAPIDS CUDA 12.0 packages to coexist with PyTorch CUDA 12.1 nightly packages if there is a hard-requirement of CUDA 12 but it is currently unsupported:
 ```
 mamba create -n rapids-pytorch-cu12 -c rapidsai -c pytorch-nightly -c conda-forge -c nvidia cuml pytorch pytorch-cuda=12.1 cuda-version=12.0
 ```
@@ -139,7 +139,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 - <i class="fas fa-info-circle"></i> CUDA 12 packages and images currently support CUDA 12.0
 - <i class="fas fa-info-circle"></i> CUDA 11 packages and images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
-- <i class="fas fa-info-circle"></i> arm is not currently supported on CUDA 12 packages and images, use CUDA 11 or pip for arm support
+- <i class="fas fa-info-circle"></i> ARM is not currently supported on CUDA 12 packages and images, use CUDA 11 or pip packages for ARM support
  
 ### **pip**
 
