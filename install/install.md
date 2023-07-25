@@ -53,12 +53,11 @@ RAPIDS has switched the default solver recommendation to [libmamba](https://www.
 conda create: error: argument --solver: invalid choice: 'libmamba' (choose from 'classic')
 ```
 
-Please resolve by updating your conda installation to at least `23.5.2` as it include the `libmamba` solver.
-```
-conda update -n base -c defaults conda
-```
-
-Alternatively, either use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"} or use the classic solver by removing `--solver=libmamba` from the `conda create` command provided by the selector.
+To resolve this error please follow one of these steps:
+- If the conda installation is version `22.11` or newer, run: `conda install -n base conda-libmamba-solver`
+- If the conda installtion is older than `22.11` please update your [Conda or Miniconda to the latest version](https://conda.io/projects/conda/en/stable/user-guide/install/index.html){: target="_blank"}
+- Use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}
+- Use the classic solver by removing `--solver=libmamba` from the `conda create` command provided by the selector.
 
 <i class="fas fa-info-circle"></i> CUDA 12.0 ARM packages are not yet available:<br/>
 Conda-forge does not yet support the minimum required glibc (2.27) for CUDA 12 on ARM. For ARM support, please use CUDA 11.
