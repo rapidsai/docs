@@ -71,12 +71,6 @@ mamba create -n rapids-pytorch-cu12 -c rapidsai -c pytorch-nightly -c conda-forg
 
 <br/>
 
-### **Docker Issues**
-<i class="fas fa-info-circle"></i> Jupyter Lab is not accessible:<br/>
-If the server has not started or needs to be restarted / stop, use the included [start/stop script](#docker-startstop). Note this may change in the near future releases.
-
-<br/>
-
 ### **pip Issues**
 <i class="fas fa-info-circle"></i> pip installations require using the matching wheel to the system's installed CUDA toolkit. For CUDA 11 toolkits, install the `-cu11` wheels, and for CUDA 12 tookits install the `-cu12` wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the `-cu11` wheels. <br/>
 <i class="fas fa-info-circle"></i> Infiniband is not supported yet. <br/>
@@ -134,7 +128,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 <i class="fas fa-download text-purple"></i> **CUDA & NVIDIA Drivers:** One of the following supported versions:
 {: .no-tb-margins }
 
-- <i class="fas fa-check-circle"></i> [CUDA 11.2](https://developer.nvidia.com/cuda-11.2.0-download-archive){: target="_blank"} with Driver 460.27.03 or newer
+- <i class="fas fa-check-circle"></i> [CUDA 11.2](https://developer.nvidia.com/cuda-11.2.0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.4](https://developer.nvidia.com/cuda-11-4-0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.5](https://developer.nvidia.com/cuda-11-5-0-download-archive){: target="_blank"} with Driver 495.29.05 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 520.61.05 or newer
@@ -251,16 +245,6 @@ docker run -t -d --gpus all --shm-size=1g --ulimit memlock=-1 --ulimit stack= 67
 
 The standard docker command may be sufficient, but the additional arguments ensures more stability.  See the [NCCL docs](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/troubleshooting.html#sharing-data){: target="_blank"} and [UCX docs](https://github.com/openucx/ucx/blob/master/docs/source/running.md#running-in-docker-containers){: target="_blank"} for more details on MNMG usage.
 
-<div id="docker-startstop"></div>
-**Start / Stop Jupyter Lab Notebooks.** Either the standard single GPU or the modified MNMG Docker command above should auto-run a Jupyter Lab Notebook server. If it does not, or a restart is needed, run the following command within the Docker container to launch the notebook server:
-```
-bash /rapids/utils/start-jupyter.sh
-```
-
-If, for whatever reason, you need to shut down the Jupyter Lab server, use:
-```
-bash /rapids/utils/stop-jupyter.sh
-```
 
 **Custom Datasets.** See the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/rapidsai){: target="_blank"} for more information about using custom datasets. [Docker Hub](https://hub.docker.com/r/rapidsai/rapidsai/){: target="_blank"} and [NVIDIA GPU Cloud](https://ngc.nvidia.com/catalog/containers/nvidia:rapidsai:rapidsai){: target="_blank"} host RAPIDS containers with a full list of [available tags](https://hub.docker.com/r/rapidsai/rapidsai/tags){: target="_blank"}.
 
