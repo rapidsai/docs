@@ -83,7 +83,7 @@ pip uninstall cupy-cuda115; pip install cupy-cuda11x
 
 <i class="fas fa-info-circle"></i> The following error message indicates a problem with your environment:
 ```
-ERROR: Could not find a version that satisfies the requirement cudf-cu11 (from versions: 0.0.1, 22.10.0)
+ERROR: Could not find a version that satisfies the requirement cudf-cu11 (from versions: 0.0.1, {{ site.data.releases.stable.version }})
 ERROR: No matching distribution found for cudf-cu11
 ```
 Check the suggestions below for possible resolutions:
