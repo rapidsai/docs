@@ -69,6 +69,17 @@ The installation method below may allow RAPIDS CUDA 12.0 packages to coexist wit
 mamba create -n rapids-pytorch-cu12 -c rapidsai -c pytorch-nightly -c conda-forge -c nvidia rapids={{ site.data.releases.stable.version }} cuda-version=12.0 pytorch pytorch-cuda=12.1
 ```
 
+### **Docker Issues**
+<i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brings significant Docker changes
+To learn more about these changes, please see the [RAPIDS Docker README](https://github.com/rapidsai/docker){: target="_blank"}. Some key notes below:
+- `Development` images are no longer being published, RAPIDS now recommends [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) for development
+   - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer)
+- All images are Ubuntu-based
+   - CUDA `11.2` images are Ubuntu `20.04`
+   - All other images are Ubuntu `22.04`
+- All images are multiarch (x86_64 and ARM)
+   - CUDA 12 is not yet supported on ARM the Docker images
+
 <br/>
 
 ### **pip Issues**
@@ -313,7 +324,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Install latest Docker Desktop for Windows
 4. Log in to the WSL2 Linux instance.
-5. Generate and run the RAPIDS `docker pull` and `docker run` commands based on your desired configuration using the RAPIDS [Release Selector](#selector).
+5. Generate and run the RAPIDS `docker` command based on your desired configuration using the RAPIDS [Release Selector](#selector).
 6. Inside the Docker instance, run this code to check that the RAPIDS installation is working:
 	```
 	import cudf
