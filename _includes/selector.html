@@ -247,15 +247,6 @@
                         </div>
                     </template>
                 </div>
-                <!-- <div class="options-section">
-                    <div class="option-label">Arch</div>
-                    <template x-for="arch in arches">
-                        <div x-on:click="(e) => archClickHandler(e, arch)"
-                            x-bind:class="{'active': arch === active_arch, 'disabled': disableUnsupportedArch(arch)}" class="option" x-text="arch"
-                            x-text="getArchText(arch)">
-                        </div>
-                    </template>
-                </div> -->
                 <div class="options-section">
                     <div class="option-label">Method</div>
                     <template x-for="method in methods">
@@ -384,7 +375,6 @@
             active_pip_cuda_ver: "12.0",
             active_method: "Conda",
             active_release: "Stable",
-            // active_arch: "amd",
             active_img_type: "Base",
             active_img_loc: "NGC",
             active_packages: ["Standard"],
@@ -396,7 +386,6 @@
             pip_cuda_vers: ["11.2 - 11.8", "12.0"],
             methods: ["Conda", "pip", "Docker"],
             releases: ["Stable", "Nightly"],
-            // arches: ["amd", "arm"],
             img_loc: ["NGC", "Dockerhub"],
             img_types: ["Base", "Notebooks"],
             packages: ["Standard", "Choose Specific Packages"],
@@ -414,7 +403,6 @@
             getMethodHTML(method) {
                 var icon_class = "box-open fas";
                 if (method.includes("Docker")) icon_class = "regular fa-container-storage";
-                // if (method.includes("Source")) icon_class = "cogs fas";
                 return method + "&nbsp;<i class='fa-" + icon_class + "'></i>";
             },
             getPackageHTML(pkg) {
@@ -430,12 +418,6 @@
                 if (release.includes("Nightly")) version = this.getNightlyVersion() + "a";
                 return release + " " + "(" + version + ")";
             },
-            // getArchText(arch) {
-            //     var text = "Arch not implemented yet!"
-            //     if (arch === "amd") text = "x86-64";
-            //     if (arch === "arm") text = "Arm Server (SBSA)";
-            //     return text;
-            // },
             highlightCmd(str) {
                 return "<span class='nb'>" + str + "</span>"
             },
@@ -520,7 +502,6 @@
                         .filter(pkg => pkg !== "Choose Specific Packages" && pkg !== "cuSignal")
                         .map(libraryToPkg)
                         .join(" ");                }
-                // var isArm = this.active_arch === "arm";
 
                 if (pkgs === "cucim") {
                     index_url = "";
@@ -559,29 +540,6 @@
                     indent + fullImg;
                 return cmd;
             },
-            // getSourceCmdHtml() {
-            //     var isStable = this.active_release === "Stable";
-            //     var version = isStable ? this.getStableVersion() : this.getNightlyVersion();
-            //     var links = [
-            //         "https://github.com/rapidsai/cudf/blob/branch-" + version + "/CONTRIBUTING.md",
-            //         "https://github.com/rapidsai/cuml/blob/branch-" + version + "/README.md",
-            //         "https://github.com/rapidsai/cugraph/blob/branch-" + version + "/readme_pages/CONTRIBUTING.md",
-            //         "https://github.com/rapidsai/cuspatial/blob/branch-" + version + "/README.md",
-            //         "https://github.com/rapidsai/cuxfilter/blob/branch-" + version + "/CONTRIBUTING.md",
-            //         "https://github.com/rapidsai/cusignal#source-linux-os",
-            //         "https://github.com/rapidsai/cucim/blob/branch-" + version + "/CONTRIBUTING.md#building-and-testing-cucim-from-source"
-            //     ];
-            //     var cmd = "<p class='selector__source-cmd'>For source build instructions, please view the links below:</p>";
-            //     cmd += "<ul class='selector__source-cmd__list'>";
-            //     for (var i = 0; i < links.length; i++) {
-            //         var link = links[i];
-            //         cmd += "<li class='selector__source-cmd__list-item'>";
-            //         cmd += "<a class='selector__source-cmd__link' target='_blank' href='" + link + "'>" + link + "</a>";
-            //         cmd += "</li>";
-            //     }
-            //     cmd += "</ul>";
-            //     return cmd;
-            // },
             getImgLoc(loc) {
                 if (loc === "NGC") return 'NGC (Stable Only) <i class="fa-regular fa-share-nodes"></i>';
                 if (loc === "Dockerhub") return 'Docker Hub (Stable and Nightly) <i class="fa-docker fab"></i>';
@@ -628,15 +586,8 @@
 
                 return notes.map(note => this.note_prefix + " " + note);
             },
-            // getArmNotes() {
-            //     return [this.note_prefix + " ARM support does not currently include Jetson products."];
-            // },
             getNoteHtml() {
                 var notes = [];
-
-                // if (this.active_arch === "arm") {
-                //     notes.push(...this.getArmNotes());
-                // }
 
                 if (this.active_method === "Docker") {
                     notes.push(...this.getDockerNotes());
@@ -659,8 +610,6 @@
                     return this.getCondaCmdHtml();
                 if (this.active_method === "pip")
                     return this.getpipCmdHtml();
-                // if (this.active_method === "Source")
-                //     return this.getSourceCmdHtml();
                 return "Not implemented yet!";
             },
             disableUnsupportedRelease(release) {
@@ -672,8 +621,6 @@
             disableUnsupportedCuda(cuda_version) {
                 var isDisabled = false;
                 if (this.active_additional_packages.includes("TensorFlow") && cuda_version !== "11.2") isDisabled = true;
-                // if (this.active_arch === "arm" && cuda_version === "12.0") isDisabled = true;
-
                 return isDisabled;
             },
             disableUnsupportedPython(python_version) {
@@ -693,11 +640,6 @@
                 if (this.active_release === "Nightly" && method === "pip") isDisabled = true;
                 return isDisabled;
             },
-            // disableUnsupportedArch(arch) {
-            //     var isDisabled = false;
-            //     if (["Conda", "Docker"].includes(this.active_method) && this.active_cuda_ver.startsWith("12") && arch === "arm") isDisabled = true;
-            //     return isDisabled;
-            // },
             disableUnsupportedPackage(package) {
                 var isDisabled = false;
                 if (this.active_cuda_ver.startsWith("12") && this.active_method === "Conda" && package === "cuSignal") isDisabled = true;
@@ -717,10 +659,6 @@
                 if (this.isDisabled(e.target)) return;
                 this.active_img_type = type;
             },
-            // archClickHandler(e, arch) {
-            //     if (this.isDisabled(e.target)) return;
-            //     this.active_arch = arch;
-            // },
             cudaClickHandler(e, version) {
                 if (this.isDisabled(e.target)) return;
                 this.active_cuda_ver = version;
@@ -748,7 +686,6 @@
                 if (method === "pip") {
                     this.active_pip_cuda_ver = '12.0';
                     this.active_release = 'Stable';
-                    // this.active_packages = ['cuDF']
                 }
                 if (method === "Docker") {
                     if (this.active_release === 'Nightly') {
