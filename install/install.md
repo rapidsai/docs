@@ -75,7 +75,7 @@ To learn more about these changes, please see the [RAPIDS Container README](http
 - `Development` images are no longer being published, RAPIDS now recommends [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
    - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
 - All images are Ubuntu-based
-   - CUDA `11.2` images are Ubuntu `20.04`
+   - CUDA 11.2 images are Ubuntu `20.04`
    - All other images are Ubuntu `22.04`
 - All images are multiarch (x86_64 and ARM)
    - CUDA 12 is not yet supported when using Docker images on ARM architecture
