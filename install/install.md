@@ -55,7 +55,7 @@ conda create: error: argument --solver: invalid choice: 'libmamba' (choose from 
 
 To resolve this error please follow one of these steps:
 - If the Conda installation is version `22.11` or newer, run: `conda install -n base conda-libmamba-solver`
-- If the Conda installtion is older than `22.11`, please update your [Conda or Miniconda to the latest version](https://conda.io/projects/conda/en/stable/user-guide/install/index.html){: target="_blank"}
+- If the Conda installation is older than `22.11`, please update your [Conda or Miniconda to the latest version](https://conda.io/projects/conda/en/stable/user-guide/install/index.html){: target="_blank"}
 - Use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}
 - Use the classic solver by removing `--solver=libmamba` from the `conda create` command provided by the selector
 
@@ -70,7 +70,7 @@ mamba create -n rapids-pytorch-cu12 -c rapidsai -c pytorch-nightly -c conda-forg
 ```
 
 ### **Docker Issues**
-<i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brings significant Docker changes <br/>
+<i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brings significant Docker changes. <br/>
 To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/rapidsai){: target="_blank"}. Some key notes below:
 - `Development` images are no longer being published, RAPIDS now recommends [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
    - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
@@ -78,9 +78,8 @@ To learn more about these changes, please see the [RAPIDS Container README](http
    - CUDA `11.2` images are Ubuntu `20.04`
    - All other images are Ubuntu `22.04`
 - All images are multiarch (x86_64 and ARM)
-   - CUDA 12 is not yet supported when using Docker Images on ARM architechture
+   - CUDA 12 is not yet supported when using Docker images on ARM architecture
 
-<br/>
 
 ### **pip Issues**
 <i class="fas fa-info-circle"></i> pip installations require using the matching wheel to the system's installed CUDA toolkit. For CUDA 11 toolkits, install the `-cu11` wheels, and for CUDA 12 tookits install the `-cu12` wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the `-cu11` wheels. <br/>
