@@ -70,15 +70,15 @@ mamba create -n rapids-pytorch-cu12 -c rapidsai -c pytorch-nightly -c conda-forg
 ```
 
 ### **Docker Issues**
-<i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brings significant Docker changes
-To learn more about these changes, please see the [RAPIDS Docker README](https://github.com/rapidsai/docker){: target="_blank"}. Some key notes below:
-- `Development` images are no longer being published, RAPIDS now recommends [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) for development
-   - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer)
+<i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brings significant Docker changes <br/>
+To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/rapidsai){: target="_blank"}. Some key notes below:
+- `Development` images are no longer being published, RAPIDS now recommends [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
+   - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
 - All images are Ubuntu-based
    - CUDA `11.2` images are Ubuntu `20.04`
    - All other images are Ubuntu `22.04`
 - All images are multiarch (x86_64 and ARM)
-   - CUDA 12 is not yet supported on ARM the Docker images
+   - CUDA 12 is not yet supported when using Docker Images on ARM architechture
 
 <br/>
 
@@ -245,9 +245,9 @@ docker run --gpus all nvcr.io/nvidia/k8s/cuda-sample:nbody nbody -gpu -benchmark
 **4b. Legacy Docker Users.** Docker CE v18 & [nvidia-docker2](https://github.com/NVIDIA/nvidia-docker/wiki/Installation-(version-2.0)){: target="_blank"} users will need to replace the following for compatibility:
 `docker run --gpus all` with `docker run --runtime=nvidia`
 
-<br/><br/>
+<br/>
 
-**JupyterLab.** Defaults will run [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/){: target="_blank"} on your host machine at port: `8888`.
+### **JupyterLab.** Defaults will run [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/){: target="_blank"} on your host machine at port: `8888`.
 
 **Running Multi-Node / Multi-GPU (MNMG) Environment.** To start the container in an MNMG environment:
 ```
