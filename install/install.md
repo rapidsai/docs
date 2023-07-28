@@ -71,7 +71,7 @@ mamba create -n rapids-pytorch-cu12 -c rapidsai -c pytorch-nightly -c conda-forg
 
 ### **Docker Issues**
 <i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brings significant Docker changes. <br/>
-To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/rapidsai){: target="_blank"}. Some key notes below:
+To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/base){: target="_blank"}. Some key notes below:
 - `Development` images are no longer being published, in the coming releases RAPIDS will roll out [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
    - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
 - All images are Ubuntu-based
