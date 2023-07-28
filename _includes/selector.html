@@ -318,7 +318,7 @@
                         </template>
                     </div>
                     <div class="options-section" x-show="active_packages != 'Standard'">
-                        <div class="option-label">Packages</div>
+                        <div class="option-label"><!-- Second row of packages --></div>
                         <template x-for="package in additional_pip_packages">
                             <div x-on:click="(e) => packagesClickHandler(e, package)"
                                 x-bind:class="{'active': active_packages.includes(package)}" class="option"
@@ -389,7 +389,7 @@
             img_loc: ["NGC", "Dockerhub"],
             img_types: ["Base", "Notebooks"],
             packages: ["Standard", "Choose Specific Packages"],
-            additional_pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph", "cuXFilter", "cuSpatial", "cuCIM"],
+            additional_pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph", "cuSpatial", "cuXFilter", "cuCIM"],
             additional_rapids_packages: ["cuDF", "cuML", "cuGraph", "cuSpatial", "cuXFilter", "cuSignal", "cuCIM"],
             additional_packages: ["Dask-SQL", "JupyterLab", "Plotly Dash", "Graphistry", "TensorFlow", "Xarray-Spatial"], // , "RTXpy" will return later
             note_prefix: "<i class='fas fa-info-circle text-blue'></i>",
@@ -548,7 +548,7 @@
             getDockerNotes() {
                 if (this.active_cuda_ver.startsWith("12")) {
                         var pkgs_html = this.rapids_meta_pkgs.filter(pkg => pkg !== "cuSignal").map(pkg => "<code>" + pkg + "</code>").join(", ");
-                        notes = [...notes, "RAPIDS CUDA 12.0 packages do not support ARM architectures"];
+                        notes = [...notes, "RAPIDS Docker images for CUDA 12 do not currently support ARM architectures"];
                 } else {
                         var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                     }
@@ -560,7 +560,7 @@
                 notes = [...notes, "RAPIDS currently doesn't support <code>channel_priority: strict</code>; use <code>channel_priority: flexible</code> instead"];
                 if (this.active_packages.length === 1 && this.active_packages[0] === "Standard") {
                     if (this.active_cuda_ver.startsWith("12")) {
-                        notes = [...notes, "RAPIDS CUDA 12.0 packages do not support ARM architectures"];
+                        notes = [...notes, "RAPIDS conda packages for CUDA 12 do not currently support ARM architectures"];
                         var pkgs_html = this.rapids_meta_pkgs.filter(pkg => pkg !== "cuSignal").map(pkg => "<code>" + pkg + "</code>").join(", ");
                     } else {
                         var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
@@ -642,7 +642,7 @@
             },
             disableUnsupportedPackage(package) {
                 var isDisabled = false;
-                if (this.active_cuda_ver.startsWith("12") && this.active_method === "Conda" && package === "cuSignal") isDisabled = true;
+                if (package === "cuSignal" && ((this.active_cuda_ver.startsWith("12") && this.active_method === "Conda") || this.active_release === "Nightly")) isDisabled = true;
                 return isDisabled;
             },
             isDisabled(e) {
