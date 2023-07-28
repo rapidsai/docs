@@ -79,6 +79,9 @@ To learn more about these changes, please see the [RAPIDS Container README](http
    - All other images are Ubuntu `22.04`
 - All images are multiarch (x86_64 and ARM)
    - CUDA 12 is not yet supported when using Docker images on ARM architecture
+- The `Base` image starts in an ipython shell
+   - To run bash commands inside the ipython shell prefix the command with `!`
+   - To run the image without the ipython shell add `/bin/bash` to the end of the `docker run` command
 
 
 ### **pip Issues**
