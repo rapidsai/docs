@@ -82,6 +82,7 @@ To learn more about these changes, please see the [RAPIDS Container README](http
 - The `Base` image starts in an ipython shell
    - To run bash commands inside the ipython shell prefix the command with `!`
    - To run the image without the ipython shell add `/bin/bash` to the end of the `docker run` command
+- For a full list of changes please see this [RAPIDS Docker Issue](https://github.com/rapidsai/docker/issues/539){: target="_blank"}
 
 
 ### **pip Issues**
