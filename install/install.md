@@ -48,7 +48,7 @@ Use the selector tool below to select your preferred method, packages, and envir
 
 ### **Conda Issues**
 <i class="fas fa-info-circle"></i> A `conda create error` occurs:<br/>
-RAPIDS has switched the default solver recommendation to [libmamba](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}, a Mamba-powered Conda solver that is [now included with all Conda/Miniconda installations](https://www.anaconda.com/blog/new-release-anaconda-distribution-2023-07-miniconda-23-5-0-and-more){: target="_blank"} to significantly accelerate environment solving. If the error below occurs:
+RAPIDS has switched the default solver recommendation to [libmamba](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}, a Mamba-powered Conda solver that is [now included with all Conda/Miniconda installations](https://www.anaconda.com/blog/new-release-anaconda-distribution-2023-07-miniconda-23-5-0-and-more){: target="_blank"} to significantly accelerate environment solving. The error output shows:
 ```
 conda create: error: argument --solver: invalid choice: 'libmamba' (choose from 'classic')
 ```
@@ -150,9 +150,9 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 ### **Docker and Conda**
 
-- <i class="fas fa-info-circle"></i> CUDA 12 packages and images currently support CUDA 12.0
-- <i class="fas fa-info-circle"></i> CUDA 11 packages and images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
-- <i class="fas fa-info-circle"></i> ARM is not currently supported on CUDA 12 packages and images, use CUDA 11 or pip packages for ARM support
+- <i class="fas fa-info-circle"></i> CUDA 12 conda packages and Docker images currently support CUDA 12.0
+- <i class="fas fa-info-circle"></i> CUDA 11 conda packages and Docker images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
+- <i class="fas fa-info-circle"></i> ARM is not currently supported by CUDA 12 conda packages or Docker images, use CUDA 11 or pip packages for ARM support
  
 ### **pip**
 
