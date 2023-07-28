@@ -18,6 +18,14 @@
         flex-wrap: nowrap;
     }
 
+    .selector .options-section-specific {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        width: 97%;
+        margin: 0 auto;
+    }
+
     .selector .options .option-label {
         color: white;
         width: 6em;
@@ -290,8 +298,8 @@
                             </div>
                         </template>
                     </div>
-                    <div class="options-section" x-show="active_packages != 'Standard'">
-                        <div class="option-label">RAPIDS Packages</div>
+                    <div class="options-section-specific" x-show="active_packages != 'Standard'">
+                        <div class="option-label"><!-- Second row of packages --></div>
                         <template x-for="package in additional_rapids_packages">
                             <div x-on:click="(e) => packagesClickHandler(e, package)"
                                 x-bind:class="{'active': active_packages.includes(package)}" class="option"
@@ -317,7 +325,7 @@
                             </div>
                         </template>
                     </div>
-                    <div class="options-section" x-show="active_packages != 'Standard'">
+                    <div class="options-section-specific" x-show="active_packages != 'Standard'">
                         <div class="option-label"><!-- Second row of packages --></div>
                         <template x-for="package in additional_pip_packages">
                             <div x-on:click="(e) => packagesClickHandler(e, package)"
@@ -709,6 +717,15 @@
                 if (package === "Standard") {
                     this.active_packages = [package];
                     return;
+                }
+
+                if (package === "Choose Specific Packages") {
+                    if (this.active_packages[0] === "Standard" && this.active_packages.length === 1) {
+                        this.active_packages = [package, "cuDF"];
+                        return;
+                    } else {
+                        return;
+                    }
                 }
 
                 this.active_packages = this.active_packages.filter(el => el !== "Standard");
