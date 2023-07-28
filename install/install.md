@@ -72,7 +72,7 @@ mamba create -n rapids-pytorch-cu12 -c rapidsai -c pytorch-nightly -c conda-forg
 ### **Docker Issues**
 <i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brings significant Docker changes. <br/>
 To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/rapidsai){: target="_blank"}. Some key notes below:
-- `Development` images are no longer being published, RAPIDS now recommends [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
+- `Development` images are no longer being published, in the coming releases RAPIDS will roll out [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
    - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
 - All images are Ubuntu-based
    - CUDA 11.2 images are Ubuntu `20.04`
@@ -246,7 +246,8 @@ docker run --gpus all nvcr.io/nvidia/k8s/cuda-sample:nbody nbody -gpu -benchmark
 
 <br/>
 
-### **JupyterLab.** Defaults will run [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/){: target="_blank"} on your host machine at port: `8888`.
+### **JupyterLab.** 
+The command provided from the selector for the `notebooks` Docker image will run [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/){: target="_blank"} on your host machine at port: `8888`.
 
 **Running Multi-Node / Multi-GPU (MNMG) Environment.** To start the container in an MNMG environment:
 ```
