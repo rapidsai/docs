@@ -440,7 +440,7 @@
                 var pkgs = this.active_packages;
                 var py_cuda_pkgs = [this.highlightPkgOrImg("python") + "=" + python_version, this.highlightPkgOrImg("cuda-version") + "=" + cuda_version].join(" ");
                 var conda_channels = [rapids_channel, "conda-forge", "nvidia"]
-                    .map(ch => this.highlightFlag("-c") + " " + ch + " ")
+                    .map(ch => "-" + this.highlightFlag("c") + " " + ch + " ")
                     .join("");
                 var indentation = "    ";
 
@@ -455,7 +455,7 @@
                 var pkgs_vers = pkgs.filter(pkg => pkg !== "Choose Specific Packages").map(pkg => this.highlightPkgOrImg(pkg) + "=" + rapids_version + " ").join("").toLowerCase();
                 var all_pkgs = pkgs_vers + py_cuda_pkgs;
 
-                var conda_create_ln = this.highlightCmd('conda') + " create --solver=libmamba " + this.highlightFlag("-n") + " rapids-" + rapids_version + " " + conda_channels;
+                var conda_create_ln = this.highlightCmd('conda') + " create --" + this.highlightFlag("solver") + "=libmamba " + this.highlightFlag("-n") + " rapids-" + rapids_version + " " + conda_channels;
                 var pkgs_ln = indentation + all_pkgs;
                 var add_pkgs_ln = "";
 
@@ -474,9 +474,10 @@
                 return lines;
             },
             getpipCmdHtml() {
-                var pip_install = "pip install ";
-                var index_url = " --extra-index-url=https://pypi.nvidia.com";
+                var pip_install = `${this.highlightCmd("pip")} install`;
+                var index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.nvidia.com`;
                 var cuda_suffix = "-cu12";
+                var indentation = "    ";
 
                 if (this.active_pip_cuda_ver === "11.2 - 11.8") {
                     cuda_suffix = "-cu11";
@@ -490,19 +491,20 @@
                 if (this.active_packages.length === 1 && this.active_packages[0] === "Choose Specific Packages") {
                     return "Select at least one package.";
                 } else if (this.active_packages[0] === 'Standard') {
-                    var pkgs = this.additional_pip_packages.map(libraryToPkg).join(" ");
+                    var pkgs = this.additional_pip_packages.map(libraryToPkg);
                 } else {
                     var pkgs = this.active_packages
                         .filter(pkg => pkg !== "Choose Specific Packages" && pkg !== "cuSignal")
-                        .map(libraryToPkg)
-                        .join(" ");
+                        .map(libraryToPkg);
                 }
 
-                if (pkgs === "cucim") {
+                if (pkgs.length === 1 && pkgs[0] === "cucim") {
                     index_url = "";
                 }
 
-                return pip_install + pkgs + index_url;
+                return [pip_install, index_url, pkgs.map(pkg => this.highlightPkgOrImg(pkg)).join(" ")]
+                    .filter(Boolean)
+                    .join(" \\\n" + indentation);
             },
             getDockerCmdHtml() {
                 var hasNotebooks = this.active_img_type === "Notebook";
@@ -528,7 +530,7 @@
                 var fullImg = (this.highlightPkgOrImg(imgRepo) + ":" + imgTag).toLowerCase();
 
                 var indent = "    ";
-                var cmd = this.highlightCmd("docker") + " run --" + this.highlightFlag("gpus") + " all --pull always --" + this.highlightFlag("rm") + " -" + this.highlightFlag("it") + " \\\n" +
+                var cmd = this.highlightCmd("docker") + " run --" + this.highlightFlag("gpus") + " all --" + this.highlightFlag("pull") + " always --" + this.highlightFlag("rm") + " -" + this.highlightFlag("it") + " \\\n" +
                     indent + "--" + this.highlightFlag("shm-size") + "=1g --" + this.highlightFlag("ulimit") + " memlock=-1 --" + this.highlightFlag("ulimit") + " stack=67108864" + " \\\n" +
                     (portOptions ? indent + portOptions + "\\\n" : "") +
                     indent + fullImg;
