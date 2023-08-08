@@ -125,7 +125,11 @@ You can enter these values preemptively to suppress the prompts. For example:
 ```sh
 export RAPIDS_BUILD_TYPE=pull-request # or "branch" or "nightly"
 export RAPIDS_REPOSITORY=rapidsai/cugraph
-export RAPIDS_REF_NAME=pull-request/3258 # or "branch-YY.MM" for "branch"/"nightly" builds
+
+export RAPIDS_REF_NAME=pull-request/3258 # use this type of value for "pull-request" builds
+export RAPIDS_REF_NAME=branch-{{ site.data.releases.nightly.version }} # use this type of value for "branch"/"nightly" builds
+
+export RAPIDS_NIGHTLY_DATE=2023-06-20 # this variable is only necessary for "nightly" builds
 
 ./ci/test_python.sh
 ```
