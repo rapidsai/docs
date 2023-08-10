@@ -361,7 +361,7 @@
             <div class="cmd">
                 <div class="cmd-label">Command</div>
                 <div class="cmd-box">
-                    <pre class="highlight"><code><span x-ref="cmd" x-html="getCmdHtml"></span></code></pre>
+                    <pre class="highlight"><code><span x-ref="cmd" x-html="getCmdHtml" x-on:mouseup.once="copyToGA"></span></code></pre>
                 </div>
             </div>
         </div>
@@ -856,7 +856,7 @@
                 if (this.active_additional_packages.includes("TensorFlow") && this.active_cuda_ver !== "11.2") this.active_cuda_ver = "11.2";
             },
             copyToClipboard() {
-                var range = document.createRange();
+                let range = document.createRange();
                 range.selectNode(this.$refs.cmd);
                 window.getSelection().removeAllRanges();
                 window.getSelection().addRange(range);
@@ -870,6 +870,22 @@
                     'install_copy_cmd': text
                 });
             },
+            copyToGA(){
+                let range = document.createRange();
+                range.selectNode(this.$refs.cmd);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                let text = window.getSelection().toString()
+                document.execCommand("copy");
+                window.getSelection().removeAllRanges();
+
+                /** checks number of installs from copy vs downloads **/
+                /** Note mouse-up event is only sent once **/
+                gtag('event', 'copyMouseUp', {
+                    'button': 'CopyCommand',
+                    'install_copy_cmd': text
+                });
+            }
         }))
     })
 </script>
