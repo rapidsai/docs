@@ -54,7 +54,7 @@ docker run \
   --network=host \
   --volume $PWD:/repo \
   --workdir /repo \
-  rapidsai/ci:cuda11.8.0-ubuntu22.04-py3.10
+  rapidsai/ci-conda:cuda11.8.0-ubuntu22.04-py3.10
 ```
 
 Once the container has started, you can run any of the CI scripts inside of it:
