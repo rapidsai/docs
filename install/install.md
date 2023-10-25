@@ -156,7 +156,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 - <i class="fas fa-info-circle"></i> CUDA 12 conda packages and Docker images currently support CUDA 12.0
 - <i class="fas fa-info-circle"></i> CUDA 11 conda packages and Docker images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
-- <i class="fas fa-info-circle"></i> ARM is currently supported by nightly CUDA 12 Conda packages or Docker images, use CUDA 11 or pip packages for stable version ARM support
+- <i class="fas fa-info-circle"></i> ARM is currently supported by nightly CUDA 12 conda packages or Docker images, use CUDA 11 or pip packages for stable version ARM support
  
 ### **pip**
 
