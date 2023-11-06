@@ -80,8 +80,8 @@ rapids-mamba-retry mambabuild \
 
 RAPIDS_CUDA_MAJOR="${RAPIDS_CUDA_VERSION%%.*}"
 PYTHON_MINOR_VERSION=$(python --version | sed -E 's/Python [0-9]+\.([0-9]+)\.[0-9]+/\1/g')
-LIBRMM_CHANNEL=$(rapids-get-artifact ci/rmm/pull-request/1223/8704a75/rmm_conda_cpp_cuda${RAPIDS_CUDA_MAJOR}_$(arch).tar.gz)
-RMM_CHANNEL=$(rapids-get-artifact ci/rmm/pull-request/1223/b8d1c12/rmm_conda_python_cuda${RAPIDS_CUDA_MAJOR}_3${PYTHON_MINOR_VERSION}_$(arch).tar.gz)
+LIBRMM_CHANNEL=$(rapids-get-artifact ci/rmm/pull-request/1223/72e0c74/rmm_conda_cpp_cuda${RAPIDS_CUDA_MAJOR}_$(arch).tar.gz)
+RMM_CHANNEL=$(rapids-get-artifact ci/rmm/pull-request/1223/72e0c74/rmm_conda_python_cuda${RAPIDS_CUDA_MAJOR}_3${PYTHON_MINOR_VERSION}_$(arch).tar.gz)
 LIBKVIKIO_CHANNEL=$(rapids-get-artifact ci/kvikio/pull-request/224/68febbb/kvikio_conda_cpp_cuda${RAPIDS_CUDA_MAJOR}_$(arch).tar.gz)
 
 # Install library packages with the CI artifact channels providing the updated dependencies for testing
