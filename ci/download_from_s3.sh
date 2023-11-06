@@ -86,7 +86,7 @@ download_lib_docs() {
         continue
       fi
 
-      SRC="s3://${DOCS_BUCKET}/${PROJECT}/${VERSION_NUMBER}/html/"
+      SRC="s3://${DOCS_BUCKET}/${PROJECT}/html/${VERSION_NUMBER}/"
       DST="$(yq -n 'env(GENERATED_DIRS)|.libs')/${PROJECT}/${VERSION_NUMBER}/"
 
       aws_cp "${SRC}" "${DST}"
@@ -100,7 +100,7 @@ download_deployment_docs() {
   local DST SRC VERSION
 
   for VERSION in nightly stable; do
-    SRC="s3://${DOCS_BUCKET}/deployment/${VERSION}/html/"
+    SRC="s3://${DOCS_BUCKET}/deployment/html/${VERSION}/"
     DST="$(yq -n 'env(GENERATED_DIRS)|.deployment')/${VERSION}/"
 
     aws_cp "${SRC}" "${DST}"

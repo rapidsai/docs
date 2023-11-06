@@ -47,16 +47,43 @@ Use the selector tool below to select your preferred method, packages, and envir
 ## Installation Troubleshooting
 
 ### **Conda Issues**
-<i class="fas fa-info-circle"></i> The dependency solver takes too long or never resolves: <br/>
-Update conda to use the new [libmamba solver](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="blank"} or use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}.
+<i class="fas fa-info-circle"></i> A `conda create error` occurs:<br/>
+RAPIDS has switched the default solver recommendation to [libmamba](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}, a Mamba-powered Conda solver that is [now included with all Conda/Miniconda installations](https://www.anaconda.com/blog/new-release-anaconda-distribution-2023-07-miniconda-23-5-0-and-more){: target="_blank"} to significantly accelerate environment solving. The error output shows:
+```
+conda create: error: argument --solver: invalid choice: 'libmamba' (choose from 'classic')
+```
 
-<br/>
+To resolve this error please follow one of these steps:
+- If the Conda installation is version `22.11` or newer, run: `conda install -n base conda-libmamba-solver`
+- If the Conda installation is older than `22.11`, please update your [Conda or Miniconda to the latest version](https://conda.io/projects/conda/en/stable/user-guide/install/index.html){: target="_blank"}
+- Use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}
+- Use the classic solver by removing `--solver=libmamba` from the `conda create` command provided by the selector
+
+<i class="fas fa-info-circle"></i> CUDA 12.0 ARM packages are not yet available:<br/>
+Nightly packages are now available for CUDA 12.0 on ARM! Stable support is coming in 23.12
+
+<i class="fas fa-info-circle"></i> At the time of writing, there is no stable CUDA 12 release of PyTorch: <br/>
+PyTorch currently only has nightly builds for CUDA 12.1, stable builds are limited to CUDA 11. <br/>
+The installation method below may allow RAPIDS CUDA 12.0 packages to coexist with PyTorch CUDA 12.1 nightly packages if there is a hard-requirement of CUDA 12 but it is currently unsupported:
+```
+conda create --solver=libmamba -n rapids-pytorch-cu12 -c rapidsai -c pytorch-nightly -c conda-forge -c nvidia rapids={{ site.data.releases.stable.version }} cuda-version=12.0 pytorch pytorch-cuda=12.1
+```
 
 ### **Docker Issues**
-<i class="fas fa-info-circle"></i> Jupyter Lab is not accessible:<br/>
-If the server has not started or needs to be restarted / stop, use the included [start/stop script](#docker-startstop). Note this may change in the near future releases.
+<i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brings significant Docker changes. <br/>
+To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/base){: target="_blank"}. Some key notes below:
+- `Development` images are no longer being published, in the coming releases RAPIDS will roll out [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
+   - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
+- All images are Ubuntu-based
+   - CUDA 11.2 images are Ubuntu `20.04`
+   - All other images are Ubuntu `22.04`
+- All images are multiarch (x86_64 and ARM)
+   - CUDA 12 support is available on the nightly versions when using Docker images on ARM architecture
+- The `Base` image starts in an ipython shell
+   - To run bash commands inside the ipython shell prefix the command with `!`
+   - To run the image without the ipython shell add `/bin/bash` to the end of the `docker run` command
+- For a full list of changes please see this [RAPIDS Docker Issue](https://github.com/rapidsai/docker/issues/539){: target="_blank"}
 
-<br/>
 
 ### **pip Issues**
 <i class="fas fa-info-circle"></i> pip installations require using the matching wheel to the system's installed CUDA toolkit. For CUDA 11 toolkits, install the `-cu11` wheels, and for CUDA 12 tookits install the `-cu12` wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the `-cu11` wheels. <br/>
@@ -70,7 +97,7 @@ pip uninstall cupy-cuda115; pip install cupy-cuda11x
 
 <i class="fas fa-info-circle"></i> The following error message indicates a problem with your environment:
 ```
-ERROR: Could not find a version that satisfies the requirement cudf-cu11 (from versions: 0.0.1, 22.10.0)
+ERROR: Could not find a version that satisfies the requirement cudf-cu11 (from versions: 0.0.1, {{ site.data.releases.stable.version }})
 ERROR: No matching distribution found for cudf-cu11
 ```
 Check the suggestions below for possible resolutions:
@@ -115,15 +142,26 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 <i class="fas fa-download text-purple"></i> **CUDA & NVIDIA Drivers:** One of the following supported versions:
 {: .no-tb-margins }
 
-- <i class="fas fa-check-circle"></i> [CUDA 11.2](https://developer.nvidia.com/cuda-11.2.0-download-archive){: target="_blank"} with Driver 460.27.03 or newer
+- <i class="fas fa-check-circle"></i> [CUDA 11.2](https://developer.nvidia.com/cuda-11.2.0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.4](https://developer.nvidia.com/cuda-11-4-0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.5](https://developer.nvidia.com/cuda-11-5-0-download-archive){: target="_blank"} with Driver 495.29.05 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 520.61.05 or newer
-- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive){: target="_blank"} with Driver 525.60.13 or newer **for pip installations only**
+- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive){: target="_blank"} with Driver 525.60.13 or newer **see CUDA 12 section below for notes on usage**
 
  **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details. 
+
+## **CUDA 12 Support**
+
+### **Docker and Conda**
+
+- <i class="fas fa-info-circle"></i> CUDA 12 conda packages and Docker images currently support CUDA 12.0
+- <i class="fas fa-info-circle"></i> CUDA 11 conda packages and Docker images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
+- <i class="fas fa-info-circle"></i> ARM is currently supported by nightly CUDA 12 conda packages or Docker images, use CUDA 11 or pip packages for stable version ARM support
  
- **Note**: RAPIDS Docker images and conda packages for CUDA 11 can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit. pip installations require using a wheel matching the system's installed CUDA toolkit. For CUDA 11 toolkits, install the <code>-cu11</code> wheels, and for CUDA 12 toolkits install the <code>-cu12</code> wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the <code>-cu11</code> wheels.
+### **pip**
+
+- <i class="fas fa-info-circle"></i> pip installations require using a wheel matching the system's installed CUDA toolkit. 
+- <i class="fas fa-info-circle"></i> For CUDA 11 toolkits, install the <code>-cu11</code> wheels, and for CUDA 12 toolkits install the <code>-cu12</code> wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the <code>-cu11</code> wheels.
 
 <br/>
 <div id="system-recommendations"></div>
@@ -210,9 +248,10 @@ docker run --gpus all nvcr.io/nvidia/k8s/cuda-sample:nbody nbody -gpu -benchmark
 **4b. Legacy Docker Users.** Docker CE v18 & [nvidia-docker2](https://github.com/NVIDIA/nvidia-docker/wiki/Installation-(version-2.0)){: target="_blank"} users will need to replace the following for compatibility:
 `docker run --gpus all` with `docker run --runtime=nvidia`
 
-<br/><br/>
+<br/>
 
-**JupyterLab.** Defaults will run [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/){: target="_blank"} on your host machine at port: `8888`.
+### **JupyterLab.** 
+The command provided from the selector for the `notebooks` Docker image will run [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/){: target="_blank"} on your host machine at port: `8888`.
 
 **Running Multi-Node / Multi-GPU (MNMG) Environment.** To start the container in an MNMG environment:
 ```
@@ -221,16 +260,6 @@ docker run -t -d --gpus all --shm-size=1g --ulimit memlock=-1 --ulimit stack= 67
 
 The standard docker command may be sufficient, but the additional arguments ensures more stability.  See the [NCCL docs](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/troubleshooting.html#sharing-data){: target="_blank"} and [UCX docs](https://github.com/openucx/ucx/blob/master/docs/source/running.md#running-in-docker-containers){: target="_blank"} for more details on MNMG usage.
 
-<div id="docker-startstop"></div>
-**Start / Stop Jupyter Lab Notebooks.** Either the standard single GPU or the modified MNMG Docker command above should auto-run a Jupyter Lab Notebook server. If it does not, or a restart is needed, run the following command within the Docker container to launch the notebook server:
-```
-bash /rapids/utils/start-jupyter.sh
-```
-
-If, for whatever reason, you need to shut down the Jupyter Lab server, use:
-```
-bash /rapids/utils/stop-jupyter.sh
-```
 
 **Custom Datasets.** See the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/rapidsai){: target="_blank"} for more information about using custom datasets. [Docker Hub](https://hub.docker.com/r/rapidsai/rapidsai/){: target="_blank"} and [NVIDIA GPU Cloud](https://ngc.nvidia.com/catalog/containers/nvidia:rapidsai:rapidsai){: target="_blank"} host RAPIDS containers with a full list of [available tags](https://hub.docker.com/r/rapidsai/rapidsai/tags){: target="_blank"}.
 
@@ -239,12 +268,12 @@ bash /rapids/utils/stop-jupyter.sh
 <div id="pip"></div>
 
 ## **pip**
-RAPIDS 23.06 pip packages of cuDF, dask-cuDF, cuML, cuGraph, cuSpatial, RMM, and RAFT are available for CUDA 11 and CUDA 12 on the NVIDIA Python Package Index.
+RAPIDS pip packages are available for CUDA 11 and CUDA 12 on the NVIDIA Python Package Index.
 
 ### **pip Additional Prerequisites**
 <i class="fas fa-info-circle"></i> The CUDA toolkit version on your system must match the pip CUDA version you install (`-cu11` or `-cu12`). <br/>
 <i class="fas fa-info-circle"></i> **glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
-<i class="fas fa-info-circle"></i> **glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.31 (only ARM Server Base System Architecture is supported).
+<i class="fas fa-info-circle"></i> **glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.32 (only ARM Server Base System Architecture is supported).
 
 
 <br/>
@@ -270,7 +299,9 @@ Windows users can now tap into GPU accelerated data science on their local machi
 
 ### **Troubleshooting**
 
-<i class="fas fa-info-circle text-white"></i> When installing with conda, if an `http 000 connection error` occurs when accessing the repository data, run `wsl --shutdown` and then [restart the WSL instance](https://stackoverflow.com/questions/67923183/miniconda-on-wsl2-ubuntu-20-04-fails-with-condahttperror-http-000-connection){: target="_blank"}.
+<i class="fas fa-info-circle text-white"></i> When installing with Conda, if an `http 000 connection error` occurs when accessing the repository data, run `wsl --shutdown` and then [restart the WSL instance](https://stackoverflow.com/questions/67923183/miniconda-on-wsl2-ubuntu-20-04-fails-with-condahttperror-http-000-connection){: target="_blank"}.
+
+<i class="fas fa-info-circle text-white"></i> When installing with Conda or pip, if an `WSL2 Jitify fatal error: libcuda.so: cannot open shared object file` error occurs, follow suggestions in [this WSL issue](https://github.com/microsoft/WSL/issues/8587) to resolve.
 
 <i class="fas fa-info-circle text-white"></i> When installing with Docker Desktop, if the container pull command is successful, but the run command hangs indefinitely, [ensure you're on Docker Desktop >= 4.18](https://docs.docker.com/desktop/release-notes/){: target="_blank"}.
 
@@ -299,7 +330,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Install latest Docker Desktop for Windows
 4. Log in to the WSL2 Linux instance.
-5. Generate and run the RAPIDS `docker pull` and `docker run` commands based on your desired configuration using the RAPIDS [Release Selector](#selector).
+5. Generate and run the RAPIDS `docker` command based on your desired configuration using the RAPIDS [Release Selector](#selector).
 6. Inside the Docker instance, run this code to check that the RAPIDS installation is working:
 	```
 	import cudf
