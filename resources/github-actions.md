@@ -101,7 +101,8 @@ If building/testing a Python package that depends on a C++ library, it is necess
 In some repos, the `test_python.sh` is quite complicated with multiple calls to conda/mamba.
 We recommend that the Python and C++ artifact channels should be added to every call of `rapids-mamba-retry` / `rapids-conda-retry` "just in case."
 
-Note: By default `rapids-get-pr-conda-artifact` uses the most recent commit from the specified PR. A commit hash from the dependent PR can be added as an optional 4th argument to test with an earlier commit or to pin testing to a commit even if the dependent PR is updated.
+Note: By default `rapids-get-pr-conda-artifact` uses the most recent commit from the specified PR.
+A commit hash from the dependent PR can be added as an optional 4th argument to test with an earlier commit or to pin testing to a commit even if the dependent PR is updated.
 ## Skipping CI for Commits
 
 See the GitHub Actions documentation page below on how to prevent GitHub Actions from running on certain commits. This is useful for preventing GitHub Actions from running on pull requests that are not fully complete. This also helps preserve the finite GPU resources provided by the RAPIDS Ops team.
