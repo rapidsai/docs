@@ -45,6 +45,21 @@ There is a link provided at the end of every C++ and Python build job where the 
 
 ![](/assets/images/downloads.png)
 
+## Using Conda CI Artifacts Locally
+
+The artifacts that result from running `conda build` are conda channels. RAPIDS' CI system then compresses these conda channels into tarballs and uploads them to [https://downloads.rapids.ai/](https://downloads.rapids.ai/).
+
+The packages in the conda channel can be used by extracting the tarball to your local filesystem and using the resulting path in your conda commands.
+
+For example, the following snippet will download a pull request artifact for `librmm` and install it into the active conda environment:
+
+```sh
+wget https://downloads.rapids.ai/ci/rmm/pull-request/1376/5124d43/rmm_conda_cpp_cuda11_x86_64.tar.gz
+mkdir local_channel
+tar xzf rmm_conda_cpp_cuda11_x86_64.tar.gz -C local_channel/
+mamba install --channel file://local_channel librmm
+```
+
 ## Using Conda CI Artifacts in Other PRs
 
 For changes that cross library boundaries, it may be necessary to test a pull request to one library with changes from a pull request to another library.
