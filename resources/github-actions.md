@@ -48,21 +48,23 @@ There is a link provided at the end of every C++ and Python build job where the 
 ## Using CI Artifacts in Other PRs
 
 For changes that cross library boundaries, it may be necessary to test a pull request to one library with changes from a pull request to another library.
+Consider the overall RAPIDS dependency graph when testing.
+For example, if you are testing artifacts from an RMM PR rmm#A in cuML, you probably also need to create a cuDF PR cudf#B that uses the artifacts from rmm#A, and then your cuML test PR will need to include the artifact channels for both rmm#A and cudf#B.
+
 To do this, it is necessary to download CI artifacts (described in the above section) from one library during the CI workflow of another library.
-First, determine the pull request number and commit hash that need to be tested from the other library.
+First, determine the pull request number(s) to be tested from the other library.
 Then, fetch the CI artifacts from the other library's pull request and use them when building and testing.
 The example code below demonstrates building and testing with conda packages from other library PRs.
-Replace the pull request numbers, commit hashes, and library names as needed.
+Replace the pull request numbers and library names as needed.
 
-**Example 1:** Building `libcuml` (C++) using `librmm`, `libraft`, `libcumlprims_mg` PR artifacts. Adapted from [cuML PR 5318](https://github.com/rapidsai/cuml/pull/5318).
+**Example 1:** Building `libcuml` (C++) using `librmm`, `libraft`, `libcumlprims_mg` PR artifacts.
 
 ```sh
 # ci/build_cpp.sh
 
-RAPIDS_CUDA_MAJOR="${RAPIDS_CUDA_VERSION%%.*}"
-LIBRMM_CHANNEL=$(rapids-get-artifact ci/rmm/pull-request/1223/72e0c74/rmm_conda_cpp_cuda${RAPIDS_CUDA_MAJOR}_$(arch).tar.gz)
-LIBRAFT_CHANNEL=$(rapids-get-artifact ci/raft/pull-request/1388/7bddaee/raft_conda_cpp_cuda${RAPIDS_CUDA_MAJOR}_$(arch).tar.gz)
-LIBCUMLPRIMS_CHANNEL=$(rapids-get-artifact ci/cumlprims_mg/pull-request/129/85effb7/cumlprims_mg_conda_cpp_cuda${RAPIDS_CUDA_MAJOR}_$(arch).tar.gz)
+LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1095 cpp)
+LIBRAFT_CHANNEL=$(rapids-get-pr-conda-artifact raft 1388 cpp)
+LIBCUMLPRIMS_CHANNEL=$(rapids-get-pr-conda-artifact cumlprims_mg 129 cpp)
 
 # Build library packages with the CI artifact channels providing the updated dependencies
 
@@ -73,16 +75,14 @@ rapids-mamba-retry mambabuild \
     conda/recipes/libcuml
 ```
 
-**Example 2:** Testing `cudf` (Python) using `librmm`, `rmm`, and `libkvikio` PR artifacts. Adapted from [cuDF PR 12922](https://github.com/rapidsai/cudf/pull/12922).
+**Example 2:** Testing `cudf` (Python) using `librmm`, `rmm`, and `libkvikio` PR artifacts.
 
 ```sh
 # ci/test_python_common.sh
 
-RAPIDS_CUDA_MAJOR="${RAPIDS_CUDA_VERSION%%.*}"
-PYTHON_MINOR_VERSION=$(python --version | sed -E 's/Python [0-9]+\.([0-9]+)\.[0-9]+/\1/g')
-LIBRMM_CHANNEL=$(rapids-get-artifact ci/rmm/pull-request/1223/72e0c74/rmm_conda_cpp_cuda${RAPIDS_CUDA_MAJOR}_$(arch).tar.gz)
-RMM_CHANNEL=$(rapids-get-artifact ci/rmm/pull-request/1223/72e0c74/rmm_conda_python_cuda${RAPIDS_CUDA_MAJOR}_3${PYTHON_MINOR_VERSION}_$(arch).tar.gz)
-LIBKVIKIO_CHANNEL=$(rapids-get-artifact ci/kvikio/pull-request/224/68febbb/kvikio_conda_cpp_cuda${RAPIDS_CUDA_MAJOR}_$(arch).tar.gz)
+LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1223 cpp)
+RMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1223 python)
+LIBKVIKIO_CHANNEL=$(rapids-get-pr-conda-artifact kvikio 224 cpp)
 
 # Install library packages with the CI artifact channels providing the updated dependencies for testing
 
@@ -95,8 +95,10 @@ rapids-mamba-retry install \
   cudf libcudf
 ```
 
-Note that the custom channel for PR artifacts is needed in the build scripts _and_ the test scripts.
-If building/testing a Python package that depends on a C++ library, it is also necessary to use PR artifacts from that C++ library (e.g. if testing `rmm` artifacts, use the corresponding `librmm` CI artifacts as well).
+Note that the custom channel for PR artifacts is needed in the build scripts _and_ the test scripts, for C++ _and_ Python.
+If building/testing a Python package that depends on a C++ library, it is necessary to use PR artifacts from that C++ library and not just Python (e.g. if testing `rmm` artifacts, you must use the corresponding `librmm` CI artifacts as well as `rmm`).
+In some repos, the `test_python.sh` is quite complicated with multiple calls to conda/mamba.
+We recommend that the Python and C++ artifact channels should be added to every call "just in case."
 
 ## Skipping CI for Commits
 
