@@ -144,6 +144,8 @@ tar xzf rmm_conda_cpp_cuda11_x86_64.tar.gz -C local_channel/
 mamba install --channel file://local_channel --channel rapidsai-nightly --channel conda-forge --channel nvidia librmm
 ```
 
+Note that CI artifacts can only be downloaded while connected to the NVIDIA VPN.
+
 ## Using Wheel CI Artifacts Locally
 
 RAPIDS' CI system compresses the wheels that it builds into tarballs and uploads them to [https://downloads.rapids.ai/](https://downloads.rapids.ai/).
@@ -158,6 +160,8 @@ mkdir wheels
 tar xzf rmm_wheel_python_rmm_cu12_39_x86_64.tar.gz -C wheels/
 pip install wheels/rmm_cu12-24.2.0a1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
 ```
+
+Note that CI artifacts can only be downloaded while connected to the NVIDIA VPN.
 
 ## Using Conda CI Artifacts in Other PRs
 
