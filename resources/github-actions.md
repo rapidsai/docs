@@ -37,6 +37,89 @@ Additionally, the section [here](https://docs.gha-runners.nvidia.com/pull-reques
 
 Finally, the page [here](https://docs.gha-runners.nvidia.com/runners/) outlines the list of runner labels that are available for use.
 
+## GitHub Action Workflows
+
+Every GitHub Actions supported RAPIDS repository has, at a minimum, the following three GitHub Action workflow files:
+
+- `pr.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/branch-23.12/.github/workflows/pr.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/pr.yaml)
+- `build.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/branch-23.12/.github/workflows/build.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/build.yaml)
+- `test.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/branch-23.12/.github/workflows/test.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/test.yaml)
+
+These GitHub Action workflow files contain a description of all the automated jobs that run as a part of the workflow.
+
+These jobs contain things like C++/Python builds, C++/Python tests, notebook tests, etc.
+
+The chart below provides an overview of how each workflow file is used.
+
+| Event:                            | Runs workflows:                 | Performs Builds? | Performs Tests? | Uploads to Anaconda.org/Wheel Registry? |
+| --------------------------------- | ------------------------------- | :--------------: | :-------------: | :-------------------------------------: |
+| - PRs                             | - `pr.yaml`                     | ✅               | ✅              | ❌                                      |
+| - `branch-*` Merges<br>- Releases | - `build.yaml`                  | ✅               | ❌              | ✅                                      |
+| - Nightlies                       | - `build.yaml`<br>- `test.yaml` | ✅               | ✅              | ✅                                      |
+
+Although release workflows don't run tests, they do go through a week of nightly testing to ensure everything works as expected. See [this page]({% link releases/process.md %}) for more details about the release process.
+
+## How Nightlies Are Triggered
+
+Since RAPIDS consists of a collection of libraries that depend on each other, it's important that nightly builds and tests run in the correct order.
+
+The [rapidsai/workflows](https://github.com/rapidsai/workflows) repository has a [nightly pipeline job](https://github.com/rapidsai/workflows/actions/workflows/nightly-pipeline.yaml) that is responsible for triggering jobs in the correct order.
+
+An example workflow run can be seen in the screenshot below.
+
+![](/assets/images/nightly_pipeline.png)
+
+## Subscribing to Nightlies
+
+A [recent blog post by GitHub](https://github.blog/changelog/2022-12-06-github-actions-workflow-notifications-in-slack-and-microsoft-teams/) explains how workflows can be subscribed to via Slack.
+
+The gist of the article is that the following command can be run in any Slack channel to subscribe that channel to a particular workflow:
+
+```sh
+/github subscribe owner/repo workflows:{name: "workflow_name"}
+```
+
+Multiple workflow names can also be passed to the command in order to subscribe to multiple workflows (shown in example below).
+
+For RAPIDS libraries, it is recommended to use the following commands to subscribe a particular Slack channel to branch build, nightly build, and nightly test workflow runs:
+
+```sh
+/github subscribe rapidsai/<repo> workflows:{name: "test","build"}
+/github unsubscribe rapidsai/<repo> issues pulls commits releases deployments
+```
+
+The second step is necessary because the `/github subscribe`` command will also subscribe the channel to a lot of other GitHub events, which will contribute a lot of noise.
+
+The `name` field in the `workflows` object corresponds to the name of a particular workflow (e.g. [this field](https://github.com/rapidsai/cudf/blob/66b846a01d418c51fb01126218d6b5e3fd83d405/.github/workflows/test.yaml#L1)).
+
+To only subscribe to nightly builds and nightly tests (and not branch builds), the actor filter can be used:
+
+```sh
+/github subscribe rapidsai/<repo> workflows:{name: "test","build", actor:"GPUtester"}
+```
+
+The `GPUtester` account is a system account that’s used to trigger nightly workflow runs from an upstream workflow.
+
+## Reusable Workflows
+
+RAPIDS uses a collection of reusable GitHub Action workflows in order to single-source common build configuration settings. These reusable workflows can be found in the [rapidsai/shared-workflows](https://github.com/rapidsai/shared-workflows) repository.
+
+An example of one of the reusable workflows used by RAPIDS is the [`conda-cpp-build.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/b5de46f0bb78115af9a4c80645faad3bb72b12be/.github/workflows/conda-cpp-build.yaml), which is the source of truth for which architectures and CUDA versions that RAPIDS C++ packages build for.
+
+Similarly, the [`conda-cpp-tests.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/b5de46f0bb78115af9a4c80645faad3bb72b12be/.github/workflows/conda-cpp-tests.yaml) exists and specifies which configurations that RAPIDS tests it's C++ packages against.
+
+The majority of these reusable workflows leverage the CI images from the [rapidsai/ci-imgs](https://github.com/rapidsai/ci-imgs/) repository.
+
+## Reusable Shell Scripts
+
+In addition to the reusable GitHub Action workflows, RAPIDS projects also leverage reusable shell scripts from the [rapidsai/gha-tools](https://github.com/rapidsai/gha-tools/) repository.
+
+All of these shell scripts are prefixed with the string `rapids-`.
+
+As an example, `rapids-print-env` is used to print common environment information.
+
+`rapids-mamba-retry` is another tool that wraps the `mamba` executable to retry commands that fail due to transient issues like network problems.
+
 ## Downloading CI Artifacts
 
 For NVIDIA employees with VPN access, artifacts from both pull-requests and branch builds can be accessed on [https://downloads.rapids.ai/](https://downloads.rapids.ai/).
