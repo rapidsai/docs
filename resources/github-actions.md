@@ -39,13 +39,13 @@ Finally, the page [here](https://docs.gha-runners.nvidia.com/runners/) outlines 
 
 ## GitHub Action Workflows
 
-Every GitHub Actions supported RAPIDS repository has, at a minimum, the following three GitHub Action workflow files:
+Every RAPIDS repository using GitHub Actions has, at a minimum, the following three GitHub Action workflow files:
 
 - `pr.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/branch-23.12/.github/workflows/pr.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/pr.yaml)
 - `build.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/branch-23.12/.github/workflows/build.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/build.yaml)
 - `test.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/branch-23.12/.github/workflows/test.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/test.yaml)
 
-These GitHub Action workflow files contain a description of all the automated jobs that run as a part of the workflow.
+These GitHub Actions workflow files contain a description of all the automated jobs that run as a part of the workflow.
 
 These jobs contain things like C++/Python builds, C++/Python tests, notebook tests, etc.
 
@@ -98,21 +98,22 @@ To only subscribe to nightly builds and nightly tests (and not branch builds), t
 /github subscribe rapidsai/<repo> workflows:{name: "test","build", actor:"GPUtester"}
 ```
 
-The `GPUtester` account is a system account that’s used to trigger nightly workflow runs from an upstream workflow.
+The `GPUtester` account is a system account used to trigger nightly workflow runs from an upstream workflow.
 
 ## Reusable Workflows
 
-RAPIDS uses a collection of reusable GitHub Action workflows in order to single-source common build configuration settings. These reusable workflows can be found in the [rapidsai/shared-workflows](https://github.com/rapidsai/shared-workflows) repository.
+RAPIDS uses a collection of reusable GitHub Actions workflows in order to single-source common build configuration settings.
+These reusable workflows can be found in the [rapidsai/shared-workflows](https://github.com/rapidsai/shared-workflows) repository.
 
-An example of one of the reusable workflows used by RAPIDS is the [`conda-cpp-build.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/b5de46f0bb78115af9a4c80645faad3bb72b12be/.github/workflows/conda-cpp-build.yaml), which is the source of truth for which architectures and CUDA versions that RAPIDS C++ packages build for.
+An example of one of the reusable workflows used by RAPIDS is the [`conda-cpp-build.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/b5de46f0bb78115af9a4c80645faad3bb72b12be/.github/workflows/conda-cpp-build.yaml), which is the source of truth for which architectures and CUDA versions build RAPIDS C++ packages.
 
-Similarly, the [`conda-cpp-tests.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/b5de46f0bb78115af9a4c80645faad3bb72b12be/.github/workflows/conda-cpp-tests.yaml) exists and specifies which configurations that RAPIDS tests it's C++ packages against.
+Similarly, the [`conda-cpp-tests.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/b5de46f0bb78115af9a4c80645faad3bb72b12be/.github/workflows/conda-cpp-tests.yaml) specifies configurations for testing RAPIDS C++ packages.
 
 The majority of these reusable workflows leverage the CI images from the [rapidsai/ci-imgs](https://github.com/rapidsai/ci-imgs/) repository.
 
 ## Reusable Shell Scripts
 
-In addition to the reusable GitHub Action workflows, RAPIDS projects also leverage reusable shell scripts from the [rapidsai/gha-tools](https://github.com/rapidsai/gha-tools/) repository.
+In addition to the reusable GitHub Actions workflows, RAPIDS projects also leverage reusable shell scripts from the [rapidsai/gha-tools](https://github.com/rapidsai/gha-tools/) repository.
 
 All of these shell scripts are prefixed with the string `rapids-`.
 
