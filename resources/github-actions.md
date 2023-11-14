@@ -140,7 +140,22 @@ For example, the following snippet will download a pull request artifact for `li
 wget https://downloads.rapids.ai/ci/rmm/pull-request/1376/5124d43/rmm_conda_cpp_cuda11_x86_64.tar.gz
 mkdir local_channel
 tar xzf rmm_conda_cpp_cuda11_x86_64.tar.gz -C local_channel/
-mamba install --channel file://local_channel librmm
+mamba install --channel file://local_channel --channel rapidsai-nightly --channel conda-forge --channel nvidia librmm
+```
+
+## Using Wheel CI Artifacts Locally
+
+RAPIDS' CI system compresses the wheels that it builds into tarballs and uploads them to [https://downloads.rapids.ai/](https://downloads.rapids.ai/).
+
+The wheels can be used by extracting the tarball to your local filesystem and using the resulting path in your pip commands.
+
+For example, the following snippet will download a pull request artifact for `librmm` and install it into the active conda environment:
+
+```sh
+wget https://downloads.rapids.ai/ci/rmm/pull-request/1376/5124d43/rmm_wheel_python_rmm_cu12_39_x86_64.tar.gz
+mkdir wheels
+tar xzf rmm_wheel_python_rmm_cu12_39_x86_64.tar.gz -C wheels/
+pip install wheels/rmm_cu12-24.2.0a1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
 ```
 
 ## Using Conda CI Artifacts in Other PRs
