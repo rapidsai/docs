@@ -481,12 +481,6 @@
             },
             getpipCmdHtml() {
                 var pip_install = `${this.highlightCmd("pip")} install`;
-                if (this.active_release === "Stable") {
-                    index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.nvidia.com`;
-                }
-                else {
-                    index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.anaconda.org/rapidsai-wheels-nightly/simple`;
-                }
                 var cuda_suffix = "-cu12";
                 var indentation = "    ";
 
@@ -494,12 +488,28 @@
                     cuda_suffix = "-cu11";
                 }
 
-                var libraryToPkg = (pkg) => {
-                    pkg = pkg.toLowerCase();
-                    if (pkg === "cucim" && this.active_release === "Stable") return pkg; // Remove this line in 23.12 when stable cucim out on our index
-                    if (pkg == "cuspatial/cuproj") return "cuspatial" + cuda_suffix + " cuproj" + cuda_suffix;
-                    return pkg + cuda_suffix;
+                // Change index depending on stable vs nightly for pip
+                // Also add versioning commands for nightly installs to prevent --pre usage
+                // This has dupilicate code, but makes for easier edits in the future
+                if (this.active_release === "Stable") {
+                    index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.nvidia.com`;
+                    var libraryToPkg = (pkg) => {
+                        pkg = pkg.toLowerCase();
+                        if (pkg === "cucim") return pkg; // Remove this line in 23.12 when stable cucim is out on our index
+                        if (pkg == "cuspatial/cuproj") return "cuspatial" + cuda_suffix + " cuproj" + cuda_suffix;
+                        return pkg + cuda_suffix;
+                    }
                 }
+                else {
+                    index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.anaconda.org/rapidsai-wheels-nightly/simple`;
+                    cuda_suffix = cuda_suffix + ">={{ site.data.releases.nightly.version }}.0a0\"";
+                    var libraryToPkg = (pkg) => {
+                        pkg = pkg.toLowerCase();
+                        if (pkg == "cuspatial/cuproj") return '"cuspatial' + cuda_suffix + ' "cuproj' + cuda_suffix;
+                        return "\"" + pkg + cuda_suffix;
+                    }
+                }
+
                 if (this.active_packages.length === 1 && this.active_packages[0] === "Choose Specific Packages") {
                     return "Select at least one package.";
                 } else if (this.active_packages[0] === 'Standard') {
@@ -513,6 +523,11 @@
                 if (pkgs.length === 1 && pkgs[0] === "cucim") {
                     index_url = "";
                 }
+
+                //for every 3rd package add a new line with a "\" character
+                for (var i = 3; i < pkgs.length; i += 4) {
+                    pkgs.splice(i, 0, "\\\n" + indentation);
+                }                
 
                 return [pip_install, index_url, pkgs.map(pkg => this.highlightPkgOrImg(pkg)).join(" ")]
                     .filter(Boolean)
