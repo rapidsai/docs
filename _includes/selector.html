@@ -359,7 +359,7 @@
         Alpine.data('rapids_selector', () => ({
             // default values
             active_python_ver: "3.10",
-            active_cuda_ver: "11.8",
+            active_cuda_ver: "12.0",
             active_pip_cuda_ver: "12.0",
             active_method: "Conda",
             active_release: "Stable",
@@ -377,11 +377,11 @@
             img_loc: ["NGC", "Dockerhub"],
             img_types: ["Base", "Notebooks"],
             packages: ["Standard", "Choose Specific Packages"],
-            additional_pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph", "cuSpatial/cuProj", "cuxfilter", "cuCIM"],
-            additional_rapids_packages: ["cuDF", "cuML", "cuGraph", "cuSpatial/cuProj", "cuxfilter", "cuSignal", "cuCIM"],
-            additional_packages: ["Dask-SQL", "JupyterLab", "Plotly Dash", "Graphistry", "TensorFlow", "Xarray-Spatial"],
+            additional_pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph", "cuSpatial/cuProj", "cuxfilter", "cuCIM", "RAFT"],
+            additional_rapids_packages: ["cuDF", "cuML", "cuGraph", "cuSpatial/cuProj", "cuxfilter", "cuCIM", "RAFT"],
+            additional_packages: ["Dask-SQL", "JupyterLab", "Plotly Dash", "Graphistry", "TensorFlow", "Xarray-Spatial", "Pytorch"],
             note_prefix: "<i class='fas fa-info-circle text-blue'></i>",
-            rapids_meta_pkgs: ["cuDF", "cuML", "cuGraph", "cuSpatial", "cuProj", "cuxfilter", "cuSignal", "cuCIM"],
+            rapids_meta_pkgs: ["cuDF", "cuML", "cuGraph", "cuSpatial", "cuProj", "cuxfilter", "cuCIM", "RAFT"],
             getStableVersion() {
                 return "{{ site.data.releases.stable.version }}";
             },
@@ -481,7 +481,12 @@
             },
             getpipCmdHtml() {
                 var pip_install = `${this.highlightCmd("pip")} install`;
-                var index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.nvidia.com`;
+                if (this.active_release === "Stable") {
+                    index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.nvidia.com`;
+                }
+                else {
+                    index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.anaconda.org/rapidsai-wheels-nightly/simple`;
+                }
                 var cuda_suffix = "-cu12";
                 var indentation = "    ";
 
@@ -491,7 +496,7 @@
 
                 var libraryToPkg = (pkg) => {
                     pkg = pkg.toLowerCase();
-                    if (pkg === "cucim") return pkg;
+                    if (pkg === "cucim" && this.active_release === "Stable") return pkg; // Remove this line in 23.12 when stable cucim out on our index
                     if (pkg == "cuspatial/cuproj") return "cuspatial" + cuda_suffix + " cuproj" + cuda_suffix;
                     return pkg + cuda_suffix;
                 }
@@ -501,7 +506,6 @@
                     var pkgs = this.additional_pip_packages.map(libraryToPkg);
                 } else {
                     var pkgs = this.active_packages
-                        .filter(pkg => pkg !== "Choose Specific Packages" && pkg !== "cuSignal")
                         .map(libraryToPkg);
                 }
 
@@ -551,7 +555,7 @@
             getDockerNotes() {
                 var notes = [];
                 if (this.active_cuda_ver.startsWith("12") && this.active_release === "Stable") {
-                    var pkgs_html = this.rapids_meta_pkgs.filter(pkg => pkg !== "cuSignal").map(pkg => "<code>" + pkg + "</code>").join(", ");
+                    var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                     var cuda12 = "Only nightly RAPIDS Docker images for CUDA 12 currently support ARM architectures<br>";
                     notes = [...notes, cuda12]
                 } else {
@@ -568,7 +572,7 @@
                 if (this.active_packages.length === 1 && this.active_packages[0] === "Standard") {
                     if (this.active_cuda_ver.startsWith("12") && this.active_release === "Stable") {
                         notes = [...notes, "Only nightly RAPIDS conda packages for CUDA 12 currently support ARM architectures"];
-                        var pkgs_html = this.rapids_meta_pkgs.filter(pkg => pkg !== "cuSignal").map(pkg => "<code>" + pkg + "</code>").join(", ");
+                        var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                     } else {
                         var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                     }
@@ -622,7 +626,6 @@
             disableUnsupportedRelease(release) {
                 var isDisabled = false;
                 if (this.active_img_loc === "NGC" && this.active_method === "Docker" && release === "Nightly") isDisabled = true;
-                if (this.active_method === "pip" && release === "Nightly") isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedCuda(cuda_version) {
@@ -645,12 +648,10 @@
             },
             disableUnsupportedMethod(method) {
                 var isDisabled = false;
-                if (this.active_release === "Nightly" && method === "pip") isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedPackage(package) {
                 var isDisabled = false;
-                if (package === "cuSignal" && ((this.active_cuda_ver.startsWith("12") && this.active_method === "Conda") || this.active_release === "Nightly")) isDisabled = true;
                 return isDisabled;
             },
             isDisabled(e) {
@@ -666,9 +667,6 @@
             },
             cudaClickHandler(e, version) {
                 if (this.isDisabled(e.target)) return;
-                if (version === "12.0") {
-                    this.active_packages = this.active_packages.filter(pkg => pkg !== "cuSignal");
-                }
                 this.active_cuda_ver = version;
             },
             pipCUDAClickHandler(e, version) {
