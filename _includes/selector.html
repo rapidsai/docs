@@ -437,12 +437,15 @@
                 var dask_prefix = this.active_release === "Nightly" ? "dask/label/dev::" : "";
                 var python_version = this.active_python_ver;
                 var cuda_version = this.active_cuda_ver;
-                var pkgs = this.active_packages;
                 var py_cuda_pkgs = [this.highlightPkgOrImg("python") + "=" + python_version, this.highlightPkgOrImg("cuda-version") + "=" + cuda_version].join(" ");
                 var conda_channels = [rapids_channel, "conda-forge", "nvidia"]
                     .map(ch => "-" + this.highlightFlag("c") + " " + ch + " ")
                     .join("");
                 var indentation = "    ";
+
+                // sort active_packages to appear in the same order as the additional_rapids_packages list
+                this.active_packages.sort((a, b) => this.additional_rapids_packages.indexOf(a) - this.additional_rapids_packages.indexOf(b));
+                var pkgs = this.active_packages;
 
                 if (this.active_packages.length + this.active_additional_packages.length === 1 && this.active_packages[0] === "Choose Specific Packages") {
                     return "Select at least one package.";
@@ -496,8 +499,8 @@
                     var libraryToPkg = (pkg) => {
                         pkg = pkg.toLowerCase();
                         if (pkg === "cucim") return pkg; // Remove this line in 23.12 when stable cucim is out on our index
-                        if (pkg == "cuspatial/cuproj") return "cuspatial" + cuda_suffix + " cuproj" + cuda_suffix;
-                        return pkg + cuda_suffix;
+                        if (pkg == "cuspatial/cuproj") return ["cuspatial" + cuda_suffix, "cuproj" + cuda_suffix];
+                        return [pkg + cuda_suffix];
                     }
                 }
                 else {
@@ -505,8 +508,8 @@
                     cuda_suffix = cuda_suffix + ">={{ site.data.releases.nightly.version }}.0a0\"";
                     var libraryToPkg = (pkg) => {
                         pkg = pkg.toLowerCase();
-                        if (pkg == "cuspatial/cuproj") return '"cuspatial' + cuda_suffix + ' "cuproj' + cuda_suffix;
-                        return "\"" + pkg + cuda_suffix;
+                        if (pkg == "cuspatial/cuproj") return ["cuspatial" + cuda_suffix, "cuproj" + cuda_suffix];
+                        return ["\"" + pkg + cuda_suffix];
                     }
                 }
 
@@ -515,23 +518,26 @@
                 } else if (this.active_packages[0] === 'Standard') {
                     var pkgs = this.additional_pip_packages.map(libraryToPkg);
                 } else {
+                    // sort active_packages to appear in the same order as the additional_pip_packages list
+                    this.active_packages.sort((a, b) => this.additional_pip_packages.indexOf(a) - this.additional_pip_packages.indexOf(b));
                     var pkgs = this.active_packages
                         .filter(pkg => pkg !== "Choose Specific Packages")
-                        .map(libraryToPkg);
+                        .flatMap(libraryToPkg);
                 }
 
                 if (pkgs.length === 1 && pkgs[0] === "cucim") {
                     index_url = "";
                 }
 
-                //for every 3rd package add a new line with a "\" character
-                for (var i = 3; i < pkgs.length; i += 3) {
-                    pkgs.splice(i, 0, "\\\n" + indentation);
-                }                
+                // For every 3rd package add a new line with a "\" character
+                // We need i += 4 since the splice adds a new element to the array
+                for (var i = 3; i < pkgs.length; i += 4) {
+                    pkgs.splice(i, 0, "\\\n" + indentation.slice(0, -1));
+                }
 
-                return [pip_install, index_url, pkgs.map(pkg => this.highlightPkgOrImg(pkg)).join(" ")]
+                return [pip_install, index_url, pkgs.flatMap(pkg => this.highlightPkgOrImg(pkg)).join(" ")]
                     .filter(Boolean)
-                    .join(" \\\n" + indentation);
+                    .join(" \\\n" + indentation)
             },
             getDockerCmdHtml() {
                 var hasNotebooks = this.active_img_type === "Notebooks";
