@@ -136,7 +136,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 <i class="fas fa-desktop"></i> **OS:** One of the following OS versions:
 - <i class="fas fa-check-circle"></i> Ubuntu 20.04/22.04 or CentOS 7 / Rocky Linux 8 with <code>gcc/++</code> 9.0+
-- <i class="fas fa-check-circle"></i> Windows 11 using a [WSL2 specific install](#WSL2)
+- <i class="fas fa-check-circle"></i> Windows 11 using a [WSL2 specific install](#wsl2)
 - <i class="fas fa-check-circle"></i> RHEL 7/8 support is provided through CentOS 7 / Rocky Linux 8 builds/installs
 
 <i class="fas fa-download text-purple"></i> **CUDA & NVIDIA Drivers:** One of the following supported versions:
