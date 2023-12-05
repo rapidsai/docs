@@ -359,7 +359,7 @@
         Alpine.data('rapids_selector', () => ({
             // default values
             active_python_ver: "3.10",
-            active_cuda_ver: "11.8",
+            active_cuda_ver: "12.0",
             active_pip_cuda_ver: "12.0",
             active_method: "Conda",
             active_release: "Stable",
@@ -377,11 +377,11 @@
             img_loc: ["NGC", "Dockerhub"],
             img_types: ["Base", "Notebooks"],
             packages: ["Standard", "Choose Specific Packages"],
-            additional_pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph", "cuSpatial/cuProj", "cuxfilter", "cuCIM"],
-            additional_rapids_packages: ["cuDF", "cuML", "cuGraph", "cuSpatial/cuProj", "cuxfilter", "cuSignal", "cuCIM"],
-            additional_packages: ["Dask-SQL", "JupyterLab", "Plotly Dash", "Graphistry", "TensorFlow", "Xarray-Spatial"],
+            additional_pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph", "cuSpatial/cuProj", "cuxfilter", "cuCIM", "RAFT"],
+            additional_rapids_packages: ["cuDF", "cuML", "cuGraph", "cuSpatial/cuProj", "cuxfilter", "cuCIM", "RAFT"],
+            additional_packages: ["Dask-SQL", "JupyterLab", "Plotly Dash", "Graphistry", "TensorFlow", "Xarray-Spatial", "PyTorch"],
             note_prefix: "<i class='fas fa-info-circle text-blue'></i>",
-            rapids_meta_pkgs: ["cuDF", "cuML", "cuGraph", "cuSpatial", "cuProj", "cuxfilter", "cuSignal", "cuCIM"],
+            rapids_meta_pkgs: ["cuDF", "cuML", "cuGraph", "cuSpatial", "cuProj", "cuxfilter", "cuCIM", "RAFT"],
             getStableVersion() {
                 return "{{ site.data.releases.stable.version }}";
             },
@@ -437,12 +437,15 @@
                 var dask_prefix = this.active_release === "Nightly" ? "dask/label/dev::" : "";
                 var python_version = this.active_python_ver;
                 var cuda_version = this.active_cuda_ver;
-                var pkgs = this.active_packages;
                 var py_cuda_pkgs = [this.highlightPkgOrImg("python") + "=" + python_version, this.highlightPkgOrImg("cuda-version") + "=" + cuda_version].join(" ");
                 var conda_channels = [rapids_channel, "conda-forge", "nvidia"]
                     .map(ch => "-" + this.highlightFlag("c") + " " + ch + " ")
                     .join("");
                 var indentation = "    ";
+
+                // sort active_packages to appear in the same order as the additional_rapids_packages list
+                this.active_packages.sort((a, b) => this.additional_rapids_packages.indexOf(a) - this.additional_rapids_packages.indexOf(b));
+                var pkgs = this.active_packages;
 
                 if (this.active_packages.length + this.active_additional_packages.length === 1 && this.active_packages[0] === "Choose Specific Packages") {
                     return "Select at least one package.";
@@ -457,6 +460,12 @@
                     pkgs.push("cuSpatial");
                     pkgs.push("cuProj");
                 }
+                if (pkgs.includes("RAFT")) {
+                    pkgs = pkgs.filter(pkg => pkg !== "RAFT");
+                    pkgs.push("pylibraft");
+                    pkgs.push("raft-dask");
+                }
+
 
                 var pkgs_vers = pkgs.filter(pkg => pkg !== "Choose Specific Packages").map(pkg => this.highlightPkgOrImg(pkg) + "=" + rapids_version + " ").join("").toLowerCase();
                 var all_pkgs = pkgs_vers + py_cuda_pkgs;
@@ -481,7 +490,6 @@
             },
             getpipCmdHtml() {
                 var pip_install = `${this.highlightCmd("pip")} install`;
-                var index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.nvidia.com`;
                 var cuda_suffix = "-cu12";
                 var indentation = "    ";
 
@@ -489,29 +497,66 @@
                     cuda_suffix = "-cu11";
                 }
 
-                var libraryToPkg = (pkg) => {
-                    pkg = pkg.toLowerCase();
-                    if (pkg === "cucim") return pkg;
-                    if (pkg == "cuspatial/cuproj") return "cuspatial" + cuda_suffix + " cuproj" + cuda_suffix;
-                    return pkg + cuda_suffix;
+                // Change index depending on stable vs nightly for pip
+                // Also add versioning commands for nightly installs so that --pre is unnecessary
+                // This has duplicate code, but makes for easier edits in the future
+                if (this.active_release === "Stable") {
+                    index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.nvidia.com`;
+                    var libraryToPkg = (pkg) => {
+                        pkg = pkg.toLowerCase();
+                        if (pkg === "cucim") return pkg; // Remove this line in 23.12 when stable cucim is out on our index
+                        if (pkg === "cuspatial/cuproj") return ["cuspatial" + cuda_suffix, "cuproj" + cuda_suffix];
+                        if (pkg === "raft") return ["pylibraft" + cuda_suffix, "raft-dask" + cuda_suffix];
+                        return [pkg + cuda_suffix];
+                    }
                 }
+                else {
+                    index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.anaconda.org/rapidsai-wheels-nightly/simple`;
+                    cuda_suffix = cuda_suffix + ">={{ site.data.releases.nightly.version }}.0a0,<={{ site.data.releases.nightly.version }}\"";
+                    var libraryToPkg = (pkg) => {
+                        pkg = pkg.toLowerCase();
+                        if (pkg === "cuspatial/cuproj") return ["\"cuspatial" + cuda_suffix, "\"cuproj" + cuda_suffix];
+                        if (pkg === "raft") return ["\"pylibraft" + cuda_suffix, "\"raft-dask" + cuda_suffix];
+                        return ["\"" + pkg + cuda_suffix];
+                    }
+                }
+
                 if (this.active_packages.length === 1 && this.active_packages[0] === "Choose Specific Packages") {
                     return "Select at least one package.";
                 } else if (this.active_packages[0] === 'Standard') {
-                    var pkgs = this.additional_pip_packages.map(libraryToPkg);
+                    var pkgs = this.additional_pip_packages.flatMap(libraryToPkg);
                 } else {
+                    // sort active_packages to appear in the same order as the additional_pip_packages list
+                    this.active_packages.sort((a, b) => this.additional_pip_packages.indexOf(a) - this.additional_pip_packages.indexOf(b));
                     var pkgs = this.active_packages
-                        .filter(pkg => pkg !== "Choose Specific Packages" && pkg !== "cuSignal")
-                        .map(libraryToPkg);
+                        .filter(pkg => pkg !== "Choose Specific Packages")
+                        .flatMap(libraryToPkg);
                 }
 
                 if (pkgs.length === 1 && pkgs[0] === "cucim") {
                     index_url = "";
                 }
+                else { // We need to add dask-cuda to nightly pip installs for everything but cucim
+                    if (this.active_release === "Nightly") {
+                        pkgs.push(["\"dask-cuda" + cuda_suffix.slice(5)])
+                    }
+                }
 
-                return [pip_install, index_url, pkgs.map(pkg => this.highlightPkgOrImg(pkg)).join(" ")]
+                // For every n packages add a new line with a "\" character
+                // We need i += n + 1 since the splice adds a new element to the array
+                if (this.active_release === "Stable") {
+                    packages_per_line = 5;
+                }
+                else {
+                    packages_per_line = 2;
+                }
+                for (var i = packages_per_line; i < pkgs.length; i += packages_per_line + 1) {
+                    pkgs.splice(i, 0, "\\\n" + indentation.slice(0, -1));
+                }
+
+                return [pip_install, index_url, pkgs.flatMap(pkg => this.highlightPkgOrImg(pkg)).join(" ")]
                     .filter(Boolean)
-                    .join(" \\\n" + indentation);
+                    .join(" \\\n" + indentation)
             },
             getDockerCmdHtml() {
                 var hasNotebooks = this.active_img_type === "Notebooks";
@@ -551,7 +596,7 @@
             getDockerNotes() {
                 var notes = [];
                 if (this.active_cuda_ver.startsWith("12") && this.active_release === "Stable") {
-                    var pkgs_html = this.rapids_meta_pkgs.filter(pkg => pkg !== "cuSignal").map(pkg => "<code>" + pkg + "</code>").join(", ");
+                    var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                     var cuda12 = "Only nightly RAPIDS Docker images for CUDA 12 currently support ARM architectures<br>";
                     notes = [...notes, cuda12]
                 } else {
@@ -568,19 +613,18 @@
                 if (this.active_packages.length === 1 && this.active_packages[0] === "Standard") {
                     if (this.active_cuda_ver.startsWith("12") && this.active_release === "Stable") {
                         notes = [...notes, "Only nightly RAPIDS conda packages for CUDA 12 currently support ARM architectures"];
-                        var pkgs_html = this.rapids_meta_pkgs.filter(pkg => pkg !== "cuSignal").map(pkg => "<code>" + pkg + "</code>").join(", ");
+                        var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                     } else {
                         var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                     }
-                    notes = [...notes, "The CUDA " + this.active_cuda_ver +
-                        " <code>Standard</code> selection contains the following packages:<br>" + pkgs_html];
+                    notes = [...notes, "The <code>Standard</code> selection contains the following packages:<br>" + pkgs_html];
                 }
 
                 if (this.active_additional_packages.length) {
                     notes = [...notes, "Third-party packages are not tested."];
 
                     if (this.active_additional_packages.includes("TensorFlow")) {
-                        notes = [...notes, "TensorFlow requires CUDA 11.2."];
+                        notes = [...notes, "TensorFlow requires CUDA 11."];
                     }
                 }
 
@@ -588,7 +632,13 @@
             },
             getpipNotes() {
                 var notes = [];
-                notes = [...notes, "<code>cuDF</code>, <code>dask-cuDF</code>, <code>cuML</code>, <code>cuGraph</code>, <code>cuSpatial</code>, <code>cuProj</code>, and <code>cuxfilter</code> pip packages are hosted on the NVIDIA Python Package Index<br>",
+                if (this.active_release === "Stable") {
+                    var install_location_notes = "<code>cuDF</code>, <code>dask-cuDF</code>, <code>cuML</code>, <code>cuGraph</code>, <code>cuSpatial</code>, <code>cuProj</code>, <code>cuxfilter</code>, and <code>RAFT</code> stable pip packages are hosted on the NVIDIA Python Package Index<br>"
+                }
+                else {
+                    var install_location_notes = "<code>cuDF</code>, <code>dask-cuDF</code>, <code>cuML</code>, <code>cuGraph</code>, <code>cuSpatial</code>, <code>cuProj</code>, <code>cuxfilter</code>, <code>cuCIM</code>, and <code>RAFT</code> nightly pip packages are hosted on the RAPIDS Python Package Index<br>"
+                }
+                notes = [...notes, install_location_notes,
                     'pip installation supports Python <code>3.9</code> and <code>3.10</code><br>'];
 
                 return notes.map(note => this.note_prefix + " " + note);
@@ -622,12 +672,11 @@
             disableUnsupportedRelease(release) {
                 var isDisabled = false;
                 if (this.active_img_loc === "NGC" && this.active_method === "Docker" && release === "Nightly") isDisabled = true;
-                if (this.active_method === "pip" && release === "Nightly") isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedCuda(cuda_version) {
                 var isDisabled = false;
-                if (this.active_additional_packages.includes("TensorFlow") && cuda_version !== "11.2") isDisabled = true;
+                if (this.active_additional_packages.includes("TensorFlow") && (cuda_version !== "11.2" && cuda_version !== "11.8")) isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedPython(python_version) {
@@ -645,12 +694,10 @@
             },
             disableUnsupportedMethod(method) {
                 var isDisabled = false;
-                if (this.active_release === "Nightly" && method === "pip") isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedPackage(package) {
                 var isDisabled = false;
-                if (package === "cuSignal" && ((this.active_cuda_ver.startsWith("12") && this.active_method === "Conda") || this.active_release === "Nightly")) isDisabled = true;
                 return isDisabled;
             },
             isDisabled(e) {
@@ -666,9 +713,6 @@
             },
             cudaClickHandler(e, version) {
                 if (this.isDisabled(e.target)) return;
-                if (version === "12.0") {
-                    this.active_packages = this.active_packages.filter(pkg => pkg !== "cuSignal");
-                }
                 this.active_cuda_ver = version;
             },
             pipCUDAClickHandler(e, version) {
@@ -692,7 +736,6 @@
                 }
                 if (method === "pip") {
                     this.active_pip_cuda_ver = '12.0';
-                    this.active_release = 'Stable';
                 }
                 if (method === "Docker") {
                     if (this.active_release === 'Nightly') {
@@ -744,7 +787,7 @@
                     return;
                 }
                 this.active_additional_packages = [...this.active_additional_packages, package];
-                if (this.active_additional_packages.includes("TensorFlow") && this.active_cuda_ver !== "11.2") this.active_cuda_ver = "11.2";
+                if (this.active_additional_packages.includes("TensorFlow") && (this.active_cuda_ver !== "11.2" && this.active_cuda_ver !== "11.8")) this.active_cuda_ver = "11.8";
             },
             copyToClipboard() {
                 let range = document.createRange();

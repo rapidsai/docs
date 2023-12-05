@@ -62,13 +62,6 @@ To resolve this error please follow one of these steps:
 <i class="fas fa-info-circle"></i> CUDA 12.0 ARM packages are not yet available:<br/>
 Nightly packages are now available for CUDA 12.0 on ARM! Stable support is coming in 23.12
 
-<i class="fas fa-info-circle"></i> At the time of writing, there is no stable CUDA 12 release of PyTorch: <br/>
-PyTorch currently only has nightly builds for CUDA 12.1, stable builds are limited to CUDA 11. <br/>
-The installation method below may allow RAPIDS CUDA 12.0 packages to coexist with PyTorch CUDA 12.1 nightly packages if there is a hard-requirement of CUDA 12 but it is currently unsupported:
-```
-conda create --solver=libmamba -n rapids-pytorch-cu12 -c rapidsai -c pytorch-nightly -c conda-forge -c nvidia rapids={{ site.data.releases.stable.version }} cuda-version=12.0 pytorch pytorch-cuda=12.1
-```
-
 ### **Docker Issues**
 <i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brings significant Docker changes. <br/>
 To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/base){: target="_blank"}. Some key notes below:
@@ -136,7 +129,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 <i class="fas fa-desktop"></i> **OS:** One of the following OS versions:
 - <i class="fas fa-check-circle"></i> Ubuntu 20.04/22.04 or CentOS 7 / Rocky Linux 8 with <code>gcc/++</code> 9.0+
-- <i class="fas fa-check-circle"></i> Windows 11 using a [WSL2 specific install](#WSL2)
+- <i class="fas fa-check-circle"></i> Windows 11 using a [WSL2 specific install](#wsl2)
 - <i class="fas fa-check-circle"></i> RHEL 7/8 support is provided through CentOS 7 / Rocky Linux 8 builds/installs
 
 <i class="fas fa-download text-purple"></i> **CUDA & NVIDIA Drivers:** One of the following supported versions:
