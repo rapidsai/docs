@@ -60,7 +60,7 @@ To resolve this error please follow one of these steps:
 - Use the classic solver by removing `--solver=libmamba` from the `conda create` command provided by the selector
 
 ### **Docker Issues**
-<i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brings significant Docker changes. <br/>
+<i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brought significant Docker changes. <br/>
 To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/base){: target="_blank"}. Some key notes below:
 - `Development` images are no longer being published, in the coming releases RAPIDS will roll out [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
    - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
@@ -122,6 +122,7 @@ See the WSL2 setup [troubleshooting section](#wsl2-troubleshooting).
 All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 <i class="fas fa-microchip"></i> **GPU:** NVIDIA Pascal™ or better with [compute capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} 6.0+
+- <i class="fas fa-exclation-triangle"></i> Pascal™ GPU support [is deprecated and will be removed in 24.02](https://docs.rapids.ai/notices/rsn0034/). Compute capability 7.0+ will become the new minimum requirement.
 
 <i class="fas fa-desktop"></i> **OS:** One of the following OS versions:
 - <i class="fas fa-check-circle"></i> Ubuntu 20.04/22.04 or CentOS 7 / Rocky Linux 8 with <code>gcc/++</code> 9.0+
