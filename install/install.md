@@ -122,7 +122,7 @@ See the WSL2 setup [troubleshooting section](#wsl2-troubleshooting).
 All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 <i class="fas fa-microchip"></i> **GPU:** NVIDIA Pascal™ or better with [compute capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} 6.0+
-<i class="fas fa-exclamation-triangle"></i> Pascal™ GPU support [is deprecated and will be removed in 24.02](https://docs.rapids.ai/notices/rsn0034/). Compute capability 7.0+ will become the new minimum requirement.
+- <i class="fas fa-exclamation-triangle"></i> Pascal™ GPU support [is deprecated and will be removed in 24.02](https://docs.rapids.ai/notices/rsn0034/). Compute capability 7.0+ will become the new minimum requirement.
 
 <i class="fas fa-desktop"></i> **OS:** One of the following OS versions:
 - <i class="fas fa-check-circle"></i> Ubuntu 20.04/22.04 or CentOS 7 / Rocky Linux 8 with <code>gcc/++</code> 9.0+
