@@ -59,11 +59,8 @@ To resolve this error please follow one of these steps:
 - Use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}
 - Use the classic solver by removing `--solver=libmamba` from the `conda create` command provided by the selector
 
-<i class="fas fa-info-circle"></i> CUDA 12.0 ARM packages are not yet available:<br/>
-Nightly packages are now available for CUDA 12.0 on ARM! Stable support is coming in 23.12
-
 ### **Docker Issues**
-<i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brings significant Docker changes. <br/>
+<i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brought significant Docker changes. <br/>
 To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/base){: target="_blank"}. Some key notes below:
 - `Development` images are no longer being published, in the coming releases RAPIDS will roll out [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
    - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
@@ -71,7 +68,6 @@ To learn more about these changes, please see the [RAPIDS Container README](http
    - CUDA 11.2 images are Ubuntu `20.04`
    - All other images are Ubuntu `22.04`
 - All images are multiarch (x86_64 and ARM)
-   - CUDA 12 support is available on the nightly versions when using Docker images on ARM architecture
 - The `Base` image starts in an ipython shell
    - To run bash commands inside the ipython shell prefix the command with `!`
    - To run the image without the ipython shell add `/bin/bash` to the end of the `docker run` command
@@ -126,6 +122,7 @@ See the WSL2 setup [troubleshooting section](#wsl2-troubleshooting).
 All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 <i class="fas fa-microchip"></i> **GPU:** NVIDIA Pascal™ or better with [compute capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} 6.0+
+- <i class="fas fa-exclamation-triangle"></i> Pascal™ GPU support [is deprecated and will be removed in 24.02](https://docs.rapids.ai/notices/rsn0034/). Compute capability 7.0+ will be required for RAPIDS 24.02 and later.
 
 <i class="fas fa-desktop"></i> **OS:** One of the following OS versions:
 - <i class="fas fa-check-circle"></i> Ubuntu 20.04/22.04 or CentOS 7 / Rocky Linux 8 with <code>gcc/++</code> 9.0+
@@ -149,7 +146,6 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 - <i class="fas fa-info-circle"></i> CUDA 12 conda packages and Docker images currently support CUDA 12.0
 - <i class="fas fa-info-circle"></i> CUDA 11 conda packages and Docker images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
-- <i class="fas fa-info-circle"></i> ARM is currently supported by nightly CUDA 12 conda packages or Docker images, use CUDA 11 or pip packages for stable version ARM support
  
 ### **pip**
 
