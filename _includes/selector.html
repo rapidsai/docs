@@ -505,7 +505,6 @@
                     cuda_suffix = cuda_suffix + "=={{ site.data.releases.stable.version }}.*";
                     var libraryToPkg = (pkg) => {
                         pkg = pkg.toLowerCase();
-                        if (pkg === "cucim") return pkg; // Remove this line in 23.12 when stable cucim is out on our index
                         if (pkg === "cuspatial/cuproj") return ["cuspatial" + cuda_suffix, "cuproj" + cuda_suffix];
                         if (pkg === "raft") return ["pylibraft" + cuda_suffix, "raft-dask" + cuda_suffix];
                         return [pkg + cuda_suffix];
@@ -534,13 +533,9 @@
                         .flatMap(libraryToPkg);
                 }
 
-                if (pkgs.length === 1 && pkgs[0] === "cucim") {
-                    index_url = "";
-                }
-                else { // We need to add dask-cuda to nightly pip installs for everything but cucim
-                    if (this.active_release === "Nightly") {
-                        pkgs.push(["\"dask-cuda" + cuda_suffix.slice(5)])
-                    }
+                // pkgs.length == 2 because it includes the "Choose Specific Packages" option
+                if (this.active_release === "Nightly" && !(pkgs.length === 2 && pkgs[0] === "cucim")) {
+                    pkgs.push(["\"dask-cuda" + cuda_suffix.slice(5)])
                 }
 
                 // For every n packages add a new line with a "\" character
@@ -627,12 +622,7 @@
             },
             getpipNotes() {
                 var notes = [];
-                if (this.active_release === "Stable") {
-                    var install_location_notes = "<code>cuDF</code>, <code>dask-cuDF</code>, <code>cuML</code>, <code>cuGraph</code>, <code>cuSpatial</code>, <code>cuProj</code>, <code>cuxfilter</code>, and <code>RAFT</code> stable pip packages are hosted on the NVIDIA Python Package Index<br>"
-                }
-                else {
-                    var install_location_notes = "<code>cuDF</code>, <code>dask-cuDF</code>, <code>cuML</code>, <code>cuGraph</code>, <code>cuSpatial</code>, <code>cuProj</code>, <code>cuxfilter</code>, <code>cuCIM</code>, and <code>RAFT</code> nightly pip packages are hosted on the RAPIDS Python Package Index<br>"
-                }
+                var install_location_notes = "<code>cuDF</code>, <code>dask-cuDF</code>, <code>cuML</code>, <code>cuGraph</code>, <code>cuSpatial</code>, <code>cuProj</code>, <code>cuxfilter</code>, <code>cuCIM</code>, and <code>RAFT</code> pip packages are hosted by NVIDIA<br>"
                 notes = [...notes, install_location_notes,
                     'pip installation supports Python <code>3.9</code> and <code>3.10</code><br>'];
 
