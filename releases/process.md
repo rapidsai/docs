@@ -55,7 +55,7 @@ Burn down is the process of locking down all issues slated for the release and m
 
 ### Timing
 
-For the selection of a `burn down date`, the general guidelines should be followed:
+For the selection of a `burn down date`, the genereral guidelines should be followed:
 * Choose a `burn down date` at least **3 business days** before a `code freeze date`
 * Consult project leads to ensure key features will make the release with the anticipated date
 * Communicate the decided `burn down date` to the development team immediately to ensure they can meet the deadline
@@ -105,10 +105,11 @@ Generally the process for Code Freeze occurs around 10:00AM PT on the first day 
 Project Leads
 {: .label .label-blue}
 
-1. Move any open pull requests targeting `branch-M.B` to target `branch-M.C` instead
-2. Wait for confirmation from operations on the branch switch
-3. Continue `M.C` development
-4. Respond promptly to operations if any issues are found with the `M.B` release
+1. Final call for new release artifacts in PIC synch (2 weeks prior to cuDF burndown)
+2. Move any open pull requests targeting `branch-M.B` to target `branch-M.C` instead
+3. Wait for confirmation from operations on the branch switch
+4. Continue `M.C` development
+5. Respond promptly to operations if any issues are found with the `M.B` release
 
 Operations
 {: .label .label-purple}
