@@ -502,9 +502,9 @@
                 // This has duplicate code, but makes for easier edits in the future
                 if (this.active_release === "Stable") {
                     index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.nvidia.com`;
+                    cuda_suffix = cuda_suffix + "=={{ site.data.releases.stable.version }}.*";
                     var libraryToPkg = (pkg) => {
                         pkg = pkg.toLowerCase();
-                        if (pkg === "cucim") return pkg; // Remove this line in 23.12 when stable cucim is out on our index
                         if (pkg === "cuspatial/cuproj") return ["cuspatial" + cuda_suffix, "cuproj" + cuda_suffix];
                         if (pkg === "raft") return ["pylibraft" + cuda_suffix, "raft-dask" + cuda_suffix];
                         return [pkg + cuda_suffix];
@@ -533,19 +533,15 @@
                         .flatMap(libraryToPkg);
                 }
 
-                if (pkgs.length === 1 && pkgs[0] === "cucim") {
-                    index_url = "";
-                }
-                else { // We need to add dask-cuda to nightly pip installs for everything but cucim
-                    if (this.active_release === "Nightly") {
-                        pkgs.push(["\"dask-cuda" + cuda_suffix.slice(5)])
-                    }
+                // pkgs.length == 2 because it includes the "Choose Specific Packages" option
+                if (this.active_release === "Nightly" && !(pkgs.length === 2 && pkgs[0] === "cucim")) {
+                    pkgs.push(["\"dask-cuda" + cuda_suffix.slice(5)])
                 }
 
                 // For every n packages add a new line with a "\" character
                 // We need i += n + 1 since the splice adds a new element to the array
                 if (this.active_release === "Stable") {
-                    packages_per_line = 5;
+                    packages_per_line = 3;
                 }
                 else {
                     packages_per_line = 2;
@@ -597,8 +593,7 @@
                 var notes = [];
                 if (this.active_cuda_ver.startsWith("12") && this.active_release === "Stable") {
                     var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
-                    var cuda12 = "Only nightly RAPIDS Docker images for CUDA 12 currently support ARM architectures<br>";
-                    notes = [...notes, cuda12]
+                    notes = [...notes]
                 } else {
                     var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                 }
@@ -611,12 +606,7 @@
                 var notes = [];
                 notes = [...notes, "RAPIDS currently doesn't support <code>channel_priority: strict</code>; use <code>channel_priority: flexible</code> instead"];
                 if (this.active_packages.length === 1 && this.active_packages[0] === "Standard") {
-                    if (this.active_cuda_ver.startsWith("12") && this.active_release === "Stable") {
-                        notes = [...notes, "Only nightly RAPIDS conda packages for CUDA 12 currently support ARM architectures"];
-                        var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
-                    } else {
-                        var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
-                    }
+                    var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                     notes = [...notes, "The <code>Standard</code> selection contains the following packages:<br>" + pkgs_html];
                 }
 
@@ -632,12 +622,7 @@
             },
             getpipNotes() {
                 var notes = [];
-                if (this.active_release === "Stable") {
-                    var install_location_notes = "<code>cuDF</code>, <code>dask-cuDF</code>, <code>cuML</code>, <code>cuGraph</code>, <code>cuSpatial</code>, <code>cuProj</code>, <code>cuxfilter</code>, and <code>RAFT</code> stable pip packages are hosted on the NVIDIA Python Package Index<br>"
-                }
-                else {
-                    var install_location_notes = "<code>cuDF</code>, <code>dask-cuDF</code>, <code>cuML</code>, <code>cuGraph</code>, <code>cuSpatial</code>, <code>cuProj</code>, <code>cuxfilter</code>, <code>cuCIM</code>, and <code>RAFT</code> nightly pip packages are hosted on the RAPIDS Python Package Index<br>"
-                }
+                var install_location_notes = "<code>cuDF</code>, <code>dask-cuDF</code>, <code>cuML</code>, <code>cuGraph</code>, <code>cuSpatial</code>, <code>cuProj</code>, <code>cuxfilter</code>, <code>cuCIM</code>, and <code>RAFT</code> pip packages are hosted by NVIDIA<br>"
                 notes = [...notes, install_location_notes,
                     'pip installation supports Python <code>3.9</code> and <code>3.10</code><br>'];
 
@@ -677,6 +662,7 @@
             disableUnsupportedCuda(cuda_version) {
                 var isDisabled = false;
                 if (this.active_additional_packages.includes("TensorFlow") && (cuda_version !== "11.2" && cuda_version !== "11.8")) isDisabled = true;
+                if (this.active_method === "Docker" && this.active_release === "Nightly" && cuda_version === "11.2") isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedPython(python_version) {

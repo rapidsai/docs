@@ -170,3 +170,25 @@ sed -ri '/rapids-download-conda-from-s3/ s/_CHANNEL=.*/_CHANNEL=${RAPIDS_CONDA_B
 Currently, [downloads.rapids.ai](https://downloads.rapids.ai) is only available via the NVIDIA VPN.
 
 If you want to run any test jobs locally, you'll need to be connected to the VPN to download CI build artifacts.
+
+### Some Builds Rely on Versioning Information in Git Tags
+
+Some RAPIDS projects rely on versioning information stored in `git` tags.
+
+For example, some use `conda` recipes that rely on the mechanisms described in ["Git environment variables" in the `conda-build` docs](https://docs.conda.io/projects/conda-build/en/stable/user-guide/environment-variables.html#git-environment-variables).
+
+When those tags are unavailable, builds might fail with errors similar to this:
+
+> Error: Failed to render jinja template in /repo/conda/recipes/libcudf/meta.yaml:
+> 'GIT_DESCRIBE_NUMBER' is undefined
+> conda returned exit code: 1
+
+To fix that, pull the latest set of tags from the upstream repo.
+
+For example, for `cudf`:
+
+```sh
+git fetch \
+  git@github.com:rapidsai/cudf.git \
+  --tags
+```
