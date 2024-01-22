@@ -55,7 +55,7 @@ Burn down is the process of locking down all issues slated for the release and m
 
 ### Timing
 
-For the selection of a `burn down date`, the genereral guidelines should be followed:
+For the selection of a `burn down date`, the general guidelines should be followed:
 * Choose a `burn down date` at least **3 business days** before a `code freeze date`
 * Consult project leads to ensure key features will make the release with the anticipated date
 * Communicate the decided `burn down date` to the development team immediately to ensure they can meet the deadline
