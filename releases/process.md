@@ -105,7 +105,7 @@ Generally the process for Code Freeze occurs around 10:00AM PT on the first day 
 Project Leads
 {: .label .label-blue}
 
-1. Final call for new release artifacts in PIC synch (2 weeks prior to cuDF burndown)
+1. Inform operations team of any new release artifacts (packages, wheels, containers) no later than 2 weeks prior to cuDF burndown.
 2. Move any open pull requests targeting `branch-M.B` to target `branch-M.C` instead
 3. Wait for confirmation from operations on the branch switch
 4. Continue `M.C` development
