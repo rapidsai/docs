@@ -11,7 +11,7 @@ title: Forward Mergers
 
 The forward mergers are automated pull requests to merge a branch in burndown into the next versioned branch. For example merging `branch-22.12` into `branch-23.02`. This ensures all changes to the current branch are reflected in the next version.
 
-The forward merger jobs are located here: [https://gpuci.gpuopenanalytics.com/job/rapidsai/job/forward-mergers/](https://gpuci.gpuopenanalytics.com/job/rapidsai/job/forward-mergers/)
+Forward merging is implemented with the [ops-bot](https://github.com/rapidsai/ops-bot) forward-merger plugin. The plugin is activated for a repository by adding `forward_merger: true` to `.github/ops-bot.yaml`.
 
 ### Intended audience
 
@@ -26,7 +26,7 @@ Operations
 
 ## Forward Mergers
 
-During the release process, the branch for the next release is created and set as default. Once this happens, the forward-merger branch jobs are activated. Forward-mergers automatically merge any commits made to the release branch to the latest default branch during burn down.
+During the release process, the branch for the next release is created and set as default. For any repository in which the `forward-merger` plugin is enabled, forward-mergers automatically merge any commits made to the release branch to the latest default branch during burn down.
 
 **When Forward Merging Fails**
 
