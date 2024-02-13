@@ -4,7 +4,7 @@
 {% assign versions = api.versions | sort | where_exp: "item", "item[1] == 1" | join: "" | split: "1" | reverse %}
 ### {{ api.name }}
 {{ api.desc }}
-#### DOCS {% for version_name in versions %} **[{{ version_name }} ({{ site.data.releases[version_name].version }})](/api/{{ api.path }}/{{ version_name }})** {% unless forloop.last %}|{% endunless %} {% endfor %}
-#### LINKS **[changelog]({{ api.cllink }}){:target="_blank"}** | **[github]({{ api.ghlink }}){:target="_blank"}**
-{: .mb-7 }
+#### DOCS {% for version_name in versions %} {% if api.name == 'libucxx' %} {% case version_name %}
+{% when 'legacy' %}{% assign display_version = '0.34' %} {% when 'stable' %}{% assign display_version = '0.35' %} {% else %}{% assign display_version = '0.36' %} {% endcase %} {% else %} {% assign display_version = site.data.releases[version_name].version %} {% endif %} **[{{ version_name }} ({{ display_version }})](/api/{{ api.path }}/{{ version_name }})** {% unless forloop.last %}|{% endunless %} {% endfor %}
+{% if api.name != 'libucxx' %}#### LINKS **[changelog]({{ api.cllink }}){:target="_blank"}** | **[github]({{ api.ghlink }}){:target="_blank"}**{: .mb-7 }{% else %}#### LINKS **[github]({{ api.ghlink }}){:target="_blank"}**{: .mb-7 }{% endif %}
 {% endfor %}
