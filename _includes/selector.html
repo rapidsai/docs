@@ -488,6 +488,9 @@
 
                 return lines;
             },
+            removeLeadingZeros(version) {
+                return version.split(".").map(Number).join(".");
+            },
             getpipCmdHtml() {
                 var pip_install = `${this.highlightCmd("pip")} install`;
                 var cuda_suffix = "-cu12";
@@ -502,7 +505,8 @@
                 // This has duplicate code, but makes for easier edits in the future
                 if (this.active_release === "Stable") {
                     index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.nvidia.com`;
-                    cuda_suffix = cuda_suffix + "=={{ site.data.releases.stable.version }}.*";
+                    var version = this.removeLeadingZeros("{{ site.data.releases.stable.version }}")
+                    cuda_suffix = cuda_suffix + `==${version}.*`;
                     var libraryToPkg = (pkg) => {
                         pkg = pkg.toLowerCase();
                         if (pkg === "cuspatial/cuproj") return ["cuspatial" + cuda_suffix, "cuproj" + cuda_suffix];
@@ -512,7 +516,8 @@
                 }
                 else {
                     index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.anaconda.org/rapidsai-wheels-nightly/simple`;
-                    cuda_suffix = cuda_suffix + ">={{ site.data.releases.nightly.version }}.0a0,<={{ site.data.releases.nightly.version }}\"";
+                    var version = this.removeLeadingZeros("{{ site.data.releases.nightly.version }}")
+                    cuda_suffix = cuda_suffix + `>=${version}.0a0,<=${version}"`;
                     var libraryToPkg = (pkg) => {
                         pkg = pkg.toLowerCase();
                         if (pkg === "cuspatial/cuproj") return ["\"cuspatial" + cuda_suffix, "\"cuproj" + cuda_suffix];
