@@ -370,8 +370,8 @@
 
             // all possible values
             python_vers: ["3.9", "3.10"],
-            cuda_vers: ["11.2", "11.8", "12.0"],
-            pip_cuda_vers: ["11.2 - 11.8", "12.0"],
+            cuda_vers: ["11.2", "11.8", "12.0", "12.2"],
+            pip_cuda_vers: ["11.2 - 11.8", "12"],
             methods: ["Conda", "pip", "Docker"],
             releases: ["Stable", "Nightly"],
             img_loc: ["NGC", "Dockerhub"],
@@ -627,9 +627,9 @@
             },
             getpipNotes() {
                 var notes = [];
-                var install_location_notes = "<code>cuDF</code>, <code>dask-cuDF</code>, <code>cuML</code>, <code>cuGraph</code>, <code>cuSpatial</code>, <code>cuProj</code>, <code>cuxfilter</code>, <code>cuCIM</code>, and <code>RAFT</code> pip packages are hosted by NVIDIA<br>"
+                var install_location_notes = "RAPIDS pip packages are hosted by NVIDIA<br>"
                 notes = [...notes, install_location_notes,
-                    'pip installation supports Python <code>3.9</code> and <code>3.10</code><br>'];
+                    'pip installation supports only Python <code>3.9</code> and <code>3.10</code><br>'];
 
                 return notes.map(note => this.note_prefix + " " + note);
             },
@@ -668,6 +668,7 @@
                 var isDisabled = false;
                 if (this.active_additional_packages.includes("TensorFlow") && (cuda_version !== "12.0")) isDisabled = true;
                 if (this.active_method === "Docker" && cuda_version < "11.8") isDisabled = true;
+                if (this.active_release != "Nightly" && cuda_version === "12.2") isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedPython(python_version) {
@@ -696,6 +697,8 @@
             },
             releaseClickHandler(e, release) {
                 if (this.isDisabled(e.target)) return;
+                // Remove below after we support 12.2 in stable
+                if (this.active_cuda_ver === "12.2" && release === "Stable") this.active_cuda_ver = "12.0";
                 this.active_release = release;
             },
             imgTypeClickHandler(e, type) {
