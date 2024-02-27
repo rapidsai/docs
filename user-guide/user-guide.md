@@ -39,7 +39,7 @@ The RAPIDS data science framework is a collection of libraries for running end-t
 
 
 **<i class="fa-light fa-chart-network"></i> Graph Analytics with [cuGraph](https://github.com/rapidsai/cugraph){: target="_blank"}**:
- Start with the [Easy Path](/api/cugraph/stable/basics/nx_transition/#easy-path-use-networkx-graph-objects-accelerated-algorithms){: target="_blank"} to use NetworkX graph objects with accelerated algorithms. There is also general [cuGraph Introduction](/api/cugraph/stable/basics/cugraph_intro/){: target="_blank"}.
+ Start with the [Easy Path](/api/cugraph/stable/basics/nx_transition/#easy-path-use-networkx-graph-objects-accelerated-algorithms){: target="_blank"} to use NetworkX graph objects with accelerated algorithms. There is also a general [cuGraph Introduction](/api/cugraph/stable/basics/cugraph_intro/){: target="_blank"}.
 {: .mb-8 }
 
 
@@ -59,7 +59,7 @@ The RAPIDS data science framework is a collection of libraries for running end-t
 
 
 **<i class="fa-light fa-file-binary"></i> Algorithms and Primitives for Scientific Computing, Data Science and Machine Learning with [RAFT](https://github.com/rapidsai/raft){: target="_blank"}**:
- Start with the [Quick Start](/api/raft/stable/quick_start/){: target="_blank"} guide for simple python and C++ examples.
+ Start with the [Quick Start](/api/raft/stable/quick_start/){: target="_blank"} guide for simple Python and C++ examples.
 {: .mb-8 }
 
 
