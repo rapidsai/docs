@@ -137,6 +137,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 - <i class="fas fa-check-circle"></i> [CUDA 11.5](https://developer.nvidia.com/cuda-11-5-0-download-archive){: target="_blank"} with Driver 495.29.05 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 520.61.05 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive){: target="_blank"} with Driver 525.60.13 or newer **see CUDA 12 section below for notes on usage**
+- <i class="fas fa-check-circle"></i> [CUDA 12.2](https://developer.nvidia.com/cuda-12-2-2-download-archive){: target="_blank"} with Driver 535.86.10 or newer **see CUDA 12 section below for notes on usage**
 
  **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details. 
 
@@ -144,7 +145,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 ### **Docker and Conda**
 
-- <i class="fas fa-info-circle"></i> CUDA 12 conda packages and Docker images currently support CUDA 12.0
+- <i class="fas fa-info-circle"></i> Stable CUDA 12 conda packages and Docker images currently support CUDA 12.0. Additionally, nightly versions now support CUDA 12.2
 - <i class="fas fa-info-circle"></i> CUDA 11 conda packages and Docker images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
  
 ### **pip**
@@ -334,8 +335,9 @@ Windows users can now tap into GPU accelerated data science on their local machi
 1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
-4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then install the WSL-specific [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} or [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} Toolkit without drivers into the WSL2 instance.
+4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then install the WSL-specific [CUDA 11](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} or [CUDA 12](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} Toolkit without drivers into the WSL2 instance.
 	- The installed CUDA Toolkit version must match the pip wheel version (`-cu11` or `-cu12`)
+	- Any CUDA 12 CTK will work with RAPIDS `-cu12` pip packages
 5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [release selector](#selector) commands.
 6. Run this code to check that the RAPIDS installation is working:
 	```
