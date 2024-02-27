@@ -105,10 +105,11 @@ Generally the process for Code Freeze occurs around 10:00AM PT on the first day 
 Project Leads
 {: .label .label-blue}
 
-1. Move any open pull requests targeting `branch-M.B` to target `branch-M.C` instead
-2. Wait for confirmation from operations on the branch switch
-3. Continue `M.C` development
-4. Respond promptly to operations if any issues are found with the `M.B` release
+1. Inform operations team of any new release artifacts (packages, wheels, containers) no later than 2 weeks prior to cuDF burndown
+2. Move any open pull requests targeting `branch-M.B` to target `branch-M.C` instead
+3. Wait for confirmation from operations on the branch switch
+4. Continue `M.C` development
+5. Respond promptly to operations if any issues are found with the `M.B` release
 
 Operations
 {: .label .label-purple}
