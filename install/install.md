@@ -79,7 +79,7 @@ To learn more about these changes, please see the [RAPIDS Container README](http
 <i class="fas fa-info-circle"></i> Infiniband is not supported yet. <br/>
 <i class="fas fa-info-circle"></i> These packages are not compatible with Tensorflow pip packages. Please use the [NGC containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow){: target="_blank"} or conda packages instead. <br/>
 <i class="fas fa-info-circle"></i> If you experience a "Failed to import CuPy" error, please uninstall any existing versions of cupy and install `cupy-cuda11x`. For example:
-```
+```sh
 pip uninstall cupy-cuda115; pip install cupy-cuda11x
 ```
 <br/>
@@ -194,7 +194,7 @@ RAPIDS can use several versions of conda:
 Below is a quick installation guide using miniconda.
 
 **1. Download and Run Install Script**. Copy the command below to download and run the miniconda install script:
-```
+```sh
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
 ```
@@ -212,12 +212,12 @@ RAPIDS requires both Docker CE v19.03+ and [nvidia-container-toolkit](https://gi
 - <i class="fas fa-history text-purple"></i> Legacy Support: Docker CE v17-18 and [nvidia-docker2](https://github.com/NVIDIA/nvidia-docker/wiki/Installation-(version-2.0)){: target="_blank"}
 
 **1. Download and Install.** Copy command below to download and install the latest Docker CE Edition:
-```
+```sh
 curl https://get.docker.com | sh
 ```
 
 **2. Install Latest NVIDIA Docker.** Select the [appropriate supported distribution](https://nvidia.github.io/nvidia-container-runtime/){: target="_blank"}:
-```
+```sh
 curl -s -L https://nvidia.github.io/nvidia-container-runtime/gpgkey | sudo apt-key add - distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
 curl -s -L https://nvidia.github.io/nvidia-container-runtime/$distribution/nvidia-container-runtime.list | sudo tee /etc/apt/sources.list.d/nvidia-container-runtime.list
 sudo apt-get update
@@ -225,13 +225,13 @@ sudo apt-get install nvidia-container-runtime
 ```
 
 **3. Start Docker.** In new terminal window run:
-```
+```sh
 sudo service docker stop
 sudo service docker start
 ```
 
 **4a. Test NVIDIA Docker.** In a terminal window run:
-```
+```sh
 docker run --gpus all nvcr.io/nvidia/k8s/cuda-sample:nbody nbody -gpu -benchmark
 ```
 
@@ -244,7 +244,7 @@ docker run --gpus all nvcr.io/nvidia/k8s/cuda-sample:nbody nbody -gpu -benchmark
 The command provided from the selector for the `notebooks` Docker image will run [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/){: target="_blank"} on your host machine at port: `8888`.
 
 **Running Multi-Node / Multi-GPU (MNMG) Environment.** To start the container in an MNMG environment:
-```
+```sh
 docker run -t -d --gpus all --shm-size=1g --ulimit memlock=-1 --ulimit stack= 67108864 -v $PWD:/ws <container label>
 ```
 
@@ -306,7 +306,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 4. Install Conda in the WSL2 Linux Instance using our [Conda instructions](#conda).
 5. Install RAPIDS via Conda, using the RAPIDS [Release Selector](#selector).
 6. Run this code to check that the RAPIDS installation is working:
-```
+```python
 import cudf
 print(cudf.Series([1, 2, 3]))
 ```
@@ -322,7 +322,7 @@ print(cudf.Series([1, 2, 3]))
 4. Log in to the WSL2 Linux instance.
 5. Generate and run the RAPIDS `docker` command based on your desired configuration using the RAPIDS [Release Selector](#selector).
 6. Inside the Docker instance, run this code to check that the RAPIDS installation is working:
-```
+```python
 import cudf
 print(cudf.Series([1, 2, 3]))
 ```
@@ -340,7 +340,7 @@ print(cudf.Series([1, 2, 3]))
   - Any CUDA 12 CTK will work with RAPIDS `-cu12` pip packages
 5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [release selector](#selector) commands.
 6. Run this code to check that the RAPIDS installation is working:
-```
+```python
 import cudf
 print(cudf.Series([1, 2, 3]))
 ```

@@ -34,7 +34,7 @@ It is important to note that the forward-merge jobs will sometimes fail due to m
 
 Using the example of `branch-{{ site.data.releases.stable.version }}` release branch and a new default `branch-{{ site.data.releases.nightly.version }}`.
 
-```
+```sh
 git checkout branch-{{ site.data.releases.stable.version }}
 git pull <rapidsai remote>
 git checkout branch-{{ site.data.releases.nightly.version }}
