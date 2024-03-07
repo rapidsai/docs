@@ -44,7 +44,7 @@ the `VERSIONING_NAME` must be added to the file.
 
 - `PACKAGE_NAME` - is the conda package name
 - `VERSIONING_NAME` - is the conda package name with `-` replaced with `_` and a suffix of `_version` added
-  - For example 
+  - For example
     - `cupy` would become `cupy_version`
     - `scikit-learn` would become `scikit_learn_version`
 
@@ -109,7 +109,7 @@ There are two versions files that are in `conda/recipes`:
  - `nightly-versions.yaml` - These are versions used by the `ci/axis/nightly.yaml` for NIGHTLY builds
 
  Edit the files above and update the `VERSION_SPEC` as desired.
- 
+
  For more information see the [Modifying Versions Files](#modifying-versions-files)
 
 Once done, submit a PR to the `integration` repository. The changes will be built and tested on a development docker image to confirm that it doesn't conflict with other RAPIDS libraries.

@@ -15,7 +15,7 @@ This site serves to unify the documentation for RAPIDS. Whether you're new to RA
 
 ## Sections
 
-[<i class="fa-solid fa-download"></i> Installation Guide]({% link install/install.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 } 
+[<i class="fa-solid fa-download"></i> Installation Guide]({% link install/install.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
 [<i class="fa-solid fa-file-circle-info"></i> User Guides]({% link user-guide/user-guide.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
 <br/>
 [<i class="fa-solid fa-file-circle-info"></i> API Documentation]({% link api.md %}){: .btn.fs-4 .mb-4 .mb-md-04 .mr-2 }

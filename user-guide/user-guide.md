@@ -14,12 +14,12 @@ The RAPIDS data science framework is a collection of libraries for running end-t
 {: .fs-6 .fw-300 .mb-8 }
 
 
-**<i class="fa-light fa-notebook"></i> [Community Notebooks](https://github.com/rapidsai/notebooks-contrib){: target="_blank"}**: 
+**<i class="fa-light fa-notebook"></i> [Community Notebooks](https://github.com/rapidsai/notebooks-contrib){: target="_blank"}**:
  A collection of examples and tutorials used to introduce new users to the features and capabilities of RAPIDS.
 {: .mb-8 }
 
 
-**<i class="fa-light fa-cloud"></i> Machine Learning Services Integration for [RAPIDS Cloud](https://github.com/rapidsai/cloud-ml-examples){: target="_blank"}**: 
+**<i class="fa-light fa-cloud"></i> Machine Learning Services Integration for [RAPIDS Cloud](https://github.com/rapidsai/cloud-ml-examples){: target="_blank"}**:
  A repository with example notebooks and "getting started" code samples to help you integrate RAPIDS with the hyperparameter optimization services from Azure ML, AWS Sagemaker, Google Cloud, and Databricks.
 {: .mb-8 }
 
@@ -53,7 +53,7 @@ The RAPIDS data science framework is a collection of libraries for running end-t
 {: .mb-8 }
 
 
-**<i class="fa-light fa-images"></i> Computer Vision and Analytics with [cuCIM](https://github.com/rapidsai/cucim){: target="_blank"}**: 
+**<i class="fa-light fa-images"></i> Computer Vision and Analytics with [cuCIM](https://github.com/rapidsai/cucim){: target="_blank"}**:
  Start with the [Welcome Notebook](https://github.com/rapidsai/cucim/blob/branch-{{ site.data.releases.stable.version }}/notebooks/Welcome.ipynb){: target="_blank"} for links to resources guides and a good overview of the project structure.
 {: .mb-8 }
 
