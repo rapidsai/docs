@@ -1,6 +1,8 @@
+# Copyright (c) 2023-2024, NVIDIA CORPORATION.
 """
 Script to customize doxygen/sphinx generated HTML for RAPIDS
 """
+
 import re
 import sys
 import json
@@ -10,7 +12,9 @@ from bs4 import BeautifulSoup
 FILEPATH = sys.argv[1]
 
 LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
-RELEASES_PATH = os.path.join(os.path.dirname(__file__), "../", "../", "_data", "releases.json")
+RELEASES_PATH = os.path.join(
+    os.path.dirname(__file__), "../", "../", "_data", "releases.json"
+)
 
 with open(LIB_MAP_PATH) as fp:
     LIB_PATH_DICT = json.load(fp)
@@ -217,7 +221,7 @@ def delete_element(soup, selector):
     """
     try:
         soup.select(f"{selector}")[0].extract()
-    except:
+    except Exception:
         pass
 
 

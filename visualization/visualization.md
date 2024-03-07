@@ -38,7 +38,7 @@ The below libraries directly use RAPIDS cuDF/Dask-cuDF and/or cuSpatial to creat
 - **[cuxfilter GitHub](https://github.com/rapidsai/cuxfilter)**
 
 
-### **Note:** Web Hosted vs Local Hosted Chart Interaction 
+### **Note:** Web Hosted vs Local Hosted Chart Interaction
 When interacting with this page through a website, the interactive examples below are all **static and use pre-computed data.** To run a true interactive version, host through the **active** instance found on our [cuxfilter GitHub Notebooks](https://github.com/rapidsai/cuxfilter/tree/branch-{{ site.data.releases.stable.version }}/notebooks/RAPIDS%20Visualization%20Guide).
 
 {% include viz-cdn-js-css.html %}
@@ -54,7 +54,7 @@ When interacting with this page through a website, the interactive examples belo
 - HoloViews is an open-source Python library designed to make data analysis and visualization seamless and simple. [See this diagram](https://holoviz.org/background.html#the-holoviz-ecosystem)  for an excellent architecture overview.
 - With HoloViews, you can usually express what you want to do in very few lines of code, letting you focus on what you are trying to explore and convey, not on the process of plotting.
 - Read about Holoviews at [holoviews.org](https://holoviews.org) and explore its gallery [holoviews.org/gallery/](https://holoviews.org/gallery/).
-- Read about [RAPIDS compatibilty](https://holoviews.org/reference_manual/holoviews.core.data.html?highlight=cudf#module-holoviews.core.data.cudf).
+- Read about [RAPIDS compatibility](https://holoviews.org/reference_manual/holoviews.core.data.html?highlight=cudf#module-holoviews.core.data.cudf).
 
 **Run an interactive example and cpu / gpu code comparison below:**
 {% include holoviews.html %}
@@ -65,7 +65,7 @@ When interacting with this page through a website, the interactive examples belo
 <img src="/assets/images/heatmap.png" style="width:120px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
 
 - hvPlot provides an alternative for the static plotting API provided by Pandas and other libraries, with an interactive plotting API. Just replace `.plot()` with `.hvplot()`.
-- hvPlot can integrate neatly with the individual libraries if an extension mechanism for the native plot APIs is offered, or it can be used as a standalone component.   
+- hvPlot can integrate neatly with the individual libraries if an extension mechanism for the native plot APIs is offered, or it can be used as a standalone component.
 - Read about hvPlot at [holoviews.org](http://holoviews.org) and explore its gallery [hvplot.holoviz.org/reference/index.html](https://hvplot.holoviz.org/reference/index.html).
 - Read about [RAPIDS compatibility](https://hvplot.holoviz.org/user_guide/Introduction.html?highlight=rapids#).
 <br/>
@@ -85,10 +85,10 @@ When interacting with this page through a website, the interactive examples belo
 **Run an interactive example and cpu / gpu code comparison below:**
 {% include datashader.html %}
 
-                                                                                                                                                                                                             
+
 
 <a id='plotly'></a><br/>
-<img src="/assets/images/plotly-logo.png" style="width:160px; vertical-align:middle;"> 
+<img src="/assets/images/plotly-logo.png" style="width:160px; vertical-align:middle;">
 <a href="https://dash.gallery/Portal/" target="_blank" title="plotly dash US Opioid Epidemic demo">
 <img src="/assets/images/plotly-dash.png" style="width:230px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
 <br/>
@@ -98,7 +98,7 @@ When interacting with this page through a website, the interactive examples belo
 
 **Run an interactive example and cpu / gpu code comparison below:**
 {% include plotly.html %}
-                                                                                                                                                                                                             
+
 
 <a id='bokeh'></a><br/>
 <img src="/assets/images/bokeh-logo.svg" style="width:130px; display:inline-block; vertical-align:middle;">
@@ -113,15 +113,15 @@ When interacting with this page through a website, the interactive examples belo
 **Run an interactive example and cpu / gpu code comparison below:**
 {% include bokeh.html %}
 
-                                                                                                                                                                                                             
+
 
 <a id='seaborn'></a><br/>
-<img src="/assets/images/seaborn-logo.svg" style="width:200px; display:inline-block; vertical-align:middle;"> 
+<img src="/assets/images/seaborn-logo.svg" style="width:200px; display:inline-block; vertical-align:middle;">
 <a href="https://seaborn.pydata.org/examples/hexbin_marginals.html" target="_blank" title="seaborn hexbin example">
 <img src="/assets/images/hexbin_marginals.png" style="width:130px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
 <br/>
 - Seaborn is a Python data visualization library based on [matplotlib](https://matplotlib.org/). It provides a high-level interface for drawing static charts.
-- Although not directly accelerated with GPU usage, it provides a base example of using a popular Python based visualization library with RAPIDS. 
+- Although not directly accelerated with GPU usage, it provides a base example of using a popular Python based visualization library with RAPIDS.
 - Read about Seaborn at [seaborn.pydata.org/](https://seaborn.pydata.org/) and explore its gallery [seaborn.pydata.org/examples/index.html](https://seaborn.pydata.org/examples/index.html).
 - Further [Documentation](https://seaborn.pydata.org/api.html).
 
@@ -133,7 +133,7 @@ When interacting with this page through a website, the interactive examples belo
 # Other Notable Libraries
 
 <a id='panel'></a><br/>
-<img src="/assets/images/panel-logo.png" style="width:100px; display:inline-block; vertical-align:middle;"> 
+<img src="/assets/images/panel-logo.png" style="width:100px; display:inline-block; vertical-align:middle;">
 <a href="https://panel.holoviz.org/gallery/index.html" target="_blank" title="panel gapminder example">
 <img src="/assets/images/gapminders.png" style="width:210px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
 <br/>
