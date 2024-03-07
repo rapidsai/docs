@@ -29,7 +29,7 @@ Tests using the RAPIDS dataset locating utilities (see below) allow a user to sp
 ### The `RAPIDS_DATASET_ROOT_DIR` option to `cmake`
 
 The `cmake` command responsible for building the test executables supports the option `RAPIDS_DATASET_ROOT_DIR`, which can be used as shown below:
-```
+```sh
 cmake -DRAPIDS_DATASET_ROOT_DIR=/location/to/datasets
 ```
 This mechanism allows a user building tests from source to create test executables that will find their datasets in the directory specified.
@@ -39,7 +39,7 @@ This mechanism allows a user building tests from source to create test executabl
 If a user needs to override the `RAPIDS_DATASET_ROOT_DIR` build option, or if the build option was not used, the `RAPIDS_DATASET_ROOT_DIR` environment variable can be set to the location of the datasets.
 
 This environment variable takes precedence over the build option, meaning both options can be used. This can be useful for experimenting on different datasets without requiring a rebuild, or for running the test binaries on a different system that has the datasets installed to an alternate location. The environment variable can be set as shown below prior to running the tests (showing a bash shell):
-```
+```sh
 export RAPIDS_DATASET_ROOT_DIR=/location/to/datasets
 ```
 
@@ -50,13 +50,13 @@ Finally, if neither the build option nor the environment variable are set, tests
 ## Writing Tests That Use Datasets
 
 Test developers can use the RAPIDS dataset locating utilities by calling the following function:
-```
+```cpp
 const std::string& get_rapids_dataset_root_dir()
 ```
 `get_rapids_dataset_root_dir()` will return a `std::string` reference to the root directory containing the datasets, as determined by the user-accessible options described above, or a default value of `/datasets` if the user did not use the options.
 
 ### Example API usage
-```
+```cpp
 const std::string& rapidsDatasetRootDir = get_rapids_dataset_root_dir();
 readDataset(rapidsDatasetRootDir + "/golden_data/web-BerkStan.pagerank_val_0.85.bin");
 ```
@@ -74,7 +74,7 @@ Developers and end users alike may need to run benchmarks to evaluate the perfor
 - Datasets for both tests and benchmarks are located in `<repo root>/datasets`. This allows benchmark developers to use the same dataset locating APIs (`get_rapids_dataset_root_dir()`, etc.) with the same settings described above for running tests.
 - Some datasets are small enough that they can be included in the repository with the source code. This is convenient for certain cases where a very small dataset is acceptable, but larger datasets must not be committed due to limitations of the source repository. Instead, larger datasets (approximately 2MB or larger) should be hosted separately and made available to download and install via the script described below.
 - A script is provided for downloading and installing different datasets for different use cases. The `-h` option to the script will describe the options available. For cugraph benchmarks, run the script with the `--benchmark` option from the `datasets` dir:
-```
+```sh
 cd <repo root>/datasets
 ./get_test_data.sh --benchmark
 ```

@@ -9,7 +9,7 @@
 
 ## Development
 
-```
+```sh
 bundle exec jekyll serve
 ```
 
@@ -17,7 +17,7 @@ bundle exec jekyll serve
 
 Alternatively, you can use the [jekyll-docker](https://github.com/envygeeks/jekyll-docker) container to build and serve the `docs` site locally:
 
-```
+```sh
 docker run --rm \
   --volume="$PWD:/srv/jekyll" \
   --publish [::1]:4000:4000 \
