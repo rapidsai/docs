@@ -54,7 +54,7 @@ Each Release board has the following columns:
 **IMPORTANT:** By leveraging the Release board for issues, Project Leads can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.  We can also use labels on the issues/PRs to filter and _prioritize_ work.
 
 #### Using the release board
-- Assigning and priortizing work
+- Assigning and prioritizing work
   - Scroll to the left to see all the columns labeled `Issue-*`
   - Re-prioritize issues in `P0`, `P1`, `P2` by moving issuses between columns
   - Move high priority issues within a column to the top; this promotes "pop off the top of the stack" development

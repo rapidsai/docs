@@ -12,4 +12,3 @@ permalink: resources
 
 Resources and detailed information referenced in other sections of this documentation.
 {: .fs-6 .fw-300 }
-

@@ -46,7 +46,7 @@ git commit -am "Merge branch-{{ site.data.releases.stable.version }} into branch
 git push <personal fork> branch-{{ site.data.releases.nightly.version }}-merge-{{ site.data.releases.stable.version }}
 ```
 
-Once this is done, open a PR that targets the new default branch (`branch-{{ site.data.releases.nightly.version }}` in this example) with your changes. 
+Once this is done, open a PR that targets the new default branch (`branch-{{ site.data.releases.nightly.version }}` in this example) with your changes.
 
 **IMPORTANT**: When merging this PR, do not use the [auto-merger]({% link resources/auto-merger.md %}) (i.e. the `/merge` comment). Instead, an admin must manually merge by changing the merging strategy to `Create a Merge Commit`. Otherwise, history will be lost and the branches become incompatible.
 

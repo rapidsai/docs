@@ -26,7 +26,7 @@ RAPIDS projects are continuously triaging new issues and re-triaging existing is
 
 ## Triage process
 
-### Timing 
+### Timing
 
 - Label and prioritize new issues within **2 business days**
 - Re-prioritize existing issues **every week** using the project's issue tracking boards
@@ -55,7 +55,7 @@ Each permanent project board (Bug Squashing, Feature Planning,and Other Issues) 
 
 See [Release Board](https://docs.rapids.ai/releases/planning/) for the column definition that pertain to the Release Board.
 
-**IMPORTANT:** 
+**IMPORTANT:**
 In leveraging the tracking boards for issue management, project leads can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom. We can also use labels on the issues/PRs to filter and _prioritize_ work.
 
 By placing the issues in one of these permanent boards (Bug Squashing, Feature Planning, or Other Issues) filers and the community will see updates to the issue and can get a sense of when they can expect feedback. For example, on a given issue a user may see `Future release in Other Issues` and this allows the filer or the community to comment on if they believe the issue should be addressed faster.
@@ -104,7 +104,7 @@ Project Leads - Daily
 
 ### Prioritize & schedule
 
-Once issues have been triaged, we can prioritize and schedule them for a release. 
+Once issues have been triaged, we can prioritize and schedule them for a release.
 
 **IMPORTANT:** By leveraging the tracking boards for issues, project leads can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.
 
@@ -118,7 +118,7 @@ Project Leads - Daily
 Project Leads - Weekly
 {: .label .label-blue}
 
-1. Archvie all issues in the `Closed` column.
+1. Archive all issues in the `Closed` column.
 2. Review all issues in each column of `Next release`, `Future release`, and `Backlog` to make sure issues are still scheduled appropriately.
 3. Prioritize any issues in `Future release`, and `Backlog` columns. `Hotfix` and `Next release` do not need to be re-prioritized as they should be in active development already.
 4. Discuss the status of all issues with the team in `Hotfix` and `Next release` columns to ensure development progress is being made and there are no blockers.

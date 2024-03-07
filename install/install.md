@@ -26,9 +26,9 @@ RAPIDS has several methods for installation, depending on the preferred environm
 - [Docker](#docker)
 - [pip](#pip)
 - [Within WSL2](#wsl2)
-	- [Conda](#wsl2-conda)
-	- [Docker](#wsl2-docker)
-	- [pip](#wsl2-pip)
+  - [Conda](#wsl2-conda)
+  - [Docker](#wsl2-docker)
+  - [pip](#wsl2-pip)
 - [Build From Source](#source)
 
 **[Next Steps](#next-steps)**
@@ -63,19 +63,19 @@ To resolve this error please follow one of these steps:
 <i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brought significant Docker changes. <br/>
 To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/base){: target="_blank"}. Some key notes below:
 - `Development` images are no longer being published, in the coming releases RAPIDS will roll out [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
-   - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
+  - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
 - All images are Ubuntu-based
-   - CUDA 11.2 images are Ubuntu `20.04`
-   - All other images are Ubuntu `22.04`
+  - CUDA 11.2 images are Ubuntu `20.04`
+  - All other images are Ubuntu `22.04`
 - All images are multiarch (x86_64 and ARM)
 - The `Base` image starts in an ipython shell
-   - To run bash commands inside the ipython shell prefix the command with `!`
-   - To run the image without the ipython shell add `/bin/bash` to the end of the `docker run` command
+  - To run bash commands inside the ipython shell prefix the command with `!`
+  - To run the image without the ipython shell add `/bin/bash` to the end of the `docker run` command
 - For a full list of changes please see this [RAPIDS Docker Issue](https://github.com/rapidsai/docker/issues/539){: target="_blank"}
 
 
 ### **pip Issues**
-<i class="fas fa-info-circle"></i> pip installations require using the matching wheel to the system's installed CUDA toolkit. For CUDA 11 toolkits, install the `-cu11` wheels, and for CUDA 12 tookits install the `-cu12` wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the `-cu11` wheels. <br/>
+<i class="fas fa-info-circle"></i> pip installations require using the matching wheel to the system's installed CUDA toolkit. For CUDA 11 toolkits, install the `-cu11` wheels, and for CUDA 12 toolkits install the `-cu12` wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the `-cu11` wheels. <br/>
 <i class="fas fa-info-circle"></i> Infiniband is not supported yet. <br/>
 <i class="fas fa-info-circle"></i> These packages are not compatible with Tensorflow pip packages. Please use the [NGC containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow){: target="_blank"} or conda packages instead. <br/>
 <i class="fas fa-info-circle"></i> If you experience a "Failed to import CuPy" error, please uninstall any existing versions of cupy and install `cupy-cuda11x`. For example:
@@ -98,13 +98,13 @@ Check the suggestions below for possible resolutions:
 
 <i class="fas fa-info-circle"></i> Dask / Jupyter / Tornado 6.2 dependency conflicts can occur. Install `jupyter-client` 7.3.4 if the error below occurs: <br/>
 ```
-    ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behavior is the source of the following dependency conflicts.
-    jupyter-client 7.4.2 requires tornado>=6.2, but you have tornado 6.1 which is incompatible.
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behavior is the source of the following dependency conflicts.
+jupyter-client 7.4.2 requires tornado>=6.2, but you have tornado 6.1 which is incompatible.
 ```
 
 <i class="fas fa-info-circle"></i> cuSpatial installation may yield the error below:<br/>
 ```
-    ERROR: GDAL >= 3.2 is required for fiona. Please upgrade GDAL.
+ERROR: GDAL >= 3.2 is required for fiona. Please upgrade GDAL.
 ```
 To resolve, either <code>GDAL</code> needs to be updated, or <code>fiona</code> needs to be pinned to specific versions depending on the installation OS. please see the [cuSpatial README](https://github.com/rapidsai/cuspatial/tree/branch-23.06#install-with-pip){: target="_blank"} to resolve this error.
 
@@ -139,7 +139,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 - <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive){: target="_blank"} with Driver 525.60.13 or newer **see CUDA 12 section below for notes on usage**
 - <i class="fas fa-check-circle"></i> [CUDA 12.2](https://developer.nvidia.com/cuda-12-2-2-download-archive){: target="_blank"} with Driver 535.86.10 or newer **see CUDA 12 section below for notes on usage**
 
- **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details. 
+ **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details.
 
 ## **CUDA 12 Support**
 
@@ -147,10 +147,10 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 - <i class="fas fa-info-circle"></i> Stable CUDA 12 conda packages and Docker images currently support CUDA 12.0. Additionally, nightly versions now support CUDA 12.2
 - <i class="fas fa-info-circle"></i> CUDA 11 conda packages and Docker images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
- 
+
 ### **pip**
 
-- <i class="fas fa-info-circle"></i> pip installations require using a wheel matching the system's installed CUDA toolkit. 
+- <i class="fas fa-info-circle"></i> pip installations require using a wheel matching the system's installed CUDA toolkit.
 - <i class="fas fa-info-circle"></i> For CUDA 11 toolkits, install the <code>-cu11</code> wheels, and for CUDA 12 toolkits install the <code>-cu12</code> wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the <code>-cu11</code> wheels.
 
 <br/>
@@ -240,7 +240,7 @@ docker run --gpus all nvcr.io/nvidia/k8s/cuda-sample:nbody nbody -gpu -benchmark
 
 <br/>
 
-### **JupyterLab.** 
+### **JupyterLab.**
 The command provided from the selector for the `notebooks` Docker image will run [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/){: target="_blank"} on your host machine at port: `8888`.
 
 **Running Multi-Node / Multi-GPU (MNMG) Environment.** To start the container in an MNMG environment:
@@ -306,10 +306,10 @@ Windows users can now tap into GPU accelerated data science on their local machi
 4. Install Conda in the WSL2 Linux Instance using our [Conda instructions](#conda).
 5. Install RAPIDS via Conda, using the RAPIDS [Release Selector](#selector).
 6. Run this code to check that the RAPIDS installation is working:
-	```
-	import cudf
-	print(cudf.Series([1, 2, 3]))
-	```
+```
+import cudf
+print(cudf.Series([1, 2, 3]))
+```
 
 <br/>
 <div id="wsl2-docker"></div>
@@ -322,10 +322,10 @@ Windows users can now tap into GPU accelerated data science on their local machi
 4. Log in to the WSL2 Linux instance.
 5. Generate and run the RAPIDS `docker` command based on your desired configuration using the RAPIDS [Release Selector](#selector).
 6. Inside the Docker instance, run this code to check that the RAPIDS installation is working:
-	```
-	import cudf
-	print(cudf.Series([1, 2, 3]))
-    ```
+```
+import cudf
+print(cudf.Series([1, 2, 3]))
+```
 
 <br/>
 <div id="wsl2-pip"></div>
@@ -336,14 +336,14 @@ Windows users can now tap into GPU accelerated data science on their local machi
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
 4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then install the WSL-specific [CUDA 11](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} or [CUDA 12](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} Toolkit without drivers into the WSL2 instance.
-	- The installed CUDA Toolkit version must match the pip wheel version (`-cu11` or `-cu12`)
-	- Any CUDA 12 CTK will work with RAPIDS `-cu12` pip packages
+  - The installed CUDA Toolkit version must match the pip wheel version (`-cu11` or `-cu12`)
+  - Any CUDA 12 CTK will work with RAPIDS `-cu12` pip packages
 5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [release selector](#selector) commands.
 6. Run this code to check that the RAPIDS installation is working:
-	```
-	import cudf
-	print(cudf.Series([1, 2, 3]))
-	```
+```
+import cudf
+print(cudf.Series([1, 2, 3]))
+```
 <br/>
 
 <div id="source"></div>
