@@ -189,7 +189,7 @@ For most installations, you will need a Conda or Docker environments installed f
 RAPIDS can use several versions of conda:
 - Full installation with [Anaconda](https://www.anaconda.com/download){: target="_blank"} (with optional faster [libmamba solver](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}).
 - Minimal installation with [Miniconda](https://conda.io/miniconda.html){: target="_blank"}
-- Faster environment solving installation with standalone [Mamba](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}.
+- Faster environment solving installation with standalone [Mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html){: target="_blank"}.
 
 Below is a quick installation guide using miniconda.
 
