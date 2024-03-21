@@ -203,6 +203,11 @@ bash Miniconda3-latest-Linux-x86_64.sh
 
 **3. Start Conda.** Open a new terminal window, which should now show Conda initialized.
 
+**4. Check Conda Configuration.** Installing RAPIDS requires you to use `channel_priority: flexible`. You check this and change it, if required, by doing:
+```sh
+conda config --show channel_priority
+conda config --set channel_priority flexible
+```
 
 <br/>
 <div id="docker"></div>
