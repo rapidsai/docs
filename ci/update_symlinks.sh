@@ -13,6 +13,11 @@ NIGHTLY_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.nightly.versi
 echo "Updating symlinks..."
 echo ""
 for FOLDER in _site/api/*/ ; do
+  if [[ "${FOLDER}" == *"libucxx"* ]]; then
+    STABLE_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.stable.ucxx_version')
+    LEGACY_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.legacy.ucxx_version')
+    NIGHTLY_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.nightly.ucxx_version')
+  fi
 
   cd ${FOLDER}
   echo ""
