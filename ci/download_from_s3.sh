@@ -63,26 +63,26 @@ download_lib_docs() {
         SRC VERSION_MAP VERSION_NAME \
         VERSION_NUMBER
 
-  VERSION_MAP=$(
-    jq '{
-      "legacy": .legacy.version,
-      "stable": .stable.version,
-      "nightly": .nightly.version
-    }' _data/releases.json
-  )
-  export VERSION_MAP
+  VERSION_MAP=$(jq '{
+    "legacy": { "version": .legacy.version, "ucxx_version": .legacy.ucxx_version },
+    "stable": { "version": .stable.version, "ucxx_version": .stable.ucxx_version },
+    "nightly": { "version": .nightly.version, "ucxx_version": .nightly.ucxx_version }
+  }' _data/releases.json)
 
   PROJECT_MAP=$(yq '.apis + .libs' _data/docs.yml)
-  export PROJECT_MAP
 
+  for VERSION_NAME in $(jq -r 'keys | .[]' <<< "$VERSION_MAP"); do
+    for PROJECT in $(yq -r 'keys | .[]' <<< "$PROJECT_MAP"); do
+      VERSION_NUMBER=$(jq -r --arg vn "$VERSION_NAME" --arg pr "$PROJECT" '
+        if $pr == "libucxx" then
+          .[$vn].ucxx_version
+        else
+          .[$vn].version
+        end' <<< "$VERSION_MAP")
 
-  for VERSION_NAME in $(jq -nr 'env.VERSION_MAP | fromjson | keys | .[]'); do
-    for PROJECT in $(yq -n 'env(PROJECT_MAP) | keys | .[]'); do
-      export VERSION_NAME PROJECT
-      VERSION_NUMBER=$(jq -nr 'env.VERSION_MAP | fromjson | .[env.VERSION_NAME]')
-
-      if yq -en 'env(PROJECT_MAP) | .[strenv(PROJECT)].versions.[strenv(VERSION_NAME)] == 0' > /dev/null 2>&1; then
-        echo "skipping: $PROJECT | $VERSION_NAME | $VERSION_NUMBER"
+      PROJECT_MAP_JSON=$(yq -r -o json '.' <<< "$PROJECT_MAP")
+      if [ "$(jq -r --arg pr "$PROJECT" --arg vn "$VERSION_NAME" '.[$pr].versions[$vn]' <<< "$PROJECT_MAP_JSON")" == "0" ]; then
+        echo "Skipping: $PROJECT | $VERSION_NAME | $VERSION_NUMBER"
         continue
       fi
 
