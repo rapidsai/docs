@@ -5,18 +5,27 @@
 set -euEo pipefail
 
 PROJ_ROOT=$(realpath "$(dirname $(realpath $0))/../")
+RELEASES="${PROJ_ROOT}/_data/releases.json"
 
-STABLE_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.stable.version')
-LEGACY_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.legacy.version')
-NIGHTLY_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.nightly.version')
+STABLE_VERSION=$(jq -r '.stable.version' < "${RELEASES}")
+LEGACY_VERSION=$(jq -r '.legacy.version' < "${RELEASES}")
+NIGHTLY_VERSION=$(jq -r '.nightly.version' < "${RELEASES}")
+
+STABLE_UCXX_VERSION=$(jq -r '.stable.ucxx_version' < "${RELEASES}")
+LEGACY_UCXX_VERSION=$(jq -r '.legacy.ucxx_version' < "${RELEASES}")
+NIGHTLY_UCXX_VERSION=$(jq -r '.nightly.ucxx_version' < "${RELEASES}")
 
 echo "Updating symlinks..."
 echo ""
 for FOLDER in _site/api/*/ ; do
   if [[ "${FOLDER}" == *"libucxx"* ]]; then
-    STABLE_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.stable.ucxx_version')
-    LEGACY_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.legacy.ucxx_version')
-    NIGHTLY_FOLDER=$( cat "${PROJ_ROOT}/_data/releases.json" | jq -r '.nightly.ucxx_version')
+    STABLE_FOLDER=$STABLE_UCXX_VERSION
+    LEGACY_FOLDER=$LEGACY_UCXX_VERSION
+    NIGHTLY_FOLDER=$NIGHTLY_UCXX_VERSION
+  else
+    STABLE_FOLDER=$STABLE_VERSION
+    LEGACY_FOLDER=$LEGACY_VERSION
+    NIGHTLY_FOLDER=$NIGHTLY_VERSION
   fi
 
   cd ${FOLDER}
