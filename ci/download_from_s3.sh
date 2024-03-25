@@ -74,7 +74,7 @@ download_lib_docs() {
   for VERSION_NAME in $(jq -r 'keys | .[]' <<< "$VERSION_MAP"); do
     for PROJECT in $(yq -r 'keys | .[]' <<< "$PROJECT_MAP"); do
       VERSION_NUMBER=$(jq -r --arg vn "$VERSION_NAME" --arg pr "$PROJECT" '
-        if $pr == "libucxx" then
+        if ($pr | contains("ucxx")) then
           .[$vn].ucxx_version
         else
           .[$vn].version

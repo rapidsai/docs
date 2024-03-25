@@ -18,7 +18,7 @@ NIGHTLY_UCXX_VERSION=$(jq -r '.nightly.ucxx_version' < "${RELEASES}")
 echo "Updating symlinks..."
 echo ""
 for FOLDER in _site/api/*/ ; do
-  if [[ "${FOLDER}" == *"libucxx"* ]]; then
+  if [[ "${FOLDER}" == *"ucxx"* ]]; then
     STABLE_FOLDER=$STABLE_UCXX_VERSION
     LEGACY_FOLDER=$LEGACY_UCXX_VERSION
     NIGHTLY_FOLDER=$NIGHTLY_UCXX_VERSION
