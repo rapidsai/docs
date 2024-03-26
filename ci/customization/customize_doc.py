@@ -8,8 +8,10 @@ import sys
 import json
 import os
 from bs4 import BeautifulSoup
+from util import r_versions
 
 FILEPATH = sys.argv[1]
+IS_UCXX_FILE = len(sys.argv) > 2 and sys.argv[2] == "--is-ucxx"
 
 LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
 RELEASES_PATH = os.path.join(
@@ -22,9 +24,11 @@ with open(LIB_MAP_PATH) as fp:
 with open(RELEASES_PATH) as fp:
     release_data = json.load(fp)
     VERSIONS_DICT = {
-        "nightly": release_data["nightly"]["version"],
-        "stable": release_data["stable"]["version"],
-        "legacy": release_data["legacy"]["version"],
+        "nightly": release_data["nightly"][
+            "ucxx_version" if IS_UCXX_FILE else "version"
+        ],
+        "stable": release_data["stable"]["ucxx_version" if IS_UCXX_FILE else "version"],
+        "legacy": release_data["legacy"]["ucxx_version" if IS_UCXX_FILE else "version"],
     }
 
 SCRIPT_TAG_ID = "rapids-selector-js"
@@ -40,11 +44,11 @@ def get_version_from_fp():
     based on the file path
     """
     match = re.search(r"/(\d?\d\.\d\d)/", FILEPATH)
-    version_number_str = match.group(1)
+    version_number_str = r_versions(match.group(1))
     version_name = "stable"
-    if version_number_str > VERSIONS_DICT["stable"]:
+    if version_number_str.is_greater_than(VERSIONS_DICT["stable"]):
         version_name = "nightly"
-    if version_number_str < VERSIONS_DICT["stable"]:
+    if version_number_str.is_less_than(VERSIONS_DICT["stable"]):
         version_name = "legacy"
     return {"name": version_name, "number": version_number_str}
 
