@@ -59,6 +59,17 @@ To resolve this error please follow one of these steps:
 - Use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}
 - Use the classic solver by removing `--solver=libmamba` from the `conda create` command provided by the selector
 
+<i class="fas fa-info-circle"></i> A `LibMambaUnsatisfiableError` occurs:<br/>
+You may see something like:
+```
+LibMambaUnsatisfiableError: Encountered problems while solving:
+ - package cuda-version-12.0-hffde075_0 has constraint __cuda >=12 conflicting with __cuda-11.4-0
+```
+This is telling you the CUDA version currently installed on your machine (`__cuda`: 11.4.0) is
+incompatible with the `cuda-version` (12.0) you are trying to install. You will have to ensure the CUDA
+version on your machine is greater than or equal to the CUDA version you are trying to install
+with conda.
+
 ### **Docker Issues**
 <i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brought significant Docker changes. <br/>
 To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/base){: target="_blank"}. Some key notes below:
