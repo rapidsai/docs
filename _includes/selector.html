@@ -358,9 +358,9 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('rapids_selector', () => ({
             // default values
-            active_python_ver: "3.10",
-            active_cuda_ver: "12.0",
-            active_pip_cuda_ver: "12.0",
+            active_python_ver: "3.11",
+            active_cuda_ver: "12.2",
+            active_pip_cuda_ver: "12",
             active_method: "Conda",
             active_release: "Stable",
             active_img_type: "Base",
@@ -369,9 +369,9 @@
             active_additional_packages: [],
 
             // all possible values
-            python_vers: ["3.9", "3.10", "3.11"],
-            cuda_vers: ["11.2", "11.8", "12.0", "12.2"],
-            pip_cuda_vers: ["11.2 - 11.8", "12"],
+            python_vers: ["3.9", "3.10", "3.11"].reverse(),
+            cuda_vers: ["11.2", "11.8", "12.0", "12.2"].reverse(),
+            pip_cuda_vers: ["11.2 - 11.8", "12"].reverse(),
             methods: ["Conda", "pip", "Docker"],
             releases: ["Stable", "Nightly"],
             img_loc: ["NGC", "Dockerhub"],
@@ -629,7 +629,7 @@
                 var notes = [];
                 var install_location_notes = "RAPIDS pip packages are hosted by NVIDIA<br>"
                 notes = [...notes, install_location_notes,
-                    'pip installation supports Python <code>3.9</code> and <code>3.10</code>. Nightly builds also support <code>3.11</code>.<br>'];
+                    'pip installation supports Python <code>3.9</code>, <code>3.10</code>, and <code>3.11</code>.<br>'];
 
                 return notes.map(note => this.note_prefix + " " + note);
             },
@@ -668,12 +668,10 @@
                 var isDisabled = false;
                 if (this.active_additional_packages.includes("TensorFlow") && (cuda_version !== "12.0")) isDisabled = true;
                 if (this.active_method === "Docker" && cuda_version < "11.8") isDisabled = true;
-                if (this.active_release != "Nightly" && cuda_version === "12.2") isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedPython(python_version) {
                 var isDisabled = false;
-                if (this.active_release != "Nightly" && python_version === "3.11") isDisabled = true;
                 return isDisabled;
             },
             disableUnsupportedImgType(type) {
@@ -698,10 +696,6 @@
             },
             releaseClickHandler(e, release) {
                 if (this.isDisabled(e.target)) return;
-                // Remove below after we support 12.2 in stable
-                if (this.active_cuda_ver === "12.2" && release === "Stable") this.active_cuda_ver = "12.0";
-                // Remove below after we support 3.11 in stable
-                if (this.active_python_ver === "3.11" && release === "Stable") this.active_python_ver = "3.10";
                 this.active_release = release;
             },
             imgTypeClickHandler(e, type) {
@@ -732,7 +726,7 @@
                     this.active_packages = ['Standard'];
                 }
                 if (method === "pip") {
-                    this.active_pip_cuda_ver = '12.0';
+                    this.active_pip_cuda_ver = '12';
                 }
                 if (method === "Docker") {
                     if (this.active_release === 'Nightly') {
