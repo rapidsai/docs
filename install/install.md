@@ -86,12 +86,12 @@ pip uninstall cupy-cuda115; pip install cupy-cuda11x
 
 <i class="fas fa-info-circle"></i> The following error message indicates a problem with your environment:
 ```
-ERROR: Could not find a version that satisfies the requirement cudf-cu11 (from versions: 0.0.1, {{ site.data.releases.stable.version }})
-ERROR: No matching distribution found for cudf-cu11
+ERROR: Could not find a version that satisfies the requirement cudf-cu12 (from versions: 0.0.1, {{ site.data.releases.stable.version }})
+ERROR: No matching distribution found for cudf-cu12
 ```
 Check the suggestions below for possible resolutions:
 - The pip index has moved from the initial experimental release! Ensure the correct `--extra-index-url=https://pypi.nvidia.com`
-- Only Python versions 3.9 and 3.10 are supported
+- Only Python versions 3.9, 3.10, and 3.11 are supported
 - RAPIDS pip packages require a recent version of pip that [supports PEP600](https://peps.python.org/pep-0600/){: target="_blank"}. Some users may need to update pip: `pip install -U pip`
 
 <br/>
