@@ -343,7 +343,8 @@
             <div class="cmd">
                 <div class="cmd-label">Command</div>
                 <div class="cmd-box">
-                    <pre class="highlight"><code><span x-ref="cmd" x-html="getCmdHtml" x-on:mouseup.once="copyToGA"></span></code></pre>
+                    <pre
+                        class="highlight"><code><span x-ref="cmd" x-html="getCmdHtml" x-on:mouseup.once="copyToGA"></span></code></pre>
                 </div>
             </div>
         </div>
@@ -372,7 +373,7 @@
             python_vers: ["3.9", "3.10", "3.11"],
             cuda_vers: ["11.2", "11.8", "12.0", "12.2"],
             pip_cuda_vers: ["11.2 - 11.8", "12"],
-            methods: ["Conda", "pip", "Docker"],
+            methods: ["Conda", "pip", "uv pip", "Docker"],
             releases: ["Stable", "Nightly"],
             img_loc: ["NGC", "Dockerhub"],
             img_types: ["Base", "Notebooks"],
@@ -495,8 +496,8 @@
             removeLeadingZeros(version) {
                 return version.split(".").map(Number).join(".");
             },
-            getpipCmdHtml() {
-                var pip_install = `${this.highlightCmd("pip")} install`;
+            getpipCmdHtml(commandType = "pip") {
+                var pip_install = `${this.highlightCmd(`${commandType}`)} install`;
                 var cuda_suffix = "-cu12";
                 var indentation = "    ";
 
@@ -663,6 +664,8 @@
                     return this.getCondaCmdHtml();
                 if (this.active_method === "pip")
                     return this.getpipCmdHtml();
+                if (this.active_method === "uv pip")
+                    return this.getpipCmdHtml("uv pip");
                 return "Not implemented yet!";
             },
             disableUnsupportedRelease(release) {
@@ -796,12 +799,12 @@
                 window.getSelection().removeAllRanges();
 
                 /** checks number of installs from copy command vs downloads **/
-                 gtag('event', 'copyClick', {
+                gtag('event', 'copyClick', {
                     'button': 'CopyCommand',
                     'install_copy_cmd': text
                 });
             },
-            copyToGA(){
+            copyToGA() {
                 let range = document.createRange();
                 range.selectNode(this.$refs.cmd);
                 window.getSelection().removeAllRanges();
