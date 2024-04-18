@@ -48,16 +48,11 @@ Use the selector tool below to select your preferred method, packages, and envir
 
 ### **Conda Issues**
 <i class="fas fa-info-circle"></i> A `conda create error` occurs:<br/>
-RAPIDS has switched the default solver recommendation to [libmamba](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}, a Mamba-powered Conda solver that is [now included with all Conda/Miniconda installations](https://www.anaconda.com/blog/new-release-anaconda-distribution-2023-07-miniconda-23-5-0-and-more){: target="_blank"} to significantly accelerate environment solving. The error output shows:
-```
-conda create: error: argument --solver: invalid choice: 'libmamba' (choose from 'classic')
-```
-
 To resolve this error please follow one of these steps:
-- If the Conda installation is version `22.11` or newer, run: `conda install -n base conda-libmamba-solver`
-- If the Conda installation is older than `22.11`, please update your [Conda or Miniconda to the latest version](https://conda.io/projects/conda/en/stable/user-guide/install/index.html){: target="_blank"}
-- Use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"}
-- Use the classic solver by removing `--solver=libmamba` from the `conda create` command provided by the selector
+- If the Conda installation is older than `22.11`, please update your [Conda or Miniconda to the latest version](https://conda.io/projects/conda/en/stable/user-guide/install/index.html){: target="_blank"}. This will include [libmamba](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}, a Mamba-powered Conda solver that is [now included with all Conda/Miniconda installations](https://www.anaconda.com/blog/new-release-anaconda-distribution-2023-07-miniconda-23-5-0-and-more){: target="_blank"} to significantly accelerate environment solving.
+- If the Conda installation is version `22.11` or newer, run: `conda install -n base conda-libmamba-solver` and run
+`conda create --solver=libmamba ...`
+- Use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"} as `mamba create ...`
 
 ### **Docker Issues**
 <i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brought significant Docker changes. <br/>
