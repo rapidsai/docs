@@ -54,6 +54,18 @@ To resolve this error please follow one of these steps:
 `conda create --solver=libmamba ...`
 - Use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"} as `mamba create ...`
 
+<i class="fas fa-info-circle"></i> A `__cuda` constraint conflict occurs:<br/>
+You may see something like:
+```
+LibMambaUnsatisfiableError: Encountered problems while solving:
+ - package cuda-version-12.0-hffde075_0 has constraint __cuda >=12 conflicting with __cuda-11.4-0
+```
+This means the CUDA driver currently installed on your machine (e.g. `__cuda`: 11.4.0) is
+incompatible with the `cuda-version` (12.0) you are trying to install. You will have to ensure the [CUDA
+driver on your machine supports the CUDA version](#system-req) you are trying to install with conda.
+
+If conda has incorrectly identified the CUDA driver, you can [override by setting the `CONDA_OVERRIDE_CUDA`](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-virtual.html#overriding-detected-packages){: target="_blank"} environment variable.
+
 ### **Docker Issues**
 <i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brought significant Docker changes. <br/>
 To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/base){: target="_blank"}. Some key notes below:
