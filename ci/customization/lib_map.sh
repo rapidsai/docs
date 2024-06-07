@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright (c) 2024, NVIDIA CORPORATION.
 #
 # This script generates a lib_map.json file that maps each RAPIDS library
 # to its default documentation page for each version (legacy, stable, nightly).
@@ -35,10 +36,7 @@ for FOLDER in _site/api/*/ ; do
     if [ -d "${VERSION}" ]; then
       DEFAULT_PATH+="/${VERSION}"
 
-      if [[ "${LIB}" = librmm ]]; then
-        DEFAULT_PATH+="/annotated/"
-
-      elif [ "${LIB}" = libcudf ]; then
+      if [ "${LIB}" = libcudf ]; then
         DEFAULT_PATH+="/namespacecudf/"
 
       elif [ "${LIB}" = cudf ]; then
