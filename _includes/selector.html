@@ -249,7 +249,7 @@
                     <template x-for="version in conda_cuda_vers">
                         <div x-on:click="(e) => condaCUDAClickHandler(e, version)"
                             x-bind:class="{'active': version === active_conda_cuda_ver, 'disabled': disableUnsupportedCuda(version)}"
-                            class="option" x-text="'CUDA ' + version"></div>
+                            class="option" x-text="'CUDA ' + getCondaVersionSupport(version)['label']"></div>
                     </template>
                 </div>
                 <div class="options-section" x-show="active_method === 'pip'">
@@ -434,6 +434,25 @@
                 }
                 return pkg_components[0] + channel_pkg_separator + this.highlightPkgOrImg(pkg_components[1]);
             },
+            getCondaVersionSupport(version) {
+                var cuda_version_info = {
+                    "Stable": {
+                        "11": ["11.4", "11.8"],
+                        "12": ["12.0", "12.2"]
+                    },
+                    "Nightly": {
+                        "11": ["11.4", "11.8"],
+                        "12": ["12.0", "12.5"]
+                    }
+                };
+                var bounds = cuda_version_info[this.active_release][version];
+                var lower_bound = bounds[0];
+                var upper_bound = bounds[1];
+                return {
+                    "label": lower_bound + " - " + upper_bound,
+                    "pinning": ">=" + lower_bound + ".*,<=" + upper_bound + ".*"
+                };
+            },
             getAdditionalPkgName(pkg) {
                 var dask_prefix = this.active_release === "Nightly" ? "dask/label/dev::" : "";
                 var pkg_names = {
@@ -447,17 +466,7 @@
                 var rapids_channel = this.active_release === "Stable" ? "rapidsai" : "rapidsai-nightly";
                 var dask_prefix = this.active_release === "Nightly" ? "dask/label/dev::" : "";
                 var python_version = this.active_python_ver;
-                var cuda_version_info = {
-                    "Stable": {
-                        "11": ">=11.4.*,<=11.8.*",
-                        "12": ">=12.0.*,<=12.2.*"
-                    },
-                    "Nightly": {
-                        "11": ">=11.4.*,<=11.8.*",
-                        "12": ">=12.0.*,<=12.5.*"
-                    }
-                };
-                var cuda_version_pinning = cuda_version_info[this.active_release][this.active_conda_cuda_ver];
+                var cuda_version_pinning = getCondaVersionSupport(version)["pinning"];
                 var py_cuda_pkgs = [this.highlightPkgOrImg("python") + "=" + python_version, this.highlightPkgOrImg("cuda-version") + cuda_version_pinning].join(" ");
                 var conda_channels = [rapids_channel, "conda-forge", "nvidia"]
                     .map(ch => "-" + this.highlightFlag("c") + " " + ch + " ")
