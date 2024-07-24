@@ -244,12 +244,12 @@
                         </div>
                     </template>
                 </div>
-                <div class="options-section" x-show="active_method !== 'pip'">
+                <div class="options-section" x-show="active_method === 'Conda'">
                     <div class="option-label">ENV. CUDA</div>
-                    <template x-for="version in cuda_vers">
-                        <div x-on:click="(e) => cudaClickHandler(e, version)"
-                            x-bind:class="{'active': version === active_cuda_ver, 'disabled': disableUnsupportedCuda(version)}"
-                            class="option" x-text="'CUDA ' + version"></div>
+                    <template x-for="version in conda_cuda_vers">
+                        <div x-on:click="(e) => condaCUDAClickHandler(e, version)"
+                            x-bind:class="{'active': version === active_conda_cuda_ver, 'disabled': disableUnsupportedCuda(version)}"
+                            class="option" x-text="'CUDA ' + getCondaVersionSupport(version)['label']"></div>
                     </template>
                 </div>
                 <div class="options-section" x-show="active_method === 'pip'">
@@ -258,6 +258,14 @@
                         <div x-on:click="(e) => pipCUDAClickHandler(e, version)"
                             x-bind:class="{'active': version === active_pip_cuda_ver}" class="option"
                             x-text="'CUDA ' + version"></div>
+                    </template>
+                </div>
+                <div class="options-section" x-show="active_method === 'Docker'">
+                    <div class="option-label">Image CUDA</div>
+                    <template x-for="version in docker_cuda_vers">
+                        <div x-on:click="(e) => dockerCUDAClickHandler(e, version)"
+                            x-bind:class="{'active': version === active_docker_cuda_ver, 'disabled': disableUnsupportedCuda(version)}"
+                            class="option" x-text="'CUDA ' + version"></div>
                     </template>
                 </div>
                 <div class="options-section" x-show="active_method !== 'pip'">
@@ -360,8 +368,9 @@
         Alpine.data('rapids_selector', () => ({
             // default values
             active_python_ver: "3.11",
-            active_cuda_ver: "12.2",
+            active_conda_cuda_ver: "12",
             active_pip_cuda_ver: "12",
+            active_docker_cuda_ver: "12.2",
             active_method: "Conda",
             active_release: "Stable",
             active_img_type: "Base",
@@ -371,8 +380,9 @@
 
             // all possible values
             python_vers: ["3.9", "3.10", "3.11"],
-            cuda_vers: ["11.2", "11.8", "12.0", "12.2", "12.5"],
-            pip_cuda_vers: ["11.2 - 11.8", "12"],
+            conda_cuda_vers: ["11", "12"],
+            pip_cuda_vers: ["11.4 - 11.8", "12"],
+            docker_cuda_vers: ["11.8", "12.0", "12.2", "12.5"],
             methods: ["Conda", "pip", "Docker"],
             releases: ["Stable", "Nightly"],
             img_loc: ["NGC", "Dockerhub"],
@@ -424,6 +434,25 @@
                 }
                 return pkg_components[0] + channel_pkg_separator + this.highlightPkgOrImg(pkg_components[1]);
             },
+            getCondaVersionSupport(version) {
+                var cuda_version_info = {
+                    "Stable": {
+                        "11": ["11.4", "11.8"],
+                        "12": ["12.0", "12.2"]
+                    },
+                    "Nightly": {
+                        "11": ["11.4", "11.8"],
+                        "12": ["12.0", "12.5"]
+                    }
+                };
+                var bounds = cuda_version_info[this.active_release][version];
+                var lower_bound = bounds[0];
+                var upper_bound = bounds[1];
+                return {
+                    "label": lower_bound + " - " + upper_bound,
+                    "pinning": ">=" + lower_bound + ",<=" + upper_bound
+                };
+            },
             getAdditionalPkgName(pkg) {
                 var dask_prefix = this.active_release === "Nightly" ? "dask/label/dev::" : "";
                 var pkg_names = {
@@ -438,8 +467,8 @@
                 var rapids_channel = this.active_release === "Stable" ? "rapidsai" : "rapidsai-nightly";
                 var dask_prefix = this.active_release === "Nightly" ? "dask/label/dev::" : "";
                 var python_version = this.active_python_ver;
-                var cuda_version = this.active_cuda_ver;
-                var py_cuda_pkgs = [this.highlightPkgOrImg("python") + "=" + python_version, this.highlightPkgOrImg("cuda-version") + "=" + cuda_version].join(" ");
+                var cuda_version_pinning = this.getCondaVersionSupport(this.active_conda_cuda_ver)["pinning"];
+                var py_cuda_pkgs = [this.highlightPkgOrImg("python") + "=" + python_version, "'" + this.highlightPkgOrImg("cuda-version") + cuda_version_pinning + "'"].join(" ");
                 var conda_channels = [rapids_channel, "conda-forge", "nvidia"]
                     .map(ch => "-" + this.highlightFlag("c") + " " + ch + " ")
                     .join("");
@@ -502,7 +531,7 @@
                 var cuda_suffix = "-cu12";
                 var indentation = "    ";
 
-                if (this.active_pip_cuda_ver === "11.2 - 11.8") {
+                if (this.active_pip_cuda_ver.startsWith("11")) {
                     cuda_suffix = "-cu11";
                 }
 
@@ -584,7 +613,7 @@
 
                 var imgTag = [
                     (isNightly ? this.getNightlyVersion() + "a" : this.getStableVersion()),
-                    "cuda" + this.active_cuda_ver,
+                    "cuda" + this.active_docker_cuda_ver,
                     "py" + this.active_python_ver
                 ].join("-");
 
@@ -604,7 +633,7 @@
             },
             getDockerNotes() {
                 var notes = [];
-                if (this.active_cuda_ver.startsWith("12") && this.active_release === "Stable") {
+                if (this.active_docker_cuda_ver.startsWith("12") && this.active_release === "Stable") {
                     var pkgs_html = this.rapids_meta_pkgs.map(pkg => "<code>" + pkg + "</code>").join(", ");
                     notes = [...notes]
                 } else {
@@ -674,8 +703,7 @@
             },
             disableUnsupportedCuda(cuda_version) {
                 var isDisabled = false;
-                if (this.active_additional_packages.includes("TensorFlow") && (cuda_version !== "12.0")) isDisabled = true;
-                if (this.active_method === "Docker" && cuda_version < "11.8") isDisabled = true;
+                if (this.active_additional_packages.includes("TensorFlow") && (!cuda_version.startsWith("12"))) isDisabled = true;
                 if (this.active_release === "Stable" && cuda_version === "12.5") isDisabled = true;
                 return isDisabled;
             },
@@ -706,21 +734,25 @@
             releaseClickHandler(e, release) {
                 if (this.isDisabled(e.target)) return;
                 this.active_release = release;
-                if ( this.active_release === "Stable" && this.active_cuda_ver === "12.5") {
-                    this.active_cuda_ver = "12.2";
+                if (this.active_release === "Stable" && this.active_docker_cuda_ver === "12.5") {
+                    this.active_docker_cuda_ver = "12.2";
                 }
             },
             imgTypeClickHandler(e, type) {
                 if (this.isDisabled(e.target)) return;
                 this.active_img_type = type;
             },
-            cudaClickHandler(e, version) {
+            condaCUDAClickHandler(e, version) {
                 if (this.isDisabled(e.target)) return;
-                this.active_cuda_ver = version;
+                this.active_conda_cuda_ver = version;
             },
             pipCUDAClickHandler(e, version) {
                 if (this.isDisabled(e.target)) return;
                 this.active_pip_cuda_ver = version;
+            },
+            dockerCUDAClickHandler(e, version) {
+                if (this.isDisabled(e.target)) return;
+                this.active_docker_cuda_ver = version;
             },
             pythonClickHandler(e, version) {
                 if (this.isDisabled(e.target)) return;
@@ -790,7 +822,7 @@
                     return;
                 }
                 this.active_additional_packages = [...this.active_additional_packages, package];
-                if (this.active_additional_packages.includes("TensorFlow") && (this.active_cuda_ver !== "12.0")) this.active_cuda_ver = "12.0";
+                if (this.active_additional_packages.includes("TensorFlow") && this.active_conda_cuda_ver !== "12") this.active_conda_cuda_ver = "12";
             },
             copyToClipboard() {
                 let range = document.createRange();
