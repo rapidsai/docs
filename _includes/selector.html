@@ -740,6 +740,18 @@
             releaseClickHandler(e, release) {
                 if (this.isDisabled(e.target)) return;
                 this.active_release = release;
+
+                /*
+                    It's possible that the active Python version prior to someone changing releases
+                    isn't supported by whatever release was chosen in the selector.
+
+                    This handles that case, updating to the oldest Python version supported by the chosen release.
+                */
+                if (this.active_release === "Stable" && !this.python_vers_stable.includes(this.active_python_ver)) {
+                    this.active_python_ver = this.python_vers_stable[0];
+                } else if (this.active_release === "Nightly" && !this.python_vers_nightly.includes(this.active_python_ver)) {
+                    this.active_python_ver = this.python_vers_nightly[0];
+                }
             },
             imgTypeClickHandler(e, type) {
                 if (this.isDisabled(e.target)) return;
