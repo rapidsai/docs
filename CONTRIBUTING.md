@@ -22,7 +22,7 @@ docker run --rm \
   --volume="$PWD:/srv/jekyll" \
   --publish [::1]:4000:4000 \
   jekyll/jekyll \
-  jekyll serve
+  bash -c 'rm -rf ./_site && jekyll serve'
 ```
 
 ## PR submissions
