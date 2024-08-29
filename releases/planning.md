@@ -56,7 +56,7 @@ Each Release board has the following columns:
 #### Using the release board
 - Assigning and prioritizing work
   - Scroll to the left to see all the columns labeled `Issue-*`
-  - Re-prioritize issues in `P0`, `P1`, `P2` by moving issuses between columns
+  - Re-prioritize issues in `P0`, `P1`, `P2` by moving issues between columns
   - Move high priority issues within a column to the top; this promotes "pop off the top of the stack" development
 - Expediting and finishing work
   - Scroll to the right to see all columns labeled `PR-*`
