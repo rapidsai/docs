@@ -39,7 +39,7 @@ The RAPIDS data science framework is a collection of libraries for running end-t
 
 
 **<i class="fa-light fa-chart-network"></i> Graph Analytics with [cuGraph](https://github.com/rapidsai/cugraph){: target="_blank"}**:
- Start with the [Easy Path](/api/cugraph/stable/basics/nx_transition/#easy-path-use-networkx-graph-objects-accelerated-algorithms){: target="_blank"} to use NetworkX graph objects with accelerated algorithms. Or, use [nx-cugraph](/api/cugraph/stable/nx_cugraph/nx_cugraph/){: target="_blank"} to use the NetworkX API with a zero code-change GPU accelerated backend. There is also a general [cuGraph Introduction](/api/cugraph/stable/basics/cugraph_intro/){: target="_blank"}.
+ Start with the [Easy Path](/api/cugraph/stable/basics/nx_transition/#easy-path-use-networkx-graph-objects-accelerated-algorithms){: target="_blank"} to use NetworkX graph objects with accelerated algorithms. Or, use [nx-cugraph](/api/cugraph/stable/nx_cugraph/nx_cugraph/){: target="_blank"} to use the NetworkX API with a zero code change GPU accelerated backend. There is also a general [cuGraph Introduction](/api/cugraph/stable/basics/cugraph_intro/){: target="_blank"}.
 {: .mb-8 }
 
 
