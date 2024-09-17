@@ -49,7 +49,7 @@ Use the selector tool below to select your preferred method, packages, and envir
 ### **Conda Issues**
 <i class="fas fa-info-circle"></i> A `conda create error` occurs:<br/>
 To resolve this error please follow one of these steps:
-- If the Conda installation is older than `22.11`, please update your [Conda or Miniconda to the latest version](https://conda.io/projects/conda/en/stable/user-guide/install/index.html){: target="_blank"}. This will include [libmamba](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}, a Mamba-powered Conda solver that is [now included with all Conda/Miniconda installations](https://www.anaconda.com/blog/new-release-anaconda-distribution-2023-07-miniconda-23-5-0-and-more){: target="_blank"} to significantly accelerate environment solving.
+- If the Conda installation is older than `22.11`, please update to the latest version. This will include [libmamba](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}, a Mamba-powered Conda solver that is now included with all conda installations to significantly accelerate environment solving.
 - If the Conda installation is version `22.11` or newer, run: `conda install -n base conda-libmamba-solver` and run
 `conda create --solver=libmamba ...`
 - Use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"} as `mamba create ...`
@@ -193,17 +193,14 @@ For most installations, you will need a Conda or Docker environments installed f
 <div id="conda"></div>
 
 ## **Conda**
-RAPIDS can use several versions of conda:
-- Full installation with [Anaconda](https://www.anaconda.com/download){: target="_blank"} (with optional faster [libmamba solver](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}).
-- Minimal installation with [Miniconda](https://conda.io/miniconda.html){: target="_blank"}
-- Faster environment solving installation with standalone [Mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html){: target="_blank"}.
+RAPIDS can be used with any conda distribution.
 
-Below is a quick installation guide using miniconda.
+Below is an installation guide using miniforge.
 
-**1. Download and Run Install Script**. Copy the command below to download and run the miniconda install script:
+**1. Download and Run Install Script**. Copy the command below to download and run the miniforge install script:
 ```sh
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh
+curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+bash Miniforge3-$(uname)-$(uname -m).sh
 ```
 
 **2. Customize Conda and Run the Install.** Use the terminal window to finish installation. Note, we recommend enabling `conda-init`.
