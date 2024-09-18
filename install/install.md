@@ -99,7 +99,7 @@ ERROR: No matching distribution found for cudf-cu12
 Check the suggestions below for possible resolutions:
 
 - The pip index has moved from the initial experimental release! Ensure the correct `--extra-index-url=https://pypi.nvidia.com`
-- Ensure you're using a Python version that RAPIDS supports (compare the values in the [the install selector](#selector) to the Python version reported by `pip --version`).
+- Ensure you're using a Python version that RAPIDS supports (compare the values in the [the install selector](#selector) to the Python version reported by `python --version`).
 - RAPIDS pip packages require a recent version of pip that [supports PEP600](https://peps.python.org/pep-0600/){: target="_blank"}. Some users may need to update pip: `pip install -U pip`
 
 <br/>
