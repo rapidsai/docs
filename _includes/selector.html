@@ -379,9 +379,9 @@
             active_additional_packages: [],
 
             // all possible values
-            python_vers: ["3.9", "3.10", "3.11"],
+            python_vers: ["3.9", "3.10", "3.11", "3.12"],
             python_vers_stable: ["3.9", "3.10", "3.11"],
-            python_vers_nightly: ["3.10", "3.11"],
+            python_vers_nightly: ["3.10", "3.11", "3.12"],
             conda_cuda_vers: ["11", "12"],
             pip_cuda_vers: ["11.4 - 11.8", "12"],
             docker_cuda_vers: ["11.8", "12.0", "12.5"],
@@ -664,8 +664,9 @@
             getpipNotes() {
                 var notes = [];
                 var install_location_notes = "RAPIDS pip packages are hosted by NVIDIA<br>"
+                var version_string = this.getSupportedPythonVersions().map((v) => `<code>${v}</code>`).join(", ")
                 notes = [...notes, install_location_notes,
-                    'pip installation supports Python <code>3.9</code>, <code>3.10</code>, and <code>3.11</code>.<br>'];
+                    `pip installation supports the following Python versions: ${version_string}.<br>`];
 
                 return notes.map(note => this.note_prefix + " " + note);
             },
@@ -695,6 +696,12 @@
                     return this.getpipCmdHtml();
                 return "Not implemented yet!";
             },
+            getSupportedPythonVersions() {
+                if (this.active_release === "Stable") {
+                    return this.python_vers_stable;
+                }
+                return this.python_vers_nightly;
+            },
             disableUnsupportedRelease(release) {
                 var isDisabled = false;
                 if (this.active_img_loc === "NGC" && this.active_method === "Docker" && release === "Nightly") isDisabled = true;
@@ -706,12 +713,7 @@
                 return isDisabled;
             },
             disableUnsupportedPython(python_version) {
-                var isDisabled = false;
-                if (this.active_release === "Stable") {
-                    isDisabled = !this.python_vers_stable.includes(python_version)
-                } else if (this.active_release === "Nightly") {
-                    isDisabled = !this.python_vers_nightly.includes(python_version)
-                }
+                var isDisabled = !this.getSupportedPythonVersions().includes(python_version)
                 return isDisabled;
             },
             disableUnsupportedImgType(type) {
@@ -744,11 +746,10 @@
 
                     This handles that case, updating to the oldest Python version supported by the chosen release.
                 */
-                if (this.active_release === "Stable" && !this.python_vers_stable.includes(this.active_python_ver)) {
-                    this.active_python_ver = this.python_vers_stable[0];
-                } else if (this.active_release === "Nightly" && !this.python_vers_nightly.includes(this.active_python_ver)) {
-                    this.active_python_ver = this.python_vers_nightly[0];
-                }
+               var supported_python_versions = this.getSupportedPythonVersions()
+               if (!supported_python_versions.includes(this.active_python_ver)) {
+                   this.active_python_ver = supported_python_versions[supported_python_versions.length - 1];
+               }
             },
             imgTypeClickHandler(e, type) {
                 if (this.isDisabled(e.target)) return;
