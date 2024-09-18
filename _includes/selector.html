@@ -456,8 +456,10 @@
                 };
             },
             getAdditionalPkgName(pkg) {
+                // used to pin the version of nx-cugraph for conda install
+                var rapids_version = this.active_release === "Stable" ? this.getStableVersion() : this.getNightlyVersion();
                 var pkg_names = {
-                    "NetworkX + nx-cugraph": "networkx nx-cugraph",
+                    "NetworkX + nx-cugraph": `networkx nx-cugraph=${rapids_version}`,
                     "Plotly Dash": "dash",
                     "PyTorch": "'pytorch=*=*cuda*'"
                 }
@@ -540,7 +542,7 @@
                 // This has duplicate code, but makes for easier edits in the future
                 if (this.active_release === "Stable") {
                     index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.nvidia.com`;
-                    var version = this.removeLeadingZeros("{{ site.data.releases.stable.version }}")
+                    var version = this.removeLeadingZeros("{{ site.data.releases.stable.version }}");
                     cuda_suffix = cuda_suffix + `==${version}.*`;
                     var libraryToPkg = (pkg) => {
                         pkg = pkg.toLowerCase();
