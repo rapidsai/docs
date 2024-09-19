@@ -17,6 +17,7 @@ export PATH="${PATH}:${INSTALL_PREFIX}/go/bin"
 
 install_dependencies() {
   echo "installing dependencies..."
+  ruby --version
   bundle install
   npm install
 }
