@@ -24,19 +24,23 @@ jobs:
     name: Build (and deploy)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       # this step uses the `.ruby-version` file
       - uses: ruby/setup-ruby@v1
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
       - name: Build Jekyll Site
         run: |
           bundle install
           bundle exec jekyll build
 
-      - uses: aws-actions/configure-aws-credentials@v1-node16
+      - uses: aws-actions/configure-aws-credentials@4
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
@@ -48,7 +52,7 @@ jobs:
       - name: Post-process docs
         run: ci/post-process.sh
 
-      - name: Deploy site
+      - name: Deploy site to Netlify
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_DOCS_SITE_ID }}
@@ -63,3 +67,19 @@ jobs:
           fi
           netlify deploy "$ARGS" \
             --dir=_site
+
+      - name: Deploy site to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npm install
+          npm install --global --force vercel
+
+          ARGS=""
+          if [ "$GITHUB_REF_NAME" = "main" ]; then
+            ARGS="--prod"
+          fi
+          ./vercel.sh mk-dist
+          vercel deploy --prebuilt "${ARGS}" --token="${VERCEL_TOKEN}"

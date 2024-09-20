@@ -26,10 +26,15 @@ build() {
   env | sort
 
   echo "clean output directories..."
-  rm -rf ./.vercel/output ./_site
+  rm -rf ./.vercel/ ./_site
 
   echo "building..."
   jekyll build
+  mk-dist
+}
+
+mk-dist() {
+  echo "copying to vercel directory..."
   mkdir -p .vercel/output/
   node ci/vercel/config.mjs > .vercel/output/config.json
   cp -r _site .vercel/output/static
@@ -41,6 +46,9 @@ case "${CMD}" in
     ;;
   "build")
     build
+    ;;
+  "mk-dist")
+    mk-dist
     ;;
   *)
     echo "${USAGE}"
