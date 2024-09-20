@@ -4,7 +4,6 @@ notice_type: rdn
 title: RAPIDS Developer Notices
 nav_order: 1
 has_children: true
-permalink: notices/rdn
 parent: RAPIDS Notices
 has_notice_index: true # shows list of notices for this 'notice_type'
 ---

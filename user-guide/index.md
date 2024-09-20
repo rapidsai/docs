@@ -2,7 +2,6 @@
 layout: default
 title: User Guides
 nav_order: 3
-permalink: user-guide
 description: |
   Guide to Getting Started Using RAPIDS
 ---
