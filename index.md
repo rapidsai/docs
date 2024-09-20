@@ -2,7 +2,6 @@
 layout: default
 title: Home
 nav_order: 1
-permalink: /
 description: |
   A collection of all the documentation for RAPIDS. Whether you're new to RAPIDS, looking to contribute, or are a part of the RAPIDS team, the docs here will help guide you.
 ---
@@ -15,16 +14,16 @@ This site serves to unify the documentation for RAPIDS. Whether you're new to RA
 
 ## Sections
 
-[<i class="fa-solid fa-download"></i> Installation Guide]({% link install/install.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
-[<i class="fa-solid fa-file-circle-info"></i> User Guides]({% link user-guide/user-guide.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
+[<i class="fa-solid fa-download"></i> Installation Guide]({% link install/index.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
+[<i class="fa-solid fa-file-circle-info"></i> User Guides]({% link user-guide/index.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
 <br/>
 [<i class="fa-solid fa-file-circle-info"></i> API Documentation]({% link api.md %}){: .btn.fs-4 .mb-4 .mb-md-04 .mr-2 }
-[<i class="fa-solid fa-file-circle-info"></i> Visualization Guide]({% link visualization/visualization.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
+[<i class="fa-solid fa-file-circle-info"></i> Visualization Guide]({% link visualization/index.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
 <br/>
 [<i class="fa-solid fa-file-circle-info"></i> Deployment Guides](/deployment/stable/){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
-[<i class="fa-solid fa-file-circle-info"></i> Maintainer Documentation]({% link maintainers/maintainers.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
+[<i class="fa-solid fa-file-circle-info"></i> Maintainer Documentation]({% link maintainers/index.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
 <br/>
-[<i class="fas fa-bullhorn"></i> RAPIDS Notices]({% link notices/notices.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
+[<i class="fas fa-bullhorn"></i> RAPIDS Notices]({% link notices/index.md %}){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
 [<i class="fab fa-github"></i> RAPIDS GitHub](https://github.com/rapidsai){: .btn.fs-4 .mb-4 .mb-md-4 .mr-2 }
 
 ---
