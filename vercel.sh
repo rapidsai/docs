@@ -34,7 +34,7 @@ build() {
   echo "building..."
   jekyll build
   mkdir -p .vercel/output/
-  node scripts/vercel/config.mjs > .vercel/output/config.json
+  node ci/vercel/config.mjs > .vercel/output/config.json
   cp -r _site .vercel/output/static
 }
 
