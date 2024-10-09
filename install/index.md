@@ -322,7 +322,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 <br/>
 <div id="wsl2-sdkm"></div>
 
-### **WSL2 SDK Manager Install (Preferred Method)**
+### **WSL2 SDK Manager Install**
 [NVIDIA's SDK Manager](https://developer.nvidia.com/sdk-manager){: target="_blank"} gives a Windows user a Graphical User Interface (GUI) option to install RAPIDS.  It also attempts to fix any environment issues before installing RAPIDS or updating RAPIDS without any Linux knowledge.
 1. In Windows, install or update WSL2 [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
