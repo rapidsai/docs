@@ -151,7 +151,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
  **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details.
 
-## **CUDA 12 Support**
+## **CUDA Support**
 
 ### **Docker and Conda**
 
