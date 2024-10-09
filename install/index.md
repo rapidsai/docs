@@ -328,7 +328,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Download [SDK Manager's Ubuntu version from their website](https://developer.nvidia.com/sdk-manager){: target="_blank"} (requires sign up or login to NVIDIA's Developer community).  Do not install yet.  It is assumed that your home directory's `Downloads` folder is where the `.deb` file will be stored.  If not, please move `sdkmanager_[version]-[build#]_amd64.deb` file to your current Download folder.
 4. Open PowerShell command line or Windows terminal, run `wsl --install -d Ubuntu-22.04`.  This will install and start Ubuntu in your Windows host system using WSL2.  Make your **sudo** password memorable as you will need it in the next two steps.
-5. Install and run SDK Manager using  inside Ubuntu by pasting this into your command line.  You will have to enter the sudo password you created when you installed Ubuntu and also change folder location to match your home directory in windows (if you don't know it, open powershell, type `$HOME`, and hit enter)
+5. Install and run SDK Manager using inside Ubuntu by pasting this into your command line.  You will have to enter the sudo password you created when you installed Ubuntu and also change folder location to match your home directory in windows (if you don't know it, open PowerShell, type `$HOME`, and hit enter)
 ```sudo apt update && sudo apt install wslu -y
 sudo apt install /mnt/c/Users/[YOUR HOME DIRECTORY ON WINDOWS]/Downloads/sdkmanager_[version]-[build#]_amd64.deb
 sdkmanager
