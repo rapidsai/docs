@@ -287,7 +287,7 @@ RAPIDS pip packages are available for CUDA 11 and CUDA 12 on the NVIDIA Python P
 sudo apt install ./sdkmanager_[version]-[build#]_amd64.deb
 sdkmanager
 ```
-3. Sign in when asked, and [follow SDK Manager's RAPIDS installation instructions here](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html){: target="_blank"}.
+3. Sign in when asked, and follow SDK Manager's [RAPIDS installation instructions](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html){: target="_blank"}.
 
 
 <br/>
