@@ -145,9 +145,9 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 - <i class="fas fa-check-circle"></i> [CUDA 11.4](https://developer.nvidia.com/cuda-11-4-0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.5](https://developer.nvidia.com/cuda-11-5-0-download-archive){: target="_blank"} with Driver 495.29.05 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 520.61.05 or newer
-- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive){: target="_blank"} with Driver 525.60.13 or newer **see CUDA 12 section below for notes on usage**
-- <i class="fas fa-check-circle"></i> [CUDA 12.2](https://developer.nvidia.com/cuda-12-2-2-download-archive){: target="_blank"} with Driver 535.86.10 or newer **see CUDA 12 section below for notes on usage**
-- <i class="fas fa-check-circle"></i> [CUDA 12.5](https://developer.nvidia.com/cuda-12-5-1-download-archive){: target="_blank"} with Driver 555.42.02 or newer **see CUDA 12 section below for notes on usage**
+- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive){: target="_blank"} with Driver 525.60.13 or newer
+- <i class="fas fa-check-circle"></i> [CUDA 12.2](https://developer.nvidia.com/cuda-12-2-2-download-archive){: target="_blank"} with Driver 535.86.10 or newer
+- <i class="fas fa-check-circle"></i> [CUDA 12.5](https://developer.nvidia.com/cuda-12-5-1-download-archive){: target="_blank"} with Driver 555.42.02 or newer
 
  **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details.
 
