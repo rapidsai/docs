@@ -155,7 +155,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 ### **Docker and Conda**
 
-- <i class="fas fa-info-circle"></i> Stable CUDA 12 conda packages and Docker images currently support CUDA 12.0 and 12.5.
+- <i class="fas fa-info-circle"></i> Stable conda packages support CUDA 11.4-11.8 and 12.0-12.5. Docker images currently support CUDA 11.8, 12.0, and 12.5.
 - <i class="fas fa-info-circle"></i> CUDA 11 conda packages and Docker images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
 
 ### **pip**
