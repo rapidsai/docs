@@ -326,7 +326,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 [NVIDIA's SDK Manager](https://developer.nvidia.com/sdk-manager){: target="_blank"} gives a Windows user a Graphical User Interface (GUI) option to install RAPIDS. It also attempts to fix any environment issues before installing RAPIDS or updating RAPIDS without any Linux knowledge.
 1. In Windows, install or update WSL2 [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
-3. Download [SDK Manager's Ubuntu version from their website](https://developer.nvidia.com/sdk-manager){: target="_blank"} (requires sign up or login to NVIDIA's Developer community).  Do not install yet.  It is assumed that your home directory's `Downloads` folder is where the `.deb` file will be stored.  If not, please move `sdkmanager_[version]-[build#]_amd64.deb` file to your current Download folder.
+3. Download [SDK Manager's Ubuntu version from their website](https://developer.nvidia.com/sdk-manager){: target="_blank"} (requires sign up or login to NVIDIA's Developer community).  Do not install yet.  The rest of the instructions assume that your home directory's `Downloads` folder is where the `.deb` file will be stored.  If this is not the case, please change the directroy, as needed, for your system.
 4. Open PowerShell command line or Windows terminal, run:
 ```bash
 wsl --install -d Ubuntu-22.04
