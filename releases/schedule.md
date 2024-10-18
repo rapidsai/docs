@@ -26,7 +26,7 @@ Operations
 
 ## Current release
 
-The current release schedule is posted on the [RAPIDS Maintainers Docs]({% link maintainers/maintainers.md %}) page.
+The current release schedule is posted on the [RAPIDS Maintainers Docs]({% link maintainers/index.md %}) page.
 
 ## Completed Releases
 

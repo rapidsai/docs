@@ -3,7 +3,6 @@ layout: notice-index
 title: RAPIDS Notices
 nav_order: 7
 has_children: true
-permalink: notices
 has_notice_pin_index: true # shows pinned notices at end
 ---
 
@@ -16,6 +15,6 @@ Notices are our means to communicate and document changes in the project to cont
 
 Type | Code | Intended Audience | Purpose
 --- | --- | --- | ---
-[RAPIDS Developer Notice]({% link notices/rdn.md %}) | **RDN** | Contributors & Core Developers | Communicate updates to development processes
-[RAPIDS General Notice]({% link notices/rgn.md %}) | **RGN** | Everyone | Project wide announcements and updates, including breaking changes
-[RAPIDS Support Notice]({% link notices/rsn.md %}) | **RSN** | Everyone | Updates on RAPIDS support for specific versions of CUDA, Python, OS, platforms, and compilers
+[RAPIDS Developer Notice]({% link notices/rdn/index.md %}) | **RDN** | Contributors & Core Developers | Communicate updates to development processes
+[RAPIDS General Notice]({% link notices/rgn/index.md %}) | **RGN** | Everyone | Project wide announcements and updates, including breaking changes
+[RAPIDS Support Notice]({% link notices/rsn/index.md %}) | **RSN** | Everyone | Updates on RAPIDS support for specific versions of CUDA, Python, OS, platforms, and compilers

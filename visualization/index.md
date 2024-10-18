@@ -2,7 +2,6 @@
 layout: default
 title: Visualization Guide
 nav_order: 5
-permalink: visualization
 ---
 
 # RAPIDS Visualization Guide

@@ -4,7 +4,6 @@ title: Resources
 parent: Maintainer Docs
 nav_order: 6
 has_children: true
-permalink: resources
 ---
 
 # Resources

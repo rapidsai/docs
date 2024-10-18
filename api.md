@@ -2,7 +2,6 @@
 layout: default
 title: API Docs
 nav_order: 4
-permalink: api
 has_toc: false
 has_children: false
 ---
