@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright (c) 2024, NVIDIA CORPORATION.
 
 set -euo pipefail
 
@@ -35,7 +36,7 @@ main() {
     patch=${patch:-0} # handle patch values like 00
 
     local url="https://repo1.maven.org/maven2/ai/rapids/cudf/${major}.${minor}.${patch}/cudf-${major}.${minor}.${patch}-javadoc.jar"
-    
+
     if ! wget --spider "$url" 2>/dev/null; then
         echo "Error: Documentation not found at $url" >&2
         exit 1
