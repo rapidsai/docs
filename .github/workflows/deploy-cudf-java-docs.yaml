@@ -39,14 +39,13 @@ jobs:
           role-duration-seconds: 7200 # 2h
 
       - name: Upload cudf-java docs to S3
-        if: ${{ inputs.new_stable_value == '1' }}
         run: ci/upload_cudf_java_docs.sh ${{ inputs.version }}
 
       - name: Run script to update stable value for cudf-java in docs.yml
         env :
           NEW_STABLE_VALUE: ${{ inputs.new_stable_value }}
         run: |
-          if [ "$NEW_STABLE_VALUE" != "1" ] && [ "$NEW_STABLE_VALUE" != "0" ]; then
+          if [ "$NEW_STABLE_VALUE" != "1" ]; then
             echo "Invalid value for new_stable_value: $NEW_STABLE_VALUE"
             exit 1
           fi
@@ -61,7 +60,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Update stable value for cudf-java in docs.yml"
           branch: "update-stable-value-for-cudf-java"
-          title: ${{ inputs.new_stable_value == '1' && 'Enable' || 'Disable' }} cudf-java docs for version ${{ inputs.version }}
+          title: Enable cudf-java docs for version ${{ inputs.version }}
           author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
           body: |
-            This PR ${{ inputs.new_stable_value == '1' && 'enables' || 'disables' }} cudf-java docs for version ${{ inputs.version }}.
+            This PR enables cudf-java docs for version ${{ inputs.version }}.
