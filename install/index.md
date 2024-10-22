@@ -24,7 +24,9 @@ RAPIDS has several methods for installation, depending on the preferred environm
 - [Conda](#conda)
 - [Docker](#docker)
 - [pip](#pip)
+- [SDK Manager](#sdkm)
 - [Within WSL2](#wsl2)
+  - [SDK Manager](#wsl2-sdkm)
   - [Conda](#wsl2-conda)
   - [Docker](#wsl2-docker)
   - [pip](#wsl2-pip)
@@ -143,16 +145,17 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 - <i class="fas fa-check-circle"></i> [CUDA 11.4](https://developer.nvidia.com/cuda-11-4-0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.5](https://developer.nvidia.com/cuda-11-5-0-download-archive){: target="_blank"} with Driver 495.29.05 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 520.61.05 or newer
-- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive){: target="_blank"} with Driver 525.60.13 or newer **see CUDA 12 section below for notes on usage**
-- <i class="fas fa-check-circle"></i> [CUDA 12.2](https://developer.nvidia.com/cuda-12-2-2-download-archive){: target="_blank"} with Driver 535.86.10 or newer **see CUDA 12 section below for notes on usage**
+- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive){: target="_blank"} with Driver 525.60.13 or newer
+- <i class="fas fa-check-circle"></i> [CUDA 12.2](https://developer.nvidia.com/cuda-12-2-2-download-archive){: target="_blank"} with Driver 535.86.10 or newer
+- <i class="fas fa-check-circle"></i> [CUDA 12.5](https://developer.nvidia.com/cuda-12-5-1-download-archive){: target="_blank"} with Driver 555.42.02 or newer
 
  **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details.
 
-## **CUDA 12 Support**
+## **CUDA Support**
 
 ### **Docker and Conda**
 
-- <i class="fas fa-info-circle"></i> Stable CUDA 12 conda packages and Docker images currently support CUDA 12.0. Additionally, nightly versions now support CUDA 12.2
+- <i class="fas fa-info-circle"></i> Stable conda packages support CUDA 11.4-11.8 and 12.0-12.5. Docker images currently support CUDA 11.8, 12.0, and 12.5.
 - <i class="fas fa-info-circle"></i> CUDA 11 conda packages and Docker images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
 
 ### **pip**
@@ -179,8 +182,7 @@ If you do not have access to GPU hardware, there are several cloud service provi
 
 Several services also offer **free and limited** trials with GPU resources:
 - [Amazon SageMaker Studio Lab](https://studiolab.sagemaker.aws/)
-- [Google CoLab w/ pip](https://colab.research.google.com/drive/13sspqiEZwso4NYTbsflpPyNFaVAAxUgr)
-- [Google CoLab w/ Conda](https://colab.research.google.com/drive/1TAAi_szMfWqRfHVfjGSqnGVLr_ztzUM9)
+- [Google Colab w/ pip](https://nvda.ws/3XEO6hK)
 - [PaperSpace](https://www.paperspace.com/gpu-cloud)
 
 <hr/>
@@ -274,6 +276,19 @@ RAPIDS pip packages are available for CUDA 11 and CUDA 12 on the NVIDIA Python P
 <i class="fas fa-info-circle"></i> **glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
 <i class="fas fa-info-circle"></i> **glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.32 (only ARM Server Base System Architecture is supported).
 
+<br/>
+<div id="sdkm"></div>
+
+### **SDK Manager (Ubuntu Only)**
+[NVIDIA SDK Manager](https://developer.nvidia.com/sdk-manager) gives a users a Graphical User Interface (GUI) option to install RAPIDS.  It also attempts to fix any environment issues before installing RAPIDS or updating RAPIDS, making it ideal for new Linux users.
+1. Download [SDK Manager's Ubuntu version from their website](https://developer.nvidia.com/sdk-manager){: target="_blank"} (requires sign up or login to NVIDIA's Developer community).  Do not install yet.  It is assumed that your home directory's `Downloads` folder is where the `.deb` file will be stored.  If not, please move `sdkmanager_[version]-[build#]_amd64.deb` file to your current Download folder.
+2. Install and run SDK Manager [using the installation guide here](https://docs.nvidia.com/sdk-manager/download-run-sdkm/index.html){: target="_blank"}.  For example, in Ubuntu, the code will look like:
+```bash
+sudo apt install ./sdkmanager_[version]-[build#]_amd64.deb
+sdkmanager
+```
+3. Sign in when asked, and follow SDK Manager's [RAPIDS installation instructions](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html){: target="_blank"}.
+
 
 <br/>
 <div id="wsl2"></div>
@@ -305,9 +320,30 @@ Windows users can now tap into GPU accelerated data science on their local machi
 <i class="fas fa-info-circle text-white"></i> When installing with Docker Desktop, if the container pull command is successful, but the run command hangs indefinitely, [ensure you're on Docker Desktop >= 4.18](https://docs.docker.com/desktop/release-notes/){: target="_blank"}.
 
 <br/>
+<div id="wsl2-sdkm"></div>
+
+### **WSL2 SDK Manager Install**
+[NVIDIA's SDK Manager](https://developer.nvidia.com/sdk-manager){: target="_blank"} gives a Windows user a Graphical User Interface (GUI) option to install RAPIDS. It also attempts to fix any environment issues before installing RAPIDS or updating RAPIDS without any Linux knowledge.
+1. In Windows, install or update WSL2 [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
+2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
+3. Download [SDK Manager's Ubuntu version from their website](https://developer.nvidia.com/sdk-manager){: target="_blank"} (requires sign up or login to NVIDIA's Developer community).  Do not install yet.  The rest of the instructions assume that your home directory's `Downloads` folder is where the `.deb` file will be stored.  If this is not the case, please change the directory, as needed, for your system.
+4. Open PowerShell command line or Windows terminal, run:
+```bash
+wsl --install -d Ubuntu-22.04
+```
+This will install and start Ubuntu in your Windows host system using WSL2.  Make your **sudo** password memorable as you will need it in the next two steps.
+5. Install and run SDK Manager using inside Ubuntu by pasting this into your command line.  You will have to enter the sudo password you created when you installed Ubuntu and also change folder location to match your home directory in windows (if you don't know it, open PowerShell, type `$HOME`, and hit enter)
+```bash
+sudo apt update && sudo apt install wslu -y
+sudo apt install /mnt/c/Users/[YOUR HOME DIRECTORY ON WINDOWS]/Downloads/sdkmanager_[version]-[build#]_amd64.deb
+sdkmanager
+```
+6. Sign in when asked, and [follow SDK Manager's RAPIDS installation instructions here](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html){: target="_blank"}.
+
+<br/>
 <div id="wsl2-conda"></div>
 
-### **WSL2 Conda Install (Preferred Method)**
+### **WSL2 Conda Install**
 
 1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
