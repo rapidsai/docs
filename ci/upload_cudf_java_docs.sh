@@ -45,6 +45,7 @@ main() {
     wget "$url"
     unzip cudf-*-javadoc.jar -d cudf-docs
     aws s3 sync --delete cudf-docs/ "s3://rapidsai-docs/cudf-java/html/${DOCS_VERSION}/"
+    echo "Documentation successfully uploaded to s3://rapidsai-docs/cudf-java/html/${DOCS_VERSION}/"
 }
 
 main "$@"
