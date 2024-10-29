@@ -71,7 +71,7 @@ To learn more about these changes, please see the [RAPIDS Container README](http
 - `Development` images are no longer being published, in the coming releases RAPIDS will roll out [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
   - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
 - All images are Ubuntu-based
-  - CUDA 11.2 images are Ubuntu `20.04`
+  - CUDA 12.5+ images are Ubuntu `24.04`
   - All other images are Ubuntu `22.04`
 - All images are multiarch (x86_64 and ARM)
 - The `Base` image starts in an ipython shell
@@ -131,8 +131,14 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 <i class="fas fa-microchip"></i> **GPU:** NVIDIA Volta™ or higher with [compute capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} 7.0+
 - <i class="fas fa-exclamation-triangle"></i> Pascal™ GPU support was [removed in 24.02](https://docs.rapids.ai/notices/rsn0034/). Compute capability 7.0+ is required for RAPIDS 24.02 and later.
 
-<i class="fas fa-desktop"></i> **OS:** One of the following OS versions:
-- <i class="fas fa-check-circle"></i> Ubuntu 20.04/22.04 or Rocky Linux 8 with <code>gcc/++</code> 9.0+
+<i class="fas fa-desktop"></i> **OS:**
+- <i class="fas fa-check-circle"></i> Linux distributions with `glibc>=2.28` (released in August 2018), which include the following:
+  - [Arch Linux](https://archlinux.org/), minimum version 2018-08-02
+  - [Debian](https://www.debian.org/), minimum version 10.0
+  - [Fedora](https://fedoraproject.org/), minimum version 29
+  - [Linux Mint](https://linuxmint.com/), minimum version 20
+  - [Rocky Linux](https://rockylinux.org/) / [Alma Linux](https://almalinux.org/) / [RHEL](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux), minimum version 8
+  - [Ubuntu](https://ubuntu.com/), minimum version 20.04
 - <i class="fas fa-check-circle"></i> Windows 11 using a [WSL2 specific install](#wsl2)
 - <i class="fas fa-check-circle"></i> RHEL 7/8 support is provided through Rocky Linux 8 builds/installs
 
