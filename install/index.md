@@ -24,7 +24,7 @@ RAPIDS has several methods for installation, depending on the preferred environm
 - [Conda](#conda)
 - [Docker](#docker)
 - [pip](#pip)
-- [Within WSL2](#wsl2)
+- [Windows WSL2](#wsl2)
   - [Conda](#wsl2-conda)
   - [Docker](#wsl2-docker)
   - [pip](#wsl2-pip)
