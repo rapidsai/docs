@@ -68,13 +68,13 @@ If conda has incorrectly identified the CUDA driver, you can [override by settin
 ### **Docker Issues**
 <i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brought significant Docker changes. <br/>
 To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/base){: target="_blank"}. Some key notes below:
-- `Development` images are no longer being published, in the coming releases RAPIDS will roll out [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
+- `Development` images are no longer being published, RAPIDS now uses [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
   - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
 - All images are Ubuntu-based
-  - CUDA 12.5+ images are Ubuntu `24.04`
-  - All other images are Ubuntu `22.04`
+  - CUDA 12.5+ images use Ubuntu 24.04
+  - All other images use Ubuntu 22.04
 - All images are multiarch (x86_64 and ARM)
-- The `Base` image starts in an ipython shell
+- The `base` image starts in an ipython shell
   - To run bash commands inside the ipython shell prefix the command with `!`
   - To run the image without the ipython shell add `/bin/bash` to the end of the `docker run` command
 - For a full list of changes please see this [RAPIDS Docker Issue](https://github.com/rapidsai/docker/issues/539){: target="_blank"}
@@ -289,7 +289,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 
 ### **WSL2 Additional Prerequisites**
 
-<i class="fas fa-desktop text-white"></i> **OS:** Windows 11 with Ubuntu 22.04 instance for WSL2. <br/>
+<i class="fas fa-desktop text-white"></i> **OS:** Windows 11 with a WSL2 installation of Ubuntu (minimum version 20.04). <br/>
 <i class="fas fa-info-circle text-white"></i> **WSL Version:** WSL2 (WSL1 not supported). <br/>
 <i class="fas fa-microchip text-white"></i> **GPU:** GPUs with [Compute Capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} 7.0 or higher (16GB+ GPU RAM is recommended).
 
@@ -315,7 +315,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 
 ### **WSL2 Conda Install (Preferred Method)**
 
-1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
+1. Install WSL2 and the Ubuntu distribution [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
 4. Install Conda in the WSL2 Linux Instance using our [Conda instructions](#conda).
@@ -331,7 +331,7 @@ print(cudf.Series([1, 2, 3]))
 
 ### **WSL2 Docker Desktop Install**
 
-1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
+1. Install WSL2 and the Ubuntu distribution [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Install latest Docker Desktop for Windows
 4. Log in to the WSL2 Linux instance.
@@ -347,7 +347,7 @@ print(cudf.Series([1, 2, 3]))
 
 ### **WSL2 pip Install**
 
-1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
+1. Install WSL2 and the Ubuntu distribution [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
 4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then install the WSL-specific [CUDA 11](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} or [CUDA 12](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} Toolkit without drivers into the WSL2 instance.
