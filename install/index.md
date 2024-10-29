@@ -140,7 +140,6 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
   - [Rocky Linux](https://rockylinux.org/) / [Alma Linux](https://almalinux.org/) / [RHEL](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux), minimum version 8
   - [Ubuntu](https://ubuntu.com/), minimum version 20.04
 - <i class="fas fa-check-circle"></i> Windows 11 using a [WSL2 specific install](#wsl2)
-- <i class="fas fa-check-circle"></i> RHEL 7/8 support is provided through Rocky Linux 8 builds/installs
 
 <i class="fas fa-download text-purple"></i> **CUDA & NVIDIA Drivers:** One of the following supported versions:
 {: .no-tb-margins }
@@ -151,6 +150,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 - <i class="fas fa-check-circle"></i> [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 520.61.05 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive){: target="_blank"} with Driver 525.60.13 or newer **see CUDA 12 section below for notes on usage**
 - <i class="fas fa-check-circle"></i> [CUDA 12.2](https://developer.nvidia.com/cuda-12-2-2-download-archive){: target="_blank"} with Driver 535.86.10 or newer **see CUDA 12 section below for notes on usage**
+- <i class="fas fa-check-circle"></i> [CUDA 12.5](https://developer.nvidia.com/cuda-12-5-1-download-archive){: target="_blank"} with Driver 555.42.06 or newer **see CUDA 12 section below for notes on usage**
 
  **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details.
 
@@ -158,8 +158,8 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 ### **Docker and Conda**
 
-- <i class="fas fa-info-circle"></i> Stable CUDA 12 conda packages and Docker images currently support CUDA 12.0. Additionally, nightly versions now support CUDA 12.2
-- <i class="fas fa-info-circle"></i> CUDA 11 conda packages and Docker images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
+- <i class="fas fa-info-circle"></i> conda packages and Docker images support CUDA 12 on systems with a CUDA 12 driver.
+- <i class="fas fa-info-circle"></i> CUDA 11 conda packages and Docker images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit.
 
 ### **pip**
 
