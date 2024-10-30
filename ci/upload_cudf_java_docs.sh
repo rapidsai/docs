@@ -37,11 +37,6 @@ main() {
 
     local url="https://repo1.maven.org/maven2/ai/rapids/cudf/${major}.${minor}.${patch}/cudf-${major}.${minor}.${patch}-javadoc.jar"
 
-    if ! wget --spider "$url" 2>/dev/null; then
-        echo "Error: Documentation not found at $url" >&2
-        exit 1
-    fi
-
     wget "$url"
     unzip cudf-*-javadoc.jar -d cudf-docs
     aws s3 sync --delete cudf-docs/ "s3://rapidsai-docs/cudf-java/html/${DOCS_VERSION}/"
