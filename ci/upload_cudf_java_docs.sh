@@ -11,13 +11,7 @@ validate_version() {
     fi
 }
 
-cleanup() {
-    rm -rf cudf-*-javadoc.jar cudf-docs 2>/dev/null || true
-}
-
 main() {
-    trap cleanup EXIT
-
     if [ $# -ne 1 ]; then
         echo "Usage: $0 <version>"
         echo "Version format: YY.MM or YY.MM.P"
@@ -37,9 +31,11 @@ main() {
 
     local url="https://repo1.maven.org/maven2/ai/rapids/cudf/${major}.${minor}.${patch}/cudf-${major}.${minor}.${patch}-javadoc.jar"
 
-    wget "$url"
-    unzip cudf-*-javadoc.jar -d cudf-docs
-    aws s3 sync --delete cudf-docs/ "s3://rapidsai-docs/cudf-java/html/${DOCS_VERSION}/"
+    TMP_FILE=$(mktemp)
+    TMP_DIR=$(mktemp -d)
+    wget -O "${TMP_FILE}" "$url"
+    unzip "${TMP_FILE}" -d "${TMP_DIR}"
+    aws s3 sync --delete "${TMP_DIR}"/ "s3://rapidsai-docs/cudf-java/html/${DOCS_VERSION}/"
     echo "Documentation successfully uploaded to s3://rapidsai-docs/cudf-java/html/${DOCS_VERSION}/"
 }
 
