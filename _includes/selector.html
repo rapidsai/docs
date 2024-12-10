@@ -367,7 +367,7 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('rapids_selector', () => ({
             // default values
-            active_python_ver: "3.11",
+            active_python_ver: "3.12",
             active_conda_cuda_ver: "12",
             active_pip_cuda_ver: "12",
             active_docker_cuda_ver: "12.5",
@@ -379,8 +379,8 @@
             active_additional_packages: [],
 
             // all possible values
-            python_vers: ["3.9", "3.10", "3.11", "3.12"],
-            python_vers_stable: ["3.9", "3.10", "3.11"],
+            python_vers: ["3.10", "3.11", "3.12"],
+            python_vers_stable: ["3.10", "3.11", "3.12"],
             python_vers_nightly: ["3.10", "3.11", "3.12"],
             conda_cuda_vers: ["11", "12"],
             pip_cuda_vers: ["11.4 - 11.8", "12"],
@@ -390,7 +390,7 @@
             img_loc: ["NGC", "Dockerhub"],
             img_types: ["Base", "Notebooks"],
             packages: ["Standard", "Choose Specific Packages"],
-            additional_pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph", "cuSpatial/cuProj", "cuxfilter", "cuCIM", "RAFT", "cuVS"],
+            additional_pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph/nx-cugraph", "cuSpatial/cuProj", "cuxfilter", "cuCIM", "RAFT", "cuVS"],
             additional_rapids_packages: ["cuDF", "cuML", "cuGraph", "cuSpatial/cuProj", "cuxfilter", "cuCIM", "RAFT", "cuVS"],
             additional_packages: ["Graphistry", "JupyterLab", "NetworkX + nx-cugraph", "Plotly Dash", "PyTorch", "TensorFlow", "Xarray-Spatial"],
             note_prefix: "<i class='fas fa-info-circle text-blue'></i>",
@@ -549,19 +549,21 @@
                         if (pkg === "cuspatial/cuproj") return ["cuspatial" + cuda_suffix, "cuproj" + cuda_suffix];
                         if (pkg === "raft") return ["pylibraft" + cuda_suffix, "raft-dask" + cuda_suffix];
                         if (pkg === "cuvs") return ["cuvs" + cuda_suffix];
+                        if (pkg === "cugraph/nx-cugraph") return ["cugraph" + cuda_suffix, "nx-cugraph" + cuda_suffix];
                         return [pkg + cuda_suffix];
                     }
                 }
                 else {
                     index_url = `--${this.highlightFlag("extra-index-url")}=https://pypi.anaconda.org/rapidsai-wheels-nightly/simple`;
                     var version = this.removeLeadingZeros("{{ site.data.releases.nightly.version }}")
-                    cuda_suffix = cuda_suffix + `>=${version}.0a0,<=${version}"`;
+                    cuda_suffix = cuda_suffix + `>=${version}.0a0,<=${version}`;
                     var libraryToPkg = (pkg) => {
                         pkg = pkg.toLowerCase();
-                        if (pkg === "cuspatial/cuproj") return ["\"cuspatial" + cuda_suffix, "\"cuproj" + cuda_suffix];
-                        if (pkg === "raft") return ["\"pylibraft" + cuda_suffix, "\"raft-dask" + cuda_suffix];
-                        if (pkg === "cuvs") return ["\"cuvs" + cuda_suffix, "\"pylibraft" + cuda_suffix];
-                        return ["\"" + pkg + cuda_suffix];
+                        if (pkg === "cuspatial/cuproj") return ["cuspatial" + cuda_suffix, "cuproj" + cuda_suffix];
+                        if (pkg === "raft") return ["pylibraft" + cuda_suffix, "raft-dask" + cuda_suffix];
+                        if (pkg === "cuvs") return ["cuvs" + cuda_suffix, "pylibraft" + cuda_suffix];
+                        if (pkg === "cugraph/nx-cugraph") return ["cugraph" + cuda_suffix, "nx-cugraph" + cuda_suffix];
+                        return [pkg + cuda_suffix];
                     }
                 }
 
@@ -581,8 +583,11 @@
 
                 // pkgs.length == 2 because it includes the "Choose Specific Packages" option
                 if (this.active_release === "Nightly" && !(pkgs.length === 2 && pkgs[0] === "cucim")) {
-                    pkgs.push(["\"dask-cuda" + cuda_suffix.slice(5)])
+                    pkgs.push(["dask-cuda" + cuda_suffix.slice(5)])
                 }
+
+                // Make sure all packages (and version selectors) are quoted
+                pkgs = pkgs.flatMap(pkg => '"' + pkg + '"');
 
                 // For every n packages add a new line with a "\" character
                 // We need i += n + 1 since the splice adds a new element to the array

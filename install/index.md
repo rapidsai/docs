@@ -25,7 +25,7 @@ RAPIDS has several methods for installation, depending on the preferred environm
 - [Docker](#docker)
 - [pip](#pip)
 - [SDK Manager](#sdkm)
-- [Within WSL2](#wsl2)
+- [Windows WSL2](#wsl2)
   - [SDK Manager](#wsl2-sdkm)
   - [Conda](#wsl2-conda)
   - [Docker](#wsl2-docker)
@@ -70,13 +70,13 @@ If conda has incorrectly identified the CUDA driver, you can [override by settin
 ### **Docker Issues**
 <i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brought significant Docker changes. <br/>
 To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/base){: target="_blank"}. Some key notes below:
-- `Development` images are no longer being published, in the coming releases RAPIDS will roll out [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
+- `Development` images are no longer being published, RAPIDS now uses [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
   - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
 - All images are Ubuntu-based
-  - CUDA 11.2 images are Ubuntu `20.04`
-  - All other images are Ubuntu `22.04`
+  - CUDA 12.5+ images use Ubuntu 24.04
+  - All other images use Ubuntu 22.04
 - All images are multiarch (x86_64 and ARM)
-- The `Base` image starts in an ipython shell
+- The `base` image starts in an ipython shell
   - To run bash commands inside the ipython shell prefix the command with `!`
   - To run the image without the ipython shell add `/bin/bash` to the end of the `docker run` command
 - For a full list of changes please see this [RAPIDS Docker Issue](https://github.com/rapidsai/docker/issues/539){: target="_blank"}
@@ -133,10 +133,15 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 <i class="fas fa-microchip"></i> **GPU:** NVIDIA Volta™ or higher with [compute capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} 7.0+
 - <i class="fas fa-exclamation-triangle"></i> Pascal™ GPU support was [removed in 24.02](https://docs.rapids.ai/notices/rsn0034/). Compute capability 7.0+ is required for RAPIDS 24.02 and later.
 
-<i class="fas fa-desktop"></i> **OS:** One of the following OS versions:
-- <i class="fas fa-check-circle"></i> Ubuntu 20.04/22.04 or Rocky Linux 8 with <code>gcc/++</code> 9.0+
+<i class="fas fa-desktop"></i> **OS:**
+- <i class="fas fa-check-circle"></i> Linux distributions with `glibc>=2.28` (released in August 2018), which include the following:
+  - [Arch Linux](https://archlinux.org/), minimum version 2018-08-02
+  - [Debian](https://www.debian.org/), minimum version 10.0
+  - [Fedora](https://fedoraproject.org/), minimum version 29
+  - [Linux Mint](https://linuxmint.com/), minimum version 20
+  - [Rocky Linux](https://rockylinux.org/) / [Alma Linux](https://almalinux.org/) / [RHEL](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux), minimum version 8
+  - [Ubuntu](https://ubuntu.com/), minimum version 20.04
 - <i class="fas fa-check-circle"></i> Windows 11 using a [WSL2 specific install](#wsl2)
-- <i class="fas fa-check-circle"></i> RHEL 7/8 support is provided through Rocky Linux 8 builds/installs
 
 <i class="fas fa-download text-purple"></i> **CUDA & NVIDIA Drivers:** One of the following supported versions:
 {: .no-tb-margins }
@@ -145,9 +150,9 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 - <i class="fas fa-check-circle"></i> [CUDA 11.4](https://developer.nvidia.com/cuda-11-4-0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.5](https://developer.nvidia.com/cuda-11-5-0-download-archive){: target="_blank"} with Driver 495.29.05 or newer
 - <i class="fas fa-check-circle"></i> [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 520.61.05 or newer
-- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive){: target="_blank"} with Driver 525.60.13 or newer
-- <i class="fas fa-check-circle"></i> [CUDA 12.2](https://developer.nvidia.com/cuda-12-2-2-download-archive){: target="_blank"} with Driver 535.86.10 or newer
-- <i class="fas fa-check-circle"></i> [CUDA 12.5](https://developer.nvidia.com/cuda-12-5-1-download-archive){: target="_blank"} with Driver 555.42.02 or newer
+- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive){: target="_blank"} with Driver 525.60.13 or newer **see CUDA 12 section below for notes on usage**
+- <i class="fas fa-check-circle"></i> [CUDA 12.2](https://developer.nvidia.com/cuda-12-2-2-download-archive){: target="_blank"} with Driver 535.86.10 or newer **see CUDA 12 section below for notes on usage**
+- <i class="fas fa-check-circle"></i> [CUDA 12.5](https://developer.nvidia.com/cuda-12-5-1-download-archive){: target="_blank"} with Driver 555.42.06 or newer **see CUDA 12 section below for notes on usage**
 
  **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details.
 
@@ -155,8 +160,8 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 
 ### **Docker and Conda**
 
-- <i class="fas fa-info-circle"></i> Stable conda packages support CUDA 11.4-11.8 and 12.0-12.5. Docker images currently support CUDA 11.8, 12.0, and 12.5.
-- <i class="fas fa-info-circle"></i> CUDA 11 conda packages and Docker images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit
+- <i class="fas fa-info-circle"></i> conda packages and Docker images support CUDA 12 on systems with a CUDA 12 driver.
+- <i class="fas fa-info-circle"></i> CUDA 11 conda packages and Docker images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit.
 
 ### **pip**
 
@@ -298,7 +303,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 
 ### **WSL2 Additional Prerequisites**
 
-<i class="fas fa-desktop text-white"></i> **OS:** Windows 11 with Ubuntu 22.04 instance for WSL2. <br/>
+<i class="fas fa-desktop text-white"></i> **OS:** Windows 11 with a WSL2 installation of Ubuntu (minimum version 20.04). <br/>
 <i class="fas fa-info-circle text-white"></i> **WSL Version:** WSL2 (WSL1 not supported). <br/>
 <i class="fas fa-microchip text-white"></i> **GPU:** GPUs with [Compute Capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} 7.0 or higher (16GB+ GPU RAM is recommended).
 
@@ -313,7 +318,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 
 ### **Troubleshooting**
 
-<i class="fas fa-info-circle text-white"></i> When installing with Conda, if an `http 000 connection error` occurs when accessing the repository data, run `wsl --shutdown` and then [restart the WSL instance](https://stackoverflow.com/questions/67923183/miniconda-on-wsl2-ubuntu-20-04-fails-with-condahttperror-http-000-connection){: target="_blank"}.
+<i class="fas fa-info-circle text-white"></i> When installing with Conda, if an `http 000 connection error` occurs when accessing the repository data, run `wsl --shutdown` and then [restart the WSL instance](https://stackoverflow.com/a/69601760){: target="_blank"}.
 
 <i class="fas fa-info-circle text-white"></i> When installing with Conda or pip, if an `WSL2 Jitify fatal error: libcuda.so: cannot open shared object file` error occurs, follow suggestions in [this WSL issue](https://github.com/microsoft/WSL/issues/8587) to resolve.
 
@@ -345,7 +350,7 @@ sdkmanager
 
 ### **WSL2 Conda Install**
 
-1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
+1. Install WSL2 and the Ubuntu distribution [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
 4. Install Conda in the WSL2 Linux Instance using our [Conda instructions](#conda).
@@ -361,7 +366,7 @@ print(cudf.Series([1, 2, 3]))
 
 ### **WSL2 Docker Desktop Install**
 
-1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
+1. Install WSL2 and the Ubuntu distribution [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Install latest Docker Desktop for Windows
 4. Log in to the WSL2 Linux instance.
@@ -377,7 +382,7 @@ print(cudf.Series([1, 2, 3]))
 
 ### **WSL2 pip Install**
 
-1. Install WSL2 and the Ubuntu 22.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
+1. Install WSL2 and the Ubuntu distribution [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
 4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then install the WSL-specific [CUDA 11](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} or [CUDA 12](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} Toolkit without drivers into the WSL2 instance.
