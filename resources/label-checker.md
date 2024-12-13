@@ -34,6 +34,7 @@ In order for the _Label Checker_ check to pass, pull requests must include **one
 
 - `category` - categorizes the pull request
   - `bug`
+  - `ci`
   - `doc`
   - `feature request`
   - `improvement`
