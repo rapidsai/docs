@@ -337,7 +337,7 @@ wsl --install -d Ubuntu-24.04
 ```
 This will install and start Ubuntu in your Windows host system using WSL2.  Make your **sudo** password memorable as you will need it in the next two steps.
 
-4. Install and run SDK Manager using inside Ubuntu by pasting this into your command line.  You will have to enter the sudo password you created when you installed Ubuntu and also change folder location to match your home directory in windows (if you don't know it, open PowerShell, type `$HOME`, and hit enter).  There will be a lot of activity, which you can review.  This is normal for installing packages on Linux.
+4. Install and run SDK Manager inside Ubuntu by pasting this into your command line.  You will have to enter the sudo password you created when you installed Ubuntu and also change folder location to match your home directory in Windows (if you don't know it, open PowerShell, type `$HOME`, and hit enter).
 ```bash
 sudo apt update && sudo apt install wslu -y
 sudo apt install /mnt/c/Users/[YOUR HOME DIRECTORY ON WINDOWS]/Downloads/sdkmanager_[version]-[build#]_amd64.deb -y
