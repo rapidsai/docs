@@ -287,7 +287,7 @@ RAPIDS pip packages are available for CUDA 11 and CUDA 12 on the NVIDIA Python P
 ## **SDK Manager (Ubuntu Only)**
 [NVIDIA SDK Manager](https://developer.nvidia.com/sdk-manager) gives a users a Graphical User Interface (GUI) option to install RAPIDS.  It also attempts to fix any environment issues before installing RAPIDS or updating RAPIDS, making it ideal for new Linux users.
 1. Download [SDK Manager's Ubuntu version from their website](https://developer.nvidia.com/sdk-manager){: target="_blank"} (requires sign up or login to NVIDIA's Developer community).  Do not install yet.  It is assumed that your home directory's `Downloads` folder is where the `.deb` file will be stored.  If not, please move `sdkmanager_[version]-[build#]_amd64.deb` file to your current Download folder.
-2. Install and run SDK Manager [using the installation guide here](https://docs.nvidia.com/sdk-manager/download-run-sdkm/index.html){: target="_blank"}.  For example, in Ubuntu, the code will look like:
+2. Install and run SDK Manager [using the installation guide here](https://docs.nvidia.com/sdk-manager/download-run-sdkm/index.html){: target="_blank"}. For Ubuntu, use the following commands:
 ```bash
 sudo apt install ./sdkmanager_[version]-[build#]_amd64.deb
 sdkmanager
