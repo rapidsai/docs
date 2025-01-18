@@ -51,11 +51,11 @@ Release | {{ release.date | date: "%a, %b %e, %Y" }}
 {% else %}
 Phase | Start | End | Duration
 -- | -- | -- | --
-Development (cuDF/RMM{% if release.version >= '23.06' %}/rapids-cmake/cugraph-ops/raft{% endif %}) | {{ release.cudf_dev.start | date: "%a, %b %e, %Y" }} | {{ release.cudf_dev.end | date: "%a, %b %e, %Y" }} | {{ release.cudf_dev.days }} days
+Development (cuDF/RMM{% if release.version >= '23.06' %}/rapids-cmake/{% if release.version <= '24.12' %}cugraph-ops/{% endif %}raft{% endif %}) | {{ release.cudf_dev.start | date: "%a, %b %e, %Y" }} | {{ release.cudf_dev.end | date: "%a, %b %e, %Y" }} | {{ release.cudf_dev.days }} days
 Development (others) | {{ release.other_dev.start | date: "%a, %b %e, %Y" }} | {{ release.other_dev.end | date: "%a, %b %e, %Y" }} | {{ release.other_dev.days }} days
-[Burn Down]({% link releases/process.md %}#burn-down)(cuDF/RMM{% if release.version >= '23.06' %}/rapids-cmake/cugraph-ops/raft{% endif %}) | {{ release.cudf_burndown.start | date: "%a, %b %e, %Y" }} | {{ release.cudf_burndown.end | date: "%a, %b %e, %Y" }} | {{ release.cudf_burndown.days }} days
+[Burn Down]({% link releases/process.md %}#burn-down)(cuDF/RMM{% if release.version >= '23.06' %}/rapids-cmake/{% if release.version <= '24.12' %}cugraph-ops/{% endif %}raft{% endif %}) | {{ release.cudf_burndown.start | date: "%a, %b %e, %Y" }} | {{ release.cudf_burndown.end | date: "%a, %b %e, %Y" }} | {{ release.cudf_burndown.days }} days
 [Burn Down]({% link releases/process.md %}#burn-down) (others) | {{ release.other_burndown.start | date: "%a, %b %e, %Y" }} | {{ release.other_burndown.end | date: "%a, %b %e, %Y" }} | {{ release.other_burndown.days }} days
-[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM/rapids-cmake/cugraph-ops/raft) | {{ release.cudf_codefreeze.start | date: "%a, %b %e, %Y" }} | {{ release.cudf_codefreeze.end | date: "%a, %b %e, %Y" }} | {{ release.cudf_codefreeze.days }} days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM{% if release.version >= '23.06' %}/rapids-cmake/{% if release.version <= '24.12' %}cugraph-ops/{% endif %}raft{% endif %}) | {{ release.cudf_codefreeze.start | date: "%a, %b %e, %Y" }} | {{ release.cudf_codefreeze.end | date: "%a, %b %e, %Y" }} | {{ release.cudf_codefreeze.days }} days
 [Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | {{ release.other_codefreeze.start | date: "%a, %b %e, %Y" }} | {{ release.other_codefreeze.end | date: "%a, %b %e, %Y" }} | {{ release.other_codefreeze.days }} days
 [Release]({% link releases/process.md %}#releasing) | {{ release.release.start | date: "%a, %b %e, %Y" }} | {{ release.release.end | date: "%a, %b %e, %Y" }} | {{ release.release.days }} days
 {% endif %}
