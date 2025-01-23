@@ -1,5 +1,6 @@
 {% for lib in include.data %}
 {% assign api = lib[1] %}
+{% if api.name != "librmm" %}
 {% comment %} HACK: below operation returns an array of stable/nightly/legacy values only if they're enabled in docs.yml. see issue #97 {% endcomment %}
 {% assign versions = api.versions | sort | where_exp: "item", "item[1] == 1" | join: "" | split: "1" | reverse %}
 ### {{ api.name }}
@@ -7,4 +8,5 @@
 #### DOCS {% for version_name in versions %} {% if api.name == "libucxx" %} **[{{ version_name }} ({{ site.data.releases[version_name].ucxx_version }})](/api/{{ api.path }}/{{ version_name }})** {% else %} **[{{ version_name }} ({{ site.data.releases[version_name].version }})](/api/{{ api.path }}/{{ version_name }})** {% endif %} {% unless forloop.last %}|{% endunless %} {% endfor %}
 #### LINKS {% if api.cllink %} **[changelog]({{ api.cllink }}){:target="_blank"}** | {% endif %} **[github]({{ api.ghlink }}){:target="_blank"}**
 {: .mb-7 }
+{% endif %}
 {% endfor %}
