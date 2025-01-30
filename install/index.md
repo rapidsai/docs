@@ -336,10 +336,11 @@ Windows users can now tap into GPU accelerated data science on their local machi
 wsl --install -d Ubuntu-24.04
 ```
 This will install and start Ubuntu in your Windows host system using WSL2.  Make your **sudo** password memorable as you will need it in the next two steps.
-4. Install and run SDK Manager inside Ubuntu by pasting this into your command line.  You will have to enter the sudo password you created when you installed Ubuntu and also change folder location to match your home directory in Windows (if you don't know it, open PowerShell, type `$HOME`, and hit enter).
+4. Install and run SDK Manager inside Ubuntu by pasting this into your command line.  This command will navigate to your Windows users's `Downloads` folder, from your WSL2 instance, and install the latest SDK Manager `.deb` file that you had downloaded. You will have to enter the sudo password you created when you installed Ubuntu.  
 ```bash
 sudo apt update && sudo apt install wslu -y
-sudo apt install /mnt/c/Users/[YOUR HOME DIRECTORY ON WINDOWS]/Downloads/sdkmanager_[version]-[build#]_amd64.deb -y
+cd "$(wslpath -au "$(cmd.exe /c 'echo %USERPROFILE%' | tr -d '\r')")/Downloads"
+sudo apt install "$(ls -t ./sdkmanager_*_amd64.deb | head -n 1)" -y
 sdkmanager
 ```
 5. Sign in when asked, and [follow SDK Manager's RAPIDS installation instructions here](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html){: target="_blank"}.
