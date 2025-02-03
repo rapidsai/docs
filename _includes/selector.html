@@ -264,7 +264,7 @@
                     <div class="option-label">Image CUDA</div>
                     <template x-for="version in docker_cuda_vers">
                         <div x-on:click="(e) => dockerCUDAClickHandler(e, version)"
-                            x-bind:class="{'active': version === active_docker_cuda_ver, 'disabled': disableUnsupportedCuda(version)}"
+                            x-bind:class="{'active': version === active_docker_cuda_ver, 'disabled': disableUnsupportedDockerCuda(version)}"
                             class="option" x-text="'CUDA ' + version"></div>
                     </template>
                 </div>
@@ -384,10 +384,12 @@
             python_vers_nightly: ["3.10", "3.11", "3.12"],
             conda_cuda_vers: ["11", "12"],
             pip_cuda_vers: ["11.4 - 11.8", "12"],
-            docker_cuda_vers: ["11.8", "12.0", "12.5"],
+            docker_cuda_vers: ["11.8", "12.0", "12.5", "12.8"],
+            docker_cuda_vers_stable: ["11.8", "12.0", "12.5"],
+            docker_cuda_vers_nightly: ["11.8", "12.0", "12.8"],
             methods: ["Conda", "pip", "Docker"],
             releases: ["Stable", "Nightly"],
-            img_loc: ["NGC", "Dockerhub"],
+            img_loc: ["NGC", "Docker Hub"],
             img_types: ["Base", "Notebooks"],
             packages: ["Standard", "Choose Specific Packages"],
             additional_pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph/nx-cugraph", "cuSpatial/cuProj", "cuxfilter", "cuCIM", "RAFT", "cuVS"],
@@ -444,7 +446,7 @@
                     },
                     "Nightly": {
                         "11": ["11.4", "11.8"],
-                        "12": ["12.0", "12.5"]
+                        "12": ["12.0", "12.8"]
                     }
                 };
                 var bounds = cuda_version_info[this.active_release][version];
@@ -712,6 +714,12 @@
                 }
                 return this.python_vers_nightly;
             },
+            getSupportedDockerCudaVersions() {
+                if (this.active_release === "Stable") {
+                    return this.docker_cuda_vers_stable;
+                }
+                return this.docker_cuda_vers_nightly;
+            },
             disableUnsupportedRelease(release) {
                 var isDisabled = false;
                 if (this.active_img_loc === "NGC" && this.active_method === "Docker" && release === "Nightly") isDisabled = true;
@@ -724,6 +732,10 @@
             },
             disableUnsupportedPython(python_version) {
                 var isDisabled = !this.getSupportedPythonVersions().includes(python_version)
+                return isDisabled;
+            },
+            disableUnsupportedDockerCuda(cuda_version) {
+                var isDisabled = !this.getSupportedDockerCudaVersions().includes(cuda_version)
                 return isDisabled;
             },
             disableUnsupportedImgType(type) {
@@ -754,11 +766,21 @@
                     It's possible that the active Python version prior to someone changing releases
                     isn't supported by whatever release was chosen in the selector.
 
-                    This handles that case, updating to the oldest Python version supported by the chosen release.
+                    This handles that case, updating to the newest Python version supported by the chosen release.
                 */
-               var supported_python_versions = this.getSupportedPythonVersions()
+               var supported_python_versions = this.getSupportedPythonVersions();
                if (!supported_python_versions.includes(this.active_python_ver)) {
                    this.active_python_ver = supported_python_versions[supported_python_versions.length - 1];
+               }
+
+               /*
+                   If the selected release doesn't support the selected Docker
+                   CUDA version, update Docker CUDA version to the newest
+                   supported by the selected release.
+               */
+               var supported_docker_cuda_versions = this.getSupportedDockerCudaVersions();
+               if (!supported_docker_cuda_versions.includes(this.active_docker_cuda_ver)) {
+                   this.active_docker_cuda_ver = supported_docker_cuda_versions[supported_docker_cuda_versions.length - 1];
                }
             },
             imgTypeClickHandler(e, type) {
@@ -799,6 +821,8 @@
                     if (this.active_release === 'Nightly') {
                         this.active_img_loc = 'Dockerhub';
                     }
+                    // Use most recent supported CUDA version
+                    this.active_docker_cuda_ver = this.getSupportedDockerCudaVersions()[-1];
                 }
                 this.active_method = method;
             },
