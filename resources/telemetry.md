@@ -186,6 +186,131 @@ variable, it won't be reflected in stored metadata.
 
 TODO: Seems like we should move the upload AFTER the action command.
 
-## Receiving and storing data
+## Sending data
+
+Telemetry data is sent from [a python script that uses the python OpenTelemetry
+SDK](https://github.com/rapidsai/shared-actions/blob/main/telemetry-impls/summarize/send_trace.py).
+Configuration for this SDK is done with environment variables. Defaults are set
+in [the github action that stashes base environment
+variables](https://github.com/rapidsai/shared-actions/blob/main/telemetry-impls/stash-base-env-vars/action.yml),
+which runs at the start of each root workflow, e.g.
+[rmm](https://github.com/rapidsai/rmm/blob/45a44463472003e86c7ade2248d8d799fb97758e/.github/workflows/pr.yaml#L43).
+
+### Debugging
+
+It is helpful to be able to send telemetry to some testing server without running workflows. The general steps are:
+
+1. Run your own instance of tempo locally. The [official example docker-compose
+configuration](https://github.com/grafana/tempo/blob/main/example/docker-compose/local/docker-compose.yaml)
+works fine.
+2. Download a JSON file of your github actions jobs. These are removed by
+default when a job finishes, but you can preserve it by re-running a job with
+debug output. The filename is `all_jobs.json`.
+3. Clone the shared-actions repo locally
+4. copy the `all_jobs.json` file into `shared-actions/telemetry-impls/summarize`
+5. cd into `shared-actions/telemetry-impls/summarize`
+6. Set key environment variables
+
+  a. Set them on the terminal
+    ```
+    export OTEL_EXPORTER_OTLP_ENDPOINT: "http://localhost:4318"
+    export OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
+    export OTEL_TRACES_EXPORTER: "otlp_proto_http"
+    ```
+  b. Use VS Code run configurations
+    ```
+        {
+            "name": "send-tempo",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "send_trace.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/telemetry-impls/summarize",
+            "justMyCode": false,
+            "env": {
+                "OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:4318",
+                "OTEL_PYTHON_LOG_LEVEL": "DEBUG",
+                "OTEL_EXPORTER_OTLP_PROTOCOL": "http/protobuf",
+                "OTEL_TRACES_EXPORTER": "otlp_proto_http"
+            }
+        },
+    ```
+
+7. (optional) Run bump_time.py script to adjust timestamps in your
+`all_jobs.json` file. The Grafana UI shows data that is a certain amount of time
+prior to the present. Not updating timestamps can lead to your data points being
+too far back in time to show up.
+8. Run send_trace.py
+
+## Receiving data
+
+Authentication is the biggest complication with receiving data. We use mTLS to
+allow exposing the Tempo server to the internet without restricting IPs. This
+means that any server interacting with Tempo needs a set of certificates. It is
+not viable to manage that for our workers. Instead, we have a FluentBit
+forwarder that is only accessible to self-hosted runners. Our runners
+communicate with the FluentBit forwarder without needing authentication, and the
+FluentBit forwarder is configured with certificates so that it can send the data
+on to the Tempo instance.
+
+## Storing data
+
+This is an implementation detail of Tempo. The RAPIDS ops team currently has
+Tempo backed by S3 to avoid ongoing upkeep requirements of a database server.
 
 ## Viewing captured data
+
+### Dashboards
+
+#### Dashboard variables
+
+Grafana has something called ["dashboard
+variables,"](https://grafana.com/docs/grafana/latest/dashboards/variables/)
+which serve to select some value for a particular dimension. Using this as the
+input to the data filters makes it easy to make multiple plots for different
+values of the variable (e.g. different machine labels or different RAPIDS repos)
+
+There is a gotcha with variables. Grafana has a way of automatically detecting
+values for variables. This is the same as Tempo's [search tag values
+API](https://grafana.com/docs/tempo/latest/api_docs/#search-tag-values). When it
+works, it is very convenient. However, it only works on recent data. [If your
+data was collected some time ago, Grafana may fail to populate these
+fields](https://community.grafana.com/t/missing-resource-attributes-in-tempo-labels-and-values/140856).
+Because of this, it is generally worthwhile to manually input variable values,
+instead of relying on Grafana/Tempo detecting them.
+
+While configuring your variable, if you want to show multiple plots with
+different values of this variable , be sure to check the "Include All Option"
+checkbox.
+
+#### Queries
+
+[Queries provide the data from the data source to the panel/visualization](https://grafana.com/docs/tempo/latest/traceql/). Queries differ based on the data source being used. [Tempo's queries use TraceQL](https://grafana.com/docs/tempo/latest/traceql/).
+
+Attributes must be included as selectors in the query, or else they won't be available for filtering down the line. The TraceQL line can get pretty long:
+
+```
+{ } | select(span:duration, name, resource.rapids.labels, resource.service.name, resource.rapids.cuda, resource.rapids.cuda, resource.git.run_url, resource.rapids.py, resource.rapids.gpu, )
+```
+
+#### Filtering and grouping data
+
+The workhorse ideas of the grafana plots are:
+
+* filtering data such that it matches a given value
+* Using groupby operations to aggregate multiple values of a given type
+
+These are on the [Transform tab](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/) of the same box where the query was entered.
+
+An example useful set of transforms:
+
+* [Filter data by values](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/#filter-data-by-values)
+    * `Regex` is useful for matching strings
+    * If using a variable, [ensure that Grafana is formatting the variable value](https://grafana.com/docs/grafana/latest/dashboards/variables/variable-syntax)
+      correctly. The `regex` formatter is appropriate for escaping annoying characters. If your
+      data filter is not functioning correctly - either not filtering values that should be
+      filtered, or not yielding any results, you probably have the wrong formatter.
+
+* [Group-by](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/#group-by) is generally useful for averaging or summing multiple values for a given span kind.
+  * You can average the span time for all `wheel-build-cpp` by project to compare the average wheel build time for each project. This would be a good bar chart.
+  * You can sum the span time for all usage by machine label to show resource usage. This is particularly useful when combined with filters and dashboard variables to make multiple plots.
