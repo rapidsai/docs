@@ -22,9 +22,6 @@ optimizations that might be worthwhile.
 Operations
 {: .label .label-purple}
 
-Developers
-{: .label .label-green}
-
 ## Table of contents
 {: .no_toc .text-delta }
 
@@ -61,14 +58,17 @@ implementation details. In the top-level workflow, such as
 `cudf/.github/workflows/pr.yaml`:
 
 1. Add a job for telemetry-setup, and add that job name to the pr-builder `needs` collection.
+
 ```
 jobs:
-    # Please keep pr-builder as the top job here
+  # Please keep pr-builder as the top job here
   pr-builder:
     needs:
       - check-nightly-ci
       - changed-files
+
       ... <other job names> ...
+
       - telemetry-setup
   telemetry-setup:
     continue-on-error: true
@@ -77,7 +77,7 @@ jobs:
       OTEL_SERVICE_NAME: 'pr-cudf'
     steps:
       - name: Telemetry setup
-        if: ${{ vars.TELEMETRY_ENABLED == 'true' }}
+        if: $\{\{ vars.TELEMETRY_ENABLED == 'true' \}\}
         uses: rapidsai/shared-actions/telemetry-dispatch-stash-base-env-vars@main
 ```
 
@@ -170,7 +170,7 @@ jobs:
         continue-on-error: true
         if: ${{ vars.TELEMETRY_ENABLED == 'true' }}
         with:
-            extra_attributes: "rapids.operation=build-cpp,rapids.package_type=conda,rapids.cuda=${{ matrix.CUDA_VER }},rapids.py=${{ matrix.PY_VER }},rapids.arch=${{ matrix.ARCH }},rapids.linux=${{ matrix.LINUX_VER }}"
+            extra_attributes: "rapids.operation=build-cpp,rapids.package_type=conda,rapids.cuda=$\{\{ matrix.CUDA_VER \}\},rapids.py=${{ matrix.PY_VER }},rapids.arch=${{ matrix.ARCH }},rapids.linux=${{ matrix.LINUX_VER }}"
 ```
 
 Passing in the `extra_attributes` parameter appends these comma-separated
@@ -209,8 +209,16 @@ default when a job finishes, but you can preserve it by re-running a job with
 debug output. The filename is `all_jobs.json`. Alternatively, you can fetch it
 with the [Github Actions
 API](https://docs.github.com/en/rest/actions/workflow-jobs?apiVersion=2022-11-28#list-jobs-for-a-workflow-run-attempt).
-If you use the Github Actions API, bear in mind that it is paginated and your
-results may be incomplete without proper handling of pagination.
+
+An example gh cli call that downloads this JSON output:
+
+```
+gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
+    --paginate /repos/rapidsai/cudf/actions/runs/<RUN_ID>/attempts/<RUN_ATTEMPT>/jobs | jq -c '.jobs' > all_jobs.json
+```
+
+Substitute RUN_ID with the value seen in the GitHub web UI for the job that
+you're interested in. The RUN_ATTEMPT is usually 1, unless you have retried the job.
 
 3. Clone the shared-actions repo locally
 
