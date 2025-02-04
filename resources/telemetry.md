@@ -81,8 +81,6 @@ jobs:
         uses: rapidsai/shared-actions/telemetry-dispatch-stash-base-env-vars@main
 ```
 
-`OTEL_SERVICE_NAME` serves as one identifier in telemetry. It's not strictly necessary.
-
 2. Add `telemetry-setup` as a `needs` entry for all jobs at the top of the tree. The purpose is to communicate telemetry variables that any job may use - even the checks.yaml job. `needs` that generally catch the required jobs are:
 
 * checks
@@ -116,6 +114,8 @@ Syntax for the `ignored_pr_jobs` is [space-separated within the quotes](https://
       - name: Telemetry summarize
         uses: rapidsai/shared-actions/telemetry-dispatch-summarize@main
 ```
+
+> NOTE: pay special attention to the `runs-on` entry. This is what dictates that the job runs on a self-hosted runner, which is necessary for network access control.
 
 ### Implementation details
 
@@ -173,7 +173,7 @@ jobs:
             extra_attributes: "rapids.operation=build-cpp,rapids.package_type=conda,rapids.cuda=${{ matrix.CUDA_VER }},rapids.py=${{ matrix.PY_VER }},rapids.arch=${{ matrix.ARCH }},rapids.linux=${{ matrix.LINUX_VER }}"
 ```
 
-Passing in the `extra_attibutes` parameter appends these comma-separated
+Passing in the `extra_attributes` parameter appends these comma-separated
 key=value pairs to the `OTEL_RESOURCE_ATTRIBUTES` environment variable. This is
 the way that we associate matrix values, such as CUDA version, architecture, and
 python version with a particular job.
@@ -203,21 +203,30 @@ It is helpful to be able to send telemetry to some testing server without runnin
 1. Run your own instance of tempo locally. The [official example docker-compose
 configuration](https://github.com/grafana/tempo/blob/main/example/docker-compose/local/docker-compose.yaml)
 works fine.
+
 2. Download a JSON file of your github actions jobs. These are removed by
 default when a job finishes, but you can preserve it by re-running a job with
-debug output. The filename is `all_jobs.json`.
+debug output. The filename is `all_jobs.json`. Alternatively, you can fetch it
+with the [Github Actions
+API](https://docs.github.com/en/rest/actions/workflow-jobs?apiVersion=2022-11-28#list-jobs-for-a-workflow-run-attempt).
+If you use the Github Actions API, bear in mind that it is paginated and your
+results may be incomplete without proper handling of pagination.
+
 3. Clone the shared-actions repo locally
+
 4. copy the `all_jobs.json` file into `shared-actions/telemetry-impls/summarize`
+
 5. cd into `shared-actions/telemetry-impls/summarize`
+
 6. Set key environment variables
 
-  a. Set them on the terminal
+  * Set them on the terminal
     ```
     export OTEL_EXPORTER_OTLP_ENDPOINT: "http://localhost:4318"
     export OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
     export OTEL_TRACES_EXPORTER: "otlp_proto_http"
     ```
-  b. Use VS Code run configurations
+  * Use VS Code run configurations
     ```
         {
             "name": "send-tempo",
@@ -240,6 +249,7 @@ debug output. The filename is `all_jobs.json`.
 `all_jobs.json` file. The Grafana UI shows data that is a certain amount of time
 prior to the present. Not updating timestamps can lead to your data points being
 too far back in time to show up.
+
 8. Run send_trace.py
 
 ## Receiving data
@@ -253,16 +263,20 @@ communicate with the FluentBit forwarder without needing authentication, and the
 FluentBit forwarder is configured with certificates so that it can send the data
 on to the Tempo instance.
 
+Important reiteration: only our self-hosted runners can send telemetry data.
+Github-hosted runners will error out.
+
+If you run tempo locally, be sure to adjust Grafana's datasources.yaml file to
+point to your desired tempo instance.
+
 ## Storing data
 
 This is an implementation detail of Tempo. The RAPIDS ops team currently has
 Tempo backed by S3 to avoid ongoing upkeep requirements of a database server.
 
-## Viewing captured data
+## Viewing captured data: Grafana dashboards
 
-### Dashboards
-
-#### Dashboard variables
+### Dashboard variables
 
 Grafana has something called ["dashboard
 variables,"](https://grafana.com/docs/grafana/latest/dashboards/variables/)
@@ -271,29 +285,51 @@ input to the data filters makes it easy to make multiple plots for different
 values of the variable (e.g. different machine labels or different RAPIDS repos)
 
 There is a gotcha with variables. Grafana has a way of automatically detecting
-values for variables. This is the same as Tempo's [search tag values
+values for variables - the "Query" variable type. This is the same as Tempo's [search tag values
 API](https://grafana.com/docs/tempo/latest/api_docs/#search-tag-values). When it
 works, it is very convenient. However, it only works on recent data. [If your
 data was collected some time ago, Grafana may fail to populate these
 fields](https://community.grafana.com/t/missing-resource-attributes-in-tempo-labels-and-values/140856).
-Because of this, it is generally worthwhile to manually input variable values,
-instead of relying on Grafana/Tempo detecting them.
+Because of this, it is generally worthwhile to use the "Custom" variable type
+and manually input variable values, instead of relying on Grafana/Tempo
+detecting them.
+
+![](/assets/images/telemetry/grafana_variable_definition.png)
 
 While configuring your variable, if you want to show multiple plots with
-different values of this variable , be sure to check the "Include All Option"
+different values of this variable, be sure to check the "Include All Option"
 checkbox.
 
-#### Queries
+When finished defining your variable and its values, click the blue "Save
+dashboard" in the upper right. If you navigate away from this page without
+clicking this button, your variable will not be saved.
+
+### Queries
 
 [Queries provide the data from the data source to the panel/visualization](https://grafana.com/docs/tempo/latest/traceql/). Queries differ based on the data source being used. [Tempo's queries use TraceQL](https://grafana.com/docs/tempo/latest/traceql/).
 
 Attributes must be included as selectors in the query, or else they won't be available for filtering down the line. The TraceQL line can get pretty long:
 
 ```
-{ } | select(span:duration, name, resource.rapids.labels, resource.service.name, resource.rapids.cuda, resource.rapids.cuda, resource.git.run_url, resource.rapids.py, resource.rapids.gpu, )
+{ } | select(span:duration, name, resource.rapids.labels, resource.service.name, resource.rapids.cuda, resource.rapids.cuda, resource.git.run_url, resource.rapids.py, resource.rapids.gpu)
 ```
 
-#### Filtering and grouping data
+![](/assets/images/telemetry/panel_query.png)
+
+On the right side, take note of the "Repeat options" - this is how you get multiple plots (one per variable value).
+
+On the bottom, take note of the limits and table format. For limits, each trace
+represents one top-level workflow run. Scale this accordingly, especially if you
+are looking back far in time. The span limit is less important - you just want
+this number high enough to capture the largest number of spans for a given
+trace. It's fine to set it to a high number, such as 1000 spans. Regarding table
+format, we are interested in spans, not traces. You will not see the additional
+metadata columns in the trace table format, because they apply to the spans.
+
+As always, remember to click the upper-right save button after making any
+changes.
+
+### Filtering and grouping data
 
 The workhorse ideas of the grafana plots are:
 
@@ -301,6 +337,8 @@ The workhorse ideas of the grafana plots are:
 * Using groupby operations to aggregate multiple values of a given type
 
 These are on the [Transform tab](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/) of the same box where the query was entered.
+
+![](/assets/images/telemetry/filter_by_values.png)
 
 An example useful set of transforms:
 
@@ -311,6 +349,21 @@ An example useful set of transforms:
       data filter is not functioning correctly - either not filtering values that should be
       filtered, or not yielding any results, you probably have the wrong formatter.
 
+![](/assets/images/telemetry/filter_by_values_with_var.png)
+
 * [Group-by](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/#group-by) is generally useful for averaging or summing multiple values for a given span kind.
   * You can average the span time for all `wheel-build-cpp` by project to compare the average wheel build time for each project. This would be a good bar chart.
   * You can sum the span time for all usage by machine label to show resource usage. This is particularly useful when combined with filters and dashboard variables to make multiple plots.
+  * You may need to transform a column of string labels into an enum field for correct grouping. This is done with the [Convert field type transformation](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/#convert-field-type)
+
+![](/assets/images/telemetry/field_type_and_value_options.png)
+
+On any chart, Grafana often guesses wrong on the data to display. On the right
+side of the image above, chech the "Value options -> Show". This often defaults to "Calculate". It should generally be set to "All values" for our purposes.
+
+Similarly, the "Value options -> Fields" combobox often defaults to "Numeric
+fields," but we usually want to point it to a specific field.
+
+* After a group-by aggregation, Grafana can lose track of the duration in terms of nanoseconds. To compensate for this, add an "Add field from calculation" transformation. You can divide nanoseconds by 60E9 to obtain minutes. Keep in mind that this is adding a new column, not altering the old one. You'll need to select the new column in the "Value options -> Fields" combobox.
+
+![](/assets/images/telemetry/calculate_field.png)
