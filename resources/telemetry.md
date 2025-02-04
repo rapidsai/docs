@@ -275,7 +275,7 @@ you're interested in. The RUN_ATTEMPT is usually 1, unless you have retried the 
 prior to the present. Not updating timestamps can lead to your data points being
 too far back in time to show up.
 
-8. Run send_trace.py
+8. Run send_trace.py. The requirements.txt file is alongside send_trace.py.
 
 ## Receiving data
 
@@ -368,6 +368,9 @@ These are on the [Transform tab](https://grafana.com/docs/grafana/latest/panels-
 ![](/assets/images/telemetry/filter_by_values.png)
 
 An example useful set of transforms:
+
+* [Filter data by values](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/#filter-data-by-values)
+    * matching `is not null` on the `git.job_url` is useful for ignoring jobs that were cancelled
 
 * [Filter data by values](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/#filter-data-by-values)
     * `Regex` is useful for matching strings
