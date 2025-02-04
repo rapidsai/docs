@@ -220,10 +220,12 @@ API](https://docs.github.com/en/rest/actions/workflow-jobs?apiVersion=2022-11-28
 
 An example gh cli call that downloads this JSON output:
 
+{% raw %}
 ```
 gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
     --paginate /repos/rapidsai/cudf/actions/runs/<RUN_ID>/attempts/<RUN_ATTEMPT>/jobs | jq -c '.jobs' > all_jobs.json
 ```
+{% endraw %}
 
 Substitute RUN_ID with the value seen in the GitHub web UI for the job that
 you're interested in. The RUN_ATTEMPT is usually 1, unless you have retried the job.
@@ -237,12 +239,18 @@ you're interested in. The RUN_ATTEMPT is usually 1, unless you have retried the 
 6. Set key environment variables
 
   * Set them on the terminal
+
+    {% raw %}
     ```
     export OTEL_EXPORTER_OTLP_ENDPOINT: "http://localhost:4318"
     export OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
     export OTEL_TRACES_EXPORTER: "otlp_proto_http"
     ```
+    {% endraw %}
+
   * Use VS Code run configurations
+
+    {% raw %}
     ```
         {
             "name": "send-tempo",
@@ -260,6 +268,7 @@ you're interested in. The RUN_ATTEMPT is usually 1, unless you have retried the 
             }
         },
     ```
+    {% endraw %}
 
 7. (optional) Run bump_time.py script to adjust timestamps in your
 `all_jobs.json` file. The Grafana UI shows data that is a certain amount of time
@@ -326,9 +335,11 @@ clicking this button, your variable will not be saved.
 
 Attributes must be included as selectors in the query, or else they won't be available for filtering down the line. The TraceQL line can get pretty long:
 
+{% raw %}
 ```
 { } | select(span:duration, name, resource.rapids.labels, resource.service.name, resource.rapids.cuda, resource.rapids.cuda, resource.git.run_url, resource.rapids.py, resource.rapids.gpu)
 ```
+{% endraw %}
 
 ![](/assets/images/telemetry/panel_query.png)
 
