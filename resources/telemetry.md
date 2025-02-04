@@ -59,6 +59,7 @@ implementation details. In the top-level workflow, such as
 
 1. Add a job for telemetry-setup, and add that job name to the pr-builder `needs` collection.
 
+{% raw %}
 ```
 jobs:
   # Please keep pr-builder as the top job here
@@ -77,9 +78,10 @@ jobs:
       OTEL_SERVICE_NAME: 'pr-cudf'
     steps:
       - name: Telemetry setup
-        if: $\{\{ vars.TELEMETRY_ENABLED == 'true' \}\}
+        if: ${{ vars.TELEMETRY_ENABLED == 'true' }}
         uses: rapidsai/shared-actions/telemetry-dispatch-stash-base-env-vars@main
 ```
+{% endraw %}
 
 2. Add `telemetry-setup` as a `needs` entry for all jobs at the top of the tree. The purpose is to communicate telemetry variables that any job may use - even the checks.yaml job. `needs` that generally catch the required jobs are:
 
@@ -89,6 +91,7 @@ jobs:
 
 3. Add an entry to skip the final job, `ignored_pr_jobs`:
 
+{% raw %}
 ```
   checks:
     secrets: inherit
@@ -98,11 +101,13 @@ jobs:
       enable_check_generated_files: false
       ignored_pr_jobs: "telemetry-summarize"
 ```
+{% endraw %}
 
 Syntax for the `ignored_pr_jobs` is [space-separated within the quotes](https://github.com/rapidsai/shared-workflows/blob/branch-25.02/.github/workflows/checks.yaml#L30).
 
 4. Run the parsing and submission script job as the final job - after `pr-builder`:
 
+{% raw %}
 ```
   telemetry-summarize:
     # This job must use a self-hosted runner to record telemetry traces.
@@ -114,6 +119,7 @@ Syntax for the `ignored_pr_jobs` is [space-separated within the quotes](https://
       - name: Telemetry summarize
         uses: rapidsai/shared-actions/telemetry-dispatch-summarize@main
 ```
+{% endraw %}
 
 > NOTE: pay special attention to the `runs-on` entry. This is what dictates that the job runs on a self-hosted runner, which is necessary for network access control.
 
@@ -161,6 +167,7 @@ environment variables that we load ensures that if any build tool natively
 supports OpenTelemetry, it has the necessary information to send that data (job
 needs to be on a self-hosted runner)
 
+{% raw %}
 ```
 jobs:
   build:
@@ -170,8 +177,9 @@ jobs:
         continue-on-error: true
         if: ${{{{ vars.TELEMETRY_ENABLED == 'true' }}}}
         with:
-            extra_attributes: "rapids.operation=build-cpp,rapids.package_type=conda,rapids.cuda=$\{\{ matrix.CUDA_VER \}\},rapids.py=${{ matrix.PY_VER }},rapids.arch=${{ matrix.ARCH }},rapids.linux=${{ matrix.LINUX_VER }}"
+            extra_attributes: "rapids.operation=build-cpp,rapids.package_type=conda,rapids.cuda=${{ matrix.CUDA_VER }},rapids.py=${{ matrix.PY_VER }},rapids.arch=${{ matrix.ARCH }},rapids.linux=${{ matrix.LINUX_VER }}"
 ```
+{% endraw %}
 
 Passing in the `extra_attributes` parameter appends these comma-separated
 key=value pairs to the `OTEL_RESOURCE_ATTRIBUTES` environment variable. This is
