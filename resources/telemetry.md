@@ -359,7 +359,7 @@ An example useful set of transforms:
 ![](/assets/images/telemetry/field_type_and_value_options.png)
 
 On any chart, Grafana often guesses wrong on the data to display. On the right
-side of the image above, chech the "Value options -> Show". This often defaults to "Calculate". It should generally be set to "All values" for our purposes.
+side of the image above, check the "Value options -> Show". This often defaults to "Calculate". It should generally be set to "All values" for our purposes.
 
 Similarly, the "Value options -> Fields" combobox often defaults to "Numeric
 fields," but we usually want to point it to a specific field.
