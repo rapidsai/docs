@@ -252,7 +252,7 @@ LIBRAFT_WHEELHOUSE=$(
   RAPIDS_PY_WHEEL_NAME="libraft_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact raft 2433 cpp
 )
 
-# write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this file"
+# write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
 cat > /tmp/constraints.txt <<EOF
 librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRMM_WHEELHOUSE}/librmm_*.whl)
 libraft-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRAFT_WHEELHOUSE}/libraft_*.whl)
@@ -292,7 +292,7 @@ RMM_WHEELHOUSE=$(
   RAPIDS_PY_WHEEL_NAME="rmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact rmm 1678 python
 )
 
-# write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this file"
+# write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
 cat > /tmp/constraints.txt <<EOF
 libkvikio-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBKVIKIO_WHEELHOUSE}/libkvikio_*.whl)
 librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRMM_WHEELHOUSE}/librmm_*.whl)
