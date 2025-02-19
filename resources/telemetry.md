@@ -242,9 +242,9 @@ you're interested in. The RUN_ATTEMPT is usually 1, unless you have retried the 
 
     {% raw %}
     ```
-    export OTEL_EXPORTER_OTLP_ENDPOINT: "http://localhost:4318"
-    export OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
-    export OTEL_TRACES_EXPORTER: "otlp_proto_http"
+    export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4318"
+    export OTEL_EXPORTER_OTLP_PROTOCOL="http/protobuf"
+    export OTEL_TRACES_EXPORTER="otlp_proto_http"
     ```
     {% endraw %}
 
