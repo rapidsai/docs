@@ -261,14 +261,14 @@ EOF
 export PIP_CONSTRAINT=/tmp/constraints.txt
 ```
 
-Then copy the following into every script in the `ci/` directory that is doing `pip` installs or wheels builds with e.g. `pip wheel`.
+Then copy the following into every script in the `ci/` directory that is doing `pip` installs or wheel builds with e.g. `pip wheel`.
 
 ```shell
 source ./ci/use_wheels_from_prs.sh
 ```
 
 This should generally be enough.
-If any of the other CI scripts are already setting environment variable `PIP_CONSTRAINT`, you may need to
+If any of the other CI scripts are already setting the environment variable `PIP_CONSTRAINT`, you may need to
 modify them slightly to ensure they **append to**, instead of **overwriting**, the constraints set up by `use_wheels_from_prs.sh`.
 
 **Example 2:** Testing `cudf` (Python) using `librmm`, `rmm`, and `libkvikio` PR artifacts.
@@ -296,19 +296,19 @@ RMM_WHEELHOUSE=$(
 cat > /tmp/constraints.txt <<EOF
 libkvikio-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBKVIKIO_WHEELHOUSE}/libkvikio_*.whl)
 librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRMM_WHEELHOUSE}/librmm_*.whl)
-rmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${RMM_WHEELHOUSE}/librmm_*.whl)
+rmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${RMM_WHEELHOUSE}/rmm_*.whl)
 EOF
 
 export PIP_CONSTRAINT=/tmp/constraints.txt
 ```
 
-Then copy the following into every script in the `ci/` directory that is doing `pip` installs or wheels builds with e.g. `pip wheel`.
+Then copy the following into every script in the `ci/` directory that is doing `pip` installs or wheel builds with e.g. `pip wheel`.
 
 ```shell
 source ./ci/use_wheels_from_prs.sh
 ```
 
-As above, if any of the other CI scripts are already setting environment variable `PIP_CONSTRAINT`, you may need to
+As above, if any of the other CI scripts are already setting the environment variable `PIP_CONSTRAINT`, you may need to
 modify them slightly to ensure they **append to**, instead of **overwriting**, the constraints set up by `use_wheels_from_prs.sh`.
 
 **Note:** By default `rapids-get-pr-wheel-artifact` uses the most recent commit from the specified PR.
