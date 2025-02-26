@@ -187,7 +187,7 @@ LIBCUMLPRIMS_CHANNEL=$(rapids-get-pr-conda-artifact cumlprims_mg 129 cpp)
 
 # Build library packages with the CI artifact channels providing the updated dependencies
 
-rapids-mamba-retry mambabuild \
+rapids-conda-retry build \
     --channel "${LIBRMM_CHANNEL}" \
     --channel "${LIBRAFT_CHANNEL}" \
     --channel "${LIBCUMLPRIMS_CHANNEL}" \
@@ -204,14 +204,18 @@ RMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1223 python)
 LIBKVIKIO_CHANNEL=$(rapids-get-pr-conda-artifact kvikio 224 cpp)
 
 # Install library packages with the CI artifact channels providing the updated dependencies for testing
-
-rapids-mamba-retry install \
-  --channel "${CPP_CHANNEL}" \
-  --channel "${PYTHON_CHANNEL}" \
-  --channel "${LIBRMM_CHANNEL}" \
-  --channel "${LIBKVIKIO_CHANNEL}" \
-  --channel "${RMM_CHANNEL}" \
-  cudf libcudf
+# ...
+rapids-dependency-file-generator \
+  --output conda \
+  --file-key "${FILE_KEY}" \
+  --prepend-channel "${CPP_CHANNEL}" \
+  --prepend-channel "${PYTHON_CHANNEL}" \
+  --prepend-channel "${LIBRMM_CHANNEL}" \
+  --prepend-channel "${LIBKVIKIO_CHANNEL}" \
+  --prepend-channel "${RMM_CHANNEL}" \
+  --matrix "cuda=${RAPIDS_CUDA_VERSION%.*};arch=$(arch);py=${RAPIDS_PY_VERSION};dependencies=${RAPIDS_DEPENDENCIES}" \
+    | tee "${ENV_YAML_DIR}/env.yaml"
+# ...
 ```
 
 Note that the custom channel for PR artifacts is needed in the build scripts _and_ the test scripts, for C++ _and_ Python.
