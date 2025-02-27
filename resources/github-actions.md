@@ -187,7 +187,7 @@ LIBCUMLPRIMS_CHANNEL=$(rapids-get-pr-conda-artifact cumlprims_mg 129 cpp)
 
 # Build library packages with the CI artifact channels providing the updated dependencies
 
-rapids-mamba-retry mambabuild \
+rapids-conda-retry build \
     --channel "${LIBRMM_CHANNEL}" \
     --channel "${LIBRAFT_CHANNEL}" \
     --channel "${LIBCUMLPRIMS_CHANNEL}" \
