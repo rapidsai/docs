@@ -196,6 +196,9 @@ rapids-conda-retry build \
 
 **Example 2:** Testing `cudf` (Python) using `librmm`, `rmm`, and `libkvikio` PR artifacts.
 
+Here, `--file-key ${FILE_KEY}` must include dependencies on all the packages that were built in this PR and the packages being pulled from other PRs' artifacts.
+Thus, prepending these channels will ensure that the packages are pulled from the PR artifacts rather than `rapidsai-nightly`.
+
 ```sh
 # ci/test_python_common.sh
 
