@@ -176,51 +176,144 @@ The example code below demonstrates building and testing with conda packages fro
 Replace the pull request numbers and library names as needed.
 Remember that changes to use CI artifacts should be _temporary_ and should be reverted prior to merging any required changes in that PR.
 
-**Example 1:** Building `libcuml` (C++) using `librmm`, `libraft`, `libcumlprims_mg` PR artifacts.
+**Example 1:** Building `libcuml` (C++) using `librmm` and `libraft` PR artifacts.
 
-```sh
-# ci/build_cpp.sh
+Add a new file called `ci/use_conda_packages_from_prs.sh`.
 
-LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1095 cpp)
+```shell
+# ci/use_conda_packages_from_prs.sh
+
+# download CI artifacts
 LIBRAFT_CHANNEL=$(rapids-get-pr-conda-artifact raft 1388 cpp)
-LIBCUMLPRIMS_CHANNEL=$(rapids-get-pr-conda-artifact cumlprims_mg 129 cpp)
+LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1095 cpp)
 
-# Build library packages with the CI artifact channels providing the updated dependencies
+# make sure they can be found locally
+conda config --system --add channels "${LIBRAFT_CHANNEL}"
+conda config --system --add channels "${LIBRMM_CHANNEL}"
+```
 
-rapids-mamba-retry mambabuild \
-    --channel "${LIBRMM_CHANNEL}" \
-    --channel "${LIBRAFT_CHANNEL}" \
-    --channel "${LIBCUMLPRIMS_CHANNEL}" \
-    conda/recipes/libcuml
+Then copy the following into every script in the `ci/` directory that is doing `conda` installs.
+
+```shell
+source ./ci/use_conda_packages_from_prs.sh
 ```
 
 **Example 2:** Testing `cudf` (Python) using `librmm`, `rmm`, and `libkvikio` PR artifacts.
 
-```sh
-# ci/test_python_common.sh
+It's important to include all of the recursive dependencies.
+So, for example, Python testing jobs that use the `rmm` Python package also need the `librmm` C++ package.
 
+```shell
+# ci/use_conda_packages_from_prs.sh
+
+# download CI artifacts
+LIBKVIKIO_CHANNEL=$(rapids-get-pr-conda-artifact kvikio 224 cpp)
 LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1223 cpp)
 RMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1223 python)
-LIBKVIKIO_CHANNEL=$(rapids-get-pr-conda-artifact kvikio 224 cpp)
 
-# Install library packages with the CI artifact channels providing the updated dependencies for testing
-
-rapids-mamba-retry install \
-  --channel "${CPP_CHANNEL}" \
-  --channel "${PYTHON_CHANNEL}" \
-  --channel "${LIBRMM_CHANNEL}" \
-  --channel "${LIBKVIKIO_CHANNEL}" \
-  --channel "${RMM_CHANNEL}" \
-  cudf libcudf
+# make sure they can be found locally
+conda config --system --add channels "${LIBKVIKIO_CHANNEL}"
+conda config --system --add channels "${LIBRMM_CHANNEL}"
+conda config --system --add channels "${RMM_CHANNEL}"
 ```
 
-Note that the custom channel for PR artifacts is needed in the build scripts _and_ the test scripts, for C++ _and_ Python.
-If building/testing a Python package that depends on a C++ library, it is necessary to use PR artifacts from that C++ library and not just Python (e.g. if testing `rmm` artifacts, you must use the corresponding `librmm` CI artifacts as well as `rmm`).
-In some repos, the `test_python.sh` is quite complicated with multiple calls to conda/mamba.
-We recommend that the Python and C++ artifact channels should be added to every call of `rapids-mamba-retry` / `rapids-conda-retry` "just in case."
+Then copy the following into every script in the `ci/` directory that is doing `conda` installs.
 
-Note: By default `rapids-get-pr-conda-artifact` uses the most recent commit from the specified PR.
-A commit hash from the dependent PR can be added as an optional 4th argument to test with an earlier commit or to pin testing to a commit even if the dependent PR is updated.
+```shell
+source ./ci/use_conda_packages_from_prs.sh
+```
+
+**Note:** By default `rapids-get-pr-conda-artifact` uses the most recent commit from the specified PR.
+A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
+
+## Using Wheel CI Artifacts in Other PRs
+
+To use wheels produced by other PRs' CI:
+
+* download the wheels at the beginning of CI jobs
+* constrain `pip` to always use them
+
+Consider the following examples.
+
+**Example:** Building `libcuml` (C++) using `librmm` and `libraft` PR artifacts.
+
+Add a new file called `ci/use_wheels_from_prs.sh`.
+
+```shell
+# ci/use_wheels_from_prs.sh
+
+RAPIDS_PY_CUDA_SUFFIX=$(rapids-wheel-ctk-name-gen "${RAPIDS_CUDA_VERSION}")
+
+# download wheels, store the directories holding them in variables
+LIBRMM_WHEELHOUSE=$(
+  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact rmm 1678 cpp
+)
+LIBRAFT_WHEELHOUSE=$(
+  RAPIDS_PY_WHEEL_NAME="libraft_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact raft 2433 cpp
+)
+
+# write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
+cat > /tmp/constraints.txt <<EOF
+librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRMM_WHEELHOUSE}/librmm_*.whl)
+libraft-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRAFT_WHEELHOUSE}/libraft_*.whl)
+EOF
+
+export PIP_CONSTRAINT=/tmp/constraints.txt
+```
+
+Then copy the following into every script in the `ci/` directory that is doing `pip` installs or wheel builds with e.g. `pip wheel`.
+
+```shell
+source ./ci/use_wheels_from_prs.sh
+```
+
+This should generally be enough.
+If any of the other CI scripts are already setting the environment variable `PIP_CONSTRAINT`, you may need to
+modify them slightly to ensure they **append to**, instead of **overwriting**, the constraints set up by `use_wheels_from_prs.sh`.
+
+**Example 2:** Testing `cudf` (Python) using `librmm`, `rmm`, and `libkvikio` PR artifacts.
+
+It's important to include all of the recursive dependencies.
+So, for example, Python testing jobs that use the `rmm` Python package also need the `librmm` C++ package.
+
+```shell
+# ci/use_wheels_from_prs.sh
+
+RAPIDS_PY_CUDA_SUFFIX=$(rapids-wheel-ctk-name-gen "${RAPIDS_CUDA_VERSION}")
+
+# download wheels, store the directories holding them in variables
+LIBKVIKIO_WHEELHOUSE=$(
+  RAPIDS_PY_WHEEL_NAME="libkvikio_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact kvikio 510 cpp
+)
+LIBRMM_WHEELHOUSE=$(
+  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact rmm 1678 cpp
+)
+RMM_WHEELHOUSE=$(
+  RAPIDS_PY_WHEEL_NAME="rmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact rmm 1678 python
+)
+
+# write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
+cat > /tmp/constraints.txt <<EOF
+libkvikio-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBKVIKIO_WHEELHOUSE}/libkvikio_*.whl)
+librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRMM_WHEELHOUSE}/librmm_*.whl)
+rmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${RMM_WHEELHOUSE}/rmm_*.whl)
+EOF
+
+export PIP_CONSTRAINT=/tmp/constraints.txt
+```
+
+Then copy the following into every script in the `ci/` directory that is doing `pip` installs or wheel builds with e.g. `pip wheel`.
+
+```shell
+source ./ci/use_wheels_from_prs.sh
+```
+
+As above, if any of the other CI scripts are already setting the environment variable `PIP_CONSTRAINT`, you may need to
+modify them slightly to ensure they **append to**, instead of **overwriting**, the constraints set up by `use_wheels_from_prs.sh`.
+
+**Note:** By default `rapids-get-pr-wheel-artifact` uses the most recent commit from the specified PR.
+A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
+
 ## Skipping CI for Commits
 
 See the GitHub Actions documentation page below on how to prevent GitHub Actions from running on certain commits. This is useful for preventing GitHub Actions from running on pull requests that are not fully complete. This also helps preserve the finite GPU resources provided by the RAPIDS Ops team.
