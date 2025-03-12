@@ -337,7 +337,7 @@ Attributes must be included as selectors in the query, or else they won't be ava
 
 {% raw %}
 ```
-{ } | select(span:duration, name, resource.rapids.labels, resource.service.name, resource.rapids.cuda, resource.rapids.cuda, resource.git.run_url, resource.rapids.py, resource.rapids.gpu)
+{} | select(span:duration, name, resource.rapids.labels, resource.service.name, resource.rapids.cuda, resource.rapids.cuda, resource.git.job_url, resource.rapids.py, resource.rapids.gpu, resource.rapids.package_type, resource.rapids.arch, resource.rapids.linux, resource.rapids.driver, resource.rapids.deps,span.sccache.main_process.hit_rate,span.sccache.main_process.miss_rate,span.sccache.main_process.error_rate)
 ```
 {% endraw %}
 
@@ -358,7 +358,88 @@ changes.
 
 ### Filtering and grouping data
 
-The workhorse ideas of the grafana plots are:
+We store our span data using Grafana Tempo. Tempo allows TraceQL queries for filtering data. In general, there are two parts of [a TraceQL query](https://grafana.com/docs/tempo/latest/traceql/#traceql):
+
+1. The `{filter}` part, which is used to filter the traces
+2. The `select` part, which is used to select the metadata fields to return
+
+The query is limited to a certain number of traces and spans per trace, as well as the time range of the query. The maximum time range is 7 days.
+
+The resource-level attributes that are captured can be found in shared-workflows, such as https://github.com/rapidsai/shared-workflows/blob/branch-25.04/.github/workflows/conda-cpp-build.yaml#L117C32-L117C199.
+
+Additional span attributes get added by [the python script that uses the OpenTelemetry SDK](https://github.com/rapidsai/shared-actions/blob/main/telemetry-impls/summarize/send_trace.py#L317).
+
+
+From [conda-cpp-build.yaml](https://github.com/rapidsai/shared-workflows/blob/branch-25.04/.github/workflows/conda-cpp-build.yaml#L117):
+```
+"rapids.PACKAGER=conda,rapids.CUDA_VER=${{ matrix.CUDA_VER }},rapids.PY_VER=${{ matrix.PY_VER }},rapids.ARCH=${{ matrix.ARCH }},rapids.LINUX_VER=${{ matrix.LINUX_VER }}"
+```
+
+From [wheels-test.yaml](https://github.com/rapidsai/shared-workflows/blob/branch-25.04/.github/workflows/wheels-test.yaml#L152)
+```
+"rapids.PACKAGER=wheel,rapids.CUDA_VER=${{ matrix.CUDA_VER }},rapids.PY_VER=${{ matrix.PY_VER }},rapids.ARCH=${{ matrix.ARCH }},rapids.LINUX_VER=${{ matrix.LINUX_VER }},rapids.GPU=${{ matrix.GPU }},rapids.DRIVER=${{ matrix.DRIVER }},rapids.DEPENDENCIES=${{ matrix.DEPENDENCIES }}"
+```
+
+#### Filter out docker stuff outside of builds
+
+Part of telemetry setup is providing environment variables that other tools that use OpenTelemetry can use to send spans. These get sent to the aggregator, which may or may not be accessible to the build machine. If the aggregator is accessible, it will be used to send spans. These spans might be useful to you, or they might be noise. To filter them, you can filter by several key attributes.
+
+* `trace:rootName` - The name of the root span. In Grafana, this is the "Trace name" column. It is useful to filter both empty values and "moby.*" which comes from docker, and not of interest.
+
+```
+{trace:rootName !~ ""} && {trace:rootName !~ "moby.*"}
+```
+
+* `duration` - The duration of the trace. This is the "Duration" column in Grafana. It is useful for filtering spurious values.
+
+```
+{duration>10s && duration<1d}
+```
+
+* `resource.git.job_url` - The URL of the job. This is a metadata field that we add, and when this field is empty, it often comes from failed builds that are not of interest.
+
+```
+{resource.git.job_url !~ ""}
+```
+
+* `resource.rapids.labels` - These are the labels of the kind of machine that was used for the job. This filter removes "in-between" jobs, such as the matrix computation, and can also distinguish between build and test jobs.
+
+Workers with GPUs will be associated with test jobs
+```
+{resource.rapids.labels =~ ".*gpu.*"}
+```
+
+We'll call any other label "build"
+```
+{resource.rapids.labels !~ ".*gpu.*" && resource.rapids.labels !~ ""}
+```
+
+Any of these can be combined, either [within one query](https://grafana.com/docs/tempo/latest/traceql/#field-expressions), or by [combining span sets (joining multiple `{}` sections)](https://grafana.com/docs/tempo/latest/traceql/#combine-spansets).
+
+
+#### Adding metadata to spans
+
+The default spans returned from Tempo only include barebones native attributes. To access the custom attributes that we use to capture GPU, CUDA version, etc., you can use the `select` function.
+
+```
+{} | select(span:duration, name, resource.rapids.labels, resource.service.name, resource.rapids.CUDA_VER, resource.git.run_url, resource.rapids.PY_VERSION, resource.rapids.GPU)
+```
+
+Reminder: the values in the select function are scoped. `resource` is a scope that makes the query faster. You can omit it. However, it may be confusing if you try to use a `resource` scope on an attribute at the `span` level. The `rapids` prefix currently implies resource attributes.
+
+Scope:
+* `resource` - `rapids`, `git`
+* `span` - `sccache`, likely built file sizes, ninja build times, etc.
+
+#### Combining filters and spansets
+
+This is an example of a query that joins filtered spansets, and selects several metadata fields on the resulting spanset.
+
+```
+{duration<1d && duration>10s} && {trace:rootName !~ ""} && {trace:rootName !~ "moby.*"} | select(span:duration, name, resource.rapids.labels, resource.service.name, resource.rapids.CUDA_VER, resource.git.run_url, resource.rapids.PY_VERSION, resource.rapids.GPU)
+```
+
+The returned data here is the foundation of the telemetry dashboard. Beyond the query, the workhorse ideas of the grafana plots are:
 
 * filtering data such that it matches a given value
 * Using groupby operations to aggregate multiple values of a given type
