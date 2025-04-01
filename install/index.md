@@ -166,6 +166,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 ### **pip**
 
 - <i class="fas fa-info-circle"></i> pip installations require using a wheel matching the system's installed CUDA toolkit.
+- <i class="fas fa-info-circle"></i> RAPIDS pip packages require NVRTC for Numba to function properly. For Docker users, this means that RAPIDS wheels require the `devel` flavor of `nvidia/cuda` images for full functionality. The `base` and `runtime` flavors of `nvidia/cuda` Docker images are currently not sufficient.
 - <i class="fas fa-info-circle"></i> For CUDA 11 toolkits, install the <code>-cu11</code> wheels, and for CUDA 12 toolkits install the <code>-cu12</code> wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the <code>-cu11</code> wheels.
 
 <br/>
