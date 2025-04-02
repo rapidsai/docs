@@ -17,9 +17,9 @@ bundle exec jekyll serve
 
 If you're using [VSCode](https://code.visualstudio.com/) you can use the jekyll Dev Container.
 
-- This project contains a devcontainer config. 
+- This project contains a devcontainer config:
   - If prompted with "Folder contains a Dev Container configuration file." select "Reopen in Container"
-  - Alternatively select "Dev Containers: Reopen in Container" from the command pallete
+  - Alternatively select "Dev Containers: Reopen in Container" from the command palette
 - Run `bundle exec jekyll serve`
 
 ### Local Docker development
