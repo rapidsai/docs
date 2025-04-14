@@ -51,13 +51,13 @@ docker run \
   -it \
   --gpus all \
   --pull=always \
-  -e GITHUB_TOKEN=$(gh auth token) \
+  --env GITHUB_TOKEN=$(gh auth token) \
   --volume $PWD:/repo \
   --workdir /repo \
   rapidsai/ci-conda:cuda11.8.0-ubuntu22.04-py3.10
 ```
 
-Note: The `-e GITHUB_TOKEN=$(gh auth token)` flag is required to authenticate with GitHub for accessing private repositories and artifacts. This token is automatically generated from your GitHub CLI authentication and passed to the container. Make sure you have the GitHub CLI (`gh`) installed and authenticated on your host machine.
+Note: The `--env GITHUB_TOKEN=$(gh auth token)` flag is required to authenticate with GitHub for accessing artifacts. This token is automatically generated from your GitHub CLI authentication and passed to the container. Make sure you have the GitHub CLI (`gh`) installed and authenticated on your host machine.
 
 Once the container has started, you can run any of the CI scripts inside of it:
 
