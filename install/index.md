@@ -215,7 +215,13 @@ bash Miniforge3-$(uname)-$(uname -m).sh
 
 **3. Start Conda.** Open a new terminal window, which should now show Conda initialized.
 
-**4. Check Conda Configuration.** Installing RAPIDS requires you to use `channel_priority: flexible`. You can check this and change it, if required, by doing:
+**4. Check Conda Configuration.** Installing RAPIDS may require you to use `channel_priority: flexible`.
+
+If you are installing RAPIDS with CUDA 12 or greater, then you can use either strict or flexible channel priority.
+
+If you are install RAPIDS with CUDA 11, then you must set `channel_priority: flexible`.
+
+You can check this and change it, if required, by doing:
 ```sh
 conda config --show channel_priority
 conda config --set channel_priority flexible
