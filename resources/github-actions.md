@@ -123,7 +123,7 @@ As an example, `rapids-print-env` is used to print common environment informatio
 
 ## Downloading CI Artifacts
 
-Artifacts from both pull-requests and branch builds can be accessed on the Github UI for the specific workflow run, found in the Actions tab of the repository
+Artifacts from both pull-requests and branch builds can be accessed on the Github UI for the specific workflow run, found in the Actions tab of the repository.
 
 ![](/assets/images/workflow-ui.png)
 
@@ -133,13 +133,13 @@ There is also a link provided in the `Run actions/upload-artifact@v4` step of ev
 
 This link downloads the required artifact as a zip file.
 
-This can also be done using `ghcli` using the following command to download the artifact. This command unzips the artifact to the destination location
+This can also be done using `ghcli` using the following command to download the artifact. This command also unzips the artifact to the destination location:
 
 ```sh
 gh run download <workflow-run-id> --repo <repo-name> --name <artifact-name> --dir <destination-directory>
 ```
 
-For example, to download the artifact `rmm_conda_python_cuda11_py311_x86_64` from the workflow run ID `14437867406` on the `rmm` repository into the `/artifacts` directory, you can use this command
+For example, to download the artifact `rmm_conda_python_cuda11_py311_x86_64` from the workflow run ID `14437867406` on the `rmm` repository into the `/artifacts` directory, you can use this command:
 
 ```sh
 gh run download 14437867406 --repo rapidsai/rmm --name rmm_conda_python_cuda11_py311_x86_64 --dir /artifacts
@@ -159,7 +159,7 @@ gh run download 14437867406 --repo rapidsai/rmm -name rmm_conda_cpp_cuda11_x86_6
 mamba install --channel file://local_channel --channel rapidsai-nightly --channel conda-forge --channel nvidia librmm
 ```
 
-Note: Make sure you have the GitHub CLI (`gh`) installed and authenticated on your host machine to download artifacts from GitHub Artifacts. To download artifacts made for a specific PR, replace the workflow run ID with the ID of the run triggered by the PR branch
+Note: Make sure you have the GitHub CLI (`gh`) installed and authenticated on your host machine to download artifacts from GitHub Artifacts. To download artifacts made for a specific PR, replace the workflow run ID with the ID of the run triggered by the PR branch.
 
 ## Using Wheel CI Artifacts Locally
 
@@ -175,7 +175,7 @@ gh run download 14437867406 --repo rapidsai/rmm --name rmm_wheel_python_rmm_cu12
 pip install wheels/rmm_cu12-25.6.0a23-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl
 ```
 
-Note: Make sure you have the GitHub CLI (`gh`) installed and authenticated on your host machine to download artifacts from GitHub Artifacts. To download artifacts made for a specific PR, replace the workflow run ID with the ID of the run triggered by the PR branch
+Note: Make sure you have the GitHub CLI (`gh`) installed and authenticated on your host machine to download artifacts from GitHub Artifacts. To download artifacts made for a specific PR, replace the workflow run ID with the ID of the run triggered by the PR branch.
 
 ## Using Conda CI Artifacts in Other PRs
 
