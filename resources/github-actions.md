@@ -131,7 +131,7 @@ There is also a link provided in the `Run actions/upload-artifact@v4` step of ev
 
 ![](/assets/images/downloads-github.png)
 
-This link downloads the required artifact as a zip file. 
+This link downloads the required artifact as a zip file.
 
 This can also be done using `ghcli` using the following command to download the artifact. This command unzips the artifact to the destination location
 
