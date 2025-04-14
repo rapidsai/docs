@@ -123,45 +123,59 @@ As an example, `rapids-print-env` is used to print common environment informatio
 
 ## Downloading CI Artifacts
 
-For NVIDIA employees with VPN access, artifacts from both pull-requests and branch builds can be accessed on [https://downloads.rapids.ai/](https://downloads.rapids.ai/).
+Artifacts from both pull-requests and branch builds can be accessed on the Github UI for the specific workflow run, found in the Actions tab of the repository
 
-There is a link provided at the end of every C++ and Python build job where the build artifacts for that particular workflow run can be accessed.
+![](/assets/images/workflow-ui.png)
 
-![](/assets/images/downloads.png)
+There is also a link provided in the `Run actions/upload-artifact@v4` step of every C++ and Python build job where the build artifacts for that particular job can be accessed.
+
+![](/assets/images/downloads-github.png)
+
+This link downloads the required artifact as a zip file. 
+
+This can also be done using `ghcli` using the following command to download the artifact. This command unzips the artifact to the destination location
+
+```sh
+gh run download <workflow-run-id> --repo <repo-name> --name <artifact-name> --dir <destination-directory>
+```
+
+For example, to download the artifact `rmm_conda_python_cuda11_py311_x86_64` from the workflow run ID `14437867406` on the `rmm` repository into the `/artifacts` directory, you can use this command
+
+```sh
+gh run download 14437867406 --repo rapidsai/rmm --name rmm_conda_python_cuda11_py311_x86_64 --dir /artifacts
+```
 
 ## Using Conda CI Artifacts Locally
 
-The artifacts that result from running `conda build` are conda channels. RAPIDS' CI system then compresses these conda channels into tarballs and uploads them to [https://downloads.rapids.ai/](https://downloads.rapids.ai/).
+The artifacts that result from running `conda build` are conda channels. RAPIDS' CI system uploads these conda channels to GitHub Artifacts as zipfiles.
 
-The packages in the conda channel can be used by extracting the tarball to your local filesystem and using the resulting path in your conda commands.
+The packages in the conda channel can be used by downloading the artifact to your local filesystem using `ghcli` and using the resulting path in your conda commands.
 
-For example, the following snippet will download a pull request artifact for `librmm` and install it into the active conda environment:
+For example, the following snippet will download an artifact for `librmm` from workflow run ID `14437867406` and install it into the active conda environment:
 
 ```sh
-wget https://downloads.rapids.ai/ci/rmm/pull-request/1376/5124d43/rmm_conda_cpp_cuda11_x86_64.tar.gz
-mkdir local_channel
-tar xzf rmm_conda_cpp_cuda11_x86_64.tar.gz -C local_channel/
+# Download and extract the artifact
+gh run download 14437867406 --repo rapidsai/rmm -name rmm_conda_cpp_cuda11_x86_64 --dir local_channel
 mamba install --channel file://local_channel --channel rapidsai-nightly --channel conda-forge --channel nvidia librmm
 ```
 
-Note that CI artifacts can only be downloaded while connected to the NVIDIA VPN.
+Note: Make sure you have the GitHub CLI (`gh`) installed and authenticated on your host machine to download artifacts from GitHub Artifacts. To download artifacts made for a specific PR, replace the workflow run ID with the ID of the run triggered by the PR branch
 
 ## Using Wheel CI Artifacts Locally
 
-RAPIDS' CI system compresses the wheels that it builds into tarballs and uploads them to [https://downloads.rapids.ai/](https://downloads.rapids.ai/).
+RAPIDS' CI system compresses the wheels that it builds into zipfiles and uploads them to GitHub Artifacts.
 
-The wheels can be used by extracting the tarball to your local filesystem and using the resulting path in your pip commands.
+The wheels can be used byby downloading the artifact to your local filesystem using `ghcli` and using the resulting path in your pip commands.
 
-For example, the following snippet will download a pull request artifact for `librmm` and install it into the active conda environment:
+For example, the following snippet will download an artifact for `librmm` and install it into the active conda environment:
 
 ```sh
-wget https://downloads.rapids.ai/ci/rmm/pull-request/1376/5124d43/rmm_wheel_python_rmm_cu12_39_x86_64.tar.gz
-mkdir wheels
-tar xzf rmm_wheel_python_rmm_cu12_39_x86_64.tar.gz -C wheels/
-pip install wheels/rmm_cu12-24.2.0a1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# Download and extract the artifact
+gh run download 14437867406 --repo rapidsai/rmm --name rmm_wheel_python_rmm_cu12_py312_x86_64 --dir wheels
+pip install wheels/rmm_cu12-25.6.0a23-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl
 ```
 
-Note that CI artifacts can only be downloaded while connected to the NVIDIA VPN.
+Note: Make sure you have the GitHub CLI (`gh`) installed and authenticated on your host machine to download artifacts from GitHub Artifacts. To download artifacts made for a specific PR, replace the workflow run ID with the ID of the run triggered by the PR branch
 
 ## Using Conda CI Artifacts in Other PRs
 
@@ -184,8 +198,8 @@ Add a new file called `ci/use_conda_packages_from_prs.sh`.
 # ci/use_conda_packages_from_prs.sh
 
 # download CI artifacts
-LIBRAFT_CHANNEL=$(rapids-get-pr-conda-artifact raft 1388 cpp)
-LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1095 cpp)
+LIBRAFT_CHANNEL=$(rapids-get-pr-conda-artifact-github raft 1388 cpp)
+LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact-github rmm 1095 cpp)
 
 # make sure they can be found locally
 conda config --system --add channels "${LIBRAFT_CHANNEL}"
@@ -207,9 +221,9 @@ So, for example, Python testing jobs that use the `rmm` Python package also need
 # ci/use_conda_packages_from_prs.sh
 
 # download CI artifacts
-LIBKVIKIO_CHANNEL=$(rapids-get-pr-conda-artifact kvikio 224 cpp)
-LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1223 cpp)
-RMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1223 python)
+LIBKVIKIO_CHANNEL=$(rapids-get-pr-conda-artifact-github kvikio 224 cpp)
+LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact-github rmm 1223 cpp)
+RMM_CHANNEL=$(rapids-get-pr-conda-artifact-github rmm 1223 python)
 
 # make sure they can be found locally
 conda config --system --add channels "${LIBKVIKIO_CHANNEL}"
@@ -223,7 +237,7 @@ Then copy the following into every script in the `ci/` directory that is doing `
 source ./ci/use_conda_packages_from_prs.sh
 ```
 
-**Note:** By default `rapids-get-pr-conda-artifact` uses the most recent commit from the specified PR.
+**Note:** By default `rapids-get-pr-conda-artifact-github` uses the most recent commit from the specified PR.
 A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
 
 ## Using Wheel CI Artifacts in Other PRs
@@ -246,10 +260,10 @@ RAPIDS_PY_CUDA_SUFFIX=$(rapids-wheel-ctk-name-gen "${RAPIDS_CUDA_VERSION}")
 
 # download wheels, store the directories holding them in variables
 LIBRMM_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact rmm 1678 cpp
+  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact-github rmm 1678 cpp
 )
 LIBRAFT_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="libraft_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact raft 2433 cpp
+  RAPIDS_PY_WHEEL_NAME="libraft_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact-github raft 2433 cpp
 )
 
 # write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
@@ -283,13 +297,13 @@ RAPIDS_PY_CUDA_SUFFIX=$(rapids-wheel-ctk-name-gen "${RAPIDS_CUDA_VERSION}")
 
 # download wheels, store the directories holding them in variables
 LIBKVIKIO_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="libkvikio_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact kvikio 510 cpp
+  RAPIDS_PY_WHEEL_NAME="libkvikio_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact-github kvikio 510 cpp
 )
 LIBRMM_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact rmm 1678 cpp
+  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact-github rmm 1678 cpp
 )
 RMM_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="rmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact rmm 1678 python
+  RAPIDS_PY_WHEEL_NAME="rmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact-github rmm 1678 python
 )
 
 # write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
@@ -311,7 +325,7 @@ source ./ci/use_wheels_from_prs.sh
 As above, if any of the other CI scripts are already setting the environment variable `PIP_CONSTRAINT`, you may need to
 modify them slightly to ensure they **append to**, instead of **overwriting**, the constraints set up by `use_wheels_from_prs.sh`.
 
-**Note:** By default `rapids-get-pr-wheel-artifact` uses the most recent commit from the specified PR.
+**Note:** By default `rapids-get-pr-wheel-artifact-github` uses the most recent commit from the specified PR.
 A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
 
 ## Skipping CI for Commits
