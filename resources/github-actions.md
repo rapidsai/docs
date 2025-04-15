@@ -147,7 +147,7 @@ gh run download 14437867406 --repo rapidsai/rmm --name rmm_conda_python_cuda11_p
 
 ## Using Conda CI Artifacts Locally
 
-The artifacts that result from running `conda build` are conda channels. RAPIDS' CI system uploads these conda channels to GitHub Artifacts as zipfiles.
+The artifacts that result from running `conda build` are conda channels. RAPIDS' CI system uploads these conda channels to GitHub Artifacts as zip files.
 
 The packages in the conda channel can be used by downloading the artifact to your local filesystem using `gh` CLI and using the resulting path in your conda commands.
 
