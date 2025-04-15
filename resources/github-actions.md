@@ -165,7 +165,7 @@ Note: Make sure you have the GitHub CLI (`gh`) installed and authenticated on yo
 
 RAPIDS' CI system compresses the wheels that it builds into zipfiles and uploads them to GitHub Artifacts.
 
-The wheels can be used byby downloading the artifact to your local filesystem using `ghcli` and using the resulting path in your pip commands.
+The wheels can be used by downloading the artifact to your local filesystem using `gh` CLI and using the resulting path in your pip commands.
 
 For example, the following snippet will download an artifact for `librmm` and install it into the active conda environment:
 
