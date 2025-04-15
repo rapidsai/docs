@@ -133,7 +133,7 @@ There is also a link provided in the `Run actions/upload-artifact@v4` step of ev
 
 This link downloads the required artifact as a zip file.
 
-This can also be done using `ghcli` using the following command to download the artifact. This command also unzips the artifact to the destination location:
+This can also be done using the following `gh` CLI command to download the artifact. This command also unzips the artifact to the destination location:
 
 ```sh
 gh run download <workflow-run-id> --repo <repo-name> --name <artifact-name> --dir <destination-directory>
