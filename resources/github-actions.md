@@ -123,7 +123,7 @@ As an example, `rapids-print-env` is used to print common environment informatio
 
 ## Downloading CI Artifacts
 
-Artifacts from both pull-requests and branch builds can be accessed on the Github UI for the specific workflow run, found in the Actions tab of the repository.
+Artifacts from both pull-requests and branch builds can be accessed on the GitHub UI for the specific workflow run, found in the Actions tab of the repository.
 
 ![](/assets/images/workflow-ui.png)
 
