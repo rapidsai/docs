@@ -149,7 +149,7 @@ gh run download 14437867406 --repo rapidsai/rmm --name rmm_conda_python_cuda11_p
 
 The artifacts that result from running `conda build` are conda channels. RAPIDS' CI system uploads these conda channels to GitHub Artifacts as zipfiles.
 
-The packages in the conda channel can be used by downloading the artifact to your local filesystem using `ghcli` and using the resulting path in your conda commands.
+The packages in the conda channel can be used by downloading the artifact to your local filesystem using `gh` CLI and using the resulting path in your conda commands.
 
 For example, the following snippet will download an artifact for `librmm` from workflow run ID `14437867406` and install it into the active conda environment:
 
