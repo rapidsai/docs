@@ -163,7 +163,7 @@ Note: Make sure you have the GitHub CLI (`gh`) installed and authenticated on yo
 
 ## Using Wheel CI Artifacts Locally
 
-RAPIDS' CI system compresses the wheels that it builds into zipfiles and uploads them to GitHub Artifacts.
+RAPIDS' CI system compresses the wheels that it builds into zip files and uploads them to GitHub Artifacts.
 
 The wheels can be used by downloading the artifact to your local filesystem using `gh` CLI and using the resulting path in your pip commands.
 
