@@ -149,15 +149,15 @@ If builds are failing in CI, developers should fix the problem locally and then 
 
 Then CI jobs can run and the fixed build artifacts will be made available for the test job to download and use.
 
-To attempt a complete build and test workflow locally, you can manually update any instances of `CPP_CHANNEL` and `PYTHON_CHANNEL` that use `rapids-download-conda-from-s3` (e.g. [1](https://github.com/rapidsai/cuml/blob/dc38afc584154ebe7332d43f69e3913492f7a273/ci/build_python.sh#L14),[2](https://github.com/rapidsai/cuml/blob/dc38afc584154ebe7332d43f69e3913492f7a273/ci/test_python_common.sh#L22-L23)) with the value of the `RAPIDS_CONDA_BLD_OUTPUT_DIR` environment variable that is [set in our CI images](https://github.com/rapidsai/ci-imgs/blob/d048ffa6bfd672fa72f31aeb7cc5cf2363aff6d9/Dockerfile#L105).
+To attempt a complete build and test workflow locally, you can manually update any instances of `CPP_CHANNEL` and `PYTHON_CHANNEL` that use `rapids-download-conda-from-github` (e.g. [1](https://github.com/rapidsai/cuml/blob/dc38afc584154ebe7332d43f69e3913492f7a273/ci/build_python.sh#L14),[2](https://github.com/rapidsai/cuml/blob/dc38afc584154ebe7332d43f69e3913492f7a273/ci/test_python_common.sh#L22-L23)) with the value of the `RAPIDS_CONDA_BLD_OUTPUT_DIR` environment variable that is [set in our CI images](https://github.com/rapidsai/ci-imgs/blob/d048ffa6bfd672fa72f31aeb7cc5cf2363aff6d9/Dockerfile#L105).
 
 This value is used to set the `output_folder` of the `.condarc` file used in our CI images (see [docs](https://conda.io/projects/conda/en/latest/user-guide/configuration/use-condarc.html#specify-conda-build-build-folder-conda-build-3-16-3-output-folder)). Therefore, any locally built packages will end up in this directory.
 
 For example:
 
 ```sh
-# Replace all local uses of `rapids-download-conda-from-s3`
-sed -ri '/rapids-download-conda-from-s3/ s/_CHANNEL=.*/_CHANNEL=${RAPIDS_CONDA_BLD_OUTPUT_DIR}/' ci/*.sh
+# Replace all local uses of `rapids-download-conda-from-github`
+sed -ri '/rapids-download-conda-from-github/ s/_CHANNEL=.*/_CHANNEL=${RAPIDS_CONDA_BLD_OUTPUT_DIR}/' ci/*.sh
 
 # Run the sequence of build/test scripts
 ./ci/build_cpp.sh
@@ -167,6 +167,10 @@ sed -ri '/rapids-download-conda-from-s3/ s/_CHANNEL=.*/_CHANNEL=${RAPIDS_CONDA_B
 ./ci/test_notebooks.sh
 ./ci/build_docs.sh
 ```
+
+Similarly, you can manually update any instance of the environment variable `RAPIDS_WHEEL_BLD_OUTPUT_DIR` to set the destination location for newly built wheels. (e.g. [1](https://github.com/rapidsai/cudf/blob/05646df0b8dd4b69f7cfed6fbf9e882df795210c/ci/build_wheel_cudf.sh#L29),[2](https://github.com/rapidsai/cuml/blob/e02797cabbd54a328fb22a48b5f1f02c4b6c81ee/ci/build_wheel_cuml.sh#L38)).
+
+This value is set to `/tmp/wheelhouse` in our [CI images](https://github.com/rapidsai/ci-imgs/blob/adc9f61a0c9d37b21b9ce0a978681e406a00bc64/ci-wheel.Dockerfile#L27)
 
 ### Some Builds Rely on Versioning Information in Git Tags
 
