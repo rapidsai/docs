@@ -123,7 +123,7 @@ As an example, `rapids-print-env` is used to print common environment informatio
 
 ## Downloading CI Artifacts
 
-Artifacts from both pull-requests and branch builds can be accessed on the Github UI for the specific workflow run, found in the Actions tab of the repository.
+Artifacts from both pull-requests and branch builds can be accessed on the GitHub UI for the specific workflow run, found in the Actions tab of the repository.
 
 ![](/assets/images/workflow-ui.png)
 
@@ -133,7 +133,7 @@ There is also a link provided in the `Run actions/upload-artifact@v4` step of ev
 
 This link downloads the required artifact as a zip file.
 
-This can also be done using `ghcli` using the following command to download the artifact. This command also unzips the artifact to the destination location:
+This can also be done using the following `gh` CLI command to download the artifact. This command also unzips the artifact to the destination location:
 
 ```sh
 gh run download <workflow-run-id> --repo <repo-name> --name <artifact-name> --dir <destination-directory>
@@ -147,9 +147,9 @@ gh run download 14437867406 --repo rapidsai/rmm --name rmm_conda_python_cuda11_p
 
 ## Using Conda CI Artifacts Locally
 
-The artifacts that result from running `conda build` are conda channels. RAPIDS' CI system uploads these conda channels to GitHub Artifacts as zipfiles.
+The artifacts that result from running `conda build` are conda channels. RAPIDS' CI system uploads these conda channels to GitHub Artifacts as zip files.
 
-The packages in the conda channel can be used by downloading the artifact to your local filesystem using `ghcli` and using the resulting path in your conda commands.
+The packages in the conda channel can be used by downloading the artifact to your local filesystem using `gh` CLI and using the resulting path in your conda commands.
 
 For example, the following snippet will download an artifact for `librmm` from workflow run ID `14437867406` and install it into the active conda environment:
 
@@ -163,9 +163,9 @@ Note: Make sure you have the GitHub CLI (`gh`) installed and authenticated on yo
 
 ## Using Wheel CI Artifacts Locally
 
-RAPIDS' CI system compresses the wheels that it builds into zipfiles and uploads them to GitHub Artifacts.
+RAPIDS' CI system compresses the wheels that it builds into zip files and uploads them to GitHub Artifacts.
 
-The wheels can be used byby downloading the artifact to your local filesystem using `ghcli` and using the resulting path in your pip commands.
+The wheels can be used by downloading the artifact to your local filesystem using `gh` CLI and using the resulting path in your pip commands.
 
 For example, the following snippet will download an artifact for `librmm` and install it into the active conda environment:
 
