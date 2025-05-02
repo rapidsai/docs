@@ -58,7 +58,7 @@ docker run \
 ```
 
 Note: The `--env-file <(echo "GH_TOKEN=$(gh auth token)")` flag is recommended to authenticate with GitHub for accessing artifacts. The authentication token is generated from your GitHub CLI on the host machine and passed to the container, allowing for customizability of access scopes. Make sure you have the GitHub CLI (`gh`) installed and authenticated on your host machine.
-If this token is not provided, and authenticating to GitHub is necessary for an operation (such as downloading artifacts), the container prompts for an interactive authentication to GitHub. 
+If this token is not provided, and authenticating to GitHub is necessary for an operation (such as downloading artifacts), the container prompts for an interactive authentication to GitHub.
 
 Once the container has started, you can run any of the CI scripts inside of it:
 
