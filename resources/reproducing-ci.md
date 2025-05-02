@@ -51,13 +51,14 @@ docker run \
   -it \
   --gpus all \
   --pull=always \
-  --env GITHUB_TOKEN=$(gh auth token) \
+  --env-file <(echo "GH_TOKEN=$(gh auth token)") \
   --volume $PWD:/repo \
   --workdir /repo \
   rapidsai/ci-conda:cuda11.8.0-ubuntu22.04-py3.10
 ```
 
-Note: The `--env GITHUB_TOKEN=$(gh auth token)` flag is required to authenticate with GitHub for accessing artifacts. This token is automatically generated from your GitHub CLI authentication and passed to the container. Make sure you have the GitHub CLI (`gh`) installed and authenticated on your host machine.
+Note: The `--env-file <(echo "GH_TOKEN=$(gh auth token)")` flag is recommended to authenticate with GitHub for accessing artifacts. The authentication token is generated from your GitHub CLI on the host machine and passed to the container, allowing for customizability of access scopes. Make sure you have the GitHub CLI (`gh`) installed and authenticated on your host machine.
+If this token is not provided, and authenticating to GitHub is necessary for an operation (such as downloading artifacts), the container prompts for an interactive authentication to GitHub. 
 
 Once the container has started, you can run any of the CI scripts inside of it:
 
@@ -116,8 +117,7 @@ In CI, this process happens transparently.
 
 Local builds lack the context provided by the CI environment and therefore will require input from the user in order to ensure that the correct artifacts are downloaded.
 
-Any time the `rapids-download-conda-from-github` command (e.g. [here](https://github.com/rapidsai/cugraph/blob/b50850f0498e163e56b0374c1c64e551a5898f26/ci/test_python.sh#L22-L23)) is encountered in a local test run, the user will be prompted for any necessary environment variables that are missing.
-<!-- The reference to the file needs to be changed once the downloading from GH PRs are merged -->
+Any time the `rapids-download-conda-from-github` command (e.g. [here](https://github.com/rapidsai/cugraph/blob/487b0d2ddbf4ee81ca46c29cd5cb6e33381d6de2/ci/test_python.sh#L12-L13)) is encountered in a local test run, the user will be prompted for any necessary environment variables that are missing.
 
 The screenshot below shows an example.
 
@@ -149,7 +149,7 @@ If builds are failing in CI, developers should fix the problem locally and then 
 
 Then CI jobs can run and the fixed build artifacts will be made available for the test job to download and use.
 
-To attempt a complete build and test workflow locally, you can manually update any instances of `CPP_CHANNEL` and `PYTHON_CHANNEL` that use `rapids-download-conda-from-github` (e.g. [1](https://github.com/rapidsai/cuml/blob/dc38afc584154ebe7332d43f69e3913492f7a273/ci/build_python.sh#L14),[2](https://github.com/rapidsai/cuml/blob/dc38afc584154ebe7332d43f69e3913492f7a273/ci/test_python_common.sh#L22-L23)) with the value of the `RAPIDS_CONDA_BLD_OUTPUT_DIR` environment variable that is [set in our CI images](https://github.com/rapidsai/ci-imgs/blob/d048ffa6bfd672fa72f31aeb7cc5cf2363aff6d9/Dockerfile#L105).
+To attempt a complete build and test workflow locally, you can manually update any instances of `CPP_CHANNEL` and `PYTHON_CHANNEL` that use `rapids-download-conda-from-github` (e.g. [1](https://github.com/rapidsai/cuml/blob/5442d450d844ef8bbaacd273007700a64abede89/ci/build_python.sh#L18),[2](https://github.com/rapidsai/cuml/blob/5442d450d844ef8bbaacd273007700a64abede89/ci/test_python_common.sh#L9-L10)) with the value of the `RAPIDS_CONDA_BLD_OUTPUT_DIR` environment variable that is [set in our CI images](https://github.com/rapidsai/ci-imgs/blob/d048ffa6bfd672fa72f31aeb7cc5cf2363aff6d9/Dockerfile#L105).
 
 This value is used to set the `output_folder` of the `.condarc` file used in our CI images (see [docs](https://conda.io/projects/conda/en/latest/user-guide/configuration/use-condarc.html#specify-conda-build-build-folder-conda-build-3-16-3-output-folder)). Therefore, any locally built packages will end up in this directory.
 
