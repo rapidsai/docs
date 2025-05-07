@@ -51,11 +51,14 @@ docker run \
   -it \
   --gpus all \
   --pull=always \
-  --network=host \
+  --env-file <(echo "GH_TOKEN=$(gh auth token)") \
   --volume $PWD:/repo \
   --workdir /repo \
   rapidsai/ci-conda:cuda11.8.0-ubuntu22.04-py3.10
 ```
+
+Note: The `--env-file <(echo "GH_TOKEN=$(gh auth token)")` flag is recommended to authenticate with GitHub for accessing artifacts. The authentication token is generated from your GitHub CLI on the host machine and passed to the container, allowing for customizability of access scopes. Make sure you have the GitHub CLI (`gh`) installed and authenticated on your host machine.
+If this token is not provided, and authenticating to GitHub is necessary for an operation (such as downloading artifacts), the container prompts for an interactive authentication to GitHub.
 
 Once the container has started, you can run any of the CI scripts inside of it:
 
@@ -83,11 +86,11 @@ The `docker` command above makes the follow assumptions:
 
 - Your current directory is the repository that you wish to troubleshoot
 - Your current directory has the same commit checked out as the pull-request whose jobs you are trying to debug
+- You have the GitHub CLI (`gh`) installed and authenticated on your host machine
 
 A few notes about the `docker` command flags:
 
 - Most of the RAPIDS conda builds occur on machines without GPUs. Only the tests require GPUs. Therefore, you can omit the `--gpus` flag when running local conda builds
-- The `--network` flag ensures that the container has access to the VPN connection on your host machine. VPN connectivity is required for test jobs since they need access to [downloads.rapids.ai](https://downloads.rapids.ai) for downloading build artifacts from a particular pull-request. This flag can be omitted for build jobs
 
 
 ## Additional Considerations
@@ -108,13 +111,13 @@ In RAPIDS CI workflows, the builds and tests occur on different machines.
 
 Machines without GPUs are used for builds, while the tests occur on machines with GPUs.
 
-Due to this process, the artifacts from the build jobs must be downloaded from [downloads.rapids.ai](https://downloads.rapids.ai) in order for the test jobs to run.
+Due to this process, the artifacts from the build jobs must be downloaded from GitHub Artifacts in order for the test jobs to run.
 
 In CI, this process happens transparently.
 
 Local builds lack the context provided by the CI environment and therefore will require input from the user in order to ensure that the correct artifacts are downloaded.
 
-Any time the `rapids-download-conda-from-s3` command (e.g. [here](https://github.com/rapidsai/cugraph/blob/b50850f0498e163e56b0374c1c64e551a5898f26/ci/test_python.sh#L22-L23)) is encountered in a local test run, the user will be prompted for any necessary environment variables that are missing.
+Any time the `rapids-download-conda-from-github` command (e.g. [here](https://github.com/rapidsai/cugraph/blob/487b0d2ddbf4ee81ca46c29cd5cb6e33381d6de2/ci/test_python.sh#L12-L13)) is encountered in a local test run, the user will be prompted for any necessary environment variables that are missing.
 
 The screenshot below shows an example.
 
@@ -140,21 +143,21 @@ There are a few limitations to keep in mind when running CI scripts locally.
 
 ### Local Artifacts Cannot Be Uploaded
 
-Build artifacts from local jobs cannot be uploaded to [downloads.rapids.ai](https://downloads.rapids.ai).
+Build artifacts from local jobs cannot be uploaded to GitHub Artifacts.
 
 If builds are failing in CI, developers should fix the problem locally and then push their changes to a pull-request.
 
 Then CI jobs can run and the fixed build artifacts will be made available for the test job to download and use.
 
-To attempt a complete build and test workflow locally, you can manually update any instances of `CPP_CHANNEL` and `PYTHON_CHANNEL` that use `rapids-download-conda-from-s3` (e.g. [1](https://github.com/rapidsai/cuml/blob/dc38afc584154ebe7332d43f69e3913492f7a273/ci/build_python.sh#L14),[2](https://github.com/rapidsai/cuml/blob/dc38afc584154ebe7332d43f69e3913492f7a273/ci/test_python_common.sh#L22-L23)) with the value of the `RAPIDS_CONDA_BLD_OUTPUT_DIR` environment variable that is [set in our CI images](https://github.com/rapidsai/ci-imgs/blob/d048ffa6bfd672fa72f31aeb7cc5cf2363aff6d9/Dockerfile#L105).
+To attempt a complete build and test workflow locally, you can manually update any instances of `CPP_CHANNEL` and `PYTHON_CHANNEL` that use `rapids-download-conda-from-github` (e.g. [1](https://github.com/rapidsai/cuml/blob/5442d450d844ef8bbaacd273007700a64abede89/ci/build_python.sh#L18),[2](https://github.com/rapidsai/cuml/blob/5442d450d844ef8bbaacd273007700a64abede89/ci/test_python_common.sh#L9-L10)) with the value of the `RAPIDS_CONDA_BLD_OUTPUT_DIR` environment variable that is [set in our CI images](https://github.com/rapidsai/ci-imgs/blob/d048ffa6bfd672fa72f31aeb7cc5cf2363aff6d9/Dockerfile#L105).
 
 This value is used to set the `output_folder` of the `.condarc` file used in our CI images (see [docs](https://conda.io/projects/conda/en/latest/user-guide/configuration/use-condarc.html#specify-conda-build-build-folder-conda-build-3-16-3-output-folder)). Therefore, any locally built packages will end up in this directory.
 
 For example:
 
 ```sh
-# Replace all local uses of `rapids-download-conda-from-s3`
-sed -ri '/rapids-download-conda-from-s3/ s/_CHANNEL=.*/_CHANNEL=${RAPIDS_CONDA_BLD_OUTPUT_DIR}/' ci/*.sh
+# Replace all local uses of `rapids-download-conda-from-github`
+sed -ri '/rapids-download-conda-from-github/ s/_CHANNEL=.*/_CHANNEL=${RAPIDS_CONDA_BLD_OUTPUT_DIR}/' ci/*.sh
 
 # Run the sequence of build/test scripts
 ./ci/build_cpp.sh
@@ -165,11 +168,9 @@ sed -ri '/rapids-download-conda-from-s3/ s/_CHANNEL=.*/_CHANNEL=${RAPIDS_CONDA_B
 ./ci/build_docs.sh
 ```
 
-### VPN Access
+Similarly, you can manually update any instance of the environment variable `RAPIDS_WHEEL_BLD_OUTPUT_DIR` to set the destination location for newly built wheels. (e.g. [1](https://github.com/rapidsai/cudf/blob/05646df0b8dd4b69f7cfed6fbf9e882df795210c/ci/build_wheel_cudf.sh#L29),[2](https://github.com/rapidsai/cuml/blob/e02797cabbd54a328fb22a48b5f1f02c4b6c81ee/ci/build_wheel_cuml.sh#L38)).
 
-Currently, [downloads.rapids.ai](https://downloads.rapids.ai) is only available via the NVIDIA VPN.
-
-If you want to run any test jobs locally, you'll need to be connected to the VPN to download CI build artifacts.
+This value is set to `/tmp/wheelhouse` in our [CI images](https://github.com/rapidsai/ci-imgs/blob/adc9f61a0c9d37b21b9ce0a978681e406a00bc64/ci-wheel.Dockerfile#L27)
 
 ### Some Builds Rely on Versioning Information in Git Tags
 
