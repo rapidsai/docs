@@ -71,7 +71,7 @@ If conda has incorrectly identified the CUDA driver, you can [override by settin
 <i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brought significant Docker changes. <br/>
 To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/base){: target="_blank"}. Some key notes below:
 - `Development` images are no longer being published, RAPIDS now uses [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers){: target="_blank"} for development
-  - See cuSpatial for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cuspatial/tree/main/.devcontainer){: target="_blank"}
+  - See cuDF for an example and information on [RAPIDS' usage of Dev Containers](https://github.com/rapidsai/cudf/tree/main/.devcontainer){: target="_blank"}
 - All images are Ubuntu-based
   - CUDA 12.5+ images use Ubuntu 24.04
   - All other images use Ubuntu 22.04
