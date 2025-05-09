@@ -149,7 +149,7 @@ Do one of the following to authenticate:
 * set environment variable `GH_TOKEN` to a GitHub personal access token with at least the `repo` scope
 * log in interactively by running `gh auth login`
 
-For more details, see the `gh` CLI authentication docs ([link](https://cli.github.com/manual/gh_auth_login)), this can be done the 
+For more details, see the `gh` CLI authentication docs ([link](https://cli.github.com/manual/gh_auth_login)), this can be done the
 
 After authenticating, artifacts can be downloaded with the following command:
 
@@ -284,7 +284,7 @@ subdir      : linux-64
 url         : file:///tmp/tmp.LfkdLFvzzj/linux-64/rmm-25.06.00a32-cuda12_py312_250509_dbd8cc7a.conda
 md5         : fd3ceea32ef3aee44cb207602668cf8d
 timestamp   : 2025-05-09 05:10:10 UTC
-dependencies: 
+dependencies:
   - cuda-cudart
   - cuda-python >=12.6.2,<13.0a0
   - cuda-version >=12,<13.0a0
