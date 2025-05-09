@@ -54,7 +54,7 @@ docker run \
   --network=host \
   --volume $PWD:/repo \
   --workdir /repo \
-  rapidsai/ci-conda:cuda11.8.0-ubuntu22.04-py3.10
+  rapidsai/ci-conda:cuda12.9.0-ubuntu24.04-py3.12
 ```
 
 Once the container has started, you can run any of the CI scripts inside of it:
@@ -87,8 +87,6 @@ The `docker` command above makes the follow assumptions:
 A few notes about the `docker` command flags:
 
 - Most of the RAPIDS conda builds occur on machines without GPUs. Only the tests require GPUs. Therefore, you can omit the `--gpus` flag when running local conda builds
-- The `--network` flag ensures that the container has access to the VPN connection on your host machine. VPN connectivity is required for test jobs since they need access to [downloads.rapids.ai](https://downloads.rapids.ai) for downloading build artifacts from a particular pull-request. This flag can be omitted for build jobs
-
 
 ## Additional Considerations
 
@@ -108,7 +106,7 @@ In RAPIDS CI workflows, the builds and tests occur on different machines.
 
 Machines without GPUs are used for builds, while the tests occur on machines with GPUs.
 
-Due to this process, the artifacts from the build jobs must be downloaded from [downloads.rapids.ai](https://downloads.rapids.ai) in order for the test jobs to run.
+Artifacts from the build jobs must be downloaded from the GitHub Actions artifact store in order for the test jobs to run.
 
 In CI, this process happens transparently.
 

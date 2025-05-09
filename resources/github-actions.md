@@ -105,9 +105,9 @@ The `GPUtester` account is a system account used to trigger nightly workflow run
 RAPIDS uses a collection of reusable GitHub Actions workflows in order to single-source common build configuration settings.
 These reusable workflows can be found in the [rapidsai/shared-workflows](https://github.com/rapidsai/shared-workflows) repository.
 
-An example of one of the reusable workflows used by RAPIDS is the [`conda-cpp-build.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/b5de46f0bb78115af9a4c80645faad3bb72b12be/.github/workflows/conda-cpp-build.yaml), which is the source of truth for which architectures and CUDA versions build RAPIDS C++ packages.
+An example of one of the reusable workflows used by RAPIDS is the [`conda-cpp-build.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/branch-25.06/.github/workflows/conda-cpp-build.yaml), which is the source of truth for which architectures and CUDA versions build RAPIDS C++ packages.
 
-Similarly, the [`conda-cpp-tests.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/b5de46f0bb78115af9a4c80645faad3bb72b12be/.github/workflows/conda-cpp-tests.yaml) specifies configurations for testing RAPIDS C++ packages.
+Similarly, the [`conda-cpp-tests.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/branch-25.06/.github/workflows/conda-cpp-tests.yaml) specifies configurations for testing RAPIDS C++ packages.
 
 The majority of these reusable workflows leverage the CI images from the [rapidsai/ci-imgs](https://github.com/rapidsai/ci-imgs/) repository.
 
@@ -123,47 +123,235 @@ As an example, `rapids-print-env` is used to print common environment informatio
 
 ## Downloading CI Artifacts
 
-For NVIDIA employees with VPN access, artifacts from both pull-requests and branch builds can be accessed on [https://downloads.rapids.ai/](https://downloads.rapids.ai/).
+CI artifacts are uploaded to the GitHub Actions artifact store.
 
-There is a link provided at the end of every C++ and Python build job where the build artifacts for that particular workflow run can be accessed.
+### Finding Artifacts in the GitHub UI
 
-![](/assets/images/downloads.png)
+Those artifacts are visible in the GitHub Actions UI.
+Navigate to the `Actions` tab, then select a specific workflow run.
+Scroll down to the "Artifacts" section of the run summary.
 
-## Using Conda CI Artifacts Locally
+![](/assets/images/workflow-ui.png)
 
-The artifacts that result from running `conda build` are conda channels. RAPIDS' CI system then compresses these conda channels into tarballs and uploads them to [https://downloads.rapids.ai/](https://downloads.rapids.ai/).
+There is also a link provided in the `Run actions/upload-artifact` step of every build job where the build artifacts for that particular job can be accessed.
 
-The packages in the conda channel can be used by extracting the tarball to your local filesystem and using the resulting path in your conda commands.
+![](/assets/images/downloads-github.png)
 
-For example, the following snippet will download a pull request artifact for `librmm` and install it into the active conda environment:
+That link returns the corresponding artifact as a zip file.
 
-```sh
-wget https://downloads.rapids.ai/ci/rmm/pull-request/1376/5124d43/rmm_conda_cpp_cuda11_x86_64.tar.gz
-mkdir local_channel
-tar xzf rmm_conda_cpp_cuda11_x86_64.tar.gz -C local_channel/
-mamba install --channel file://local_channel --channel rapidsai-nightly --channel conda-forge --channel nvidia librmm
+### Downloading Artifacts Programmatically
+
+Artifacts can also be downloaded programmatically using the `gh` CLI ([docs](https://cli.github.com/manual/)).
+
+To download artifacts, you must authenticate with GitHub, using a personal access token that has the `repo` scope.
+Do one of the following to authenticate:
+
+* set environment variable `GH_TOKEN` to a GitHub personal access token with at least the `repo` scope
+* log in interactively by running `gh auth login`
+
+For more details, see the `gh` CLI authentication docs ([link](https://cli.github.com/manual/gh_auth_login)), this can be done the 
+
+After authenticating, artifacts can be downloaded with the following command:
+
+```shell
+gh run download \
+  {workflow-run-id} \
+  --repo {org}/{repo} \
+  --name {artifact-name} \
+  --dir {destination-directory}
 ```
 
-Note that CI artifacts can only be downloaded while connected to the NVIDIA VPN.
+Where those inputs are defined as follows:
 
-## Using Wheel CI Artifacts Locally
+* `{workflow-run-id}` = the unique identifier for a GitHub Actions workflow run
+* `{org}/{repo}` = the repository the workflow run occurred in (e.g. `rapidsai/rmm`)
+* `{artifact-name}` = unique identifier for an artifact within one workflow run (e.g. `rmm_conda_python_cuda12_py312_x86_64`)
+* `{destination-directory}` = local directory the artifact's contents should be decompressed to
 
-RAPIDS' CI system compresses the wheels that it builds into tarballs and uploads them to [https://downloads.rapids.ai/](https://downloads.rapids.ai/).
+The `{org}`, `{repo}`, and `{workflow-run-id}` can be found in the URL for CI jobs.
+Those URLs are of the form `https://github.com/{org}/{repo}/actions/runs/{workflow-run-id}`
 
-The wheels can be used by extracting the tarball to your local filesystem and using the resulting path in your pip commands.
+Valid values for `{artifact-name}` can be found on the "Actions" tab in the GitHub Actions UI, as described above.
+The run IDs can also be identified programmatically.
 
-For example, the following snippet will download a pull request artifact for `librmm` and install it into the active conda environment:
+For example, the following sequence of commands accomplishes the task *"download the latest `rmm` Python 3.12, CUDA 12 conda packages built from `branch-25.06`"*.
 
-```sh
-wget https://downloads.rapids.ai/ci/rmm/pull-request/1376/5124d43/rmm_wheel_python_rmm_cu12_39_x86_64.tar.gz
-mkdir wheels
-tar xzf rmm_wheel_python_rmm_cu12_39_x86_64.tar.gz -C wheels/
-pip install wheels/rmm_cu12-24.2.0a1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+```shell
+# get the most recent successful branch-25.06 nightly or branch build
+RUN_ID=$(
+  gh run list \
+    --repo "rapidsai/rmm" \
+    --branch "branch-25.06" \
+    --workflow "build.yaml" \
+    --status "success" \
+    --json "createdAt,databaseId" \
+    --jq 'sort_by(.createdAt) | reverse | .[0] | .databaseId'
+)
+
+# create a temporary directory to store files
+RMM_CHANNEL="$(mktemp -d)"
+
+# download files
+gh run download \
+  "${RUN_ID}" \
+  --repo "rapidsai/rmm" \
+  --name "rmm_conda_python_cuda12_py312_x86_64" \
+  --dir "${RMM_CHANNEL}"
+
+# inspect the files that were downloaded
+ls "${RMM_CHANNEL}"
 ```
 
-Note that CI artifacts can only be downloaded while connected to the NVIDIA VPN.
+### Using Conda CI Artifacts Locally
 
-## Using Conda CI Artifacts in Other PRs
+The artifacts that result from running `conda build` are conda channels.
+RAPIDS' CI system uploads these conda channels to the GitHub Actions artifact store as zip files.
+
+To use these:
+
+* identify the GitHub Actions workflow run ID that produced the artifacts you want
+* download them to local directories using the `gh` CLI
+* pass the paths to those directories as channels via `--channel` to `conda` / `mamba` commands
+
+For example, to create a conda environment that uses the latest `librmm` and `rmm` conda packages built from `branch-25.06` on an x86_64, CUDA 12 system:
+
+```shell
+# get the most recent successful nightly or branch build
+RUN_ID=$(
+  gh run list \
+    --repo "rapidsai/rmm" \
+    --branch "branch-25.06" \
+    --workflow "build.yaml" \
+    --status 'success' \
+    --json 'createdAt,databaseId' \
+    --jq 'sort_by(.createdAt) | reverse | .[0] | .databaseId'
+)
+
+# create temporary directories to store packages
+LIBRMM_CHANNEL="$(mktemp -d)"
+RMM_CHANNEL="$(mktemp -d)"
+
+# download packages
+gh run download \
+  "${RUN_ID}" \
+  --repo "rapidsai/rmm" \
+  --name "rmm_conda_cpp_cuda12_x86_64" \
+  --dir "${LIBRMM_CHANNEL}"
+
+gh run download \
+  "${RUN_ID}" \
+  --repo "rapidsai/rmm" \
+  --name "rmm_conda_python_cuda12_py312_x86_64" \
+  --dir "${RMM_CHANNEL}"
+
+# create conda environment
+conda create \
+  --yes \
+  --name rmm-test-env \
+  --channel "${LIBRMM_CHANNEL}" \
+  --channel "${RMM_CHANNEL}" \
+  --channel rapidsai-nightly \
+  --channel conda-forge \
+    librmm \
+    rmm
+```
+
+Because those build artifacts contain conda *channels* and not just packages, you can also use `conda search` to inspect them.
+
+Like this:
+
+```shell
+conda search \
+  --override-channels \
+  --channel "${RMM_CHANNEL}" \
+  --info \
+      rmm
+```
+
+That produces a summary like this:
+
+```text
+rmm 25.06.00a32 cuda12_py312_250509_dbd8cc7a
+--------------------------------------------
+file name   : rmm-25.06.00a32-cuda12_py312_250509_dbd8cc7a.conda
+name        : rmm
+version     : 25.06.00a32
+build       : cuda12_py312_250509_dbd8cc7a
+build number: 0
+size        : 430 KB
+license     : Apache-2.0
+subdir      : linux-64
+url         : file:///tmp/tmp.LfkdLFvzzj/linux-64/rmm-25.06.00a32-cuda12_py312_250509_dbd8cc7a.conda
+md5         : fd3ceea32ef3aee44cb207602668cf8d
+timestamp   : 2025-05-09 05:10:10 UTC
+dependencies: 
+  - cuda-cudart
+  - cuda-python >=12.6.2,<13.0a0
+  - cuda-version >=12,<13.0a0
+  - numpy >=1.23,<3.0a0
+  - python
+  - libstdcxx >=13
+  - libgcc >=13
+  - __glibc >=2.28,<3.0.a0
+  - librmm >=25.6.0a32,<25.7.0a0
+  - python_abi 3.12.* *_cp312
+```
+
+### Using Wheel CI Artifacts Locally
+
+RAPIDS' CI system uploads wheels that it builds to the GitHub Actions artifact store as zip files.
+
+To use these:
+
+* identify the GitHub Actions workflow run ID that produced the artifacts you want
+* download them to local directories using the `gh` CLI
+* pass the paths to wheels in those directories to installers like `pip` or `uv`
+
+For example, to create a virtual environment with `librmm` and `rmm` packages built from `branch-25.06` on an x86_64, CUDA 12 system:
+
+```shell
+# create virtualenv
+python -m venv ./rmm-test-env
+source ./rmm-test-env/bin/activate
+
+# get the most recent successful nightly or branch build
+RUN_ID=$(
+  gh run list \
+    --repo "rapidsai/rmm" \
+    --branch "branch-25.06" \
+    --workflow "build.yaml" \
+    --status 'success' \
+    --json 'createdAt,databaseId' \
+    --jq 'sort_by(.createdAt) | reverse | .[0] | .databaseId'
+)
+
+# create temporary directories to store wheels
+LIBRMM_WHEELHOUSE="$(mktemp -d)"
+RMM_WHEELHOUSE="$(mktemp -d)"
+
+# figure out Python version in the venv
+PY_VERSION=$(python -c 'from sys import version_info as vi; print(f"{vi.major}{vi.minor}")')
+
+# download packages
+gh run download \
+  "${RUN_ID}" \
+  --repo "rapidsai/rmm" \
+  --name "rmm_wheel_cpp_librmm_cu12_x86_64" \
+  --dir "${LIBRMM_WHEELHOUSE}"
+
+gh run download \
+  "${RUN_ID}" \
+  --repo "rapidsai/rmm" \
+  --name "rmm_wheel_python_rmm_cu12_py${PY_VERSION}_x86_64" \
+  --dir "${RMM_WHEELHOUSE}"
+
+# install into the environment
+python -m pip install \
+  "${LIBRMM_WHEELHOUSE}"/librmm_*.whl \
+  "${RMM_WHEELHOUSE}"/rmm_*.whl
+```
+
+### Using Conda CI Artifacts in Other PRs
 
 For changes that cross library boundaries, it may be necessary to test a pull request to one library with changes from a pull request to another library.
 Consider the overall RAPIDS dependency graph when testing.
@@ -226,7 +414,7 @@ source ./ci/use_conda_packages_from_prs.sh
 **Note:** By default `rapids-get-pr-conda-artifact` uses the most recent commit from the specified PR.
 A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
 
-## Using Wheel CI Artifacts in Other PRs
+### Using Wheel CI Artifacts in Other PRs
 
 To use wheels produced by other PRs' CI:
 
