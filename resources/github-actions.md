@@ -369,15 +369,35 @@ Remember that changes to use CI artifacts should be _temporary_ and should be re
 Add a new file called `ci/use_conda_packages_from_prs.sh`.
 
 ```shell
-# ci/use_conda_packages_from_prs.sh
+#!/bin/bash
+# Copyright (c) 2025, NVIDIA CORPORATION.
 
 # download CI artifacts
-LIBRAFT_CHANNEL=$(rapids-get-pr-conda-artifact raft 1388 cpp)
-LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1095 cpp)
+LIBRAFT_CHANNEL=$(rapids-get-pr-conda-artifact raft 789 python)
+LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1909 cpp)
 
-# make sure they can be found locally
-conda config --system --add channels "${LIBRAFT_CHANNEL}"
-conda config --system --add channels "${LIBRMM_CHANNEL}"
+# For `rattler` builds:
+#
+# Add these channels to the array checked by 'rapids-rattler-channel-string'.
+# This ensures that when conda packages are built with strict channel priority enabled,
+# the locally-downloaded packages will be preferred to remote packages (e.g. nightlies).
+#
+RAPIDS_PREPENDED_CONDA_CHANNELS=(
+    "${LIBRAFT_CHANNEL}"
+    "${LIBRMM_CHANNEL}"
+)
+export RAPIDS_PREPENDED_CONDA_CHANNELS
+
+# For tests and `conda-build` builds:
+#
+# Add these channels to the system-wide conda configuration.
+# This results in PREPENDING them to conda's channel list, so
+# these packages should be found first if strict channel priority is enabled.
+#
+for _channel in "${RAPIDS_PREPENDED_CONDA_CHANNELS[@]}"
+do
+   conda config --system --add channels "${_channel}"
+done
 ```
 
 Then copy the following into every script in the `ci/` directory that is doing `conda` installs.
@@ -392,17 +412,37 @@ It's important to include all of the recursive dependencies.
 So, for example, Python testing jobs that use the `rmm` Python package also need the `librmm` C++ package.
 
 ```shell
-# ci/use_conda_packages_from_prs.sh
+#!/bin/bash
+# Copyright (c) 2025, NVIDIA CORPORATION.
 
 # download CI artifacts
 LIBKVIKIO_CHANNEL=$(rapids-get-pr-conda-artifact kvikio 224 cpp)
 LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1223 cpp)
 RMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1223 python)
 
-# make sure they can be found locally
-conda config --system --add channels "${LIBKVIKIO_CHANNEL}"
-conda config --system --add channels "${LIBRMM_CHANNEL}"
-conda config --system --add channels "${RMM_CHANNEL}"
+# For `rattler` builds:
+#
+# Add these channels to the array checked by 'rapids-rattler-channel-string'.
+# This ensures that when conda packages are built with strict channel priority enabled,
+# the locally-downloaded packages will be preferred to remote packages (e.g. nightlies).
+#
+RAPIDS_PREPENDED_CONDA_CHANNELS=(
+    "${LIBKVIKIO_CHANNEL}"
+    "${LIBRMM_CHANNEL}"
+    "${RMM_CHANNEL}"
+)
+export RAPIDS_PREPENDED_CONDA_CHANNELS
+
+# For tests and `conda-build` builds:
+#
+# Add these channels to the system-wide conda configuration.
+# This results in PREPENDING them to conda's channel list, so
+# these packages should be found first if strict channel priority is enabled.
+#
+for _channel in "${RAPIDS_PREPENDED_CONDA_CHANNELS[@]}"
+do
+   conda config --system --add channels "${_channel}"
+done
 ```
 
 Then copy the following into every script in the `ci/` directory that is doing `conda` installs.
@@ -428,25 +468,27 @@ Consider the following examples.
 Add a new file called `ci/use_wheels_from_prs.sh`.
 
 ```shell
-# ci/use_wheels_from_prs.sh
+#!/bin/bash
+# Copyright (c) 2025, NVIDIA CORPORATION.
+
+# initialize PIP_CONSTRAINT
+source rapids-init-pip
 
 RAPIDS_PY_CUDA_SUFFIX=$(rapids-wheel-ctk-name-gen "${RAPIDS_CUDA_VERSION}")
 
 # download wheels, store the directories holding them in variables
-LIBRMM_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact rmm 1678 cpp
-)
 LIBRAFT_WHEELHOUSE=$(
   RAPIDS_PY_WHEEL_NAME="libraft_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact raft 2433 cpp
 )
+LIBRMM_WHEELHOUSE=$(
+  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact rmm 1909 cpp
+)
 
 # write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
-cat > /tmp/constraints.txt <<EOF
-librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRMM_WHEELHOUSE}/librmm_*.whl)
+cat > "${PIP_CONSTRAINT}" <<EOF
 libraft-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRAFT_WHEELHOUSE}/libraft_*.whl)
+librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRMM_WHEELHOUSE}/librmm_*.whl)
 EOF
-
-export PIP_CONSTRAINT=/tmp/constraints.txt
 ```
 
 Then copy the following into every script in the `ci/` directory that is doing `pip` installs or wheel builds with e.g. `pip wheel`.
@@ -456,8 +498,6 @@ source ./ci/use_wheels_from_prs.sh
 ```
 
 This should generally be enough.
-If any of the other CI scripts are already setting the environment variable `PIP_CONSTRAINT`, you may need to
-modify them slightly to ensure they **append to**, instead of **overwriting**, the constraints set up by `use_wheels_from_prs.sh`.
 
 **Example 2:** Testing `cudf` (Python) using `librmm`, `rmm`, and `libkvikio` PR artifacts.
 
@@ -465,7 +505,11 @@ It's important to include all of the recursive dependencies.
 So, for example, Python testing jobs that use the `rmm` Python package also need the `librmm` C++ package.
 
 ```shell
-# ci/use_wheels_from_prs.sh
+#!/bin/bash
+# Copyright (c) 2025, NVIDIA CORPORATION.
+
+# initialize PIP_CONSTRAINT
+source rapids-init-pip
 
 RAPIDS_PY_CUDA_SUFFIX=$(rapids-wheel-ctk-name-gen "${RAPIDS_CUDA_VERSION}")
 
@@ -481,13 +525,11 @@ RMM_WHEELHOUSE=$(
 )
 
 # write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
-cat > /tmp/constraints.txt <<EOF
+cat > "${PIP_CONSTRAINT}" <<EOF
 libkvikio-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBKVIKIO_WHEELHOUSE}/libkvikio_*.whl)
 librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRMM_WHEELHOUSE}/librmm_*.whl)
 rmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${RMM_WHEELHOUSE}/rmm_*.whl)
 EOF
-
-export PIP_CONSTRAINT=/tmp/constraints.txt
 ```
 
 Then copy the following into every script in the `ci/` directory that is doing `pip` installs or wheel builds with e.g. `pip wheel`.
@@ -495,9 +537,6 @@ Then copy the following into every script in the `ci/` directory that is doing `
 ```shell
 source ./ci/use_wheels_from_prs.sh
 ```
-
-As above, if any of the other CI scripts are already setting the environment variable `PIP_CONSTRAINT`, you may need to
-modify them slightly to ensure they **append to**, instead of **overwriting**, the constraints set up by `use_wheels_from_prs.sh`.
 
 **Note:** By default `rapids-get-pr-wheel-artifact` uses the most recent commit from the specified PR.
 A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
