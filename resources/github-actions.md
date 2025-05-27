@@ -149,7 +149,7 @@ Do one of the following to authenticate:
 * set environment variable `GH_TOKEN` to a GitHub personal access token with at least the `repo` scope
 * log in interactively by running `gh auth login`
 
-For more details, see the `gh` CLI authentication docs ([link](https://cli.github.com/manual/gh_auth_login)), this can be done the
+For more details, see the `gh` CLI authentication docs ([link](https://cli.github.com/manual/gh_auth_login)).
 
 After authenticating, artifacts can be downloaded with the following command:
 
@@ -171,7 +171,7 @@ Where those inputs are defined as follows:
 The `{org}`, `{repo}`, and `{workflow-run-id}` can be found in the URL for CI jobs.
 Those URLs are of the form `https://github.com/{org}/{repo}/actions/runs/{workflow-run-id}`
 
-Valid values for `{artifact-name}` can be found on the "Actions" tab in the GitHub Actions UI, as described above.
+Valid values for `{artifact-name}` can be found on the "Actions" tab in the GitHub Actions UI, as described in "Finding Artifacts in the GitHub UI" above.
 The run IDs can also be identified programmatically.
 
 For example, the following sequence of commands accomplishes the task *"download the latest `rmm` Python 3.12, CUDA 12 conda packages built from `branch-25.06`"*.
@@ -362,6 +362,7 @@ First, determine the pull request number(s) to be tested from the other library.
 Then, fetch the CI artifacts from the other library's pull request and use them when building and testing.
 The example code below demonstrates building and testing with conda packages from other library PRs.
 Replace the pull request numbers and library names as needed.
+
 Remember that changes to use CI artifacts should be _temporary_ and should be reverted prior to merging any required changes in that PR.
 
 **Example 1:** Building `libcuml` (C++) using `librmm` and `libraft` PR artifacts.
