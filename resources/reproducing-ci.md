@@ -127,6 +127,20 @@ docker run \
   ...
 ```
 
+Or pull authenticate locally with the `gh` CLI and pass that token through `docker run`.
+
+```shell
+gh auth login
+
+docker run \
+  ...
+  --env "GH_TOKEN=$(gh auth token)" \
+  ...
+```
+
+NOTE: On shared machines, this method might expose your GitHub token in the output of `ps`. In those settings,
+consider just relying on the interactive prompts inside the container or using the `--env-file` approach.
+
 For more details, see "GitHub Actions" ([link](./github-actions)).
 
 ### Downloading Build Artifacts for Tests
