@@ -132,7 +132,7 @@ Or pull authenticate locally with the `gh` CLI and pass that token through `dock
 ```shell
 gh auth login
 
-docker run \
+ docker run \
   ...
   --env "GH_TOKEN=$(gh auth token)" \
   ...
