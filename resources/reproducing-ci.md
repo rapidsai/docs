@@ -50,7 +50,6 @@ docker run \
   --rm \
   --gpus all \
   --pull=always \
-  --network=host \
   --volume $PWD:/repo \
   --workdir /repo \
   -it rapidsai/ci-conda:latest
