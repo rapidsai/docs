@@ -125,6 +125,8 @@ As an example, `rapids-print-env` is used to print common environment informatio
 
 CI artifacts are uploaded to the GitHub Actions artifact store.
 
+Artifacts produced in public repositories can generally be accessed by anyone, using the methods described below.[^1]
+
 ### Finding Artifacts in the GitHub UI
 
 Those artifacts are visible in the GitHub Actions UI.
@@ -557,3 +559,7 @@ See the GitHub Actions documentation page below on how to rerun failed workflows
 At this time there are no alternative ways to rerun tests with GitHub Actions beyond what is described in the documentation (e.g. there is no `rerun tests` comment for GitHub Actions).
 
 **Link**: [https://docs.github.com/en/actions/managing-workflow-runs/re-running-workflows-and-jobs](https://docs.github.com/en/actions/managing-workflow-runs/re-running-workflows-and-jobs)
+
+<hr>
+
+[^1]: Using CI artifacts from private repositories requires some additional configuration. `rapidsai` organization members, see [https://github.com/rapidsai/kb/issues/54](https://github.com/rapidsai/kb/issues/54).
