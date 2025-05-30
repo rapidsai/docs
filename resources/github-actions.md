@@ -560,4 +560,6 @@ At this time there are no alternative ways to rerun tests with GitHub Actions be
 
 **Link**: [https://docs.github.com/en/actions/managing-workflow-runs/re-running-workflows-and-jobs](https://docs.github.com/en/actions/managing-workflow-runs/re-running-workflows-and-jobs)
 
-[^1]: Using CI artifacts from private repositories requires some additional configuration. `rapidsai` organization members, see https://github.com/rapidsai/kb/issues/54.
+<hr>
+
+[^1]: Using CI artifacts from private repositories requires some additional configuration. `rapidsai` organization members, see [https://github.com/rapidsai/kb/issues/54](https://github.com/rapidsai/kb/issues/54).
