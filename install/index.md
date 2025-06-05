@@ -334,23 +334,30 @@ Windows users can now tap into GPU accelerated data science on their local machi
 <br/>
 <div id="wsl2-sdkm"></div>
 
-### **WSL2 SDK Manager Install**
-[NVIDIA's SDK Manager](https://developer.nvidia.com/sdk-manager){: target="_blank"} gives Windows users a Graphical User Interface (GUI) option to install RAPIDS. It also attempts to fix any environment issues before installing RAPIDS or updating RAPIDS, making it ideal for new WSL users.
-1. Install the [latest NVIDIA Drivers](https://www.nvidia.com/en-us/drivers/){: target="_blank"} on the Windows host.
-2. Download [SDK Manager's Ubuntu version from their website](https://developer.nvidia.com/sdk-manager){: target="_blank"} (requires sign up or login to NVIDIA's Developer community).  Do not install yet.  The rest of the instructions assume that your home directory's `Downloads` folder is where the `.deb` file will be stored.  If this is not the case, please change the directory, as needed, for your system.
-3. Install or update WSL2 and the Ubuntu 22.04 or Ubuntu 24.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}. To install Ubuntu 24.04 from the command line, use this command:
-```bash
-wsl --install -d Ubuntu-24.04
-```
-This will install and start Ubuntu in your Windows host system using WSL2.  Make your **sudo** password memorable as you will need it in the next two steps.
-4. Install and run SDK Manager inside Ubuntu by pasting this into your command line.  This command will navigate to your Windows users's `Downloads` folder, from your WSL2 instance, and install the latest SDK Manager `.deb` file that you had downloaded. You will have to enter the sudo password you created when you installed Ubuntu.
-```bash
-sudo apt update && sudo apt install wslu -y
-cd "$(wslpath -au "$(cmd.exe /c 'echo %USERPROFILE%' | tr -d '\r')")/Downloads"
-sudo apt install "$(ls -t ./sdkmanager_*_amd64.deb | head -n 1)" -y
-sdkmanager
-```
-5. Sign in when asked, and [follow SDK Manager's RAPIDS installation instructions here](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html){: target="_blank"}.
+### **Windows SDK Manager Install (Updated)**
+[NVIDIA's SDK Manager](https://developer.nvidia.com/sdk-manager){: target="_blank"} gives Windows users a Graphical User Interface (GUI) option to install RAPIDS. After your install, it also provides easy, quick-start shortcuts to launch RAPIDS enabled `python` and `jupyterlab server` instances from your Windows Desktop, making it ideal for Windows users.
+1. Install the [latest NVIDIA Drivers](https://www.nvidia.com/en-us/drivers/){: target="_blank"} on the Windows host.  For pip or conda install. you will need Driver 535.86 with CUDA 12.2 or newer.  If you plan to use Docker, you will need [Driver 572.83 as it includes CUDA 12.8](https://www.nvidia.com/en-us/drivers/details/242207/).
+2. Download and Install [SDK Manager's Windows version from their website](https://developer.nvidia.com/sdk-manager){: target="_blank"} (requires sign up or login to NVIDIA's Developer community).  
+3. Run SDK Manager as   you would any Windows program. Sign in when asked and [follow SDK Manager's RAPIDS installation instructions here](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html){: target="_blank"}.
+4. Once the RAPIDS install is complete, start using your RAPIDS environments by
+    1. Using the [desktop shortcuts to start a RAPIDS enabled Python console or Jupyterlab server if you installed using `pip` or `conda` (Step 4.5)](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html#step-04-finalize-setup).
+    2. Manually start the docker container (shortcuts for the Docker install are coming soon).
+        1. Enter your WSL2 instance (unless unchecked during install, the RAPIDS containing instance becomes WSL2's default)
+           
+          ```code
+          wsl
+          ```
+          
+        2. Then, once inside the instance, enter the docker run command from the RAPIDS [Release Selector](#selector).  Here is a basic example running the RAPIDS 25.06 Notebooks container:
+
+          ```
+          docker run --gpus all --pull always --rm -it \
+          --shm-size=1g --ulimit memlock=-1 --ulimit stack=67108864 \
+          -p 8888:8888 -p 8787:8787 -p 8786:8786 \
+          nvcr.io/nvidia/rapidsai/notebooks:25.06-cuda12.8-py3.12
+          ```
+          
+        3. Enter Jupyterlab by opening your web browser like you normally do in Windows and navigating to `http://127.0.0.1:8888`.
 
 <br/>
 <div id="wsl2-conda"></div>
