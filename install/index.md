@@ -337,17 +337,17 @@ Windows users can now tap into GPU accelerated data science on their local machi
 ### **Windows SDK Manager Install (Updated)**
 [NVIDIA's SDK Manager](https://developer.nvidia.com/sdk-manager){: target="_blank"} gives Windows users a Graphical User Interface (GUI) option to install RAPIDS. After your install, it also provides easy, quick-start shortcuts to launch RAPIDS enabled `python` and `jupyterlab server` instances from your Windows Desktop, making it ideal for Windows users.
 1. Install the [latest NVIDIA Drivers](https://www.nvidia.com/en-us/drivers/){: target="_blank"} on the Windows host.  For pip or conda install. you will need Driver 535.86 with CUDA 12.2 or newer.  If you plan to use Docker, you will need [Driver 572.83 as it includes CUDA 12.8](https://www.nvidia.com/en-us/drivers/details/242207/).
-2. Download and Install [SDK Manager's Windows version from their website](https://developer.nvidia.com/sdk-manager){: target="_blank"} (requires sign up or login to NVIDIA's Developer community).  
+2. Download and Install [SDK Manager's Windows version from their website](https://developer.nvidia.com/sdk-manager){: target="_blank"} (requires sign up or login to NVIDIA's Developer community).
 3. Run SDK Manager as   you would any Windows program. Sign in when asked and [follow SDK Manager's RAPIDS installation instructions here](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html){: target="_blank"}.
 4. Once the RAPIDS install is complete, start using your RAPIDS environments by
     1. Using the [desktop shortcuts to start a RAPIDS enabled Python console or Jupyterlab server if you installed using `pip` or `conda` (Step 4.5)](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html#step-04-finalize-setup).
     2. Manually start the docker container (shortcuts for the Docker install are coming soon).
         1. Enter your WSL2 instance (unless unchecked during install, the RAPIDS containing instance becomes WSL2's default)
-           
+
           ```code
           wsl
           ```
-          
+
         2. Then, once inside the instance, enter the docker run command from the RAPIDS [Release Selector](#selector).  Here is a basic example running the RAPIDS 25.06 Notebooks container:
 
           ```
@@ -356,7 +356,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
           -p 8888:8888 -p 8787:8787 -p 8786:8786 \
           nvcr.io/nvidia/rapidsai/notebooks:25.06-cuda12.8-py3.12
           ```
-          
+
         3. Enter Jupyterlab by opening your web browser like you normally do in Windows and navigating to `http://127.0.0.1:8888`.
 
 <br/>
