@@ -39,15 +39,16 @@ git checkout branch-{{ site.data.releases.stable.version }}
 git pull <rapidsai remote>
 git checkout branch-{{ site.data.releases.nightly.version }}
 git pull <rapidsai remote>
-git checkout -b branch-{{ site.data.releases.nightly.version }}-merge-{{ site.data.releases.stable.version }}
+git checkout -b branch-{{ site.data.releases.nightly.version }}-merge-branch-{{ site.data.releases.stable.version }}
 git merge --no-squash branch-{{ site.data.releases.stable.version }}
 # Fix any merge conflicts caused by this merge
 git commit -am "Merge branch-{{ site.data.releases.stable.version }} into branch-{{ site.data.releases.nightly.version }}"
-git push <personal fork> branch-{{ site.data.releases.nightly.version }}-merge-{{ site.data.releases.stable.version }}
+git push <personal fork> branch-{{ site.data.releases.nightly.version }}-merge-branch-{{ site.data.releases.stable.version }}
 ```
 
 Once this is done, open a PR that targets the new default branch (`branch-{{ site.data.releases.nightly.version }}` in this example) with your changes.
 
-**IMPORTANT**: When merging this PR, do not use the [auto-merger]({% link resources/auto-merger.md %}) (i.e. the `/merge` comment). Instead, an admin must manually merge by changing the merging strategy to `Create a Merge Commit`. Otherwise, history will be lost and the branches become incompatible.
+**IMPORTANT**:
+- When merging this PR, do not use the [auto-merger]({% link resources/auto-merger.md %}) (i.e. the `/merge` comment). Instead, use the `/merge nosquash` comment. This ensures that branch history is preserved and branches remain compatible.
 
-Once this PR is approved and merged, the original forward-merger PR should automatically be merged since it will contain the same commit hashes.
+Once this PR is merged, the original forward-merger PR should automatically be merged since it will contain the same commit hashes.
