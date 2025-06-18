@@ -48,6 +48,7 @@ Use the selector tool below to select your preferred method, packages, and envir
 ## Installation Troubleshooting
 
 ### **Conda Issues**
+- Ensure that the `defaults` channel is not included in the conda solve. The `defaults` channel is not compatible with `conda-forge`, which RAPIDS relies on. If you installed conda with [the Miniconda or Anaconda distributions](https://www.anaconda.com/docs/getting-started/miniconda/main#should-i-install-miniconda-or-anaconda-distribution), the `defaults` channel will be included unless you modify your `.condarc` file or specify `nodefaults` in the install commands for RAPIDS packages. If you installed with [Miniforge](https://conda-forge.org/download/) (our recommendation for best compatibility) then the `defaults` channel is not included. Note that in general [mixing `conda-forge` and `defaults` packages is not supported by either](https://conda-forge.org/docs/user/transitioning_from_defaults/).
 <i class="fas fa-info-circle"></i> A `conda create error` occurs:<br/>
 To resolve this error please follow one of these steps:
 - If the Conda installation is older than `22.11`, please update to the latest version. This will include [libmamba](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}, a Mamba-powered Conda solver that is now included with all conda installations to significantly accelerate environment solving.
