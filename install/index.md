@@ -5,7 +5,7 @@ nav_order: 2
 description: |
   Guide to installing RAPIDS
 ---
-<i class="fas fa-exclamation-triangle"></i><i class="fas fa-exclamation-triangle"></i>Please install RAPIDS using Conda or Docker until further notice!<i class="fas fa-exclamation-triangle"></i><i class="fas fa-exclamation-triangle"></i>
+<p style="text-align:center"><i style="color:#f7d12e" class="fas fa-exclamation-triangle"></i><i style="color:#f7d12e"class="fas fa-exclamation-triangle"></i>Please install RAPIDS using Conda or Docker until further notice!<i style="color:#f7d12e" class="fas fa-exclamation-triangle"></i><i style="color:#f7d12e" class="fas fa-exclamation-triangle"></i></p>
 <table>
       <thead>
         <tr>
@@ -28,10 +28,10 @@ description: |
             Platform Support Change
           </td>
           <td>
-            v25.08+
+            All RAPIDS Versions
           </td>
           <td>
-              04 June 2025
+              27 June 2025
           </td>
         </tr>
       </tbody>
