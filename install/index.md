@@ -9,7 +9,7 @@ description: |
 # RAPIDS Installation Guide
 {: .fs-8 }
 
-##<i class="fa-solid fa-triangle-exclamation fa-fade"></i> NOTICE: PIP wheel issue, please install RAPIDS using Conda or Docker until further notice - [See Notice RSN #49 For Details](/notices/rsn0049/){: target="_blank"}
+## <i class="fa-solid fa-triangle-exclamation fa-fade"></i> NOTICE: PIP wheel issue, please install RAPIDS using Conda or Docker until further notice - [See Notice RSN #49 For Details](/notices/rsn0049/){: target="_blank"}
 
 RAPIDS has several methods for installation, depending on the preferred environment and version.
 *New Users* should review the system and environment prerequisites.
