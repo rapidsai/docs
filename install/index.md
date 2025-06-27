@@ -5,40 +5,11 @@ nav_order: 2
 description: |
   Guide to installing RAPIDS
 ---
-<p style="text-align:center"><i style="color:#f7d12e" class="fas fa-exclamation-triangle"></i><i style="color:#f7d12e"class="fas fa-exclamation-triangle"></i>Please install RAPIDS using Conda or Docker until further notice!<i style="color:#f7d12e" class="fas fa-exclamation-triangle"></i><i style="color:#f7d12e" class="fas fa-exclamation-triangle"></i></p>
-<table>
-      <thead>
-        <tr>
-          <th>Notice</th>
-          <th>Title</th>
-          <th>Topic</th>
-          <th>RAPIDS Version</th>
-          <th>Updated</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <b>RSN 49</b><br><p class="label label-title label-yellow">In Progress</p>
-          </td>
-          <td>
-            <a href="/notices/rsn0049/">Important Installation Notice : RAPIDS Wheels are missing from pypi.nvidia.com.  </a>
-          </td>
-          <td>
-            Platform Support Change
-          </td>
-          <td>
-            All RAPIDS Versions
-          </td>
-          <td>
-              27 June 2025
-          </td>
-        </tr>
-      </tbody>
-    </table>
 
 # RAPIDS Installation Guide
 {: .fs-8 }
+
+##<i class="fa-solid fa-triangle-exclamation fa-fade"></i> NOTICE: PIP wheel issue, please install RAPIDS using Conda or Docker until further notice - [See Notice RSN #49 For Details](/notices/rsn0049/){: target="_blank"}
 
 RAPIDS has several methods for installation, depending on the preferred environment and version.
 *New Users* should review the system and environment prerequisites.
