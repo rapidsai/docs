@@ -5,7 +5,38 @@ nav_order: 2
 description: |
   Guide to installing RAPIDS
 ---
-
+<i class="fas fa-exclamation-triangle"></i><i class="fas fa-exclamation-triangle"></i>Please install RAPIDS using Conda or Docker until further notice!<i class="fas fa-exclamation-triangle"></i><i class="fas fa-exclamation-triangle"></i>
+<table>
+      <thead>
+        <tr>
+          <th>Notice</th>
+          <th>Title</th>
+          <th>Topic</th>
+          <th>RAPIDS Version</th>
+          <th>Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <b>RSN 49</b><br><p class="label label-title label-yellow">In Progress</p>
+          </td>
+          <td>
+            <a href="/notices/rsn0049/">Important Installation Notice : RAPIDS Wheels are missing from pypi.nvidia.com.  </a>
+          </td>
+          <td>
+            Platform Support Change
+          </td>
+          <td>
+            v25.08+
+          </td>
+          <td>            
+              04 June 2025  
+          </td>
+        </tr>      
+      </tbody>
+    </table>
+  
 # RAPIDS Installation Guide
 {: .fs-8 }
 
