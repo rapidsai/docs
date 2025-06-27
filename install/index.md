@@ -30,13 +30,13 @@ description: |
           <td>
             v25.08+
           </td>
-          <td>            
-              04 June 2025  
+          <td>
+              04 June 2025
           </td>
-        </tr>      
+        </tr>
       </tbody>
     </table>
-  
+
 # RAPIDS Installation Guide
 {: .fs-8 }
 
