@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES.
+// All rights reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 // temporary flag to prevent JS from being loaded twice
 // while we move around some of this JS to the libraries
 window.customJSLoaded = window.customJSLoaded || false;

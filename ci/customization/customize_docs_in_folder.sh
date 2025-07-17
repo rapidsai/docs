@@ -1,4 +1,8 @@
 #!/bin/bash
+# SPDX-FileCopyrightText: Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES.
+# All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
 #######################################
 # Recursively customizes all docs in a specified folder relative
 # to the project's root. Intended to be run from the project's
