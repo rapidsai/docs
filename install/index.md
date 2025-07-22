@@ -335,22 +335,9 @@ Windows users can now tap into GPU accelerated data science on their local machi
 <div id="wsl2-sdkm"></div>
 
 ### **WSL2 SDK Manager Install**
-[NVIDIA's SDK Manager](https://developer.nvidia.com/sdk-manager){: target="_blank"} gives Windows users a Graphical User Interface (GUI) option to install RAPIDS. It also attempts to fix any environment issues before installing RAPIDS or updating RAPIDS, making it ideal for new WSL users.
-1. Install the [latest NVIDIA Drivers](https://www.nvidia.com/en-us/drivers/){: target="_blank"} on the Windows host.
-2. Download [SDK Manager's Ubuntu version from their website](https://developer.nvidia.com/sdk-manager){: target="_blank"} (requires sign up or login to NVIDIA's Developer community).  Do not install yet.  The rest of the instructions assume that your home directory's `Downloads` folder is where the `.deb` file will be stored.  If this is not the case, please change the directory, as needed, for your system.
-3. Install or update WSL2 and the Ubuntu 22.04 or Ubuntu 24.04 package [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}. To install Ubuntu 24.04 from the command line, use this command:
-```bash
-wsl --install -d Ubuntu-24.04
-```
-This will install and start Ubuntu in your Windows host system using WSL2.  Make your **sudo** password memorable as you will need it in the next two steps.
-4. Install and run SDK Manager inside Ubuntu by pasting this into your command line.  This command will navigate to your Windows users's `Downloads` folder, from your WSL2 instance, and install the latest SDK Manager `.deb` file that you had downloaded. You will have to enter the sudo password you created when you installed Ubuntu.
-```bash
-sudo apt update && sudo apt install wslu -y
-cd "$(wslpath -au "$(cmd.exe /c 'echo %USERPROFILE%' | tr -d '\r')")/Downloads"
-sudo apt install "$(ls -t ./sdkmanager_*_amd64.deb | head -n 1)" -y
-sdkmanager
-```
-5. Sign in when asked, and [follow SDK Manager's RAPIDS installation instructions here](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html){: target="_blank"}.
+[NVIDIA's SDK Manager](https://developer.nvidia.com/sdk-manager){: target="_blank"} gives Windows users a Graphical User Interface (GUI) option to install RAPIDS. It automates Windows Subsystem for Linux (WSL) setup for RAPIDS SDK 25.04 and later, simplifying the installation process.
+1. Download [SDK Manager's Windows version from their website](https://developer.nvidia.com/sdk-manager){: target="_blank"} (requires sign up or login to NVIDIA's Developer community).
+2. [Follow SDK Manager's RAPIDS installation instructions here](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html){: target="_blank"}.
 
 <br/>
 <div id="wsl2-conda"></div>
