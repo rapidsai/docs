@@ -1,4 +1,7 @@
 #!/bin/bash
+# SPDX-FileCopyrightText: Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES.
+# All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
 # Copies the RAPIDS libraries' HTML files from S3 into the "_site" directory of
 # the Jekyll build.
 set -euo pipefail
