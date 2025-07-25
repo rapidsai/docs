@@ -74,7 +74,7 @@ If you installed conda with [the Miniconda or Anaconda distributions](https://ww
 If you find any packages from `defaults` in your environment, please make those changes and try recreating your environment from scratch.
 Note that if you installed conda with [Miniforge](https://conda-forge.org/download/) ([our recommendation for best compatibility](https://docs.rapids.ai/install/#conda)) then the `defaults` channel is not included.
 
-In general [mixing `conda-forge` and `defaults` packages is not supported by either](https://conda-forge.org/docs/user/transitioning_from_defaults/). RAPIDS packages are published to a separate `rapidsai` channel that is designed for compatibility with `conda-forge`, not `defaults`.
+In general [mixing `conda-forge` and `defaults` channels is not supported](https://conda-forge.org/docs/user/transitioning_from_defaults/). RAPIDS packages are published to a separate `rapidsai` channel that is designed for compatibility with `conda-forge`, not `defaults`.
 
 ### **Docker Issues**
 <i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brought significant Docker changes. <br/>
