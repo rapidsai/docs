@@ -1,6 +1,8 @@
 #!/bin/bash
-# Copyright (c) 2024, NVIDIA CORPORATION.
-#
+# SPDX-FileCopyrightText: Copyright (c) 2024-2025, NVIDIA CORPORATION & AFFILIATES.
+# All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
 # This script generates a lib_map.json file that maps each RAPIDS library
 # to its default documentation page for each version (legacy, stable, nightly).
 # i.e.
