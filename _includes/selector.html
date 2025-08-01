@@ -249,7 +249,7 @@
                 </div>
                 <div class="options-section" x-show="active_method === 'Conda'">
                     <div class="option-label">ENV. CUDA</div>
-                    <template x-for="version in conda_cuda_vers">
+                    <template x-for="version in getSupportedCondaCudaVersions()">
                         <div x-on:click="(e) => condaCUDAClickHandler(e, version)"
                             x-bind:class="{'active': version === active_conda_cuda_ver, 'disabled': disableUnsupportedCuda(version)}"
                             class="option" x-text="'CUDA ' + getCondaVersionSupport(version)['label']"></div>
@@ -257,7 +257,7 @@
                 </div>
                 <div class="options-section" x-show="active_method === 'pip'">
                     <div class="option-label">System CUDA</div>
-                    <template x-for="version in pip_cuda_vers">
+                    <template x-for="version in getSupportedPipCudaVersions()">
                         <div x-on:click="(e) => pipCUDAClickHandler(e, version)"
                             x-bind:class="{'active': version === active_pip_cuda_ver}" class="option"
                             x-text="'CUDA ' + version"></div>
@@ -386,10 +386,14 @@
             python_vers_stable: ["3.10", "3.11", "3.12", "3.13"],
             python_vers_nightly: ["3.10", "3.11", "3.12", "3.13"],
             conda_cuda_vers: ["11", "12"],
+            conda_cuda_vers_stable: ["11", "12"],
+            conda_cuda_vers_nightly: ["12"],
             pip_cuda_vers: ["11.4 - 11.8", "12"],
+            pip_cuda_vers_stable: ["11.4 - 11.8", "12"],
+            pip_cuda_vers_nightly: ["12"],
             docker_cuda_vers: ["11.8", "12.0", "12.8", "12.9"],
             docker_cuda_vers_stable: ["11.8", "12.0", "12.8"],
-            docker_cuda_vers_nightly: ["11.8", "12.0", "12.9"],
+            docker_cuda_vers_nightly: ["12.0", "12.9"],
             methods: ["Conda", "pip", "Docker"],
             releases: ["Stable", "Nightly"],
             img_loc: ["NGC", "Docker Hub"],
@@ -448,7 +452,6 @@
                         "12": ["12.0", "12.8"]
                     },
                     "Nightly": {
-                        "11": ["11.4", "11.8"],
                         "12": ["12.0", "12.9"]
                     }
                 };
@@ -719,6 +722,18 @@
                 }
                 return this.docker_cuda_vers_nightly;
             },
+            getSupportedCondaCudaVersions() {
+                if (this.active_release === "Stable") {
+                    return this.conda_cuda_vers_stable;
+                }
+                return this.conda_cuda_vers_nightly;
+            },
+            getSupportedPipCudaVersions() {
+                if (this.active_release === "Stable") {
+                    return this.pip_cuda_vers_stable;
+                }
+                return this.pip_cuda_vers_nightly;
+            },
             disableUnsupportedRelease(release) {
                 var isDisabled = false;
                 if (this.active_img_loc === "NGC" && this.active_method === "Docker" && release === "Nightly") isDisabled = true;
@@ -780,6 +795,26 @@
                var supported_docker_cuda_versions = this.getSupportedDockerCudaVersions();
                if (!supported_docker_cuda_versions.includes(this.active_docker_cuda_ver)) {
                    this.active_docker_cuda_ver = supported_docker_cuda_versions[supported_docker_cuda_versions.length - 1];
+               }
+
+               /*
+                   If the selected release doesn't support the selected Conda
+                   CUDA version, update Conda CUDA version to the newest
+                   supported by the selected release.
+               */
+               var supported_conda_cuda_versions = this.getSupportedCondaCudaVersions();
+               if (!supported_conda_cuda_versions.includes(this.active_conda_cuda_ver)) {
+                   this.active_conda_cuda_ver = supported_conda_cuda_versions[supported_conda_cuda_versions.length - 1];
+               }
+
+               /*
+                   If the selected release doesn't support the selected pip
+                   CUDA version, update pip CUDA version to the newest
+                   supported by the selected release.
+               */
+               var supported_pip_cuda_versions = this.getSupportedPipCudaVersions();
+               if (!supported_pip_cuda_versions.includes(this.active_pip_cuda_ver)) {
+                   this.active_pip_cuda_ver = supported_pip_cuda_versions[supported_pip_cuda_versions.length - 1];
                }
             },
             imgTypeClickHandler(e, type) {
