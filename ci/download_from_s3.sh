@@ -84,10 +84,11 @@ download_lib_docs() {
     "nightly": { "version": .nightly.version, "ucxx_version": .nightly.ucxx_version }
   }' _data/releases.json)
 
+  echo "--- processing active RAPIDS libraries ---"
   PROJECT_MAP=$(yq '.apis + .libs' _data/docs.yml)
 
-  for VERSION_NAME in $(jq -r 'keys | .[]' <<< "$VERSION_MAP"); do
-    for PROJECT in $(yq -r 'keys | .[]' <<< "$PROJECT_MAP"); do
+  for PROJECT in $(yq -r 'keys | .[]' <<< "$PROJECT_MAP"); do
+    for VERSION_NAME in $(jq -r 'keys | .[]' <<< "$VERSION_MAP"); do
       VERSION_NUMBER=$(jq -r --arg vn "$VERSION_NAME" --arg pr "$PROJECT" '
         if ($pr | contains("ucxx")) then
           .[$vn].ucxx_version
@@ -108,17 +109,17 @@ download_lib_docs() {
   done
 
   # inactive projects (no longer maintained, but we still host the docs)
-  PROJECT_MAP=$(yq '.inactive-projects' _data/docs.yml)
+  echo "--- processing inactive projects ---"
+  INACTIVE_PROJECT_MAP=$(yq '.inactive-projects' _data/docs.yml)
 
-  for VERSION_NAME in $(jq -r 'keys | .[]' <<< "$VERSION_MAP"); do
-    for PROJECT in $(yq -r 'keys | .[]' <<< "$PROJECT_MAP"); do
+  for PROJECT in $(yq -r 'keys | .[]' <<< "$INACTIVE_PROJECT_MAP"); do
+    for VERSION_NAME in $(jq -r 'keys | .[]' <<< "$VERSION_MAP"); do
       # do not attempt updates for any versions where the corresponding key is '0' in docs.yml
-      PROJECT_MAP_JSON=$(yq -r -o json '.' <<< "$PROJECT_MAP")
-      if [ "$(jq -r --arg pr "$PROJECT" --arg vn "$VERSION_NAME" '.[$pr].versions[$vn]' <<< "$PROJECT_MAP_JSON")" == "0" ]; then
+      INACTIVE_PROJECT_MAP_JSON=$(yq -r -o json '.' <<< "$INACTIVE_PROJECT_MAP")
+      if [ "$(jq -r --arg pr "$PROJECT" --arg vn "$VERSION_NAME" '.[$pr].versions[$vn]' <<< "$INACTIVE_PROJECT_MAP_JSON")" == "0" ]; then
         echo "Skipping: $PROJECT | $VERSION_NAME"
         continue
       fi
-      echo "processing inactive project: ${PROJECT} (${VERSION_NAME})"
 
       # get the version from the 'version-overrides' field in docs.yml, hard-coded there
       # so it doesn't change from release-to-release for inactive projects
@@ -127,7 +128,7 @@ download_lib_docs() {
           --arg vn "$VERSION_NAME"          \
           --arg pr "${PROJECT}"             \
           '.[$pr]."version-overrides"[$vn]' \
-        <<< "${PROJECT_MAP_JSON}"
+        <<< "${INACTIVE_PROJECT_MAP_JSON}"
       )
 
       SRC="s3://${DOCS_BUCKET}/${PROJECT}/html/${VERSION_NUMBER}/"
@@ -142,6 +143,7 @@ download_lib_docs() {
 download_deployment_docs() {
   local DST SRC VERSION
 
+  echo "--- processing deployment docs ---"
   for VERSION in nightly stable; do
     SRC="s3://${DOCS_BUCKET}/deployment/html/${VERSION}/"
     DST="$(yq -n 'env(GENERATED_DIRS)|.deployment')/${VERSION}/"
