@@ -24,12 +24,12 @@ select the docs that fit your needs.
 
 ## RAPIDS APIs
 
-{% include api-docs.html data=site.data.docs.apis use_version_overrides=false %}
+{% include api-docs.html data=site.data.docs.apis %}
 
 ## RAPIDS Libraries
 
-{% include api-docs.html data=site.data.docs.libs use_version_overrides=false %}
+{% include api-docs.html data=site.data.docs.libs %}
 
 ## Inactive Projects
 
-{% include api-docs.html data=site.data.docs.inactive-projects use_version_overrides=true %}
+{% include api-docs.html data=site.data.docs.inactive-projects %}
