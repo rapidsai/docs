@@ -14,24 +14,26 @@ from bs4 import BeautifulSoup
 from util import r_versions
 
 FILEPATH = sys.argv[1]
-IS_UCXX_FILE = len(sys.argv) > 2 and sys.argv[2] == "--is-ucxx"
 
 LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
 RELEASES_PATH = os.path.join(
     os.path.dirname(__file__), "../", "../", "_data", "releases.json"
 )
+PROJECTS_TO_VERSIONS_PATH = os.path.join(os.path.dirname(__file__), "projects-to-versions.json")
 
 with open(LIB_MAP_PATH) as fp:
     LIB_PATH_DICT = json.load(fp)
 
+# get version overrides for inactive projects
+with open(PROJECTS_TO_VERSIONS_PATH) as f:
+    PROJECTS_TO_VERSIONS_DICT = json.load(f)
+
 with open(RELEASES_PATH) as fp:
     release_data = json.load(fp)
     VERSIONS_DICT = {
-        "nightly": release_data["nightly"][
-            "ucxx_version" if IS_UCXX_FILE else "version"
-        ],
-        "stable": release_data["stable"]["ucxx_version" if IS_UCXX_FILE else "version"],
-        "legacy": release_data["legacy"]["ucxx_version" if IS_UCXX_FILE else "version"],
+        "nightly": release_data["nightly"]["version"],
+        "stable": release_data["stable"]["version"],
+        "legacy": release_data["legacy"]["version"],
     }
 
 SCRIPT_TAG_ID = "rapids-selector-js"
@@ -41,7 +43,7 @@ STYLE_TAG_ID = "rapids-selector-css"
 FA_TAG_ID = "rapids-fa-tag"
 
 
-def get_version_from_fp():
+def get_version_from_fp(*, stable_version: str):
     """
     Determines if the current HTML document is for legacy, stable, or nightly versions
     based on the file path
@@ -49,22 +51,21 @@ def get_version_from_fp():
     match = re.search(r"/(\d?\d\.\d\d)/", FILEPATH)
     version_number_str = r_versions(match.group(1))
     version_name = "stable"
-    if version_number_str.is_greater_than(VERSIONS_DICT["stable"]):
+    if version_number_str.is_greater_than(stable_version):
         version_name = "nightly"
-    if version_number_str.is_less_than(VERSIONS_DICT["stable"]):
+    if version_number_str.is_less_than(stable_version):
         version_name = "legacy"
     return {"name": version_name, "number": version_number_str}
 
 
-def get_lib_from_fp():
+def get_lib_from_fp(*, filepath: str):
     """
     Determines the current RAPIDS library based on the file path
     """
-
     for lib in LIB_PATH_DICT.keys():
-        if re.search(f"(^{lib}/|/{lib}/)", FILEPATH):
+        if re.search(f"(^{lib}/|/{lib}/)", filepath):
             return lib
-    raise Exception(f"Couldn't find valid library name in {FILEPATH}.")
+    raise ValueError(f"Couldn't find valid library name in '{filepath}'.")
 
 
 def create_home_container(soup):
@@ -94,20 +95,25 @@ def add_font_awesome(soup):
     soup.head.append(fa_tag)
 
 
-def create_version_options():
+def create_version_options(
+    *,
+    stable_version: str | None,
+    legacy_version: str | None,
+    nightly_version: str | None,
+) -> list[dict[str, bool | str]]:
     """
     Creates options for legacy/stable/nightly selector
     """
     options = []
-    doc_version = get_version_from_fp()
-    doc_lib = get_lib_from_fp()
+    doc_version = get_version_from_fp(stable_version=stable_version)
+    doc_lib = get_lib_from_fp(filepath=FILEPATH)
     doc_is_extra_legacy = (  # extra legacy means the doc version is older then current legacy
         doc_version["name"] == "legacy"
-        and VERSIONS_DICT["legacy"] != doc_version["number"]
+        and legacy_version != doc_version["number"]
     )
     doc_is_extra_nightly = (  # extra nightly means the doc version is newer then current nightly
         doc_version["name"] == "nightly"
-        and VERSIONS_DICT["nightly"] != doc_version["number"]
+        and nightly_version != doc_version["number"]
     )
     for version_name, version_path in [
         (_, path) for _, path in LIB_PATH_DICT[doc_lib].items() if path is not None
@@ -135,7 +141,7 @@ def create_library_options():
     """
     Creates options for library selector
     """
-    doc_lib = get_lib_from_fp()
+    doc_lib = get_lib_from_fp(filepath=FILEPATH)
     options = []
 
     for lib, lib_versions in LIB_PATH_DICT.items():
@@ -294,6 +300,18 @@ def main():
     parse the file and add library/version selectors and a Home button
     """
     print(f"--- {FILEPATH} ---")
+
+    # exit early for projects with no API docs (like cusignal)
+    project_name = get_lib_from_fp(filepath=FILEPATH)
+    if not PROJECTS_TO_VERSIONS_DICT[project_name]:
+        print(f"'{project_name}': no API docs requested. Skipping customization.")
+        return
+
+    # figure out versions
+    stable_version = PROJECTS_TO_VERSIONS_DICT[project_name].get("stable")
+    nightly_version = PROJECTS_TO_VERSIONS_DICT[project_name].get("nightly")
+    legacy_version = PROJECTS_TO_VERSIONS_DICT[project_name].get("legacy")
+
     with open(FILEPATH) as fp:
         soup = BeautifulSoup(fp, "html5lib")
 
@@ -309,7 +327,14 @@ def main():
     # Create new elements
     home_btn_container = create_home_container(soup)
     library_selector = create_selector(soup, create_library_options())
-    version_selector = create_selector(soup, create_version_options())
+    version_selector = create_selector(
+        soup,
+        create_version_options(
+            stable_version=stable_version,
+            legacy_version=legacy_version,
+            nightly_version=nightly_version,
+        )
+    )
     container = soup.new_tag("div", id=f"rapids-{doc_type}-container")
     script_tag = create_script_tag(soup)
     [pix_head_tag, pix_body_tag] = create_pixel_tags(soup)
@@ -330,6 +355,9 @@ def main():
     with open(FILEPATH, "w") as fp:
         fp.write(soup.decode(formatter="html5"))
 
+
+import pdb
+pdb.set_trace()
 
 if __name__ == "__main__":
     main()

@@ -50,11 +50,7 @@ for FILE in $(grep "${JTD_SEARCH_TERM}\|${DOXYGEN_SEARCH_TERM}\|${PYDATA_SEARCH_
   --exclude-dir=legacy \
   --exclude-dir=cudf-java \
   ${FOLDER_TO_CUSTOMIZE} ); do
-  if [[ ${FILE} == *"ucxx"* ]]; then
-    python ${SCRIPT_SRC_FOLDER}/customize_doc.py $(realpath ${FILE}) --is-ucxx
-  else
-    python ${SCRIPT_SRC_FOLDER}/customize_doc.py $(realpath ${FILE})
-  fi
+  python ${SCRIPT_SRC_FOLDER}/customize_doc.py $(realpath ${FILE})
   echo "" # line break for readability
 done
 IFS="$OIFS"
