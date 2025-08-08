@@ -34,6 +34,90 @@ docker run --rm \
   bash -c 'rm -rf ./_site && jekyll serve'
 ```
 
+### Local macOS development
+
+Upgrade to a new-enough ruby and install `jekyll`, like following https://jekyllrb.com/docs/installation/macos/
+
+```shell
+# (one-time) get ruby env-management stuff
+brew install chruby ruby-install
+
+# (one time) update to newer ruby
+ruby-install ruby 3.4.1
+
+source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh
+source $(brew --prefix)/opt/chruby/share/chruby/auto.sh
+chruby ruby-3.4.1
+ruby -v
+
+# (one time) install Bundler
+gem install bundler
+
+# install everything else the project needs
+bundle install
+```
+
+Build the site (this populates the `_site/` folder)
+
+```shell
+bundle exec jekyll build --verbose
+```
+
+At this point, the API documentation will not be populated.
+
+To test those and the post-processing that happens on them, get read-only AWS credentials for the relevant resources
+and put them in a profile called `[rapids-docs]` in your AWS CLI configuration.
+
+```shell
+export AWS_DEFAULT_PROFILE="rapids-docs"
+ci/download_from_s3.sh
+```
+
+At this point, the site is now built and the API documentation has been downloaded.
+Next, some post-processing needs to be done to point links like `/stable` (including those in drop-down selectors)
+to the appropriate documentation files.
+
+Those steps include a `pip install`, so create and active a Python virtual environment first.
+
+```shell
+python -m venv rapids-docs-env
+source ./rapids-docs-env/bin/activate
+```
+
+Then run the post-processing.
+
+```shell
+ci/post-process.sh
+```
+
+At this point, you should be able to view the site locally with a pretty similar experience to what's hosted in deployments.
+
+`jekyll serve` cleans and re-generates the `_site/` folder, but it also does some other bundling and packaging that's needed for links and formatting
+to work correctly.
+
+First, back up the `api/` directory:
+
+```shell
+BACKUP_DIR=$(mktemp -d)
+cp -avR ./_site/api "${BACKUP_DIR}"
+```
+
+Then serve the site.
+
+```shell
+bundle exec jekyll serve
+```
+
+Once it's up, copy all the `api/` files back in.
+
+```shell
+cp -avR "${BACKUP_DIR}/api" _site
+```
+
+`jekyll serve` should automatically pick up the changes.
+
+In a browser, navigate to the URL shown in the `jekyll serve` output (probably something like `http://127.0.0.1:4000/`) to see the rendered docs.
+
 ## PR submissions
 
 Once you have code changes, submit a PR to the docs site. Netlify will generate
