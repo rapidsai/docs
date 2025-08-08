@@ -11,28 +11,6 @@ import sys
 import json
 import os
 from bs4 import BeautifulSoup
-from util import r_versions
-
-FILEPATH = sys.argv[1]
-IS_UCXX_FILE = len(sys.argv) > 2 and sys.argv[2] == "--is-ucxx"
-
-LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
-RELEASES_PATH = os.path.join(
-    os.path.dirname(__file__), "../", "../", "_data", "releases.json"
-)
-
-with open(LIB_MAP_PATH) as fp:
-    LIB_PATH_DICT = json.load(fp)
-
-with open(RELEASES_PATH) as fp:
-    release_data = json.load(fp)
-    VERSIONS_DICT = {
-        "nightly": release_data["nightly"][
-            "ucxx_version" if IS_UCXX_FILE else "version"
-        ],
-        "stable": release_data["stable"]["ucxx_version" if IS_UCXX_FILE else "version"],
-        "legacy": release_data["legacy"]["ucxx_version" if IS_UCXX_FILE else "version"],
-    }
 
 SCRIPT_TAG_ID = "rapids-selector-js"
 PIXEL_SRC_TAG_ID = "rapids-selector-pixel-src"
@@ -41,30 +19,49 @@ STYLE_TAG_ID = "rapids-selector-css"
 FA_TAG_ID = "rapids-fa-tag"
 
 
-def get_version_from_fp():
+class r_versions(str):
+    def compare(self, other: str) -> int:
+        yearA, monthA = map(int, self.split("."))
+        yearB, monthB = map(int, other.split("."))
+
+        if yearA < yearB or (yearA == yearB and monthA < monthB):
+            return -1
+        elif yearA == yearB and monthA == monthB:
+            return 0
+        else:
+            return 1
+
+    def is_less_than(self, other: str) -> bool:
+        return self.compare(other) == -1
+
+    def is_greater_than(self, other: str) -> bool:
+        return self.compare(other) == 1
+
+
+def get_version_from_fp(*, filepath: str, versions_dict: dict):
     """
     Determines if the current HTML document is for legacy, stable, or nightly versions
     based on the file path
     """
-    match = re.search(r"/(\d?\d\.\d\d)/", FILEPATH)
+    match = re.search(r"/(\d?\d\.\d\d)/", filepath)
     version_number_str = r_versions(match.group(1))
     version_name = "stable"
-    if version_number_str.is_greater_than(VERSIONS_DICT["stable"]):
+    if version_number_str.is_greater_than(versions_dict["stable"]):
         version_name = "nightly"
-    if version_number_str.is_less_than(VERSIONS_DICT["stable"]):
+    if version_number_str.is_less_than(versions_dict["stable"]):
         version_name = "legacy"
     return {"name": version_name, "number": version_number_str}
 
 
-def get_lib_from_fp():
+def get_lib_from_fp(*, filepath: str, lib_path_dict: dict) -> str:
     """
     Determines the current RAPIDS library based on the file path
     """
 
-    for lib in LIB_PATH_DICT.keys():
-        if re.search(f"(^{lib}/|/{lib}/)", FILEPATH):
+    for lib in lib_path_dict.keys():
+        if re.search(f"(^{lib}/|/{lib}/)", filepath):
             return lib
-    raise Exception(f"Couldn't find valid library name in {FILEPATH}.")
+    raise ValueError(f"Couldn't find valid library name in '{filepath}'.")
 
 
 def create_home_container(soup):
@@ -94,30 +91,31 @@ def add_font_awesome(soup):
     soup.head.append(fa_tag)
 
 
-def create_version_options():
+def create_version_options(
+    *, project_name: str, filepath: str, lib_path_dict: dict, versions_dict: dict
+):
     """
     Creates options for legacy/stable/nightly selector
     """
     options = []
-    doc_version = get_version_from_fp()
-    doc_lib = get_lib_from_fp()
+    doc_version = get_version_from_fp(filepath=filepath, versions_dict=versions_dict)
     doc_is_extra_legacy = (  # extra legacy means the doc version is older then current legacy
         doc_version["name"] == "legacy"
-        and VERSIONS_DICT["legacy"] != doc_version["number"]
+        and versions_dict["legacy"] != doc_version["number"]
     )
     doc_is_extra_nightly = (  # extra nightly means the doc version is newer then current nightly
         doc_version["name"] == "nightly"
-        and VERSIONS_DICT["nightly"] != doc_version["number"]
+        and versions_dict["nightly"] != doc_version["number"]
     )
     for version_name, version_path in [
-        (_, path) for _, path in LIB_PATH_DICT[doc_lib].items() if path is not None
+        (_, path) for _, path in lib_path_dict[project_name].items() if path is not None
     ]:
         if (doc_is_extra_legacy and version_name == "legacy") or (
             doc_is_extra_nightly and version_name == "nightly"
         ):
             version_number_str = doc_version["number"]
         else:
-            version_number_str = VERSIONS_DICT[version_name]
+            version_number_str = versions_dict[version_name]
         is_selected = False
         option_href = version_path
         version_text = f"{version_name} ({version_number_str})"
@@ -131,14 +129,13 @@ def create_version_options():
     return options
 
 
-def create_library_options():
+def create_library_options(*, project_name: str, lib_path_dict: dict):
     """
     Creates options for library selector
     """
-    doc_lib = get_lib_from_fp()
     options = []
 
-    for lib, lib_versions in LIB_PATH_DICT.items():
+    for lib, lib_versions in lib_path_dict.items():
         if lib_versions["stable"]:
             option_href = lib_versions["stable"]
         elif lib_versions["nightly"]:
@@ -148,7 +145,7 @@ def create_library_options():
         else:
             continue
         is_selected = False
-        if lib == doc_lib:
+        if lib == project_name:
             print(f"default lib: {lib}")
             is_selected = True
         options.append({"selected": is_selected, "href": option_href, "text": lib})
@@ -259,7 +256,7 @@ def delete_existing_elements(soup):
         delete_element(soup, element)
 
 
-def get_theme_info(soup):
+def get_theme_info(soup, *, filepath: str):
     """
     Determines what theme a given HTML file is using or exits if it's
     not able to be determined. Returns a string identifier and reference element
@@ -282,7 +279,7 @@ def get_theme_info(soup):
         return "pydata", soup.select(pydata_identifier)[0]
 
     print(
-        f"Couldn't identify {FILEPATH} as a supported theme type. Skipping file.",
+        f"Couldn't identify {filepath} as a supported theme type. Skipping file.",
         file=sys.stderr,
     )
     exit(0)
@@ -293,11 +290,45 @@ def main():
     Given the path to a documentation HTML file, this function will
     parse the file and add library/version selectors and a Home button
     """
+
+    # parse CLI arguments
+    FILEPATH = sys.argv[1]
+    IS_UCXX_FILE = len(sys.argv) > 2 and sys.argv[2] == "--is-ucxx"
     print(f"--- {FILEPATH} ---")
+
+    # read in config files
+    LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
+    RELEASES_PATH = os.path.join(
+        os.path.dirname(__file__), "../", "../", "_data", "releases.json"
+    )
+
+    with open(LIB_MAP_PATH) as fp:
+        LIB_PATH_DICT = json.load(fp)
+
+    with open(RELEASES_PATH) as fp:
+        release_data = json.load(fp)
+        VERSIONS_DICT = {
+            "nightly": release_data["nightly"][
+                "ucxx_version" if IS_UCXX_FILE else "version"
+            ],
+            "stable": release_data["stable"][
+                "ucxx_version" if IS_UCXX_FILE else "version"
+            ],
+            "legacy": release_data["legacy"][
+                "ucxx_version" if IS_UCXX_FILE else "version"
+            ],
+        }
+
+    # determine project name (e.g. 'cudf')
+    project_name = get_lib_from_fp(
+        lib_path_dict=LIB_PATH_DICT,
+        filepath=FILEPATH,
+    )
+
     with open(FILEPATH) as fp:
         soup = BeautifulSoup(fp, "html5lib")
 
-    doc_type, reference_el = get_theme_info(soup)
+    doc_type, reference_el = get_theme_info(soup, filepath=FILEPATH)
 
     # Delete any existing added/unnecessary elements
     delete_existing_elements(soup)
@@ -308,8 +339,22 @@ def main():
 
     # Create new elements
     home_btn_container = create_home_container(soup)
-    library_selector = create_selector(soup, create_library_options())
-    version_selector = create_selector(soup, create_version_options())
+    library_selector = create_selector(
+        soup,
+        create_library_options(
+            project_name=project_name,
+            lib_path_dict=LIB_PATH_DICT,
+        ),
+    )
+    version_selector = create_selector(
+        soup,
+        create_version_options(
+            project_name=project_name,
+            filepath=FILEPATH,
+            lib_path_dict=LIB_PATH_DICT,
+            versions_dict=VERSIONS_DICT,
+        ),
+    )
     container = soup.new_tag("div", id=f"rapids-{doc_type}-container")
     script_tag = create_script_tag(soup)
     [pix_head_tag, pix_body_tag] = create_pixel_tags(soup)
