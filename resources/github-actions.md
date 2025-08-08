@@ -376,8 +376,8 @@ Add a new file called `ci/use_conda_packages_from_prs.sh`.
 # Copyright (c) 2025, NVIDIA CORPORATION.
 
 # download CI artifacts
-LIBRAFT_CHANNEL=$(rapids-get-pr-conda-artifact raft 789 python)
-LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1909 cpp)
+LIBRAFT_CHANNEL=$(rapids-get-pr-artifact raft 789 python conda)
+LIBRMM_CHANNEL=$(rapids-get-pr-artifact rmm 1909 cpp conda)
 
 # For `rattler` builds:
 #
@@ -419,9 +419,9 @@ So, for example, Python testing jobs that use the `rmm` Python package also need
 # Copyright (c) 2025, NVIDIA CORPORATION.
 
 # download CI artifacts
-LIBKVIKIO_CHANNEL=$(rapids-get-pr-conda-artifact kvikio 224 cpp)
-LIBRMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1223 cpp)
-RMM_CHANNEL=$(rapids-get-pr-conda-artifact rmm 1223 python)
+LIBKVIKIO_CHANNEL=$(rapids-get-pr-artifact kvikio 224 cpp conda)
+LIBRMM_CHANNEL=$(rapids-get-pr-artifact rmm 1223 cpp conda)
+RMM_CHANNEL=$(rapids-get-pr-artifact rmm 1223 python conda)
 
 # For `rattler` builds:
 #
@@ -454,7 +454,7 @@ Then copy the following into every script in the `ci/` directory that is doing `
 source ./ci/use_conda_packages_from_prs.sh
 ```
 
-**Note:** By default `rapids-get-pr-conda-artifact` uses the most recent commit from the specified PR.
+**Note:** By default `rapids-get-pr-artifact` uses the most recent commit from the specified PR.
 A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
 
 ### Using Wheel CI Artifacts in Other PRs
@@ -481,10 +481,10 @@ RAPIDS_PY_CUDA_SUFFIX=$(rapids-wheel-ctk-name-gen "${RAPIDS_CUDA_VERSION}")
 
 # download wheels, store the directories holding them in variables
 LIBRAFT_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="libraft_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact raft 2433 cpp
+  RAPIDS_PY_WHEEL_NAME="libraft_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-artifact raft 2433 cpp wheel
 )
 LIBRMM_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact rmm 1909 cpp
+  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-artifact rmm 1909 cpp wheel
 )
 
 # write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
@@ -518,13 +518,13 @@ RAPIDS_PY_CUDA_SUFFIX=$(rapids-wheel-ctk-name-gen "${RAPIDS_CUDA_VERSION}")
 
 # download wheels, store the directories holding them in variables
 LIBKVIKIO_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="libkvikio_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact kvikio 510 cpp
+  RAPIDS_PY_WHEEL_NAME="libkvikio_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-artifact kvikio 510 cpp wheel
 )
 LIBRMM_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact rmm 1678 cpp
+  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-artifact rmm 1678 cpp wheel
 )
 RMM_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="rmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-wheel-artifact rmm 1678 python
+  RAPIDS_PY_WHEEL_NAME="rmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-artifact rmm 1678 python wheel
 )
 
 # write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
@@ -541,7 +541,7 @@ Then copy the following into every script in the `ci/` directory that is doing `
 source ./ci/use_wheels_from_prs.sh
 ```
 
-**Note:** By default `rapids-get-pr-wheel-artifact` uses the most recent commit from the specified PR.
+**Note:** By default `rapids-get-pr-artifact` uses the most recent commit from the specified PR.
 A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
 
 ## Skipping CI for Commits
