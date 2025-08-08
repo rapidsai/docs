@@ -25,6 +25,11 @@ for PROJECT in $(jq -r 'keys | .[]' <<< "${PROJECTS_TO_VERSIONS_JSON}"); do
     <<< "${PROJECTS_TO_VERSIONS_JSON}"
   )
 
+  if [[ "${VERSIONS_FOR_THIS_PROJECT}" == "{}" ]]; then
+    echo "skipping '${PROJECT}'... no API docs hosted for this project"
+    continue
+  fi
+
   # expect to find a local folder, relative to the root of the repo,
   # named e.g. '_site/api/cudf'
   PROJECT_FOLDER="_site/api/${PROJECT}"
@@ -55,6 +60,7 @@ for PROJECT in $(jq -r 'keys | .[]' <<< "${PROJECTS_TO_VERSIONS_JSON}"); do
     fi
   done # for VERSION
 
+  popd
   echo "---------------"
   echo ""
 done # for PROJECT
