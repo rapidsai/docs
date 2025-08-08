@@ -50,10 +50,8 @@ Use the selector tool below to select your preferred method, packages, and envir
 ### **Conda Issues**
 <i class="fas fa-info-circle"></i> A `conda create error` occurs:<br/>
 To resolve this error please follow one of these steps:
-- If the Conda installation is older than `22.11`, please update to the latest version. This will include [libmamba](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community/){: target="_blank"}, a Mamba-powered Conda solver that is now included with all conda installations to significantly accelerate environment solving.
-- If the Conda installation is version `22.11` or newer, run: `conda install -n base conda-libmamba-solver` and run
-`conda create --solver=libmamba ...`
-- Use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation.html){: target="_blank"} as `mamba create ...`
+- If the Conda installation is older than `23.10`, please update to the latest version. This will include [libmamba](https://conda.org/blog/2023-11-06-conda-23-10-0-release/){: target="_blank"} to significantly accelerate environment solving
+- Use [Mamba directly](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html){: target="_blank"} as `mamba create ...`
 
 <i class="fas fa-info-circle"></i> A `__cuda` constraint conflict occurs:<br/>
 You may see something like:
@@ -72,7 +70,7 @@ Check if any packages in your environment have been installed from the `defaults
 The `defaults` channel is not supported by RAPIDS packages, which are built to be compatible with dependencies from the `conda-forge` channel.
 If you installed conda with [the Miniconda or Anaconda distributions](https://www.anaconda.com/docs/getting-started/miniconda/main#should-i-install-miniconda-or-anaconda-distribution), the `defaults` channel will be included unless you modify your `.condarc` file or specify `-c nodefaults` in the install commands for RAPIDS packages.
 If you find any packages from `defaults` in your environment, please make those changes and try recreating your environment from scratch.
-Note that if you installed conda with [Miniforge](https://conda-forge.org/download/) ([our recommendation for best compatibility](https://docs.rapids.ai/install/#conda)) then the `defaults` channel is not included.
+Note that if you installed conda with [Miniforge](https://conda-forge.org/download/) ([our recommendation for best compatibility](#conda)) then the `defaults` channel is not included.
 
 In general [mixing `conda-forge` and `defaults` channels is not supported](https://conda-forge.org/docs/user/transitioning_from_defaults/). RAPIDS packages are published to a separate `rapidsai` channel that is designed for compatibility with `conda-forge`, not `defaults`.
 
@@ -106,21 +104,6 @@ Check the suggestions below for possible resolutions:
 
 - The pip index has moved from the initial experimental release! Ensure the correct `--extra-index-url=https://pypi.nvidia.com`
 - Ensure you're using a Python version that RAPIDS supports (compare the values in the [the install selector](#selector) to the Python version reported by `python --version`).
-- RAPIDS pip packages require a recent version of pip that [supports PEP600](https://peps.python.org/pep-0600/){: target="_blank"}. Some users may need to update pip: `pip install -U pip`
-
-<br/>
-
-<i class="fas fa-info-circle"></i> Dask / Jupyter / Tornado 6.2 dependency conflicts can occur. Install `jupyter-client` 7.3.4 if the error below occurs: <br/>
-```
-ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behavior is the source of the following dependency conflicts.
-jupyter-client 7.4.2 requires tornado>=6.2, but you have tornado 6.1 which is incompatible.
-```
-
-<i class="fas fa-info-circle"></i> cuSpatial installation may yield the error below:<br/>
-```
-ERROR: GDAL >= 3.2 is required for fiona. Please upgrade GDAL.
-```
-To resolve, either <code>GDAL</code> needs to be updated, or <code>fiona</code> needs to be pinned to specific versions depending on the installation OS. please see the [cuSpatial README](https://github.com/rapidsai/cuspatial/tree/branch-23.06#install-with-pip){: target="_blank"} to resolve this error.
 
 <br/>
 
@@ -222,21 +205,14 @@ conda config --set channel_priority flexible
 <div id="docker"></div>
 
 ## **Docker**
-RAPIDS requires both Docker CE v19.03+ and [nvidia-container-toolkit](https://github.com/NVIDIA/nvidia-docker#quickstart){: target="_blank"} installed.
-- <i class="fas fa-history text-purple"></i> Legacy Support: Docker CE v17-18 and [nvidia-docker2](https://github.com/NVIDIA/nvidia-docker/wiki/Installation-(version-2.0)){: target="_blank"}
+RAPIDS requires Docker Engine and [nvidia-container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html){: target="_blank"} installed.
 
-**1. Download and Install.** Copy command below to download and install the latest Docker CE Edition:
+**1. Download and Install.** Copy command below to download and install the latest Docker Engine:
 ```sh
 curl https://get.docker.com | sh
 ```
 
-**2. Install Latest NVIDIA Docker.** Select the [appropriate supported distribution](https://nvidia.github.io/nvidia-container-runtime/){: target="_blank"}:
-```sh
-curl -s -L https://nvidia.github.io/nvidia-container-runtime/gpgkey | sudo apt-key add - distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-curl -s -L https://nvidia.github.io/nvidia-container-runtime/$distribution/nvidia-container-runtime.list | sudo tee /etc/apt/sources.list.d/nvidia-container-runtime.list
-sudo apt-get update
-sudo apt-get install nvidia-container-runtime
-```
+**2. Install Latest NVIDIA Container Toolkit.** Follow the instructions for your Linux distribution in the [nvidia-container-toolkit installation guide](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html){: target="_blank"}.
 
 **3. Start Docker.** In new terminal window run:
 ```sh
@@ -244,13 +220,10 @@ sudo service docker stop
 sudo service docker start
 ```
 
-**4a. Test NVIDIA Docker.** In a terminal window run:
+**4. Test Docker with GPU support.** In a terminal window run:
 ```sh
 docker run --gpus all nvcr.io/nvidia/k8s/cuda-sample:nbody nbody -gpu -benchmark
 ```
-
-**4b. Legacy Docker Users.** Docker CE v18 & [nvidia-docker2](https://github.com/NVIDIA/nvidia-docker/wiki/Installation-(version-2.0)){: target="_blank"} users will need to replace the following for compatibility:
-`docker run --gpus all` with `docker run --runtime=nvidia`
 
 <br/>
 
@@ -262,11 +235,7 @@ The command provided from the selector for the `notebooks` Docker image will run
 docker run -t -d --gpus all --shm-size=1g --ulimit memlock=-1 --ulimit stack= 67108864 -v $PWD:/ws <container label>
 ```
 
-The standard docker command may be sufficient, but the additional arguments ensures more stability.  See the [NCCL docs](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/troubleshooting.html#sharing-data){: target="_blank"} and [UCX docs](https://github.com/openucx/ucx/blob/master/docs/source/running.md#running-in-docker-containers){: target="_blank"} for more details on MNMG usage.
-
-
-**Custom Datasets.** See the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/rapidsai){: target="_blank"} for more information about using custom datasets. [Docker Hub](https://hub.docker.com/r/rapidsai/rapidsai/){: target="_blank"} and [NVIDIA GPU Cloud](https://ngc.nvidia.com/catalog/containers/nvidia:rapidsai:rapidsai){: target="_blank"} host RAPIDS containers with a full list of [available tags](https://hub.docker.com/r/rapidsai/rapidsai/tags){: target="_blank"}.
-
+The standard docker command may be sufficient, but the additional arguments ensures more stability. See the [NCCL docs](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/troubleshooting.html#sharing-data){: target="_blank"} and [UCX docs](https://github.com/openucx/ucx/blob/master/docs/source/running.md#running-in-docker-containers){: target="_blank"} for more details on MNMG usage.
 
 <br/>
 <div id="pip"></div>
@@ -296,7 +265,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 
 ### **WSL2 Additional Prerequisites**
 
-<i class="fas fa-desktop text-white"></i> **OS:** Windows 11 with a WSL2 installation of Ubuntu (minimum version 20.04). <br/>
+<i class="fas fa-desktop text-white"></i> **OS:** Windows 11 with a WSL2 installation of Ubuntu. <br/>
 <i class="fas fa-info-circle text-white"></i> **WSL Version:** WSL2 (WSL1 not supported). <br/>
 <i class="fas fa-microchip text-white"></i> **GPU:** GPUs with [Compute Capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} 7.0 or higher (16GB+ GPU RAM is recommended).
 
@@ -314,8 +283,6 @@ Windows users can now tap into GPU accelerated data science on their local machi
 <i class="fas fa-info-circle text-white"></i> When installing with Conda, if an `http 000 connection error` occurs when accessing the repository data, run `wsl --shutdown` and then [restart the WSL instance](https://stackoverflow.com/a/69601760){: target="_blank"}.
 
 <i class="fas fa-info-circle text-white"></i> When installing with Conda or pip, if an `WSL2 Jitify fatal error: libcuda.so: cannot open shared object file` error occurs, follow suggestions in [this WSL issue](https://github.com/microsoft/WSL/issues/8587) to resolve.
-
-<i class="fas fa-info-circle text-white"></i> When installing with Docker Desktop, if the container pull command is successful, but the run command hangs indefinitely, [ensure you're on Docker Desktop >= 4.18](https://docs.docker.com/desktop/release-notes/){: target="_blank"}.
 
 <br/>
 <div id="wsl2-sdkm"></div>
