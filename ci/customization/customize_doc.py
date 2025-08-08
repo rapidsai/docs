@@ -11,6 +11,7 @@ import sys
 import json
 import os
 from bs4 import BeautifulSoup
+from copy import deepcopy
 
 SCRIPT_TAG_ID = "rapids-selector-js"
 PIXEL_SRC_TAG_ID = "rapids-selector-pixel-src"
@@ -285,50 +286,25 @@ def get_theme_info(soup, *, filepath: str):
     exit(0)
 
 
-def main():
+def main(*, filepath: str, lib_path_dict: dict, versions_dict: dict[str, str]) -> None:
     """
     Given the path to a documentation HTML file, this function will
     parse the file and add library/version selectors and a Home button
     """
 
     # parse CLI arguments
-    FILEPATH = sys.argv[1]
-    IS_UCXX_FILE = len(sys.argv) > 2 and sys.argv[2] == "--is-ucxx"
-    print(f"--- {FILEPATH} ---")
-
-    # read in config files
-    LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
-    RELEASES_PATH = os.path.join(
-        os.path.dirname(__file__), "../", "../", "_data", "releases.json"
-    )
-
-    with open(LIB_MAP_PATH) as fp:
-        LIB_PATH_DICT = json.load(fp)
-
-    with open(RELEASES_PATH) as fp:
-        release_data = json.load(fp)
-        VERSIONS_DICT = {
-            "nightly": release_data["nightly"][
-                "ucxx_version" if IS_UCXX_FILE else "version"
-            ],
-            "stable": release_data["stable"][
-                "ucxx_version" if IS_UCXX_FILE else "version"
-            ],
-            "legacy": release_data["legacy"][
-                "ucxx_version" if IS_UCXX_FILE else "version"
-            ],
-        }
+    print(f"--- {filepath} ---")
 
     # determine project name (e.g. 'cudf')
     project_name = get_lib_from_fp(
-        lib_path_dict=LIB_PATH_DICT,
-        filepath=FILEPATH,
+        lib_path_dict=lib_path_dict,
+        filepath=filepath,
     )
 
-    with open(FILEPATH) as fp:
+    with open(filepath) as fp:
         soup = BeautifulSoup(fp, "html5lib")
 
-    doc_type, reference_el = get_theme_info(soup, filepath=FILEPATH)
+    doc_type, reference_el = get_theme_info(soup, filepath=filepath)
 
     # Delete any existing added/unnecessary elements
     delete_existing_elements(soup)
@@ -343,16 +319,16 @@ def main():
         soup,
         create_library_options(
             project_name=project_name,
-            lib_path_dict=LIB_PATH_DICT,
+            lib_path_dict=lib_path_dict,
         ),
     )
     version_selector = create_selector(
         soup,
         create_version_options(
             project_name=project_name,
-            filepath=FILEPATH,
-            lib_path_dict=LIB_PATH_DICT,
-            versions_dict=VERSIONS_DICT,
+            filepath=filepath,
+            lib_path_dict=lib_path_dict,
+            versions_dict=versions_dict,
         ),
     )
     container = soup.new_tag("div", id=f"rapids-{doc_type}-container")
@@ -372,9 +348,38 @@ def main():
     soup.head.append(pix_head_tag)
     soup.head.append(style_tab)
 
-    with open(FILEPATH, "w") as fp:
+    with open(filepath, "w") as fp:
         fp.write(soup.decode(formatter="html5"))
 
 
 if __name__ == "__main__":
-    main()
+    # read in config files (doing this here so it only happens once)
+    LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
+    RELEASES_PATH = os.path.join(
+        os.path.dirname(__file__), "../", "../", "_data", "releases.json"
+    )
+
+    with open(LIB_MAP_PATH) as fp:
+        LIB_PATH_DICT = json.load(fp)
+
+    with open(RELEASES_PATH) as fp:
+        RELEASE_DATA = json.load(fp)
+
+    MANIFEST_FILEPATH = sys.argv[1]
+    with open(MANIFEST_FILEPATH) as manifest_file:
+        for line in manifest_file:
+            filepath = line.strip()
+            version_key = "version"
+            if "ucxx" in filepath:
+                version_key = "ucxx_version"
+
+            versions_dict = {
+                "legacy": RELEASE_DATA["legacy"][version_key],
+                "nightly": RELEASE_DATA["nightly"][version_key],
+                "stable": RELEASE_DATA["stable"][version_key],
+            }
+            main(
+                filepath=filepath,
+                lib_path_dict=deepcopy(LIB_PATH_DICT),
+                versions_dict=deepcopy(versions_dict),
+            )
