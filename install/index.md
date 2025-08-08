@@ -59,9 +59,9 @@ To resolve this error please follow one of these steps:
 You may see something like:
 ```
 LibMambaUnsatisfiableError: Encountered problems while solving:
- - package cuda-version-12.0-hffde075_0 has constraint __cuda >=12 conflicting with __cuda-11.4-0
+ - package cuda-version-12.0-hffde075_0 has constraint __cuda >=12 conflicting with __cuda-11.8-0
 ```
-This means the CUDA driver currently installed on your machine (e.g. `__cuda`: 11.4.0) is
+This means the CUDA driver currently installed on your machine (e.g. `__cuda`: 11.8.0) is
 incompatible with the `cuda-version` (12.0) you are trying to install. You will have to ensure the [CUDA
 driver on your machine supports the CUDA version](#system-req) you are trying to install with conda.
 
@@ -92,13 +92,9 @@ To learn more about these changes, please see the [RAPIDS Container README](http
 
 
 ### **pip Issues**
-<i class="fas fa-info-circle"></i> pip installations require using the matching wheel to the system's installed CUDA toolkit. For CUDA 11 toolkits, install the `-cu11` wheels, and for CUDA 12 toolkits install the `-cu12` wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the `-cu11` wheels. <br/>
+<i class="fas fa-info-circle"></i> pip installations require using the matching wheel to the system's installed CUDA toolkit. For example, if you have the CUDA 12 toolkit, install the `-cu12` wheels.<br/>
 <i class="fas fa-info-circle"></i> Infiniband is not supported yet. <br/>
 <i class="fas fa-info-circle"></i> These packages are not compatible with Tensorflow pip packages. Please use the [NGC containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow){: target="_blank"} or conda packages instead. <br/>
-<i class="fas fa-info-circle"></i> If you experience a "Failed to import CuPy" error, please uninstall any existing versions of cupy and install `cupy-cuda11x`. For example:
-```sh
-pip uninstall cupy-cuda115; pip install cupy-cuda11x
-```
 <br/>
 
 <i class="fas fa-info-circle"></i> The following error message indicates a problem with your environment:
@@ -155,28 +151,18 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 <i class="fas fa-download text-purple"></i> **CUDA & NVIDIA Drivers:** One of the following supported versions:
 {: .no-tb-margins }
 
-- <i class="fas fa-check-circle"></i> [CUDA 11.2](https://developer.nvidia.com/cuda-11.2.0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
-- <i class="fas fa-check-circle"></i> [CUDA 11.4](https://developer.nvidia.com/cuda-11-4-0-download-archive){: target="_blank"} with Driver 470.42.01 or newer
-- <i class="fas fa-check-circle"></i> [CUDA 11.5](https://developer.nvidia.com/cuda-11-5-0-download-archive){: target="_blank"} with Driver 495.29.05 or newer
-- <i class="fas fa-check-circle"></i> [CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive){: target="_blank"} with Driver 520.61.05 or newer
-- <i class="fas fa-check-circle"></i> [CUDA 12.0](https://developer.nvidia.com/cuda-12-0-1-download-archive){: target="_blank"} with Driver 525.60.13 or newer **see CUDA 12 section below for notes on usage**
-- <i class="fas fa-check-circle"></i> [CUDA 12.2](https://developer.nvidia.com/cuda-12-2-2-download-archive){: target="_blank"} with Driver 535.86.10 or newer **see CUDA 12 section below for notes on usage**
-- <i class="fas fa-check-circle"></i> [CUDA 12.5](https://developer.nvidia.com/cuda-12-5-1-download-archive){: target="_blank"} with Driver 555.42.06 or newer **see CUDA 12 section below for notes on usage**
+- <i class="fas fa-check-circle"></i> CUDA 12 with Driver 525.60.13 or newer
+- <i class="fas fa-info-circle"></i> Compatibility with CUDA 13 is coming soon
 
- **Note**: RAPIDS is tested with and officially supports the versions listed above. Newer CUDA and driver versions may also work with RAPIDS. See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/index.html) for details.
+See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/) for details.
 
-## **CUDA Support**
-
-### **Docker and Conda**
-
-- <i class="fas fa-info-circle"></i> conda packages and Docker images support CUDA 12 on systems with a CUDA 12 driver.
-- <i class="fas fa-info-circle"></i> CUDA 11 conda packages and Docker images can be used on a system with a CUDA 12 driver because they include their own CUDA toolkit.
+## **CUDA Support Notes**
 
 ### **pip**
 
 - <i class="fas fa-info-circle"></i> pip installations require using a wheel matching the system's installed CUDA toolkit.
 - <i class="fas fa-info-circle"></i> RAPIDS pip packages require NVRTC for Numba to function properly. For Docker users, this means that RAPIDS wheels require the `devel` flavor of `nvidia/cuda` images for full functionality. The `base` and `runtime` flavors of `nvidia/cuda` Docker images are currently not sufficient.
-- <i class="fas fa-info-circle"></i> For CUDA 11 toolkits, install the <code>-cu11</code> wheels, and for CUDA 12 toolkits install the <code>-cu12</code> wheels. If your installation has a CUDA 12 driver but a CUDA 11 toolkit, use the <code>-cu11</code> wheels.
+- <i class="fas fa-info-circle"></i> pip installations require using the matching wheel to the system's installed CUDA toolkit. For example, if you have the CUDA 12 toolkit, install the `-cu12` wheels.<br/>
 
 <br/>
 <div id="system-recommendations"></div>
@@ -224,11 +210,7 @@ bash Miniforge3-$(uname)-$(uname -m).sh
 
 **3. Start Conda.** Open a new terminal window, which should now show Conda initialized.
 
-**4. Check Conda Configuration.** Installing RAPIDS may require you to use `channel_priority: flexible`.
-
-If you are installing RAPIDS with CUDA 12 or greater, then you can use either `strict` or `flexible` channel priority.
-
-If you are installing RAPIDS with CUDA 11, then you must set `channel_priority: flexible`.
+**4. Check Conda Configuration.** RAPIDS supports either `flexible` or `strict` channel priority.
 
 You can check this and change it, if required, by doing:
 ```sh
@@ -290,12 +272,7 @@ The standard docker command may be sufficient, but the additional arguments ensu
 <div id="pip"></div>
 
 ## **pip**
-RAPIDS pip packages are available for CUDA 11 and CUDA 12 on the NVIDIA Python Package Index.
-
-### **pip Additional Prerequisites**
-<i class="fas fa-info-circle"></i> The CUDA toolkit version on your system must match the pip CUDA version you install (`-cu11` or `-cu12`). <br/>
-<i class="fas fa-info-circle"></i> **glibc version:** x86_64 wheels require glibc >= 2.17. <br/>
-<i class="fas fa-info-circle"></i> **glibc version:** ARM architecture (aarch64) wheels require glibc >= 2.32 (only ARM Server Base System Architecture is supported).
+RAPIDS pip packages are available on the NVIDIA Python Package Index.
 
 <br/>
 <div id="sdkm"></div>
@@ -401,9 +378,8 @@ print(cudf.Series([1, 2, 3]))
 1. Install WSL2 and the Ubuntu distribution [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install){: target="_blank"}.
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx){: target="_blank"} on the Windows host.
 3. Log in to the WSL2 Linux instance.
-4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then install the WSL-specific [CUDA 11](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} or [CUDA 12](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} Toolkit without drivers into the WSL2 instance.
-  - The installed CUDA Toolkit version must match the pip wheel version (`-cu11` or `-cu12`)
-  - Any CUDA 12 CTK will work with RAPIDS `-cu12` pip packages
+4. Follow [this helpful developer guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#cuda-support-for-wsl2){: target="_blank"} and then install the WSL-specific [CUDA 12](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local){: target="_blank"} Toolkit without drivers into the WSL2 instance.
+  - The installed CUDA Toolkit major version must match the package suffix (e.g. `-cu12`)
 5. Install RAPIDS pip packages on the WSL2 Linux Instance using the [release selector](#selector) commands.
 6. Run this code to check that the RAPIDS installation is working:
 ```python
