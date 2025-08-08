@@ -27,10 +27,9 @@ for PROJECT in $(jq -r 'keys | .[]' <<< "${PROJECTS_TO_VERSIONS_JSON}"); do
 
   # expect to find a local folder, relative to the root of the repo,
   # named e.g. '_site/api/cudf'
-  FOLDER="_site/api/${PROJECT}/"
-  pushd "${FOLDER}"
+  PROJECT_FOLDER="_site/api/${PROJECT}"
   echo ""
-  echo "${FOLDER}--------"
+  echo "${PROJECT_FOLDER}/--------"
 
   # loop over 'stable', 'nightly', etc.
   for VERSION_NAME in $(jq -r 'keys | .[]' <<< "${VERSIONS_FOR_THIS_PROJECT}"); do
@@ -42,20 +41,19 @@ for PROJECT in $(jq -r 'keys | .[]' <<< "${PROJECTS_TO_VERSIONS_JSON}"); do
         '.[$version_name]' \
       <<< "${VERSIONS_FOR_THIS_PROJECT}"
     )
-    FOLDER_FOR_THIS_VERSION="${VERSION_NUMBER}"
+    FOLDER_FOR_THIS_VERSION="${PROJECT_FOLDER}/${VERSION_NUMBER}"
 
     # map /latest to the same version as /stable
     if [[ "${VERSION_NAME}" == "stable" ]]; then
-      ls -s "${FOLDER_FOR_THIS_VERSION}" stable
-      ls -s "${FOLDER_FOR_THIS_VERSION}" latest
+      ln -s "${FOLDER_FOR_THIS_VERSION}" "${PROJECT_FOLDER}/stable"
+      ln -s "${FOLDER_FOR_THIS_VERSION}" "${PROJECT_FOLDER}/latest"
       echo "  - 'stable' and 'latest' point to '${FOLDER_FOR_THIS_VERSION}'"
     else
-      ls -s "${FOLDER_FOR_THIS_VERSION}" "${VERSION_NAME}"
+      ln -s "${FOLDER_FOR_THIS_VERSION}" "${PROJECT_FOLDER}/${VERSION_NAME}"
       echo "  - '${VERSION_NAME}' points to '${FOLDER_FOR_THIS_VERSION}'"
     fi
   done # for VERSION
 
   echo "---------------"
   echo ""
-  popd
 done # for PROJECT
