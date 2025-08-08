@@ -358,7 +358,7 @@ print(cudf.Series([1, 2, 3]))
 <div id="source"></div>
 
 ## **Build from Source**
-To build from source, check each [RAPIDS GitHub](https://github.com/rapidsai){: target="_blank"} README, such as the [cuDF's](https://github.com/rapidsai/cudf#buildinstall-from-source){: target="_blank"} source environment set up and build instructions. Further links are provided in the [selector tool](#selector). If additional help is needed reach out on our [Slack Channel]({{ site.social.slack.url }}).
+To build from source, find the library on the [RAPIDS GitHub](https://github.com/rapidsai){: target="_blank"}. Libraries provide guidance on building from source in `README.md` or `CONTRIBUTING.md`. If additional help is needed, file an issue on GitHub or reach out on our [Slack Channel]({{ site.social.slack.url }}).
 
 
 <hr/>
