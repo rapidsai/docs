@@ -29,7 +29,3 @@ select the docs that fit your needs.
 ## RAPIDS Libraries
 
 {% include api-docs.html data=site.data.docs.libs %}
-
-## Inactive Projects
-
-{% include api-docs.html data=site.data.docs.inactive-projects %}
