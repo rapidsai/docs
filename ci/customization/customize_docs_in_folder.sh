@@ -14,7 +14,7 @@
 # Positional Arguments:
 #   1) FOLDER_TO_CUSTOMIZE: project root relative folder to customize (i.e. api/, api/rmm, etc.)
 #######################################
-set -e
+set -euo pipefail
 
 display_usage() {
   echo "Usage:"
@@ -51,5 +51,5 @@ grep "${JTD_SEARCH_TERM}\|${DOXYGEN_SEARCH_TERM}\|${PYDATA_SEARCH_TERM}" -rl \
 > "${MANIFEST_FILE}"
 
 echo "Customizing $(wc -l < ${MANIFEST_FILE} | tr -d ' ') HTML files"
-python ${SCRIPT_SRC_FOLDER}/customize_doc.py "${MANIFEST_FILE}"
+python -u ${SCRIPT_SRC_FOLDER}/customize_doc.py "${MANIFEST_FILE}"
 echo "Done customizing"
