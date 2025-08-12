@@ -257,6 +257,15 @@ def delete_existing_elements(soup):
         delete_element(soup, element)
 
 
+class UnsupportedThemeError(ValueError):
+    """
+    Custom exception indicating that a document uses a Sphinx theme this script
+    either cannot identify or does not know how to modify.
+    """
+
+    pass
+
+
 def get_theme_info(soup, *, filepath: str):
     """
     Determines what theme a given HTML file is using or exits if it's
@@ -279,11 +288,9 @@ def get_theme_info(soup, *, filepath: str):
     if soup.select(pydata_identifier):
         return "pydata", soup.select(pydata_identifier)[0]
 
-    print(
-        f"Couldn't identify {filepath} as a supported theme type. Skipping file.",
-        file=sys.stderr,
+    raise UnsupportedThemeError(
+        f"Couldn't identify {filepath} as a supported theme type. Skipping file."
     )
-    exit(0)
 
 
 def main(*, filepath: str, lib_path_dict: dict, versions_dict: dict[str, str]) -> None:
@@ -304,7 +311,11 @@ def main(*, filepath: str, lib_path_dict: dict, versions_dict: dict[str, str]) -
     with open(filepath) as fp:
         soup = BeautifulSoup(fp, "html5lib")
 
-    doc_type, reference_el = get_theme_info(soup, filepath=filepath)
+    try:
+        doc_type, reference_el = get_theme_info(soup, filepath=filepath)
+    except UnsupportedThemeError as err:
+        print(f"{str(err)}", file=sys.stderr)
+        return
 
     # Delete any existing added/unnecessary elements
     delete_existing_elements(soup)
