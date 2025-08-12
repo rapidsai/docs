@@ -8,11 +8,13 @@
 #######################################
 set -euEo pipefail
 
+PROJECTS_TO_VERSIONS_PATH="${1}"
+
 # expect paths to be relative to the project root
 PROJ_ROOT=$(realpath "$(dirname $(realpath $0))/../")
 pushd "${PROJ_ROOT}"
 
-PROJECTS_TO_VERSIONS_JSON=$(./ci/get-projects-to-versions.sh)
+PROJECTS_TO_VERSIONS_JSON=$(cat "${PROJECTS_TO_VERSIONS_PATH}")
 
 echo "Updating symlinks..."
 echo ""
