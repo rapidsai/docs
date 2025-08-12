@@ -28,7 +28,7 @@ def get_version_from_fp(*, filepath: str, versions_dict: dict):
     match = re.search(r"/(\d?\d\.\d\d)/", filepath)
     version_number_from_filepath = match.group(1)
 
-    # take a map of the form {"stable": "YY.MM", ...} and flip to {"YY.MM": "stable"}
+    # given a version number like "25.10", figure out the corresponding version name like "stable", "nightly", or "legacy"
     for version_name, version_number in versions_dict.items():
         if version_number == version_number_from_filepath:
             return {"name": version_name, "number": version_number_from_filepath}
