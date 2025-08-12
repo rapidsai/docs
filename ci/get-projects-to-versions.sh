@@ -13,11 +13,6 @@
 #
 # The libraries that should be copied are read from "_data/docs.yml".
 #
-# The versions that should be copied are read from a mix of sources:
-#
-#   - active projects: "_data/releases.json"
-#   - inactive projects: 'version-overrides' field in entries in "_data/docs.yml"
-#
 # Produces a JSON mapping of the form:
 #
 #     {
@@ -47,7 +42,6 @@ log-stderr() {
 }
 
 PROJECT_MAP=$(yq '.apis + .libs'  _data/docs.yml)
-INACTIVE_PROJECT_MAP=$(yq '.inactive-projects' _data/docs.yml)
 
 VERSION_MAP=$(jq '{
     "legacy": { "version": .legacy.version, "ucxx_version": .legacy.ucxx_version },
