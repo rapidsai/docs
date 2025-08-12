@@ -20,38 +20,23 @@ STYLE_TAG_ID = "rapids-selector-css"
 FA_TAG_ID = "rapids-fa-tag"
 
 
-class r_versions(str):
-    def compare(self, other: str) -> int:
-        yearA, monthA = map(int, self.split("."))
-        yearB, monthB = map(int, other.split("."))
-
-        if yearA < yearB or (yearA == yearB and monthA < monthB):
-            return -1
-        elif yearA == yearB and monthA == monthB:
-            return 0
-        else:
-            return 1
-
-    def is_less_than(self, other: str) -> bool:
-        return self.compare(other) == -1
-
-    def is_greater_than(self, other: str) -> bool:
-        return self.compare(other) == 1
-
-
 def get_version_from_fp(*, filepath: str, versions_dict: dict):
     """
     Determines if the current HTML document is for legacy, stable, or nightly versions
     based on the file path
     """
     match = re.search(r"/(\d?\d\.\d\d)/", filepath)
-    version_number_str = r_versions(match.group(1))
-    version_name = "stable"
-    if version_number_str.is_greater_than(versions_dict["stable"]):
-        version_name = "nightly"
-    if version_number_str.is_less_than(versions_dict["stable"]):
-        version_name = "legacy"
-    return {"name": version_name, "number": version_number_str}
+    version_number_from_filepath = match.group(1)
+
+    # given a version number like "25.10", figure out the corresponding version name like "stable", "nightly", or "legacy"
+    for version_name, version_number in versions_dict.items():
+        if version_number == version_number_from_filepath:
+            return {"name": version_name, "number": version_number_from_filepath}
+
+    # if we get here, the version number wasn't found
+    raise ValueError(
+        f"Filepath implies version '{version_number_from_filepath}', no matching entry in versions_dict: {versions_dict}"
+    )
 
 
 def get_lib_from_fp(*, filepath: str, lib_path_dict: dict) -> str:
@@ -293,20 +278,19 @@ def get_theme_info(soup, *, filepath: str):
     )
 
 
-def main(*, filepath: str, lib_path_dict: dict, versions_dict: dict[str, str]) -> None:
+def main(
+    *,
+    filepath: str,
+    lib_path_dict: dict,
+    project_name: str,
+    versions_dict: dict[str, str],
+) -> None:
     """
     Given the path to a documentation HTML file, this function will
     parse the file and add library/version selectors and a Home button
     """
 
-    # parse CLI arguments
     print(f"--- {filepath} ---")
-
-    # determine project name (e.g. 'cudf')
-    project_name = get_lib_from_fp(
-        lib_path_dict=lib_path_dict,
-        filepath=filepath,
-    )
 
     with open(filepath) as fp:
         soup = BeautifulSoup(fp, "html5lib")
@@ -364,33 +348,32 @@ def main(*, filepath: str, lib_path_dict: dict, versions_dict: dict[str, str]) -
 
 
 if __name__ == "__main__":
-    # read in config files (doing this here so it only happens once)
+    MANIFEST_FILEPATH = sys.argv[1]
+    PROJECT_TO_VERSIONS_PATH = sys.argv[2]
     LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
-    RELEASES_PATH = os.path.join(
-        os.path.dirname(__file__), "../", "../", "_data", "releases.json"
-    )
 
+    # read in config files (doing this here so it only happens once)
     with open(LIB_MAP_PATH) as fp:
         LIB_PATH_DICT = json.load(fp)
 
-    with open(RELEASES_PATH) as fp:
-        RELEASE_DATA = json.load(fp)
+    with open(PROJECT_TO_VERSIONS_PATH) as fp:
+        PROJECT_TO_VERSIONS_DICT = json.load(fp)
 
-    MANIFEST_FILEPATH = sys.argv[1]
     with open(MANIFEST_FILEPATH) as manifest_file:
         for line in manifest_file:
             filepath = line.strip()
-            version_key = "version"
-            if "ucxx" in filepath:
-                version_key = "ucxx_version"
 
-            versions_dict = {
-                "legacy": RELEASE_DATA["legacy"][version_key],
-                "nightly": RELEASE_DATA["nightly"][version_key],
-                "stable": RELEASE_DATA["stable"][version_key],
-            }
+            lib_path_dict = deepcopy(LIB_PATH_DICT)
+
+            # determine project name (e.g. 'cudf')
+            project_name = get_lib_from_fp(
+                lib_path_dict=lib_path_dict,
+                filepath=filepath,
+            )
+
             main(
                 filepath=filepath,
-                lib_path_dict=deepcopy(LIB_PATH_DICT),
-                versions_dict=deepcopy(versions_dict),
+                lib_path_dict=lib_path_dict,
+                project_name=project_name,
+                versions_dict=deepcopy(PROJECT_TO_VERSIONS_DICT[project_name]),
             )

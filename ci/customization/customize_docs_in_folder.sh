@@ -23,8 +23,9 @@ display_usage() {
 }
 
 FOLDER_TO_CUSTOMIZE=$1
+PROJECTS_TO_VERSIONS_PATH=$2
 
-if [[ $# -ne 1 ]]; then
+if [[ $# -ne 2 ]]; then
   display_usage
   exit 1
 fi
@@ -51,5 +52,8 @@ grep "${JTD_SEARCH_TERM}\|${DOXYGEN_SEARCH_TERM}\|${PYDATA_SEARCH_TERM}" -rl \
 > "${MANIFEST_FILE}"
 
 echo "Customizing $(wc -l < ${MANIFEST_FILE} | tr -d ' ') HTML files"
-python -u ${SCRIPT_SRC_FOLDER}/customize_doc.py "${MANIFEST_FILE}"
+python -u ${SCRIPT_SRC_FOLDER}/customize_doc.py \
+  "${MANIFEST_FILE}" \
+  "${PROJECTS_TO_VERSIONS_PATH}"
+
 echo "Done customizing"
