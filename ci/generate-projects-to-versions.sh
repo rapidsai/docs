@@ -58,7 +58,6 @@ VERSION_MAP=$(jq '{
 PROJECTS_TO_VERSIONS='{}'
 
 for PROJECT in $(yq -r 'keys | .[]' <<< "$PROJECT_MAP"); do
-    log-stderr "active: ${PROJECT}"
     THIS_PROJECT_MAP="{\"${PROJECT}\":{}}"
     for VERSION_NAME in $(jq -r 'keys | .[]' <<< "$VERSION_MAP"); do
         VERSION_NUMBER=$(jq -r --arg vn "$VERSION_NAME" --arg pr "$PROJECT" '
