@@ -46,24 +46,6 @@ log-stderr() {
     echo "${1}" >&2
 }
 
-# no way to pre-install tools on pre-commit.ci, so ensure they
-# get installed at runtime as needed here
-if type -f jq && type -f yq ; then
-    log-stderr "detected 'jq' and 'yq' already installed"
-else
-    DETECTED_OS="$(uname)"
-    if [[ "${DETECTED_OS}" != "Linux" ]] || ! type -f apt-get; then
-        log-stderr "'jq' and/or 'yq' not found, and not sure how to automatically them'. Install those tools."
-        exit 1
-    else
-        log-stderr "'jq' and/or 'yq' not found, installing them with 'apt'"
-        apt-get update
-        apt-get install -y --no-install-recommends \
-            jq \
-            yq
-    fi
-fi
-
 PROJECT_MAP=$(yq '.apis + .libs'  _data/docs.yml)
 INACTIVE_PROJECT_MAP=$(yq '.inactive-projects' _data/docs.yml)
 
