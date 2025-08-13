@@ -52,7 +52,7 @@ if type -f jq && type -f yq ; then
     log-stderr "detected 'jq' and 'yq' already installed"
 else
     DETECTED_OS="$(uname)"
-    if [[ "${DETECTED_OS}" != "Linux" ]] || ! type -f apt; then
+    if [[ "${DETECTED_OS}" != "Linux" ]] || ! type -f apt-get; then
         log-stderr "'jq' and/or 'yq' not found, and not sure how to automatically them'. Install those tools."
         exit 1
     else
