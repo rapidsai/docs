@@ -59,14 +59,18 @@ for docs_key in ["apis", "libs", "inactive-projects"]:
         versions_for_this_project = OrderedDict()
         for version_name, should_include in project_details["versions"].items():
             if should_include == 1:
-                version_override = project_details.get("version-overrides", dict()).get(version_name, "")
+                version_override = project_details.get("version-overrides", dict()).get(
+                    version_name, ""
+                )
                 if version_override:
                     versions_for_this_project[version_name] = version_override
                 else:
-                    versions_for_this_project[version_name] = RELEASES_JSON_DICT[version_name][version_key]
+                    versions_for_this_project[version_name] = RELEASES_JSON_DICT[
+                        version_name
+                    ][version_key]
             else:
                 print(f"Skipping: {project_name} | {version_name}", file=sys.stderr)
-        
+
         # update overall mapping
         PROJECTS_TO_VERSIONS_DICT[project_name] = versions_for_this_project
 
