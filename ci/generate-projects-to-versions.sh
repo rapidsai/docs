@@ -35,7 +35,7 @@
 #
 # Only that mapping is written to stdout, so this is safe to use inline like this:
 #
-#     PROJECTS_TO_VERSIONS=$(./ci/get-projects-to-versions.sh)
+#     PROJECTS_TO_VERSIONS=$(./ci/generate-projects-to-versions.sh)
 #
 # WARNING: no guarantees are made about the ordering of output in this mapping.
 #
@@ -130,4 +130,4 @@ for PROJECT in $(yq -r 'keys | .[]' <<< "$INACTIVE_PROJECT_MAP"); do
     )
 done
 
-echo -n "${PROJECTS_TO_VERSIONS}"
+echo "${PROJECTS_TO_VERSIONS}" > ./ci/customization/projects-to-versions.json
