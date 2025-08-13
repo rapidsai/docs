@@ -11,7 +11,7 @@ The steps are roughly as follows.
 
 ### Step 1: determine libraries and versions to build
 
-`get-projects-to-versions.sh` is responsible for holding all the logic relevant to the question "projects' API docs should be hosted? what versions?".
+`get-projects-to-versions.sh` is responsible for holding all the logic relevant to the questions "What projects' API docs should be hosted? What versions?".
 
 Run it from the root of the repo to see for yourself.
 
