@@ -10,7 +10,6 @@ CURRENT_DIR=$(dirname $(realpath $0))
 pip install -r "${CURRENT_DIR}/customization/requirements.txt"
 
 PROJECTS_TO_VERSIONS_PATH="${CURRENT_DIR}"/customization/projects-to-versions.json
-"${CURRENT_DIR}"/get-projects-to-versions.sh > "${PROJECTS_TO_VERSIONS_PATH}"
 
 "${CURRENT_DIR}"/update_symlinks.sh "${PROJECTS_TO_VERSIONS_PATH}"
 
