@@ -77,3 +77,4 @@ for docs_key in ["apis", "libs", "inactive-projects"]:
 
 with open("ci/customization/projects-to-versions.json", "w") as f:
     json.dump(PROJECTS_TO_VERSIONS_DICT, f, indent=2)
+    f.write("\n")
