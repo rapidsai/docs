@@ -71,7 +71,7 @@ download_lib_docs() {
     SRC VERSION_NAME VERSION_NUMBER
 
   echo "--- processing RAPIDS libraries ---"
-  PROJECTS_TO_VERSIONS_JSON=$(./ci/get-projects-to-versions.sh)
+  PROJECTS_TO_VERSIONS_JSON=$(cat "./ci/customization/projects-to-versions.json")
   for PROJECT in $(jq -r 'keys | .[]' <<< "${PROJECTS_TO_VERSIONS_JSON}"); do
 
     # extract the map of versions to download for this project, which will look something like:
