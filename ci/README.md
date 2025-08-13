@@ -19,7 +19,7 @@ Run it from the root of the repo to see for yourself.
 ./ci/get-projects-to-versions.sh
 ```
 
-That script is re-used by other automation to determine which projects and versions to build.
+That script is reused by other automation to determine which projects and versions to build.
 
 ### Step 2: download API docs
 
