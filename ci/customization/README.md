@@ -40,12 +40,12 @@ Building the API docs requires answering these questions:
 * what version types? (stable? legacy? nightly?)
 * what version numbers correspond to those version types?
 
-Logic for all of that is centralized in a script.
+Logic for all of that is centralized in a script which is run by `pre-commit`.
 
 Invoke it to see what will be built.
 
 ```shell
-./ci/get-projects-to-versions.sh > ./ci/customization/projects-to-versions.json
+pre-commit run --all-files generate-projects-to-versions
 ```
 
 ### Symlinks

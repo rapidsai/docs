@@ -11,12 +11,13 @@ The steps are roughly as follows.
 
 ### Step 1: determine libraries and versions to build
 
-`get-projects-to-versions.sh` is responsible for holding all the logic relevant to the questions "What projects' API docs should be hosted? What versions?".
+`generate-projects-to-versions.py` is responsible for holding all the logic relevant to the questions "What projects' API docs should be hosted? What versions?".
 
 Run it from the root of the repo to see for yourself.
 
 ```shell
-./ci/get-projects-to-versions.sh
+pre-commit run --all-files generate-projects-to-versions
+cat ./ci/customization/projects-to-versions.json
 ```
 
 That script is reused by other automation to determine which projects and versions to build.
