@@ -240,7 +240,7 @@ If you run tempo locally, be sure to adjust Grafana's datasources.yaml file to
 point to your desired tempo instance.
 
 ### Data Storage & Visualization
-- **Tempo**: OpenTelemetry-compatible trace storage. It is configured at https://github.com/nv-gha-runners/cloud-infrastructure/blob/main/modules/telemetry/tempo.tf
+- **Tempo**: OpenTelemetry-compatible trace storage. [Configuration link](https://github.com/nv-gha-runners/cloud-infrastructure/blob/main/modules/telemetry/tempo.tf)
 - **S3 Backend**: Persistent storage for Tempo data
 - **Grafana**: Dashboard and visualization platform using TraceQL queries.
   Deployed using K8s as [part of a larger helm chart with many
