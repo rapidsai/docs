@@ -32,25 +32,50 @@ Operations
 
 This is an overview of how telemetry data is collected, how it is transmitted and recorded, and how visualizations can be obtained using Grafana.
 
-## Collecting data
+## Process Flow Details
 
-We can collect telemetry data from possibly multiple sources. Right now, the
-main source of timing information is the Github Actions job metadata, which we
-obtain using the [Github Actions REST
-API](https://docs.github.com/en/rest/actions/workflow-jobs?apiVersion=2022-11-28#list-jobs-for-a-workflow-run-attempt).
-These data contain jobs, which generally correspond to calls to reusable
-workflows from our shared-workflows repository. They also itemize each step
-within any given workflow.
+1. **Setup Phase**: `telemetry-setup` job runs first, creating base environment variables
+2. **Execution Phase**: Reusable workflows load variables, add metadata, and execute build/test operations
+3. **Collection Phase**: `telemetry-summarize` job parses GitHub Actions metadata and associates it with workflow attributes
+4. **Transmission Phase**: Data sent via OpenTelemetry SDK through Vector to Tempo
+5. **Storage Phase**: Tempo stores traces in S3 backend
+6. **Analysis Phase**: Grafana queries Tempo data using TraceQL for visualization and analysis
 
-The general implementation for telemetry is as follows:
+```mermaid
+graph TD
+    A[GitHub Actions Workflow Starts] --> B[telemetry-setup Job]
+    B --> C[Load Base Environment Variables global to all jobs]
+    C --> D[Stash Variables for Later Use]
 
-1. Creating initial variables that get loaded
-2. add metadata in shared-workflows using OTEL_ATTRIBUTES, run workflow, stash variables to collect in final job
-3. On a self-hosted node, parse Github Actions job metadata, and associate jobs with attributes passed in from step 2). Send data to Tempo via a FluentBit agent that is also used to aggregate logs.
+    D --> E[Reusable Workflows Execute]
+    E --> F[Load Stashed Variables]
+    G --> H[Run Build/Test Commands]
+    F --> G[Add Matrix Attributes, Files<br/>CUDA_VER, PY_VER, ARCH, sccache logs]
+    H --> I[Stash Job Metadata]
 
-Steps 1 and 3 happen as jobs in the "top-level repository" - the workflow that initiates all subsequent workflows.
+    I --> J[All Jobs Complete]
+    J --> K[telemetry-summarize Job<br/>Self-hosted Runner]
+    K --> L[Parse GitHub Actions Job Metadata]
+    L --> M[Associate Jobs with Attributes]
+    M --> N[Send Data via OpenTelemetry SDK]
 
-### Code changes for projects to add telemetry
+    N --> O[Vector Forwarder<br/>Self-hosted Only]
+    O --> P[Tempo Server<br/>mTLS Authentication]
+    P --> Q[S3 Storage Backend]
+
+    Q --> R[Grafana Dashboard<br/>TraceQL Queries]
+    R --> S[Visualizations & Analytics]
+
+    style B fill:#e1f5fe
+    style K fill:#e1f5fe
+    style O fill:#fff3e0
+    style P fill:#fff3e0
+    style Q fill:#f3e5f5
+    style R fill:#e8f5e8
+    style S fill:#e8f5e8
+```
+
+## Code changes for projects to add telemetry
 
 These are the general steps necessary to add telemetry to a repository that does
 not currently have it. This does not describe changes to shared-workflows as
@@ -89,7 +114,7 @@ jobs:
 * changed-files
 * devcontainer
 
-3. Add an entry to skip the final job, `ignored_pr_jobs`:
+3. Add an entry to skip the final job from the pr check, `ignored_pr_jobs`:
 
 {% raw %}
 ```
@@ -123,7 +148,12 @@ Syntax for the `ignored_pr_jobs` is [space-separated within the quotes](https://
 
 > NOTE: pay special attention to the `runs-on` entry. This is what dictates that the job runs on a self-hosted runner, which is necessary for network access control.
 
-### Implementation details
+## Key Components
+
+### Data Collection
+- **telemetry-setup**: Initial job that creates base environment variables
+- **Reusable Workflows**: Add operation-specific attributes (CUDA version, Python version, etc.)
+- **Job Metadata**: GitHub Actions provides timing and status information
 
 The "meat" implementation of telemetry lives primarily in the `shared-actions`
 repository. As the middle layer, the reusable workflows in the shared-workflows
@@ -146,19 +176,22 @@ clones the shared-actions repo, which enables referring to local files in the
 clone. Folders at the top level in the shared-actions repo that start with
 telemetry-dispatch are all dispatch actions.
 
-Most of these scripts start with the `load-then-clone` action, which downloads
-the initial file that contains the basic environment variables that should be
-propagated. The main exception to this is
+Most of these scripts start with the [`load-then-clone`
+action](https://github.com/rapidsai/shared-actions/blob/main/telemetry-impls/load-then-clone/action.yml),
+which downloads the initial file that contains the basic environment variables
+that should be propagated. The main exception to this is
 `telemetry-dispatch-stash-base-env-vars` which is used to populate the basic
 environment variable file in the first place. Passing the environment variable
-file is used instead of parameters to save on lots of bloat.
+file is used instead of parameters to save on lots of cumbersome argument
+passing, and because Github Actions has a low cap on the number of parameters
+that can be passed to shared actions and workflows.
 
 The ability to refer to local files is employed in the
 [`telemetry-impls/summarize`](https://github.com/rapidsai/shared-actions/tree/main/telemetry-impls/summarize)
 action, where a python file is used to parse and send OpenTelemetry data with
 the OpenTelemetry Python SDK. If some value here seems like it's magically
 coming from nowhere, it is probably being passed in an environment variable
-file.
+file, loaded in the `load-then-clone` action.
 
 #### Shared-workflows
 
@@ -192,9 +225,10 @@ from needing to have that as a separate step in our shared-workflows workflows,
 but also means that if our action changes any telemetry-related environment
 variable, it won't be reflected in stored metadata.
 
-TODO: Seems like we should move the upload AFTER the action command.
-
-## Sending data
+### Data Transmission
+- **Self-hosted Runners Only**: Required for network access to telemetry infrastructure
+- **Vector Forwarder**: Handles authentication and forwarding to Tempo. [Configured with k8s](https://github.com/nv-gha-runners/arc-nvks-argocd/tree/main/vector)
+- **mTLS Authentication**: Secure communication with Tempo server
 
 Telemetry data is sent from [a python script that uses the python OpenTelemetry
 SDK](https://github.com/rapidsai/shared-actions/blob/main/telemetry-impls/summarize/send_trace.py).
@@ -204,88 +238,13 @@ variables](https://github.com/rapidsai/shared-actions/blob/main/telemetry-impls/
 which runs at the start of each root workflow, e.g.
 [rmm](https://github.com/rapidsai/rmm/blob/45a44463472003e86c7ade2248d8d799fb97758e/.github/workflows/pr.yaml#L43).
 
-### Debugging
-
-It is helpful to be able to send telemetry to some testing server without running workflows. The general steps are:
-
-1. Run your own instance of tempo locally. The [official example docker-compose
-configuration](https://github.com/grafana/tempo/blob/main/example/docker-compose/local/docker-compose.yaml)
-works fine.
-
-2. Download a JSON file of your github actions jobs. These are removed by
-default when a job finishes, but you can preserve it by re-running a job with
-debug output. The filename is `all_jobs.json`. Alternatively, you can fetch it
-with the [Github Actions
-API](https://docs.github.com/en/rest/actions/workflow-jobs?apiVersion=2022-11-28#list-jobs-for-a-workflow-run-attempt).
-
-An example gh cli call that downloads this JSON output:
-
-{% raw %}
-```
-gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
-    --paginate /repos/rapidsai/cudf/actions/runs/<RUN_ID>/attempts/<RUN_ATTEMPT>/jobs | jq -c '.jobs' > all_jobs.json
-```
-{% endraw %}
-
-Substitute RUN_ID with the value seen in the GitHub web UI for the job that
-you're interested in. The RUN_ATTEMPT is usually 1, unless you have retried the job.
-
-3. Clone the shared-actions repo locally
-
-4. copy the `all_jobs.json` file into `shared-actions/telemetry-impls/summarize`
-
-5. cd into `shared-actions/telemetry-impls/summarize`
-
-6. Set key environment variables
-
-  * Set them on the terminal
-
-    {% raw %}
-    ```
-    export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4318"
-    export OTEL_EXPORTER_OTLP_PROTOCOL="http/protobuf"
-    export OTEL_TRACES_EXPORTER="otlp_proto_http"
-    ```
-    {% endraw %}
-
-  * Use VS Code run configurations
-
-    {% raw %}
-    ```
-        {
-            "name": "send-tempo",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "send_trace.py",
-            "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}/telemetry-impls/summarize",
-            "justMyCode": false,
-            "env": {
-                "OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:4318",
-                "OTEL_PYTHON_LOG_LEVEL": "DEBUG",
-                "OTEL_EXPORTER_OTLP_PROTOCOL": "http/protobuf",
-                "OTEL_TRACES_EXPORTER": "otlp_proto_http"
-            }
-        },
-    ```
-    {% endraw %}
-
-7. (optional) Run bump_time.py script to adjust timestamps in your
-`all_jobs.json` file. The Grafana UI shows data that is a certain amount of time
-prior to the present. Not updating timestamps can lead to your data points being
-too far back in time to show up.
-
-8. Run send_trace.py. The requirements.txt file is alongside send_trace.py.
-
-## Receiving data
-
 Authentication is the biggest complication with receiving data. We use mTLS to
 allow exposing the Tempo server to the internet without restricting IPs. This
 means that any server interacting with Tempo needs a set of certificates. It is
-not viable to manage that for our workers. Instead, we have a FluentBit
+not viable to manage that for our workers. Instead, we have a Vector
 forwarder that is only accessible to self-hosted runners. Our runners
-communicate with the FluentBit forwarder without needing authentication, and the
-FluentBit forwarder is configured with certificates so that it can send the data
+communicate with the Vector forwarder without needing authentication, and the
+Vector forwarder is configured with certificates so that it can send the data
 on to the Tempo instance.
 
 Important reiteration: only our self-hosted runners can send telemetry data.
@@ -294,14 +253,36 @@ Github-hosted runners will error out.
 If you run tempo locally, be sure to adjust Grafana's datasources.yaml file to
 point to your desired tempo instance.
 
-## Storing data
+### Data Storage & Visualization
+- **Tempo**: OpenTelemetry-compatible trace storage
+- **S3 Backend**: Persistent storage for Tempo data
+- **Grafana**: Dashboard and visualization platform using TraceQL queries.
+  Deployed using K8s as [part of a larger helm chart with many
+  pieces](https://github.com/nv-gha-runners/arc-nvks-argocd/tree/main/prometheus).
 
 This is an implementation detail of Tempo. The RAPIDS ops team currently has
 Tempo backed by S3 to avoid ongoing upkeep requirements of a database server.
 
-## Viewing captured data: Grafana dashboards
+#### Grafana dashboards
 
-### Dashboard variables
+Dashboards are made available by committing them to: https://github.com/nv-gha-runners/arc-nvks-argocd/tree/main/prometheus/resources
+
+These files consist of a short YAML header:
+
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: <some-unique-dashboard-name>
+  labels:
+     grafana_dashboard: "1"
+data:
+  runner-metrics.json: |-
+```
+
+followed by the JSON that you can [export from Grafana](https://grafana.com/docs/grafana/latest/dashboards/share-dashboards-panels/#export-a-dashboard-as-json).
+
+##### Dashboard variables
 
 Grafana has something called ["dashboard
 variables,"](https://grafana.com/docs/grafana/latest/dashboards/variables/)
@@ -356,7 +337,7 @@ metadata columns in the trace table format, because they apply to the spans.
 As always, remember to click the upper-right save button after making any
 changes.
 
-### Filtering and grouping data
+##### Filtering and grouping data
 
 We store our span data using Grafana Tempo. Tempo allows TraceQL queries for filtering data. In general, there are two parts of [a TraceQL query](https://grafana.com/docs/tempo/latest/traceql/#traceql):
 
@@ -380,7 +361,7 @@ From [wheels-test.yaml](https://github.com/rapidsai/shared-workflows/blob/branch
 "rapids.PACKAGER=wheel,rapids.CUDA_VER=${{ matrix.CUDA_VER }},rapids.PY_VER=${{ matrix.PY_VER }},rapids.ARCH=${{ matrix.ARCH }},rapids.LINUX_VER=${{ matrix.LINUX_VER }},rapids.GPU=${{ matrix.GPU }},rapids.DRIVER=${{ matrix.DRIVER }},rapids.DEPENDENCIES=${{ matrix.DEPENDENCIES }}"
 ```
 
-#### Filter out docker stuff outside of builds
+##### Filter out docker stuff outside of builds
 
 Part of telemetry setup is providing environment variables that other tools that use OpenTelemetry can use to send spans. These get sent to the aggregator, which may or may not be accessible to the build machine. If the aggregator is accessible, it will be used to send spans. These spans might be useful to you, or they might be noise. To filter them, you can filter by several key attributes.
 
@@ -417,7 +398,7 @@ We'll call any other label "build"
 Any of these can be combined, either [within one query](https://grafana.com/docs/tempo/latest/traceql/#field-expressions), or by [combining span sets (joining multiple `{}` sections)](https://grafana.com/docs/tempo/latest/traceql/#combine-spansets).
 
 
-#### Adding metadata to spans
+##### Adding metadata to spans
 
 The default spans returned from Tempo only include barebones native attributes. To access the custom attributes that we use to capture GPU, CUDA version, etc., you can use the `select` function.
 
@@ -478,3 +459,77 @@ fields," but we usually want to point it to a specific field.
 * After a group-by aggregation, Grafana can lose track of the duration in terms of nanoseconds. To compensate for this, add an "Add field from calculation" transformation. You can divide nanoseconds by 60E9 to obtain minutes. Keep in mind that this is adding a new column, not altering the old one. You'll need to select the new column in the "Value options -> Fields" combobox.
 
 ![](/assets/images/telemetry/calculate_field.png)
+
+
+## Debugging
+
+It is helpful to be able to send telemetry to some testing server without running workflows. The general steps are:
+
+1. Run your own instance of tempo locally. The [official example docker-compose
+configuration](https://github.com/grafana/tempo/blob/main/example/docker-compose/local/docker-compose.yaml)
+works fine.
+
+2. Download a JSON file of your github actions jobs. These are removed by
+default when a job finishes, but you can preserve it by re-running a job with
+debug output. The filename is `all_jobs.json`. Alternatively, you can fetch it
+with the [Github Actions
+API](https://docs.github.com/en/rest/actions/workflow-jobs?apiVersion=2022-11-28#list-jobs-for-a-workflow-run-attempt).
+
+An example gh cli call that downloads this JSON output:
+
+{% raw %}
+```
+gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
+    --paginate /repos/rapidsai/cudf/actions/runs/<RUN_ID>/attempts/<RUN_ATTEMPT>/jobs | jq -c '.jobs' > all_jobs.json
+```
+{% endraw %}
+
+Substitute RUN_ID with the value seen in the GitHub web UI for the job that
+you're interested in. The RUN_ATTEMPT is usually 1, unless you have retried the job.
+
+3. Clone the shared-actions repo locally
+
+4. copy the `all_jobs.json` file into `shared-actions/telemetry-impls/summarize`
+
+5. cd into `shared-actions/telemetry-impls/summarize`
+
+6. Set key environment variables. At least two options:
+
+  * Set them on the terminal
+
+    {% raw %}
+    ```
+    export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4318"
+    export OTEL_EXPORTER_OTLP_PROTOCOL="http/protobuf"
+    export OTEL_TRACES_EXPORTER="otlp_proto_http"
+    ```
+    {% endraw %}
+
+  * (OR) Use VS Code run configurations
+
+    {% raw %}
+    ```
+        {
+            "name": "send-tempo",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "send_trace.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/telemetry-impls/summarize",
+            "justMyCode": false,
+            "env": {
+                "OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:4318",
+                "OTEL_PYTHON_LOG_LEVEL": "DEBUG",
+                "OTEL_EXPORTER_OTLP_PROTOCOL": "http/protobuf",
+                "OTEL_TRACES_EXPORTER": "otlp_proto_http"
+            }
+        },
+    ```
+    {% endraw %}
+
+7. (optional) Run bump_time.py script to adjust timestamps in your
+`all_jobs.json` file. The Grafana UI shows data that is a certain amount of time
+prior to the present. Not updating timestamps can lead to your data points being
+too far back in time to show up.
+
+8. Run send_trace.py. The requirements.txt file is alongside send_trace.py.
