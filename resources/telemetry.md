@@ -35,11 +35,10 @@ This is an overview of how telemetry data is collected, how it is transmitted an
 ## Process Flow Details
 
 1. **Setup Phase**: `telemetry-setup` job runs first, creating base environment variables
-2. **Execution Phase**: Reusable workflows load variables, add metadata, and execute build/test operations
+2. **Execution Phase**: Reusable workflows load variables, add metadata, and execute build/test operations. They stash results to be associated with spans later.
 3. **Collection Phase**: `telemetry-summarize` job parses GitHub Actions metadata and associates it with workflow attributes
-4. **Transmission Phase**: Data sent via OpenTelemetry SDK through Vector to Tempo
-5. **Storage Phase**: Tempo stores traces in S3 backend
-6. **Analysis Phase**: Grafana queries Tempo data using TraceQL for visualization and analysis
+4. **Transmission Phase**: Data sent via OpenTelemetry SDK through Vector to Tempo. Also happens in telemetry-summarize job in pipeline.
+5. **Analysis Phase**: Grafana queries Tempo data using TraceQL for visualization and analysis
 
 ```mermaid
 graph TD
