@@ -1,4 +1,12 @@
-# Copyright (c) 2024, NVIDIA CORPORATION.
+# Copyright (c) 2024-2025, NVIDIA CORPORATION.
+
+ci:
+  autofix_commit_msg: "[pre-commit.ci] auto code formatting"
+  autofix_prs: false
+  autoupdate_branch: ""
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
+  autoupdate_schedule: quarterly
+  submodules: false
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -16,11 +24,28 @@ repos:
             assets/.*|
             licenses/.*
           )
+      - id: mixed-line-ending
       - id: debug-statements
       - id: check-builtin-literals
       - id: check-executables-have-shebangs
+      - id: check-json
+        exclude: |
+          (?x)^(
+            assets/.*|
+            .devcontainer/devcontainer.json
+          )
+      - id: check-yaml
+  - repo: local
+    hooks:
+      - id: generate-projects-to-versions
+        name: generate-projects-to-versions
+        entry: ./ci/generate-projects-to-versions.py
+        language: python
+        pass_filenames: false
+        additional_dependencies:
+          - pyyaml
   - repo: https://github.com/sirosen/texthooks
-    rev: 0.6.8
+    rev: 0.7.1
     hooks:
       - id: fix-smartquotes
         exclude: |
@@ -38,13 +63,13 @@ repos:
             resources/conduct\.md
           )$
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.12
+    rev: v0.12.7
     hooks:
       - id: ruff
         args: ["--fix"]
       - id: ruff-format
   - repo: https://github.com/rapidsai/pre-commit-hooks
-    rev: v0.6.0
+    rev: v0.7.0
     hooks:
       - id: verify-copyright
 

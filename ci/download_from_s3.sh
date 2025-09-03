@@ -1,5 +1,9 @@
 #!/bin/bash
-# Copies the RAPIDS libraries' HTML files from S3 into the "_site" directory of
+# SPDX-FileCopyrightText: Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES.
+# All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Copies the RAPIDS projects' HTML files from S3 into the "_site" directory of
 # the Jekyll build.
 set -euo pipefail
 
@@ -61,43 +65,44 @@ aws_cp() {
 }
 
 # Downloads the RAPIDS libraries' documentation files from S3 and places them
-# into the "_site/api" folder. The versions that should be copied are read from
-# "_data/releases.json" and the libraries that should be copied are read from
-# "_data/docs.yml".
+# into the "_site/api" folder.
 download_lib_docs() {
-  local DST PROJECT PROJECT_MAP \
-        SRC VERSION_MAP VERSION_NAME \
-        VERSION_NUMBER
+  local DST PROJECT PROJECTS_TO_VERSIONS_JSON \
+    SRC VERSION_NAME VERSION_NUMBER
 
-  VERSION_MAP=$(jq '{
-    "legacy": { "version": .legacy.version, "ucxx_version": .legacy.ucxx_version },
-    "stable": { "version": .stable.version, "ucxx_version": .stable.ucxx_version },
-    "nightly": { "version": .nightly.version, "ucxx_version": .nightly.ucxx_version }
-  }' _data/releases.json)
+  echo "--- processing RAPIDS libraries ---"
+  PROJECTS_TO_VERSIONS_JSON=$(cat "./ci/customization/projects-to-versions.json")
+  for PROJECT in $(jq -r 'keys | .[]' <<< "${PROJECTS_TO_VERSIONS_JSON}"); do
 
-  PROJECT_MAP=$(yq '.apis + .libs' _data/docs.yml)
+    # extract the map of versions to download for this project, which will look something like:
+    #
+    # {"stable": 25.10, "nightly": 25.12, "legacy": 25.08}
+    #
+    # With keys varying based on which types of docs we want to build for this particular project.
+    VERSIONS_FOR_THIS_PROJECT=$(
+      jq \
+        -r \
+        --arg pr "${PROJECT}" \
+        '.[$pr]' \
+      <<< "${PROJECTS_TO_VERSIONS_JSON}"
+    )
 
-  for VERSION_NAME in $(jq -r 'keys | .[]' <<< "$VERSION_MAP"); do
-    for PROJECT in $(yq -r 'keys | .[]' <<< "$PROJECT_MAP"); do
-      VERSION_NUMBER=$(jq -r --arg vn "$VERSION_NAME" --arg pr "$PROJECT" '
-        if ($pr | contains("ucxx")) then
-          .[$vn].ucxx_version
-        else
-          .[$vn].version
-        end' <<< "$VERSION_MAP")
-
-      PROJECT_MAP_JSON=$(yq -r -o json '.' <<< "$PROJECT_MAP")
-      if [ "$(jq -r --arg pr "$PROJECT" --arg vn "$VERSION_NAME" '.[$pr].versions[$vn]' <<< "$PROJECT_MAP_JSON")" == "0" ]; then
-        echo "Skipping: $PROJECT | $VERSION_NAME | $VERSION_NUMBER"
-        continue
-      fi
-
+    # loop over 'stable', 'nightly', etc.
+    for VERSION_NAME in $(jq -r 'keys | .[]' <<< "${VERSIONS_FOR_THIS_PROJECT}"); do
+      VERSION_NUMBER=$(
+        jq \
+          -r \
+          --arg version_name "${VERSION_NAME}" \
+          '.[$version_name]' \
+        <<< "${VERSIONS_FOR_THIS_PROJECT}"
+      )
+      # copy the relevant files from S3 to the local directory
       SRC="s3://${DOCS_BUCKET}/${PROJECT}/html/${VERSION_NUMBER}/"
       DST="$(yq -n 'env(GENERATED_DIRS)|.libs')/${PROJECT}/${VERSION_NUMBER}/"
-
       aws_cp "${SRC}" "${DST}"
-    done
-  done
+    done  # for VERSION_NAME
+
+  done  # for PROJECT
 }
 
 # Downloads the deployment docs from S3 and places them in the
@@ -105,6 +110,7 @@ download_lib_docs() {
 download_deployment_docs() {
   local DST SRC VERSION
 
+  echo "--- processing deployment docs ---"
   for VERSION in nightly stable; do
     SRC="s3://${DOCS_BUCKET}/deployment/html/${VERSION}/"
     DST="$(yq -n 'env(GENERATED_DIRS)|.deployment')/${VERSION}/"
