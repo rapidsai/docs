@@ -137,18 +137,22 @@ Syntax for the `ignored_pr_jobs` is [space-separated within the quotes](https://
 - **Reusable Workflows**: Add operation-specific attributes (CUDA version, Python version, etc.)
 - **Job Metadata**: GitHub Actions provides timing and status information after all other jobs have completed
 
-The "meat" implementation of telemetry lives primarily in the `shared-actions`
+The "meat" implementation of telemetry lives primarily in the [`shared-actions`](https://github.com/rapidsai/shared-actions)
 repository. As the middle layer, the reusable workflows in the shared-workflows
-repo download the stashed environment variables from the top-level
+repo download the stashed environment variables in files from the top-level
 `telemetry-setup`, load them in the local worker's environment, run the command,
-and stash possible variables of interest, which capture metadata for that
-particular job. You should not generally need to change shared-actions or
-shared-workflows when maintaining other RAPIDS repositories. This section is
-only necessary for someone looking to change or improve something like:
+and add possible variables of interest to the stash. Extra variables of interest
+capture metadata for that particular job, such as CUDA version, python version,
+CPU arch, or run-specific output such as sccache statistics. You should not
+generally need to change shared-actions or shared-workflows when maintaining
+other RAPIDS repositories. The content below is only necessary for someone looking to
+change or improve something like:
 
 * Adding new metadata to associate with a job
 * Adding telemetry from new sources, such as sccache statistics or build logs
-* fixing one or more of what is surely multitudinous bugs
+* Fixing one or more of what is surely multitudinous bugs
+
+but ideally project maintainers can stop reading now.
 
 #### Shared-actions
 
@@ -236,7 +240,7 @@ If you run tempo locally, be sure to adjust Grafana's datasources.yaml file to
 point to your desired tempo instance.
 
 ### Data Storage & Visualization
-- **Tempo**: OpenTelemetry-compatible trace storage
+- **Tempo**: OpenTelemetry-compatible trace storage. It is configured at https://github.com/nv-gha-runners/cloud-infrastructure/blob/main/modules/telemetry/tempo.tf
 - **S3 Backend**: Persistent storage for Tempo data
 - **Grafana**: Dashboard and visualization platform using TraceQL queries.
   Deployed using K8s as [part of a larger helm chart with many
