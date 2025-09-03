@@ -32,47 +32,15 @@ Operations
 
 This is an overview of how telemetry data is collected, how it is transmitted and recorded, and how visualizations can be obtained using Grafana.
 
-## Process Flow Details
-
 1. **Setup Phase**: `telemetry-setup` job runs first, creating base environment variables
 2. **Execution Phase**: Reusable workflows load variables, add metadata, and execute build/test operations. They stash results to be associated with spans later.
 3. **Collection Phase**: `telemetry-summarize` job parses GitHub Actions metadata and associates it with workflow attributes
 4. **Transmission Phase**: Data sent via OpenTelemetry SDK through Vector to Tempo. Also happens in telemetry-summarize job in pipeline.
 5. **Analysis Phase**: Grafana queries Tempo data using TraceQL for visualization and analysis
 
-```mermaid
-graph TD
-    A[GitHub Actions Workflow Starts] --> B[telemetry-setup Job]
-    B --> C[Load Base Environment Variables global to all jobs]
-    C --> D[Stash Variables for Later Use]
+![](/assets/images/telemetry/mermaid-workflow.png)
 
-    D --> E[Reusable Workflows Execute]
-    E --> F[Load Stashed Variables]
-    G --> H[Run Build/Test Commands]
-    F --> G[Add Matrix Attributes, Files<br/>CUDA_VER, PY_VER, ARCH, sccache logs]
-    H --> I[Stash Job Metadata]
-
-    I --> J[All Jobs Complete]
-    J --> K[telemetry-summarize Job<br/>Self-hosted Runner]
-    K --> L[Parse GitHub Actions Job Metadata]
-    L --> M[Associate Jobs with Attributes]
-    M --> N[Send Data via OpenTelemetry SDK]
-
-    N --> O[Vector Forwarder<br/>Self-hosted Only]
-    O --> P[Tempo Server<br/>mTLS Authentication]
-    P --> Q[S3 Storage Backend]
-
-    Q --> R[Grafana Dashboard<br/>TraceQL Queries]
-    R --> S[Visualizations & Analytics]
-
-    style B fill:#e1f5fe
-    style K fill:#e1f5fe
-    style O fill:#fff3e0
-    style P fill:#fff3e0
-    style Q fill:#f3e5f5
-    style R fill:#e8f5e8
-    style S fill:#e8f5e8
-```
+<!-- NOTE: For source code of mermaid diagram, see assets/images/telemetry/mermaid-workflow.md  -->
 
 ## Code changes for projects to add telemetry
 
@@ -81,7 +49,7 @@ not currently have it. This does not describe changes to shared-workflows as
 implementation details. In the top-level workflow, such as
 `cudf/.github/workflows/pr.yaml`:
 
-1. Add a job for telemetry-setup, and add that job name to the pr-builder `needs` collection.
+* Add a job for telemetry-setup, and add that job name to the pr-builder `needs` collection.
 
 {% raw %}
 ```
@@ -107,13 +75,13 @@ jobs:
 ```
 {% endraw %}
 
-2. Add `telemetry-setup` as a `needs` entry for all jobs at the top of the tree. The purpose is to communicate telemetry variables that any job may use - even the checks.yaml job. `needs` that generally catch the required jobs are:
+* Add `telemetry-setup` as a `needs` entry for all jobs at the top of the tree. The purpose is to communicate telemetry variables that any job may use - even the checks.yaml job. `needs` that generally catch the required jobs are:
 
-* checks
-* changed-files
-* devcontainer
+  * checks
+  * changed-files
+  * devcontainer
 
-3. Add an entry to skip the final job from the pr check, `ignored_pr_jobs`:
+* Add an entry to skip the final job from the pr check, `ignored_pr_jobs`:
 
 {% raw %}
 ```
@@ -129,7 +97,7 @@ jobs:
 
 Syntax for the `ignored_pr_jobs` is [space-separated within the quotes](https://github.com/rapidsai/shared-workflows/blob/branch-25.02/.github/workflows/checks.yaml#L30).
 
-4. Run the parsing and submission script job as the final job - after `pr-builder`:
+* Run the parsing and submission script job as the final job - after `pr-builder`:
 
 {% raw %}
 ```
@@ -147,12 +115,27 @@ Syntax for the `ignored_pr_jobs` is [space-separated within the quotes](https://
 
 > NOTE: pay special attention to the `runs-on` entry. This is what dictates that the job runs on a self-hosted runner, which is necessary for network access control.
 
+* Optionally, add steps to your build scripts to copy additional contents to be
+  bundled with your run results. For example, [cudf uses a special rapids
+  command that shows the sccache
+  statistics](https://github.com/rapidsai/cudf/blob/branch-25.10/ci/build_cpp.sh#L36)
+  and [saves them to a text file in the appropriate location](https://github.com/rapidsai/gha-tools/blob/main/tools/rapids-telemetry-record).
+
+* Processing of additional files is automatic, so long as filenames match expected patterns. The currently handled filenames are:
+  * sccache-stats.txt
+
+* To add additional filenames/logic to handle, add code to [the Python parsing script](https://github.com/rapidsai/shared-actions/blob/main/telemetry-impls/summarize/send_trace.py#L208)
+
+---
+**Below here is docs on how to maintain the backend parts. Project maintainers should not need anything below here.**
+---
+
 ## Key Components
 
 ### Data Collection
 - **telemetry-setup**: Initial job that creates base environment variables
 - **Reusable Workflows**: Add operation-specific attributes (CUDA version, Python version, etc.)
-- **Job Metadata**: GitHub Actions provides timing and status information
+- **Job Metadata**: GitHub Actions provides timing and status information after all other jobs have completed
 
 The "meat" implementation of telemetry lives primarily in the `shared-actions`
 repository. As the middle layer, the reusable workflows in the shared-workflows
