@@ -67,6 +67,7 @@ jobs:
     continue-on-error: true
     runs-on: ubuntu-latest
     env:
+      # This is useful for distinguishing different pipelines (for example, `pr` vs `build`) but otherwise not necessary
       OTEL_SERVICE_NAME: 'pr-cudf'
     steps:
       - name: Telemetry setup
@@ -75,7 +76,7 @@ jobs:
 ```
 {% endraw %}
 
-* Add `telemetry-setup` as a `needs` entry for all jobs at the top of the tree. The purpose is to communicate telemetry variables that any job may use - even the checks.yaml job. `needs` that generally catch the required jobs are:
+* Add `telemetry-setup` as a `needs:` entry for all jobs at the top of the tree. The purpose is to communicate telemetry variables that any job may use - even the `checks.yaml` job. `needs:` that generally catch the required jobs are:
 
   * checks
   * changed-files
@@ -88,7 +89,7 @@ jobs:
   checks:
     secrets: inherit
     needs: telemetry-setup
-    uses: rapidsai/shared-workflows/.github/workflows/checks.yaml@branch-25.02
+    uses: rapidsai/shared-workflows/.github/workflows/checks.yaml@branch-25.10
     with:
       enable_check_generated_files: false
       ignored_pr_jobs: "telemetry-summarize"
@@ -142,7 +143,7 @@ repository. As the middle layer, the reusable workflows in the shared-workflows
 repo download the stashed environment variables in files from the top-level
 `telemetry-setup`, load them in the local worker's environment, run the command,
 and add possible variables of interest to the stash. Extra variables of interest
-capture metadata for that particular job, such as CUDA version, python version,
+capture metadata for that particular job, such as CUDA version, Python version,
 CPU arch, or run-specific output such as sccache statistics. You should not
 generally need to change shared-actions or shared-workflows when maintaining
 other RAPIDS repositories. The content below is only necessary for someone looking to
@@ -169,12 +170,12 @@ that should be propagated. The main exception to this is
 `telemetry-dispatch-stash-base-env-vars` which is used to populate the basic
 environment variable file in the first place. Passing the environment variable
 file is used instead of parameters to save on lots of cumbersome argument
-passing, and because Github Actions has a low cap on the number of parameters
+passing, and because GitHub Actions has a low cap on the number of parameters
 that can be passed to shared actions and workflows.
 
 The ability to refer to local files is employed in the
 [`telemetry-impls/summarize`](https://github.com/rapidsai/shared-actions/tree/main/telemetry-impls/summarize)
-action, where a python file is used to parse and send OpenTelemetry data with
+action, where a Python file is used to parse and send OpenTelemetry data with
 the OpenTelemetry Python SDK. If some value here seems like it's magically
 coming from nowhere, it is probably being passed in an environment variable
 file, loaded in the `load-then-clone` action.
@@ -332,7 +333,7 @@ We store our span data using Grafana Tempo. Tempo allows TraceQL queries for fil
 
 The query is limited to a certain number of traces and spans per trace, as well as the time range of the query. The maximum time range is 7 days.
 
-The resource-level attributes that are captured can be found in shared-workflows, such as https://github.com/rapidsai/shared-workflows/blob/branch-25.04/.github/workflows/conda-cpp-build.yaml#L117C32-L117C199.
+The resource-level attributes that are captured can be found in shared-workflows, such as https://github.com/rapidsai/shared-workflows/blob/d94b26cdfafe306cde800e8cc11ed9444a21c634/.github/workflows/conda-cpp-build.yaml#L158.
 
 Additional span attributes get added by [the python script that uses the OpenTelemetry SDK](https://github.com/rapidsai/shared-actions/blob/main/telemetry-impls/summarize/send_trace.py#L317).
 
