@@ -385,11 +385,11 @@
             python_vers_stable: ["3.10", "3.11", "3.12", "3.13"],
             python_vers_nightly: ["3.10", "3.11", "3.12", "3.13"],
             conda_cuda_vers_stable: ["12"],
-            conda_cuda_vers_nightly: ["12"],
+            conda_cuda_vers_nightly: ["12", "13"],
             pip_cuda_vers_stable: ["12"],
-            pip_cuda_vers_nightly: ["12"],
+            pip_cuda_vers_nightly: ["12", "13"],
             docker_cuda_vers_stable: ["12.0", "12.9"],
-            docker_cuda_vers_nightly: ["12.0", "12.9"],
+            docker_cuda_vers_nightly: ["12.0", "12.9", "13.0"],
             methods: ["Conda", "pip", "Docker"],
             releases: ["Stable", "Nightly"],
             img_loc: ["NGC", "Docker Hub"],
@@ -447,10 +447,19 @@
                         "12": ["12.0", "12.9"]
                     },
                     "Nightly": {
-                        "12": ["12.0", "12.9"]
+                        "12": ["12.0", "12.9"],
+                        "13": ["13.0"]
                     }
                 };
                 var bounds = cuda_version_info[this.active_release][version];
+                // if there is only one bound, we pin the version exactly
+                if (bounds.length === 1) {
+                    return {
+                        "label": bounds[0],
+                        "pinning": "=" + bounds[0]
+                    };
+                }
+                // if there are two bounds, we pin the version between the two bounds, inclusive
                 var lower_bound = bounds[0];
                 var upper_bound = bounds[1];
                 return {
@@ -655,6 +664,9 @@
                 if (this.active_additional_packages.length) {
                     notes = [...notes, "Third-party packages are not tested."];
 
+                    if (this.active_additional_packages.includes("PyTorch")) {
+                        notes = [...notes, "PyTorch requires CUDA 12."];
+                    }
                     if (this.active_additional_packages.includes("TensorFlow")) {
                         notes = [...notes, "TensorFlow requires CUDA 12."];
                     }
@@ -728,6 +740,8 @@
             },
             disableUnsupportedCuda(cuda_version) {
                 var isDisabled = false;
+                // PyTorch and TensorFlow do not support CUDA 13 yet
+                if (this.active_additional_packages.includes("PyTorch") && (!cuda_version.startsWith("12"))) isDisabled = true;
                 if (this.active_additional_packages.includes("TensorFlow") && (!cuda_version.startsWith("12"))) isDisabled = true;
                 return isDisabled;
             },
@@ -888,6 +902,7 @@
                     return;
                 }
                 this.active_additional_packages = [...this.active_additional_packages, package];
+                if (this.active_additional_packages.includes("PyTorch") && this.active_conda_cuda_ver !== "12") this.active_conda_cuda_ver = "12";
                 if (this.active_additional_packages.includes("TensorFlow") && this.active_conda_cuda_ver !== "12") this.active_conda_cuda_ver = "12";
             },
             copyToClipboard() {
