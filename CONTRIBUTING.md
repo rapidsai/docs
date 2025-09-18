@@ -118,6 +118,12 @@ cp -avR "${BACKUP_DIR}/api" _site
 
 In a browser, navigate to the URL shown in the `jekyll serve` output (probably something like `http://127.0.0.1:4000/`) to see the rendered docs.
 
+If the hot reloading in `jekyll serve` again deletes all the files in `api/`, just copy them in again.
+
+```shell
+cp -avR "${BACKUP_DIR}/api" _site
+```
+
 ## PR submissions
 
 Once you have code changes, submit a PR to the docs site. Netlify will generate
