@@ -55,9 +55,9 @@ A real example of this would be removing an accidentally published package for r
 
 ### Copy files from one channel to another
 
- The recommended install command right now is `conda create -n rapids-25.10 -c rapidsai-nightly -c conda-forge -c nvidia rapids=25.10 python=3.13 'cuda-version>=12.0,<=12.9'`. If a release is uploaded to the rapidsai channel and not the rapidsai-nightly channel, our install command will not see the packages on the `rapidsai`. If both channels were added, we would have to be very careful about strict channel priority, which could easily pick up older or alpha releases.
+The recommended install command at time of writing is `conda create -n rapids-25.10 -c rapidsai-nightly -c conda-forge -c nvidia rapids=25.10 python=3.13 'cuda-version>=12.0,<=12.9'`. If a release is uploaded to the rapidsai channel and not the rapidsai-nightly channel, our install command will not see the packages on the `rapidsai` channel. It's just not in the channel list. If both channels were added, we would have to be very careful about strict channel priority, which could easily pick up older or alpha releases.
 
- One solution to this is to just copy the published packages to both `rapidsai` and `rapidsai-nightly`.
+One solution to this is to just copy the published packages to both `rapidsai` and `rapidsai-nightly`.
 
 `anaconda copy <source channel>/<package>/<version> --to-owner <destination channel>`
 
