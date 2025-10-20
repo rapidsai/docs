@@ -536,6 +536,12 @@
             removeLeadingZeros(version) {
                 return version.split(".").map(Number).join(".");
             },
+            areOnlyPypiAvailablePackagesSelected() {
+                var selected_packages = this.active_packages.filter(pkg => pkg !== "Choose Specific Packages" && pkg !== "Standard");
+                var pypi_available_packages = ["cudf", "cuml", "dask-cudf"];
+                return selected_packages.length > 0 &&
+                    selected_packages.every(pkg => pypi_available_packages.includes(pkg.toLowerCase()));
+            },
             getpipCmdHtml() {
                 var pip_install = `${this.highlightCmd("pip")} install`;
                 var cuda_suffix = `-cu${this.active_pip_cuda_ver}`;
@@ -594,11 +600,8 @@
                 // Make sure all packages (and version selectors) are quoted
                 pkgs = pkgs.flatMap(pkg => '"' + pkg + '"');
 
-                // Check if only cuDF, cuML, and/or dask-cuDF are selected (exclude --extra-index-url for these)
-                var selected_packages = this.active_packages.filter(pkg => pkg !== "Choose Specific Packages");
-                var pypi_available_packages = ["cudf", "cuml", "dask-cudf"];
-                var only_pip_available_packages_selected = selected_packages.length > 0 &&
-                    selected_packages.every(pkg => pypi_available_packages.includes(pkg.toLowerCase()));
+                // Check if only PyPI-available packages are selected (exclude --extra-index-url for these)
+                var only_pypi_available_packages_selected = this.areOnlyPypiAvailablePackagesSelected();
 
                 // For every n packages add a new line with a "\" character
                 // We need i += n + 1 since the splice adds a new element to the array
@@ -612,7 +615,7 @@
                     pkgs.splice(i, 0, "\\\n" + indentation.slice(0, -1));
                 }
 
-                return [pip_install, (only_pip_available_packages_selected ? null : index_url), pkgs.flatMap(pkg => this.highlightPkgOrImg(pkg)).join(" ")]
+                return [pip_install, (only_pypi_available_packages_selected ? null : index_url), pkgs.flatMap(pkg => this.highlightPkgOrImg(pkg)).join(" ")]
                     .filter(Boolean)
                     .join(" \\\n" + indentation)
             },
@@ -685,12 +688,9 @@
                 var notes = [];
 
                 // Check if only PyPI-available packages are selected
-                var selected_packages = this.active_packages.filter(pkg => pkg !== "Choose Specific Packages" && pkg !== "Standard");
-                var pypi_available_packages = ["cudf", "cuml", "dask-cudf"];
-                var only_pip_available_packages_selected = selected_packages.length > 0 &&
-                    selected_packages.every(pkg => pypi_available_packages.includes(pkg.toLowerCase()));
+                var only_pypi_available_packages_selected = this.areOnlyPypiAvailablePackagesSelected();
 
-                var install_location_notes = only_pip_available_packages_selected
+                var install_location_notes = only_pypi_available_packages_selected
                     ? "RAPIDS pip packages are hosted by NVIDIA, some are also available on the Python Package Index (PyPI).<br>"
                     : "RAPIDS pip packages are hosted by NVIDIA<br>";
 
