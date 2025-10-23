@@ -536,7 +536,11 @@
             removeLeadingZeros(version) {
                 return version.split(".").map(Number).join(".");
             },
-            areOnlyPypiAvailablePackagesSelected() {
+            canInstallFromPyPi() {
+                // Nightlies should always use the NVIDIA index, never PyPI
+                if (this.active_release !== "Stable") {
+                    return false;
+                }
                 var selected_packages = this.active_packages.filter(pkg => pkg !== "Choose Specific Packages" && pkg !== "Standard");
                 var pypi_available_packages = ["cudf", "cuml", "dask-cudf", "raft"];
                 return selected_packages.length > 0 &&
@@ -601,7 +605,7 @@
                 pkgs = pkgs.flatMap(pkg => '"' + pkg + '"');
 
                 // Check if only PyPI-available packages are selected (exclude --extra-index-url for these)
-                var only_pypi_available_packages_selected = this.areOnlyPypiAvailablePackagesSelected();
+                var can_install_from_pypi = this.canInstallFromPyPi();
 
                 // For every n packages add a new line with a "\" character
                 // We need i += n + 1 since the splice adds a new element to the array
@@ -615,7 +619,7 @@
                     pkgs.splice(i, 0, "\\\n" + indentation.slice(0, -1));
                 }
 
-                return [pip_install, (only_pypi_available_packages_selected ? null : index_url), pkgs.flatMap(pkg => this.highlightPkgOrImg(pkg)).join(" ")]
+                return [pip_install, (can_install_from_pypi ? null : index_url), pkgs.flatMap(pkg => this.highlightPkgOrImg(pkg)).join(" ")]
                     .filter(Boolean)
                     .join(" \\\n" + indentation)
             },
@@ -688,9 +692,9 @@
                 var notes = [];
 
                 // Check if only PyPI-available packages are selected
-                var only_pypi_available_packages_selected = this.areOnlyPypiAvailablePackagesSelected();
+                var can_install_from_pypi = this.canInstallFromPyPi();
 
-                var install_location_notes = only_pypi_available_packages_selected
+                var install_location_notes = can_install_from_pypi
                     ? "RAPIDS pip packages are hosted by NVIDIA, some are also available on the Python Package Index (PyPI).<br>"
                     : "RAPIDS pip packages are hosted by NVIDIA<br>";
 
