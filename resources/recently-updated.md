@@ -52,3 +52,13 @@ recently_updated_threshold: 5
 ```
 
 Note that since RAPIDS uses squash commits for pull requests, the `recently_updated_threshold` value effectively means "how many pull requests have been merge into the source repository since the current pull request has last been updated".
+
+Besides `recently_updated_threshold`, PRs can be explicitly marked as "merge barriers" to be required to be merged into a PR before it can be merged. This is used for PRs that have wide-reaching implications, such as broad reformatting or linting, which are highly likely to cause logical merge conflicts with many other PRs.
+
+A PR can be marked as a merge barrier by adding the following line to the PR description:
+
+```
+Ops-Bot-Merge-Barrier: true
+```
+
+If a PR with this line is merged, no PRs can be merged after it unless they merge in the merge barrier commit.
