@@ -61,4 +61,4 @@ A PR can be marked as a merge barrier by adding the following line to the PR des
 Ops-Bot-Merge-Barrier: true
 ```
 
-If a PR with this line is merged, no PRs can be merged after it unless they merge in the merge barrier commit.
+If a PR with this line is merged, no PRs can be merged after it unless they merge in the merge barrier commit. If a PR cannot be merged due to missing a merge barrier, the easiest fix is to simply merge in the latest commit from the target branch.
