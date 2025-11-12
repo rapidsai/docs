@@ -45,4 +45,4 @@ Ops-Bot-Merge-Barrier: true
 
 If a pull request with this line is merged, no pull requests can be merged after it unless they merge in the merge barrier commit. If a pull request cannot be merged due to missing a merge barrier, the easiest fix is to simply merge in the latest commit from the target branch.
 
-For more generic requirements to keep a pull request reasonably up-to-date with the origin, see the [recently updated check](../recently-updated).
+For more generic requirements to keep a pull request reasonably up-to-date with the origin, see the [recently updated check](./recently-updated.md).

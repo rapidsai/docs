@@ -141,7 +141,7 @@ gh auth login
 NOTE: On shared machines, this method might expose your GitHub token in the output of `ps`. In those settings,
 consider just relying on the interactive prompts inside the container or using the `--env-file` approach.
 
-For more details, see "GitHub Actions" ([link](./github-actions)).
+For more details, see "GitHub Actions" ([link](./github-actions.md)).
 
 ### Downloading Build Artifacts for Tests
 
