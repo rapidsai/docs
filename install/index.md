@@ -134,7 +134,7 @@ All provisioned systems need to be RAPIDS capable. Here's what is required:
 {: .no-tb-margins }
 
 - <i class="fas fa-check-circle"></i> CUDA 12 with Driver 525.60.13 or newer
-- <i class="fas fa-info-circle"></i> Compatibility with CUDA 13 is coming soon
+- <i class="fas fa-check-circle"></i> CUDA 13 with Driver 580.65.06 or newer
 
 See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/) for details.
 
