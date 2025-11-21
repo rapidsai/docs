@@ -9,7 +9,7 @@ title: Forward Mergers
 
 ## Overview
 
-The forward mergers are automated pull requests to merge a branch in burndown into the `main` default development branch. For example merging `release/25.12` into `main`. This ensures all changes to the current branch are reflected in the next version.
+The forward mergers are automated pull requests to merge a branch in burndown into the `main` default development branch, such as merging `release/25.12` into `main`. This ensures all changes to the current release during burndown are reflected in the next version.
 
 Forward merging is implemented with the [ops-bot](https://github.com/rapidsai/ops-bot) forward-merger plugin. The plugin is activated for a repository by adding `forward_merger: true` to `.github/ops-bot.yaml`.
 
