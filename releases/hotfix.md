@@ -58,19 +58,19 @@ Also consider the timing of when the next release is scheduled. If the freeze or
 ### Process
 
 **NOTE:** The processes below use these releases as examples:
-- Current release `M.A.X`
-- Next minor release `M.B.0`  (where `B=A+1`)
-- Next patch release `M.A.Y` (where `Y=X+1`)
+- Current release `YY.MA.X`
+- Next release `YY.MB.0` (where `MB=MA+2`)
+- Next patch release `MM.MA.Y` (where `Y=X+1`)
 
 Developers
 {: .label .label-green}
 1. Hotfix issues will be assigned to you
-2. Create your branch from the `branch-M.A` branch
+2. Create your branch from the `release/YY.MA` branch
 3. Implement the fix succinctly
   1. Change the minimal amount of code required
   2. Update related documentation and unit tests
   3. It is acceptable to implement a quick fix and open a new issue for a more in depth solution
-4. Once complete, create a pull request targeting `branch-M.A`
+4. Once complete, create a pull request targeting `release/YY.MA`
 5. Notify the project lead
 
 Project Leads
@@ -86,9 +86,9 @@ Operations
 {: .label .label-purple}
 1. Once notified by a Project Lead, review the pull request
 2. Begin testing of conda and containers for correctness and functionality
-3. Review documentation to ensure version numbers (updating to `M.A.Y`) and instructions are correct
-4. Merge the developer's PR targeting `branch-M.A` after approval
-5. Create a new PR from `branch-M.A` targeting `main`
+3. Review documentation to ensure version numbers (updating to `YY.MA.Y`) and instructions are correct
+4. Merge the developer's PR targeting `release/YY.MA` after approval
+5. Create a new PR from `release/YY.MA` targeting `main`
 6. Merge the PR targeting `main` after review and approval
 7. Monitor process of automated tools
 8. Spot check deliverables to ensure correctness
