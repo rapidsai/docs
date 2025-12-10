@@ -77,7 +77,7 @@ Operations
 {: .label .label-purple}
 
 1. Beginning of the `burn down date` announce the burn down of `release/YY.MB`
-2. The development branch will remain `main` 
+2. The development branch will remain `main`
 3. Create release `YY.MC` project board
 4. Notify project leads process is complete
 
