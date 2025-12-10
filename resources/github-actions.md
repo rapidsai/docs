@@ -457,6 +457,43 @@ source ./ci/use_conda_packages_from_prs.sh
 **Note:** By default `rapids-get-pr-artifact` uses the most recent commit from the specified PR.
 A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
 
+**Example 3:** Integration testing `cuml` (Python) with a `noarch` build of `cuxfilter`
+
+```shell
+#!/bin/bash
+# Copyright (c) 2025, NVIDIA CORPORATION.
+
+# download CI artifacts
+CUXFILTER_CHANNEL=$(RAPIDS_PY_NOARCH_SUFFIX="noarch" rapids-get-pr-artifact cuxfilter 224 python conda --noarch)
+
+# For `rattler` builds:
+#
+# Add these channels to the array checked by 'rapids-rattler-channel-string'.
+# This ensures that when conda packages are built with strict channel priority enabled,
+# the locally-downloaded packages will be preferred to remote packages (e.g. nightlies).
+#
+RAPIDS_PREPENDED_CONDA_CHANNELS=("${CUXFILTERCHANNEL}")
+
+export RAPIDS_PREPENDED_CONDA_CHANNELS
+
+# For tests and `conda-build` builds:
+#
+# Add these channels to the system-wide conda configuration.
+# This results in PREPENDING them to conda's channel list, so
+# these packages should be found first if strict channel priority is enabled.
+#
+for _channel in "${RAPIDS_PREPENDED_CONDA_CHANNELS[@]}"
+do
+   conda config --system --add channels "${_channel}"
+done
+```
+
+Then copy the following into every script in the `ci/` directory that is doing `conda` installs.
+
+```shell
+source ./ci/use_conda_packages_from_prs.sh
+```
+
 ### Using Wheel CI Artifacts in Other PRs
 
 To use wheels produced by other PRs' CI:
