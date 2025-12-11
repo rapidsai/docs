@@ -32,36 +32,6 @@ Releases are planned in two phases:
 1. `Fuzzy planning` from [Issue Triage]({% link releases/triage.md %}) which is ongoing.
 2. `Focus planning` which starts when release `YY.MB` is **frozen**.
 
-### Release boards
-
-RAPIDS projects use GitHub project boards for tracking releases with a customized setup and automation that is copied from existing boards.
-
-For each project there is a Release board for each release. As an example [Release v25.10 RAPIDS](https://github.com/orgs/rapidsai/projects/190) tracks the progress for the `v25.10` release. Release boards are closed once a release is completed, and are labeled `Release vYY.MM` where `YY` & `MM` are the two digit year & two digit month.
-
-Each Release board has the following columns:
-
-| Column | Purpose |
-|:-------|:--------|
-| Issue-Needs prioritizing | Issues that have gone through the [Issue Triage]({% link releases/triage.md %}) process and need to be prioritized |
-| Issue-P0 | Issues that should be worked on first |
-| Issue-P1 | Issues that should be worked on only if all `P0` issues are complete or assigned |
-| Issue-P2 | Issues that should be worked on only if all `P1` issues are complete or assigned |
-| PR-WIP | Newly opened PRs and re-opened PRs |
-| PR-Needs Review | PRs move **automatically** to this column when pending approval by reviewer |
-| PR-Reviewer approved | PRs move **automatically** to this column when approved by reviewer |
-| Done | Issues and PRs that are closed will **automatically** be moved to this column |
-
-**IMPORTANT:** By leveraging the Release board for issues, Project Leads can _schedule_ issues by placing them in the appropriate column and then _prioritize_ issues by dragging & sorting the issues from highest priority at the top of the column to lowest at the bottom.  We can also use labels on the issues/PRs to filter and _prioritize_ work.
-
-#### Using the release board
-- Assigning and prioritizing work
-  - Scroll to the left to see all the columns labeled `Issue-*`
-  - Re-prioritize issues in `P0`, `P1`, `P2` by moving issues between columns
-  - Move high priority issues within a column to the top; this promotes "pop off the top of the stack" development
-- Expediting and finishing work
-  - Scroll to the right to see all columns labeled `PR-*`
-  - Identify PRs that need reviewers, input from authors, and other help
-
 ### Fuzzy planning
 
 During `Fuzzy planning` issues are triaged and scheduled in their respective tracking boards. This naturally creates a pool of issues to consider from across the tracking boards during `Focus planning` under the columns `Future release`.
