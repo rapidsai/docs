@@ -26,7 +26,7 @@ Operations
 ### See also
 
 * [Hotfix versioning]({% link resources/versions.md %})
-* [Major and minor releases]({% link releases/process.md %})
+* [Releases]({% link releases/process.md %})
 
 ## Hotfixes
 
