@@ -46,7 +46,7 @@ If the merge criteria below are **not satisfied** when the comment is left on th
 - All **required** (not optional) CI checks must be passing
 - Must not have merge conflicts
 - `Branch Checker` Ensures the base branch is under active development
-- [Label Checker]({% link resources/label-checker.md %}) Correct labels applied
+- [Label Checker]({% link resources/label-checker.md %}) Ensures the correct labels have been applied
 - No changes have been requested from users who have `write`, `admin`, or `owner` permissions
 - Any user who left the `/merge` comment must have `write` or `admin` privileges on the repo
 
