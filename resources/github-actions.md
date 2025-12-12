@@ -41,9 +41,9 @@ Finally, the page [here](https://docs.gha-runners.nvidia.com/runners/) outlines 
 
 Every RAPIDS repository using GitHub Actions has, at a minimum, the following three GitHub Action workflow files:
 
-- `pr.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/branch-23.12/.github/workflows/pr.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/pr.yaml)
-- `build.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/branch-23.12/.github/workflows/build.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/build.yaml)
-- `test.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/branch-23.12/.github/workflows/test.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/test.yaml)
+- `pr.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/main/.github/workflows/pr.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/pr.yaml)
+- `build.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/main/.github/workflows/build.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/build.yaml)
+- `test.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/main/.github/workflows/test.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/test.yaml)
 
 These GitHub Actions workflow files contain a description of all the automated jobs that run as a part of the workflow.
 
@@ -51,11 +51,11 @@ These jobs contain things like C++/Python builds, C++/Python tests, notebook tes
 
 The chart below provides an overview of how each workflow file is used.
 
-| Event:                            | Runs workflows:                 | Performs Builds? | Performs Tests? | Uploads to Anaconda.org/Wheel Registry? |
-| --------------------------------- | ------------------------------- | :--------------: | :-------------: | :-------------------------------------: |
-| - PRs                             | - `pr.yaml`                     | ✅               | ✅              | ❌                                      |
-| - `branch-*` Merges<br>- Releases | - `build.yaml`                  | ✅               | ❌              | ✅                                      |
-| - Nightlies                       | - `build.yaml`<br>- `test.yaml` | ✅               | ✅              | ✅                                      |
+| Event:                             | Runs workflows:                 | Performs Builds? | Performs Tests? | Uploads to Anaconda.org/Wheel Registry? |
+| ---------------------------------- | ------------------------------- | :--------------: | :-------------: | :-------------------------------------: |
+| - PRs                              | - `pr.yaml`                     | ✅               | ✅              | ❌                                      |
+| - `release/*` Merges<br>- Releases | - `build.yaml`                  | ✅               | ❌              | ✅                                      |
+| - Nightlies                        | - `build.yaml`<br>- `test.yaml` | ✅               | ✅              | ✅                                      |
 
 Although release workflows don't run tests, they do go through a week of nightly testing to ensure everything works as expected. See [this page]({% link releases/process.md %}) for more details about the release process.
 
@@ -105,9 +105,9 @@ The `GPUtester` account is a system account used to trigger nightly workflow run
 RAPIDS uses a collection of reusable GitHub Actions workflows in order to single-source common build configuration settings.
 These reusable workflows can be found in the [rapidsai/shared-workflows](https://github.com/rapidsai/shared-workflows) repository.
 
-An example of one of the reusable workflows used by RAPIDS is the [`conda-cpp-build.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/branch-25.08/.github/workflows/conda-cpp-build.yaml), which is the source of truth for which architectures and CUDA versions build RAPIDS C++ packages.
+An example of one of the reusable workflows used by RAPIDS is the [`conda-cpp-build.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/release/25.12/.github/workflows/conda-cpp-build.yaml), which is the source of truth for which architectures and CUDA versions build RAPIDS C++ packages.
 
-Similarly, the [`conda-cpp-tests.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/branch-25.08/.github/workflows/conda-cpp-tests.yaml) specifies configurations for testing RAPIDS C++ packages.
+Similarly, the [`conda-cpp-tests.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/release/25.12/.github/workflows/conda-cpp-tests.yaml) specifies configurations for testing RAPIDS C++ packages.
 
 The majority of these reusable workflows leverage the CI images from the [rapidsai/ci-imgs](https://github.com/rapidsai/ci-imgs/) repository.
 
@@ -176,14 +176,14 @@ Those URLs are of the form `https://github.com/{org}/{repo}/actions/runs/{workfl
 Valid values for `{artifact-name}` can be found on the "Actions" tab in the GitHub Actions UI, as described in "Finding Artifacts in the GitHub UI" above.
 The run IDs can also be identified programmatically.
 
-For example, the following sequence of commands accomplishes the task *"download the latest `rmm` Python 3.12, CUDA 12 conda packages built from `branch-25.08`"*.
+For example, the following sequence of commands accomplishes the task *"download the latest `rmm` Python 3.12, CUDA 12 conda packages built from `release/25.12`"*.
 
 ```shell
-# get the most recent successful branch-25.08 nightly or branch build
+# get the most recent successful release/25.12 nightly or branch build
 RUN_ID=$(
   gh run list \
     --repo "rapidsai/rmm" \
-    --branch "branch-25.08" \
+    --branch "release/25.12" \
     --workflow "build.yaml" \
     --status "success" \
     --json "createdAt,databaseId" \
@@ -215,14 +215,14 @@ To use these:
 * download them to local directories using the `gh` CLI
 * pass the paths to those directories as channels via `--channel` to `conda` / `mamba` commands
 
-For example, to create a conda environment that uses the latest `librmm` and `rmm` conda packages built from `branch-25.08` on an x86_64, CUDA 12 system:
+For example, to create a conda environment that uses the latest `librmm` and `rmm` conda packages built from `release/25.12` on an x86_64, CUDA 12 system:
 
 ```shell
 # get the most recent successful nightly or branch build
 RUN_ID=$(
   gh run list \
     --repo "rapidsai/rmm" \
-    --branch "branch-25.08" \
+    --branch "release/25.12" \
     --workflow "build.yaml" \
     --status 'success' \
     --json 'createdAt,databaseId' \
@@ -309,7 +309,7 @@ To use these:
 * download them to local directories using the `gh` CLI
 * pass the paths to wheels in those directories to installers like `pip` or `uv`
 
-For example, to create a virtual environment with `librmm` and `rmm` packages built from `branch-25.08` on an x86_64, CUDA 12 system:
+For example, to create a virtual environment with `librmm` and `rmm` packages built from `release/25.12` on an x86_64, CUDA 12 system:
 
 ```shell
 # create virtualenv
@@ -320,7 +320,7 @@ source ./rmm-test-env/bin/activate
 RUN_ID=$(
   gh run list \
     --repo "rapidsai/rmm" \
-    --branch "branch-25.08" \
+    --branch "release/25.12" \
     --workflow "build.yaml" \
     --status 'success' \
     --json 'createdAt,databaseId' \
