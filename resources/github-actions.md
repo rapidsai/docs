@@ -457,14 +457,14 @@ source ./ci/use_conda_packages_from_prs.sh
 **Note:** By default `rapids-get-pr-artifact` uses the most recent commit from the specified PR.
 A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
 
-**Example 3:** Integration testing `cuml` (Python) with a `noarch` build of `cuxfilter`
+**Example 3:** Testing `cudf` with a `noarch` build of `dask-cuda`
 
 ```shell
 #!/bin/bash
 # Copyright (c) 2025, NVIDIA CORPORATION.
 
 # download CI artifacts
-CUXFILTER_CHANNEL=$(RAPIDS_PY_NOARCH_SUFFIX="noarch" rapids-get-pr-artifact cuxfilter 224 python conda --noarch)
+DASK_CUDA_CHANNEL=$(RAPIDS_PY_NOARCH_SUFFIX="noarch" rapids-get-pr-artifact dask-cuda 1595 python conda --noarch)
 
 # For `rattler` builds:
 #
@@ -472,7 +472,7 @@ CUXFILTER_CHANNEL=$(RAPIDS_PY_NOARCH_SUFFIX="noarch" rapids-get-pr-artifact cuxf
 # This ensures that when conda packages are built with strict channel priority enabled,
 # the locally-downloaded packages will be preferred to remote packages (e.g. nightlies).
 #
-RAPIDS_PREPENDED_CONDA_CHANNELS=("${CUXFILTERCHANNEL}")
+RAPIDS_PREPENDED_CONDA_CHANNELS=("${DASK_CUDA_CHANNEL}")
 
 export RAPIDS_PREPENDED_CONDA_CHANNELS
 
