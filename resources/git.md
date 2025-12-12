@@ -30,7 +30,7 @@ Developers
 
 ### Approach
 
-Our development approach involves using the `main` branch as the main development branch. When a release occurs it will use the [Versioning and Tagging]({% link resources/versions.md %}) and [Release]({% link releases/process.md %}) proceedures.
+Our development approach involves using the `main` branch as the main development branch. When a release occurs it will use the [Versioning and Tagging]({% link resources/versions.md %}) and [Release]({% link releases/process.md %}) procedures.
 
 ### Development workflow
 
