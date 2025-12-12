@@ -168,7 +168,7 @@ export RAPIDS_BUILD_TYPE=pull-request # or "branch" or "nightly"
 export RAPIDS_REPOSITORY=rapidsai/cugraph
 
 export RAPIDS_REF_NAME=pull-request/3258 # use this type of value for "pull-request" builds
-export RAPIDS_REF_NAME=branch-{{ site.data.releases.nightly.version }} # use this type of value for "branch"/"nightly" builds
+export RAPIDS_REF_NAME=main # use this type of value for "nightly" builds, for "branch" builds use the branch
 
 export RAPIDS_NIGHTLY_DATE=2023-06-20 # this variable is only necessary for "nightly" builds
 
@@ -187,7 +187,7 @@ If builds are failing in CI, developers should fix the problem locally and then 
 
 Then CI jobs will run and the fixed build artifacts will be made available for the test job(s) to download and use.
 
-To attempt a complete build and test workflow locally, you can manually update any instances of `CPP_CHANNEL` and `PYTHON_CHANNEL` that use `rapids-download-conda-from-github` (e.g. [1](https://github.com/rapidsai/cuml/blob/47aad39a3f71564976b4f5179201530bafe73f69/ci/test_python_common.sh#L9-L10)) with the value of the `RAPIDS_CONDA_BLD_OUTPUT_DIR` environment variable that is [set in the RAPIDS CI images](https://github.com/rapidsai/ci-imgs/blob/b7ef0f3932da7b8ce958baadc7597c1d7f1f2ab0/ci-conda.Dockerfile#L224).
+To attempt a complete build and test workflow locally, you can manually update any instances of `CPP_CHANNEL` and `PYTHON_CHANNEL` that use `rapids-download-conda-from-github` (e.g. [1](https://github.com/rapidsai/cuml/blob/main/ci/test_python_common.sh#L13-L14)) with the value of the `RAPIDS_CONDA_BLD_OUTPUT_DIR` environment variable that is [set in the RAPIDS CI images](https://github.com/rapidsai/ci-imgs/blob/main/ci-conda.Dockerfile#L249).
 
 This value is used to set the `output_folder` of the `.condarc` file used in the RAPIDS CI images (see [docs](https://conda.io/projects/conda/en/latest/user-guide/configuration/use-condarc.html#specify-conda-build-build-folder-conda-build-3-16-3-output-folder)).
 Therefore, any locally built packages will end up in this directory.
