@@ -168,9 +168,10 @@ export RAPIDS_BUILD_TYPE=pull-request # or "branch" or "nightly"
 export RAPIDS_REPOSITORY=rapidsai/cugraph
 
 export RAPIDS_REF_NAME=pull-request/3258 # use this type of value for "pull-request" builds
-export RAPIDS_REF_NAME=main # use this type of value for "nightly" builds, for "branch" builds use the branch
+export RAPIDS_REF_NAME=main # use this type of value for "nightly" builds
+export RAPIDS_REF_NAME=release/{{ site.data.releases.stable.version }} # for "branch" builds use the branch names
 
-export RAPIDS_NIGHTLY_DATE=2023-06-20 # this variable is only necessary for "nightly" builds
+export RAPIDS_NIGHTLY_DATE=2025-12-12 # this variable is only necessary for "nightly" builds
 
 ./ci/test_python.sh
 ```
