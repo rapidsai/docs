@@ -105,9 +105,9 @@ The `GPUtester` account is a system account used to trigger nightly workflow run
 RAPIDS uses a collection of reusable GitHub Actions workflows in order to single-source common build configuration settings.
 These reusable workflows can be found in the [rapidsai/shared-workflows](https://github.com/rapidsai/shared-workflows) repository.
 
-An example of one of the reusable workflows used by RAPIDS is the [`conda-cpp-build.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/release/25.12/.github/workflows/conda-cpp-build.yaml), which is the source of truth for which architectures and CUDA versions build RAPIDS C++ packages.
+An example of one of the reusable workflows used by RAPIDS is the [`conda-cpp-build.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/main/.github/workflows/conda-cpp-build.yaml), which is the source of truth for which architectures and CUDA versions build RAPIDS C++ packages.
 
-Similarly, the [`conda-cpp-tests.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/release/25.12/.github/workflows/conda-cpp-tests.yaml) specifies configurations for testing RAPIDS C++ packages.
+Similarly, the [`conda-cpp-tests.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/main/.github/workflows/conda-cpp-tests.yaml) specifies configurations for testing RAPIDS C++ packages.
 
 The majority of these reusable workflows leverage the CI images from the [rapidsai/ci-imgs](https://github.com/rapidsai/ci-imgs/) repository.
 
@@ -176,14 +176,14 @@ Those URLs are of the form `https://github.com/{org}/{repo}/actions/runs/{workfl
 Valid values for `{artifact-name}` can be found on the "Actions" tab in the GitHub Actions UI, as described in "Finding Artifacts in the GitHub UI" above.
 The run IDs can also be identified programmatically.
 
-For example, the following sequence of commands accomplishes the task *"download the latest `rmm` Python 3.12, CUDA 12 conda packages built from `release/25.12`"*.
+For example, the following sequence of commands accomplishes the task *"download the latest `rmm` Python 3.12, CUDA 12 conda packages built from `main`"*.
 
 ```shell
-# get the most recent successful release/25.12 nightly or branch build
+# get the most recent successful main nightly or branch build
 RUN_ID=$(
   gh run list \
     --repo "rapidsai/rmm" \
-    --branch "release/25.12" \
+    --branch "main" \
     --workflow "build.yaml" \
     --status "success" \
     --json "createdAt,databaseId" \
@@ -215,14 +215,14 @@ To use these:
 * download them to local directories using the `gh` CLI
 * pass the paths to those directories as channels via `--channel` to `conda` / `mamba` commands
 
-For example, to create a conda environment that uses the latest `librmm` and `rmm` conda packages built from `release/25.12` on an x86_64, CUDA 12 system:
+For example, to create a conda environment that uses the latest `librmm` and `rmm` conda packages built from `main` on an x86_64, CUDA 12 system:
 
 ```shell
 # get the most recent successful nightly or branch build
 RUN_ID=$(
   gh run list \
     --repo "rapidsai/rmm" \
-    --branch "release/25.12" \
+    --branch "main" \
     --workflow "build.yaml" \
     --status 'success' \
     --json 'createdAt,databaseId' \
@@ -309,7 +309,7 @@ To use these:
 * download them to local directories using the `gh` CLI
 * pass the paths to wheels in those directories to installers like `pip` or `uv`
 
-For example, to create a virtual environment with `librmm` and `rmm` packages built from `release/25.12` on an x86_64, CUDA 12 system:
+For example, to create a virtual environment with `librmm` and `rmm` packages built from `main` on an x86_64, CUDA 12 system:
 
 ```shell
 # create virtualenv
@@ -320,7 +320,7 @@ source ./rmm-test-env/bin/activate
 RUN_ID=$(
   gh run list \
     --repo "rapidsai/rmm" \
-    --branch "release/25.12" \
+    --branch "main" \
     --workflow "build.yaml" \
     --status 'success' \
     --json 'createdAt,databaseId' \
