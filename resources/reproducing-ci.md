@@ -155,7 +155,7 @@ In CI, this process happens transparently.
 
 Local builds lack the context provided by the CI environment and therefore require some user-supplied input in order to ensure that the correct artifacts are downloaded.
 
-Any time the `rapids-download-{conda,wheels}-from-github` command (e.g. [here](https://github.com/rapidsai/cugraph/blob/6200e99714113ea08fef6c8ae05d93c5516e9a13/ci/test_cpp.sh#L11)) is encountered in a local test run, the user will be prompted for any necessary environment variables that are missing.
+Any time the `rapids-download-{conda,wheels}-from-github` command (e.g. [here](https://github.com/rapidsai/cugraph/blob/63aaa24c675f63033e72d2fa611649153fbd44ab/ci/test_cpp.sh#L15)) is encountered in a local test run, the user will be prompted for any necessary environment variables that are missing.
 
 The screenshot below shows an example.
 
@@ -168,9 +168,10 @@ export RAPIDS_BUILD_TYPE=pull-request # or "branch" or "nightly"
 export RAPIDS_REPOSITORY=rapidsai/cugraph
 
 export RAPIDS_REF_NAME=pull-request/3258 # use this type of value for "pull-request" builds
-export RAPIDS_REF_NAME=branch-{{ site.data.releases.nightly.version }} # use this type of value for "branch"/"nightly" builds
+export RAPIDS_REF_NAME=main # use this type of value for "nightly" builds
+export RAPIDS_REF_NAME=release/{{ site.data.releases.stable.version }} # for "branch" builds use the branch names
 
-export RAPIDS_NIGHTLY_DATE=2023-06-20 # this variable is only necessary for "nightly" builds
+export RAPIDS_NIGHTLY_DATE=2025-12-12 # this variable is only necessary for "nightly" builds
 
 ./ci/test_python.sh
 ```
@@ -187,7 +188,7 @@ If builds are failing in CI, developers should fix the problem locally and then 
 
 Then CI jobs will run and the fixed build artifacts will be made available for the test job(s) to download and use.
 
-To attempt a complete build and test workflow locally, you can manually update any instances of `CPP_CHANNEL` and `PYTHON_CHANNEL` that use `rapids-download-conda-from-github` (e.g. [1](https://github.com/rapidsai/cuml/blob/47aad39a3f71564976b4f5179201530bafe73f69/ci/test_python_common.sh#L9-L10)) with the value of the `RAPIDS_CONDA_BLD_OUTPUT_DIR` environment variable that is [set in the RAPIDS CI images](https://github.com/rapidsai/ci-imgs/blob/b7ef0f3932da7b8ce958baadc7597c1d7f1f2ab0/ci-conda.Dockerfile#L224).
+To attempt a complete build and test workflow locally, you can manually update any instances of `CPP_CHANNEL` and `PYTHON_CHANNEL` that use `rapids-download-conda-from-github` (e.g. [1](https://github.com/rapidsai/cuml/blob/f6e50ada0d031872bf8db516db38cfca72c8a5cc/ci/test_python_common.sh#L13-L14)) with the value of the `RAPIDS_CONDA_BLD_OUTPUT_DIR` environment variable that is [set in the RAPIDS CI images](https://github.com/rapidsai/ci-imgs/blob/55b24734b7d594e768599771dcae2e718af52f9a/ci-conda.Dockerfile#L249).
 
 This value is used to set the `output_folder` of the `.condarc` file used in the RAPIDS CI images (see [docs](https://conda.io/projects/conda/en/latest/user-guide/configuration/use-condarc.html#specify-conda-build-build-folder-conda-build-3-16-3-output-folder)).
 Therefore, any locally built packages will end up in this directory.
