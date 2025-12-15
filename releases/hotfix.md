@@ -74,7 +74,7 @@ Developers
   1. `hotfix/YY.MA.PX` → `release/YY.MA` and notify Operations
   2. `hotfix/YY.MA.PX` → `main` and notify Operations
     1. This can also be done as a `cherry-pick` from `release/YY.MA` -> `main`
-  3. ***NOTE:*** After the `release/YY.MA` has completed, the [forward merger]({% link resources/auto-merge.md %}) will no longer automatically merge from `release/YY.MA` -> `main`
+  3. ***NOTE:*** After the `release/YY.MA` has completed, the [forward merger]({% link resources/auto-merger.md %}) will no longer automatically merge from `release/YY.MA` -> `main`
 5. Notify the project lead
 
 Project Leads
