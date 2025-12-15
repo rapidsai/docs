@@ -155,7 +155,12 @@ In CI, this process happens transparently.
 
 Local builds lack the context provided by the CI environment and therefore require some user-supplied input in order to ensure that the correct artifacts are downloaded.
 
-Any time the `rapids-download-{conda,wheels}-from-github` command (e.g. [here](https://github.com/rapidsai/cugraph/blob/63aaa24c675f63033e72d2fa611649153fbd44ab/ci/test_cpp.sh#L15)) is encountered in a local test run, the user will be prompted for any necessary environment variables that are missing.
+Any time the `rapids-download-{conda,wheels}-from-github` command (e.g.
+[here](https://github.com/rapidsai/cugraph/blob/63aaa24c675f63033e72d2fa611649153fbd44ab/ci/test_cpp.sh#L15))
+or the `rapids-download-from-github "$(rapids-package-name ...)"` command (e.g.
+[here](https://github.com/rapidsai/cuxfilter/blob/b9964b157db60a647421bba719a661afb9994a83/ci/test_python.sh#L13))
+is encountered in a local test run, the user will be prompted for any necessary
+environment variables that are missing.
 
 The screenshot below shows an example.
 
