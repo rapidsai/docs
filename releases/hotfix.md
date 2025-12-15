@@ -71,8 +71,8 @@ Developers
   2. Update related documentation and unit tests
   3. It is acceptable to implement a quick fix and open a new issue for a more in depth solution
 4. Once complete, create a pull request targeting the following
-  1. `hotfix/YY.MA.PX` → `release/YY.MA` and merge
-  2. `hotfix/YY.MA.PX` → `main` and merge
+  1. `hotfix/YY.MA.PX` → `release/YY.MA` and notify Operations
+  2. `hotfix/YY.MA.PX` → `main` and notify Operations
     1. This can also be done as a `cherry-pick` from `release/YY.MA` -> `main`
   3. ***NOTE:*** After the `release/YY.MA` has completed, the [forward merger]({% link resources/auto-merge.md %}) will no longer automatically merge from `release/YY.MA` -> `main`
 5. Notify the project lead
