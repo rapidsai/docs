@@ -65,12 +65,16 @@ Also consider the timing of when the next release is scheduled. If the freeze or
 Developers
 {: .label .label-green}
 1. Hotfix issues will be assigned to you
-2. Create your branch from the `release/YY.MA` branch
+2. Create `hotfix/YY.MA` branch from `^vYY.MA.00` (commit `BEFORE` the tag)
 3. Implement the fix succinctly
   1. Change the minimal amount of code required
   2. Update related documentation and unit tests
   3. It is acceptable to implement a quick fix and open a new issue for a more in depth solution
-4. Once complete, create a pull request targeting `release/YY.MA`
+4. Once complete, create a pull request targeting the following
+  1. `hotfix/YY.MM` → `release/YY.MM` and merge
+  2. `hotfix/YY.MM` → `main` and merge
+    1. This can also be done as a `cherry-pick` from `release/YY.MM` -> `main`
+  3. ***NOTE:*** After the `release/YY.MM` has completed, the [forward merger]({% link resources/auto-merge.md %}) will no longer automatically merge from `release/YY.MM` -> `main`
 5. Notify the project lead
 
 Project Leads
