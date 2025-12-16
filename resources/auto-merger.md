@@ -27,7 +27,15 @@ Some RAPIDS repositories use an auto-merger to merge pull requests. The auto-mer
 1. Ensures all merged pull requests have consistent and useful commit messages
 2. Allows pull request merges to be scheduled to occur when all merge criteria (below) are satisfied
 
-To use the auto-merger, simply type `/merge` as a comment on a given pull request. The auto-merger will not run if the comment includes any other text besides `/merge`.
+To use the auto-merger, simply type `/merge` as a comment on a given pull request.
+
+There was a secondary use case used when PRs are merged from a `release` branch back into `main`.
+
+Sometimes these requests have merge conflicts that need to be resolved and we do `NOT` want the commits to be squashed.
+
+In order to facilitate this use case the `/merge nosquash` comment has been implemented.
+
+*NOTE* The auto-merger will not run if the comment includes any other text besides `/merge` or `/merge nosquash`.
 
 If the merge criteria below are satisfied when the comment is left on the pull request, the pull request will merge immediately.
 
@@ -37,7 +45,8 @@ If the merge criteria below are **not satisfied** when the comment is left on th
 
 - All **required** (not optional) CI checks must be passing
 - Must not have merge conflicts
-- Must not be merging to the `main` branch
+- `Branch Checker` Ensures the base branch is under active development
+- [Label Checker]({% link resources/label-checker.md %}) Ensures the correct labels have been applied
 - No changes have been requested from users who have `write`, `admin`, or `owner` permissions
 - Any user who left the `/merge` comment must have `write` or `admin` privileges on the repo
 
