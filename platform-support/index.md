@@ -54,8 +54,6 @@ For installation instructions, see the [Installation Guide](/install/).
 | **nvCOMP** | {{ release.source_build.nvcomp }} |
 | **GCC** | {{ release.source_build.gcc }} |
 
-<i class="fas fa-info-circle"></i> clang is not officially supported.
-
 </div>
 
 {% endfor %}
