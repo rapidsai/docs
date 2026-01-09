@@ -13,6 +13,7 @@ RAPIDS libraries are supported on a specific set of platforms for each release. 
 
 RAPIDS uses [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/){: target="_blank"} to support a range of CUDA toolkit and driver versions.
 The NVIDIA Developer documentation contains a reference of [Compute Capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} for each GPU architecture.
+Note that for the list of supported compute capabilities below, newer GPUs are supported via [forward-compatible PTX instructions](https://developer.nvidia.com/blog/understanding-ptx-the-assembly-language-of-cuda-gpu-computing/){: target="_blank"} built for the latest virtual architecture.
 
 For installation instructions, see the [Installation Guide](/install/).
 
@@ -26,21 +27,21 @@ For installation instructions, see the [Installation Guide](/install/).
 #### <i class="fab fa-python"></i> Python
 {: .fs-5 }
 
-**{{ release.python }}**
+**{{ release.python | join: ", " }}**
 
 #### <i class="fas fa-desktop"></i> Operating Systems
 {: .fs-5 }
 
-**glibc {{ release.glibc }}** (tested on {% for os in release.os_support %}{{ os }}{% unless forloop.last %}, {% endunless %}{% endfor %})
+**glibc {{ release.glibc_min }}+** (tested on {% for os in release.os_support %}{{ os }}{% unless forloop.last %}, {% endunless %}{% endfor %})
 
 #### <i class="fas fa-microchip"></i> CUDA
 {: .fs-5 }
 
 | | CUDA 12 | CUDA 13 |
 |:--|:--|:--|
-| **Toolkit** | {{ release.cuda_12.toolkit }} | {{ release.cuda_13.toolkit }} |
-| **Driver** | {{ release.cuda_12.driver }} | {{ release.cuda_13.driver }} |
-| **Compute Capability** | {{ release.cuda_12.compute_capability }} | {{ release.cuda_13.compute_capability }} |
+| **Toolkit** | {{ release.cuda_12.toolkit_min }}{% if release.cuda_12.toolkit_min != release.cuda_12.toolkit_max %} - {{ release.cuda_12.toolkit_max }}{% endif %} | {{ release.cuda_13.toolkit_min }}{% if release.cuda_13.toolkit_min != release.cuda_13.toolkit_max %} - {{ release.cuda_13.toolkit_max }}{% endif %} |
+| **Driver** | {{ release.cuda_12.driver }}+ | {{ release.cuda_13.driver }}+ |
+| **Compute Capability** | {% for cc in release.cuda_12.compute_capability %}{{ cc.name }} ({% if cc.sm.first %}{{ cc.sm | join: ", " }}{% else %}{{ cc.sm }}{% endif %}){% unless forloop.last %}, {% endunless %}{% endfor %} or newer | {% for cc in release.cuda_13.compute_capability %}{{ cc.name }} ({% if cc.sm.first %}{{ cc.sm | join: ", " }}{% else %}{{ cc.sm }}{% endif %}){% unless forloop.last %}, {% endunless %}{% endfor %} or newer |
 
 #### <i class="fas fa-hammer"></i> Source Builds
 {: .fs-5 }
