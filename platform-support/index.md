@@ -33,7 +33,6 @@ For installation instructions, see the [Installation Guide](/install/).
 {: .fs-5 }
 
 - <i class="fab fa-linux"></i> **Linux (glibc {{ release.glibc_min }}+):** {{ release.cpu_arch | join: ", " }} (tested on {% for os in release.os_support %}{{ os }}{% unless forloop.last %}, {% endunless %}{% endfor %})
-- <i class="fab fa-apple"></i> **macOS:** Not supported
 - <i class="fab fa-windows"></i> **Windows:** Supported via [WSL](/install/#wsl2) with a compatible Linux distribution
 
 #### <i class="fas fa-microchip"></i> CUDA
