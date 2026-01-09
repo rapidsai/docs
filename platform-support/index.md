@@ -50,9 +50,9 @@ For installation instructions, see the [Installation Guide](/install/).
 
 | Dependency | Version |
 |:--|:--|
+| **GCC** | {{ release.source_build.gcc }} |
 | **CCCL** | {{ release.source_build.cccl }} |
 | **nvCOMP** | {{ release.source_build.nvcomp }} |
-| **GCC** | {{ release.source_build.gcc }} |
 
 </div>
 
