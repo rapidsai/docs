@@ -9,41 +9,46 @@ description: |
 # RAPIDS Platform Support
 {: .fs-8 }
 
-This page documents the supported versions of CUDA, Python, GPU drivers, and GPU architectures for each RAPIDS release.
-{: .fs-6 .fw-300 }
+RAPIDS libraries are supported on a specific set of platforms for each release. RAPIDS depends on CUDA and Python, and each release is built and tested against specific versions of these dependencies.
+
+RAPIDS uses [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/){: target="_blank"} to support a range of CUDA toolkit and driver versions.
+The NVIDIA Developer documentation contains a reference of [Compute Capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} for each GPU architecture.
+
+For installation instructions, see the [Installation Guide](/install/).
 
 {% for release in site.data.platform_support.releases %}
 ---
 
 ## RAPIDS {{ release.version }}
 
-| Requirement | Supported |
-|:------------|:----------|
-| **Python** | {{ release.python }} |
-| **glibc** | {{ release.glibc }} |
-| **Operating Systems** | {% for os in release.os_support %}{{ os }}{% unless forloop.last %}, {% endunless %}{% endfor %} |
+<div markdown="1" style="margin-left: 1.5em;">
 
-### CUDA 12
+#### <i class="fab fa-python"></i> Python
+{: .fs-5 }
 
-| Requirement | Supported |
-|:------------|:----------|
-| **CUDA Toolkit** | {{ release.cuda_12.toolkit }} |
-| **NVIDIA Driver** | {{ release.cuda_12.driver }} |
-| **GPU Architectures** | {{ release.cuda_12.architectures }} |
+**{{ release.python }}**
 
-### CUDA 13
+#### <i class="fas fa-desktop"></i> Operating Systems
+{: .fs-5 }
 
-| Requirement | Supported |
-|:------------|:----------|
-| **CUDA Toolkit** | {{ release.cuda_13.toolkit }} |
-| **NVIDIA Driver** | {{ release.cuda_13.driver }} |
-| **GPU Architectures** | {{ release.cuda_13.architectures }} |
+**glibc {{ release.glibc }}** (tested on {% for os in release.os_support %}{{ os }}{% unless forloop.last %}, {% endunless %}{% endfor %})
+
+#### <i class="fas fa-microchip"></i> CUDA
+{: .fs-5 }
+
+| | CUDA 12 | CUDA 13 |
+|:--|:--|:--|
+| **Toolkit** | {{ release.cuda_12.toolkit }} | {{ release.cuda_13.toolkit }} |
+| **Driver** | {{ release.cuda_12.driver }} | {{ release.cuda_13.driver }} |
+| **Compute Capability** | {{ release.cuda_12.compute_capability }} | {{ release.cuda_13.compute_capability }} |
+
+#### <i class="fas fa-hammer"></i> Source Builds
+{: .fs-5 }
+
+| Dependency | Version |
+|:--|:--|
+| **CCCL** | {{ release.source_build.cccl }} |
+
+</div>
 
 {% endfor %}
----
-
-## Related Resources
-
-- [Installation Guide](/install/) - Detailed installation instructions
-- [RAPIDS Notices](/notices/) - Deprecation and support announcements
-- [Release Schedule](/releases/schedule/) - Upcoming release dates
