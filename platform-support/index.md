@@ -49,6 +49,7 @@ For installation instructions, see the [Installation Guide](/install/).
 | Dependency | Version |
 |:--|:--|
 | **CCCL** | {{ release.source_build.cccl }} |
+| **nvCOMP** | {{ release.source_build.nvcomp }} |
 
 </div>
 
