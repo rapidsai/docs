@@ -115,7 +115,7 @@ See the WSL2 setup [troubleshooting section](#wsl2-troubleshooting).
 
 # System Requirements
 ## **OS / GPU Driver / CUDA Versions**
-All provisioned systems need to be RAPIDS capable. Here's what is required:
+All provisioned systems need to be RAPIDS capable. Below is a list of requirements for the current release. For requirements of historical RAPIDS versions, see [Platform Support](/platform-support/).
 
 <i class="fas fa-microchip"></i> **GPU:** NVIDIA Volta™ or higher with [compute capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} 7.0+
 - <i class="fas fa-exclamation-triangle"></i> Pascal™ GPU support was [removed in 24.02](https://docs.rapids.ai/notices/rsn0034/). Compute capability 7.0+ is required for RAPIDS 24.02 and later.
