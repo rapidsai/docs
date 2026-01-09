@@ -24,16 +24,16 @@ For installation instructions, see the [Installation Guide](/install/).
 
 <div markdown="1" style="margin-left: 1.5em;">
 
-#### <i class="fab fa-python"></i> Python
-{: .fs-5 }
-
-**{{ release.python | join: ", " }}**
-
 #### <i class="fas fa-desktop"></i> Operating Systems
 {: .fs-5 }
 
 - <i class="fab fa-linux"></i> **Linux (glibc {{ release.glibc_min }}+):** {{ release.cpu_arch | join: ", " }} (tested on {% for os in release.os_support %}{{ os }}{% unless forloop.last %}, {% endunless %}{% endfor %})
 - <i class="fab fa-windows"></i> **Windows:** Supported via [WSL](/install/#wsl2) with a compatible Linux distribution
+
+#### <i class="fab fa-python"></i> Python
+{: .fs-5 }
+
+**{{ release.python | join: ", " }}**
 
 #### <i class="fas fa-microchip"></i> CUDA
 {: .fs-5 }
