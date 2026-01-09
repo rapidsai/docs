@@ -32,7 +32,9 @@ For installation instructions, see the [Installation Guide](/install/).
 #### <i class="fas fa-desktop"></i> Operating Systems
 {: .fs-5 }
 
-**glibc {{ release.glibc_min }}+** (tested on {% for os in release.os_support %}{{ os }}{% unless forloop.last %}, {% endunless %}{% endfor %})
+- <i class="fab fa-linux"></i> **Linux (glibc {{ release.glibc_min }}+):** {{ release.cpu_arch | join: ", " }} (tested on {% for os in release.os_support %}{{ os }}{% unless forloop.last %}, {% endunless %}{% endfor %})
+- <i class="fab fa-apple"></i> **macOS:** Not supported
+- <i class="fab fa-windows"></i> **Windows:** Supported via [WSL](/install/#wsl2) with a compatible Linux distribution
 
 #### <i class="fas fa-microchip"></i> CUDA
 {: .fs-5 }
@@ -50,6 +52,9 @@ For installation instructions, see the [Installation Guide](/install/).
 |:--|:--|
 | **CCCL** | {{ release.source_build.cccl }} |
 | **nvCOMP** | {{ release.source_build.nvcomp }} |
+| **GCC** | {{ release.source_build.gcc }} |
+
+<i class="fas fa-info-circle"></i> clang is not officially supported.
 
 </div>
 
