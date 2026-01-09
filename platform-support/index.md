@@ -37,11 +37,11 @@ For installation instructions, see the [Installation Guide](/install/).
 #### <i class="fas fa-microchip"></i> CUDA
 {: .fs-5 }
 
-| | CUDA 12 | CUDA 13 |
-|:--|:--|:--|
-| **Toolkit** | {{ release.cuda_12.toolkit_min }}{% if release.cuda_12.toolkit_min != release.cuda_12.toolkit_max %} - {{ release.cuda_12.toolkit_max }}{% endif %} | {{ release.cuda_13.toolkit_min }}{% if release.cuda_13.toolkit_min != release.cuda_13.toolkit_max %} - {{ release.cuda_13.toolkit_max }}{% endif %} |
-| **Driver** | {{ release.cuda_12.driver }}+ | {{ release.cuda_13.driver }}+ |
-| **Compute Capability** | {% for cc in release.cuda_12.compute_capability %}{{ cc.name }} ({% if cc.sm.first %}{{ cc.sm | join: ", " }}{% else %}{{ cc.sm }}{% endif %}){% unless forloop.last %}, {% endunless %}{% endfor %} or newer | {% for cc in release.cuda_13.compute_capability %}{{ cc.name }} ({% if cc.sm.first %}{{ cc.sm | join: ", " }}{% else %}{{ cc.sm }}{% endif %}){% unless forloop.last %}, {% endunless %}{% endfor %} or newer |
+| | {% for cuda in release.cuda %}CUDA {{ cuda.major }}{% unless forloop.last %} | {% endunless %}{% endfor %} |
+|:--|{% for cuda in release.cuda %}:--|{% endfor %}
+| **Toolkit** | {% for cuda in release.cuda %}{{ cuda.toolkit_min }}{% if cuda.toolkit_min != cuda.toolkit_max %} - {{ cuda.toolkit_max }}{% endif %}{% unless forloop.last %} | {% endunless %}{% endfor %} |
+| **Driver** | {% for cuda in release.cuda %}{{ cuda.driver_min }}+{% unless forloop.last %} | {% endunless %}{% endfor %} |
+| **Compute Capability** | {% for cuda in release.cuda %}{% for cc in cuda.compute_capability %}{{ cc.name }} ({% if cc.sm.first %}{{ cc.sm | join: ", " }}{% else %}{{ cc.sm }}{% endif %}){% unless forloop.last %}, {% endunless %}{% endfor %} or newer{% unless forloop.last %} | {% endunless %}{% endfor %} |
 
 #### <i class="fas fa-hammer"></i> Source Builds
 {: .fs-5 }
