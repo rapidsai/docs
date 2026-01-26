@@ -89,14 +89,14 @@ jobs:
   checks:
     secrets: inherit
     needs: telemetry-setup
-    uses: rapidsai/shared-workflows/.github/workflows/checks.yaml@branch-25.10
+    uses: rapidsai/shared-workflows/.github/workflows/checks.yaml@main
     with:
       enable_check_generated_files: false
       ignored_pr_jobs: "telemetry-summarize"
 ```
 {% endraw %}
 
-Syntax for the `ignored_pr_jobs` is [space-separated within the quotes](https://github.com/rapidsai/shared-workflows/blob/branch-25.02/.github/workflows/checks.yaml#L30).
+Syntax for the `ignored_pr_jobs` is [space-separated within the quotes](https://github.com/rapidsai/shared-workflows/blob/main/.github/workflows/checks.yaml#L40).
 
 * Run the parsing and submission script job as the final job - after `pr-builder`:
 
@@ -119,7 +119,7 @@ Syntax for the `ignored_pr_jobs` is [space-separated within the quotes](https://
 * Optionally, add steps to your build scripts to copy additional contents to be
   bundled with your run results. For example, [cudf uses a special rapids
   command that shows the sccache
-  statistics](https://github.com/rapidsai/cudf/blob/branch-25.10/ci/build_cpp.sh#L36)
+  statistics](https://github.com/rapidsai/cudf/blob/main/ci/build_cpp.sh#L36)
   and [saves them to a text file in the appropriate location](https://github.com/rapidsai/gha-tools/blob/main/tools/rapids-telemetry-record).
 
 * Processing of additional files is automatic, so long as filenames match expected patterns. The currently handled filenames are:
@@ -333,17 +333,17 @@ We store our span data using Grafana Tempo. Tempo allows TraceQL queries for fil
 
 The query is limited to a certain number of traces and spans per trace, as well as the time range of the query. The maximum time range is 7 days.
 
-The resource-level attributes that are captured can be found in shared-workflows, such as https://github.com/rapidsai/shared-workflows/blob/d94b26cdfafe306cde800e8cc11ed9444a21c634/.github/workflows/conda-cpp-build.yaml#L158.
+The resource-level attributes that are captured can be found in shared-workflows, such as https://github.com/rapidsai/shared-workflows/blob/main/.github/workflows/conda-cpp-build.yaml#L168.
 
 Additional span attributes get added by [the python script that uses the OpenTelemetry SDK](https://github.com/rapidsai/shared-actions/blob/main/telemetry-impls/summarize/send_trace.py#L317).
 
 
-From [conda-cpp-build.yaml](https://github.com/rapidsai/shared-workflows/blob/branch-25.04/.github/workflows/conda-cpp-build.yaml#L117):
+From [conda-cpp-build.yaml](https://github.com/rapidsai/shared-workflows/blob/main/.github/workflows/conda-cpp-build.yaml#L168):
 ```
 "rapids.PACKAGER=conda,rapids.CUDA_VER=${{ matrix.CUDA_VER }},rapids.PY_VER=${{ matrix.PY_VER }},rapids.ARCH=${{ matrix.ARCH }},rapids.LINUX_VER=${{ matrix.LINUX_VER }}"
 ```
 
-From [wheels-test.yaml](https://github.com/rapidsai/shared-workflows/blob/branch-25.04/.github/workflows/wheels-test.yaml#L152)
+From [wheels-test.yaml](https://github.com/rapidsai/shared-workflows/blob/branch-25.04/.github/workflows/wheels-test.yaml#L169)
 ```
 "rapids.PACKAGER=wheel,rapids.CUDA_VER=${{ matrix.CUDA_VER }},rapids.PY_VER=${{ matrix.PY_VER }},rapids.ARCH=${{ matrix.ARCH }},rapids.LINUX_VER=${{ matrix.LINUX_VER }},rapids.GPU=${{ matrix.GPU }},rapids.DRIVER=${{ matrix.DRIVER }},rapids.DEPENDENCIES=${{ matrix.DEPENDENCIES }}"
 ```
