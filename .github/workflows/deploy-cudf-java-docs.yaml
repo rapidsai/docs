@@ -41,9 +41,10 @@ jobs:
       - name: Upload cudf-java docs to S3
         run: ci/upload_cudf_java_docs.sh ${{ inputs.version }}
 
-      - name: Run script to update stable value for cudf-java in docs.yml
-        env :
+      - name: Update stable value for cudf-java in docs.yml and projects-to-versions.json
+        env:
           NEW_STABLE_VALUE: ${{ inputs.new_stable_value }}
+          VERSION: ${{ inputs.version }}
         run: |
           if [ "$NEW_STABLE_VALUE" != "1" ]; then
             echo "Invalid value for new_stable_value: $NEW_STABLE_VALUE"
@@ -51,8 +52,11 @@ jobs:
           fi
 
           sed -i '/cudf-java:/,/stable:/s/stable: .*/stable: '"$NEW_STABLE_VALUE"'/' _data/docs.yml
-
           echo "Updated stable value for cudf-java to $NEW_STABLE_VALUE in _data/docs.yml"
+
+          jq --arg version "$VERSION" '."cudf-java".stable = $version' ci/customization/projects-to-versions.json > tmp.json \
+            && mv tmp.json ci/customization/projects-to-versions.json
+          echo "Updated cudf-java stable version to $VERSION in projects-to-versions.json"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v8
