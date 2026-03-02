@@ -48,7 +48,7 @@ These commands require that the logged-in user (`anaconda login`) is in the owne
 When release procedures are not well-established or some other accident has resulted in packages that may cause problems, we need to remove packages.
 
 ```shell
-anaconda remove'<channel>/<package>/<version>'
+anaconda remove '<channel>/<package>/<version>'
 ```
 
 A real example of this would be removing an accidentally published package for rapids-logger, with a version that doesn't make sense:
