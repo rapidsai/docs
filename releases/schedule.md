@@ -39,9 +39,11 @@ Historical list of completed releases
 Phase | Start | End | Duration
 -- | -- | -- | --
 Development | {{ release.dev.start | date: "%a, %b %e, %Y" }} | {{ release.dev.end | date: "%a, %b %e, %Y" }} | {{ release.dev.days }} days
-Burn Down | {{ release.burndown.start | date: "%a, %b %e, %Y" }} | {{ release.burndown.end | date: "%a, %b %e, %Y" }} | {{ release.burndown.days }} days
-Code Freeze/Testing | {{ release.codefreeze.start | date: "%a, %b %e, %Y" }} | {{ release.codefreeze.end | date: "%a, %b %e, %Y" }} | {{ release.codefreeze.days }} days
-Release | {{ release.release.start | date: "%a, %b %e, %Y" }} | {{ release.release.end | date: "%a, %b %e, %Y" }} | {{ release.release.days }} days
+[Burn Down]({% link releases/process.md %}#burn-down) | {{ release.burndown.start | date: "%a, %b %e, %Y" }} | {{ release.burndown.end | date: "%a, %b %e, %Y" }} | {{ release.burndown.days }} days
+{% if release.cudf_codefreeze %}[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (cuDF/RMM/rapids-cmake/raft/dask-cuda/KvikIO/ucxx/rapidsmpf) | {{ release.cudf_codefreeze.start | date: "%a, %b %e, %Y" }} | {{ release.cudf_codefreeze.end | date: "%a, %b %e, %Y" }} | {{ release.cudf_codefreeze.days }} days
+[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) (others) | {{ release.other_codefreeze.start | date: "%a, %b %e, %Y" }} | {{ release.other_codefreeze.end | date: "%a, %b %e, %Y" }} | {{ release.other_codefreeze.days }} days
+{% else %}[Code Freeze/Testing]({% link releases/process.md %}#code-freeze) | {{ release.codefreeze.start | date: "%a, %b %e, %Y" }} | {{ release.codefreeze.end | date: "%a, %b %e, %Y" }} | {{ release.codefreeze.days }} days
+{% endif %}[Release]({% link releases/process.md %}#releasing) | {{ release.release.start | date: "%a, %b %e, %Y" }} | {{ release.release.end | date: "%a, %b %e, %Y" }} | {{ release.release.days }} days
 
 {% else %}
 {% if release.date %}
