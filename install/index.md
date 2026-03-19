@@ -26,7 +26,6 @@ RAPIDS has several methods for installation, depending on the preferred environm
 - [pip](#pip)
 - [SDK Manager](#sdkm)
 - [Windows WSL2](#wsl2)
-  - [SDK Manager](#wsl2-sdkm)
   - [Conda](#wsl2-conda)
   - [Docker](#wsl2-docker)
   - [pip](#wsl2-pip)
@@ -247,13 +246,28 @@ RAPIDS pip packages are available on the NVIDIA Python Package Index.
 
 ## **SDK Manager**
 [NVIDIA SDK Manager](https://developer.nvidia.com/sdk-manager) gives users a Graphical User Interface (GUI) option to install RAPIDS.  It also attempts to fix any environment issues before installing RAPIDS or updating RAPIDS, making it ideal for new users.
-1. Download [SDK Manager from its website](https://developer.nvidia.com/sdk-manager){: target="_blank"} (requires sign up or login to NVIDIA's Developer community).  
-2. Install and run SDK Manager [using the installation guide here](https://docs.nvidia.com/sdk-manager/download-run-sdkm/index.html){: target="_blank"}. For Ubuntu, use the following commands:
-```bash
+1. Download [SDK Manager from its website](https://developer.nvidia.com/sdk-manager) (requires sign up or login to NVIDIA's Developer community).
+2. Install SDK Manager client
+- For Ubuntu, use the following command:
+```sh
 sudo apt install ./sdkmanager_[version]-[build#]_amd64.deb
+```
+
+   - For Windows, follow the step-by-step instructions in the NVIDIA_SDK_Manager_[version]-[build#].exe
+
+3. Run SDK Manager client
+- For Ubuntu, use the following command:
+```sh
 sdkmanager
 ```
-3. Sign in when asked, and follow SDK Manager's [RAPIDS installation instructions](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html){: target="_blank"}.
+
+- For Windows,
+```sh
+Use the Start menu shortcut "NVIDIA SDK Manager" or
+Open a terminal window, go to the installation directory if not added to the path during installation, and run NvSDKManager.exe
+```
+
+4. To install RAPIDS, log in to your NVIDIA Developer account via the SDK Manager client (“NVIDIA Developer” tab) using the [provided login instructions](https://docs.nvidia.com/sdk-manager/download-run-sdkm/index.html#log-in-and-run-sdk-manager). Once logged in, proceed with the RAPIDS installation using the SDK Manager's instructions, which can be found [here](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html).
 
 
 <br/>
