@@ -50,5 +50,6 @@ Once this is done, open a PR that targets the default development branch (`main`
 
 **IMPORTANT**:
 - When merging this PR, do not use the [auto-merger]({% link resources/auto-merger.md %}) (i.e. the `/merge` comment). Instead, use the `/merge nosquash` comment. This ensures that branch history is preserved and branches remain compatible.
+- DO NOT close the PR that was auto-opened by the ops-bot. Otherwise, the manual forward-merge cannot be merged with `/merge nosquash` and must be admin-merged instead.
 
 Once this PR is merged, the original forward-merger PR should automatically be merged since it will contain the same commit hashes.
