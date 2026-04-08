@@ -32,14 +32,46 @@
   <link rel="stylesheet" href="{{ "/assets/css/custom.css" | relative_url }}">
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DLJNCEWKZD"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
-    gtag('config', 'G-DLJNCEWKZD');
+    function hasAnalyticsConsent() {
+      return typeof OnetrustActiveGroups === 'string' &&
+            OnetrustActiveGroups.split(',').includes('C0002');
+    }
+
+    function loadGA4() {
+      if (window._ga4Loaded) return;
+      window._ga4Loaded = true;
+      var gtagScript = document.createElement('script');
+      gtagScript.async = true;
+      gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-DLJNCEWKZD';
+      document.head.appendChild(gtagScript);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      window.gtag = window.gtag || gtag;
+      gtag('js', new Date());
+      gtag('config', 'G-DLJNCEWKZD');
+    }
+
+    function initAnalyticsIfConsented() {
+      if (hasAnalyticsConsent()) {
+        loadGA4();
+      }
+    }
+
+    if (document.readyState === 'complete') {
+      initAnalyticsIfConsented();
+    } else {
+      window.addEventListener('load', initAnalyticsIfConsented);
+    }
+
+    if (window.OneTrust && typeof window.OneTrust.OnConsentChanged === 'function') {
+      window.OneTrust.OnConsentChanged(function () {
+        initAnalyticsIfConsented();
+      });
+    }
   </script>
+
   <script src="https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js"></script>
 
   {% if site.search_enabled != nil %}
