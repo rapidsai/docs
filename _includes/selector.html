@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2024-2025, NVIDIA CORPORATION & AFFILIATES.
+<!-- SPDX-FileCopyrightText: Copyright (c) 2024-2026, NVIDIA CORPORATION & AFFILIATES.
  * All rights reserved.
  * SPDX-License-Identifier: Apache-2.0 -->
 <style>
@@ -291,7 +291,7 @@
                     </div>
                     <div class="options-section-specific" x-show="active_packages != 'Standard'">
                         <div class="option-label"><!-- Second row of packages --></div>
-                        <template x-for="package in getAdditionalRapidsPackagesForRelease()">
+                        <template x-for="package in additional_rapids_packages">
                             <div x-on:click="(e) => packagesClickHandler(e, package)"
                                 x-bind:class="{'active': active_packages.includes(package), 'disabled': disableUnsupportedPackage(package)}"
                                 class="option" x-text="package"></div>
@@ -318,7 +318,7 @@
                     </div>
                     <div class="options-section-specific" x-show="active_packages != 'Standard'">
                         <div class="option-label"><!-- Second row of packages --></div>
-                        <template x-for="package in getAdditionalPipPackagesForRelease()">
+                        <template x-for="package in additional_pip_packages">
                             <div x-on:click="(e) => packagesClickHandler(e, package)"
                                 x-bind:class="{'active': active_packages.includes(package), 'disabled': disableUnsupportedPackage(package)}" class="option"
                                 x-text="package"></div>
@@ -405,15 +405,6 @@
             },
             getNightlyVersion() {
                 return "{{ site.data.releases.nightly.version }}";
-            },
-            // nvForest is nightly-only until the 26.04 release; exclude from package lists when Stable is selected
-            getAdditionalRapidsPackagesForRelease() {
-                if (this.active_release === "Nightly") return this.additional_rapids_packages;
-                return this.additional_rapids_packages.filter(p => p !== "nvForest");
-            },
-            getAdditionalPipPackagesForRelease() {
-                if (this.active_release === "Nightly") return this.additional_pip_packages;
-                return this.additional_pip_packages.filter(p => p !== "nvForest");
             },
             getMethodHTML(method) {
                 var icon_class = "box-open fas";
@@ -509,12 +500,6 @@
                 if (this.active_packages.length === 1 && this.active_packages[0] === "Standard") {
                     pkgs = ["rapids"];
                 }
-                if (this.active_release === "Stable") {
-                    pkgs = pkgs.filter(pkg => pkg !== "nvForest");
-                }
-                if (this.active_packages[0] === "Choose Specific Packages" && pkgs.length === 0) {
-                    return "Select at least one package.";
-                }
 
                 if (pkgs.includes("RAFT")) {
                     pkgs = pkgs.filter(pkg => pkg !== "RAFT");
@@ -557,7 +542,7 @@
                     return false;
                 }
                 var selected_packages = this.active_packages.filter(pkg => pkg !== "Choose Specific Packages" && pkg !== "Standard");
-                var pypi_available_packages = ["cudf", "cuml", "dask-cudf", "raft"];
+                var pypi_available_packages = ["cudf", "cuml", "dask-cudf", "raft", "nvforest"];
                 return selected_packages.length > 0 &&
                     selected_packages.every(pkg => pypi_available_packages.includes(pkg.toLowerCase()));
             },
@@ -597,7 +582,7 @@
                 if (this.active_packages.length === 1 && this.active_packages[0] === "Choose Specific Packages") {
                     return "Select at least one package.";
                 } else if (this.active_packages[0] === 'Standard') {
-                    var pkgs_to_show = this.getAdditionalPipPackagesForRelease();
+                    var pkgs_to_show = this.additional_pip_packages;
 
                     var pkgs = pkgs_to_show.flatMap(libraryToPkg);
 
@@ -606,14 +591,9 @@
                 } else {
                     // sort active_packages to appear in the same order as the additional_pip_packages list
                     this.active_packages.sort((a, b) => this.additional_pip_packages.indexOf(a) - this.additional_pip_packages.indexOf(b));
-                    var selected_pkgs = this.active_packages.filter(pkg => pkg !== "Choose Specific Packages");
-                    if (this.active_release === "Stable") {
-                        selected_pkgs = selected_pkgs.filter(pkg => pkg !== "nvForest");
-                    }
-                    var pkgs = selected_pkgs.flatMap(libraryToPkg);
-                    if (pkgs.length === 0) {
-                        return "Select at least one package.";
-                    }
+                    var pkgs = this.active_packages
+                        .filter(pkg => pkg !== "Choose Specific Packages")
+                        .flatMap(libraryToPkg);
                 }
 
                 // pkgs.length == 2 because it includes the "Choose Specific Packages" option
@@ -859,10 +839,6 @@
                    this.active_pip_cuda_ver = supported_pip_cuda_versions[supported_pip_cuda_versions.length - 1];
                }
 
-               // nvForest is nightly-only; deselect it when switching to Stable
-               if (release === "Stable" && this.active_packages.includes("nvForest")) {
-                   this.active_packages = this.active_packages.filter(p => p !== "nvForest");
-               }
             },
             imgTypeClickHandler(e, type) {
                 if (this.isDisabled(e.target)) return;
