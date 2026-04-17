@@ -167,7 +167,7 @@ Where those inputs are defined as follows:
 
 * `{workflow-run-id}` = the unique identifier for a GitHub Actions workflow run
 * `{org}/{repo}` = the repository the workflow run occurred in (e.g. `rapidsai/rmm`)
-* `{artifact-name}` = unique identifier for an artifact within one workflow run (e.g. `rmm_conda_python_cuda12_py312_x86_64`)
+* `{artifact-name}` = unique identifier for an artifact within one workflow run (e.g. `rmm_conda_python_abi3_x86_64_cu12`)
 * `{destination-directory}` = local directory the artifact's contents should be decompressed to
 
 The `{org}`, `{repo}`, and `{workflow-run-id}` can be found in the URL for CI jobs.
@@ -176,7 +176,7 @@ Those URLs are of the form `https://github.com/{org}/{repo}/actions/runs/{workfl
 Valid values for `{artifact-name}` can be found on the "Actions" tab in the GitHub Actions UI, as described in "Finding Artifacts in the GitHub UI" above.
 The run IDs can also be identified programmatically.
 
-For example, the following sequence of commands accomplishes the task *"download the latest `rmm` Python 3.12, CUDA 12 conda packages built from `main`"*.
+For example, the following sequence of commands accomplishes the task *"download the latest `rmm` Python CUDA 12 conda packages built from `main`"*.
 
 ```shell
 # get the most recent successful main nightly or branch build
@@ -197,7 +197,7 @@ RMM_CHANNEL="$(mktemp -d)"
 gh run download \
   "${RUN_ID}" \
   --repo "rapidsai/rmm" \
-  --name "rmm_conda_python_cuda12_py312_x86_64" \
+  --name "rmm_conda_python_abi3_x86_64_cu12" \
   --dir "${RMM_CHANNEL}"
 
 # inspect the files that were downloaded
@@ -243,7 +243,7 @@ gh run download \
 gh run download \
   "${RUN_ID}" \
   --repo "rapidsai/rmm" \
-  --name "rmm_conda_python_cuda12_py312_x86_64" \
+  --name "rmm_conda_python_abi3_x86_64_cu12" \
   --dir "${RMM_CHANNEL}"
 
 # create conda environment
@@ -273,17 +273,17 @@ conda search \
 That produces a summary like this:
 
 ```text
-rmm 25.08.00a32 cuda12_py312_250509_dbd8cc7a
+rmm 25.10.00a32 cuda12_abi3_250509_dbd8cc7a
 --------------------------------------------
-file name   : rmm-25.08.00a32-cuda12_py312_250509_dbd8cc7a.conda
+file name   : rmm-25.10.00a32-cuda12_abi3_250509_dbd8cc7a.conda
 name        : rmm
-version     : 25.08.00a32
-build       : cuda12_py312_250509_dbd8cc7a
+version     : 25.10.00a32
+build       : cuda12_abi3_250509_dbd8cc7a
 build number: 0
 size        : 430 KB
 license     : Apache-2.0
 subdir      : linux-64
-url         : file:///tmp/tmp.LfkdLFvzzj/linux-64/rmm-25.08.00a32-cuda12_py312_250509_dbd8cc7a.conda
+url         : file:///tmp/tmp.LfkdLFvzzj/linux-64/rmm-25.10.00a32-cuda12_abi3_250509_dbd8cc7a.conda
 md5         : fd3ceea32ef3aee44cb207602668cf8d
 timestamp   : 2025-05-09 05:10:10 UTC
 dependencies:
@@ -295,8 +295,7 @@ dependencies:
   - libstdcxx >=13
   - libgcc >=13
   - __glibc >=2.28,<3.0.a0
-  - librmm >=25.6.0a32,<25.7.0a0
-  - python_abi 3.12.* *_cp312
+  - librmm >=25.10.0a32,<25.11.0a0
 ```
 
 ### Using Wheel CI Artifacts Locally
@@ -331,9 +330,6 @@ RUN_ID=$(
 LIBRMM_WHEELHOUSE="$(mktemp -d)"
 RMM_WHEELHOUSE="$(mktemp -d)"
 
-# figure out Python version in the venv
-PY_VERSION=$(python -c 'from sys import version_info as vi; print(f"{vi.major}{vi.minor}")')
-
 # download packages
 gh run download \
   "${RUN_ID}" \
@@ -344,7 +340,7 @@ gh run download \
 gh run download \
   "${RUN_ID}" \
   --repo "rapidsai/rmm" \
-  --name "rmm_wheel_python_rmm_cu12_py${PY_VERSION}_x86_64" \
+  --name "rmm_wheel_python_abi3_x86_64_cu12" \
   --dir "${RMM_WHEELHOUSE}"
 
 # install into the environment
@@ -376,7 +372,7 @@ Add a new file called `ci/use_conda_packages_from_prs.sh`.
 # Copyright (c) 2025, NVIDIA CORPORATION.
 
 # download CI artifacts
-LIBRAFT_CHANNEL=$(rapids-get-pr-artifact raft 789 python conda)
+LIBRAFT_CHANNEL=$(rapids-get-pr-artifact raft 789 cpp conda)
 LIBRMM_CHANNEL=$(rapids-get-pr-artifact rmm 1909 cpp conda)
 
 # For `rattler` builds:
@@ -414,6 +410,10 @@ source ./ci/use_conda_packages_from_prs.sh
 It's important to include all of the recursive dependencies.
 So, for example, Python testing jobs that use the `rmm` Python package also need the `librmm` C++ package.
 
+For Python conda packages that use the [stable ABI](https://docs.python.org/3/c-api/stable.html) (i.e. `abi3`),
+use the `--stable` flag on `rapids-get-pr-artifact`.
+This matches the artifact naming used by the build jobs (e.g. `rmm_conda_python_abi3_x86_64_cu12`).
+
 ```shell
 #!/bin/bash
 # Copyright (c) 2025, NVIDIA CORPORATION.
@@ -421,7 +421,7 @@ So, for example, Python testing jobs that use the `rmm` Python package also need
 # download CI artifacts
 LIBKVIKIO_CHANNEL=$(rapids-get-pr-artifact kvikio 224 cpp conda)
 LIBRMM_CHANNEL=$(rapids-get-pr-artifact rmm 1223 cpp conda)
-RMM_CHANNEL=$(rapids-get-pr-artifact rmm 1223 python conda)
+RMM_CHANNEL=$(rapids-get-pr-artifact rmm 1223 python conda --stable)
 
 # For `rattler` builds:
 #
@@ -457,7 +457,14 @@ source ./ci/use_conda_packages_from_prs.sh
 **Note:** By default `rapids-get-pr-artifact` uses the most recent commit from the specified PR.
 A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
 
+**Note:** To determine whether a package uses `--stable` or `--noarch`, check its `ci/build_python.sh` script
+and look at the `rapids-package-name` invocation. If it uses `--stable --cuda`, use `--stable` with `rapids-get-pr-artifact`.
+
 **Example 3:** Testing `cudf` with a `noarch` build of `dask-cuda`
+
+The `--noarch` flag (with `RAPIDS_PY_NOARCH_SUFFIX`) is for truly `noarch: python` conda packages
+like `dask-cuda` that have no architecture or CUDA version suffix.
+Do not use `--noarch` for stable ABI (`abi3`) packages — use `--stable` instead (see Example 2).
 
 ```shell
 #!/bin/bash
@@ -526,8 +533,8 @@ LIBRMM_WHEELHOUSE=$(
 
 # write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
 cat > "${PIP_CONSTRAINT}" <<EOF
-libraft-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRAFT_WHEELHOUSE}/libraft_*.whl)
-librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRMM_WHEELHOUSE}/librmm_*.whl)
+libraft-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo "${LIBRAFT_WHEELHOUSE}"/libraft_*.whl)
+librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo "${LIBRMM_WHEELHOUSE}"/librmm_*.whl)
 EOF
 ```
 
@@ -543,6 +550,10 @@ This should generally be enough.
 
 It's important to include all of the recursive dependencies.
 So, for example, Python testing jobs that use the `rmm` Python package also need the `librmm` C++ package.
+
+For Python wheels that use the stable ABI (`abi3`), use the `--stable` flag instead of
+`RAPIDS_PY_WHEEL_NAME`. This matches the artifact naming used by the build jobs
+(e.g. `rmm_wheel_python_abi3_x86_64_cu12`).
 
 ```shell
 #!/bin/bash
@@ -561,14 +572,14 @@ LIBRMM_WHEELHOUSE=$(
   RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-artifact rmm 1678 cpp wheel
 )
 RMM_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="rmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-artifact rmm 1678 python wheel
+  rapids-get-pr-artifact rmm 1678 python wheel --stable
 )
 
 # write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
 cat > "${PIP_CONSTRAINT}" <<EOF
-libkvikio-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBKVIKIO_WHEELHOUSE}/libkvikio_*.whl)
-librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRMM_WHEELHOUSE}/librmm_*.whl)
-rmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${RMM_WHEELHOUSE}/rmm_*.whl)
+libkvikio-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo "${LIBKVIKIO_WHEELHOUSE}"/libkvikio_*.whl)
+librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo "${LIBRMM_WHEELHOUSE}"/librmm_*.whl)
+rmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo "${RMM_WHEELHOUSE}"/rmm_*.whl)
 EOF
 ```
 
