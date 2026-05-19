@@ -47,20 +47,42 @@ These commands require that the logged-in user (`anaconda login`) is in the owne
 
 When release procedures are not well-established or some other accident has resulted in packages that may cause problems, we need to remove packages.
 
-`anaconda remove <channel>/<package>/<version>`
+```shell
+anaconda remove '<channel>/<package>/<version>'
+```
 
 A real example of this would be removing an accidentally published package for rapids-logger, with a version that doesn't make sense:
 
-`anaconda remove rapidsai-nightly/rapids-logger/0.2.27`
+```shell
+anaconda remove 'rapidsai-nightly/rapids-logger/0.2.27'
+```
 
 ### Copy files from one channel to another
 
-The recommended install command at time of writing is `conda create -n rapids-25.10 -c rapidsai-nightly -c conda-forge -c nvidia rapids=25.10 python=3.13 'cuda-version>=12.0,<=12.9'`. If a release is uploaded to the rapidsai channel and not the rapidsai-nightly channel, our install command will not see the packages on the `rapidsai` channel. It's just not in the channel list. If both channels were added, we would have to be very careful about strict channel priority, which could easily pick up older or alpha releases.
+The recommended install command for nightlies at time of writing is
+
+```shell
+conda create -n rapids-26.04 -c rapidsai-nightly -c conda-forge rapids=26.04 python=3.13 'cuda-version>=13.0,<=13.1.1'
+```
+
+If a release is uploaded to the `rapidsai` channel and not the `rapidsai-nightly` channel, our install command will not see the packages on the `rapidsai` channel.
+
+It's just not in the channel list.
+
+If both channels were added, we would have to be very careful about strict channel priority, which could easily pick up older or alpha releases.
 
 One solution to this is to just copy the published packages to both `rapidsai` and `rapidsai-nightly`.
 
-`anaconda copy <source channel>/<package>/<version> --to-owner <destination channel>`
+```shell
+anaconda copy \
+    '<source channel>/<package>/<version>' \
+    --to-owner '<destination channel>'
+```
 
 and a real example:
 
-`anaconda copy rapidsai/rapids-logger/0.2.2 --to-owner rapidsai-nightly`
+```shell
+anaconda copy \
+    'rapidsai/rapids-logger/0.2.2' \
+    --to-owner 'rapidsai-nightly'
+```

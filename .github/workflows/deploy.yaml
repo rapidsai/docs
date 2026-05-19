@@ -6,48 +6,39 @@ on:
   push:
     branches:
       - main
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 defaults:
   run:
     shell: bash
-
 permissions:
   id-token: write
   contents: read
-
 jobs:
   build:
     name: Build (and deploy)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
-
+          persist-credentials: false
       # this step uses the `.ruby-version` file
-      - uses: ruby/setup-ruby@v1
-
+      - uses: ruby/setup-ruby@6aaa311d81eba98ae12eaffbcb63296ace0efcde # v1.307.0
       - name: Build Jekyll Site
         run: |
           bundle install
           bundle exec jekyll build
-
-      - uses: aws-actions/configure-aws-credentials@v1-node16
+      - uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 #v5.1.1
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
           role-duration-seconds: 7200 # 2h
-
       - name: Fetch doc files from S3
         run: ci/download_from_s3.sh
-
       - name: Post-process docs
         run: ci/post-process.sh
-
       - name: Deploy site
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
@@ -62,4 +53,5 @@ jobs:
             ARGS="--prod"
           fi
           netlify deploy "$ARGS" \
+            --debug \
             --dir=_site

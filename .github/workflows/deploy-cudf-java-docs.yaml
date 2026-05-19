@@ -1,5 +1,4 @@
 name: Deploy cudf-java docs
-
 on:
   workflow_dispatch:
     inputs:
@@ -10,40 +9,37 @@ on:
       version:
         description: "Version being released. Format: YY.MM or YY.MM.P e.g 24.08 or 24.08.1"
         required: true
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 defaults:
   run:
     shell: bash
-
 permissions:
   id-token: write
   contents: write
   pull-requests: write
-
 jobs:
   deploy-cudf-java-docs:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - uses: aws-actions/configure-aws-credentials@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 #v5.1.1
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
           role-duration-seconds: 7200 # 2h
-
       - name: Upload cudf-java docs to S3
-        run: ci/upload_cudf_java_docs.sh ${{ inputs.version }}
-
-      - name: Run script to update stable value for cudf-java in docs.yml
-        env :
+        env:
+          VERSION: ${{ inputs.version }}
+        run: ci/upload_cudf_java_docs.sh "${VERSION}"
+      - name: Update stable value for cudf-java in docs.yml and projects-to-versions.json
+        env:
           NEW_STABLE_VALUE: ${{ inputs.new_stable_value }}
+          VERSION: ${{ inputs.version }}
         run: |
           if [ "$NEW_STABLE_VALUE" != "1" ]; then
             echo "Invalid value for new_stable_value: $NEW_STABLE_VALUE"
@@ -51,11 +47,13 @@ jobs:
           fi
 
           sed -i '/cudf-java:/,/stable:/s/stable: .*/stable: '"$NEW_STABLE_VALUE"'/' _data/docs.yml
-
           echo "Updated stable value for cudf-java to $NEW_STABLE_VALUE in _data/docs.yml"
 
+          jq --arg version "$VERSION" '."cudf-java".stable = $version' ci/customization/projects-to-versions.json > tmp.json \
+            && mv tmp.json ci/customization/projects-to-versions.json
+          echo "Updated cudf-java stable version to $VERSION in projects-to-versions.json"
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Update stable value for cudf-java in docs.yml"
