@@ -96,7 +96,7 @@ jobs:
 ```
 {% endraw %}
 
-Syntax for the `ignored_pr_jobs` is [space-separated within the quotes](https://github.com/rapidsai/shared-workflows/blob/main/.github/workflows/checks.yaml#L40).
+Syntax for the `ignored_pr_jobs` is space-separated within the quotes.
 
 * Run the parsing and submission script job as the final job - after `pr-builder`:
 
@@ -117,15 +117,20 @@ Syntax for the `ignored_pr_jobs` is [space-separated within the quotes](https://
 > NOTE: pay special attention to the `runs-on` entry. This is what dictates that the job runs on a self-hosted runner, which is necessary for network access control.
 
 * Optionally, add steps to your build scripts to copy additional contents to be
-  bundled with your run results. For example, [cudf uses a special rapids
-  command that shows the sccache
-  statistics](https://github.com/rapidsai/cudf/blob/main/ci/build_cpp.sh#L36)
-  and [saves them to a text file in the appropriate location](https://github.com/rapidsai/gha-tools/blob/main/tools/rapids-telemetry-record).
+  bundled with your run results. For example, cudf uses a [special rapids
+  command](https://github.com/rapidsai/gha-tools/blob/main/tools/rapids-telemetry-record) that shows the sccache
+  statistics
+  and saves them to a text file in the appropriate location:
+{% raw %}
+```
+rapids-telemetry-record sccache-stats.txt sccache --show-adv-stats
+```
+{% endraw %}
 
 * Processing of additional files is automatic, so long as filenames match expected patterns. The currently handled filenames are:
   * sccache-stats.txt
 
-* To add additional filenames/logic to handle, add code to [the Python parsing script](https://github.com/rapidsai/shared-actions/blob/main/telemetry-impls/summarize/send_trace.py#L208)
+* To add additional filenames/logic to handle, add code to [the Python parsing script](https://github.com/rapidsai/shared-actions/blob/2c0720ff09faab9b77be88ab9e653360cc37faec/telemetry-impls/summarize/send_trace.py#L208)
 
 ---
 **Below here is docs on how to maintain the backend parts. Project maintainers should not need anything below here.**
@@ -335,15 +340,15 @@ The query is limited to a certain number of traces and spans per trace, as well 
 
 The resource-level attributes that are captured can be found in shared-workflows, such as https://github.com/rapidsai/shared-workflows/blob/main/.github/workflows/conda-cpp-build.yaml#L168.
 
-Additional span attributes get added by [the python script that uses the OpenTelemetry SDK](https://github.com/rapidsai/shared-actions/blob/main/telemetry-impls/summarize/send_trace.py#L317).
+Additional span attributes get added by [the python script that uses the OpenTelemetry SDK](https://github.com/rapidsai/shared-actions/blob/2c0720ff09faab9b77be88ab9e653360cc37faec/telemetry-impls/summarize/send_trace.py#L335-L345).
 
 
-From [conda-cpp-build.yaml](https://github.com/rapidsai/shared-workflows/blob/main/.github/workflows/conda-cpp-build.yaml#L168):
+From [conda-cpp-build.yaml](https://github.com/rapidsai/shared-workflows/blob/ece43bbc9347340721e5cc576e6ba69148176d3f/.github/workflows/conda-cpp-build.yaml#L145):
 ```
 "rapids.PACKAGER=conda,rapids.CUDA_VER=${{ matrix.CUDA_VER }},rapids.PY_VER=${{ matrix.PY_VER }},rapids.ARCH=${{ matrix.ARCH }},rapids.LINUX_VER=${{ matrix.LINUX_VER }}"
 ```
 
-From [wheels-test.yaml](https://github.com/rapidsai/shared-workflows/blob/branch-25.04/.github/workflows/wheels-test.yaml#L169)
+From [wheels-test.yaml](https://github.com/rapidsai/shared-workflows/blob/ece43bbc9347340721e5cc576e6ba69148176d3f/.github/workflows/wheels-test.yaml#L198):
 ```
 "rapids.PACKAGER=wheel,rapids.CUDA_VER=${{ matrix.CUDA_VER }},rapids.PY_VER=${{ matrix.PY_VER }},rapids.ARCH=${{ matrix.ARCH }},rapids.LINUX_VER=${{ matrix.LINUX_VER }},rapids.GPU=${{ matrix.GPU }},rapids.DRIVER=${{ matrix.DRIVER }},rapids.DEPENDENCIES=${{ matrix.DEPENDENCIES }}"
 ```
