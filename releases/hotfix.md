@@ -79,7 +79,7 @@ Developers
 
 Project Leads
 {: .label .label-blue}
-1. During [triage]({% link releases/triage.md %}), identify potential hotfixes
+1. Identify potential hotfixes
 2. Ensure that the [hotfix criteria](#criteria) is met
 3. Assign the issue and track its progress
 4. Notify Operations that a hotfix is being worked on
