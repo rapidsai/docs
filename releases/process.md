@@ -27,13 +27,7 @@ Operations
 
 ## Git branching model
 
-RAPIDS uses a custom git branching model, [adapted from OneFlow](https://github.com/rapidsai/build-planning/issues/63) to leverage the tools GitHub provides and also focus on release-driven development. From more details see our guide for our [git branching]({% link resources/git.md %}) methodology.
-
-### Migrating projects
-
-For RAPIDS projects that are using another branching/development model, continue to develop with that approach until the next release. All development will happen on the `main` branch and new release branches of the format `release/YY.MM` will be created as part of the release process.
-
-From this point forward you can follow the git branching & release model used by the RAPIDS team.
+RAPIDS uses a custom git branching model, [adapted from OneFlow](https://github.com/rapidsai/build-planning/issues/63) to leverage the tools GitHub provides and also focus on release-driven development.
 
 ## Release Dates
 
