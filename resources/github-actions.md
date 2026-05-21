@@ -41,9 +41,9 @@ Finally, the page [here](https://docs.gha-runners.nvidia.com/runners/) outlines 
 
 Every RAPIDS repository using GitHub Actions has, at a minimum, the following three GitHub Action workflow files:
 
-- `pr.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/branch-23.12/.github/workflows/pr.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/pr.yaml)
-- `build.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/branch-23.12/.github/workflows/build.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/build.yaml)
-- `test.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/branch-23.12/.github/workflows/test.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/test.yaml)
+- `pr.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/main/.github/workflows/pr.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/pr.yaml)
+- `build.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/main/.github/workflows/build.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/build.yaml)
+- `test.yaml` - [rmm workflow example](https://github.com/rapidsai/rmm/blob/main/.github/workflows/test.yaml), [rmm workflow run history](https://github.com/rapidsai/rmm/actions/workflows/test.yaml)
 
 These GitHub Actions workflow files contain a description of all the automated jobs that run as a part of the workflow.
 
@@ -51,11 +51,11 @@ These jobs contain things like C++/Python builds, C++/Python tests, notebook tes
 
 The chart below provides an overview of how each workflow file is used.
 
-| Event:                            | Runs workflows:                 | Performs Builds? | Performs Tests? | Uploads to Anaconda.org/Wheel Registry? |
-| --------------------------------- | ------------------------------- | :--------------: | :-------------: | :-------------------------------------: |
-| - PRs                             | - `pr.yaml`                     | ✅               | ✅              | ❌                                      |
-| - `branch-*` Merges<br>- Releases | - `build.yaml`                  | ✅               | ❌              | ✅                                      |
-| - Nightlies                       | - `build.yaml`<br>- `test.yaml` | ✅               | ✅              | ✅                                      |
+| Event:                             | Runs workflows:                 | Performs Builds? | Performs Tests? | Uploads to Anaconda.org/Wheel Registry? |
+| ---------------------------------- | ------------------------------- | :--------------: | :-------------: | :-------------------------------------: |
+| - PRs                              | - `pr.yaml`                     | ✅               | ✅              | ❌                                      |
+| - `release/*` Merges<br>- Releases | - `build.yaml`                  | ✅               | ❌              | ✅                                      |
+| - Nightlies                        | - `build.yaml`<br>- `test.yaml` | ✅               | ✅              | ✅                                      |
 
 Although release workflows don't run tests, they do go through a week of nightly testing to ensure everything works as expected. See [this page]({% link releases/process.md %}) for more details about the release process.
 
@@ -105,9 +105,9 @@ The `GPUtester` account is a system account used to trigger nightly workflow run
 RAPIDS uses a collection of reusable GitHub Actions workflows in order to single-source common build configuration settings.
 These reusable workflows can be found in the [rapidsai/shared-workflows](https://github.com/rapidsai/shared-workflows) repository.
 
-An example of one of the reusable workflows used by RAPIDS is the [`conda-cpp-build.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/branch-25.08/.github/workflows/conda-cpp-build.yaml), which is the source of truth for which architectures and CUDA versions build RAPIDS C++ packages.
+An example of one of the reusable workflows used by RAPIDS is the [`conda-cpp-build.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/main/.github/workflows/conda-cpp-build.yaml), which is the source of truth for which architectures and CUDA versions build RAPIDS C++ packages.
 
-Similarly, the [`conda-cpp-tests.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/branch-25.08/.github/workflows/conda-cpp-tests.yaml) specifies configurations for testing RAPIDS C++ packages.
+Similarly, the [`conda-cpp-tests.yaml` workflow](https://github.com/rapidsai/shared-workflows/blob/main/.github/workflows/conda-cpp-tests.yaml) specifies configurations for testing RAPIDS C++ packages.
 
 The majority of these reusable workflows leverage the CI images from the [rapidsai/ci-imgs](https://github.com/rapidsai/ci-imgs/) repository.
 
@@ -167,7 +167,7 @@ Where those inputs are defined as follows:
 
 * `{workflow-run-id}` = the unique identifier for a GitHub Actions workflow run
 * `{org}/{repo}` = the repository the workflow run occurred in (e.g. `rapidsai/rmm`)
-* `{artifact-name}` = unique identifier for an artifact within one workflow run (e.g. `rmm_conda_python_cuda12_py312_x86_64`)
+* `{artifact-name}` = unique identifier for an artifact within one workflow run (e.g. `rmm_conda_python_abi3_x86_64_cu12`)
 * `{destination-directory}` = local directory the artifact's contents should be decompressed to
 
 The `{org}`, `{repo}`, and `{workflow-run-id}` can be found in the URL for CI jobs.
@@ -176,14 +176,14 @@ Those URLs are of the form `https://github.com/{org}/{repo}/actions/runs/{workfl
 Valid values for `{artifact-name}` can be found on the "Actions" tab in the GitHub Actions UI, as described in "Finding Artifacts in the GitHub UI" above.
 The run IDs can also be identified programmatically.
 
-For example, the following sequence of commands accomplishes the task *"download the latest `rmm` Python 3.12, CUDA 12 conda packages built from `branch-25.08`"*.
+For example, the following sequence of commands accomplishes the task *"download the latest `rmm` Python CUDA 12 conda packages built from `main`"*.
 
 ```shell
-# get the most recent successful branch-25.08 nightly or branch build
+# get the most recent successful main nightly or branch build
 RUN_ID=$(
   gh run list \
     --repo "rapidsai/rmm" \
-    --branch "branch-25.08" \
+    --branch "main" \
     --workflow "build.yaml" \
     --status "success" \
     --json "createdAt,databaseId" \
@@ -197,7 +197,7 @@ RMM_CHANNEL="$(mktemp -d)"
 gh run download \
   "${RUN_ID}" \
   --repo "rapidsai/rmm" \
-  --name "rmm_conda_python_cuda12_py312_x86_64" \
+  --name "rmm_conda_python_abi3_x86_64_cu12" \
   --dir "${RMM_CHANNEL}"
 
 # inspect the files that were downloaded
@@ -215,14 +215,14 @@ To use these:
 * download them to local directories using the `gh` CLI
 * pass the paths to those directories as channels via `--channel` to `conda` / `mamba` commands
 
-For example, to create a conda environment that uses the latest `librmm` and `rmm` conda packages built from `branch-25.08` on an x86_64, CUDA 12 system:
+For example, to create a conda environment that uses the latest `librmm` and `rmm` conda packages built from `main` on an x86_64, CUDA 12 system:
 
 ```shell
 # get the most recent successful nightly or branch build
 RUN_ID=$(
   gh run list \
     --repo "rapidsai/rmm" \
-    --branch "branch-25.08" \
+    --branch "main" \
     --workflow "build.yaml" \
     --status 'success' \
     --json 'createdAt,databaseId' \
@@ -243,7 +243,7 @@ gh run download \
 gh run download \
   "${RUN_ID}" \
   --repo "rapidsai/rmm" \
-  --name "rmm_conda_python_cuda12_py312_x86_64" \
+  --name "rmm_conda_python_abi3_x86_64_cu12" \
   --dir "${RMM_CHANNEL}"
 
 # create conda environment
@@ -273,17 +273,17 @@ conda search \
 That produces a summary like this:
 
 ```text
-rmm 25.08.00a32 cuda12_py312_250509_dbd8cc7a
+rmm 25.10.00a32 cuda12_abi3_250509_dbd8cc7a
 --------------------------------------------
-file name   : rmm-25.08.00a32-cuda12_py312_250509_dbd8cc7a.conda
+file name   : rmm-25.10.00a32-cuda12_abi3_250509_dbd8cc7a.conda
 name        : rmm
-version     : 25.08.00a32
-build       : cuda12_py312_250509_dbd8cc7a
+version     : 25.10.00a32
+build       : cuda12_abi3_250509_dbd8cc7a
 build number: 0
 size        : 430 KB
 license     : Apache-2.0
 subdir      : linux-64
-url         : file:///tmp/tmp.LfkdLFvzzj/linux-64/rmm-25.08.00a32-cuda12_py312_250509_dbd8cc7a.conda
+url         : file:///tmp/tmp.LfkdLFvzzj/linux-64/rmm-25.10.00a32-cuda12_abi3_250509_dbd8cc7a.conda
 md5         : fd3ceea32ef3aee44cb207602668cf8d
 timestamp   : 2025-05-09 05:10:10 UTC
 dependencies:
@@ -295,8 +295,7 @@ dependencies:
   - libstdcxx >=13
   - libgcc >=13
   - __glibc >=2.28,<3.0.a0
-  - librmm >=25.6.0a32,<25.7.0a0
-  - python_abi 3.12.* *_cp312
+  - librmm >=25.10.0a32,<25.11.0a0
 ```
 
 ### Using Wheel CI Artifacts Locally
@@ -309,7 +308,7 @@ To use these:
 * download them to local directories using the `gh` CLI
 * pass the paths to wheels in those directories to installers like `pip` or `uv`
 
-For example, to create a virtual environment with `librmm` and `rmm` packages built from `branch-25.08` on an x86_64, CUDA 12 system:
+For example, to create a virtual environment with `librmm` and `rmm` packages built from `main` on an x86_64, CUDA 12 system:
 
 ```shell
 # create virtualenv
@@ -320,7 +319,7 @@ source ./rmm-test-env/bin/activate
 RUN_ID=$(
   gh run list \
     --repo "rapidsai/rmm" \
-    --branch "branch-25.08" \
+    --branch "main" \
     --workflow "build.yaml" \
     --status 'success' \
     --json 'createdAt,databaseId' \
@@ -330,9 +329,6 @@ RUN_ID=$(
 # create temporary directories to store wheels
 LIBRMM_WHEELHOUSE="$(mktemp -d)"
 RMM_WHEELHOUSE="$(mktemp -d)"
-
-# figure out Python version in the venv
-PY_VERSION=$(python -c 'from sys import version_info as vi; print(f"{vi.major}{vi.minor}")')
 
 # download packages
 gh run download \
@@ -344,7 +340,7 @@ gh run download \
 gh run download \
   "${RUN_ID}" \
   --repo "rapidsai/rmm" \
-  --name "rmm_wheel_python_rmm_cu12_py${PY_VERSION}_x86_64" \
+  --name "rmm_wheel_python_abi3_x86_64_cu12" \
   --dir "${RMM_WHEELHOUSE}"
 
 # install into the environment
@@ -376,7 +372,7 @@ Add a new file called `ci/use_conda_packages_from_prs.sh`.
 # Copyright (c) 2025, NVIDIA CORPORATION.
 
 # download CI artifacts
-LIBRAFT_CHANNEL=$(rapids-get-pr-artifact raft 789 python conda)
+LIBRAFT_CHANNEL=$(rapids-get-pr-artifact raft 789 cpp conda)
 LIBRMM_CHANNEL=$(rapids-get-pr-artifact rmm 1909 cpp conda)
 
 # For `rattler` builds:
@@ -414,6 +410,10 @@ source ./ci/use_conda_packages_from_prs.sh
 It's important to include all of the recursive dependencies.
 So, for example, Python testing jobs that use the `rmm` Python package also need the `librmm` C++ package.
 
+For Python conda packages that use the [stable ABI](https://docs.python.org/3/c-api/stable.html) (i.e. `abi3`),
+use the `--stable` flag on `rapids-get-pr-artifact`.
+This matches the artifact naming used by the build jobs (e.g. `rmm_conda_python_abi3_x86_64_cu12`).
+
 ```shell
 #!/bin/bash
 # Copyright (c) 2025, NVIDIA CORPORATION.
@@ -421,7 +421,7 @@ So, for example, Python testing jobs that use the `rmm` Python package also need
 # download CI artifacts
 LIBKVIKIO_CHANNEL=$(rapids-get-pr-artifact kvikio 224 cpp conda)
 LIBRMM_CHANNEL=$(rapids-get-pr-artifact rmm 1223 cpp conda)
-RMM_CHANNEL=$(rapids-get-pr-artifact rmm 1223 python conda)
+RMM_CHANNEL=$(rapids-get-pr-artifact rmm 1223 python conda --stable)
 
 # For `rattler` builds:
 #
@@ -457,6 +457,50 @@ source ./ci/use_conda_packages_from_prs.sh
 **Note:** By default `rapids-get-pr-artifact` uses the most recent commit from the specified PR.
 A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
 
+**Note:** To determine whether a package uses `--stable` or `--noarch`, check its `ci/build_python.sh` script
+and look at the `rapids-package-name` invocation. If it uses `--stable --cuda`, use `--stable` with `rapids-get-pr-artifact`.
+
+**Example 3:** Testing `cudf` with a `noarch` build of `dask-cuda`
+
+The `--noarch` flag (with `RAPIDS_PY_NOARCH_SUFFIX`) is for truly `noarch: python` conda packages
+like `dask-cuda` that have no architecture or CUDA version suffix.
+Do not use `--noarch` for stable ABI (`abi3`) packages — use `--stable` instead (see Example 2).
+
+```shell
+#!/bin/bash
+# Copyright (c) 2025, NVIDIA CORPORATION.
+
+# download CI artifacts
+DASK_CUDA_CHANNEL=$(RAPIDS_PY_NOARCH_SUFFIX="noarch" rapids-get-pr-artifact dask-cuda 1595 python conda --noarch)
+
+# For `rattler` builds:
+#
+# Add these channels to the array checked by 'rapids-rattler-channel-string'.
+# This ensures that when conda packages are built with strict channel priority enabled,
+# the locally-downloaded packages will be preferred to remote packages (e.g. nightlies).
+#
+RAPIDS_PREPENDED_CONDA_CHANNELS=("${DASK_CUDA_CHANNEL}")
+
+export RAPIDS_PREPENDED_CONDA_CHANNELS
+
+# For tests and `conda-build` builds:
+#
+# Add these channels to the system-wide conda configuration.
+# This results in PREPENDING them to conda's channel list, so
+# these packages should be found first if strict channel priority is enabled.
+#
+for _channel in "${RAPIDS_PREPENDED_CONDA_CHANNELS[@]}"
+do
+   conda config --system --add channels "${_channel}"
+done
+```
+
+Then copy the following into every script in the `ci/` directory that is doing `conda` installs.
+
+```shell
+source ./ci/use_conda_packages_from_prs.sh
+```
+
 ### Using Wheel CI Artifacts in Other PRs
 
 To use wheels produced by other PRs' CI:
@@ -489,8 +533,8 @@ LIBRMM_WHEELHOUSE=$(
 
 # write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
 cat > "${PIP_CONSTRAINT}" <<EOF
-libraft-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRAFT_WHEELHOUSE}/libraft_*.whl)
-librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRMM_WHEELHOUSE}/librmm_*.whl)
+libraft-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo "${LIBRAFT_WHEELHOUSE}"/libraft_*.whl)
+librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo "${LIBRMM_WHEELHOUSE}"/librmm_*.whl)
 EOF
 ```
 
@@ -506,6 +550,10 @@ This should generally be enough.
 
 It's important to include all of the recursive dependencies.
 So, for example, Python testing jobs that use the `rmm` Python package also need the `librmm` C++ package.
+
+For Python wheels that use the stable ABI (`abi3`), use the `--stable` flag instead of
+`RAPIDS_PY_WHEEL_NAME`. This matches the artifact naming used by the build jobs
+(e.g. `rmm_wheel_python_abi3_x86_64_cu12`).
 
 ```shell
 #!/bin/bash
@@ -524,14 +572,14 @@ LIBRMM_WHEELHOUSE=$(
   RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-artifact rmm 1678 cpp wheel
 )
 RMM_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="rmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-artifact rmm 1678 python wheel
+  rapids-get-pr-artifact rmm 1678 python wheel --stable
 )
 
 # write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
 cat > "${PIP_CONSTRAINT}" <<EOF
-libkvikio-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBKVIKIO_WHEELHOUSE}/libkvikio_*.whl)
-librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${LIBRMM_WHEELHOUSE}/librmm_*.whl)
-rmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo ${RMM_WHEELHOUSE}/rmm_*.whl)
+libkvikio-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo "${LIBKVIKIO_WHEELHOUSE}"/libkvikio_*.whl)
+librmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo "${LIBRMM_WHEELHOUSE}"/librmm_*.whl)
+rmm-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo "${RMM_WHEELHOUSE}"/rmm_*.whl)
 EOF
 ```
 

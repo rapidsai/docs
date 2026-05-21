@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2024-2025, NVIDIA CORPORATION & AFFILIATES.
+<!-- SPDX-FileCopyrightText: Copyright (c) 2024-2026, NVIDIA CORPORATION & AFFILIATES.
  * All rights reserved.
  * SPDX-License-Identifier: Apache-2.0 -->
 <style>
@@ -370,7 +370,7 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('rapids_selector', () => ({
             // default values
-            active_python_ver: "3.13",
+            active_python_ver: "3.14",
             active_conda_cuda_ver: "13",
             active_pip_cuda_ver: "13",
             active_docker_cuda_ver: "13",
@@ -382,8 +382,8 @@
             active_additional_packages: [],
 
             // all possible values
-            python_vers_stable: ["3.10", "3.11", "3.12", "3.13"],
-            python_vers_nightly: ["3.10", "3.11", "3.12", "3.13"],
+            python_vers_stable: ["3.11", "3.12", "3.13", "3.14"],
+            python_vers_nightly: ["3.11", "3.12", "3.13", "3.14"],
             conda_cuda_vers_stable: ["12", "13"],
             conda_cuda_vers_nightly: ["12", "13"],
             pip_cuda_vers_stable: ["12", "13"],
@@ -395,8 +395,8 @@
             img_loc: ["NGC", "Docker Hub"],
             img_types: ["Base", "Notebooks"],
             packages: ["Standard", "Choose Specific Packages"],
-            additional_pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph/nx-cugraph", "cuxfilter", "cuCIM", "RAFT", "cuVS"],
-            additional_rapids_packages: ["cuDF", "cuML", "cuGraph", "cuxfilter", "cuCIM", "RAFT", "cuVS"],
+            additional_pip_packages: ["cuDF", "dask-cuDF", "cuML", "cuGraph/nx-cugraph", "cuxfilter", "cuCIM", "RAFT", "cuVS", "nvForest"],
+            additional_rapids_packages: ["cuDF", "cuML", "cuGraph", "cuxfilter", "cuCIM", "RAFT", "cuVS", "nvForest"],
             additional_packages: ["Graphistry", "JupyterLab", "NetworkX + nx-cugraph", "Plotly Dash", "PyTorch", "TensorFlow", "Xarray-Spatial"],
             note_prefix: "<i class='fas fa-info-circle text-blue'></i>",
             rapids_meta_pkgs: ["cuDF", "cuML", "cuGraph", "nx-cugraph", "cuxfilter", "cuCIM", "RAFT", "cuVS"],
@@ -444,12 +444,12 @@
             getCondaVersionSupport(version) {
                 var cuda_version_info = {
                     "Stable": {
-                        "12": ["12.0", "12.9"],
-                        "13": ["13.0"]
+                        "12": ["12.2", "12.9"],
+                        "13": ["13.0", "13.1"]
                     },
                     "Nightly": {
                         "12": ["12.2", "12.9"],
-                        "13": ["13.0"]
+                        "13": ["13.0", "13.2"]
                     }
                 };
                 var bounds = cuda_version_info[this.active_release][version];
@@ -542,7 +542,7 @@
                     return false;
                 }
                 var selected_packages = this.active_packages.filter(pkg => pkg !== "Choose Specific Packages" && pkg !== "Standard");
-                var pypi_available_packages = ["cudf", "cuml", "dask-cudf", "raft"];
+                var pypi_available_packages = ["cudf", "cuml", "dask-cudf", "raft", "nvforest"];
                 return selected_packages.length > 0 &&
                     selected_packages.every(pkg => pypi_available_packages.includes(pkg.toLowerCase()));
             },
@@ -838,6 +838,7 @@
                if (!supported_pip_cuda_versions.includes(this.active_pip_cuda_ver)) {
                    this.active_pip_cuda_ver = supported_pip_cuda_versions[supported_pip_cuda_versions.length - 1];
                }
+
             },
             imgTypeClickHandler(e, type) {
                 if (this.isDisabled(e.target)) return;
