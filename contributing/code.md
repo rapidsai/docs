@@ -47,12 +47,6 @@ If you are new to RAPIDS, make sure to check out <https://rapids.ai/> to help un
 
 Remember, if you are unsure about anything, don't hesitate to comment on issues and ask for clarifications!
 
-## Seasoned developers
-
-Once you have gotten your feet wet and are more comfortable with the code, follow these steps to find prioritized issues.
-
-All RAPIDS projects have project boards for triaging [issues]({% link releases/triage.md %}) and planning [features]({% link releases/planning.md %}).
-
 ### What do I work on?
 
 __Note:__ If you have been assigned issues, work on those issues first.

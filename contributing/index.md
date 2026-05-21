@@ -29,12 +29,6 @@ Welcome! We are excited you are here! Before you begin, we ask that everyone rev
 
 Remember, if you are unsure about anything, don't hesitate to comment on issues and ask for clarifications!
 
-### Seasoned developers
-
-Once you have gotten your feet wet and are more comfortable with the code, follow these steps to find prioritized issues.
-
-All RAPIDS projects have project boards for triaging [issues]({% link releases/triage.md %}) and planning [features]({% link releases/planning.md %}).
-
 ### More details
 
 Review the [Code Contributions]({% link contributing/code.md %}) page.
