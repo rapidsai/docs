@@ -22,7 +22,6 @@ Operations
 
 ### See also
 
-* [Git branching model]({% link resources/git.md %})
 * [Release versioning]({% link resources/versions.md %})
 
 ## Git branching model
