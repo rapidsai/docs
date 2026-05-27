@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (c) 2023-2025, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2023-2026, NVIDIA CORPORATION & AFFILIATES.
 # All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
@@ -6,12 +6,13 @@
 Script to customize doxygen/sphinx generated HTML for RAPIDS
 """
 
-import re
-import sys
 import json
 import os
-from bs4 import BeautifulSoup
+import re
+import sys
 from copy import deepcopy
+
+from bs4 import BeautifulSoup
 
 SCRIPT_TAG_ID = "rapids-selector-js"
 PIXEL_SRC_TAG_ID = "rapids-selector-pixel-src"
