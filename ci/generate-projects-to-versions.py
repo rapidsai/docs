@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2025-2026, NVIDIA CORPORATION & AFFILIATES.
 # All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -35,8 +35,9 @@
 #
 import json
 import sys
-import yaml
 from collections import OrderedDict
+
+import yaml
 
 with open("_data/docs.yml") as f:
     DOCS_YML_DICT = yaml.safe_load(f)
