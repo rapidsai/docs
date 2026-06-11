@@ -410,10 +410,6 @@ source ./ci/use_conda_packages_from_prs.sh
 It's important to include all of the recursive dependencies.
 So, for example, Python testing jobs that use the `rmm` Python package also need the `librmm` C++ package.
 
-For Python conda packages that use the [stable ABI](https://docs.python.org/3/c-api/stable.html) (i.e. `abi3`),
-use the `--stable` flag on `rapids-get-pr-artifact`.
-This matches the artifact naming used by the build jobs (e.g. `rmm_conda_python_abi3_x86_64_cu12`).
-
 ```shell
 #!/bin/bash
 # Copyright (c) 2025, NVIDIA CORPORATION.
@@ -421,7 +417,7 @@ This matches the artifact naming used by the build jobs (e.g. `rmm_conda_python_
 # download CI artifacts
 LIBKVIKIO_CHANNEL=$(rapids-get-pr-artifact kvikio 224 cpp conda)
 LIBRMM_CHANNEL=$(rapids-get-pr-artifact rmm 1223 cpp conda)
-RMM_CHANNEL=$(rapids-get-pr-artifact rmm 1223 python conda --stable)
+RMM_CHANNEL=$(rapids-get-pr-artifact rmm 1223 python conda)
 
 # For `rattler` builds:
 #
@@ -457,21 +453,25 @@ source ./ci/use_conda_packages_from_prs.sh
 **Note:** By default `rapids-get-pr-artifact` uses the most recent commit from the specified PR.
 A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
 
-**Note:** To determine whether a package uses `--stable` or `--noarch`, check its `ci/build_python.sh` script
-and look at the `rapids-package-name` invocation. If it uses `--stable --cuda`, use `--stable` with `rapids-get-pr-artifact`.
-
 **Example 3:** Testing `cudf` with a `noarch` build of `dask-cuda`
 
-The `--noarch` flag (with `RAPIDS_PY_NOARCH_SUFFIX`) is for truly `noarch: python` conda packages
-like `dask-cuda` that have no architecture or CUDA version suffix.
-Do not use `--noarch` for stable ABI (`abi3`) packages — use `--stable` instead (see Example 2).
+Packages like `dask-cuda` are unusual in that they have no architecture or CUDA version suffix.
+Instead of adding hyper-specific flags to handle these edge cases,
+`rapids-get-pr-artifact` has an `--override-artifact-name` flag that allows you
+to specify the artifact name explicitly.
+
+If you look up the `rapids-artifact-name` call used in, e.g. `ci/build_python.sh` in `dask-cuda`, you can pass that same command directly to `rapids-get-pr-artifact` to fetch the expected artifact:
 
 ```shell
 #!/bin/bash
-# Copyright (c) 2025, NVIDIA CORPORATION.
+# Copyright (c) 2026, NVIDIA CORPORATION.
+
+# Copy `rapids-artifact-name` call from upstream ci/build_python.sh
+# to generate the artifact name
+artifact_name="$(rapids-artifact-name wheel_python dask-cuda dask-cuda --pure --arch any)"
 
 # download CI artifacts
-DASK_CUDA_CHANNEL=$(RAPIDS_PY_NOARCH_SUFFIX="noarch" rapids-get-pr-artifact dask-cuda 1595 python conda --noarch)
+DASK_CUDA_CHANNEL=$(rapids-get-pr-artifact dask-cuda 1595 python conda --override-artifact-name $artifact_name)
 
 # For `rattler` builds:
 #
@@ -524,12 +524,8 @@ source rapids-init-pip
 RAPIDS_PY_CUDA_SUFFIX=$(rapids-wheel-ctk-name-gen "${RAPIDS_CUDA_VERSION}")
 
 # download wheels, store the directories holding them in variables
-LIBRAFT_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="libraft_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-artifact raft 2433 cpp wheel
-)
-LIBRMM_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-artifact rmm 1909 cpp wheel
-)
+LIBRAFT_WHEELHOUSE=$(rapids-get-pr-artifact raft 2433 cpp wheel)
+LIBRMM_WHEELHOUSE=$(rapids-get-pr-artifact rmm 1909 cpp wheel)
 
 # write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
 cat > "${PIP_CONSTRAINT}" <<EOF
@@ -551,10 +547,6 @@ This should generally be enough.
 It's important to include all of the recursive dependencies.
 So, for example, Python testing jobs that use the `rmm` Python package also need the `librmm` C++ package.
 
-For Python wheels that use the stable ABI (`abi3`), use the `--stable` flag instead of
-`RAPIDS_PY_WHEEL_NAME`. This matches the artifact naming used by the build jobs
-(e.g. `rmm_wheel_python_abi3_x86_64_cu12`).
-
 ```shell
 #!/bin/bash
 # Copyright (c) 2025, NVIDIA CORPORATION.
@@ -565,15 +557,9 @@ source rapids-init-pip
 RAPIDS_PY_CUDA_SUFFIX=$(rapids-wheel-ctk-name-gen "${RAPIDS_CUDA_VERSION}")
 
 # download wheels, store the directories holding them in variables
-LIBKVIKIO_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="libkvikio_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-artifact kvikio 510 cpp wheel
-)
-LIBRMM_WHEELHOUSE=$(
-  RAPIDS_PY_WHEEL_NAME="librmm_${RAPIDS_PY_CUDA_SUFFIX}" rapids-get-pr-artifact rmm 1678 cpp wheel
-)
-RMM_WHEELHOUSE=$(
-  rapids-get-pr-artifact rmm 1678 python wheel --stable
-)
+LIBKVIKIO_WHEELHOUSE=$(rapids-get-pr-artifact kvikio 510 cpp wheel)
+LIBRMM_WHEELHOUSE=$(rapids-get-pr-artifact rmm 1678 cpp wheel)
+RMM_WHEELHOUSE=$(rapids-get-pr-artifact rmm 1678 python wheel)
 
 # write a pip constraints file saying e.g. "whenever you encounter a requirement for 'librmm-cu12', use this wheel"
 cat > "${PIP_CONSTRAINT}" <<EOF
@@ -589,8 +575,48 @@ Then copy the following into every script in the `ci/` directory that is doing `
 source ./ci/use_wheels_from_prs.sh
 ```
 
+
+**Example 3:** Testing `cuvs` with a build of `pylibraft`
+
+Most RAPIDS projects have Python libraries with the same name as the project, e.g. `rmm` in `rmm`.
+But sometimes you might need the a library of Python bindings, like `pylibcudf` or `pylibraft`.
+
+For these, you need to tell `rapids-get-pr-artifact` what name it should use to look for the artifact with the `--pkg_name` flag.
+
+```shell
+#!/bin/bash
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION.
+# SPDX-License-Identifier: Apache-2.0
+
+# initialize PIP_CONSTRAINT
+source rapids-init-pip
+
+RAPIDS_PY_CUDA_SUFFIX=$(rapids-wheel-ctk-name-gen "${RAPIDS_CUDA_VERSION}")
+
+# download wheels, store the directories holding them in variables
+LIBRAFT_WHEELHOUSE=$(rapids-get-pr-artifact raft 3052 cpp wheel)
+
+# Specify that the name of the package is `pylibraft`, not `raft`
+PYLIBRAFT_WHEELHOUSE=$(rapids-get-pr-artifact raft 3052 python wheel --pkg_name pylibraft)
+
+# write a pip constraints file saying e.g. "whenever you encounter a requirement for 'libraft-cu12', use this wheel"
+cat > "${PIP_CONSTRAINT}" <<EOF
+libraft-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo "${LIBRAFT_WHEELHOUSE}"/libraft_*.whl)
+raft-${RAPIDS_PY_CUDA_SUFFIX} @ file://$(echo "${PYLIBRAFT_WHEELHOUSE}"/pylibraft_*.whl)
+EOF
+```
+
+Then copy the following into every script in the `ci/` directory that is doing `wheel` installs.
+
+```shell
+source ./ci/use_wheels_from_prs.sh
+```
+
 **Note:** By default `rapids-get-pr-artifact` uses the most recent commit from the specified PR.
 A commit hash from the dependent PR can be added as an optional 4th argument to pin testing to a specific commit.
+
+**Note:** Nearly all RAPIDS libraries use the stable ABI, so `rapids-get-pr-artifact` defaults to looking for `abi3` artifacts.
+For Python wheels that *don't* use the stable ABI, use the `--py` flag to instruct `rapids-get-pr-artifact` to look for Python version-specific artifacts. `rapids-get-pr-artifact` defaults to using `$RAPIDS_PY_VERSION` (set in all RAPIDS CI jobs) to look up the correct Python artifact (e.g. `cucim_wheel_python_cucim_x86_64_cp313_cu12`).
 
 ## Skipping CI for Commits
 
