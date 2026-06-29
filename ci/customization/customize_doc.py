@@ -18,6 +18,7 @@ SCRIPT_TAG_ID = "rapids-selector-js"
 PIXEL_SRC_TAG_ID = "rapids-selector-pixel-src"
 PIXEL_INVOCATION_TAG_ID = "rapids-selector-pixel-invocation"
 STYLE_TAG_ID = "rapids-selector-css"
+NVIDIA_STYLE_TAG_ID = "nvidia-selector-css"
 FA_TAG_ID = "rapids-fa-tag"
 
 
@@ -196,10 +197,28 @@ def create_pixel_tags(soup):
     return [head_tag, body_tag]
 
 
+def uses_nvidia_sphinx_theme(soup) -> bool:
+    """
+    Returns whether the document already uses the NVIDIA Sphinx Theme.
+    """
+    return any(
+        "nvidia-sphinx-theme" in link.get("href", "")
+        for link in soup.find_all("link", href=True)
+    )
+
+
 def create_css_link_tag(soup):
     """
-    Creates and returns a link tag that points to custom.css
+    Creates and returns the stylesheet tag for the injected selectors.
     """
+    if uses_nvidia_sphinx_theme(soup):
+        return soup.new_tag(
+            "link",
+            id=NVIDIA_STYLE_TAG_ID,
+            rel="stylesheet",
+            href="/assets/css/custom_nvidia.css",
+        )
+
     script_tag = soup.new_tag(
         "link", id=STYLE_TAG_ID, rel="stylesheet", href="/assets/css/custom.css"
     )
@@ -214,6 +233,15 @@ def delete_element(soup, selector):
         soup.select(f"{selector}")[0].extract()
     except Exception:
         pass
+
+
+def delete_rapids_custom_css_links(soup):
+    """
+    Deletes global RAPIDS custom CSS links from NVIDIA-themed pages.
+    """
+    for link in soup.find_all("link", href=True):
+        if link["href"].endswith("/assets/css/custom.css"):
+            link.extract()
 
 
 def delete_existing_elements(soup):
@@ -236,6 +264,7 @@ def delete_existing_elements(soup):
         doxygen_title_area,
         f"#{SCRIPT_TAG_ID}",
         f"#{STYLE_TAG_ID}",
+        f"#{NVIDIA_STYLE_TAG_ID}",
         f"#{FA_TAG_ID}",
         f"#{PIXEL_SRC_TAG_ID}",
         f"#{PIXEL_INVOCATION_TAG_ID}",
@@ -304,6 +333,8 @@ def main(
 
     # Delete any existing added/unnecessary elements
     delete_existing_elements(soup)
+    if uses_nvidia_sphinx_theme(soup):
+        delete_rapids_custom_css_links(soup)
 
     # Add Font Awesome to Doxygen for icons
     if doc_type == "doxygen":
