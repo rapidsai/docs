@@ -137,6 +137,7 @@ It adds the following elements to each documentation page:
 
 - A _Home_ button that links to https://docs.rapids.ai/api
 - A _library_ selector that enables navigation to different RAPIDS libraries
+  - The library selector excludes inactive projects, hidden projects, and projects without stable or nightly docs.
 - A _version_ selector that enables navigation to the different versions of each RAPIDS library
 - A `link` tag that points to [custom.css](/assets/css/custom.css) in the file's `head`
   - Pages using NVIDIA Sphinx Theme receive [custom_nvidia.css](/assets/css/custom_nvidia.css) instead, limited to the injected selector styles.
