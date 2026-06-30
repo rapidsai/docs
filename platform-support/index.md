@@ -17,12 +17,12 @@ Note that for the list of supported compute capabilities below, newer GPUs are s
 
 For installation instructions, see the [Installation Guide](/install/).
 
-**Releases:** {% for release in site.data.platform_support.releases %}[{{ release.version }}](#rapids-{{ release.version | replace: ".", "" }}){% unless forloop.last %}, {% endunless %}{% endfor %}
+**Releases:** {% for release in site.data.platform_support.releases %}[{{ release.version }}{% if release.nightly %} (nightly){% endif %}](#rapids-{{ release.version | replace: ".", "" }}){% unless forloop.last %}, {% endunless %}{% endfor %}
 
 {% for release in site.data.platform_support.releases %}
 ---
 
-## RAPIDS {{ release.version }}
+## RAPIDS {{ release.version }}{% if release.nightly %} (nightly){% endif %}
 
 <div markdown="1" style="margin-left: 1.5em;">
 
