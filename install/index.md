@@ -115,13 +115,16 @@ See the WSL2 setup [troubleshooting section](#wsl2-troubleshooting).
 
 # System Requirements
 ## **OS / GPU Driver / CUDA Versions**
+{% assign stable_platform = site.data.platform_support.releases | where: "version", site.data.releases.stable.version | first %}
+{% assign minimum_cuda = stable_platform.cuda | first %}
+{% assign minimum_gpu = minimum_cuda.compute_capability | first %}
 All provisioned systems need to be RAPIDS capable. Below is a list of requirements for the current release. For requirements of historical RAPIDS versions, see [Platform Support](/platform-support/).
 
-<i class="fas fa-microchip"></i> **GPU:** NVIDIA Volta™ or higher with [compute capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} 7.0+
+<i class="fas fa-microchip"></i> **GPU:** NVIDIA {{ minimum_gpu.name }}™ or higher with [compute capability](https://developer.nvidia.com/cuda-gpus){: target="_blank"} {{ minimum_gpu.sm | divided_by: 10 }}.{{ minimum_gpu.sm | modulo: 10 }}+
 - <i class="fas fa-exclamation-triangle"></i> Pascal™ GPU support was [removed in 24.02](https://docs.rapids.ai/notices/rsn0034/). Compute capability 7.0+ is required for RAPIDS 24.02 and later.
 
 <i class="fas fa-desktop"></i> **OS:**
-- <i class="fas fa-check-circle"></i> Linux distributions with `glibc>=2.28` (released in August 2018), which include the following:
+- <i class="fas fa-check-circle"></i> Linux distributions with `glibc>={{ stable_platform.glibc_min }}`, which include the following:
   - [Arch Linux](https://archlinux.org/), minimum version 2018-08-02
   - [Debian](https://www.debian.org/), minimum version 10.0
   - [Fedora](https://fedoraproject.org/), minimum version 29
@@ -130,11 +133,15 @@ All provisioned systems need to be RAPIDS capable. Below is a list of requiremen
   - [Ubuntu](https://ubuntu.com/), minimum version 20.04
 - <i class="fas fa-check-circle"></i> Windows 11 using a [WSL2 specific install](#wsl2)
 
-<i class="fas fa-download text-purple"></i> **CUDA & NVIDIA Drivers:** One of the following supported versions:
-{: .no-tb-margins }
+See [Platform Support](/platform-support/) for the complete tested operating system matrix.
 
-- <i class="fas fa-check-circle"></i> CUDA 12 with Driver 525.60.13 or newer
-- <i class="fas fa-check-circle"></i> CUDA 13 with Driver 580.65.06 or newer
+<i class="fas fa-download text-purple"></i> **CUDA & NVIDIA Drivers:** One of the following supported versions:
+<ul class="no-tb-margins">
+{% for cuda in stable_platform.cuda %}
+{% assign minimum_gpu = cuda.compute_capability | first %}
+  <li><i class="fas fa-check-circle"></i> CUDA {{ cuda.major }} with Driver {{ cuda.driver_min }} or newer; minimum GPU is {{ minimum_gpu.name }} with compute capability {{ minimum_gpu.sm | divided_by: 10 }}.{{ minimum_gpu.sm | modulo: 10 }}</li>
+{% endfor %}
+</ul>
 
 See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/) for details.
 

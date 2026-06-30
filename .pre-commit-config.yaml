@@ -1,4 +1,4 @@
-# Copyright (c) 2024-2025, NVIDIA CORPORATION.
+# Copyright (c) 2024-2026, NVIDIA CORPORATION.
 
 ci:
   autofix_commit_msg: "[pre-commit.ci] auto code formatting"
@@ -37,6 +37,13 @@ repos:
       - id: check-yaml
   - repo: local
     hooks:
+      - id: generate-release-data
+        name: generate-release-data
+        entry: ./ci/generate-release-data.py
+        language: python
+        pass_filenames: false
+        additional_dependencies:
+          - pyyaml
       - id: generate-projects-to-versions
         name: generate-projects-to-versions
         entry: ./ci/generate-projects-to-versions.py
@@ -49,7 +56,23 @@ repos:
         entry: ./ci/validate-platform-support.py
         language: python
         pass_filenames: false
-        files: ^(ci/validate-platform-support\.py|_data/platform_support\.yml|_data/releases\.json|_includes/selector\.html)$
+        files: ^(ci/(data_utils|validate-platform-support)\.py|_data/platform_support\.yml|_data/releases\.json|_includes/selector\.html)$
+        additional_dependencies:
+          - pyyaml
+      - id: validate-install-packages
+        name: validate-install-packages
+        entry: ./ci/validate-install-packages.py
+        language: python
+        pass_filenames: false
+        files: ^(ci/(data_utils|validate-install-packages)\.py|_data/(docs|install_packages|platform_support|releases)\.(json|yml)|_includes/selector\.html)$
+        additional_dependencies:
+          - pyyaml
+      - id: validate-notices
+        name: validate-notices
+        entry: ./ci/validate-notices.py
+        language: python
+        pass_filenames: false
+        files: ^(ci/(new-notice|validate-notices)\.py|_notices/.*\.md)$
         additional_dependencies:
           - pyyaml
   - repo: https://github.com/sirosen/texthooks

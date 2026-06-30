@@ -81,6 +81,37 @@ def validate_cuda_versions(release, errors):
         if minimum > maximum:
             errors.append(f"{item_field}.toolkit_min must not exceed toolkit_max")
 
+        dotted_version(cuda.get("driver_min"), f"{item_field}.driver_min", errors)
+        compute_capabilities = cuda.get("compute_capability")
+        if not isinstance(compute_capabilities, list) or not compute_capabilities:
+            errors.append(f"{item_field}.compute_capability must be a non-empty list")
+            continue
+        sms = []
+        for capability_index, capability in enumerate(compute_capabilities):
+            capability_field = f"{item_field}.compute_capability[{capability_index}]"
+            if not isinstance(capability, dict) or not isinstance(
+                capability.get("name"), str
+            ):
+                errors.append(f"{capability_field} must have a string name")
+                continue
+            sm_values = capability.get("sm")
+            if isinstance(sm_values, int) and not isinstance(sm_values, bool):
+                sm_values = [sm_values]
+            if (
+                not isinstance(sm_values, list)
+                or not sm_values
+                or not all(
+                    isinstance(sm, int) and not isinstance(sm, bool) for sm in sm_values
+                )
+            ):
+                errors.append(f"{capability_field}.sm must be an integer or list")
+                continue
+            sms.extend(sm_values)
+        if sms != sorted(set(sms)):
+            errors.append(
+                f"{item_field}.compute_capability SM values must be unique and sorted"
+            )
+
     if len(set(majors)) != len(majors):
         errors.append(f"{field} contains duplicate major versions")
     if majors != sorted(majors):
