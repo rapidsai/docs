@@ -12,12 +12,15 @@ import re
 import sys
 from copy import deepcopy
 
+import yaml
+
 from bs4 import BeautifulSoup
 
 SCRIPT_TAG_ID = "rapids-selector-js"
 PIXEL_SRC_TAG_ID = "rapids-selector-pixel-src"
 PIXEL_INVOCATION_TAG_ID = "rapids-selector-pixel-invocation"
 STYLE_TAG_ID = "rapids-selector-css"
+NVIDIA_STYLE_TAG_ID = "nvidia-selector-css"
 FA_TAG_ID = "rapids-fa-tag"
 
 
@@ -49,6 +52,26 @@ def get_lib_from_fp(*, filepath: str, lib_path_dict: dict) -> str:
         if re.search(f"(^{lib}/|/{lib}/)", filepath):
             return lib
     raise ValueError(f"Couldn't find valid library name in '{filepath}'.")
+
+
+def get_selector_project_names(*, docs_yml_path: str) -> set[str]:
+    """
+    Returns projects that should be shown in the library selector.
+    """
+    with open(docs_yml_path) as fp:
+        docs_config = yaml.safe_load(fp)
+
+    selector_projects = set()
+    for docs_key in ["apis", "libs"]:
+        for project_name, project_details in docs_config[docs_key].items():
+            versions = project_details["versions"]
+            if project_details.get("hidden", False):
+                continue
+            if not (versions.get("stable") == 1 or versions.get("nightly") == 1):
+                continue
+            selector_projects.add(project_name)
+
+    return selector_projects
 
 
 def create_home_container(soup):
@@ -116,19 +139,22 @@ def create_version_options(
     return options
 
 
-def create_library_options(*, project_name: str, lib_path_dict: dict):
+def create_library_options(
+    *, project_name: str, lib_path_dict: dict, selector_project_names: set[str]
+):
     """
     Creates options for library selector
     """
     options = []
 
     for lib, lib_versions in lib_path_dict.items():
+        if lib not in selector_project_names:
+            continue
+
         if lib_versions["stable"]:
             option_href = lib_versions["stable"]
         elif lib_versions["nightly"]:
             option_href = lib_versions["nightly"]
-        elif lib_versions["legacy"]:
-            option_href = lib_versions["legacy"]
         else:
             continue
         is_selected = False
@@ -140,7 +166,7 @@ def create_library_options(*, project_name: str, lib_path_dict: dict):
     return options
 
 
-def create_selector(soup, options):
+def create_selector(soup, options, *, fallback_selected_text=None):
     """
     Creates a dropdown selector
     """
@@ -149,7 +175,10 @@ def create_selector(soup, options):
         attrs={"class": ["rapids-selector__container", "rapids-selector--hidden"]},
     )
     selected = soup.new_tag("div", attrs={"class": "rapids-selector__selected"})
-    selected.string = next(option["text"] for option in options if option["selected"])
+    selected.string = next(
+        (option["text"] for option in options if option["selected"]),
+        fallback_selected_text,
+    )
     container.append(selected)
     drop_down_menu = soup.new_tag("div", attrs={"class": ["rapids-selector__menu"]})
 
@@ -196,10 +225,28 @@ def create_pixel_tags(soup):
     return [head_tag, body_tag]
 
 
+def uses_nvidia_sphinx_theme(soup) -> bool:
+    """
+    Returns whether the document already uses the NVIDIA Sphinx Theme.
+    """
+    return any(
+        "nvidia-sphinx-theme" in link.get("href", "")
+        for link in soup.find_all("link", href=True)
+    )
+
+
 def create_css_link_tag(soup):
     """
-    Creates and returns a link tag that points to custom.css
+    Creates and returns the stylesheet tag for the injected selectors.
     """
+    if uses_nvidia_sphinx_theme(soup):
+        return soup.new_tag(
+            "link",
+            id=NVIDIA_STYLE_TAG_ID,
+            rel="stylesheet",
+            href="/assets/css/custom_nvidia.css",
+        )
+
     script_tag = soup.new_tag(
         "link", id=STYLE_TAG_ID, rel="stylesheet", href="/assets/css/custom.css"
     )
@@ -214,6 +261,15 @@ def delete_element(soup, selector):
         soup.select(f"{selector}")[0].extract()
     except Exception:
         pass
+
+
+def delete_rapids_custom_css_links(soup):
+    """
+    Deletes global RAPIDS custom CSS links from NVIDIA-themed pages.
+    """
+    for link in soup.find_all("link", href=True):
+        if link["href"].endswith("/assets/css/custom.css"):
+            link.extract()
 
 
 def delete_existing_elements(soup):
@@ -236,6 +292,7 @@ def delete_existing_elements(soup):
         doxygen_title_area,
         f"#{SCRIPT_TAG_ID}",
         f"#{STYLE_TAG_ID}",
+        f"#{NVIDIA_STYLE_TAG_ID}",
         f"#{FA_TAG_ID}",
         f"#{PIXEL_SRC_TAG_ID}",
         f"#{PIXEL_INVOCATION_TAG_ID}",
@@ -285,6 +342,7 @@ def main(
     lib_path_dict: dict,
     project_name: str,
     versions_dict: dict[str, str],
+    selector_project_names: set[str],
 ) -> None:
     """
     Given the path to a documentation HTML file, this function will
@@ -304,6 +362,8 @@ def main(
 
     # Delete any existing added/unnecessary elements
     delete_existing_elements(soup)
+    if uses_nvidia_sphinx_theme(soup):
+        delete_rapids_custom_css_links(soup)
 
     # Add Font Awesome to Doxygen for icons
     if doc_type == "doxygen":
@@ -316,7 +376,9 @@ def main(
         create_library_options(
             project_name=project_name,
             lib_path_dict=lib_path_dict,
+            selector_project_names=selector_project_names,
         ),
+        fallback_selected_text=project_name,
     )
     version_selector = create_selector(
         soup,
@@ -352,6 +414,9 @@ if __name__ == "__main__":
     MANIFEST_FILEPATH = sys.argv[1]
     PROJECT_TO_VERSIONS_PATH = sys.argv[2]
     LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
+    DOCS_YML_PATH = os.path.join(
+        os.path.dirname(__file__), "..", "..", "_data", "docs.yml"
+    )
 
     # read in config files (doing this here so it only happens once)
     with open(LIB_MAP_PATH) as fp:
@@ -359,6 +424,8 @@ if __name__ == "__main__":
 
     with open(PROJECT_TO_VERSIONS_PATH) as fp:
         PROJECT_TO_VERSIONS_DICT = json.load(fp)
+
+    SELECTOR_PROJECT_NAMES = get_selector_project_names(docs_yml_path=DOCS_YML_PATH)
 
     with open(MANIFEST_FILEPATH) as manifest_file:
         for line in manifest_file:
@@ -377,4 +444,5 @@ if __name__ == "__main__":
                 lib_path_dict=lib_path_dict,
                 project_name=project_name,
                 versions_dict=deepcopy(PROJECT_TO_VERSIONS_DICT[project_name]),
+                selector_project_names=SELECTOR_PROJECT_NAMES,
             )
