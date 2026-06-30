@@ -40,7 +40,9 @@ Building the API docs requires answering these questions:
 * what version types? (stable? legacy? nightly?)
 * what version numbers correspond to those version types?
 
-Logic for all of that is centralized in a script which is run by `pre-commit`.
+Policy for all of that is centralized in `_data/docs.yml`. The script run by
+`pre-commit` validates that source and generates
+`projects-to-versions.json`. Do not edit the generated JSON directly.
 
 Invoke it to see what will be built.
 
