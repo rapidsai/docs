@@ -15,7 +15,7 @@ deployment: ${JEKYLL_DIR}/deployment
 "
 export DOCS_BUCKET="rapidsai-docs"
 
-MAX_CONCURRENT_DOWNLOADS=4
+MAX_CONCURRENT_DOWNLOADS=8
 DOWNLOAD_PIDS=()
 
 # Checks that the "_site" directory exists from a Jekyll build. Also ensures

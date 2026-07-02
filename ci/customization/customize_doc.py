@@ -168,7 +168,6 @@ def create_version_options(
         option_href = version_path
         version_text = f"{version_name} ({version_number_str})"
         if version_name == doc_version["name"]:
-            print(f"default version: {version_name}")
             is_selected = True
         options.append(
             {"selected": is_selected, "href": option_href, "text": version_text}
@@ -197,7 +196,6 @@ def create_library_options(
             continue
         is_selected = False
         if lib == project_name:
-            print(f"default lib: {lib}")
             is_selected = True
         options.append({"selected": is_selected, "href": option_href, "text": lib})
 
@@ -385,8 +383,6 @@ def main(
     parse the file and add library/version selectors and a Home button
     """
 
-    print(f"--- {filepath} ---")
-
     with open(filepath) as fp:
         soup = BeautifulSoup(fp, "html5lib")
 
@@ -485,4 +481,10 @@ if __name__ == "__main__":
             SELECTOR_PROJECT_NAMES,
         ),
     ) as executor:
-        list(executor.map(customize_manifest_file, filepaths, chunksize=8))
+        results = executor.map(customize_manifest_file, filepaths, chunksize=8)
+        for completed, _ in enumerate(results, start=1):
+            if completed % 1000 == 0 or completed == len(filepaths):
+                print(
+                    f"Customized {completed}/{len(filepaths)} HTML files",
+                    flush=True,
+                )
