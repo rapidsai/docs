@@ -1,5 +1,5 @@
 #!/bin/bash
-# SPDX-FileCopyrightText: Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2025-2026, NVIDIA CORPORATION & AFFILIATES.
 # All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -14,6 +14,9 @@ libs: ${JEKYLL_DIR}/api
 deployment: ${JEKYLL_DIR}/deployment
 "
 export DOCS_BUCKET="rapidsai-docs"
+
+MAX_CONCURRENT_DOWNLOADS=4
+DOWNLOAD_PIDS=()
 
 # Checks that the "_site" directory exists from a Jekyll build. Also ensures
 # that the directories that are pulled from S3 aren't already present in the
@@ -64,6 +67,37 @@ aws_cp() {
     "${DST}"
 }
 
+# Starts an S3 copy and waits when the concurrency limit is reached.
+start_aws_cp() {
+  local DST SRC
+
+  SRC=$1
+  DST=$2
+
+  aws_cp "${SRC}" "${DST}" &
+  DOWNLOAD_PIDS+=("$!")
+
+  if [ "${#DOWNLOAD_PIDS[@]}" -ge "${MAX_CONCURRENT_DOWNLOADS}" ]; then
+    wait_for_aws_cp
+  fi
+}
+
+# Waits for the oldest running S3 copy and propagates its failure.
+wait_for_aws_cp() {
+  local PID
+
+  PID=${DOWNLOAD_PIDS[0]}
+  wait "${PID}"
+  DOWNLOAD_PIDS=("${DOWNLOAD_PIDS[@]:1}")
+}
+
+# Waits for all remaining S3 copies.
+wait_for_all_aws_cp() {
+  while [ "${#DOWNLOAD_PIDS[@]}" -gt 0 ]; do
+    wait_for_aws_cp
+  done
+}
+
 # Downloads the RAPIDS libraries' documentation files from S3 and places them
 # into the "_site/api" folder.
 download_lib_docs() {
@@ -99,7 +133,7 @@ download_lib_docs() {
       # copy the relevant files from S3 to the local directory
       SRC="s3://${DOCS_BUCKET}/${PROJECT}/html/${VERSION_NUMBER}/"
       DST="$(yq -n 'env(GENERATED_DIRS)|.libs')/${PROJECT}/${VERSION_NUMBER}/"
-      aws_cp "${SRC}" "${DST}"
+      start_aws_cp "${SRC}" "${DST}"
     done  # for VERSION_NAME
 
   done  # for PROJECT
@@ -115,10 +149,11 @@ download_deployment_docs() {
     SRC="s3://${DOCS_BUCKET}/deployment/html/${VERSION}/"
     DST="$(yq -n 'env(GENERATED_DIRS)|.deployment')/${VERSION}/"
 
-    aws_cp "${SRC}" "${DST}"
+    start_aws_cp "${SRC}" "${DST}"
   done
 }
 
 check_dirs
 download_lib_docs
 download_deployment_docs
+wait_for_all_aws_cp

@@ -10,7 +10,7 @@ import json
 import os
 import re
 import sys
-from copy import deepcopy
+from concurrent.futures import ProcessPoolExecutor
 
 import yaml
 
@@ -22,6 +22,44 @@ PIXEL_INVOCATION_TAG_ID = "rapids-selector-pixel-invocation"
 STYLE_TAG_ID = "rapids-selector-css"
 NVIDIA_STYLE_TAG_ID = "nvidia-selector-css"
 FA_TAG_ID = "rapids-fa-tag"
+
+LIB_PATH_DICT = None
+PROJECT_TO_VERSIONS_DICT = None
+SELECTOR_PROJECT_NAMES = None
+
+
+def initialize_worker(
+    lib_path_dict: dict,
+    project_to_versions_dict: dict,
+    selector_project_names: set[str],
+) -> None:
+    """Initializes read-only configuration used by each worker process."""
+    global LIB_PATH_DICT, PROJECT_TO_VERSIONS_DICT, SELECTOR_PROJECT_NAMES
+    LIB_PATH_DICT = lib_path_dict
+    PROJECT_TO_VERSIONS_DICT = project_to_versions_dict
+    SELECTOR_PROJECT_NAMES = selector_project_names
+
+
+def customize_manifest_file(filepath: str) -> None:
+    """Customizes one HTML file from the generated manifest."""
+    project_name = get_lib_from_fp(
+        lib_path_dict=LIB_PATH_DICT,
+        filepath=filepath,
+    )
+    main(
+        filepath=filepath,
+        lib_path_dict=LIB_PATH_DICT,
+        project_name=project_name,
+        versions_dict=PROJECT_TO_VERSIONS_DICT[project_name],
+        selector_project_names=SELECTOR_PROJECT_NAMES,
+    )
+
+
+def process_count() -> int:
+    """Returns the number of CPUs available to this process, like nproc."""
+    if hasattr(os, "sched_getaffinity"):
+        return max(1, len(os.sched_getaffinity(0)))
+    return max(1, os.cpu_count() or 1)
 
 
 def get_version_from_fp(*, filepath: str, versions_dict: dict):
@@ -130,7 +168,6 @@ def create_version_options(
         option_href = version_path
         version_text = f"{version_name} ({version_number_str})"
         if version_name == doc_version["name"]:
-            print(f"default version: {version_name}")
             is_selected = True
         options.append(
             {"selected": is_selected, "href": option_href, "text": version_text}
@@ -159,7 +196,6 @@ def create_library_options(
             continue
         is_selected = False
         if lib == project_name:
-            print(f"default lib: {lib}")
             is_selected = True
         options.append({"selected": is_selected, "href": option_href, "text": lib})
 
@@ -225,21 +261,11 @@ def create_pixel_tags(soup):
     return [head_tag, body_tag]
 
 
-def uses_nvidia_sphinx_theme(soup) -> bool:
-    """
-    Returns whether the document already uses the NVIDIA Sphinx Theme.
-    """
-    return any(
-        "nvidia-sphinx-theme" in link.get("href", "")
-        for link in soup.find_all("link", href=True)
-    )
-
-
-def create_css_link_tag(soup):
+def create_css_link_tag(soup, *, is_nvidia_theme: bool):
     """
     Creates and returns the stylesheet tag for the injected selectors.
     """
-    if uses_nvidia_sphinx_theme(soup):
+    if is_nvidia_theme:
         return soup.new_tag(
             "link",
             id=NVIDIA_STYLE_TAG_ID,
@@ -253,51 +279,86 @@ def create_css_link_tag(soup):
     return script_tag
 
 
-def delete_element(soup, selector):
-    """
-    Deletes element from soup object if it already exists
-    """
-    try:
-        soup.select(f"{selector}")[0].extract()
-    except Exception:
-        pass
-
-
-def delete_rapids_custom_css_links(soup):
+def delete_rapids_custom_css_links(links):
     """
     Deletes global RAPIDS custom CSS links from NVIDIA-themed pages.
     """
-    for link in soup.find_all("link", href=True):
-        if link["href"].endswith("/assets/css/custom.css"):
-            link.extract()
+    for link in links:
+        link.extract()
 
 
-def delete_existing_elements(soup):
+def delete_existing_elements(elements, *, doc_type: str, reference_el):
     """
     Deletes any existing page elements to prevent duplicates on the page
     """
-    doxygen_title_area = "#titlearea > table"
-    sphinx_home_btn = ".wy-side-nav-search .icon.icon-home"
-    sphinx_doc_version = ".wy-side-nav-search .version"
-    existing_jtd_container = "#rapids-jtd-container"
-    existing_pydata_container = "#rapids-pydata-container"
-    existing_doxygen_container = "#rapids-doxygen-container"
+    for element in elements:
+        element.extract()
 
-    for element in [
-        existing_jtd_container,
-        existing_pydata_container,
-        existing_doxygen_container,
-        sphinx_doc_version,
-        sphinx_home_btn,
-        doxygen_title_area,
-        f"#{SCRIPT_TAG_ID}",
-        f"#{STYLE_TAG_ID}",
-        f"#{NVIDIA_STYLE_TAG_ID}",
-        f"#{FA_TAG_ID}",
-        f"#{PIXEL_SRC_TAG_ID}",
-        f"#{PIXEL_INVOCATION_TAG_ID}",
-    ]:
-        delete_element(soup, element)
+    if doc_type == "doxygen":
+        if table := reference_el.find("table", recursive=False):
+            table.extract()
+
+    if doc_type == "jtd":
+        if version := reference_el.find(class_="version"):
+            version.extract()
+        if home_button := reference_el.find(
+            lambda tag: {"icon", "icon-home"}.issubset(tag.get("class", []))
+        ):
+            home_button.extract()
+
+
+def inspect_document(soup, *, filepath: str):
+    """Collects theme and customization state in one document traversal."""
+    removable_ids = {
+        "rapids-jtd-container",
+        "rapids-pydata-container",
+        "rapids-doxygen-container",
+        SCRIPT_TAG_ID,
+        STYLE_TAG_ID,
+        NVIDIA_STYLE_TAG_ID,
+        FA_TAG_ID,
+        PIXEL_SRC_TAG_ID,
+        PIXEL_INVOCATION_TAG_ID,
+    }
+    existing_elements = []
+    rapids_css_links = []
+    references = {}
+    is_nvidia_theme = False
+
+    for element in soup.find_all(True):
+        element_id = element.get("id")
+        if element_id in removable_ids:
+            existing_elements.append(element)
+
+        classes = element.get("class", [])
+        if "wy-side-nav-search" in classes and "jtd" not in references:
+            references["jtd"] = element
+        elif element_id == "titlearea" and "doxygen" not in references:
+            references["doxygen"] = element
+        elif "bd-sidebar" in classes and "pydata" not in references:
+            references["pydata"] = element
+
+        if element.name == "link" and (href := element.get("href")):
+            if "nvidia-sphinx-theme" in href:
+                is_nvidia_theme = True
+            if element_id not in removable_ids and href.endswith(
+                "/assets/css/custom.css"
+            ):
+                rapids_css_links.append(element)
+
+    for doc_type in ("jtd", "doxygen", "pydata"):
+        if doc_type in references:
+            return (
+                doc_type,
+                references[doc_type],
+                is_nvidia_theme,
+                existing_elements,
+                rapids_css_links,
+            )
+
+    raise UnsupportedThemeError(
+        f"Couldn't identify {filepath} as a supported theme type. Skipping file."
+    )
 
 
 class UnsupportedThemeError(ValueError):
@@ -307,33 +368,6 @@ class UnsupportedThemeError(ValueError):
     """
 
     pass
-
-
-def get_theme_info(soup, *, filepath: str):
-    """
-    Determines what theme a given HTML file is using or exits if it's
-    not able to be determined. Returns a string identifier and reference element
-    that is used for inserting the library/version selectors to the doc.
-    """
-    # Sphinx Themes
-    jtd_identifier = ".wy-side-nav-search"  # Just-the-docs theme
-    pydata_identifier = ".bd-sidebar"  # Pydata theme
-
-    # Doxygen
-    doxygen_identifier = "#titlearea"
-
-    if soup.select(jtd_identifier):
-        return "jtd", soup.select(jtd_identifier)[0]
-
-    if soup.select(doxygen_identifier):
-        return "doxygen", soup.select(doxygen_identifier)[0]
-
-    if soup.select(pydata_identifier):
-        return "pydata", soup.select(pydata_identifier)[0]
-
-    raise UnsupportedThemeError(
-        f"Couldn't identify {filepath} as a supported theme type. Skipping file."
-    )
 
 
 def main(
@@ -349,21 +383,29 @@ def main(
     parse the file and add library/version selectors and a Home button
     """
 
-    print(f"--- {filepath} ---")
-
     with open(filepath) as fp:
         soup = BeautifulSoup(fp, "html5lib")
 
     try:
-        doc_type, reference_el = get_theme_info(soup, filepath=filepath)
+        (
+            doc_type,
+            reference_el,
+            is_nvidia_theme,
+            existing_elements,
+            rapids_css_links,
+        ) = inspect_document(soup, filepath=filepath)
     except UnsupportedThemeError as err:
         print(f"{str(err)}", file=sys.stderr)
         return
 
     # Delete any existing added/unnecessary elements
-    delete_existing_elements(soup)
-    if uses_nvidia_sphinx_theme(soup):
-        delete_rapids_custom_css_links(soup)
+    delete_existing_elements(
+        existing_elements,
+        doc_type=doc_type,
+        reference_el=reference_el,
+    )
+    if is_nvidia_theme:
+        delete_rapids_custom_css_links(rapids_css_links)
 
     # Add Font Awesome to Doxygen for icons
     if doc_type == "doxygen":
@@ -392,7 +434,7 @@ def main(
     container = soup.new_tag("div", id=f"rapids-{doc_type}-container")
     script_tag = create_script_tag(soup)
     [pix_head_tag, pix_body_tag] = create_pixel_tags(soup)
-    style_tab = create_css_link_tag(soup)
+    style_tab = create_css_link_tag(soup, is_nvidia_theme=is_nvidia_theme)
 
     # Append elements to container
     container.append(home_btn_container)
@@ -428,21 +470,21 @@ if __name__ == "__main__":
     SELECTOR_PROJECT_NAMES = get_selector_project_names(docs_yml_path=DOCS_YML_PATH)
 
     with open(MANIFEST_FILEPATH) as manifest_file:
-        for line in manifest_file:
-            filepath = line.strip()
+        filepaths = [line.strip() for line in manifest_file if line.strip()]
 
-            lib_path_dict = deepcopy(LIB_PATH_DICT)
-
-            # determine project name (e.g. 'cudf')
-            project_name = get_lib_from_fp(
-                lib_path_dict=lib_path_dict,
-                filepath=filepath,
-            )
-
-            main(
-                filepath=filepath,
-                lib_path_dict=lib_path_dict,
-                project_name=project_name,
-                versions_dict=deepcopy(PROJECT_TO_VERSIONS_DICT[project_name]),
-                selector_project_names=SELECTOR_PROJECT_NAMES,
-            )
+    with ProcessPoolExecutor(
+        max_workers=process_count(),
+        initializer=initialize_worker,
+        initargs=(
+            LIB_PATH_DICT,
+            PROJECT_TO_VERSIONS_DICT,
+            SELECTOR_PROJECT_NAMES,
+        ),
+    ) as executor:
+        results = executor.map(customize_manifest_file, filepaths, chunksize=8)
+        for completed, _ in enumerate(results, start=1):
+            if completed % 1000 == 0 or completed == len(filepaths):
+                print(
+                    f"Customized {completed}/{len(filepaths)} HTML files",
+                    flush=True,
+                )
