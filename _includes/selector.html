@@ -434,12 +434,24 @@
                 return "<span class='nv'>" + str + "</span>"
             },
             highlightCondaPkg(pkg) {
-                var channel_pkg_separator = "::";
-                var pkg_components = pkg.split(channel_pkg_separator);
-                if (pkg_components.length === 1) {
-                    return this.highlightPkgOrImg(pkg);
+                var quote = "";
+                if ((pkg.startsWith("'") && pkg.endsWith("'")) || (pkg.startsWith('"') && pkg.endsWith('"'))) {
+                    quote = pkg[0];
+                    pkg = pkg.slice(1, -1);
                 }
-                return pkg_components[0] + channel_pkg_separator + this.highlightPkgOrImg(pkg_components[1]);
+
+                var channel_pkg_separator = "::";
+                var version_start = pkg.search(/[=<>!~]/);
+                var version_pinning = version_start === -1 ? "" : pkg.slice(version_start);
+                var pkg_without_version = version_start === -1 ? pkg : pkg.slice(0, version_start);
+                var pkg_components = pkg_without_version.split(channel_pkg_separator);
+                var pkg_name = pkg_components.pop();
+                var channel = pkg_components.length ? pkg_components.join(channel_pkg_separator) + channel_pkg_separator : "";
+
+                return quote + channel + this.highlightPkgOrImg(pkg_name) + version_pinning + quote;
+            },
+            highlightCondaPkgs(pkgs) {
+                return pkgs.split(/\s+/).map(pkg => this.highlightCondaPkg(pkg)).join(" ");
             },
             getCondaVersionSupport(version) {
                 var cuda_version_info = {
@@ -521,7 +533,7 @@
 
                 if (this.active_additional_packages.length) {
                     add_pkgs_ln = indentation + this.active_additional_packages
-                        .map(pkg => this.highlightCondaPkg(this.getAdditionalPkgName(pkg)))
+                        .map(pkg => this.highlightCondaPkgs(this.getAdditionalPkgName(pkg)))
                         .join(" ");
                 }
 
