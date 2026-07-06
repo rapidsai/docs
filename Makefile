@@ -11,7 +11,7 @@ html: clean
 	$(UV) run sphinx-build -E -b dirhtml source _site -W --keep-going -n
 
 assemble:
-	AWS_PROFILE=$(AWS_PROFILE) $(UV) run bash ci/download_from_s3.sh
+	$(UV) run bash ci/download_from_s3.sh
 	$(UV) run bash ci/post-process.sh
 	$(UV) run python scripts/validate_site.py _site --full
 
