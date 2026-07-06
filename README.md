@@ -13,8 +13,8 @@ make html
 make serve
 ```
 
-The rendered portal is written to `_site` and served at
-<http://localhost:8004/> by default.
+The rendered portal is written to `_site`. The server uses port 8000 by default;
+override it with `PORT` (for example, `make serve PORT=8080`).
 
 ## Build the complete site
 
