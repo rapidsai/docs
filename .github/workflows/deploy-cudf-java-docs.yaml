@@ -2,10 +2,6 @@ name: Deploy cudf-java docs
 on:
   workflow_dispatch:
     inputs:
-      new_stable_value:
-        description: "New stable value for cudf-java"
-        required: true
-        default: "1"
       version:
         description: "Version being released. Format: YY.MM or YY.MM.P e.g 24.08 or 24.08.1"
         required: true
@@ -27,6 +23,17 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
+      - name: Update cudf-java source data and generated artifacts
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          python3 -m venv /tmp/docs-automation
+          /tmp/docs-automation/bin/python -m pip install pyyaml ruamel.yaml
+          /tmp/docs-automation/bin/python ci/update-docs-project.py \
+            --project cudf-java \
+            --channel stable \
+            --version "${VERSION}"
+          /tmp/docs-automation/bin/python ci/generate-projects-to-versions.py
       - uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 #v5.1.1
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
@@ -36,22 +43,6 @@ jobs:
         env:
           VERSION: ${{ inputs.version }}
         run: ci/upload_cudf_java_docs.sh "${VERSION}"
-      - name: Update stable value for cudf-java in docs.yml and projects-to-versions.json
-        env:
-          NEW_STABLE_VALUE: ${{ inputs.new_stable_value }}
-          VERSION: ${{ inputs.version }}
-        run: |
-          if [ "$NEW_STABLE_VALUE" != "1" ]; then
-            echo "Invalid value for new_stable_value: $NEW_STABLE_VALUE"
-            exit 1
-          fi
-
-          sed -i '/cudf-java:/,/stable:/s/stable: .*/stable: '"$NEW_STABLE_VALUE"'/' _data/docs.yml
-          echo "Updated stable value for cudf-java to $NEW_STABLE_VALUE in _data/docs.yml"
-
-          jq --arg version "$VERSION" '."cudf-java".stable = $version' ci/customization/projects-to-versions.json > tmp.json \
-            && mv tmp.json ci/customization/projects-to-versions.json
-          echo "Updated cudf-java stable version to $VERSION in projects-to-versions.json"
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:

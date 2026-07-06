@@ -1,5 +1,26 @@
 # ci
 
+## Data automation
+
+The release maintenance contract and command timing are documented in
+[`releases/maintenance.md`](../releases/maintenance.md). In short:
+
+- `_data/release_calendar.yml` generates `_data/releases.json` and
+  `_data/previous_releases.json` through `generate-release-data.py`.
+- `_data/docs.yml` and `_data/redirects.yml` generate
+  `customization/projects-to-versions.json` and `_redirects` through
+  `generate-projects-to-versions.py`.
+- `_data/platform_support.yml` and `_data/install_packages.yml` are direct policy
+  inputs consumed by the rendered installation pages.
+
+Generated files are tracked for review but must not be edited directly. Every
+generator supports `--check`, and pre-commit updates stale outputs.
+
+```shell
+./ci/generate-release-data.py --check
+./ci/generate-projects-to-versions.py --check
+```
+
 ## API docs
 
 The site's `/api` page links to API documentation for many RAPIDS projects.
@@ -11,7 +32,9 @@ The steps are roughly as follows.
 
 ### Step 1: determine libraries and versions to build
 
-`generate-projects-to-versions.py` is responsible for holding all the logic relevant to the questions "What projects' API docs should be hosted? What versions?".
+`_data/docs.yml` answers which projects and channels should be hosted.
+`generate-projects-to-versions.py` validates that policy and creates the deploy map
+and regular API redirects.
 
 Run it from the root of the repo to see for yourself.
 
