@@ -1,5 +1,61 @@
-# RAPIDS Docs
+# NVIDIA RAPIDS Documentation
 
-Jekyll site for RAPIDS documentation.
+This repository contains the source for the
+[NVIDIA RAPIDS documentation portal](https://docs.rapids.ai/). The portal is
+built with Sphinx and the NVIDIA Sphinx theme.
 
-https://docs.rapids.ai
+## Build the portal
+
+Install [uv](https://docs.astral.sh/uv/), then run:
+
+```shell
+make html
+make serve
+```
+
+The rendered portal is written to `_site` and served at
+<http://localhost:8004/> by default.
+
+## Build the complete site
+
+The complete docs site imports versioned API documentation and the deployment
+documentation from the private `rapidsai-docs` S3 bucket. Configure a read-only
+AWS profile named `rapids-docs`, then run:
+
+```shell
+AWS_PROFILE=rapids-docs make full
+```
+
+This preserves the stable, latest, nightly, and legacy aliases and applies the
+RAPIDS library/version selectors to the imported documentation.
+
+## Validation
+
+```shell
+make check
+```
+
+This runs Python linting, unit tests, a warning-free Sphinx build, and output
+validation.
+
+Pull requests opened against `rapidsai/docs` are copied to a
+`pull-request/<number>` branch by the RAPIDS copy-PR bot. That branch runs the
+same validation, assembles the complete documentation tree, and creates a
+non-production Netlify preview. Merges to `main` continue to deploy the
+production site.
+
+## Repository layout
+
+- `source/` contains the portal content, Sphinx configuration, static assets,
+  and data files.
+- `extensions/` contains the portal's data-rendering and publication extension.
+- `ci/` downloads and post-processes versioned API and deployment documentation.
+- `scripts/` and `tests/` validate rendered routes, content, and publication
+  behavior.
+
+## Migration history
+
+The Sphinx portal was initially migrated from the Jekyll site at
+[`rapidsai/docs@b6afa0c`](https://github.com/rapidsai/docs/commit/b6afa0cbf4ddfc4c0a21f7c79b18631f214fd759).
+The route and content fixture in `tests/fixtures/jekyll_manifest.json` preserves
+that publication baseline.

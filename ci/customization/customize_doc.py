@@ -13,7 +13,6 @@ import sys
 from concurrent.futures import ProcessPoolExecutor
 
 import yaml
-
 from bs4 import BeautifulSoup
 
 SCRIPT_TAG_ID = "rapids-selector-js"
@@ -70,15 +69,18 @@ def get_version_from_fp(*, filepath: str, versions_dict: dict):
     match = re.search(r"/(\d?\d\.\d\d)/", filepath)
     version_number_from_filepath = match.group(1)
 
-    # given a version number like "25.10", figure out the corresponding version name like "stable", "nightly", or "legacy"
+    # Given a version number like "25.10", find the corresponding version name,
+    # such as "stable", "nightly", or "legacy".
     for version_name, version_number in versions_dict.items():
         if version_number == version_number_from_filepath:
             return {"name": version_name, "number": version_number_from_filepath}
 
     # if we get here, the version number wasn't found
-    raise ValueError(
-        f"Filepath implies version '{version_number_from_filepath}', no matching entry in versions_dict: {versions_dict}"
+    message = (
+        f"Filepath implies version '{version_number_from_filepath}', "
+        f"no matching entry in versions_dict: {versions_dict}"
     )
+    raise ValueError(message)
 
 
 def get_lib_from_fp(*, filepath: str, lib_path_dict: dict) -> str:
@@ -148,12 +150,10 @@ def create_version_options(
     options = []
     doc_version = get_version_from_fp(filepath=filepath, versions_dict=versions_dict)
     doc_is_extra_legacy = (  # extra legacy means the doc version is older then current legacy
-        doc_version["name"] == "legacy"
-        and versions_dict["legacy"] != doc_version["number"]
+        doc_version["name"] == "legacy" and versions_dict["legacy"] != doc_version["number"]
     )
     doc_is_extra_nightly = (  # extra nightly means the doc version is newer then current nightly
-        doc_version["name"] == "nightly"
-        and versions_dict["nightly"] != doc_version["number"]
+        doc_version["name"] == "nightly" and versions_dict["nightly"] != doc_version["number"]
     )
     for version_name, version_path in [
         (_, path) for _, path in lib_path_dict[project_name].items() if path is not None
@@ -169,9 +169,7 @@ def create_version_options(
         version_text = f"{version_name} ({version_number_str})"
         if version_name == doc_version["name"]:
             is_selected = True
-        options.append(
-            {"selected": is_selected, "href": option_href, "text": version_text}
-        )
+        options.append({"selected": is_selected, "href": option_href, "text": version_text})
 
     return options
 
@@ -222,9 +220,7 @@ def create_selector(soup, options, *, fallback_selected_text=None):
         option_classes = ["rapids-selector__menu-item"]
         if option["selected"]:
             option_classes.append("rapids-selector__menu-item--selected")
-        option_el = soup.new_tag(
-            "a", href=option["href"], attrs={"class": option_classes}
-        )
+        option_el = soup.new_tag("a", href=option["href"], attrs={"class": option_classes})
         option_el.string = option["text"]
         drop_down_menu.append(option_el)
 
@@ -236,9 +232,7 @@ def create_script_tag(soup):
     """
     Creates and returns a script tag that points to custom.js
     """
-    script_tag = soup.new_tag(
-        "script", defer=None, id=SCRIPT_TAG_ID, src="/assets/js/custom.js"
-    )
+    script_tag = soup.new_tag("script", defer=None, id=SCRIPT_TAG_ID, src="/assets/js/custom.js")
     return script_tag
 
 
@@ -341,9 +335,7 @@ def inspect_document(soup, *, filepath: str):
         if element.name == "link" and (href := element.get("href")):
             if "nvidia-sphinx-theme" in href:
                 is_nvidia_theme = True
-            if element_id not in removable_ids and href.endswith(
-                "/assets/css/custom.css"
-            ):
+            if element_id not in removable_ids and href.endswith("/assets/css/custom.css"):
                 rapids_css_links.append(element)
 
     for doc_type in ("jtd", "doxygen", "pydata"):
@@ -457,7 +449,7 @@ if __name__ == "__main__":
     PROJECT_TO_VERSIONS_PATH = sys.argv[2]
     LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
     DOCS_YML_PATH = os.path.join(
-        os.path.dirname(__file__), "..", "..", "_data", "docs.yml"
+        os.path.dirname(__file__), "..", "..", "source", "_data", "docs.yml"
     )
 
     # read in config files (doing this here so it only happens once)

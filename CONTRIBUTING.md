@@ -2,148 +2,87 @@
 
 ## Environment setup
 
-- Install Ruby
-- Install Bundler
-- Checkout repo
-- Run `bundle install` in checked out repo
+Install [uv](https://docs.astral.sh/uv/), check out the repository, and install
+the locked development environment:
+
+```shell
+uv sync --locked
+```
 
 ## Development
 
-```sh
-bundle exec jekyll serve
-```
-
-### Dev Containers
-
-If you're using [VSCode](https://code.visualstudio.com/) you can use the jekyll Dev Container.
-
-- This project contains a devcontainer config:
-  - If prompted with "Folder contains a Dev Container configuration file." select "Reopen in Container"
-  - Alternatively select "Dev Containers: Reopen in Container" from the command palette
-- Run `bundle exec jekyll serve`
-
-### Local Docker development
-
-Alternatively, you can use the [jekyll-docker](https://github.com/envygeeks/jekyll-docker) container to build and serve the `docs` site locally:
-
-```sh
-docker run --rm \
-  --volume="$PWD:/srv/jekyll" \
-  --publish [::1]:4000:4000 \
-  jekyll/jekyll \
-  bash -c 'rm -rf ./_site && jekyll serve'
-```
-
-### Local macOS development
-
-Upgrade to a new-enough ruby and install `jekyll`, like following https://jekyllrb.com/docs/installation/macos/
+Build the portal and serve the rendered site at <http://localhost:8004/>:
 
 ```shell
-# (one-time) get ruby env-management stuff
-brew install chruby ruby-install
-
-# (one time) update to newer ruby
-ruby-install ruby 3.4.1
-
-source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh
-source $(brew --prefix)/opt/chruby/share/chruby/auto.sh
-chruby ruby-3.4.1
-ruby -v
-
-# (one time) install Bundler
-gem install bundler
-
-# install everything else the project needs
-bundle install
+make html
+make serve
 ```
 
-Build the site (this populates the `_site/` folder)
+Pass a different port when needed:
 
 ```shell
-bundle exec jekyll build --verbose
+make serve PORT=8080
 ```
 
-At this point, the API documentation will not be populated.
-
-To test those and the post-processing that happens on them, get read-only AWS credentials for the relevant resources
-and put them in a profile called `[rapids-docs]` in your AWS CLI configuration.
+Run the complete credential-free validation suite before submitting a change:
 
 ```shell
-export AWS_DEFAULT_PROFILE="rapids-docs"
-ci/download_from_s3.sh
+make check
 ```
 
-At this point, the site is now built and the API documentation has been downloaded.
-Next, some post-processing needs to be done to point links like `/stable` (including those in drop-down selectors)
-to the appropriate documentation files.
+This runs formatting and lint checks, unit tests, a strict Sphinx build, and
+route and rendered-content validation.
 
-Those steps include a `pip install`, so create and active a Python virtual environment first.
+## Full documentation assembly
+
+The portal-only build does not include the versioned API documentation or the
+deployment documentation. To test the complete site and its post-processing,
+obtain read-only AWS credentials for the documentation bucket and configure an
+AWS CLI profile named `rapids-docs`. Then run:
 
 ```shell
-python -m venv rapids-docs-env
-source ./rapids-docs-env/bin/activate
+AWS_PROFILE=rapids-docs make full
 ```
 
-Then run the post-processing.
+This builds the Sphinx portal into `_site`, downloads the imported
+documentation, creates the stable, latest, nightly, and legacy aliases, adds
+the RAPIDS library and version selectors, and validates the assembled site.
+Serve the result without rebuilding it with:
 
 ```shell
-ci/post-process.sh
-```
-
-At this point, you should be able to view the site locally with a pretty similar experience to what's hosted in deployments.
-
-`jekyll serve` cleans and re-generates the `_site/` folder, but it also does some other bundling and packaging that's needed for links and formatting
-to work correctly.
-
-First, back up the `api/` directory:
-
-```shell
-BACKUP_DIR=$(mktemp -d)
-cp -avR ./_site/api "${BACKUP_DIR}"
-```
-
-Then serve the site.
-
-```shell
-bundle exec jekyll serve
-```
-
-Once it's up, copy all the `api/` files back in.
-
-```shell
-cp -avR "${BACKUP_DIR}/api" _site
-```
-
-`jekyll serve` should automatically pick up the changes.
-
-In a browser, navigate to the URL shown in the `jekyll serve` output (probably something like `http://127.0.0.1:4000/`) to see the rendered docs.
-
-If the hot reloading in `jekyll serve` again deletes all the files in `api/`, just copy them in again.
-
-```shell
-cp -avR "${BACKUP_DIR}/api" _site
+make serve
 ```
 
 ## PR submissions
 
-Once you have code changes, submit a PR to the docs site. Netlify will generate
-a preview of your changes and the team will review.
+Submit changes as a pull request to `rapidsai/docs`. The RAPIDS copy-PR bot
+copies the pull request head to a `pull-request/<number>` branch in the upstream
+repository. CI validates that branch, assembles the complete documentation
+site, and creates a non-production Netlify preview for review.
 
 ## Developer Certificate of Origin
 
-All contributions to this project must be accompanied by a sign-off indicating that the contribution is made pursuant to the Developer Certificate of Origin (DCO). This is a lightweight way for contributors to certify that they wrote or otherwise have the right to submit the code they are contributing to the project.
+All contributions to this project must be accompanied by a sign-off indicating
+that the contribution is made pursuant to the Developer Certificate of Origin
+(DCO). This is a lightweight way for contributors to certify that they wrote
+or otherwise have the right to submit the code they are contributing to the
+project.
 
-The DCO is a simple statement that you, as a contributor, have the legal right to make the contribution. To certify your adherence to the DCO, you must sign off on your commits. This is done by adding a `Signed-off-by` line to your commit messages:
+The DCO is a simple statement that you, as a contributor, have the legal right
+to make the contribution. To certify your adherence to the DCO, you must sign
+off on your commits. This is done by adding a `Signed-off-by` line to your
+commit messages:
 
-```
+```text
 Signed-off-by: Random J Developer <random@developer.example.org>
 ```
 
 You can do this automatically with `git commit -s`.
 
-Here is the full text of the DCO, which you can also find at <https://developercertificate.org/>:
+Here is the full text of the DCO, which you can also find at
+<https://developercertificate.org/>:
 
-```
+```text
 Developer's Certificate of Origin 1.1
 
 By making a contribution to this project, I certify that:
