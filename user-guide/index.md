@@ -30,10 +30,6 @@ The RAPIDS data science framework is a collection of libraries for running end-t
  Start with the [cuSpatial User Guide](/api/cuspatial/stable/user_guide/cuspatial_api_examples/) for an intro to GPU Accelerated Spatial Analytics.
 
 
-**<i class="fa-solid fa-chart-bar"></i> Accelerated Cross Filtered Visualization with [cuxfilter](https://github.com/rapidsai/cuxfilter)**:
- Start with [10 Minutes to Cuxfilter](api/cuxfilter/stable/user_guide/10_minutes_to_cuxfilter/) to get an overview of how to quickly create a dashboard. There are also broader examples in the [RAPIDS Visualization Guides](https://github.com/rapidsai/cuxfilter/tree/HEAD/notebooks/RAPIDS%20Visualization%20Guide).
-
-
 **<i class="fa-solid fa-images"></i> Computer Vision and Analytics with [cuCIM](https://github.com/rapidsai/cucim)**:
  Start with the [Welcome Notebook](https://github.com/rapidsai/cucim/blob/branch-{{ releases.stable.version }}/notebooks/Welcome.ipynb) for links to resources guides and a good overview of the project structure.
 
