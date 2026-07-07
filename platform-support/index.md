@@ -13,4 +13,4 @@ built for the latest virtual architecture.
 
 For installation instructions, see the [Installation Guide](/install/).
 
-<<! platform_support_content() !>>
+{{ platform_support_content() }}

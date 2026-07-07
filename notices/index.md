@@ -14,7 +14,7 @@ Notices are our means to communicate and document changes in the project to cont
 
 ## Recent and Important Notices
 
-<<! notice_table(pinned=True) !>>
+{{ notice_table(pinned=True) }}
 
 ```{toctree}
 :hidden:

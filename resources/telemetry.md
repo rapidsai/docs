@@ -35,6 +35,7 @@ implementation details. In the top-level workflow, such as
 
 * Add a job for telemetry-setup, and add that job name to the pr-builder `needs` collection.
 
+{% raw %}
 ```
 jobs:
   # Please keep pr-builder as the top job here
@@ -57,6 +58,7 @@ jobs:
         if: ${{ vars.TELEMETRY_ENABLED == 'true' }}
         uses: rapidsai/shared-actions/telemetry-dispatch-stash-base-env-vars@main
 ```
+{% endraw %}
 
 * Add `telemetry-setup` as a `needs:` entry for all jobs at the top of the tree. The purpose is to communicate telemetry variables that any job may use - even the `checks.yaml` job. `needs:` that generally catch the required jobs are:
 
@@ -80,6 +82,7 @@ Syntax for the `ignored_pr_jobs` is space-separated within the quotes.
 
 * Run the parsing and submission script job as the final job - after `pr-builder`:
 
+{% raw %}
 ```
   telemetry-summarize:
     # This job must use a self-hosted runner to record telemetry traces.
@@ -91,6 +94,7 @@ Syntax for the `ignored_pr_jobs` is space-separated within the quotes.
       - name: Telemetry summarize
         uses: rapidsai/shared-actions/telemetry-dispatch-summarize@main
 ```
+{% endraw %}
 
 > NOTE: pay special attention to the `runs-on` entry. This is what dictates that the job runs on a self-hosted runner, which is necessary for network access control.
 
@@ -168,6 +172,7 @@ environment variables that we load ensures that if any build tool natively
 supports OpenTelemetry, it has the necessary information to send that data (job
 needs to be on a self-hosted runner)
 
+{% raw %}
 ```
 jobs:
   build:
@@ -179,6 +184,7 @@ jobs:
         with:
             extra_attributes: "rapids.operation=build-cpp,rapids.package_type=conda,rapids.cuda=${{ matrix.CUDA_VER }},rapids.py=${{ matrix.PY_VER }},rapids.arch=${{ matrix.ARCH }},rapids.linux=${{ matrix.LINUX_VER }}"
 ```
+{% endraw %}
 
 Passing in the `extra_attributes` parameter appends these comma-separated
 key=value pairs to the `OTEL_RESOURCE_ATTRIBUTES` environment variable. This is
@@ -316,14 +322,18 @@ Additional span attributes get added by [the python script that uses the OpenTel
 
 
 From [conda-cpp-build.yaml](https://github.com/rapidsai/shared-workflows/blob/ece43bbc9347340721e5cc576e6ba69148176d3f/.github/workflows/conda-cpp-build.yaml#L145):
+{% raw %}
 ```
 "rapids.PACKAGER=conda,rapids.CUDA_VER=${{ matrix.CUDA_VER }},rapids.PY_VER=${{ matrix.PY_VER }},rapids.ARCH=${{ matrix.ARCH }},rapids.LINUX_VER=${{ matrix.LINUX_VER }}"
 ```
+{% endraw %}
 
 From [wheels-test.yaml](https://github.com/rapidsai/shared-workflows/blob/ece43bbc9347340721e5cc576e6ba69148176d3f/.github/workflows/wheels-test.yaml#L198):
+{% raw %}
 ```
 "rapids.PACKAGER=wheel,rapids.CUDA_VER=${{ matrix.CUDA_VER }},rapids.PY_VER=${{ matrix.PY_VER }},rapids.ARCH=${{ matrix.ARCH }},rapids.LINUX_VER=${{ matrix.LINUX_VER }},rapids.GPU=${{ matrix.GPU }},rapids.DRIVER=${{ matrix.DRIVER }},rapids.DEPENDENCIES=${{ matrix.DEPENDENCIES }}"
 ```
+{% endraw %}
 
 #### Filter out docker stuff outside of builds
 

@@ -33,10 +33,10 @@ The below libraries directly use RAPIDS cuDF/Dask-cuDF and/or cuSpatial to creat
 :::{note}
 **Web Hosted vs Local Hosted Chart Interaction**
 
-When interacting with this page through a website, the interactive examples below are all **static and use pre-computed data.** To run a true interactive version, host through the **active** instance found on our [cuxfilter GitHub Notebooks](https://github.com/rapidsai/cuxfilter/tree/branch-<<! releases.stable.version !>>/notebooks/RAPIDS%20Visualization%20Guide).
+When interacting with this page through a website, the interactive examples below are all **static and use pre-computed data.** To run a true interactive version, host through the **active** instance found on our [cuxfilter GitHub Notebooks](https://github.com/rapidsai/cuxfilter/tree/branch-{{ releases.stable.version }}/notebooks/RAPIDS%20Visualization%20Guide).
 :::
 
-[% include "_includes/viz-cdn-js-css.html" %]
+{% include "_includes/viz-cdn-js-css.html" %}
 
 <br/><br/>
 # Featured Libraries
@@ -52,7 +52,7 @@ When interacting with this page through a website, the interactive examples belo
 - Read about [RAPIDS compatibility](https://holoviews.org/reference_manual/holoviews.core.data.html?highlight=cudf#module-holoviews.core.data.cudf).
 
 **Run an interactive example and cpu / gpu code comparison below:**
-[% include "_includes/holoviews.html" %]
+{% include "_includes/holoviews.html" %}
 
 <a id='hvplot'></a><br/>
 <img src="/assets/images/hvplot-logo.png" width="90px" class="visualization-logo">
@@ -65,7 +65,7 @@ When interacting with this page through a website, the interactive examples belo
 - Read about [RAPIDS compatibility](https://hvplot.holoviz.org/user_guide/Introduction.html?highlight=rapids#).
 <br/>
 **Run an interactive example and cpu / gpu code comparison below:**
-[% include "_includes/hvplot.html" %]
+{% include "_includes/hvplot.html" %}
 
 <a id='datashader'></a><br/>
 <img src="/assets/images/datashader-logo.png" width="150px" class="visualization-logo">
@@ -78,7 +78,7 @@ When interacting with this page through a website, the interactive examples belo
 - Read about [RAPIDS compatibility](https://datashader.org/user_guide/Performance.html?highlight=cudf#data-objects).
 <br/>
 **Run an interactive example and cpu / gpu code comparison below:**
-[% include "_includes/datashader.html" %]
+{% include "_includes/datashader.html" %}
 
 
 
@@ -92,7 +92,7 @@ When interacting with this page through a website, the interactive examples belo
 - Read about [RAPIDS compatibility](https://dash.plotly.com/holoviews#gpu-accelerating-datashader-and-linked-selections-with-rapids).
 
 **Run an interactive example and cpu / gpu code comparison below:**
-[% include "_includes/plotly.html" %]
+{% include "_includes/plotly.html" %}
 
 
 <a id='bokeh'></a><br/>
@@ -106,7 +106,7 @@ When interacting with this page through a website, the interactive examples belo
 - Further [Documentation](https://docs.bokeh.org/en/latest/).
 
 **Run an interactive example and cpu / gpu code comparison below:**
-[% include "_includes/bokeh.html" %]
+{% include "_includes/bokeh.html" %}
 
 
 
@@ -121,7 +121,7 @@ When interacting with this page through a website, the interactive examples belo
 - Further [Documentation](https://seaborn.pydata.org/api.html).
 
 **Run an interactive example and cpu / gpu code comparison below:**
-[% include "_includes/seaborn.html" %]
+{% include "_includes/seaborn.html" %}
 
 <br/><br/>
 

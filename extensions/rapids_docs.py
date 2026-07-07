@@ -352,12 +352,6 @@ def _jinja_environment(app) -> Environment:
         loader=FileSystemLoader(app.srcdir),
         undefined=StrictUndefined,
         autoescape=False,
-        variable_start_string="<<!",
-        variable_end_string="!>>",
-        block_start_string="[%",
-        block_end_string="%]",
-        comment_start_string="[#%",
-        comment_end_string="%#]",
         keep_trailing_newline=True,
     )
 

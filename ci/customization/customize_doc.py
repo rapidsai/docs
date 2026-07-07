@@ -11,6 +11,7 @@ import os
 import re
 import sys
 from concurrent.futures import ProcessPoolExecutor
+from pathlib import Path
 
 import yaml
 from bs4 import BeautifulSoup
@@ -41,6 +42,9 @@ def initialize_worker(
 
 def customize_manifest_file(filepath: str) -> None:
     """Customizes one HTML file from the generated manifest."""
+    if Path(filepath).parts[-2:] == ("api", "index.html"):
+        return
+
     project_name = get_lib_from_fp(
         lib_path_dict=LIB_PATH_DICT,
         filepath=filepath,

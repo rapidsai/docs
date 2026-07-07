@@ -17,4 +17,4 @@ page.
 
 Historical list of completed releases.
 
-<<! previous_schedules() !>>
+{{ previous_schedules() }}

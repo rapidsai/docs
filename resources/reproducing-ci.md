@@ -157,7 +157,7 @@ export RAPIDS_REPOSITORY=rapidsai/cugraph
 
 export RAPIDS_REF_NAME=pull-request/3258 # use this type of value for "pull-request" builds
 export RAPIDS_REF_NAME=main # use this type of value for "nightly" builds
-export RAPIDS_REF_NAME=release/<<! releases.stable.version !>> # for "branch" builds use the branch names
+export RAPIDS_REF_NAME=release/{{ releases.stable.version }} # for "branch" builds use the branch names
 
 export RAPIDS_NIGHTLY_DATE=2025-12-12 # this variable is only necessary for "nightly" builds
 

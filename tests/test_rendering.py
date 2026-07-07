@@ -44,6 +44,19 @@ def test_data_driven_content() -> None:
     assert "PROPOSED" in schedules
 
 
+def test_standard_jinja_syntax_and_raw_blocks() -> None:
+    app = SimpleNamespace(srcdir=str(ROOT))
+    app.rapids_portal_data = rapids_docs._load_data(app)
+    template = rapids_docs._jinja_environment(app).from_string(
+        "{{ releases.stable.version }}\n{% raw %}${{ matrix.PY_VER }}{% endraw %}\n"
+    )
+
+    rendered = template.render(rapids_docs._context(app))
+    stable_version = app.rapids_portal_data["releases"]["stable"]["version"]
+
+    assert rendered == stable_version + "\n${{ matrix.PY_VER }}\n"
+
+
 def test_notice_metadata_and_indexes() -> None:
     data = rapids_docs._load_data(APP)
     source_notices = list((ROOT / "notices").glob("r[dgs]n[0-9][0-9][0-9][0-9].md"))
