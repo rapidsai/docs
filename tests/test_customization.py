@@ -14,6 +14,17 @@ assert SPEC.loader is not None
 SPEC.loader.exec_module(customize_doc)
 
 
+def test_portal_api_index_is_skipped(tmp_path: Path) -> None:
+    page = tmp_path / "api" / "index.html"
+    page.parent.mkdir(parents=True)
+    original = "<html><body>Portal API landing page</body></html>"
+    page.write_text(original)
+
+    customize_doc.customize_manifest_file(str(page))
+
+    assert page.read_text() == original
+
+
 def test_nvidia_theme_selector_injection(tmp_path: Path) -> None:
     page = tmp_path / "api" / "cudf" / "26.06" / "index.html"
     page.parent.mkdir(parents=True)
