@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 SOURCE = Path(sys.argv[1] if len(sys.argv) > 1 else "/tmp/rapidsai-docs-jekyll-upstream-main")
-DESTINATION = Path(__file__).resolve().parents[1] / "source"
+DESTINATION = Path(__file__).resolve().parents[1]
 
 
 def split_front_matter(text: str) -> tuple[str, str]:

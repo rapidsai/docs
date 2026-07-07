@@ -46,8 +46,9 @@ production site.
 
 ## Repository layout
 
-- `source/` contains the portal content, Sphinx configuration, static assets,
-  and data files.
+- Portal content, data, includes, and assets retain their established paths at
+  the repository root.
+- `sphinx/` contains the Sphinx configuration, templates, and theme overrides.
 - `extensions/` contains the portal's data-rendering and publication extension.
 - `ci/` downloads and post-processes versioned API and deployment documentation.
 - `scripts/` and `tests/` validate rendered routes, content, and publication

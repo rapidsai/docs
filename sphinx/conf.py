@@ -24,7 +24,21 @@ extensions = [
 
 source_suffix = {".md": "markdown"}
 master_doc = "index"
-exclude_patterns = ["assets/images/telemetry/mermaid-workflow.md"]
+include_patterns = [
+    "404.md",
+    "SECURITY.md",
+    "api.md",
+    "index.md",
+    "contributing/**",
+    "install/**",
+    "maintainers/**",
+    "notices/**",
+    "platform-support/**",
+    "releases/**",
+    "resources/**",
+    "user-guide/**",
+    "visualization/**",
+]
 templates_path = ["_templates"]
 
 myst_enable_extensions = [
@@ -41,7 +55,7 @@ myst_all_links_external = True
 
 html_theme = "nvidia_sphinx_theme"
 html_static_path = ["_static"]
-html_extra_path = ["_redirects"]
+html_extra_path = ["../_redirects"]
 html_baseurl = "https://docs.rapids.ai/"
 html_scaled_image_link = False
 

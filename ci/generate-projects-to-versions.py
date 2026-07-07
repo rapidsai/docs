@@ -11,12 +11,12 @@
 #   * what types of docs to host ('legacy', 'nightly', 'stable', etc.)
 #   * what versions to map to those types
 #
-# The libraries that should be copied are read from "source/_data/docs.yml".
+# The libraries that should be copied are read from "_data/docs.yml".
 #
 # The versions that should be copied are read from a mix of sources:
 #
-#   - active projects: "source/_data/releases.json"
-#   - inactive projects: 'version-overrides' field in entries in "source/_data/docs.yml"
+#   - active projects: "_data/releases.json"
+#   - inactive projects: 'version-overrides' field in entries in "_data/docs.yml"
 #
 # Produces a JSON mapping of the form:
 #
@@ -28,7 +28,7 @@
 #          },
 #      }
 #
-# With keys omitted based on configuration in source/_data/docs.yml.
+# With keys omitted based on configuration in _data/docs.yml.
 #
 # e.g. if a project has 'stable: 0' in that file, it will not have a '{project}.stable'
 # key in the mapping produced by this script.
@@ -39,10 +39,10 @@ from collections import OrderedDict
 
 import yaml
 
-with open("source/_data/docs.yml") as f:
+with open("_data/docs.yml") as f:
     DOCS_YML_DICT = yaml.safe_load(f)
 
-with open("source/_data/releases.json") as f:
+with open("_data/releases.json") as f:
     RELEASES_JSON_DICT = json.load(f)
 
 # using OrderedDict minimizes churn in the output as projects are added and removed

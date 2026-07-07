@@ -7,7 +7,7 @@ from types import SimpleNamespace
 from extensions import rapids_docs
 
 ROOT = Path(__file__).resolve().parents[1]
-APP = SimpleNamespace(srcdir=str(ROOT / "source"))
+APP = SimpleNamespace(srcdir=str(ROOT))
 
 
 def test_data_driven_content() -> None:
@@ -46,7 +46,7 @@ def test_data_driven_content() -> None:
 
 def test_notice_metadata_and_indexes() -> None:
     data = rapids_docs._load_data(APP)
-    source_notices = list((ROOT / "source" / "notices").glob("r[dgs]n[0-9][0-9][0-9][0-9].md"))
+    source_notices = list((ROOT / "notices").glob("r[dgs]n[0-9][0-9][0-9][0-9].md"))
     assert len(data["notices"]) == len(source_notices)
 
     support_notices = rapids_docs._notice_table(data, "rsn")
@@ -57,3 +57,10 @@ def test_notice_metadata_and_indexes() -> None:
     pinned = rapids_docs._notice_table(data, pinned=True)
     pinned_notice = next(notice for notice in data["notices"] if notice.get("notice_pin"))
     assert f"{pinned_notice['notice_type'].upper()} {pinned_notice['notice_id']}" in pinned
+
+
+def test_github_alert_conversion() -> None:
+    source = "> [!WARNING]\n> Do not report security vulnerabilities publicly!\n"
+    converted = rapids_docs._convert_github_alerts(source)
+
+    assert converted == ("```{warning}\nDo not report security vulnerabilities publicly!\n```\n")
