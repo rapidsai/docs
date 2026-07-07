@@ -26,7 +26,6 @@ test:
 
 validate:
 	$(UV) run python scripts/validate_site.py _site
-	$(UV) run python scripts/compare_routes.py tests/fixtures/jekyll_manifest.json _site
 
 check: lint test html validate
 

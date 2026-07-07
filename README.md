@@ -58,5 +58,3 @@ production site.
 
 The Sphinx portal was initially migrated from the Jekyll site at
 [`rapidsai/docs@b6afa0c`](https://github.com/rapidsai/docs/commit/b6afa0cbf4ddfc4c0a21f7c79b18631f214fd759).
-The route and content fixture in `tests/fixtures/jekyll_manifest.json` preserves
-that publication baseline.
