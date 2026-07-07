@@ -40,9 +40,9 @@ validation.
 
 Pull requests opened against `rapidsai/docs` are copied to a
 `pull-request/<number>` branch by the RAPIDS copy-PR bot. That branch runs the
-same validation, assembles the complete documentation tree, and creates a
-non-production Netlify preview. Merges to `main` continue to deploy the
-production site.
+same validation and dry-runs assembly of the complete S3-backed documentation
+tree without deploying it. Netlify's repository integration separately creates
+a portal-only preview. Merges to `main` continue to deploy the production site.
 
 ## Repository layout
 

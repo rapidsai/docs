@@ -60,8 +60,9 @@ make serve
 
 Submit changes as a pull request to `rapidsai/docs`. The RAPIDS copy-PR bot
 copies the pull request head to a `pull-request/<number>` branch in the upstream
-repository. CI validates that branch, assembles the complete documentation
-site, and creates a non-production Netlify preview for review.
+repository. CI validates that branch and dry-runs assembly of the complete
+S3-backed documentation site without deploying it. Netlify's repository
+integration separately creates a portal-only preview for review.
 
 ## Developer Certificate of Origin
 
