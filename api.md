@@ -1,17 +1,16 @@
-# RAPIDS API Docs
+# RAPIDS API Documentation
 
-Access our current docs for the RAPIDS projects below. Docs are available in
-both "stable" and "nightly" versions. The description of each is below to help
-select the docs that fit your needs.
+Explore documentation for current and previous RAPIDS releases. Each project
+card links to its available documentation versions and related resources.
 
-STABLE
-: Current release docs; considered to be stable.
+Stable
+: Documentation for the current release, recommended for most users.
 
-NIGHTLY
-: Work-in-progress release docs; considered to be unstable and released nightly.
+Nightly
+: Documentation for the upcoming release, generated from development branches.
 
-LEGACY
-: Previous release docs; available for reference.
+Legacy
+: Documentation for the previous release, retained for reference.
 
 ## RAPIDS APIs
 

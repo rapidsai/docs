@@ -16,8 +16,13 @@ def test_data_driven_content() -> None:
     nightly_version = data["releases"]["nightly"]["version"]
 
     api = rapids_docs._api_docs(data, "apis")
-    assert f"stable ({stable_version})" in api
+    assert f"Stable ({stable_version})" in api
     assert "/api/cudf/stable/" in api
+    assert "::::{grid} 1 1 2 2" in api
+    assert ":::{grid-item-card} cuDF" in api
+    assert "**Documentation:**" in api
+    assert "[GitHub]" in api
+    assert "DOCS" not in api
 
     inactive = rapids_docs._api_docs(data, "inactive-projects")
     inactive_project = next(
@@ -26,7 +31,7 @@ def test_data_driven_content() -> None:
         if not project.get("hidden", False) and project["versions"].get("stable") == 1
     )
     inactive_version = rapids_docs._version_label(inactive_project, "stable", data["releases"])
-    assert f"stable ({inactive_version})" in inactive
+    assert f"Stable ({inactive_version})" in inactive
 
     platform = rapids_docs._platform_support(data)
     platform_release = data["platform_support"]["releases"][0]
