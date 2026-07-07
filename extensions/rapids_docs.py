@@ -85,7 +85,7 @@ def _api_docs(data: dict, section: str) -> str:
         if project.get("hidden", False):
             continue
         versions = []
-        for name in ("stable", "nightly", "legacy"):
+        for name in ("nightly", "stable", "legacy"):
             if project["versions"].get(name) == 1:
                 label = _version_label(project, name, data["releases"])
                 versions.append(f"[{name.title()} ({label})](/api/{project['path']}/{name}/)")
@@ -115,7 +115,7 @@ def _api_docs(data: dict, section: str) -> str:
         )
     return "\n".join(
         [
-            "::::{grid} 1 1 2 2",
+            "::::{grid} 1 1 1 1",
             ":gutter: 2",
             ":class-container: rapids-api-grid",
             "",

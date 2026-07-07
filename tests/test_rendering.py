@@ -14,15 +14,18 @@ def test_data_driven_content() -> None:
     data = rapids_docs._load_data(APP)
     stable_version = data["releases"]["stable"]["version"]
     nightly_version = data["releases"]["nightly"]["version"]
+    legacy_version = data["releases"]["legacy"]["version"]
 
     api = rapids_docs._api_docs(data, "apis")
     assert f"Stable ({stable_version})" in api
     assert "/api/cudf/stable/" in api
-    assert "::::{grid} 1 1 2 2" in api
+    assert "::::{grid} 1 1 1 1" in api
     assert ":::{grid-item-card} cuDF" in api
     assert "**Documentation:**" in api
     assert "[GitHub]" in api
     assert "DOCS" not in api
+    assert api.index(f"Nightly ({nightly_version})") < api.index(f"Stable ({stable_version})")
+    assert api.index(f"Stable ({stable_version})") < api.index(f"Legacy ({legacy_version})")
 
     inactive = rapids_docs._api_docs(data, "inactive-projects")
     inactive_project = next(
