@@ -14,6 +14,7 @@ RAPIDS libraries can easily fit in visualization workflows. This catalog of feat
 *[330 million+ datapoints rendered in under 1.5s via RAPIDS + Plotly Dash 2020 Census Demo](https://github.com/rapidsai/plotly-dash-rapids-census-demo)*
 
 ### Featured Libraries
+
 - **[HoloViews](#holoviews):** Declarative objects for quickly building complex interactive plots from high-level specifications. Directly uses cuDF.
 - **[hvPlot](#hvplot):** Quickly return interactive plots from cuDF, Pandas, Xarray, or other data structures. Just replace `.plot()` with `.hvplot()`.
 - **[Datashader](#datashader):** Rasterizing huge datasets quickly as scatter, line, geospatial, or graph charts. Directly uses cuDF.
@@ -22,9 +23,9 @@ RAPIDS libraries can easily fit in visualization workflows. This catalog of feat
 - **[Seaborn](#seaborn):** Static single charting library that extends matplotlib.
 
 ### Other Notable Libraries
+
 - **[Panel](#panel):** A high-level app and dashboarding solution for the Python ecosystem.
 - **[PyDeck](#pydeck):** Python bindings for interactive spatial visualizations with webGL powered deck.gl, optimized for a Jupyter environment.
-- **[cuxfilter](#cuxfilter):** RAPIDS developed cross filtering dashboarding tool that integrates many of the libraries above.
 - **[node RAPIDS](#noderapids):** RAPIDS bindings in nodeJS, a high performance JS/TypeScript visualization alternative to using Python.
 
 
@@ -34,11 +35,10 @@ The below libraries directly use RAPIDS cuDF/Dask-cuDF and/or cuSpatial to creat
 - **[Holoviews with Linked Brushing User Guide](https://holoviews.org/user_guide/Linked_Brushing.html?highlight=linked%20brushing)**
 - **[Datashader User Guide](https://datashader.org/user_guide/Performance.html)**
 - **[Plotly Dash with Holoviews Docs](https://dash.plotly.com/holoviews#gpu-accelerating-datashader-and-linked-selections-with-rapids)**
-- **[cuxfilter GitHub](https://github.com/rapidsai/cuxfilter)**
-
 
 ### **Note:** Web Hosted vs Local Hosted Chart Interaction
-When interacting with this page through a website, the interactive examples below are all **static and use pre-computed data.** To run a true interactive version, host through the **active** instance found on our [cuxfilter GitHub Notebooks](https://github.com/rapidsai/cuxfilter/tree/branch-{{ site.data.releases.stable.version }}/notebooks/RAPIDS%20Visualization%20Guide).
+
+When interacting with this page through a website, the interactive examples below are all **static and use pre-computed data.**
 
 {% include viz-cdn-js-css.html %}
 
@@ -77,7 +77,7 @@ When interacting with this page through a website, the interactive examples belo
 <img src="/assets/images/clifford_interact.png" style="width:130px; display:inline-block; vertical-align:middle; padding-left:20px; "></a>
 
 - Datashader is a graphics pipeline system for creating meaningful representations of large datasets quickly and flexibly.
-- Datashader is able to render a variety of chart types statically, and interactively when combined with other libraries like HoloViews or cuxfilter.
+- Datashader is able to render a variety of chart types statically, and interactively when combined with other libraries like HoloViews.
 - Read about Datashader at [datashader.org](https://datashader.org) and explore its examples.
 - Read about [RAPIDS compatibility](https://datashader.org/user_guide/Performance.html?highlight=cudf#data-objects).
 <br/>
@@ -153,18 +153,6 @@ When interacting with this page through a website, the interactive examples belo
 - Read about pyDeck at [pydeck.gl/](https://pydeck.gl/) and explore its gallery [pydeck gallery](https://pydeck.gl/#gallery).
 - Further [Documentation](https://pydeck.gl/layer.html).
 
-
-<a id='cuxfilter'></a><br/>
-<img src="/assets/images/rapids_logo.png" style="width:150px; display:inline-block; vertical-align:middle;">
-<span style="color:#7400ff; font-size:2.5em; vertical-align: middle;">cuxfilter</span>
-<a href="https://docs.rapids.ai/api/cuxfilter/nightly/examples/examples.html" target="_blank" title="cuxfilter example page">
-<img src="/assets/images/cuxfilter-demo.gif" style="width:220px; display:inline-block; vertical-align:middle; padding-left:20px;"></a>
-<br/>
-- cuxfilter is a RAPIDS developed cross filtering library which enables GPU accelerated dashboards, using best in class charting libraries, with just a few lines of Python.
-- Read about cuxfilter at [github.com/rapidsai/cuxfilter](https://github.com/rapidsai/cuxfilter) and explore its examples [docs.rapids.ai/api/cuxfilter/stable/examples/examples.html](https://docs.rapids.ai/api/cuxfilter/stable/examples/examples.html).
-- Further [Documentation](https://docs.rapids.ai/api/cuxfilter/stable/10_minutes_to_cuxfilter.html).
-
-
 <a id='noderapids'></a><br/>
 <img src="/assets/images/rapids_logo.png" style="width:150px; display:inline-block; vertical-align:middle;">
 <span style="color:#7400ff; font-size:2.5em; vertical-align: middle;">nodeRAPIDS</span>
@@ -176,7 +164,6 @@ When interacting with this page through a website, the interactive examples belo
 - node RAPIDS is [available on NPM](https://www.npmjs.com/package/@rapidsai/core?activeTab=dependents).
 - Read about node RAPIDS at [github.com/rapidsai/node ](https://github.com/rapidsai/node) and explore its demo gallery [github.com/rapidsai/node/tree/main/modules/demo](https://github.com/rapidsai/node/tree/main/modules/demo).
 - Further [Documentation](https://rapidsai.github.io/node/).
-
 
 
 <br/><br/><br/>
