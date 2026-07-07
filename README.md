@@ -46,8 +46,9 @@ a portal-only preview. Merges to `main` continue to deploy the production site.
 
 ## Repository layout
 
-- `source/` contains the portal content, Sphinx configuration, static assets,
-  and data files.
+- Portal content, data, includes, and assets retain their established paths at
+  the repository root.
+- `sphinx/` contains the Sphinx configuration, templates, and theme overrides.
 - `extensions/` contains the portal's data-rendering and publication extension.
 - `ci/` downloads and post-processes versioned API and deployment documentation.
 - `scripts/` and `tests/` validate rendered routes, content, and publication
@@ -57,5 +58,3 @@ a portal-only preview. Merges to `main` continue to deploy the production site.
 
 The Sphinx portal was initially migrated from the Jekyll site at
 [`rapidsai/docs@b6afa0c`](https://github.com/rapidsai/docs/commit/b6afa0cbf4ddfc4c0a21f7c79b18631f214fd759).
-The route and content fixture in `tests/fixtures/jekyll_manifest.json` preserves
-that publication baseline.

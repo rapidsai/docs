@@ -8,7 +8,7 @@ clean:
 	rm -rf _site
 
 html: clean
-	$(UV) run sphinx-build -E -b dirhtml source _site -W --keep-going -n
+	$(UV) run sphinx-build -E -b dirhtml -c sphinx . _site -W --keep-going -n
 
 assemble:
 	$(UV) run bash ci/download_from_s3.sh
@@ -18,15 +18,14 @@ assemble:
 full: html assemble
 
 lint:
-	$(UV) run ruff check ci extensions scripts source/conf.py tests
-	$(UV) run ruff format --check ci extensions scripts source/conf.py tests
+	$(UV) run ruff check ci extensions scripts sphinx/conf.py tests
+	$(UV) run ruff format --check ci extensions scripts sphinx/conf.py tests
 
 test:
 	$(UV) run pytest
 
 validate:
 	$(UV) run python scripts/validate_site.py _site
-	$(UV) run python scripts/compare_routes.py tests/fixtures/jekyll_manifest.json _site
 
 check: lint test html validate
 

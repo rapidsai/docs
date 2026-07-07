@@ -8,6 +8,7 @@ from __future__ import annotations
 import email.utils
 import html
 import json
+import re
 import shutil
 from datetime import UTC, datetime
 from pathlib import Path
@@ -400,11 +401,31 @@ def _notice_header(metadata: dict) -> str:
     )
 
 
+_GITHUB_ALERT_RE = re.compile(
+    r"^> \[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\n((?:>.*(?:\n|$))*)",
+    re.MULTILINE,
+)
+
+
+def _convert_github_alerts(text: str) -> str:
+    """Convert GitHub alerts to MyST admonitions for the rendered portal."""
+
+    def replace(match: re.Match) -> str:
+        body = "\n".join(
+            line.removeprefix("> ").removeprefix(">") for line in match.group(2).splitlines()
+        )
+        return f"```{{{match.group(1).lower()}}}\n{body}\n```\n"
+
+    return _GITHUB_ALERT_RE.sub(replace, text)
+
+
 def _source_read(app, docname: str, source: list[str]) -> None:
     raw = source[0]
     if docname.startswith("notices/") and Path(docname).name[:3] in {"rdn", "rgn", "rsn"}:
         post = frontmatter.loads(raw)
         raw = _notice_header(post.metadata) + post.content
+    elif docname == "SECURITY":
+        raw = "---\norphan: true\n---\n\n" + _convert_github_alerts(raw)
     template = app.rapids_portal_jinja.from_string(raw)
     source[0] = template.render(_context(app))
 
@@ -477,7 +498,7 @@ def _copy_portal_files(app, exception) -> None:
             dirs_exist_ok=True,
         )
     for filename in ("LICENSE", "SECURITY.md"):
-        shutil.copy2(source_dir.parent / filename, output_dir / filename)
+        shutil.copy2(source_dir / filename, output_dir / filename)
 
     # ``dirhtml`` correctly creates pretty URLs everywhere except the hosting
     # platform's required top-level error document. sphinx-notfound-page has

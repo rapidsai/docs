@@ -452,9 +452,7 @@ if __name__ == "__main__":
     MANIFEST_FILEPATH = sys.argv[1]
     PROJECT_TO_VERSIONS_PATH = sys.argv[2]
     LIB_MAP_PATH = os.path.join(os.path.dirname(__file__), "lib_map.json")
-    DOCS_YML_PATH = os.path.join(
-        os.path.dirname(__file__), "..", "..", "source", "_data", "docs.yml"
-    )
+    DOCS_YML_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "_data", "docs.yml")
 
     # read in config files (doing this here so it only happens once)
     with open(LIB_MAP_PATH) as fp:
