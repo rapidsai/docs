@@ -15,12 +15,12 @@ LEGACY
 
 ## RAPIDS APIs
 
-<<! api_docs("apis") !>>
+{{ api_docs("apis") }}
 
 ## RAPIDS Libraries
 
-<<! api_docs("libs") !>>
+{{ api_docs("libs") }}
 
 ## Inactive Projects
 
-<<! api_docs("inactive-projects") !>>
+{{ api_docs("inactive-projects") }}

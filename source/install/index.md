@@ -31,7 +31,7 @@ RAPIDS has several methods for installation, depending on the preferred environm
 # Install RAPIDS
 Use the selector tool below to select your preferred method, packages, and environment to install RAPIDS. Certain combinations may not be possible and are dimmed automatically.
 
-[% include "_includes/selector.html" %]
+{% include "_includes/selector.html" %}
 
 <br/>
 <div id="troubleshooting"></div>
@@ -88,7 +88,7 @@ To learn more about these changes, please see the [RAPIDS Container README](http
 
 <i class="fas fa-info-circle"></i> The following error message indicates a problem with your environment:
 ```
-ERROR: Could not find a version that satisfies the requirement cudf-cu12 (from versions: 0.0.1, <<! releases.stable.version !>>)
+ERROR: Could not find a version that satisfies the requirement cudf-cu12 (from versions: 0.0.1, {{ releases.stable.version }})
 ERROR: No matching distribution found for cudf-cu12
 ```
 Check the suggestions below for possible resolutions:

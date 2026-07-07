@@ -11,7 +11,7 @@ available for the community to review and provide feedback on.
 
 {bdg-primary}`Operations`
 
-<<! current_schedules() !>>
+{{ current_schedules() }}
 
 ```{toctree}
 :hidden:

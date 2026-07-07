@@ -22,18 +22,18 @@ During the release process, the branch for the next release is created and any p
 
 It is important to note that the forward-merge jobs will sometimes fail due to merge conflicts, and will request a manual merge to be done. *Never* use the GitHub Web UI to fix the merge conflicts as it will cause changes in the default branch to be merged into the release branch. Please use the following steps to fix the merge conflicts manually:
 
-Using the example of `release/<<! releases.stable.version !>>` release branch and default development branch of `main`.
+Using the example of `release/{{ releases.stable.version }}` release branch and default development branch of `main`.
 
 ```sh
-git checkout release/<<! releases.stable.version !>>
+git checkout release/{{ releases.stable.version }}
 git pull <rapidsai remote>
 git checkout main
 git pull <rapidsai remote>
-git checkout -b main-merge-release/<<! releases.stable.version !>>
-git merge --no-squash release/<<! releases.stable.version !>>
+git checkout -b main-merge-release/{{ releases.stable.version }}
+git merge --no-squash release/{{ releases.stable.version }}
 # Fix any merge conflicts caused by this merge
-git commit -am "Merge release/<<! releases.stable.version !>> into main"
-git push <personal fork> main-merge-release/<<! releases.stable.version !>>
+git commit -am "Merge release/{{ releases.stable.version }} into main"
+git push <personal fork> main-merge-release/{{ releases.stable.version }}
 ```
 
 Once this is done, open a PR that targets the default development branch (`main` in this example) with your changes.

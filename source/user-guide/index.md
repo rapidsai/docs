@@ -19,7 +19,7 @@ The RAPIDS data science framework is a collection of libraries for running end-t
 
 
 **<i class="fa-solid fa-list"></i> Accelerated Machine Learning with [cuML](https://github.com/rapidsai/cuml)**:
- Start with the [User Guide](/api/cuml/stable/user_guide/) and the [Estimator Intro](https://github.com/rapidsai/cuml/blob/branch-<<! releases.stable.version !>>/docs/source/estimator_intro.ipynb), showcasing basic machine learning for training and evaluating machine learning models in cuML. The [Intro and key concepts for cuML](/api/cuml/stable/cuml_intro/) is helpful as well.
+ Start with the [User Guide](/api/cuml/stable/user_guide/) and the [Estimator Intro](https://github.com/rapidsai/cuml/blob/branch-{{ releases.stable.version }}/docs/source/estimator_intro.ipynb), showcasing basic machine learning for training and evaluating machine learning models in cuML. The [Intro and key concepts for cuML](/api/cuml/stable/cuml_intro/) is helpful as well.
 
 
 **<i class="fa-solid fa-code-branch"></i> Graph Analytics with [cuGraph](https://github.com/rapidsai/cugraph)**:
@@ -35,7 +35,7 @@ The RAPIDS data science framework is a collection of libraries for running end-t
 
 
 **<i class="fa-solid fa-images"></i> Computer Vision and Analytics with [cuCIM](https://github.com/rapidsai/cucim)**:
- Start with the [Welcome Notebook](https://github.com/rapidsai/cucim/blob/branch-<<! releases.stable.version !>>/notebooks/Welcome.ipynb) for links to resources guides and a good overview of the project structure.
+ Start with the [Welcome Notebook](https://github.com/rapidsai/cucim/blob/branch-{{ releases.stable.version }}/notebooks/Welcome.ipynb) for links to resources guides and a good overview of the project structure.
 
 
 **<i class="fa-solid fa-code"></i> Algorithms and Primitives for Scientific Computing, Data Science and Machine Learning with [RAFT](https://github.com/rapidsai/raft)**:

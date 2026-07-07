@@ -61,13 +61,10 @@ def convert_labels(lines: list[str]) -> list[str]:
 
 
 def convert_markdown(text: str, title: str) -> str:
-    text = text.replace("{% raw %}\n", "").replace("{% endraw %}\n", "")
     text = text.replace("{{ page.title }}", title)
+    text = text.replace("{{ site.data.releases.stable.version }}", "{{ releases.stable.version }}")
     text = text.replace(
-        "{{ site.data.releases.stable.version }}", "<<! releases.stable.version !>>"
-    )
-    text = text.replace(
-        "{{ site.data.releases.nightly.version }}", "<<! releases.nightly.version !>>"
+        "{{ site.data.releases.nightly.version }}", "{{ releases.nightly.version }}"
     )
     text = text.replace("{{ site.social.slack.url }}", "https://rapids.ai/slack-invite")
     text = text.replace("{{ 'notices/feed.xml' | absolute_url }}", "/notices/feed.xml")
@@ -79,7 +76,7 @@ def convert_markdown(text: str, title: str) -> str:
     text = re.sub(r'\{:\s*target="_blank"\s*}', "", text)
     text = re.sub(
         r"\{%\s*include\s+([A-Za-z0-9_.-]+)\.html(?:\s+[^%]*)?%}",
-        lambda match: f'[% include "_includes/{match.group(1)}.html" %]',
+        lambda match: '{% include "_includes/' + match.group(1) + '.html" %}',
         text,
     )
     text = "\n".join(convert_labels(text.splitlines())) + "\n"
