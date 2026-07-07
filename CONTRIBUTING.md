@@ -9,16 +9,19 @@ the locked development environment:
 uv sync --locked
 ```
 
+Alternatively, open the repository in its development container. The container
+installs uv and the locked environment automatically.
+
 ## Development
 
-Build the portal and serve the rendered site at <http://localhost:8004/>:
+Build the portal and serve the rendered site:
 
 ```shell
 make html
 make serve
 ```
 
-Pass a different port when needed:
+The server uses port 8000 by default. Pass a different port when needed:
 
 ```shell
 make serve PORT=8080

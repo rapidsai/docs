@@ -1,5 +1,5 @@
 UV ?= uv
-PORT ?= 8004
+PORT ?= 8000
 AWS_PROFILE ?=
 
 .PHONY: assemble check clean full html lint serve test validate

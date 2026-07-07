@@ -1,5 +1,4 @@
 name: Deploy site
-
 on:
   schedule:
     - cron: "0 9 * * *"
@@ -8,26 +7,21 @@ on:
     branches:
       - main
       - "pull-request/[0-9]+"
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 defaults:
   run:
     shell: bash
-
 permissions:
   id-token: write
   contents: read
-
 jobs:
   build:
     name: Build (and deploy)
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -39,21 +33,20 @@ jobs:
         run: uv sync --locked
       - name: Build and validate portal
         run: make check
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+      - uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 #v5.1.1
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
-          role-duration-seconds: 7200
+          role-duration-seconds: 7200 # 2h
       - name: Assemble complete documentation site
         run: make assemble
       - name: Deploy site
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_DOCS_SITE_ID }}
+          # TODO: use official netlify-cli pkg after https://github.com/netlify/cli/issues/1809
+          # is resolved and deployed.
         run: |
-          # TODO: use the official netlify-cli package after
-          # https://github.com/netlify/cli/issues/1809 is resolved and deployed.
           npm install --global --force @aschmidt8/netlify-cli
 
           ARGS=""
