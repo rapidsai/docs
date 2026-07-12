@@ -15,60 +15,73 @@
         border-top: 4px solid var(--nv-color-green);
         border-radius: 0.25rem;
         box-shadow: 0 0.125rem 0.5rem color-mix(in srgb, var(--pst-color-shadow) 55%, transparent);
-        padding: 1.5rem;
+        padding: 1.25rem;
     }
 
     .selector .options-section {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        margin-bottom: 0.35rem;
+        margin-bottom: 0.3rem;
     }
 
     .selector .options-section-additional {
         display: grid;
-        grid-template-columns: 7em repeat(4, minmax(0, 1fr));
-        gap: 0.4rem;
-        margin: 0.55rem 0 0.75rem;
+        grid-template-columns: max-content repeat(4, minmax(0, 1fr));
+        column-gap: 0.35rem;
+        row-gap: 0.25rem;
+        margin: 0.4rem 0 0.5rem;
     }
 
-    .selector .options-section-additional .option-label {
+    .selector .options .options-section-additional .option-label {
         align-self: center;
         grid-row: span 2;
-        margin: 0 0.75em 0 0;
+        line-height: 1.2;
+        margin: 0 0.35em 0 0;
+        max-width: 6.5rem;
+        white-space: normal;
         width: auto;
     }
 
     .selector .options-section-additional .option {
         align-items: center;
         display: flex;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         justify-content: center;
         line-height: 1.25;
         margin: 0;
-        min-height: 2.35rem;
-        padding: 0.35rem 0.45rem;
+        min-height: 1.9rem;
+        padding: 0.2rem 0.35rem;
         text-align: center;
     }
 
-    .selector .options-section-specific {
+    .selector .options-section-packages {
+        align-items: flex-start;
+    }
+
+    .selector .option-group {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .selector .option-row {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        width: 97%;
-        margin: 0 auto;
     }
 
     .selector .options .option-label {
         color: var(--pst-color-text-base);
-        width: 7em;
+        flex: 0 0 auto;
+        width: auto;
         text-transform: uppercase;
         font-size: 0.875rem;
         font-weight: 700;
         letter-spacing: 0.025em;
         margin-top: 0.65em;
-        margin-right: 0.75em;
+        margin-right: 0.35em;
         text-align: right;
+        white-space: nowrap;
     }
 
     .selector .options .option {
@@ -186,27 +199,31 @@
 
     .cmd {
         display: flex;
-        margin-top: 2rem;
+        gap: 0.35rem;
+        margin-top: 1rem;
     }
 
     .cmd-label {
         color: var(--pst-color-text-base);
-        width: 7em;
+        flex: 0 0 auto;
+        width: auto;
         text-transform: uppercase;
         font-size: 0.875rem;
         font-weight: 700;
         letter-spacing: 0.025em;
         margin-top: 1rem;
-        margin-right: 0.75em;
         vertical-align: top;
-        text-align: right
+        text-align: right;
+        white-space: nowrap;
     }
 
     .cmd-box {
         border: 1px solid var(--pst-color-border);
         cursor: text;
+        flex: 1 1 auto;
+        min-width: 0;
         overflow: auto;
-        width: calc(100% - 7em);
+        width: auto;
         border-radius: 4px;
     }
 
@@ -329,22 +346,25 @@
                     </template>
                 </div>
                 <div class="conda-options-container" x-show="active_method === 'Conda'">
-                    <div class="options-section">
+                    <div class="options-section options-section-packages">
                         <div class="option-label">RAPIDS Packages</div>
-                        <template x-for="package in packages">
-                            <div x-on:click="(e) => packagesClickHandler(e, package)"
-                                x-bind:class="{'active': active_packages.includes(package), 'disabled': disableUnsupportedPackage(package)}"
-                                class="option" x-html="getPackageHTML(package)">
+                        <div class="option-group">
+                            <div class="option-row">
+                                <template x-for="package in packages">
+                                    <div x-on:click="(e) => packagesClickHandler(e, package)"
+                                        x-bind:class="{'active': active_packages.includes(package), 'disabled': disableUnsupportedPackage(package)}"
+                                        class="option" x-html="getPackageHTML(package)">
+                                    </div>
+                                </template>
                             </div>
-                        </template>
-                    </div>
-                    <div class="options-section-specific" x-show="active_packages != 'Standard'">
-                        <div class="option-label"><!-- Second row of packages --></div>
-                        <template x-for="package in additional_rapids_packages">
-                            <div x-on:click="(e) => packagesClickHandler(e, package)"
-                                x-bind:class="{'active': active_packages.includes(package), 'disabled': disableUnsupportedPackage(package)}"
-                                class="option" x-text="package"></div>
-                        </template>
+                            <div class="option-row" x-show="active_packages != 'Standard'">
+                                <template x-for="package in additional_rapids_packages">
+                                    <div x-on:click="(e) => packagesClickHandler(e, package)"
+                                        x-bind:class="{'active': active_packages.includes(package), 'disabled': disableUnsupportedPackage(package)}"
+                                        class="option" x-text="package"></div>
+                                </template>
+                            </div>
+                        </div>
                     </div>
                     <div class="options-section options-section-additional">
                         <div class="option-label">Additional Packages</div>
@@ -356,22 +376,25 @@
                     </div>
                 </div>
                 <div class="pip-options-container" x-show="active_method === 'pip'">
-                    <div class="options-section">
+                    <div class="options-section options-section-packages">
                         <div class="option-label">Packages</div>
-                        <template x-for="package in packages">
-                            <div x-on:click="(e) => packagesClickHandler(e, package)"
-                                x-bind:class="{'active': active_packages.includes(package)}" class="option"
-                                x-html="getPackageHTML(package)">
+                        <div class="option-group">
+                            <div class="option-row">
+                                <template x-for="package in packages">
+                                    <div x-on:click="(e) => packagesClickHandler(e, package)"
+                                        x-bind:class="{'active': active_packages.includes(package)}" class="option"
+                                        x-html="getPackageHTML(package)">
+                                    </div>
+                                </template>
                             </div>
-                        </template>
-                    </div>
-                    <div class="options-section-specific" x-show="active_packages != 'Standard'">
-                        <div class="option-label"><!-- Second row of packages --></div>
-                        <template x-for="package in additional_pip_packages">
-                            <div x-on:click="(e) => packagesClickHandler(e, package)"
-                                x-bind:class="{'active': active_packages.includes(package), 'disabled': disableUnsupportedPackage(package)}" class="option"
-                                x-text="package"></div>
-                        </template>
+                            <div class="option-row" x-show="active_packages != 'Standard'">
+                                <template x-for="package in additional_pip_packages">
+                                    <div x-on:click="(e) => packagesClickHandler(e, package)"
+                                        x-bind:class="{'active': active_packages.includes(package), 'disabled': disableUnsupportedPackage(package)}" class="option"
+                                        x-text="package"></div>
+                                </template>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="docker-options-container" x-show="active_method === 'Docker'">
