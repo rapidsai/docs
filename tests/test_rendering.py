@@ -89,10 +89,31 @@ def test_notice_metadata_and_indexes() -> None:
     support_notice = next(notice for notice in data["notices"] if notice["notice_type"] == "rsn")
     assert f"RSN {support_notice['notice_id']}" in support_notices
     assert support_notice["title"] in support_notices
+    assert 'class="notice-status-label notice-status-green">Completed</span>' in support_notices
+    assert 'class="notice-status-label notice-status-yellow">In Progress</span>' in support_notices
 
     pinned = notices._notice_table(data, pinned=True)
     pinned_notice = next(notice for notice in data["notices"] if notice.get("notice_pin"))
     assert f"{pinned_notice['notice_type'].upper()} {pinned_notice['notice_id']}" in pinned
+
+
+def test_notice_status_labels() -> None:
+    assert (
+        notices._notice_status_label({"notice_status": "Completed", "notice_status_color": "green"})
+        == '<span class="notice-status-label notice-status-green">Completed</span>'
+    )
+    assert (
+        notices._notice_status_label(
+            {"notice_status": "In Progress", "notice_status_color": "yellow"}
+        )
+        == '<span class="notice-status-label notice-status-yellow">In Progress</span>'
+    )
+    assert (
+        notices._notice_status_label(
+            {"notice_status": "<Unknown>", "notice_status_color": "invalid"}
+        )
+        == '<span class="notice-status-label notice-status-blue">&lt;Unknown&gt;</span>'
+    )
 
 
 def test_github_alert_conversion() -> None:
