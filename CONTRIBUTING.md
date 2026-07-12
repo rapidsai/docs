@@ -27,7 +27,7 @@ The server uses port 8000 by default. Pass a different port when needed:
 make serve PORT=8080
 ```
 
-Run the complete credential-free validation suite before submitting a change:
+Run site validation before submitting a change:
 
 ```shell
 make check

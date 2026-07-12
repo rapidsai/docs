@@ -53,8 +53,3 @@ a portal-only preview. Merges to `main` continue to deploy the production site.
 - `ci/` downloads and post-processes versioned API and deployment documentation.
 - `scripts/` and `tests/` validate rendered routes, content, and publication
   behavior.
-
-## Migration history
-
-The Sphinx portal was initially migrated from the Jekyll site at
-[`rapidsai/docs@b6afa0c`](https://github.com/rapidsai/docs/commit/b6afa0cbf4ddfc4c0a21f7c79b18631f214fd759).
