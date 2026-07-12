@@ -13,9 +13,19 @@ from bs4 import BeautifulSoup
 
 from .dates import _date, _long_date
 
+_NOTICE_STATUS_COLORS = {"blue", "green", "purple", "red", "yellow"}
+
 
 def _notice_date(notice: dict) -> datetime:
     return _date(notice.get("notice_updated") or notice["notice_created"])
+
+
+def _notice_status_label(notice: dict) -> str:
+    color = str(notice.get("notice_status_color", "blue")).lower()
+    if color not in _NOTICE_STATUS_COLORS:
+        color = "blue"
+    status = html.escape(str(notice["notice_status"]))
+    return f'<span class="notice-status-label notice-status-{color}">{status}</span>'
 
 
 def _notice_table(data: dict, notice_type: str | None = None, pinned: bool = False) -> str:
@@ -38,7 +48,7 @@ def _notice_table(data: dict, notice_type: str | None = None, pinned: bool = Fal
         if not updated or _date(updated).date() == _date(notice["notice_created"]).date():
             updated = notice["notice_created"]
         output.append(
-            f"| **{notice['notice_type'].upper()} {notice['notice_id']}**<br>**{notice['notice_status']}** "
+            f"| **{notice['notice_type'].upper()} {notice['notice_id']}**<br>{_notice_status_label(notice)} "
             f"| [{notice['title']}](/notices/{Path(notice['docname']).name}/) "
             f"| {notice['notice_topic']} | {notice['notice_rapids_version']} | {_long_date(updated)} |"
         )
@@ -61,7 +71,7 @@ def _notice_header(metadata: dict) -> str:
             "| | |",
             "|:--|:--|",
             f"| **Author** | {metadata['notice_author']} |",
-            f"| **Status** | **{metadata['notice_status']}** |",
+            f"| **Status** | {_notice_status_label(metadata)} |",
             f"| **Topic** | {metadata['notice_topic']} |",
             f"| **RAPIDS Version** | {metadata['notice_rapids_version']} |",
             f"| **Created** | {_long_date(metadata['notice_created'])} |",
