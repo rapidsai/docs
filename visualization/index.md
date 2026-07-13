@@ -36,7 +36,7 @@ When interacting with this page through a website, the interactive examples belo
 {% include "_includes/viz-cdn-js-css.html" %}
 
 <br/><br/>
-# Featured Libraries
+## Featured Libraries
 
 <a id='holoviews'></a><br/>
 <img src="/assets/images/holoviews-logo.png" width="150px" class="visualization-logo">
@@ -122,7 +122,7 @@ When interacting with this page through a website, the interactive examples belo
 
 <br/><br/>
 
-# Other Notable Libraries
+## Other Notable Libraries
 
 <a id='panel'></a><br/>
 <img src="/assets/images/panel-logo.png" width="100px" class="visualization-logo">

@@ -28,7 +28,7 @@ RAPIDS has several methods for installation, depending on the preferred environm
 <hr/>
 <div id="selector"></div>
 
-# Install RAPIDS
+## Install RAPIDS
 Use the selector tool below to select your preferred method, packages, and environment to install RAPIDS. Certain combinations may not be possible and are dimmed automatically.
 
 {% include "_includes/selector.html" %}
@@ -36,9 +36,9 @@ Use the selector tool below to select your preferred method, packages, and envir
 <br/>
 <div id="troubleshooting"></div>
 
-## Installation Troubleshooting
+### Installation Troubleshooting
 
-### Conda Issues
+#### Conda Issues
 <i class="fas fa-info-circle"></i> A `conda create error` occurs:<br/>
 To resolve this error please follow one of these steps:
 - If the Conda installation is older than `23.10`, please update to the latest version. This will include [libmamba](https://conda.org/blog/2023-11-06-conda-23-10-0-release/) to significantly accelerate environment solving
@@ -65,7 +65,7 @@ Note that if you installed conda with [Miniforge](https://conda-forge.org/downlo
 
 In general [mixing `conda-forge` and `defaults` channels is not supported](https://conda-forge.org/docs/user/transitioning_from_defaults/). RAPIDS packages are published to a separate `rapidsai` channel that is designed for compatibility with `conda-forge`, not `defaults`.
 
-### Docker Issues
+#### Docker Issues
 <i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brought significant Docker changes. <br/>
 To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/base). Some key notes below:
 - `Development` images are no longer being published, RAPIDS now uses [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) for development
@@ -80,7 +80,7 @@ To learn more about these changes, please see the [RAPIDS Container README](http
 - For a full list of changes please see this [RAPIDS Docker Issue](https://github.com/rapidsai/docker/issues/539)
 
 
-### pip Issues
+#### pip Issues
 <i class="fas fa-info-circle"></i> pip installations require using the matching wheel to the system's installed CUDA toolkit. For example, if you have the CUDA 12 toolkit, install the `-cu12` wheels.<br/>
 <i class="fas fa-info-circle"></i> Infiniband is not supported yet. <br/>
 <i class="fas fa-info-circle"></i> These packages are not compatible with Tensorflow pip packages. Please use the [NGC containers](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow) or conda packages instead. <br/>
@@ -97,15 +97,15 @@ Check the suggestions below for possible resolutions:
 
 <br/>
 
-### WSL2 Issues
+#### WSL2 Issues
 See the WSL2 setup [troubleshooting section](#wsl2-troubleshooting).
 
 
 <hr/>
 <div id="system-req"></div>
 
-# System Requirements
-## OS / GPU Driver / CUDA Versions
+## System Requirements
+### OS / GPU Driver / CUDA Versions
 All provisioned systems need to be RAPIDS capable. Below is a list of requirements for the current release. For requirements of historical RAPIDS versions, see [Platform Support](/platform-support/).
 
 <i class="fas fa-microchip"></i> **GPU:** NVIDIA Volta™ or higher with [compute capability](https://developer.nvidia.com/cuda-gpus) 7.0+
@@ -128,9 +128,9 @@ All provisioned systems need to be RAPIDS capable. Below is a list of requiremen
 
 See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/) for details.
 
-## CUDA Support Notes
+### CUDA Support Notes
 
-### pip
+#### pip
 
 - <i class="fas fa-info-circle"></i> pip installations require using a wheel matching the system's installed CUDA toolkit.
 - <i class="fas fa-info-circle"></i> RAPIDS pip packages require NVRTC for Numba to function properly. For Docker users, this means that RAPIDS wheels require the `devel` flavor of `nvidia/cuda` images for full functionality. The `base` and `runtime` flavors of `nvidia/cuda` Docker images are currently not sufficient.
@@ -139,7 +139,7 @@ See [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/) for
 <br/>
 <div id="system-recommendations"></div>
 
-## System Recommendations
+### System Recommendations
 Aside from the system requirements, other considerations for best performance include:
 
 - <i class="fas fa-check-circle"></i> SSD drive (NVMe preferred)
@@ -149,7 +149,7 @@ Aside from the system requirements, other considerations for best performance in
 <br/>
 <div id="cloud-gpu"></div>
 
-## Cloud Instance GPUs
+### Cloud Instance GPUs
 If you do not have access to GPU hardware, there are several cloud service providers (CSP) that are RAPIDS enabled. Learn how to deploy RAPIDS on AWS, Azure, GCP, and IBM cloud on our [Cloud Deployment Page](https://docs.rapids.ai/deployment/stable/cloud/index.html).
 
 Several services also offer **free and limited** trials with GPU resources:
@@ -160,13 +160,13 @@ Several services also offer **free and limited** trials with GPU resources:
 <hr/>
 <div id="environment"></div>
 
-# Environment Setup
+## Environment Setup
 For most installations, you will need a Conda or Docker environments installed for RAPIDS. Note, these examples are structured for installing on **Ubuntu**. Please modify appropriately for Rocky Linux. **Windows 11** has a [WSL2 specific install](#wsl2).
 
 <br>
 <div id="conda"></div>
 
-## Conda
+### Conda
 RAPIDS can be used with any conda distribution.
 
 Below is an installation guide using miniforge.
@@ -192,7 +192,7 @@ conda config --set channel_priority flexible
 <br/>
 <div id="docker"></div>
 
-## Docker
+### Docker
 RAPIDS requires Docker Engine and [nvidia-container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) installed.
 
 **1. Download and Install.** Copy command below to download and install the latest Docker Engine:
@@ -215,7 +215,7 @@ docker run --gpus all nvcr.io/nvidia/k8s/cuda-sample:nbody nbody -gpu -benchmark
 
 <br/>
 
-### JupyterLab
+#### JupyterLab
 The command provided from the selector for the `notebooks` Docker image will run [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) on your host machine at port: `8888`.
 
 **Running Multi-Node / Multi-GPU (MNMG) Environment.** To start the container in an MNMG environment:
@@ -228,13 +228,13 @@ The standard docker command may be sufficient, but the additional arguments ensu
 <br/>
 <div id="pip"></div>
 
-## pip
+### pip
 RAPIDS pip packages are available on the NVIDIA Python Package Index.
 
 <br/>
 <div id="sdkm"></div>
 
-## SDK Manager (Ubuntu Only)
+### SDK Manager (Ubuntu Only)
 [NVIDIA SDK Manager](https://developer.nvidia.com/sdk-manager) gives a users a Graphical User Interface (GUI) option to install RAPIDS.  It also attempts to fix any environment issues before installing RAPIDS or updating RAPIDS, making it ideal for new Linux users.
 1. Download [SDK Manager's Ubuntu version from their website](https://developer.nvidia.com/sdk-manager) (requires sign up or login to NVIDIA's Developer community).  Do not install yet.  It is assumed that your home directory's `Downloads` folder is where the `.deb` file will be stored.  If not, please move `sdkmanager_[version]-[build#]_amd64.deb` file to your current Download folder.
 2. Install and run SDK Manager [using the installation guide here](https://docs.nvidia.com/sdk-manager/download-run-sdkm/index.html). For Ubuntu, use the following commands:
@@ -248,17 +248,17 @@ sdkmanager
 <br/>
 <div id="wsl2"></div>
 
-## Windows WSL2
+### Windows WSL2
 Windows users can now tap into GPU accelerated data science on their local machines using RAPIDS on [Windows Subsystem for Linux 2](https://learn.microsoft.com/en-us/windows/wsl/install). WSL2 is a Windows feature that enables users to run native Linux command line tools directly on Windows. Using this feature does not require a dual boot environment, removing complexity and saving you time.
 
-### WSL2 Additional Prerequisites
+#### WSL2 Additional Prerequisites
 
 <i class="fas fa-desktop text-white"></i> **OS:** Windows 11 with a WSL2 installation of Ubuntu. <br/>
 <i class="fas fa-info-circle text-white"></i> **WSL Version:** WSL2 (WSL1 not supported). <br/>
 <i class="fas fa-microchip text-white"></i> **GPU:** GPUs with [Compute Capability](https://developer.nvidia.com/cuda-gpus) 7.0 or higher (16GB+ GPU RAM is recommended).
 
 
-### Limitations
+#### Limitations
 
 <i class="fas fa-info-circle text-white"></i> Only single GPU is supported. <br/>
 <i class="fas fa-info-circle text-white"></i> GPU Direct Storage is not supported.
@@ -266,7 +266,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 
 <div id="wsl2-troubleshooting"></div>
 
-### Troubleshooting
+#### Troubleshooting
 
 <i class="fas fa-info-circle text-white"></i> When installing with Conda, if an `http 000 connection error` occurs when accessing the repository data, run `wsl --shutdown` and then [restart the WSL instance](https://stackoverflow.com/a/69601760).
 
@@ -275,7 +275,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 <br/>
 <div id="wsl2-sdkm"></div>
 
-### WSL2 SDK Manager Install
+#### WSL2 SDK Manager Install
 [NVIDIA's SDK Manager](https://developer.nvidia.com/sdk-manager) gives Windows users a Graphical User Interface (GUI) option to install RAPIDS. It automates Windows Subsystem for Linux (WSL) setup for RAPIDS SDK 25.04 and later, simplifying the installation process.
 1. Download [SDK Manager's Windows version from their website](https://developer.nvidia.com/sdk-manager) (requires sign up or login to NVIDIA's Developer community).
 2. [Follow SDK Manager's RAPIDS installation instructions here](https://docs.nvidia.com/sdk-manager/install-with-sdkm-rapids/index.html).
@@ -283,7 +283,7 @@ Windows users can now tap into GPU accelerated data science on their local machi
 <br/>
 <div id="wsl2-conda"></div>
 
-### WSL2 Conda Install
+#### WSL2 Conda Install
 
 1. Install WSL2 and the Ubuntu distribution [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install).
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx) on the Windows host.
@@ -299,7 +299,7 @@ print(cudf.Series([1, 2, 3]))
 <br/>
 <div id="wsl2-docker"></div>
 
-### WSL2 Docker Desktop Install
+#### WSL2 Docker Desktop Install
 
 1. Install WSL2 and the Ubuntu distribution [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install).
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx) on the Windows host.
@@ -315,7 +315,7 @@ print(cudf.Series([1, 2, 3]))
 <br/>
 <div id="wsl2-pip"></div>
 
-### WSL2 pip Install
+#### WSL2 pip Install
 
 1. Install WSL2 and the Ubuntu distribution [using Microsoft's instructions](https://docs.microsoft.com/en-us/windows/wsl/install).
 2. Install the [latest NVIDIA Drivers](https://www.nvidia.com/download/index.aspx) on the Windows host.
@@ -332,14 +332,14 @@ print(cudf.Series([1, 2, 3]))
 
 <div id="source"></div>
 
-## Build from Source
+### Build from Source
 To build from source, find the library on the [RAPIDS GitHub](https://github.com/rapidsai). Libraries provide guidance on building from source in `README.md` or `CONTRIBUTING.md`. If additional help is needed, file an issue on GitHub or reach out on our [Slack Channel](https://rapids.ai/slack-invite).
 
 
 <hr/>
 <div id="next-steps"></div>
 
-# Next Steps
+## Next Steps
 After installing the RAPIDS libraries, the best place to get started is our [User Guide](/user-guide). Our [RAPIDS.ai](https://rapids.ai/) home page also provides a great deal of information, as does our [Blog Page](https://medium.com/rapids-ai) and the [NVIDIA Developer Blog](https://developer.nvidia.com/blog/?search_posts_filter=rapids). We are also always available on our [RAPIDS GoAi Slack Channel](https://rapids.ai/slack-invite).
 
 <br/><br/>

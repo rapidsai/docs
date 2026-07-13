@@ -79,12 +79,12 @@ you. Visit [RAPIDS.ai](https://rapids.ai) for more information on the overall pr
 ```{toctree}
 :hidden:
 
-install/index
-platform-support/index
-user-guide/index
-api
-visualization/index
-maintainers/index
+Installation Guide <install/index>
+Platform Support <platform-support/index>
+User Guide <user-guide/index>
+API Docs <api>
+Visualization Guide <visualization/index>
+Maintainer Docs <maintainers/index>
 contributing/index
 notices/index
 ```
