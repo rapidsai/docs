@@ -18,7 +18,7 @@ def _platform_support(data: dict) -> str:
     releases = data["platform_support"]["releases"]
     links = ", ".join(
         f"[{release['version']}{' (nightly)' if release.get('nightly') else ''}]"
-        f"(#rapids-{str(release['version']).replace('.', '')})"
+        f"(#rapids-{str(release['version']).replace('.', '-')}{'-nightly' if release.get('nightly') else ''})"
         for release in releases
     )
     sections = [f"**Releases:** {links}"]

@@ -55,6 +55,11 @@ def test_platform_support() -> None:
     assert 'class="fab fa-python"' in platform
     assert 'class="fas fa-microchip"' in platform
     assert 'class="fas fa-hammer"' in platform
+    for release in data["platform_support"]["releases"]:
+        anchor = f"#rapids-{str(release['version']).replace('.', '-')}"
+        if release.get("nightly"):
+            anchor += "-nightly"
+        assert anchor in platform
 
 
 def test_release_schedules() -> None:
