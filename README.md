@@ -1,10 +1,10 @@
 # NVIDIA RAPIDS Documentation
 
 This repository contains the source for the
-[NVIDIA RAPIDS documentation portal](https://docs.rapids.ai/). The portal is
-built with Sphinx and the NVIDIA Sphinx theme.
+[NVIDIA RAPIDS documentation site](https://docs.rapids.ai/). The site is built
+with Sphinx and the NVIDIA Sphinx theme.
 
-## Build the portal
+## Build the site
 
 Install [uv](https://docs.astral.sh/uv/), then run:
 
@@ -13,10 +13,10 @@ make html
 make serve
 ```
 
-The rendered portal is written to `_site`. The server uses port 8000 by default;
+The rendered site is written to `_site`. The server uses port 8000 by default;
 override it with `PORT` (for example, `make serve PORT=8080`).
 
-## Build the complete site
+## Build the full site
 
 The complete docs site imports versioned API documentation and the deployment
 documentation from the private `rapidsai-docs` S3 bucket. Configure a read-only
@@ -26,8 +26,7 @@ AWS profile named `rapids-docs`, then run:
 AWS_PROFILE=rapids-docs make full
 ```
 
-This preserves the stable, latest, nightly, and legacy aliases and applies the
-RAPIDS library/version selectors to the imported documentation.
+This applies the RAPIDS library/version selectors to the imported documentation.
 
 ## Validation
 
@@ -35,21 +34,18 @@ RAPIDS library/version selectors to the imported documentation.
 make check
 ```
 
-This runs Python linting, unit tests, a warning-free Sphinx build, and output
-validation.
+Run checks including linting, tests, and a local build.
 
 Pull requests opened against `rapidsai/docs` are copied to a
 `pull-request/<number>` branch by the RAPIDS copy-PR bot. That branch runs the
 same validation and dry-runs assembly of the complete S3-backed documentation
 tree without deploying it. Netlify's repository integration separately creates
-a portal-only preview. Merges to `main` continue to deploy the production site.
+a site preview. Merges to `main` deploy the production site.
 
 ## Repository layout
 
-- Portal content, data, includes, and assets retain their established paths at
-  the repository root.
 - `sphinx/` contains the Sphinx configuration, templates, and theme overrides.
-- `extensions/` contains the portal's data-rendering and publication extension.
-- `ci/` downloads and post-processes versioned API and deployment documentation.
+- `extensions/` contains custom code extending Sphinx for this site.
+- `ci/` contains code used by automated testing and deployment jobs.
 - `scripts/` and `tests/` validate rendered routes, content, and publication
   behavior.
