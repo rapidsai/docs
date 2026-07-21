@@ -4,8 +4,10 @@
 from pathlib import Path
 from types import SimpleNamespace
 
+from docutils import nodes
+
 from extensions import rapids_docs
-from extensions.rapids_docs import api, lifecycle, notices, platform_support, releases
+from extensions.rapids_docs import api, lifecycle, notices, platform_support, releases, urls
 from extensions.rapids_docs import data as portal_data
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -128,6 +130,56 @@ def test_github_alert_conversion() -> None:
     assert converted == ("```{warning}\nDo not report security vulnerabilities publicly!\n```\n")
 
 
+def test_absolute_url_rewriting() -> None:
+    app = SimpleNamespace(
+        config=SimpleNamespace(html_baseurl="https://docs.example.com/datascience/")
+    )
+    reference = nodes.reference("", "Guide", refuri="/user-guide/")
+    raw = nodes.raw(
+        "", '<a href="/notices/feed.xml"><img src="/assets/rss.svg"></a>', format="html"
+    )
+    doctree = nodes.container("", reference, raw)
+
+    urls._rewrite_absolute_urls(app, doctree, "index")
+
+    assert reference["refuri"] == "https://docs.example.com/datascience/user-guide/"
+    assert (
+        raw.astext()
+        == '<a href="https://docs.example.com/datascience/notices/feed.xml"><img src="https://docs.example.com/datascience/assets/rss.svg"></a>'
+    )
+
+
+def test_theme_url_rewriting() -> None:
+    app = SimpleNamespace(
+        config=SimpleNamespace(html_baseurl="https://docs.example.com/datascience/")
+    )
+    context = {
+        "pathto": lambda *args, **kwargs: "/_static/theme.css",
+        "css_tag": lambda css: '<link href="/_static/theme.css">',
+        "js_tag": lambda js: '<script src="/_static/theme.js"></script>',
+        "toctree": lambda **kwargs: '<a href="/install/">Installation Guide</a>',
+        "favicon_url": "/_static/favicon.png",
+    }
+
+    urls._rewrite_theme_urls(app, "index", "page.html", context, None)
+
+    assert context["pathto"]("_static/theme.css", resource=True) == (
+        "https://docs.example.com/datascience/_static/theme.css"
+    )
+    assert (
+        context["css_tag"](None)
+        == '<link href="https://docs.example.com/datascience/_static/theme.css">'
+    )
+    assert (
+        context["js_tag"](None)
+        == '<script src="https://docs.example.com/datascience/_static/theme.js"></script>'
+    )
+    assert context["toctree"]() == (
+        '<a href="https://docs.example.com/datascience/install/">Installation Guide</a>'
+    )
+    assert context["favicon_url"] == "https://docs.example.com/datascience/_static/favicon.png"
+
+
 def test_extension_setup() -> None:
     connections = []
     app = SimpleNamespace(connect=lambda event, callback: connections.append((event, callback)))
@@ -137,6 +189,8 @@ def test_extension_setup() -> None:
     assert [event for event, _ in connections] == [
         "builder-inited",
         "source-read",
+        "doctree-resolved",
+        "html-page-context",
         "build-finished",
         "build-finished",
     ]
