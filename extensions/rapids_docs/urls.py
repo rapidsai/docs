@@ -9,6 +9,10 @@ from urllib.parse import urljoin
 from docutils import nodes
 
 _HTML_URL_RE = re.compile(r"(?P<attribute>\b(?:href|src)=['\"])(?P<url>/(?!/)[^'\"]*)")
+_TOCTREE_RE = re.compile(r"^```\{toctree\}\n.*?^```$", re.MULTILINE | re.DOTALL)
+_TOCTREE_ENTRY_RE = re.compile(
+    r"^(?P<prefix>\s*.*<)(?P<url>/(?!/)[^>]+)(?P<suffix>>\s*)$", re.MULTILINE
+)
 
 
 def _absolute_url(base_url: str, url: str) -> str:
@@ -25,6 +29,20 @@ def _rewrite_html_urls(text: str, base_url: str) -> str:
     return _HTML_URL_RE.sub(
         lambda match: match["attribute"] + _rewrite_url(match["url"], base_url), text
     )
+
+
+def _rewrite_toctree_urls(app, docname: str, source: list[str]) -> None:
+    base_url = app.config.html_baseurl
+    if not base_url:
+        return
+
+    def rewrite_toctree(match: re.Match) -> str:
+        return _TOCTREE_ENTRY_RE.sub(
+            lambda entry: entry["prefix"] + _absolute_url(base_url, entry["url"]) + entry["suffix"],
+            match[0],
+        )
+
+    source[0] = _TOCTREE_RE.sub(rewrite_toctree, source[0])
 
 
 def _rewrite_absolute_urls(app, doctree, docname: str) -> None:

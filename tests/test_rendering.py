@@ -87,6 +87,20 @@ def test_standard_jinja_syntax_and_raw_blocks() -> None:
     assert rendered == stable_version + "\n${{ matrix.PY_VER }}\n"
 
 
+def test_toctree_url_rewriting() -> None:
+    app = SimpleNamespace(
+        config=SimpleNamespace(html_baseurl="https://docs.example.com/datascience/")
+    )
+    source = ["```{toctree}\n:hidden:\n\nDeployment Guides </deployment/stable/>\n```\n"]
+
+    urls._rewrite_toctree_urls(app, "index", source)
+
+    assert source == [
+        "```{toctree}\n:hidden:\n\n"
+        "Deployment Guides <https://docs.example.com/datascience/deployment/stable/>\n```\n"
+    ]
+
+
 def test_notice_metadata_and_indexes() -> None:
     data = portal_data._load_data(APP)
     source_notices = list((ROOT / "notices").glob("r[dgs]n[0-9][0-9][0-9][0-9].md"))
@@ -188,6 +202,7 @@ def test_extension_setup() -> None:
 
     assert [event for event, _ in connections] == [
         "builder-inited",
+        "source-read",
         "source-read",
         "doctree-resolved",
         "html-page-context",
