@@ -42,6 +42,7 @@ def initialize_worker(
 
 def customize_manifest_file(filepath: str) -> None:
     """Customizes one HTML file from the generated manifest."""
+    # Skip the top-level API page, which has no library selector.
     if Path(filepath).parts[-2:] == ("api", "index.html"):
         return
 
