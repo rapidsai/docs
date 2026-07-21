@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.abspath("../extensions"))
 project = "NVIDIA RAPIDS Documentation"
 html_title = project
 author = "NVIDIA"
-copyright = f"{datetime.date.today().year}, NVIDIA"
+copyright = f"2019-{datetime.date.today().year}, NVIDIA"
 
 extensions = [
     "myst_parser",
