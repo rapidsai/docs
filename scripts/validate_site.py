@@ -7,7 +7,9 @@
 from __future__ import annotations
 
 import argparse
+import re
 from pathlib import Path
+from urllib.parse import urlsplit
 from xml.etree import ElementTree
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -97,6 +99,15 @@ def main() -> None:
     stale_liquid = [path for path in html_files if "{%" in path.read_text(errors="ignore")]
     if stale_liquid:
         missing.append(f"Liquid syntax remains in {len(stale_liquid)} rendered files")
+
+    markdown_links = []
+    for path in html_files:
+        for href in re.findall(r'href=["\']([^"\']+)["\']', path.read_text(errors="ignore")):
+            link = urlsplit(href)
+            if not (link.scheme or link.netloc) and link.path.endswith(".md"):
+                markdown_links.append(f"{path.relative_to(args.site)}: {href}")
+    if markdown_links:
+        missing.append("same-site Markdown links remain:\n  " + "\n  ".join(markdown_links))
 
     if args.full:
         full_paths = [
