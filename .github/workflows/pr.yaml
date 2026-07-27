@@ -12,6 +12,22 @@ concurrency:
 permissions: {}
 
 jobs:
+  pr-builder:
+    needs:
+      - check-style
+      - docs
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+      packages: read
+      pull-requests: read
+    secrets: inherit # zizmor: ignore[secrets-inherit]
+    uses: rapidsai/shared-workflows/.github/workflows/pr-builder.yaml@main
+    if: always()
+    with:
+      needs: ${{ toJSON(needs) }}
+
   check-style:
     runs-on: ubuntu-latest
     steps:
