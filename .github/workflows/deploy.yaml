@@ -24,21 +24,21 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      # this step uses the `.ruby-version` file
-      - uses: ruby/setup-ruby@6aaa311d81eba98ae12eaffbcb63296ace0efcde # v1.307.0
-      - name: Build Jekyll Site
-        run: |
-          bundle install
-          bundle exec jekyll build
+      - name: Set up uv
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+        with:
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --locked
+      - name: Build and validate portal
+        run: make check
       - uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 #v5.1.1
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
           role-duration-seconds: 7200 # 2h
-      - name: Fetch doc files from S3
-        run: ci/download_from_s3.sh
-      - name: Post-process docs
-        run: ci/post-process.sh
+      - name: Assemble complete documentation site
+        run: make assemble
       - name: Deploy site
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}

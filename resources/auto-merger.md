@@ -1,11 +1,3 @@
----
-layout: default
-nav_order: 3
-parent: Resources
-grand_parent: Maintainer Docs
-title: Auto-Merger
----
-
 # Auto-Merger
 
 ## Overview
@@ -14,11 +6,9 @@ Summary of the automated merge process used for pull requests.
 
 ### Intended audience
 
-Community
-{: .label .label-yellow}
+{bdg-warning}`Community`
 
-Developers
-{: .label .label-green}
+{bdg-success}`Developers`
 
 ## Summary
 
@@ -46,7 +36,7 @@ If the merge criteria below are **not satisfied** when the comment is left on th
 - All **required** (not optional) CI checks must be passing
 - Must not have merge conflicts
 - `Branch Checker` Ensures the base branch is under active development
-- [Label Checker]({% link resources/label-checker.md %}) Ensures the correct labels have been applied
+- [Label Checker](/resources/label-checker/) Ensures the correct labels have been applied
 - No changes have been requested from users who have `write`, `admin`, or `owner` permissions
 - Any user who left the `/merge` comment must have `write` or `admin` privileges on the repo
 

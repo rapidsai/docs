@@ -1,11 +1,3 @@
----
-layout: default
-nav_order: 3
-parent: Release Docs
-grand_parent: Maintainer Docs
-title: Hotfix Process
----
-
 # Hotfix Process
 
 ## Overview
@@ -14,19 +6,16 @@ Summary of the RAPIDS release process for hotfixes.
 
 ### Intended audience
 
-Developers
-{: .label .label-green}
+{bdg-success}`Developers`
 
-Project Leads
-{: .label .label-blue}
+{bdg-info}`Project Leads`
 
-Operations
-{: .label .label-purple}
+{bdg-primary}`Operations`
 
 ### See also
 
-* [Hotfix versioning]({% link resources/versions.md %})
-* [Releases]({% link releases/process.md %})
+* [Hotfix versioning](/resources/versions/)
+* [Releases](/releases/process/)
 
 ## Hotfixes
 
@@ -62,8 +51,7 @@ Also consider the timing of when the next release is scheduled. If the freeze or
 - Next release `YY.MB.0` (where `MB=MA+2`)
 - Next patch release `MM.MA.PY` (where `PY=PX+1`)
 
-Developers
-{: .label .label-green}
+{bdg-success}`Developers`
 1. Hotfix issues will be assigned to you
 2. Create `hotfix/YY.MA.PX` branch from `^vYY.MA.00` (commit `BEFORE` the tag)
 3. Implement the fix succinctly
@@ -74,11 +62,10 @@ Developers
   1. `hotfix/YY.MA.PX` → `release/YY.MA` and notify Operations
   2. `hotfix/YY.MA.PX` → `main` and notify Operations
     1. This can also be done as a `cherry-pick` from `release/YY.MA` -> `main`
-  3. ***NOTE:*** After the `release/YY.MA` has completed, the [forward merger]({% link resources/auto-merger.md %}) will no longer automatically merge from `release/YY.MA` -> `main`
+  3. ***NOTE:*** After the `release/YY.MA` has completed, the [forward merger](/resources/auto-merger/) will no longer automatically merge from `release/YY.MA` -> `main`
 5. Notify the project lead
 
-Project Leads
-{: .label .label-blue}
+{bdg-info}`Project Leads`
 1. Identify potential hotfixes
 2. Ensure that the [hotfix criteria](#criteria) is met
 3. Assign the issue and track its progress
@@ -86,8 +73,7 @@ Project Leads
 5. Once notified that the pull request is created, review and approve it. Do NOT merge the pull request.
 6. Notify Operations that the hotfix pull request is ready for merging
 
-Operations
-{: .label .label-purple}
+{bdg-primary}`Operations`
 1. Once notified by a Project Lead, review the pull request
 2. Begin testing of conda and containers for correctness and functionality
 3. Review documentation to ensure version numbers (updating to `YY.MA.PX`) and instructions are correct

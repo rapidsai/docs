@@ -1,11 +1,3 @@
----
-layout: default
-nav_order: 6
-parent: Resources
-grand_parent: Maintainer Docs
-title: Merge Barriers
----
-
 # _Merge Barriers_ Check
 
 ## Overview
@@ -14,17 +6,13 @@ A GitHub action that checks whether a pull-request is up-to-date with the any me
 
 ### Intended audience
 
-Community
-{: .label .label-yellow}
+{bdg-warning}`Community`
 
-Developers
-{: .label .label-green}
+{bdg-success}`Developers`
 
-Project Leads
-{: .label .label-blue}
+{bdg-info}`Project Leads`
 
-Operations
-{: .label .label-purple}
+{bdg-primary}`Operations`
 
 ## Summary
 
@@ -45,4 +33,4 @@ Ops-Bot-Merge-Barrier: true
 
 If a pull request with this line is merged, no pull requests can be merged after it unless they merge in the merge barrier commit. If a pull request cannot be merged due to missing a merge barrier, the easiest fix is to simply merge in the latest commit from the target branch.
 
-For more generic requirements to keep a pull request reasonably up-to-date with the origin, see the [recently updated check](./recently-updated.md).
+For more generic requirements to keep a pull request reasonably up-to-date with the origin, see the [recently updated check](/resources/recently-updated/).

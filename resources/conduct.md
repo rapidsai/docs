@@ -1,11 +1,3 @@
----
-layout: default
-nav_order: 1
-parent: Resources
-grand_parent: Maintainer Docs
-title: Code of Conduct
----
-
 # Contributor Covenant Code of Conduct
 
 ## Overview
@@ -14,14 +6,11 @@ Define the code of conduct followed and enforced for all RAPIDS projects.
 
 ### Intended audience
 
-Community
-{: .label .label-yellow}
+{bdg-warning}`Community`
 
-Developers
-{: .label .label-green}
+{bdg-success}`Developers`
 
-Project Leads
-{: .label .label-blue}
+{bdg-info}`Project Leads`
 
 ## Our Pledge
 

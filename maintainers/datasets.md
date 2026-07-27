@@ -1,10 +1,3 @@
----
-layout: default
-nav_order: 1
-parent: Maintainer Docs
-title: Datasets
----
-
 # Datasets
 
 ## Overview
@@ -13,14 +6,11 @@ Many tests depend on the presence of specific datasets in order to properly veri
 
 ### Intended audience
 
-Developers
-{: .label .label-green}
+{bdg-success}`Developers`
 
-Project Leads
-{: .label .label-blue}
+{bdg-info}`Project Leads`
 
-Operations
-{: .label .label-purple}
+{bdg-primary}`Operations`
 
 ## Running Tests That Use Datasets
 

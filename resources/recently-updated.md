@@ -1,11 +1,3 @@
----
-layout: default
-nav_order: 6
-parent: Resources
-grand_parent: Maintainer Docs
-title: Recently Updated Check
----
-
 # _Recently Updated_ Check
 
 ## Overview
@@ -14,17 +6,13 @@ A GitHub action that checks whether a pull-request is up-to-date with the latest
 
 ### Intended audience
 
-Community
-{: .label .label-yellow}
+{bdg-warning}`Community`
 
-Developers
-{: .label .label-green}
+{bdg-success}`Developers`
 
-Project Leads
-{: .label .label-blue}
+{bdg-info}`Project Leads`
 
-Operations
-{: .label .label-purple}
+{bdg-primary}`Operations`
 
 ## Summary
 
@@ -53,4 +41,4 @@ recently_updated_threshold: 5
 
 Note that since RAPIDS uses squash commits for pull requests, the `recently_updated_threshold` value effectively means "how many pull requests have been merge into the source repository since the current pull request has last been updated".
 
-For more specific control over which commits need to be merged into pull requests, see [merge barriers](./merge-barriers.md).
+For more specific control over which commits need to be merged into pull requests, see [merge barriers](/resources/merge-barriers/).

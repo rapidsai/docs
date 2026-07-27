@@ -1,32 +1,16 @@
----
-layout: default
-nav_order: 3
-parent: Resources
-grand_parent: Maintainer Docs
-title: Telemetry
----
-
-# {{ page.title }}
-{:.no_toc}
+# Telemetry
 
 ## Overview
-{:.no_toc}
 
 The RAPIDS team collects build-time and test-time telemetry from our CI jobs.
 These data are used to provide insights into potential speed impacts and
 optimizations that might be worthwhile.
 
 ### Intended audience
-{: .no_toc }
 
-Operations
-{: .label .label-purple}
+{bdg-primary}`Operations`
 
 ## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## Introduction
 
@@ -84,7 +68,6 @@ jobs:
 
 * Add an entry to skip the final job from the pr check, `ignored_pr_jobs`:
 
-{% raw %}
 ```
   checks:
     secrets: inherit
@@ -94,7 +77,6 @@ jobs:
       enable_check_generated_files: false
       ignored_pr_jobs: "telemetry-summarize"
 ```
-{% endraw %}
 
 Syntax for the `ignored_pr_jobs` is space-separated within the quotes.
 
@@ -121,11 +103,9 @@ Syntax for the `ignored_pr_jobs` is space-separated within the quotes.
   command](https://github.com/rapidsai/gha-tools/blob/main/tools/rapids-telemetry-record) that shows the sccache
   statistics
   and saves them to a text file in the appropriate location:
-{% raw %}
 ```
 rapids-telemetry-record sccache-stats.txt sccache --show-adv-stats
 ```
-{% endraw %}
 
 * Processing of additional files is automatic, so long as filenames match expected patterns. The currently handled filenames are:
   * sccache-stats.txt
@@ -134,7 +114,7 @@ rapids-telemetry-record sccache-stats.txt sccache --show-adv-stats
 
 ---
 **Below here is docs on how to maintain the backend parts. Project maintainers should not need anything below here.**
----
+***
 
 ## Key Components
 
@@ -308,11 +288,9 @@ clicking this button, your variable will not be saved.
 
 Attributes must be included as selectors in the query, or else they won't be available for filtering down the line. The TraceQL line can get pretty long:
 
-{% raw %}
 ```
 {} | select(span:duration, name, resource.rapids.labels, resource.service.name, resource.rapids.cuda, resource.rapids.cuda, resource.git.job_url, resource.rapids.py, resource.rapids.gpu, resource.rapids.package_type, resource.rapids.arch, resource.rapids.linux, resource.rapids.driver, resource.rapids.deps,span.sccache.main_process.hit_rate,span.sccache.main_process.miss_rate,span.sccache.main_process.error_rate)
 ```
-{% endraw %}
 
 ![](/assets/images/telemetry/panel_query.png)
 
@@ -329,7 +307,7 @@ metadata columns in the trace table format, because they apply to the spans.
 As always, remember to click the upper-right save button after making any
 changes.
 
-##### Filtering and grouping data
+#### Filtering and grouping data
 
 We store our span data using Grafana Tempo. Tempo allows TraceQL queries for filtering data. In general, there are two parts of [a TraceQL query](https://grafana.com/docs/tempo/latest/traceql/#traceql):
 
@@ -344,16 +322,20 @@ Additional span attributes get added by [the python script that uses the OpenTel
 
 
 From [conda-cpp-build.yaml](https://github.com/rapidsai/shared-workflows/blob/ece43bbc9347340721e5cc576e6ba69148176d3f/.github/workflows/conda-cpp-build.yaml#L145):
+{% raw %}
 ```
 "rapids.PACKAGER=conda,rapids.CUDA_VER=${{ matrix.CUDA_VER }},rapids.PY_VER=${{ matrix.PY_VER }},rapids.ARCH=${{ matrix.ARCH }},rapids.LINUX_VER=${{ matrix.LINUX_VER }}"
 ```
+{% endraw %}
 
 From [wheels-test.yaml](https://github.com/rapidsai/shared-workflows/blob/ece43bbc9347340721e5cc576e6ba69148176d3f/.github/workflows/wheels-test.yaml#L198):
+{% raw %}
 ```
 "rapids.PACKAGER=wheel,rapids.CUDA_VER=${{ matrix.CUDA_VER }},rapids.PY_VER=${{ matrix.PY_VER }},rapids.ARCH=${{ matrix.ARCH }},rapids.LINUX_VER=${{ matrix.LINUX_VER }},rapids.GPU=${{ matrix.GPU }},rapids.DRIVER=${{ matrix.DRIVER }},rapids.DEPENDENCIES=${{ matrix.DEPENDENCIES }}"
 ```
+{% endraw %}
 
-##### Filter out docker stuff outside of builds
+#### Filter out docker stuff outside of builds
 
 Part of telemetry setup is providing environment variables that other tools that use OpenTelemetry can use to send spans. These get sent to the aggregator, which may or may not be accessible to the build machine. If the aggregator is accessible, it will be used to send spans. These spans might be useful to you, or they might be noise. To filter them, you can filter by several key attributes.
 
@@ -390,7 +372,7 @@ We'll call any other label "build"
 Any of these can be combined, either [within one query](https://grafana.com/docs/tempo/latest/traceql/#field-expressions), or by [combining span sets (joining multiple `{}` sections)](https://grafana.com/docs/tempo/latest/traceql/#combine-spansets).
 
 
-##### Adding metadata to spans
+#### Adding metadata to spans
 
 The default spans returned from Tempo only include barebones native attributes. To access the custom attributes that we use to capture GPU, CUDA version, etc., you can use the `select` function.
 
@@ -469,12 +451,10 @@ API](https://docs.github.com/en/rest/actions/workflow-jobs?apiVersion=2022-11-28
 
 An example gh cli call that downloads this JSON output:
 
-{% raw %}
 ```
 gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
     --paginate /repos/rapidsai/cudf/actions/runs/<RUN_ID>/attempts/<RUN_ATTEMPT>/jobs | jq -c '.jobs' > all_jobs.json
 ```
-{% endraw %}
 
 Substitute RUN_ID with the value seen in the GitHub web UI for the job that
 you're interested in. The RUN_ATTEMPT is usually 1, unless you have retried the job.
@@ -489,18 +469,15 @@ you're interested in. The RUN_ATTEMPT is usually 1, unless you have retried the 
 
   * Set them on the terminal
 
-    {% raw %}
-    ```
+        ```
     export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4318"
     export OTEL_EXPORTER_OTLP_PROTOCOL="http/protobuf"
     export OTEL_TRACES_EXPORTER="otlp_proto_http"
     ```
-    {% endraw %}
 
   * (OR) Use VS Code run configurations
 
-    {% raw %}
-    ```
+        ```
         {
             "name": "send-tempo",
             "type": "debugpy",
@@ -517,7 +494,6 @@ you're interested in. The RUN_ATTEMPT is usually 1, unless you have retried the 
             }
         },
     ```
-    {% endraw %}
 
 7. (optional) Run bump_time.py script to adjust timestamps in your
 `all_jobs.json` file. The Grafana UI shows data that is a certain amount of time

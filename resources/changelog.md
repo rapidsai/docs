@@ -1,11 +1,3 @@
----
-layout: default
-nav_order: 2
-parent: Resources
-grand_parent: Maintainer Docs
-title: Changelog Format
----
-
 # Changelog Format
 
 ## Overview
@@ -14,14 +6,11 @@ Summary of the changelog process used by RAPIDS projects.
 
 ### Intended audience
 
-Community
-{: .label .label-yellow}
+{bdg-warning}`Community`
 
-Developers
-{: .label .label-green}
+{bdg-success}`Developers`
 
-Project Leads
-{: .label .label-blue}
+{bdg-info}`Project Leads`
 
 ### Process
 
