@@ -93,9 +93,13 @@ def main() -> None:
     if "G-DLJNCEWKZD" not in analytics or "_satellite.pageBottom" not in analytics:
         missing.append("GA4 or Adobe page-bottom telemetry is missing")
 
-    # Theme packages contain unrendered Jinja macro files under ``_static``;
-    # only rendered site pages should be checked for legacy Liquid syntax.
-    html_files = [path for path in args.site.rglob("*.html") if "_static" not in path.parts]
+    # Imported API docs may include upstream source links and template examples.
+    # Limit portal-specific checks to portal and deployment pages.
+    html_files = [
+        path
+        for path in args.site.rglob("*.html")
+        if "_static" not in path.parts and not path.is_relative_to(args.site / "api")
+    ]
     stale_liquid = [path for path in html_files if "{%" in path.read_text(errors="ignore")]
     if stale_liquid:
         missing.append(f"Liquid syntax remains in {len(stale_liquid)} rendered files")
