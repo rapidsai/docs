@@ -12,6 +12,22 @@ concurrency:
 permissions: {}
 
 jobs:
+  pr-builder:
+    needs:
+      - check-style
+      - docs
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+      packages: read
+      pull-requests: read
+    secrets: inherit # zizmor: ignore[secrets-inherit]
+    uses: rapidsai/shared-workflows/.github/workflows/pr-builder.yaml@main
+    if: always()
+    with:
+      needs: ${{ toJSON(needs) }}
+
   check-style:
     runs-on: ubuntu-latest
     steps:
@@ -20,3 +36,30 @@ jobs:
         with:
           persist-credentials: false
       - uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
+
+  docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up uv
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+        with:
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --locked
+      - name: Build and validate portal
+        run: make check
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-duration-seconds: 7200
+      - name: Assemble and validate complete documentation site
+        run: make assemble

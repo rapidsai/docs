@@ -1,20 +1,25 @@
----
-layout: notice-index
-title: RAPIDS Notices
-nav_order: 7
-has_children: true
-has_notice_pin_index: true # shows pinned notices at end
----
+# RAPIDS Notices
 
-# RAPIDS Notices <a href="{{ 'notices/feed.xml' | absolute_url }}"><i class="fas fa-rss" style="font-size: 1rem"></i></a>
+<a href="/notices/feed.xml" aria-label="RSS feed"><i class="fas fa-rss" style="font-size: 1rem" aria-hidden="true"></i> RSS feed</a>
 
 Notices are our means to communicate and document changes in the project to contributors, core developers, users, and the community.
-{: .fs-6 .fw-300 }
 
 ## Notice Types
 
-Type | Code | Intended Audience | Purpose
---- | --- | --- | ---
-[RAPIDS Developer Notice]({% link notices/rdn/index.md %}) | **RDN** | Contributors & Core Developers | Communicate updates to development processes
-[RAPIDS General Notice]({% link notices/rgn/index.md %}) | **RGN** | Everyone | Project wide announcements and updates, including breaking changes
-[RAPIDS Support Notice]({% link notices/rsn/index.md %}) | **RSN** | Everyone | Updates on RAPIDS support for specific versions of CUDA, Python, OS, platforms, and compilers
+| Type | Code | Intended Audience | Purpose |
+|:--|:--|:--|:--|
+| [RAPIDS Developer Notice](/notices/rdn/) | **RDN** | Contributors & Core Developers | Communicate updates to development processes |
+| [RAPIDS General Notice](/notices/rgn/) | **RGN** | Everyone | Project wide announcements and updates, including breaking changes |
+| [RAPIDS Support Notice](/notices/rsn/) | **RSN** | Everyone | Updates on RAPIDS support for specific versions of CUDA, Python, OS, platforms, and compilers |
+
+## Recent and Important Notices
+
+{{ notice_table(pinned=True) }}
+
+```{toctree}
+:hidden:
+
+rdn/index
+rgn/index
+rsn/index
+```

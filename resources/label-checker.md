@@ -1,11 +1,3 @@
----
-layout: default
-nav_order: 6
-parent: Resources
-grand_parent: Maintainer Docs
-title: Label Checker
----
-
 # Label Checker
 
 ## Overview
@@ -14,17 +6,13 @@ Summary of _Label Checker_ GitHub check used by some RAPIDS projects.
 
 ### Intended audience
 
-Community
-{: .label .label-yellow}
+{bdg-warning}`Community`
 
-Developers
-{: .label .label-green}
+{bdg-success}`Developers`
 
-Project Leads
-{: .label .label-blue}
+{bdg-info}`Project Leads`
 
-Operations
-{: .label .label-purple}
+{bdg-primary}`Operations`
 
 ## Summary
 

@@ -43,4 +43,50 @@
 <script type="text/javascript" src="https://cdn.holoviz.org/panel/0.14.3/dist/panel.min.js"></script>
 <script type="text/javascript">
   Bokeh.set_log_level("info");
+  window.rapidsStackPanelPanes = function (docsJson) {
+    const documents = JSON.parse(docsJson);
+    Object.values(documents).forEach(function (document) {
+      const references = document.roots.references;
+      const referencesById = new Map(
+        references.map(function (reference) {
+          return [reference.id, reference];
+        })
+      );
+      const isCodePane = function (reference) {
+        return reference?.attributes?.children?.some(function (child) {
+          const model = referencesById.get(child.id);
+          return (
+            model?.type === "panel.models.markup.HTML" &&
+            model.attributes.text.includes("codehilite")
+          );
+        });
+      };
+      const setControlWidth = function (reference) {
+        reference.attributes.width = 220;
+        reference.attributes?.children?.forEach(function (child) {
+          setControlWidth(referencesById.get(child.id));
+        });
+      };
+      references.forEach(function (reference) {
+        const children = reference.attributes?.children;
+        if (reference.type !== "Row") return;
+        if (
+          children?.length === 3 &&
+          reference.attributes.sizing_mode === "stretch_width"
+        ) {
+          children.forEach(function (child) {
+            setControlWidth(referencesById.get(child.id));
+          });
+          return;
+        }
+        if (children?.length !== 2) return;
+        const codePane = referencesById.get(children[0].id);
+        const chartPane = referencesById.get(children[1].id);
+        if (isCodePane(codePane) && chartPane?.type === "Row") {
+          reference.type = "Column";
+        }
+      });
+    });
+    return JSON.stringify(documents);
+  };
 </script>
