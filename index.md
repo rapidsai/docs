@@ -11,27 +11,27 @@ you. Visit [RAPIDS.ai](https://rapids.ai) for more information on the overall pr
 :class-container: rapids-section-grid
 
 :::{grid-item-card} <i class="fa-solid fa-download" aria-hidden="true"></i> Installation Guide
-:link: /install/
+:link: install/
 :link-type: url
 :::
 
 :::{grid-item-card} <i class="fa-solid fa-list-check" aria-hidden="true"></i> Platform Support
-:link: /platform-support/
+:link: platform-support/
 :link-type: url
 :::
 
 :::{grid-item-card} <i class="fa-solid fa-book" aria-hidden="true"></i> User Guides
-:link: /user-guide/
+:link: user-guide/
 :link-type: url
 :::
 
 :::{grid-item-card} <i class="fa-solid fa-code" aria-hidden="true"></i> API Documentation
-:link: /api/
+:link: api/
 :link-type: url
 :::
 
 :::{grid-item-card} <i class="fa-solid fa-chart-bar" aria-hidden="true"></i> Visualization Guide
-:link: /visualization/
+:link: visualization/
 :link-type: url
 :::
 
@@ -41,12 +41,12 @@ you. Visit [RAPIDS.ai](https://rapids.ai) for more information on the overall pr
 :::
 
 :::{grid-item-card} <i class="fa-solid fa-wrench" aria-hidden="true"></i> Maintainer Documentation
-:link: /maintainers/
+:link: maintainers/
 :link-type: url
 :::
 
 :::{grid-item-card} <i class="fas fa-bullhorn" aria-hidden="true"></i> RAPIDS Notices
-:link: /notices/
+:link: notices/
 :link-type: url
 :::
 
