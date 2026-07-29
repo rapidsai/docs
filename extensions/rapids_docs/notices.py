@@ -1,10 +1,11 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
 """Render notices and generate their RSS feed."""
 
 import email.utils
 import html
+import posixpath
 from datetime import UTC, datetime
 from pathlib import Path
 from xml.etree import ElementTree
@@ -28,7 +29,9 @@ def _notice_status_label(notice: dict) -> str:
     return f'<span class="notice-status-label notice-status-{color}">{status}</span>'
 
 
-def _notice_table(data: dict, notice_type: str | None = None, pinned: bool = False) -> str:
+def _notice_table(
+    data: dict, notice_type: str | None = None, pinned: bool = False, source_docname: str = "index"
+) -> str:
     notices = data["notices"]
     if notice_type:
         notices = [notice for notice in notices if notice["notice_type"] == notice_type]
@@ -44,12 +47,13 @@ def _notice_table(data: dict, notice_type: str | None = None, pinned: bool = Fal
         "|:--|:--|:--|:--|:--|",
     ]
     for notice in notices:
+        href = posixpath.relpath(notice["docname"], Path(source_docname).parent) + "/"
         updated = notice.get("notice_updated")
         if not updated or _date(updated).date() == _date(notice["notice_created"]).date():
             updated = notice["notice_created"]
         output.append(
             f"| **{notice['notice_type'].upper()} {notice['notice_id']}**<br>{_notice_status_label(notice)} "
-            f"| [{notice['title']}](/notices/{Path(notice['docname']).name}/) "
+            f"| [{notice['title']}]({href}) "
             f"| {notice['notice_topic']} | {notice['notice_rapids_version']} | {_long_date(updated)} |"
         )
     return "\n".join(output)
