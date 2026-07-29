@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
 from pathlib import Path
@@ -106,10 +106,11 @@ def test_notice_metadata_and_indexes() -> None:
     source_notices = list((ROOT / "notices").glob("r[dgs]n[0-9][0-9][0-9][0-9].md"))
     assert len(data["notices"]) == len(source_notices)
 
-    support_notices = notices._notice_table(data, "rsn")
+    support_notices = notices._notice_table(data, "rsn", source_docname="notices/rsn/index")
     support_notice = next(notice for notice in data["notices"] if notice["notice_type"] == "rsn")
     assert f"RSN {support_notice['notice_id']}" in support_notices
     assert support_notice["title"] in support_notices
+    assert f"](../{Path(support_notice['docname']).name}/)" in support_notices
     assert 'class="notice-status-label notice-status-green">Completed</span>' in support_notices
     assert 'class="notice-status-label notice-status-yellow">In Progress</span>' in support_notices
 
