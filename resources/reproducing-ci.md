@@ -1,35 +1,18 @@
----
-layout: default
-nav_order: 3
-parent: Resources
-grand_parent: Maintainer Docs
-title: Reproducing CI Locally
----
-
-# {{ page.title }}
-{:.no_toc}
+# Reproducing CI Locally
 
 ## Overview
-{:.no_toc}
 
 This page outlines some helpful information about reproducing CI builds and tests locally.
 
 At this time, this information only applies to `conda` related builds and tests.
 
 ### Intended audience
-{: .no_toc }
 
-Operations
-{: .label .label-purple}
+{bdg-primary}`Operations`
 
-Developers
-{: .label .label-green}
+{bdg-success}`Developers`
 
 ## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## Reproducing CI Jobs
 
@@ -141,7 +124,7 @@ gh auth login
 NOTE: On shared machines, this method might expose your GitHub token in the output of `ps`. In those settings,
 consider just relying on the interactive prompts inside the container or using the `--env-file` approach.
 
-For more details, see "GitHub Actions" ([link](./github-actions.md)).
+For more details, see "GitHub Actions" ([link](/resources/github-actions/)).
 
 ### Downloading Build Artifacts for Tests
 
@@ -174,7 +157,7 @@ export RAPIDS_REPOSITORY=rapidsai/cugraph
 
 export RAPIDS_REF_NAME=pull-request/3258 # use this type of value for "pull-request" builds
 export RAPIDS_REF_NAME=main # use this type of value for "nightly" builds
-export RAPIDS_REF_NAME=release/{{ site.data.releases.stable.version }} # for "branch" builds use the branch names
+export RAPIDS_REF_NAME=release/{{ releases.stable.version }} # for "branch" builds use the branch names
 
 export RAPIDS_NIGHTLY_DATE=2025-12-12 # this variable is only necessary for "nightly" builds
 

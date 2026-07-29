@@ -1,33 +1,16 @@
----
-layout: default
-nav_order: 3
-parent: Resources
-grand_parent: Maintainer Docs
-title: GitHub Actions
----
-
-# {{ page.title }}
-{:.no_toc}
+# GitHub Actions
 
 ## Overview
-{:.no_toc}
 
 The RAPIDS team uses GitHub Actions for CI/CD. The official documentation for GitHub Actions can be viewed [here](https://docs.github.com/en/actions).
 
 ### Intended audience
-{: .no_toc }
 
-Operations
-{: .label .label-purple}
+{bdg-primary}`Operations`
 
-Developers
-{: .label .label-green}
+{bdg-success}`Developers`
 
 ## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ## Introduction
 
@@ -57,7 +40,7 @@ The chart below provides an overview of how each workflow file is used.
 | - `release/*` Merges<br>- Releases | - `build.yaml`                  | ✅               | ❌              | ✅                                      |
 | - Nightlies                        | - `build.yaml`<br>- `test.yaml` | ✅               | ✅              | ✅                                      |
 
-Although release workflows don't run tests, they do go through a week of nightly testing to ensure everything works as expected. See [this page]({% link releases/process.md %}) for more details about the release process.
+Although release workflows don't run tests, they do go through a week of nightly testing to ensure everything works as expected. See [this page](/releases/process/) for more details about the release process.
 
 ## How Nightlies Are Triggered
 

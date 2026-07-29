@@ -1,13 +1,19 @@
----
-layout: default
-title: Resources
-parent: Maintainer Docs
-nav_order: 6
-has_children: true
----
-
 # Resources
-{:.no_toc}
 
 Resources and detailed information referenced in other sections of this documentation.
-{: .fs-6 .fw-300 }
+
+```{toctree}
+:hidden:
+
+conduct
+changelog
+auto-merger
+github-actions
+reproducing-ci
+telemetry
+label-checker
+merge-barriers
+recently-updated
+versions
+burn-down-guide
+```

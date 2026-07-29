@@ -1,35 +1,25 @@
----
-layout: default
-title: API Docs
-nav_order: 4
-has_toc: false
-has_children: false
----
+# RAPIDS API Documentation
 
-# RAPIDS API Docs
-{:.no_toc}
+Explore documentation for current and previous RAPIDS releases. Each project
+card links to its available documentation versions and related resources.
 
-Access our current docs for the RAPIDS projects below. Docs are available in
-both "stable" and "nightly" versions. The description of each is below to help
-select the docs that fit your needs.
-{: .fs-6 .fw-300 }
-<dl>
-  <dt>STABLE</dt>
-  <dd>Current release docs; considered to be stable.</dd>
-  <dt>NIGHTLY</dt>
-  <dd>Work-in-progress release docs; considered to be unstable and released nightly.</dd>
-  <dt>LEGACY</dt>
-  <dd>Previous release docs; available for reference.</dd>
-</dl>
+Stable
+: Documentation for the current release, recommended for most users.
+
+Nightly
+: Documentation for the upcoming release, generated from development branches.
+
+Legacy
+: Documentation for the previous release, retained for reference.
 
 ## RAPIDS APIs
 
-{% include api-docs.html data=site.data.docs.apis %}
+{{ api_docs("apis") }}
 
 ## RAPIDS Libraries
 
-{% include api-docs.html data=site.data.docs.libs %}
+{{ api_docs("libs") }}
 
 ## Inactive Projects
 
-{% include api-docs.html data=site.data.docs.inactive-projects %}
+{{ api_docs("inactive-projects") }}

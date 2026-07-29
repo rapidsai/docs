@@ -1,11 +1,3 @@
----
-layout: default
-nav_order: 3
-parent: Release Docs
-grand_parent: Maintainer Docs
-title: Release Process
----
-
 # Release Process
 
 ## Overview
@@ -14,15 +6,13 @@ Summary of the RAPIDS release process.
 
 ### Intended audience
 
-Project Leads
-{: .label .label-blue}
+{bdg-info}`Project Leads`
 
-Operations
-{: .label .label-purple}
+{bdg-primary}`Operations`
 
 ### See also
 
-* [Release versioning]({% link resources/versions.md %})
+* [Release versioning](/resources/versions/)
 
 ## Git branching model
 
@@ -40,7 +30,7 @@ The `burn down date` will always be several days before the `code freeze date` w
 
 ### Hotfixes
 
-Hotfixes have their own process and are described [here]({% link releases/hotfix.md %}).
+Hotfixes have their own process and are described [here](/releases/hotfix/).
 
 ## Burn down
 
@@ -59,27 +49,25 @@ Burn down ends at 11:59 PM PT on the final day of the process.
 
 **NOTE:** The processes below use the current release of `YY.MA`, the next release of `YY.MB` and future release `YY.MC` (where `MB=MA+2`, `MC=MB+2`) for examples.
 
-Project Leads
-{: .label .label-blue}
+{bdg-info}`Project Leads`
 
 1. Beginning of the `burn down date` remind development team to stop accepting new issues for the `YY.MB` release (unless they are critical bugs/issues)
 2. Work to merge existing pull requests targeting `YY.MB`
 3. Move any pull requests or issues that are no longer a part of the `YY.MB` release to the `YY.MC` project board or backlog (for backlog remove the issue from the project board)
 
-Operations
-{: .label .label-purple}
+{bdg-primary}`Operations`
 
 1. Beginning of the `burn down date` announce the burn down of `release/YY.MB`
 2. The development branch will remain `main`
 3. Create release `YY.MC` project board
 4. Notify project leads process is complete
 
-Also see the [Burn down guide]({% link resources/burn-down-guide.md %})
+Also see the [Burn down guide](/resources/burn-down-guide/)
 
 
 ## Code freeze
 
-Code freeze is the process when the release undergoes thorough testing. Pull requests are no longer accepted into the development branch. An exception may be made for [hotfix]({% link releases/hotfix.md %}) issues. All pull requests from Burn Down should be merged before Code Freeze begins or be moved to the next release.
+Code freeze is the process when the release undergoes thorough testing. Pull requests are no longer accepted into the development branch. An exception may be made for [hotfix](/releases/hotfix/) issues. All pull requests from Burn Down should be merged before Code Freeze begins or be moved to the next release.
 ### Timing
 
 For the selection of a `code freeze date`, the general guidelines should be followed:
@@ -95,8 +83,7 @@ For example, if Burn down runs from Wednesday Feb 3rd until Tuesday Feb 9th, the
 
 Generally the process for Code Freeze occurs around 10:00AM PT on the first day of Code Freeze.
 
-Project Leads
-{: .label .label-blue}
+{bdg-info}`Project Leads`
 
 1. Inform operations team of any new release artifacts (packages, wheels, containers) no later than 2 weeks prior to burndown
 2. Move any open pull requests targeting `release/YY.MB` to target `main` instead.
@@ -104,8 +91,7 @@ Project Leads
 4. Continue `main` development
 5. Respond promptly to operations if any issues are found with the `YY.MB` release
 
-Operations
-{: .label .label-purple}
+{bdg-primary}`Operations`
 
 1. Beginning of the `code freeze date` announce the code freeze of `release/YY.MB`
 2. The development branch will remain `main`
@@ -125,16 +111,14 @@ For the selection of a `release date`, the general guidelines should be followed
 
 **NOTE:** The processes below use the current release of `YY.MA`, the next release of `YY.MB` and future release `YY.MC` (where `MB=MA+2`, `MC=MB+2`) for examples.
 
-Project Leads
-{: .label .label-blue}
+{bdg-info}`Project Leads`
 
 1. Beginning of the `release date` work with developers to close all outstanding issues and PRs
 2. Assist operations team in testing and verifying documentation in release `YY.MB` PR
 3. Review release `YY.MB` for approval
 4. Help operations team in spot checking the deliverables post-release
 
-Operations
-{: .label .label-purple}
+{bdg-primary}`Operations`
 
 1. Beginning of the `release date` announce the release of `release/YY.MB`
 2. Begin testing of conda, containers, and notebooks for correctness and functionality

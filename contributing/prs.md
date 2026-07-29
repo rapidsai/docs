@@ -1,10 +1,3 @@
----
-layout: default
-nav_order: 3
-parent: Contributing
-title: Pull Requests
----
-
 # Pull Requests
 
 ## Overview
@@ -13,14 +6,13 @@ Overview of creating a pull request for a RAPIDS project.
 
 ### Intended audience
 
-Developers
-{: .label .label-green}
+{bdg-success}`Developers`
 
 ### See also
 
-- [Issues]({% link contributing/issues.md %})
-- [Code Contributions]({% link contributing/code.md %})
-- [Changelog]({% link resources/changelog.md %})
+- [Issues](/contributing/issues/)
+- [Code Contributions](/contributing/code/)
+- [Changelog](/resources/changelog/)
 
 ## Create a pull request
 
@@ -64,7 +56,7 @@ The description should provide any context not found in the issue description.
 
 ### Comments
 
-All pull request comments and reviews must follow the [Code of Conduct]({% link resources/conduct.md %})
+All pull request comments and reviews must follow the [Code of Conduct](/resources/conduct/)
 
 ## Lifecycle
 

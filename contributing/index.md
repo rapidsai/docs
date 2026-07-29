@@ -1,19 +1,10 @@
----
-layout: default
-title: Contributing
-nav_order: 6
-has_children: true
----
-
 # Contributing
-{:.no_toc}
 
 RAPIDS can only grow with community support and it is vital to include developers at all levels. Reporting bugs, fixing them, and/or creating new features are all vital for the success of RAPIDS. The following pages outline our approach for contributing to RAPIDS.
-{: .fs-6 .fw-300 }
 
 ## Getting started
 
-Welcome! We are excited you are here! Before you begin, we ask that everyone review the [Code of Conduct]({% link resources/conduct.md %}) before contributing.
+Welcome! We are excited you are here! Before you begin, we ask that everyone review the [Code of Conduct](/resources/conduct/) before contributing.
 
 ### Your first issue
 
@@ -22,7 +13,7 @@ Welcome! We are excited you are here! Before you begin, we ask that everyone rev
 3. Comment on the issue saying you are going to work on it
 4. Code! Make sure to update unit tests!
 5. All RAPIDS projects are released under the Apache-2.0 license, so also make sure all source files that support comments include a copyright and the Apache-2.0 license text.
-6. When done, [create your pull request]({% link contributing/prs.md %})
+6. When done, [create your pull request](/contributing/prs/)
 7. Verify that CI passes all [status checks](https://help.github.com/articles/about-status-checks/). Fix if needed
 8. Wait for other developers to review your code and update code as needed
 9. Once reviewed and approved, a RAPIDS developer will merge your pull request
@@ -31,8 +22,16 @@ Remember, if you are unsure about anything, don't hesitate to comment on issues 
 
 ### More details
 
-Review the [Code Contributions]({% link contributing/code.md %}) page.
+Review the [Code Contributions](/contributing/code/) page.
 
 ## Issues or feedback
 
 File an issue [here](https://github.com/rapidsai/docs/issues/new) for any unexpected problems encountered or general feedback with any of the information on this site.
+
+```{toctree}
+:hidden:
+
+issues
+code
+prs
+```

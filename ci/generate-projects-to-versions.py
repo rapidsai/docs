@@ -66,9 +66,9 @@ for docs_key in ["apis", "libs", "inactive-projects"]:
                 if version_override:
                     versions_for_this_project[version_name] = version_override
                 else:
-                    versions_for_this_project[version_name] = RELEASES_JSON_DICT[
-                        version_name
-                    ][version_key]
+                    versions_for_this_project[version_name] = RELEASES_JSON_DICT[version_name][
+                        version_key
+                    ]
             else:
                 print(f"Skipping: {project_name} | {version_name}", file=sys.stderr)
 
