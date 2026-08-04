@@ -16,6 +16,7 @@ jobs:
     needs:
       - check-style
       - docs
+      - publish-to-docs-nvidia-com
     permissions:
       actions: read
       contents: read
@@ -63,3 +64,67 @@ jobs:
           role-duration-seconds: 7200
       - name: Assemble and validate complete documentation site
         run: make assemble
+
+  compute-docs-nvidia-com-matrix:
+    name: Compute docs.nvidia.com matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set matrix
+        id: set-matrix
+        env:
+          PROJECTS: cudf,cugraph,cuml,nvforest,rmm
+        run: |
+          MATRIX=$(
+            jq --compact-output --arg projects "$PROJECTS" '
+              ($projects | split(",")) as $allowed |
+              [to_entries[] | select(.key | IN($allowed[])) | .key as $project | .value | to_entries[] |
+                {"project": $project, "named-version": .key, "numeric-version": .value}]' \
+              ci/customization/projects-to-versions.json
+            )
+          echo "matrix=${MATRIX}" >> "${GITHUB_OUTPUT}"
+
+  publish-to-docs-nvidia-com:
+    needs: compute-docs-nvidia-com-matrix
+    runs-on: ubuntu-latest
+    container:
+      image: rapidsai/ci-conda:26.10-latest
+      options: -e _NOOP
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.compute-docs-nvidia-com-matrix.outputs.matrix) }}
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@e7f100cf4c008499ea8adda475de1042d6975c7b # v6.2.0
+      with:
+        aws-region: ${{ vars.AWS_REGION }}
+        role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+    - name: Download docs
+      env:
+        PROJECT: ${{ matrix['project'] }}
+        NUMERIC_VERSION: ${{ matrix['numeric-version'] }}
+      run: |
+        aws s3 sync "s3://rapidsai-docs/${PROJECT}/html/${NUMERIC_VERSION}" ./docs/
+    - name: Publish to docs.nvidia.com
+      uses: rapidsai/shared-actions/publish-docs@main
+      with:
+        akamai_access_token: ${{ secrets.AKAMAI_ACCESS_TOKEN }}
+        akamai_client_secret: ${{ secrets.AKAMAI_CLIENT_SECRET }}
+        akamai_client_token: ${{ secrets.AKAMAI_CLIENT_TOKEN }}
+        akamai_emails_to_notify: ${{ secrets.AKAMAI_EMAILS_TO_NOTIFY }}
+        akamai-host: ${{ secrets.AKAMAI_HOST }}
+        akamai-request-name: rapidsai-docs-${{ matrix['project'] }}-${{ matrix['named-version'] }}
+        dry-run: true
+        source-path: ./docs/
+        target_aws_access_key_id: ${{ secrets.TARGET_AWS_ACCESS_KEY_ID }}
+        target_aws_region: ${{ secrets.TARGET_AWS_REGION }}
+        target_aws_secret_access_key: ${{ secrets.TARGET_AWS_SECRET_ACCESS_KEY }}
+        target_s3_bucket: ${{ secrets.TARGET_S3_BUCKET }}
+        target-s3-key-suffix: ${{ matrix['named-version'] }}
+        target-s3-key: ${{ matrix['project'] }}
