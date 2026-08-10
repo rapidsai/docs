@@ -28,6 +28,7 @@ def test_api_docs() -> None:
     assert f"https://docs.nvidia.com/cugraph/{nightly_version}/" in rendered
     assert f"https://docs.nvidia.com/rmm/{nightly_version}/" in rendered
     assert f"https://docs.nvidia.com/nvforest/{nightly_version}/" in rendered
+    assert rendered.count("[Documentation](https://docs.nvidia.com/cuvs/)") == 1
     assert "https://docs.rapids.ai/api/dask-cudf/nightly/" in rendered
     assert "::::{grid} 1 1 1 1" in rendered
     assert ":::{grid-item-card} cuDF" in rendered

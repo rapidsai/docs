@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: Copyright (c) 2025-2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2025-2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -58,6 +58,9 @@ for docs_key in ["apis", "libs", "inactive-projects"]:
 
         # what versions should be built for this project?
         versions_for_this_project = OrderedDict()
+        if project_details.get("external_docs_url"):
+            PROJECTS_TO_VERSIONS_DICT[project_name] = versions_for_this_project
+            continue
         for version_name, should_include in project_details["versions"].items():
             if should_include == 1:
                 version_override = project_details.get("version-overrides", dict()).get(
