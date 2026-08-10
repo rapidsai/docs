@@ -23,7 +23,7 @@ def test_api_docs() -> None:
     rendered = api._api_docs(data, "apis")
     assert f"Stable ({stable_version})" in rendered
     assert f"https://docs.nvidia.com/cudf/{nightly_version}/" in rendered
-    assert "https://docs.rapids.ai/api/cudf/stable/" in rendered
+    assert f"https://docs.nvidia.com/cudf/{stable_version}/" in rendered
     assert f"https://docs.nvidia.com/cuml/{nightly_version}/" in rendered
     assert f"https://docs.nvidia.com/cugraph/{nightly_version}/" in rendered
     assert f"https://docs.nvidia.com/rmm/{nightly_version}/" in rendered
