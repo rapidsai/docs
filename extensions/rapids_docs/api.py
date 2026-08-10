@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
 """Render the API documentation listings."""
@@ -12,6 +12,15 @@ def _version_label(project: dict, version_name: str, releases: dict) -> str:
     return str(releases[version_name][version_key])
 
 
+def _documentation_url(project: dict, version_name: str, version: str) -> str:
+    first_docs_nvidia_com_release = project["first_docs_nvidia_com_release"]
+    if first_docs_nvidia_com_release and tuple(map(int, version.split("."))) >= tuple(
+        map(int, first_docs_nvidia_com_release.split("."))
+    ):
+        return f"https://docs.nvidia.com/{project['path']}/{version}/"
+    return f"https://docs.rapids.ai/api/{project['path']}/{version_name}/"
+
+
 def _api_docs(data: dict, section: str) -> str:
     cards = []
     for project in data["docs"][section].values():
@@ -21,7 +30,8 @@ def _api_docs(data: dict, section: str) -> str:
         for name in ("nightly", "stable", "legacy"):
             if project["versions"].get(name) == 1:
                 label = _version_label(project, name, data["releases"])
-                versions.append(f"[{name.title()} ({label})](/api/{project['path']}/{name}/)")
+                url = _documentation_url(project, name, label)
+                versions.append(f"[{name.title()} ({label})]({url})")
         links = []
         if project.get("cllink"):
             links.append(f"[Changelog]({project['cllink']})")
