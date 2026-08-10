@@ -27,17 +27,21 @@ def _api_docs(data: dict, section: str) -> str:
         if project.get("hidden", False):
             continue
         versions = []
-        for name in ("nightly", "stable", "legacy"):
-            if project["versions"].get(name) == 1:
-                label = _version_label(project, name, data["releases"])
-                url = _documentation_url(project, name, label)
-                versions.append(f"[{name.title()} ({label})]({url})")
+        external_docs_url = project.get("external_docs_url")
+        if not external_docs_url:
+            for name in ("nightly", "stable", "legacy"):
+                if project["versions"].get(name) == 1:
+                    label = _version_label(project, name, data["releases"])
+                    url = _documentation_url(project, name, label)
+                    versions.append(f"[{name.title()} ({label})]({url})")
         links = []
         if project.get("cllink"):
             links.append(f"[Changelog]({project['cllink']})")
         links.append(f"[GitHub]({project['ghlink']})")
         footer = []
-        if versions:
+        if external_docs_url:
+            footer.extend([f"[Documentation]({external_docs_url})", ""])
+        elif versions:
             footer.extend(["**Documentation:** " + " · ".join(versions), ""])
         footer.append("**Resources:** " + " · ".join(links))
         cards.append(
