@@ -1,6 +1,8 @@
-name: Deploy docs.rapids.ai redirects
+name: Deploy docs.rapids.ai compatibility site
 
 on:
+  schedule:
+    - cron: "0 9 * * *"
   workflow_dispatch:
     inputs:
       status:
@@ -10,6 +12,9 @@ on:
           - "302"
           - "301"
         default: "302"
+  push:
+    branches:
+      - main
 
 concurrency:
   group: deploy-docs-rapids-ai-redirects
@@ -21,11 +26,14 @@ defaults:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   deploy:
-    name: Generate and deploy redirect-only site
+    name: Assemble and deploy compatibility site
     runs-on: ubuntu-latest
+    env:
+      RAPIDS_DOCS_BASE_URL: https://docs.rapids.ai/
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -36,18 +44,27 @@ jobs:
           enable-cache: true
       - name: Install dependencies
         run: uv sync --locked
-      - name: Generate redirect-only site
+      - name: Build and validate portal
+        run: make check
+      - name: Configure source AWS credentials
+        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-duration-seconds: 7200
+      - name: Assemble and validate API documentation
+        run: make assemble
+      - name: Generate compatibility redirects
         env:
-          REDIRECT_STATUS: ${{ inputs.status }}
+          REDIRECT_STATUS: ${{ inputs.status || vars.DOCS_RAPIDSAI_REDIRECT_STATUS || '302' }}
         run: |
           uv run python scripts/generate_redirect_site.py \
-            --output _redirect_site/_redirects \
-            --status "${REDIRECT_STATUS}" \
-            --require-complete
-      - name: Deploy redirects to docs.rapids.ai
+            --output _site/_redirects \
+            --status "${REDIRECT_STATUS}"
+      - name: Deploy compatibility site to docs.rapids.ai
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_DOCS_SITE_ID }}
         run: | # zizmor: ignore[adhoc-packages]
           npm install --global --force @aschmidt8/netlify-cli
-          netlify deploy --prod --debug --dir=_redirect_site
+          netlify deploy --prod --debug --dir=_site

@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-"""Generate the redirect-only Netlify site used after the NVIDIA docs cutover."""
+"""Generate redirects for the hybrid docs.rapids.ai compatibility site."""
 
 from __future__ import annotations
 
@@ -23,15 +23,28 @@ RELEASES_CONFIG = ROOT / "_data" / "releases.json"
 MANUAL_REDIRECTS = ROOT / "_redirects"
 SECTIONS = ("apis", "libs", "inactive-projects")
 VERSION_NAMES = ("legacy", "stable", "nightly")
+PORTAL_PREFIXES = (
+    "_static",
+    "contributing",
+    "install",
+    "licenses",
+    "maintainers",
+    "notices",
+    "platform-support",
+    "releases",
+    "resources",
+    "user-guide",
+    "visualization",
+)
+PORTAL_FILES = ("404", "404.html", "LICENSE", "SECURITY.md", "genindex", "search")
 
 
 def _rule(source: str, destination: str, status: int) -> str:
     return f"{source} {destination} {status}!"
 
 
-def _project_rules(project: dict, releases: dict, status: int) -> tuple[list[str], list[str]]:
+def _project_rules(project: dict, releases: dict, status: int) -> list[str]:
     rules = []
-    incomplete = []
     emitted_sources = set()
     project_path = project["path"]
 
@@ -43,7 +56,6 @@ def _project_rules(project: dict, releases: dict, status: int) -> tuple[list[str
         if not project.get("external_docs_url") and destination.startswith(
             "https://docs.rapids.ai/"
         ):
-            incomplete.append(f"{project_path}:{version_name}:{version}")
             continue
 
         for source_version in (version_name, version):
@@ -62,33 +74,23 @@ def _project_rules(project: dict, releases: dict, status: int) -> tuple[list[str
                 ]
             )
 
-    return rules, incomplete
+    return rules
 
 
-def generate_redirects(*, status: int, require_complete: bool = False) -> str:
+def generate_redirects(*, status: int) -> str:
     docs = yaml.safe_load(DOCS_CONFIG.read_text())
     releases = json.loads(RELEASES_CONFIG.read_text())
     rules = [
-        "# Generated redirect-only site for the docs.nvidia.com migration.",
+        "# Generated redirects for the hybrid docs.rapids.ai compatibility site.",
+        "# Unmatched API routes continue to serve assembled documentation files.",
         "# Manual compatibility redirects run first and may intentionally chain.",
         MANUAL_REDIRECTS.read_text().rstrip(),
         "",
         "# API documentation aliases and numeric versions.",
     ]
-    incomplete = []
-
     for section in SECTIONS:
         for project in docs[section].values():
-            project_rules, project_incomplete = _project_rules(project, releases, status)
-            rules.extend(project_rules)
-            incomplete.extend(project_incomplete)
-
-    if require_complete and incomplete:
-        details = "\n- ".join(incomplete)
-        raise SystemExit(
-            "Redirect cutover is blocked because these published docs still resolve to "
-            f"docs.rapids.ai:\n- {details}"
-        )
+            rules.extend(_project_rules(project, releases, status))
 
     rules.extend(
         [
@@ -100,8 +102,39 @@ def generate_redirects(*, status: int, require_complete: bool = False) -> str:
                 status,
             ),
             "",
-            "# Remaining portal routes move beneath docs.nvidia.com/datascience.",
-            _rule("/*", "https://docs.nvidia.com/datascience/:splat", status),
+            "# Portal routes move beneath docs.nvidia.com/datascience.",
+            _rule("/", "https://docs.nvidia.com/datascience/", status),
+            _rule("/api", "https://docs.nvidia.com/datascience/api/", status),
+            _rule("/api/", "https://docs.nvidia.com/datascience/api/", status),
+        ]
+    )
+    for prefix in PORTAL_PREFIXES:
+        rules.extend(
+            [
+                _rule(
+                    f"/{prefix}",
+                    f"https://docs.nvidia.com/datascience/{prefix}/",
+                    status,
+                ),
+                _rule(
+                    f"/{prefix}/*",
+                    f"https://docs.nvidia.com/datascience/{prefix}/:splat",
+                    status,
+                ),
+            ]
+        )
+    for filename in PORTAL_FILES:
+        rules.append(
+            _rule(
+                f"/{filename}",
+                f"https://docs.nvidia.com/datascience/{filename}",
+                status,
+            )
+        )
+    rules.extend(
+        [
+            "",
+            "# Do not add a /* fallback: /api and /assets contain real site content.",
             "",
         ]
     )
@@ -112,10 +145,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--status", choices=(301, 302), default=302, type=int)
-    parser.add_argument("--require-complete", action="store_true")
     args = parser.parse_args()
 
-    output = generate_redirects(status=args.status, require_complete=args.require_complete)
+    output = generate_redirects(status=args.status)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(output)
     print(f"Wrote {args.output}")

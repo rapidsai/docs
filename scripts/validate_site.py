@@ -145,6 +145,9 @@ def main() -> None:
             "api/cudf/stable",
             "api/cudf/latest",
             "api/cudf/nightly",
+            "api/dask-cudf/legacy",
+            "api/dask-cudf/stable",
+            "api/dask-cudf/nightly",
             "deployment/stable/index.html",
             "deployment/nightly/index.html",
         ]

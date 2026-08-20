@@ -16,18 +16,28 @@ make serve
 The rendered site is written to `_site`. The server uses port 8000 by default;
 override it with `PORT` (for example, `make serve PORT=8080`).
 
-## Build the full site
+## Build the docs.rapids.ai compatibility site
 
-The legacy complete-site build imports versioned API documentation and the
-deployment documentation from the private `rapidsai-docs` S3 bucket. It is kept
-temporarily as a rollback aid while the portal moves to `docs.nvidia.com`.
-Configure a read-only AWS profile named `rapids-docs`, then run:
+The compatibility site imports versioned API documentation and deployment
+documentation from the private `rapidsai-docs` S3 bucket. It continues to serve
+real API content from `docs.rapids.ai/api/<library>` until each library migrates
+to `docs.nvidia.com`. Configure a read-only AWS profile named `rapids-docs`, then
+run:
 
 ```shell
 AWS_PROFILE=rapids-docs make full
 ```
 
 This applies the RAPIDS library/version selectors to the imported documentation.
+Generate the Netlify redirect file after assembly:
+
+```shell
+uv run python scripts/generate_redirect_site.py --output _site/_redirects --status 302
+```
+
+The generated rules redirect portal pages and only those library versions whose
+migration metadata points at `docs.nvidia.com`. Unmatched API routes and shared
+assets remain real files in the assembled site.
 
 ## Validation
 
@@ -39,17 +49,17 @@ Run checks including linting, tests, and a local build.
 
 Pull requests opened against `rapidsai/docs` are copied to a
 `pull-request/<number>` branch by the RAPIDS copy-PR bot. That branch builds the
-portal with its canonical `https://docs.nvidia.com/datascience/` base URL and
-generates a preview of the eventual `docs.rapids.ai` redirects. Netlify's
-repository integration separately creates a site preview.
+full `docs.rapids.ai` compatibility site and validates its generated redirects.
+Netlify's repository integration separately creates a site preview.
 
 Merges to `main` and the daily scheduled workflow publish the portal to
 `docs.nvidia.com/datascience/`. The independently published
 `docs.nvidia.com/datascience/deployment/` subtree is explicitly preserved.
-Production publishing to `docs.rapids.ai` remains frozen until the manually
-triggered redirect workflow passes its migration-completeness gate. Run that
-workflow with temporary redirects first, then switch to permanent redirects
-after the cutover is verified.
+The companion compatibility workflow assembles and publishes the remaining API
+documentation to `docs.rapids.ai`, with redirects for migrated API versions and
+portal routes. Redirects default to temporary status `302`; set the
+`DOCS_RAPIDSAI_REDIRECT_STATUS` repository variable to `301` after the cutover is
+verified, or select a status in a manual workflow run.
 
 ## Repository layout
 
