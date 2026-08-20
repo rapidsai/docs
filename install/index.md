@@ -109,7 +109,7 @@ See the WSL2 setup [troubleshooting section](#wsl2-troubleshooting).
 All provisioned systems need to be RAPIDS capable. Below is a list of requirements for the current release. For requirements of historical RAPIDS versions, see [Platform Support](/platform-support/).
 
 <i class="fas fa-microchip"></i> **GPU:** NVIDIA Volta™ or higher with [compute capability](https://developer.nvidia.com/cuda-gpus) 7.0+
-- <i class="fas fa-exclamation-triangle"></i> Pascal™ GPU support was [removed in 24.02](https://docs.rapids.ai/notices/rsn0034/). Compute capability 7.0+ is required for RAPIDS 24.02 and later.
+- <i class="fas fa-exclamation-triangle"></i> Pascal™ GPU support was [removed in 24.02](/notices/rsn0034/). Compute capability 7.0+ is required for RAPIDS 24.02 and later.
 
 <i class="fas fa-desktop"></i> **OS:**
 - <i class="fas fa-check-circle"></i> Linux distributions with `glibc>=2.28` (released in August 2018), which include the following:
@@ -150,7 +150,7 @@ Aside from the system requirements, other considerations for best performance in
 <div id="cloud-gpu"></div>
 
 ### Cloud Instance GPUs
-If you do not have access to GPU hardware, there are several cloud service providers (CSP) that are RAPIDS enabled. Learn how to deploy RAPIDS on AWS, Azure, GCP, and IBM cloud on our [Cloud Deployment Page](https://docs.rapids.ai/deployment/stable/cloud/index.html).
+If you do not have access to GPU hardware, there are several cloud service providers (CSP) that are RAPIDS enabled. Learn how to deploy RAPIDS on AWS, Azure, GCP, and IBM cloud on our [Cloud Deployment Page](/deployment/stable/cloud/).
 
 Several services also offer **free and limited** trials with GPU resources:
 - [Amazon SageMaker Studio Lab](https://studiolab.sagemaker.aws/)

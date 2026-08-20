@@ -171,6 +171,32 @@ def test_absolute_url_rewriting() -> None:
     )
 
 
+def test_api_documentation_url_rewriting() -> None:
+    app = SimpleNamespace(
+        config=SimpleNamespace(html_baseurl="https://docs.nvidia.com/datascience/"),
+        rapids_portal_data=portal_data._load_data(APP),
+    )
+    migrated = nodes.reference(
+        "",
+        "cuDF guide",
+        refuri="/api/cudf/stable/user_guide/10min/?source=portal#intro",
+    )
+    unmigrated = nodes.reference(
+        "",
+        "Dask-cuDF guide",
+        refuri="/api/dask-cudf/stable/user_guide/",
+    )
+    doctree = nodes.container("", migrated, unmigrated)
+
+    urls._rewrite_absolute_urls(app, doctree, "user-guide/index")
+
+    stable_version = app.rapids_portal_data["releases"]["stable"]["version"]
+    assert migrated["refuri"] == (
+        f"https://docs.nvidia.com/cudf/{stable_version}/user_guide/10min/?source=portal#intro"
+    )
+    assert unmigrated["refuri"] == ("https://docs.rapids.ai/api/dask-cudf/stable/user_guide/")
+
+
 def test_theme_url_rewriting() -> None:
     app = SimpleNamespace(
         config=SimpleNamespace(html_baseurl="https://docs.example.com/datascience/")

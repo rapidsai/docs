@@ -27,6 +27,8 @@ def _jinja_environment(app) -> Environment:
 
 def _context(app, docname: str = "index") -> dict:
     data = app.rapids_portal_data
+    config = getattr(app, "config", None)
+    site_baseurl = getattr(config, "html_baseurl", "https://docs.rapids.ai/")
     return {
         **data,
         "api_docs": lambda section: _api_docs(data, section),
@@ -36,6 +38,7 @@ def _context(app, docname: str = "index") -> dict:
         ),
         "platform_support_content": lambda: _platform_support(data),
         "previous_schedules": lambda: _previous_schedules(data),
+        "site_baseurl": site_baseurl.rstrip("/") + "/",
     }
 
 

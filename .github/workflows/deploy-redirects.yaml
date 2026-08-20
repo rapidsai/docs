@@ -1,0 +1,53 @@
+name: Deploy docs.rapids.ai redirects
+
+on:
+  workflow_dispatch:
+    inputs:
+      status:
+        description: HTTP status for generated redirects
+        type: choice
+        options:
+          - "302"
+          - "301"
+        default: "302"
+
+concurrency:
+  group: deploy-docs-rapids-ai-redirects
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Generate and deploy redirect-only site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Set up uv
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+        with:
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --locked
+      - name: Generate redirect-only site
+        env:
+          REDIRECT_STATUS: ${{ inputs.status }}
+        run: |
+          uv run python scripts/generate_redirect_site.py \
+            --output _redirect_site/_redirects \
+            --status "${REDIRECT_STATUS}" \
+            --require-complete
+      - name: Deploy redirects to docs.rapids.ai
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_DOCS_SITE_ID }}
+        run: | # zizmor: ignore[adhoc-packages]
+          npm install --global --force @aschmidt8/netlify-cli
+          netlify deploy --prod --debug --dir=_redirect_site

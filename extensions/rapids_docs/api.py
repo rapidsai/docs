@@ -3,22 +3,7 @@
 
 """Render the API documentation listings."""
 
-
-def _version_label(project: dict, version_name: str, releases: dict) -> str:
-    override = project.get("version-overrides", {}).get(version_name)
-    if override:
-        return str(override)
-    version_key = "ucxx_version" if "ucxx" in project["path"].lower() else "version"
-    return str(releases[version_name][version_key])
-
-
-def _documentation_url(project: dict, version_name: str, version: str) -> str:
-    first_docs_nvidia_com_release = project["first_docs_nvidia_com_release"]
-    if first_docs_nvidia_com_release and tuple(map(int, version.split("."))) >= tuple(
-        map(int, first_docs_nvidia_com_release.split("."))
-    ):
-        return f"https://docs.nvidia.com/{project['path']}/{version}/"
-    return f"https://docs.rapids.ai/api/{project['path']}/{version_name}/"
+from .routes import _documentation_url, _version_label
 
 
 def _api_docs(data: dict, section: str) -> str:

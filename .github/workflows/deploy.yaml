@@ -13,12 +13,13 @@ defaults:
   run:
     shell: bash
 permissions:
-  id-token: write
   contents: read
 jobs:
   build:
-    name: Build (and deploy)
+    name: Build and publish NVIDIA docs portal
     runs-on: ubuntu-latest
+    env:
+      RAPIDS_DOCS_BASE_URL: https://docs.nvidia.com/datascience/
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -32,26 +33,74 @@ jobs:
         run: uv sync --locked
       - name: Build and validate portal
         run: make check
-      - uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 #v5.1.1
+      - name: Configure NVIDIA docs AWS credentials
+        uses: aws-actions/configure-aws-credentials@e7f100cf4c008499ea8adda475de1042d6975c7b # v6.2.0
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION }}
-          role-duration-seconds: 7200 # 2h
-      - name: Assemble complete documentation site
-        run: make assemble
-      - name: Deploy site
+          aws-access-key-id: ${{ secrets.NVIDIA_DOCS_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.NVIDIA_DOCS_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.NVIDIA_DOCS_AWS_REGION }}
+          unset-current-credentials: true
+      - name: Publish portal to NVIDIA docs S3
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_DOCS_SITE_ID }}
-          # TODO: use official netlify-cli pkg after https://github.com/netlify/cli/issues/1809
-          # is resolved and deployed.
-        run: | # zizmor: ignore[adhoc-packages]
-          npm install --global --force @aschmidt8/netlify-cli
-
-          ARGS=""
-          if [ "$GITHUB_REF_NAME" = "main" ]; then
-            ARGS="--prod"
-          fi
-          netlify deploy "$ARGS" \
-            --debug \
-            --dir=_site
+          TARGET_BUCKET: ${{ secrets.NVIDIA_DOCS_S3_BUCKET }}
+        run: |
+          # The deployment repository owns this subtree. Excluded objects are also
+          # protected from --delete by the AWS CLI.
+          aws s3 sync --delete \
+            --exclude 'deployment/*' \
+            _site "s3://${TARGET_BUCKET}/developer/docs/datascience"
+      - name: Check out Akamai request template
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: rapidsai/shared-actions
+          ref: main
+          path: shared-actions
+          persist-credentials: false
+          sparse-checkout: publish-docs
+      - name: Install Akamai request dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends xsltproc
+      - name: Prepare Akamai cache flush request
+        env:
+          AKAMAI_ACCESS_TOKEN: ${{ secrets.NVIDIA_DOCS_AKAMAI_ACCESS_TOKEN }}
+          AKAMAI_CLIENT_SECRET: ${{ secrets.NVIDIA_DOCS_AKAMAI_CLIENT_SECRET }}
+          AKAMAI_CLIENT_TOKEN: ${{ secrets.NVIDIA_DOCS_AKAMAI_CLIENT_TOKEN }}
+          AKAMAI_EMAILS_TO_NOTIFY: ${{ secrets.NVIDIA_DOCS_AKAMAI_EMAILS_TO_NOTIFY }}
+          AKAMAI_HOST: ${{ secrets.NVIDIA_DOCS_AKAMAI_HOST }}
+        run: |
+          umask 077
+          {
+            echo '[default]'
+            echo "client_secret = ${AKAMAI_CLIENT_SECRET}"
+            echo "host = ${AKAMAI_HOST}"
+            echo "access_token = ${AKAMAI_ACCESS_TOKEN}"
+            echo "client_token = ${AKAMAI_CLIENT_TOKEN}"
+          } > ~/.edgerc
+          xsltproc \
+            --stringparam target-path datascience \
+            shared-actions/publish-docs/akamai-eccu-flush.xslt \
+            shared-actions/publish-docs/akamai-eccu-flush.xslt \
+            | sed 's/xmlns:match="x" //' > /tmp/flush.xml
+          jq -Rnc \
+            --arg emails "${AKAMAI_EMAILS_TO_NOTIFY}" \
+            '$emails | split(",") | map(select(length > 0))' \
+            > /tmp/email-addresses.json
+      - name: Submit Akamai cache flush request
+        env:
+          REQUEST_NAME: rapidsai-docs-${{ github.run_id }}
+        run: |
+          uv tool run --from httpie-edgegrid http \
+            --ignore-stdin \
+            --auth-type edgegrid \
+            -a default: \
+            :/eccu-api/v1/requests \
+            metadata=@/tmp/flush.xml \
+            propertyName=docs.nvidia.com \
+            propertyNameExactMatch=true \
+            propertyType=HOST_HEADER \
+            requestName="${REQUEST_NAME}" \
+            statusUpdateEmails:=@/tmp/email-addresses.json
+      - name: Delete Akamai credentials
+        if: always()
+        run: rm -f ~/.edgerc

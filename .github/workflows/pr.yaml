@@ -19,7 +19,6 @@ jobs:
     permissions:
       actions: read
       contents: read
-      id-token: write
       packages: read
       pull-requests: read
     secrets: inherit # zizmor: ignore[secrets-inherit]
@@ -39,9 +38,8 @@ jobs:
 
   docs:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
+    env:
+      RAPIDS_DOCS_BASE_URL: https://docs.nvidia.com/datascience/
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -55,11 +53,8 @@ jobs:
         run: uv sync --locked
       - name: Build and validate portal
         run: make check
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
-        with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION }}
-          role-duration-seconds: 7200
-      - name: Assemble and validate complete documentation site
-        run: make assemble
+      - name: Generate redirect preview
+        run: |
+          uv run python scripts/generate_redirect_site.py \
+            --output _redirect_site/_redirects \
+            --status 302
