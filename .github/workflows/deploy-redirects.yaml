@@ -4,14 +4,6 @@ on:
   schedule:
     - cron: "0 9 * * *"
   workflow_dispatch:
-    inputs:
-      status:
-        description: HTTP status for generated redirects
-        type: choice
-        options:
-          - "302"
-          - "301"
-        default: "302"
   push:
     branches:
       - main
@@ -55,12 +47,9 @@ jobs:
       - name: Assemble and validate API documentation
         run: make assemble
       - name: Generate compatibility redirects
-        env:
-          REDIRECT_STATUS: ${{ inputs.status || vars.DOCS_RAPIDSAI_REDIRECT_STATUS || '302' }}
         run: |
           uv run python scripts/generate_redirect_site.py \
-            --output _site/_redirects \
-            --status "${REDIRECT_STATUS}"
+            --output _site/_redirects
       - name: Deploy compatibility site to docs.rapids.ai
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}

@@ -32,7 +32,7 @@ This applies the RAPIDS library/version selectors to the imported documentation.
 Generate the Netlify redirect file after assembly:
 
 ```shell
-uv run python scripts/generate_redirect_site.py --output _site/_redirects --status 302
+uv run python scripts/generate_redirect_site.py --output _site/_redirects
 ```
 
 The generated rules redirect portal pages and only those library versions whose
@@ -57,9 +57,8 @@ Merges to `main` and the daily scheduled workflow publish the portal to
 `docs.nvidia.com/datascience/deployment/` subtree is explicitly preserved.
 The companion compatibility workflow assembles and publishes the remaining API
 documentation to `docs.rapids.ai`, with redirects for migrated API versions and
-portal routes. Redirects default to temporary status `302`; set the
-`DOCS_RAPIDSAI_REDIRECT_STATUS` repository variable to `301` after the cutover is
-verified, or select a status in a manual workflow run.
+portal routes. Both automated and manually triggered compatibility deployments
+use permanent HTTP 301 redirects.
 
 ## Repository layout
 

@@ -28,7 +28,7 @@ def _jinja_environment(app) -> Environment:
 def _context(app, docname: str = "index") -> dict:
     data = app.rapids_portal_data
     config = getattr(app, "config", None)
-    site_baseurl = getattr(config, "html_baseurl", "https://docs.rapids.ai/")
+    site_baseurl = getattr(config, "html_baseurl", "https://docs.nvidia.com/datascience/")
     return {
         **data,
         "api_docs": lambda section: _api_docs(data, section),

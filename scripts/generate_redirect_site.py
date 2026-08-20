@@ -37,13 +37,14 @@ PORTAL_PREFIXES = (
     "visualization",
 )
 PORTAL_FILES = ("404", "404.html", "LICENSE", "SECURITY.md", "genindex", "search")
+REDIRECT_STATUS = 301
 
 
-def _rule(source: str, destination: str, status: int) -> str:
-    return f"{source} {destination} {status}!"
+def _rule(source: str, destination: str) -> str:
+    return f"{source} {destination} {REDIRECT_STATUS}!"
 
 
-def _project_rules(project: dict, releases: dict, status: int) -> list[str]:
+def _project_rules(project: dict, releases: dict) -> list[str]:
     rules = []
     emitted_sources = set()
     project_path = project["path"]
@@ -65,11 +66,10 @@ def _project_rules(project: dict, releases: dict, status: int) -> list[str]:
             emitted_sources.add(source)
             rules.extend(
                 [
-                    _rule(source, destination, status),
+                    _rule(source, destination),
                     _rule(
                         f"{source}/*",
                         _documentation_url(project, version_name, version, ":splat"),
-                        status,
                     ),
                 ]
             )
@@ -77,7 +77,7 @@ def _project_rules(project: dict, releases: dict, status: int) -> list[str]:
     return rules
 
 
-def generate_redirects(*, status: int) -> str:
+def generate_redirects() -> str:
     docs = yaml.safe_load(DOCS_CONFIG.read_text())
     releases = json.loads(RELEASES_CONFIG.read_text())
     rules = [
@@ -90,7 +90,7 @@ def generate_redirects(*, status: int) -> str:
     ]
     for section in SECTIONS:
         for project in docs[section].values():
-            rules.extend(_project_rules(project, releases, status))
+            rules.extend(_project_rules(project, releases))
 
     rules.extend(
         [
@@ -99,13 +99,12 @@ def generate_redirects(*, status: int) -> str:
             _rule(
                 "/deployment/*",
                 "https://docs.nvidia.com/datascience/deployment/:splat",
-                status,
             ),
             "",
             "# Portal routes move beneath docs.nvidia.com/datascience.",
-            _rule("/", "https://docs.nvidia.com/datascience/", status),
-            _rule("/api", "https://docs.nvidia.com/datascience/api/", status),
-            _rule("/api/", "https://docs.nvidia.com/datascience/api/", status),
+            _rule("/", "https://docs.nvidia.com/datascience/"),
+            _rule("/api", "https://docs.nvidia.com/datascience/api/"),
+            _rule("/api/", "https://docs.nvidia.com/datascience/api/"),
         ]
     )
     for prefix in PORTAL_PREFIXES:
@@ -114,12 +113,10 @@ def generate_redirects(*, status: int) -> str:
                 _rule(
                     f"/{prefix}",
                     f"https://docs.nvidia.com/datascience/{prefix}/",
-                    status,
                 ),
                 _rule(
                     f"/{prefix}/*",
                     f"https://docs.nvidia.com/datascience/{prefix}/:splat",
-                    status,
                 ),
             ]
         )
@@ -128,7 +125,6 @@ def generate_redirects(*, status: int) -> str:
             _rule(
                 f"/{filename}",
                 f"https://docs.nvidia.com/datascience/{filename}",
-                status,
             )
         )
     rules.extend(
@@ -144,10 +140,9 @@ def generate_redirects(*, status: int) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--status", choices=(301, 302), default=302, type=int)
     args = parser.parse_args()
 
-    output = generate_redirects(status=args.status)
+    output = generate_redirects()
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(output)
     print(f"Wrote {args.output}")

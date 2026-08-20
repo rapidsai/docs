@@ -94,6 +94,12 @@ def test_standard_jinja_syntax_and_raw_blocks() -> None:
     assert rendered == stable_version + "\n${{ matrix.PY_VER }}\n"
 
 
+def test_context_defaults_to_nvidia_portal() -> None:
+    app = SimpleNamespace(rapids_portal_data={})
+
+    assert lifecycle._context(app)["site_baseurl"] == "https://docs.nvidia.com/datascience/"
+
+
 def test_toctree_url_rewriting() -> None:
     app = SimpleNamespace(
         config=SimpleNamespace(html_baseurl="https://docs.example.com/datascience/")
