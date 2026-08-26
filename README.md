@@ -1,7 +1,7 @@
 # NVIDIA RAPIDS Documentation
 
 This repository contains the source for the
-[NVIDIA RAPIDS documentation site](https://docs.rapids.ai/). The site is built
+[NVIDIA RAPIDS documentation site](https://docs.nvidia.com/datascience/). The site is built
 with Sphinx and the NVIDIA Sphinx theme.
 
 ## Build the site
@@ -16,17 +16,28 @@ make serve
 The rendered site is written to `_site`. The server uses port 8000 by default;
 override it with `PORT` (for example, `make serve PORT=8080`).
 
-## Build the full site
+## Build the docs.rapids.ai compatibility site
 
-The complete docs site imports versioned API documentation and the deployment
-documentation from the private `rapidsai-docs` S3 bucket. Configure a read-only
-AWS profile named `rapids-docs`, then run:
+The compatibility site imports versioned API documentation and deployment
+documentation from the private `rapidsai-docs` S3 bucket. It continues to serve
+real API content from `docs.rapids.ai/api/<library>` until each library migrates
+to `docs.nvidia.com`. Configure a read-only AWS profile named `rapids-docs`, then
+run:
 
 ```shell
 AWS_PROFILE=rapids-docs make full
 ```
 
 This applies the RAPIDS library/version selectors to the imported documentation.
+Generate the Netlify redirect file after assembly:
+
+```shell
+uv run python scripts/generate_redirect_site.py --output _site/_redirects
+```
+
+The generated rules redirect portal pages and only those library versions whose
+migration metadata points at `docs.nvidia.com`. Unmatched API routes and shared
+assets remain real files in the assembled site.
 
 ## Validation
 
@@ -37,10 +48,17 @@ make check
 Run checks including linting, tests, and a local build.
 
 Pull requests opened against `rapidsai/docs` are copied to a
-`pull-request/<number>` branch by the RAPIDS copy-PR bot. That branch runs the
-same validation and dry-runs assembly of the complete S3-backed documentation
-tree without deploying it. Netlify's repository integration separately creates
-a site preview. Merges to `main` deploy the production site.
+`pull-request/<number>` branch by the RAPIDS copy-PR bot. That branch builds the
+full `docs.rapids.ai` compatibility site and validates its generated redirects.
+Netlify's repository integration separately creates a site preview.
+
+Merges to `main` and the daily scheduled workflow publish the portal to
+`docs.nvidia.com/datascience/`. The independently published
+`docs.nvidia.com/datascience/deployment/` subtree is explicitly preserved.
+The companion compatibility workflow assembles and publishes the remaining API
+documentation to `docs.rapids.ai`, with redirects for migrated API versions and
+portal routes. Both automated and manually triggered compatibility deployments
+use permanent HTTP 301 redirects.
 
 ## Repository layout
 

@@ -94,6 +94,12 @@ def test_standard_jinja_syntax_and_raw_blocks() -> None:
     assert rendered == stable_version + "\n${{ matrix.PY_VER }}\n"
 
 
+def test_context_defaults_to_nvidia_portal() -> None:
+    app = SimpleNamespace(rapids_portal_data={})
+
+    assert lifecycle._context(app)["site_baseurl"] == "https://docs.nvidia.com/datascience/"
+
+
 def test_toctree_url_rewriting() -> None:
     app = SimpleNamespace(
         config=SimpleNamespace(html_baseurl="https://docs.example.com/datascience/")
@@ -169,6 +175,32 @@ def test_absolute_url_rewriting() -> None:
         raw.astext()
         == '<a href="https://docs.example.com/datascience/notices/feed.xml"><img src="https://docs.example.com/datascience/assets/rss.svg"></a>'
     )
+
+
+def test_api_documentation_url_rewriting() -> None:
+    app = SimpleNamespace(
+        config=SimpleNamespace(html_baseurl="https://docs.nvidia.com/datascience/"),
+        rapids_portal_data=portal_data._load_data(APP),
+    )
+    migrated = nodes.reference(
+        "",
+        "cuDF guide",
+        refuri="/api/cudf/stable/user_guide/10min/?source=portal#intro",
+    )
+    unmigrated = nodes.reference(
+        "",
+        "Dask-cuDF guide",
+        refuri="/api/dask-cudf/stable/user_guide/",
+    )
+    doctree = nodes.container("", migrated, unmigrated)
+
+    urls._rewrite_absolute_urls(app, doctree, "user-guide/index")
+
+    stable_version = app.rapids_portal_data["releases"]["stable"]["version"]
+    assert migrated["refuri"] == (
+        f"https://docs.nvidia.com/cudf/{stable_version}/user_guide/10min/?source=portal#intro"
+    )
+    assert unmigrated["refuri"] == ("https://docs.rapids.ai/api/dask-cudf/stable/user_guide/")
 
 
 def test_theme_url_rewriting() -> None:

@@ -77,7 +77,7 @@ Suggested template:
 :warning: cuDF/cuML/cuGraph/RMM/cuStrings/dask-cuda v0.9 have moved to the burn down stage - `branch-0.10` is available but *not the default branch yet*
 
 *Burn down ends Tuesday, August 13*
-See https://docs.rapids.ai/maintainers for full v0.9 schedule
+See the [maintainer documentation](/maintainers/) for the full v0.9 schedule.
 
 Please keep the following in mind:
 - *Stop adding issues/PRs for v0.9*; unless deemed critical by the PICs
@@ -86,7 +86,7 @@ Please keep the following in mind:
 - *Move open issues/PRs* to the new v0.9 boards and branch
 - Forward-mergers are in place to merge updates from v0.9 to v0.10 - https://gpuci.gpuopenanalytics.com/view/gpuCI%20-%20forward-mergers/
 
-See https://docs.rapids.ai/releases/process/#burn-down for more details on the burn down and development process.
+See the [release process](/releases/process/#burn-down) for more details on the burn down and development process.
 
 *v0.9 boards:*
 - cuDF - https://github.com/rapidsai/cudf/projects/15

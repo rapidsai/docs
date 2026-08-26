@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
 """Validate the rendered RAPIDS portal and optional assembled documentation tree."""
@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -66,6 +67,10 @@ def main() -> None:
         missing.append(f"{len(missing_search_notices)} individual notices are absent from search")
 
     home = (args.site / "index.html").read_text(errors="ignore")
+    expected_baseurl = os.environ.get("RAPIDS_DOCS_BASE_URL", "https://docs.rapids.ai/")
+    expected_baseurl = expected_baseurl.rstrip("/") + "/"
+    if f'<link rel="canonical" href="{expected_baseurl}"' not in home:
+        missing.append(f"home page canonical URL does not use {expected_baseurl}")
     required_branding = [
         "nvidia-logo-horiz",
         "https://github.com/rapidsai/docs",
@@ -113,11 +118,36 @@ def main() -> None:
     if markdown_links:
         missing.append("same-site Markdown links remain:\n  " + "\n  ".join(markdown_links))
 
+    if expected_baseurl == "https://docs.nvidia.com/datascience/":
+        misplaced_api_links = []
+        legacy_portal_links = []
+        for path in html_files:
+            text = path.read_text(errors="ignore")
+            if re.search(
+                r"https://docs\.nvidia\.com/datascience/api/[^\"']+/(legacy|stable|nightly)/",
+                text,
+            ):
+                misplaced_api_links.append(str(path.relative_to(args.site)))
+            if re.search(r"https://docs\.rapids\.ai/(?!api/)", text):
+                legacy_portal_links.append(str(path.relative_to(args.site)))
+        if misplaced_api_links:
+            missing.append(
+                "migrated API links incorrectly point below /datascience/api in: "
+                + ", ".join(misplaced_api_links)
+            )
+        if legacy_portal_links:
+            missing.append(
+                "portal links still point to docs.rapids.ai in: " + ", ".join(legacy_portal_links)
+            )
+
     if args.full:
         full_paths = [
             "api/cudf/stable",
             "api/cudf/latest",
             "api/cudf/nightly",
+            "api/dask-cudf/legacy",
+            "api/dask-cudf/stable",
+            "api/dask-cudf/nightly",
             "deployment/stable/index.html",
             "deployment/nightly/index.html",
         ]

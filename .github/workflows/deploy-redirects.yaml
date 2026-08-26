@@ -1,52 +1,33 @@
-name: pr
+name: Deploy docs.rapids.ai compatibility site
 
 on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
   push:
     branches:
-      - "pull-request/[0-9]+"
+      - main
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: deploy-docs-rapids-ai-redirects
+  cancel-in-progress: false
 
-permissions: {}
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
-  pr-builder:
-    needs:
-      - check-style
-      - docs
-    permissions:
-      actions: read
-      contents: read
-      id-token: write
-      packages: read
-      pull-requests: read
-    secrets: inherit # zizmor: ignore[secrets-inherit]
-    uses: rapidsai/shared-workflows/.github/workflows/pr-builder.yaml@main
-    if: always()
-    with:
-      needs: ${{ toJSON(needs) }}
-
-  check-style:
+  deploy:
+    name: Assemble and deploy compatibility site
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: false
-      - uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
-
-  docs:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     env:
       RAPIDS_DOCS_BASE_URL: https://docs.rapids.ai/
     steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
       - name: Set up uv
@@ -69,3 +50,10 @@ jobs:
         run: |
           uv run python scripts/generate_redirect_site.py \
             --output _site/_redirects
+      - name: Deploy compatibility site to docs.rapids.ai
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_DOCS_SITE_ID }}
+        run: | # zizmor: ignore[adhoc-packages]
+          npm install --global --force @aschmidt8/netlify-cli
+          netlify deploy --prod --debug --dir=_site
