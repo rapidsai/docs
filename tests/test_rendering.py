@@ -21,9 +21,13 @@ def test_api_docs() -> None:
     legacy_version = data["releases"]["legacy"]["version"]
 
     rendered = api._api_docs(data, "apis")
+    cudf_latest = f"[Latest](https://docs.nvidia.com/cudf/{nightly_version}/)"
+    cudf_stable = f"[{stable_version}](https://docs.nvidia.com/cudf/{stable_version}/)"
+    cudf_legacy = f"[{legacy_version}](https://docs.rapids.ai/api/cudf/legacy/)"
     assert f"Stable ({stable_version})" in rendered
-    assert f"https://docs.nvidia.com/cudf/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/cudf/{stable_version}/" in rendered
+    assert cudf_latest in rendered
+    assert cudf_stable in rendered
+    assert cudf_legacy in rendered
     assert f"https://docs.nvidia.com/cuml/{nightly_version}/" in rendered
     assert f"https://docs.nvidia.com/cugraph/{nightly_version}/" in rendered
     assert f"https://docs.nvidia.com/rmm/{nightly_version}/" in rendered
@@ -40,12 +44,8 @@ def test_api_docs() -> None:
     assert "**Documentation:**" in rendered
     assert "[GitHub]" in rendered
     assert "DOCS" not in rendered
-    assert rendered.index(f"Nightly ({nightly_version})") < rendered.index(
-        f"Stable ({stable_version})"
-    )
-    assert rendered.index(f"Stable ({stable_version})") < rendered.index(
-        f"Legacy ({legacy_version})"
-    )
+    assert rendered.index(cudf_latest) < rendered.index(cudf_stable)
+    assert rendered.index(cudf_stable) < rendered.index(cudf_legacy)
 
     libs = api._api_docs(data, "libs")
     assert f"https://docs.nvidia.com/rapids-cmake/{nightly_version}/" in libs
