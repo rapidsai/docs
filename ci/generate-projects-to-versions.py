@@ -62,6 +62,9 @@ for docs_key in ["apis", "libs", "inactive-projects"]:
             PROJECTS_TO_VERSIONS_DICT[project_name] = versions_for_this_project
             continue
         for version_name, should_include in project_details["versions"].items():
+            if project_name == "dask-cuda" and version_name in {"stable", "nightly"}:
+                print(f"Skipping: {project_name} | {version_name}", file=sys.stderr)
+                continue
             if should_include == 1:
                 version_override = project_details.get("version-overrides", dict()).get(
                     version_name, ""
