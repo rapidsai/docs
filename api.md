@@ -3,14 +3,11 @@
 Explore documentation for current and previous RAPIDS releases. Each project
 card links to its available documentation versions and related resources.
 
-Stable
-: Documentation for the current release, recommended for most users.
+Latest
+: Documentation for the latest available release, recommended for most users.
 
-Nightly
-: Documentation for the upcoming release, generated from development branches.
-
-Legacy
-: Documentation for the previous release, retained for reference.
+Versioned releases
+: Documentation for specific RAPIDS releases, retained for reference.
 
 ## RAPIDS APIs
 

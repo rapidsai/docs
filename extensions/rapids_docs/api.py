@@ -33,10 +33,7 @@ def _api_docs(data: dict, section: str) -> str:
                 if project["versions"].get(name) == 1:
                     version = _version_label(project, name, data["releases"])
                     url = _documentation_url(project, name, version)
-                    if project["first_docs_nvidia_com_release"]:
-                        label = "Latest" if name == "nightly" else version
-                    else:
-                        label = f"{name.title()} ({version})"
+                    label = "Latest" if name == "nightly" else version
                     versions.append(f"[{label}]({url})")
         links = []
         if project.get("cllink"):

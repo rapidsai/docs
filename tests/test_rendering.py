@@ -24,7 +24,9 @@ def test_api_docs() -> None:
     cudf_latest = f"[Latest](https://docs.nvidia.com/cudf/{nightly_version}/)"
     cudf_stable = f"[{stable_version}](https://docs.nvidia.com/cudf/{stable_version}/)"
     cudf_legacy = f"[{legacy_version}](https://docs.rapids.ai/api/cudf/legacy/)"
-    assert f"Stable ({stable_version})" in rendered
+    assert "[Nightly (" not in rendered
+    assert "[Stable (" not in rendered
+    assert "[Legacy (" not in rendered
     assert cudf_latest in rendered
     assert cudf_stable in rendered
     assert cudf_legacy in rendered
@@ -57,7 +59,7 @@ def test_api_docs() -> None:
         if not project.get("hidden", False) and project["versions"].get("stable") == 1
     )
     inactive_version = api._version_label(inactive_project, "stable", data["releases"])
-    assert f"Stable ({inactive_version})" in inactive
+    assert f"[{inactive_version}]" in inactive
 
 
 def test_platform_support() -> None:
