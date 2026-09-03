@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
 """Validate the rendered RAPIDS portal and optional assembled documentation tree."""
@@ -115,9 +115,9 @@ def main() -> None:
 
     if args.full:
         full_paths = [
-            "api/cudf/stable",
-            "api/cudf/latest",
-            "api/cudf/nightly",
+            "api/ucxx/stable",
+            "api/ucxx/latest",
+            "api/ucxx/nightly",
             "deployment/stable/index.html",
             "deployment/nightly/index.html",
         ]

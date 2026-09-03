@@ -62,19 +62,21 @@ for docs_key in ["apis", "libs", "inactive-projects"]:
             PROJECTS_TO_VERSIONS_DICT[project_name] = versions_for_this_project
             continue
         for version_name, should_include in project_details["versions"].items():
-            if project_name == "dask-cuda" and version_name in {"stable", "nightly"}:
-                print(f"Skipping: {project_name} | {version_name}", file=sys.stderr)
-                continue
             if should_include == 1:
                 version_override = project_details.get("version-overrides", dict()).get(
                     version_name, ""
                 )
                 if version_override:
-                    versions_for_this_project[version_name] = version_override
+                    version_number = version_override
                 else:
-                    versions_for_this_project[version_name] = RELEASES_JSON_DICT[version_name][
-                        version_key
-                    ]
+                    version_number = RELEASES_JSON_DICT[version_name][version_key]
+                first_docs_nvidia_com_release = project_details.get("first_docs_nvidia_com_release")
+                if first_docs_nvidia_com_release and tuple(
+                    map(int, version_number.split("."))
+                ) >= tuple(map(int, first_docs_nvidia_com_release.split("."))):
+                    print(f"Skipping: {project_name} | {version_name}", file=sys.stderr)
+                    continue
+                versions_for_this_project[version_name] = version_number
             else:
                 print(f"Skipping: {project_name} | {version_name}", file=sys.stderr)
 

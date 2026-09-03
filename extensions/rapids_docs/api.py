@@ -17,7 +17,8 @@ def _documentation_url(project: dict, version_name: str, version: str) -> str:
     if first_docs_nvidia_com_release and tuple(map(int, version.split("."))) >= tuple(
         map(int, first_docs_nvidia_com_release.split("."))
     ):
-        return f"https://docs.nvidia.com/{project['path']}/{version}/"
+        target_version = "latest" if version_name == "nightly" else version
+        return f"https://docs.nvidia.com/{project['path']}/{target_version}/"
     return f"https://docs.rapids.ai/api/{project['path']}/{version_name}/"
 
 
@@ -31,9 +32,10 @@ def _api_docs(data: dict, section: str) -> str:
         if not external_docs_url:
             for name in ("nightly", "stable", "legacy"):
                 if project["versions"].get(name) == 1:
-                    label = _version_label(project, name, data["releases"])
-                    url = _documentation_url(project, name, label)
-                    versions.append(f"[{name.title()} ({label})]({url})")
+                    version = _version_label(project, name, data["releases"])
+                    url = _documentation_url(project, name, version)
+                    label = "Latest" if name == "nightly" else version
+                    versions.append(f"[{label}]({url})")
         links = []
         if project.get("cllink"):
             links.append(f"[Changelog]({project['cllink']})")
