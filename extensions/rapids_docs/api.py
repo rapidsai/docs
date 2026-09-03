@@ -17,7 +17,8 @@ def _documentation_url(project: dict, version_name: str, version: str) -> str:
     if first_docs_nvidia_com_release and tuple(map(int, version.split("."))) >= tuple(
         map(int, first_docs_nvidia_com_release.split("."))
     ):
-        return f"https://docs.nvidia.com/{project['path']}/{version}/"
+        target_version = "latest" if version_name == "nightly" else version
+        return f"https://docs.nvidia.com/{project['path']}/{target_version}/"
     return f"https://docs.rapids.ai/api/{project['path']}/{version_name}/"
 
 

@@ -21,7 +21,7 @@ def test_api_docs() -> None:
     legacy_version = data["releases"]["legacy"]["version"]
 
     rendered = api._api_docs(data, "apis")
-    cudf_latest = f"[Latest](https://docs.nvidia.com/cudf/{nightly_version}/)"
+    cudf_latest = "[Latest](https://docs.nvidia.com/cudf/latest/)"
     cudf_stable = f"[{stable_version}](https://docs.nvidia.com/cudf/{stable_version}/)"
     cudf_legacy = f"[{legacy_version}](https://docs.rapids.ai/api/cudf/legacy/)"
     assert "[Nightly (" not in rendered
@@ -30,16 +30,16 @@ def test_api_docs() -> None:
     assert cudf_latest in rendered
     assert cudf_stable in rendered
     assert cudf_legacy in rendered
-    assert f"https://docs.nvidia.com/cuml/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/cugraph/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/rmm/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/nvforest/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/dask-cudf/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/cucim/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/kvikio/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/raft/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/dask-cuda/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/rapidsmpf/{nightly_version}/" in rendered
+    assert "https://docs.nvidia.com/cuml/latest/" in rendered
+    assert "https://docs.nvidia.com/cugraph/latest/" in rendered
+    assert "https://docs.nvidia.com/rmm/latest/" in rendered
+    assert "https://docs.nvidia.com/nvforest/latest/" in rendered
+    assert "https://docs.nvidia.com/dask-cudf/latest/" in rendered
+    assert "https://docs.nvidia.com/cucim/latest/" in rendered
+    assert "https://docs.nvidia.com/kvikio/latest/" in rendered
+    assert "https://docs.nvidia.com/raft/latest/" in rendered
+    assert "https://docs.nvidia.com/dask-cuda/latest/" in rendered
+    assert "https://docs.nvidia.com/rapidsmpf/latest/" in rendered
     assert rendered.count("[Documentation](https://docs.nvidia.com/cuvs/)") == 1
     assert "::::{grid} 1 1 1 1" in rendered
     assert ":::{grid-item-card} cuDF" in rendered
@@ -50,7 +50,8 @@ def test_api_docs() -> None:
     assert rendered.index(cudf_stable) < rendered.index(cudf_legacy)
 
     libs = api._api_docs(data, "libs")
-    assert f"https://docs.nvidia.com/rapids-cmake/{nightly_version}/" in libs
+    assert "https://docs.nvidia.com/rapids-cmake/latest/" in libs
+    assert f"/{nightly_version}/" not in rendered + libs
 
     inactive = api._api_docs(data, "inactive-projects")
     inactive_project = next(
