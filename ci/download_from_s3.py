@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
 """Download the versioned RAPIDS documentation tree from S3."""
@@ -17,7 +17,6 @@ BUCKET = "rapidsai-docs"
 ROOT = Path(__file__).resolve().parents[1]
 SITE_DIR = ROOT / os.environ.get("SITE_DIR", "_site")
 API_DIR = SITE_DIR / "api"
-DEPLOYMENT_DIR = SITE_DIR / "deployment"
 PROJECT_VERSIONS = ROOT / "ci" / "customization" / "projects-to-versions.json"
 WORKERS = int(os.environ.get("S3_DOWNLOAD_WORKERS", "16"))
 
@@ -28,8 +27,6 @@ def validate_output() -> None:
     api_entries = sorted(path.name for path in API_DIR.iterdir())
     if api_entries != ["index.html"]:
         raise SystemExit(f'"{API_DIR}" must contain only index.html before importing API docs.')
-    if DEPLOYMENT_DIR.exists():
-        raise SystemExit(f'"{DEPLOYMENT_DIR}" is populated only during full-site assembly.')
 
 
 def object_keys(client, prefix: str) -> list[str]:
@@ -70,13 +67,6 @@ def main() -> None:
         for version_number in versions.values():
             prefix = f"{project}/html/{version_number}/"
             download_prefix(client, prefix, API_DIR / project / str(version_number))
-
-    for version in ("nightly", "stable"):
-        download_prefix(
-            client,
-            f"deployment/html/{version}/",
-            DEPLOYMENT_DIR / version,
-        )
 
 
 if __name__ == "__main__":
