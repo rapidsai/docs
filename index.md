@@ -1,8 +1,8 @@
 # RAPIDS Documentation and Resources
 
-This site serves to unify the documentation for RAPIDS. Whether you're new to RAPIDS,
-looking to contribute, or are a part of the RAPIDS team, the docs here will help guide
-you. Visit [RAPIDS.ai](https://rapids.ai) for more information on the overall project.
+This site serves to unify the documentation for NVIDIA Acclerated Data Science Libraries. Whether you're new here,
+looking to contribute, or are a part of NVIDIA's Data Science team, the docs here will help guide
+you. Visit [the NVIDIA Accelerated Data Science site](https://www.nvidia.com/en-us/deep-learning-ai/solutions/data-science/) for more information on the overall project.
 
 ## Sections
 
@@ -36,7 +36,7 @@ you. Visit [RAPIDS.ai](https://rapids.ai) for more information on the overall pr
 :::
 
 :::{grid-item-card} <i class="fa-solid fa-cloud" aria-hidden="true"></i> Deployment Guides
-:link: /deployment/stable/
+:link: https://docs.nvidia.com/datascience/deployment/latest/
 :link-type: url
 :::
 
@@ -45,12 +45,12 @@ you. Visit [RAPIDS.ai](https://rapids.ai) for more information on the overall pr
 :link-type: url
 :::
 
-:::{grid-item-card} <i class="fas fa-bullhorn" aria-hidden="true"></i> RAPIDS Notices
+:::{grid-item-card} <i class="fas fa-bullhorn" aria-hidden="true"></i> Notices
 :link: notices/
 :link-type: url
 :::
 
-:::{grid-item-card} <i class="fab fa-github" aria-hidden="true"></i> RAPIDS GitHub
+:::{grid-item-card} <i class="fab fa-github" aria-hidden="true"></i> Our GitHub
 :link: https://github.com/rapidsai
 :link-type: url
 :::
@@ -86,6 +86,5 @@ API Docs <api>
 Visualization Guide <visualization/index>
 Deployment Guides </deployment/stable/>
 Maintainer Docs <maintainers/index>
-contributing/index
 notices/index
 ```
