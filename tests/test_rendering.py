@@ -4,6 +4,7 @@
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
 from docutils import nodes
 
 from extensions import rapids_docs
@@ -21,26 +22,37 @@ def test_api_docs() -> None:
     legacy_version = data["releases"]["legacy"]["version"]
 
     rendered = api._api_docs(data, "apis")
-    assert f"Stable ({stable_version})" in rendered
-    assert f"https://docs.nvidia.com/cudf/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/cudf/{stable_version}/" in rendered
-    assert f"https://docs.nvidia.com/cuml/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/cugraph/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/rmm/{nightly_version}/" in rendered
-    assert f"https://docs.nvidia.com/nvforest/{nightly_version}/" in rendered
+    cudf_latest = "[Latest](https://docs.nvidia.com/cudf/latest/)"
+    cudf_stable = f"[{stable_version}](https://docs.nvidia.com/cudf/{stable_version}/)"
+    cudf_legacy = f"[{legacy_version}](https://docs.rapids.ai/api/cudf/legacy/)"
+    assert "[Nightly (" not in rendered
+    assert "[Stable (" not in rendered
+    assert "[Legacy (" not in rendered
+    assert cudf_latest in rendered
+    assert cudf_stable in rendered
+    assert cudf_legacy in rendered
+    assert "https://docs.nvidia.com/cuml/latest/" in rendered
+    assert "https://docs.nvidia.com/cugraph/latest/" in rendered
+    assert "https://docs.nvidia.com/rmm/latest/" in rendered
+    assert "https://docs.nvidia.com/nvforest/latest/" in rendered
+    assert "https://docs.nvidia.com/dask-cudf/latest/" in rendered
+    assert "https://docs.nvidia.com/cucim/latest/" in rendered
+    assert "https://docs.nvidia.com/kvikio/latest/" in rendered
+    assert "https://docs.nvidia.com/raft/latest/" in rendered
+    assert "https://docs.nvidia.com/dask-cuda/latest/" in rendered
+    assert "https://docs.nvidia.com/rapidsmpf/latest/" in rendered
     assert rendered.count("[Documentation](https://docs.nvidia.com/cuvs/)") == 1
-    assert "https://docs.rapids.ai/api/dask-cudf/nightly/" in rendered
     assert "::::{grid} 1 1 1 1" in rendered
     assert ":::{grid-item-card} cuDF" in rendered
     assert "**Documentation:**" in rendered
     assert "[GitHub]" in rendered
     assert "DOCS" not in rendered
-    assert rendered.index(f"Nightly ({nightly_version})") < rendered.index(
-        f"Stable ({stable_version})"
-    )
-    assert rendered.index(f"Stable ({stable_version})") < rendered.index(
-        f"Legacy ({legacy_version})"
-    )
+    assert rendered.index(cudf_latest) < rendered.index(cudf_stable)
+    assert rendered.index(cudf_stable) < rendered.index(cudf_legacy)
+
+    libs = api._api_docs(data, "libs")
+    assert "https://docs.nvidia.com/rapids-cmake/latest/" in libs
+    assert f"/{nightly_version}/" not in rendered + libs
 
     inactive = api._api_docs(data, "inactive-projects")
     inactive_project = next(
@@ -49,7 +61,7 @@ def test_api_docs() -> None:
         if not project.get("hidden", False) and project["versions"].get("stable") == 1
     )
     inactive_version = api._version_label(inactive_project, "stable", data["releases"])
-    assert f"Stable ({inactive_version})" in inactive
+    assert f"[{inactive_version}]" in inactive
 
 
 def test_platform_support() -> None:
@@ -177,7 +189,8 @@ def test_absolute_url_rewriting() -> None:
     )
 
 
-def test_api_documentation_url_rewriting() -> None:
+@pytest.mark.parametrize("version_name", ["stable", "nightly"])
+def test_api_documentation_url_rewriting(version_name: str) -> None:
     app = SimpleNamespace(
         config=SimpleNamespace(html_baseurl="https://docs.nvidia.com/datascience/"),
         rapids_portal_data=portal_data._load_data(APP),
@@ -185,22 +198,26 @@ def test_api_documentation_url_rewriting() -> None:
     migrated = nodes.reference(
         "",
         "cuDF guide",
-        refuri="/api/cudf/stable/user_guide/10min/?source=portal#intro",
+        refuri=f"/api/cudf/{version_name}/user_guide/10min/?source=portal#intro",
     )
     unmigrated = nodes.reference(
         "",
-        "Dask-cuDF guide",
-        refuri="/api/dask-cudf/stable/user_guide/",
+        "UCXX guide",
+        refuri=f"/api/ucxx/{version_name}/user_guide/",
     )
     doctree = nodes.container("", migrated, unmigrated)
 
     urls._rewrite_absolute_urls(app, doctree, "user-guide/index")
 
-    stable_version = app.rapids_portal_data["releases"]["stable"]["version"]
-    assert migrated["refuri"] == (
-        f"https://docs.nvidia.com/cudf/{stable_version}/user_guide/10min/?source=portal#intro"
+    target_version = (
+        "latest"
+        if version_name == "nightly"
+        else app.rapids_portal_data["releases"]["stable"]["version"]
     )
-    assert unmigrated["refuri"] == ("https://docs.rapids.ai/api/dask-cudf/stable/user_guide/")
+    assert migrated["refuri"] == (
+        f"https://docs.nvidia.com/cudf/{target_version}/user_guide/10min/?source=portal#intro"
+    )
+    assert unmigrated["refuri"] == f"https://docs.rapids.ai/api/ucxx/{version_name}/user_guide/"
 
 
 def test_theme_url_rewriting() -> None:

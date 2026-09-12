@@ -99,7 +99,7 @@ def main() -> None:
         missing.append("GA4 or Adobe page-bottom telemetry is missing")
 
     # Imported API docs may include upstream source links and template examples.
-    # Limit portal-specific checks to portal and deployment pages.
+    # Limit portal-specific checks to portal pages.
     html_files = [
         path
         for path in args.site.rglob("*.html")
@@ -142,14 +142,11 @@ def main() -> None:
 
     if args.full:
         full_paths = [
-            "api/cudf/stable",
-            "api/cudf/latest",
-            "api/cudf/nightly",
+            "api/cudf/legacy",
             "api/dask-cudf/legacy",
-            "api/dask-cudf/stable",
-            "api/dask-cudf/nightly",
-            "deployment/stable/index.html",
-            "deployment/nightly/index.html",
+            "api/ucxx/stable",
+            "api/ucxx/latest",
+            "api/ucxx/nightly",
         ]
         missing.extend(relative for relative in full_paths if not (args.site / relative).exists())
 

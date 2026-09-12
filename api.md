@@ -1,16 +1,7 @@
 # RAPIDS API Documentation
 
-Explore documentation for current and previous RAPIDS releases. Each project
-card links to its available documentation versions and related resources.
-
-Stable
-: Documentation for the current release, recommended for most users.
-
-Nightly
-: Documentation for the upcoming release, generated from development branches.
-
-Legacy
-: Documentation for the previous release, retained for reference.
+Below are links to each library's documentation by release. Latest docs are built
+from the current development branch and may describe unreleased changes.
 
 ## RAPIDS APIs
 

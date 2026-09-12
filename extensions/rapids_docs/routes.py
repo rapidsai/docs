@@ -33,7 +33,8 @@ def _documentation_url(
 
     first_nvidia_release = project["first_docs_nvidia_com_release"]
     if first_nvidia_release and _version_tuple(version) >= _version_tuple(first_nvidia_release):
-        base_url = f"https://docs.nvidia.com/{project['path']}/{version}/"
+        target_version = "latest" if version_name == "nightly" else version
+        base_url = f"https://docs.nvidia.com/{project['path']}/{target_version}/"
     else:
         base_url = f"https://docs.rapids.ai/api/{project['path']}/{version_name}/"
     return _with_suffix(base_url, suffix)

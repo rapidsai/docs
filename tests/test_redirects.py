@@ -20,6 +20,23 @@ def test_redirects_route_migrated_docs_and_portal() -> None:
     assert "\n/* " not in redirects
 
 
+def test_nightly_redirects_use_latest() -> None:
+    releases = json.loads(generate_redirect_site.RELEASES_CONFIG.read_text())
+    nightly = releases["nightly"]["version"]
+    project = {
+        "path": "cudf",
+        "first_docs_nvidia_com_release": "26.08",
+        "versions": {"nightly": 1},
+    }
+
+    assert generate_redirect_site._project_rules(project, releases) == [
+        "/api/cudf/nightly https://docs.nvidia.com/cudf/latest/ 301!",
+        "/api/cudf/nightly/* https://docs.nvidia.com/cudf/latest/:splat 301!",
+        f"/api/cudf/{nightly} https://docs.nvidia.com/cudf/latest/ 301!",
+        f"/api/cudf/{nightly}/* https://docs.nvidia.com/cudf/latest/:splat 301!",
+    ]
+
+
 def test_redirects_route_external_unversioned_docs() -> None:
     redirects = generate_redirect_site.generate_redirects()
 
@@ -31,7 +48,10 @@ def test_redirects_leave_unmigrated_api_docs_and_shared_assets_local() -> None:
     releases = json.loads(generate_redirect_site.RELEASES_CONFIG.read_text())
     legacy = releases["legacy"]["version"]
 
-    assert "/api/dask-cudf/stable " not in redirects
+    assert "/api/ucxx/stable " not in redirects
+    assert "/api/ucxx/nightly " not in redirects
+    assert f"/api/ucxx/{releases['stable']['ucxx_version']} " not in redirects
+    assert "/api/dask-cudf/legacy " not in redirects
     assert f"/api/dask-cudf/{legacy} " not in redirects
     assert "/api/cudf/legacy " not in redirects
     assert f"/api/cudf/{legacy} " not in redirects
