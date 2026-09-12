@@ -1,14 +1,14 @@
-# NVIDIA Accelerated Data Science Featured User Guides
+# NVIDIA CUDA-X Libraries for Data Science Featured User Guides
 
-The NVIDIA Data Science data science framework is a collection of libraries for running end-to-end data science pipelines completely on the GPU. The interaction is designed to have a familiar look and feel to working in Python, but utilizes optimized NVIDIA® CUDA® primitives and high-bandwidth GPU memory under the hood. Below are some links to help getting started with each of the individual libraries.
+The NVIDIA CUDA-X libraries for data science framework is a collection of libraries for running end-to-end data science pipelines completely on the GPU. The interaction is designed to have a familiar look and feel to working in Python, but utilizes optimized NVIDIA® CUDA® primitives and high-bandwidth GPU memory under the hood. Below are some links to help getting started with each of the individual libraries.
 
 
 **<i class="fa-solid fa-book-open"></i> [Community Notebooks](https://github.com/rapidsai/notebooks-contrib)**:
- A collection of examples and tutorials used to introduce new users to the features and capabilities of NVIDIA Data Science.
+ A collection of examples and tutorials used to introduce new users to the features and capabilities of NVIDIA CUDA-X libraries for data science.
 
 
-**<i class="fa-solid fa-wrench"></i> Tools and Guides for [NVIDIA Data Science Deployment](https://docs.nvidia.com/datascience/deployment/latest/)**:
- Deployment documentation to get you up and running with Accelerated Data Science in AWS, GCP, Azure, IBM and more. Also includes guides for HPC, HPO, Kubernetes, Dask, and more.
+**<i class="fa-solid fa-wrench"></i> Tools and Guides for [NVIDA CUDA-X Libraries for Data Science Deployment](https://docs.nvidia.com/datascience/deployment/latest/)**:
+ Deployment documentation to get you up and running with NVIDIA CUDA-X libraries for data science in AWS, GCP, Azure, IBM and more. Also includes guides for HPC, HPO, Kubernetes, Dask, and more.
 
 **<i class="fa-solid fa-database"></i> ETL and Dataframe Processing with [cuDF](https://github.com/NVIDIA/cudf)**:
  Start with the [10 Minutes to cuDF and Dask-cuDF User Guide](/api/cudf/stable/user_guide/10min/). Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is geared mainly for new users. The [cuDF User Guide](/api/cudf/stable/user_guide/index/) is generally very extensive and helpful.
@@ -31,4 +31,4 @@ The NVIDIA Data Science data science framework is a collection of libraries for 
 
 
 **<i class="fa-solid fa-bolt"></i> Accelerated Apache Spark with [Spark cuDF](https://nvidia.github.io/spark-rapids/)**:
- Start with [the Examples Repository](https://github.com/NVIDIA/spark-rapids-examples) for Spark related utilities and examples using the cuDF Accelerator, including ETL, ML/DL, and more. A good [overview](https://nvidia.github.io/spark-rapids/) is available on their docs introduction.
+ Start with [the Examples Repository](https://github.com/NVIDIA/spark-rapids-examples) for Spark related utilities and examples using the NVIDIA CUDA-X library cuDF, including ETL, ML/DL, and more. A good [overview](https://nvidia.github.io/spark-rapids/) is available on their docs introduction.

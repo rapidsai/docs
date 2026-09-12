@@ -1,6 +1,6 @@
-# NVIDIA Data Science Visualization Guide
+# NVIDIA CUDA-X Libraries for Data Science Visualization Guide
 
-NVIDIA Data Science libraries can easily fit in visualization workflows. This catalog of featured libraries offer direct cuDF support or easy integration.
+NVIDIA CUDA-X libraries for data science can easily fit in visualization workflows. This catalog of featured libraries offer direct cuDF support or easy integration.
 
 <img src="/assets/images/datashader-census-rapids.png" width="870px" class="visualization-hero">
 
@@ -44,7 +44,7 @@ When interacting with this page through a website, the interactive examples belo
 - HoloViews is an open-source Python library designed to make data analysis and visualization seamless and simple. [See this diagram](https://holoviz.org/background.html#the-holoviz-ecosystem)  for an excellent architecture overview.
 - With HoloViews, you can usually express what you want to do in very few lines of code, letting you focus on what you are trying to explore and convey, not on the process of plotting.
 - Read about Holoviews at [holoviews.org](https://holoviews.org) and explore its gallery [holoviews.org/gallery/](https://holoviews.org/gallery/).
-- Read about [NVIDIA Data Science compatibility](https://holoviews.org/reference_manual/holoviews.core.data.html?highlight=cudf#module-holoviews.core.data.cudf).
+- Read about [CUDA-X libraries for data science compatibility](https://holoviews.org/reference_manual/holoviews.core.data.html?highlight=cudf#module-holoviews.core.data.cudf).
 
 **Run an interactive example and cpu / gpu code comparison below:**
 {% include "_includes/holoviews.html" %}
@@ -57,7 +57,7 @@ When interacting with this page through a website, the interactive examples belo
 - hvPlot provides an alternative for the static plotting API provided by Pandas and other libraries, with an interactive plotting API. Just replace `.plot()` with `.hvplot()`.
 - hvPlot can integrate neatly with the individual libraries if an extension mechanism for the native plot APIs is offered, or it can be used as a standalone component.
 - Read about hvPlot at [holoviews.org](http://holoviews.org) and explore its gallery [hvplot.holoviz.org/reference/index.html](https://hvplot.holoviz.org/reference/index.html).
-- Read about [NVIDIA Data Science compatibility](https://hvplot.holoviz.org/user_guide/Introduction.html?highlight=rapids#).
+- Read about [CUDA-X libraries for data science compatibility](https://hvplot.holoviz.org/user_guide/Introduction.html?highlight=rapids#).
 <br/>
 **Run an interactive example and cpu / gpu code comparison below:**
 {% include "_includes/hvplot.html" %}
@@ -70,7 +70,7 @@ When interacting with this page through a website, the interactive examples belo
 - Datashader is a graphics pipeline system for creating meaningful representations of large datasets quickly and flexibly.
 - Datashader is able to render a variety of chart types statically, and interactively when combined with other libraries like HoloViews.
 - Read about Datashader at [datashader.org](https://datashader.org) and explore its examples.
-- Read about [NVIDIA Data Science compatibility](https://datashader.org/user_guide/Performance.html?highlight=cudf#data-objects).
+- Read about [CUDA-X libraries for data science compatibility](https://datashader.org/user_guide/Performance.html?highlight=cudf#data-objects).
 <br/>
 **Run an interactive example and cpu / gpu code comparison below:**
 {% include "_includes/datashader.html" %}
