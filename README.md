@@ -16,49 +16,31 @@ make serve
 The rendered site is written to `_site`. The server uses port 8000 by default;
 override it with `PORT` (for example, `make serve PORT=8080`).
 
-## Build the docs.rapids.ai compatibility site
-
-The compatibility site imports versioned API documentation and deployment
-documentation from the private `rapidsai-docs` S3 bucket. It continues to serve
-real API content from `docs.rapids.ai/api/<library>` until each library migrates
-to `docs.nvidia.com`. Configure a read-only AWS profile named `rapids-docs`, then
-run:
-
-```shell
-AWS_PROFILE=rapids-docs make full
-```
-
-This applies the RAPIDS library/version selectors to the imported documentation.
-Generate the Netlify redirect file after assembly:
-
-```shell
-uv run python scripts/generate_redirect_site.py --output _site/_redirects
-```
-
-The generated rules redirect portal pages and only those library versions whose
-migration metadata points at `docs.nvidia.com`. Unmatched API routes and shared
-assets remain real files in the assembled site.
+Builds use `https://docs.nvidia.com/datascience/` as the default base URL.
+Set `RAPIDS_DOCS_BASE_URL` to override it.
 
 ## Validation
+
+Run linting, tests, a strict Sphinx build, and rendered-site validation:
 
 ```shell
 make check
 ```
 
-Run checks including linting, tests, and a local build.
+Pull requests run validation and receive a Netlify preview.
 
-Pull requests opened against `rapidsai/docs` are copied to a
-`pull-request/<number>` branch by the RAPIDS copy-PR bot. That branch builds the
-full `docs.rapids.ai` compatibility site and validates its generated redirects.
-Netlify's repository integration separately creates a site preview.
+## Publishing
 
 Merges to `main` and the daily scheduled workflow publish the portal to
-`docs.nvidia.com/datascience/`. The independently published
-`docs.nvidia.com/datascience/deployment/` subtree is explicitly preserved.
-The companion compatibility workflow assembles and publishes the remaining API
-documentation to `docs.rapids.ai`, with redirects for migrated API versions and
-portal routes. Both automated and manually triggered compatibility deployments
-use permanent HTTP 301 redirects.
+`docs.nvidia.com/datascience/` using the shared `publish-docs` action.
+The independently published `datascience/deployment/` subtree is excluded from
+uploads and deletions.
+
+## Compatibility site
+
+`docs.rapids.ai` continues to host unmigrated API documentation and redirect
+migrated content. A separate [compatibility workflow](.github/workflows/deploy-redirects.yaml)
+imports the remaining API docs from S3 and publishes them to Netlify.
 
 ## Repository layout
 

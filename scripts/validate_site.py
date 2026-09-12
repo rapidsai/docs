@@ -67,7 +67,9 @@ def main() -> None:
         missing.append(f"{len(missing_search_notices)} individual notices are absent from search")
 
     home = (args.site / "index.html").read_text(errors="ignore")
-    expected_baseurl = os.environ.get("RAPIDS_DOCS_BASE_URL", "https://docs.rapids.ai/")
+    expected_baseurl = os.environ.get(
+        "RAPIDS_DOCS_BASE_URL", "https://docs.nvidia.com/datascience/"
+    )
     expected_baseurl = expected_baseurl.rstrip("/") + "/"
     if f'<link rel="canonical" href="{expected_baseurl}"' not in home:
         missing.append(f"home page canonical URL does not use {expected_baseurl}")

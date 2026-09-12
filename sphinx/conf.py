@@ -56,10 +56,13 @@ myst_all_links_external = True
 html_theme = "nvidia_sphinx_theme"
 html_static_path = ["_static"]
 html_extra_path = ["../_redirects"]
+# Production workflows explicitly set RAPIDS_DOCS_BASE_URL, which takes precedence.
+# Netlify supplies DEPLOY_PRIME_URL so rewritten portal links stay within previews.
+# Otherwise, use the NVIDIA portal as the default.
 html_baseurl = (
     os.environ.get("RAPIDS_DOCS_BASE_URL")
     or os.environ.get("DEPLOY_PRIME_URL")
-    or "https://docs.rapids.ai/"
+    or "https://docs.nvidia.com/datascience/"
 ).rstrip("/") + "/"
 html_scaled_image_link = False
 

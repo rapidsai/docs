@@ -1,11 +1,13 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 from docutils import nodes
+from sphinx.config import eval_config_file
 
 from extensions import rapids_docs
 from extensions.rapids_docs import api, lifecycle, notices, platform_support, releases, urls
@@ -104,6 +106,18 @@ def test_standard_jinja_syntax_and_raw_blocks() -> None:
     stable_version = app.rapids_portal_data["releases"]["stable"]["version"]
 
     assert rendered == stable_version + "\n${{ matrix.PY_VER }}\n"
+
+
+@pytest.mark.parametrize("base_url", [None, "https://docs.rapids.ai/"])
+def test_html_baseurl(monkeypatch: pytest.MonkeyPatch, base_url: str | None) -> None:
+    monkeypatch.delenv("RAPIDS_DOCS_BASE_URL", raising=False)
+    monkeypatch.delenv("DEPLOY_PRIME_URL", raising=False)
+    monkeypatch.setattr(sys, "path", sys.path.copy())
+    if base_url is not None:
+        monkeypatch.setenv("RAPIDS_DOCS_BASE_URL", base_url)
+
+    config = eval_config_file(ROOT / "sphinx" / "conf.py", tags=None)
+    assert config["html_baseurl"] == (base_url or "https://docs.nvidia.com/datascience/")
 
 
 def test_context_defaults_to_nvidia_portal() -> None:
