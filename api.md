@@ -1,13 +1,15 @@
-# RAPIDS API Documentation
+# NVIDIA CUDA-X for Data Science API Documentation
 
 Below are links to each library's documentation by release. Latest docs are built
 from the current development branch and may describe unreleased changes.
 
-## RAPIDS APIs
+## Our APIs
 
 {{ api_docs("apis") }}
 
-## RAPIDS Libraries
+
+
+## Our Libraries
 
 {{ api_docs("libs") }}
 

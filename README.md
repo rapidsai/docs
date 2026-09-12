@@ -1,7 +1,7 @@
-# NVIDIA RAPIDS Documentation
+# NVIDIA CUDA-X libraries for Data Science Documentation
 
 This repository contains the source for the
-[NVIDIA RAPIDS documentation site](https://docs.rapids.ai/). The site is built
+[NVIDIA CUDA-X libraries for data science documentation site](https://docs.nvidia.ai/datascience). The site is built
 with Sphinx and the NVIDIA Sphinx theme.
 
 ## Build the site
@@ -26,7 +26,7 @@ AWS profile named `rapids-docs`, then run:
 AWS_PROFILE=rapids-docs make full
 ```
 
-This applies the RAPIDS library/version selectors to the imported documentation.
+This applies the CUDA-X Library for Data Science and it's version selectors for its imported documentation.
 
 ## Validation
 
@@ -37,7 +37,7 @@ make check
 Run checks including linting, tests, and a local build.
 
 Pull requests opened against `rapidsai/docs` are copied to a
-`pull-request/<number>` branch by the RAPIDS copy-PR bot. That branch runs the
+`pull-request/<number>` branch by the copy-PR bot. That branch runs the
 same validation and dry-runs assembly of the complete S3-backed documentation
 tree without deploying it. Netlify's repository integration separately creates
 a site preview. Merges to `main` deploy the production site.
