@@ -79,7 +79,7 @@ html_theme_options = {
         }
     ],
     "navbar_align": "right",
-    "public_docs_features": os.environ.get("CI") == "true",
+    "public_docs_features": bool(os.environ.get("RAPIDS_DOCS_BASE_URL")),
     "show_toc_level": 2,
 }
 

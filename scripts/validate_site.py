@@ -94,7 +94,7 @@ def main() -> None:
     if "fa-twitter" in home or "fa-x-twitter" in home:
         missing.append("Twitter/X icon remains on the home page")
 
-    if os.environ.get("CI") == "true":
+    if os.environ.get("RAPIDS_DOCS_BASE_URL"):
         missing.extend(
             f"theme-injected telemetry missing from home page: {value}"
             for value in ("cdn.cookielaw.org", "assets.adobedtm.com")
