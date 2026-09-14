@@ -1,10 +1,13 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
 from docutils import nodes
+from sphinx.config import eval_config_file
 
 from extensions import rapids_docs
 from extensions.rapids_docs import api, lifecycle, notices, platform_support, releases, urls
@@ -105,6 +108,24 @@ def test_standard_jinja_syntax_and_raw_blocks() -> None:
     assert rendered == stable_version + "\n${{ matrix.PY_VER }}\n"
 
 
+@pytest.mark.parametrize("base_url", [None, "https://docs.rapids.ai/"])
+def test_html_baseurl(monkeypatch: pytest.MonkeyPatch, base_url: str | None) -> None:
+    monkeypatch.delenv("RAPIDS_DOCS_BASE_URL", raising=False)
+    monkeypatch.delenv("DEPLOY_PRIME_URL", raising=False)
+    monkeypatch.setattr(sys, "path", sys.path.copy())
+    if base_url is not None:
+        monkeypatch.setenv("RAPIDS_DOCS_BASE_URL", base_url)
+
+    config = eval_config_file(ROOT / "sphinx" / "conf.py", tags=None)
+    assert config["html_baseurl"] == (base_url or "https://docs.nvidia.com/datascience/")
+
+
+def test_context_defaults_to_nvidia_portal() -> None:
+    app = SimpleNamespace(rapids_portal_data={})
+
+    assert lifecycle._context(app)["site_baseurl"] == "https://docs.nvidia.com/datascience/"
+
+
 def test_toctree_url_rewriting() -> None:
     app = SimpleNamespace(
         config=SimpleNamespace(html_baseurl="https://docs.example.com/datascience/")
@@ -180,6 +201,37 @@ def test_absolute_url_rewriting() -> None:
         raw.astext()
         == '<a href="https://docs.example.com/datascience/notices/feed.xml"><img src="https://docs.example.com/datascience/assets/rss.svg"></a>'
     )
+
+
+@pytest.mark.parametrize("version_name", ["stable", "nightly"])
+def test_api_documentation_url_rewriting(version_name: str) -> None:
+    app = SimpleNamespace(
+        config=SimpleNamespace(html_baseurl="https://docs.nvidia.com/datascience/"),
+        rapids_portal_data=portal_data._load_data(APP),
+    )
+    migrated = nodes.reference(
+        "",
+        "cuDF guide",
+        refuri=f"/api/cudf/{version_name}/user_guide/10min/?source=portal#intro",
+    )
+    unmigrated = nodes.reference(
+        "",
+        "UCXX guide",
+        refuri=f"/api/ucxx/{version_name}/user_guide/",
+    )
+    doctree = nodes.container("", migrated, unmigrated)
+
+    urls._rewrite_absolute_urls(app, doctree, "user-guide/index")
+
+    target_version = (
+        "latest"
+        if version_name == "nightly"
+        else app.rapids_portal_data["releases"]["stable"]["version"]
+    )
+    assert migrated["refuri"] == (
+        f"https://docs.nvidia.com/cudf/{target_version}/user_guide/10min/?source=portal#intro"
+    )
+    assert unmigrated["refuri"] == f"https://docs.rapids.ai/api/ucxx/{version_name}/user_guide/"
 
 
 def test_theme_url_rewriting() -> None:

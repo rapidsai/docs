@@ -3,21 +3,31 @@ on:
   schedule:
     - cron: "0 9 * * *"
   workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "dry-run: build and log what would be published without uploading or flushing the CDN"
+        required: false
+        type: boolean
+        default: false
   push:
     branches:
       - main
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 defaults:
   run:
     shell: bash
 permissions:
-  id-token: write
   contents: read
+env:
+  DRY_RUN: ${{ inputs.dry-run || false }}
+  RAPIDS_DOCS_BASE_URL: https://docs.nvidia.com/datascience/
+  UPLOAD: ${{ github.ref == 'refs/heads/main' }}
 jobs:
   build:
-    name: Build (and deploy)
+    name: Build and publish NVIDIA docs portal
+    if: ${{ github.repository == 'rapidsai/docs' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -32,26 +42,77 @@ jobs:
         run: uv sync --locked
       - name: Build and validate portal
         run: make check
-      - uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 #v5.1.1
+      - name: Check out gha-tools
+        if: ${{ env.UPLOAD == 'true' }}
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: rapidsai/gha-tools
+          ref: main
+          path: gha-tools
+          persist-credentials: false
+          sparse-checkout: tools
+      - name: Add gha-tools to PATH
+        if: ${{ env.UPLOAD == 'true' }}
+        run: echo "${GITHUB_WORKSPACE}/gha-tools/tools" >> "${GITHUB_PATH}"
+      - name: Publish portal to NVIDIA docs
+        if: ${{ env.UPLOAD == 'true' }}
+        uses: rapidsai/shared-actions/publish-docs@82e2c50e4703a224de0bc8d0f6e5d12dcab68db7
+        with:
+          dry-run: ${{ env.DRY_RUN }}
+          source-path: _site
+          target-s3-key: datascience
+          target-s3-exclude: deployment/*
+          target-s3-bucket: ${{ secrets.NVIDIA_DOCS_S3_BUCKET }}
+          target-aws-access-key-id: ${{ secrets.NVIDIA_DOCS_AWS_ACCESS_KEY_ID }}
+          target-aws-secret-access-key: ${{ secrets.NVIDIA_DOCS_AWS_SECRET_ACCESS_KEY }}
+          target-aws-region: ${{ secrets.NVIDIA_DOCS_AWS_REGION }}
+          akamai-access-token: ${{ secrets.NVIDIA_DOCS_AKAMAI_ACCESS_TOKEN }}
+          akamai-client-secret: ${{ secrets.NVIDIA_DOCS_AKAMAI_CLIENT_SECRET }}
+          akamai-client-token: ${{ secrets.NVIDIA_DOCS_AKAMAI_CLIENT_TOKEN }}
+          akamai-emails-to-notify: ${{ secrets.NVIDIA_DOCS_AKAMAI_EMAILS_TO_NOTIFY }}
+          akamai-host: ${{ secrets.NVIDIA_DOCS_AKAMAI_HOST }}
+          akamai-request-name: rapidsai-docs-${{ github.run_id }}
+
+  compat:
+    name: Assemble and deploy docs.rapids.ai compatibility site
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Set up uv
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+        with:
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --locked
+      - name: Build and validate portal
+        run: make check
+      - name: Configure source AWS credentials
+        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
-          role-duration-seconds: 7200 # 2h
-      - name: Assemble complete documentation site
+          role-duration-seconds: 7200
+      - name: Assemble and validate API documentation
         run: make assemble
-      - name: Deploy site
+      - name: Generate compatibility redirects
+        run: |
+          uv run python scripts/generate_redirect_site.py \
+            --output _site/_redirects
+      - name: Deploy compatibility site to docs.rapids.ai
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_DOCS_SITE_ID }}
-          # TODO: use official netlify-cli pkg after https://github.com/netlify/cli/issues/1809
-          # is resolved and deployed.
         run: | # zizmor: ignore[adhoc-packages]
           npm install --global --force @aschmidt8/netlify-cli
-
-          ARGS=""
-          if [ "$GITHUB_REF_NAME" = "main" ]; then
-            ARGS="--prod"
+          # Only main publishes production; other refs and dry runs produce a draft deploy.
+          ARGS=()
+          if [[ "${UPLOAD}" == "true" && "${DRY_RUN}" != "true" ]]; then
+            ARGS+=(--prod)
           fi
-          netlify deploy "$ARGS" \
-            --debug \
-            --dir=_site
+          netlify deploy "${ARGS[@]}" --debug --dir=_site

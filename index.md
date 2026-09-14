@@ -36,7 +36,7 @@ you. Visit [RAPIDS.ai](https://rapids.ai) for more information on the overall pr
 :::
 
 :::{grid-item-card} <i class="fa-solid fa-cloud" aria-hidden="true"></i> Deployment Guides
-:link: /deployment/stable/
+:link: /deployment/latest/
 :link-type: url
 :::
 
@@ -84,7 +84,7 @@ Platform Support <platform-support/index>
 User Guide <user-guide/index>
 API Docs <api>
 Visualization Guide <visualization/index>
-Deployment Guides </deployment/stable/>
+Deployment Guides </deployment/latest/>
 Maintainer Docs <maintainers/index>
 contributing/index
 notices/index
