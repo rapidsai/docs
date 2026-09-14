@@ -150,7 +150,7 @@ Aside from the system requirements, other considerations for best performance in
 <div id="cloud-gpu"></div>
 
 ### Cloud Instance GPUs
-If you do not have access to GPU hardware, there are several cloud service providers (CSP) that are RAPIDS enabled. Learn how to deploy RAPIDS on AWS, Azure, GCP, and IBM cloud on our [Cloud Deployment Page](/deployment/stable/cloud/).
+If you do not have access to GPU hardware, there are several cloud service providers (CSP) that are RAPIDS enabled. Learn how to deploy RAPIDS on AWS, Azure, GCP, and IBM cloud on our [Cloud Deployment Page](/deployment/latest/cloud/).
 
 Several services also offer **free and limited** trials with GPU resources:
 - [Amazon SageMaker Studio Lab](https://studiolab.sagemaker.aws/)

@@ -95,12 +95,6 @@ def generate_redirects() -> str:
     rules.extend(
         [
             "",
-            "# Deployment docs are independently published below the datascience prefix.",
-            _rule(
-                "/deployment/*",
-                "https://docs.nvidia.com/datascience/deployment/:splat",
-            ),
-            "",
             "# Portal routes move beneath docs.nvidia.com/datascience.",
             _rule("/", "https://docs.nvidia.com/datascience/"),
             _rule("/api", "https://docs.nvidia.com/datascience/api/"),

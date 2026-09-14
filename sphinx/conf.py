@@ -67,6 +67,9 @@ html_baseurl = (
 html_scaled_image_link = False
 
 html_theme_options = {
+    "analytics": {
+        "google_analytics_id": "G-DLJNCEWKZD",
+    },
     "icon_links": [
         {
             "name": "GitHub",
@@ -76,23 +79,11 @@ html_theme_options = {
         }
     ],
     "navbar_align": "right",
+    "public_docs_features": os.environ.get("CI") == "true",
     "show_toc_level": 2,
 }
 
 html_css_files = ["css/custom.css"]
-html_js_files = [
-    (
-        "https://cdn.cookielaw.org/scripttemplates/otSDKStub.js",
-        {
-            "charset": "UTF-8",
-            "data-document-language": "true",
-            "data-domain-script": "018e2d71-40f3-7e89-90b8-e10ec6012ab0-test",
-        },
-    ),
-    "https://images.nvidia.com/aem-dam/Solutions/ot-js/ot-custom.js",
-    "https://assets.adobedtm.com/5d4962a43b79/814eb6e9b4e1/launch-4bc07f1e0b0b.min.js",
-    "js/portal-analytics.js",
-]
 
 copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
 copybutton_prompt_is_regexp = True

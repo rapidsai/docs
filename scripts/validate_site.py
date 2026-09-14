@@ -76,8 +76,6 @@ def main() -> None:
     required_branding = [
         "nvidia-logo-horiz",
         "https://github.com/rapidsai/docs",
-        "018e2d71-40f3-7e89-90b8-e10ec6012ab0-test",
-        "assets.adobedtm.com",
         "fa-download",
         "fa-list-check",
         "fa-book",
@@ -96,9 +94,14 @@ def main() -> None:
     if "fa-twitter" in home or "fa-x-twitter" in home:
         missing.append("Twitter/X icon remains on the home page")
 
-    analytics = (args.site / "_static" / "js" / "portal-analytics.js").read_text()
-    if "G-DLJNCEWKZD" not in analytics or "_satellite.pageBottom" not in analytics:
-        missing.append("GA4 or Adobe page-bottom telemetry is missing")
+    if os.environ.get("CI") == "true":
+        missing.extend(
+            f"theme-injected telemetry missing from home page: {value}"
+            for value in ("cdn.cookielaw.org", "assets.adobedtm.com")
+            if value not in home
+        )
+    if "G-DLJNCEWKZD" not in home:
+        missing.append("GA4 telemetry is missing from the home page")
 
     # Imported API docs may include upstream source links and template examples.
     # Limit portal-specific checks to portal pages.

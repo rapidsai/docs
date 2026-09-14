@@ -43,7 +43,7 @@ jobs:
       contents: read
       id-token: write
     env:
-      RAPIDS_DOCS_BASE_URL: https://docs.rapids.ai/
+      RAPIDS_DOCS_BASE_URL: https://docs.nvidia.com/datascience/
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -57,18 +57,6 @@ jobs:
         run: uv sync --locked
       - name: Build and validate portal
         run: make check
-      - name: Configure source AWS credentials
-        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
-        with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION }}
-          role-duration-seconds: 7200
-      - name: Assemble and validate API documentation
-        run: make assemble
-      - name: Generate compatibility redirects
-        run: |
-          uv run python scripts/generate_redirect_site.py \
-            --output _site/_redirects
       - name: Check out gha-tools
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -96,3 +84,15 @@ jobs:
           akamai-emails-to-notify: ${{ secrets.NVIDIA_DOCS_AKAMAI_EMAILS_TO_NOTIFY }}
           akamai-host: ${{ secrets.NVIDIA_DOCS_AKAMAI_HOST }}
           akamai-request-name: rapidsai-docs-${{ github.run_id }}
+      - name: Configure source AWS credentials
+        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-duration-seconds: 7200
+      - name: Assemble and validate API documentation
+        run: make assemble
+      - name: Generate compatibility redirects
+        run: |
+          uv run python scripts/generate_redirect_site.py \
+            --output _site/_redirects

@@ -13,7 +13,12 @@ def test_redirects_route_migrated_docs_and_portal() -> None:
 
     assert f"/api/cudf/stable/* https://docs.nvidia.com/cudf/{stable}/:splat 301!" in redirects
     assert f"/api/cudf/{stable} https://docs.nvidia.com/cudf/{stable}/ 301!" in redirects
-    assert "/deployment/* https://docs.nvidia.com/datascience/deployment/:splat 301!" in redirects
+    # Deployment redirects are hand-maintained in _redirects and target latest/.
+    assert (
+        "/deployment/stable/* https://docs.nvidia.com/datascience/deployment/latest/:splat 301!"
+        in redirects
+    )
+    assert "/deployment/*" not in redirects
     assert "/notices/* https://docs.nvidia.com/datascience/notices/:splat 301!" in redirects
     assert "/ https://docs.nvidia.com/datascience/ 301!" in redirects
     assert " 302!" not in redirects

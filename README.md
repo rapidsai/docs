@@ -34,13 +34,15 @@ Pull requests run validation and receive a Netlify preview.
 Merges to `main` and the daily scheduled workflow publish the portal to
 `docs.nvidia.com/datascience/` using the shared `publish-docs` action.
 The independently published `datascience/deployment/` subtree is excluded from
-uploads and deletions.
+uploads and deletions. A manual run with the `dry-run` input builds everything
+and skips the upload, the CDN flush, and the production Netlify deploy.
 
 ## Compatibility site
 
 `docs.rapids.ai` continues to host unmigrated API documentation and redirect
-migrated content. A separate [compatibility workflow](.github/workflows/deploy-redirects.yaml)
-imports the remaining API docs from S3 and publishes them to Netlify.
+migrated content. The `compat` job in the [deploy workflow](.github/workflows/deploy.yaml)
+imports the remaining API docs from S3 and publishes them to Netlify, and runs
+only after the portal publish to `docs.nvidia.com` has succeeded.
 
 ## Repository layout
 

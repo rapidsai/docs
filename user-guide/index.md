@@ -11,7 +11,7 @@ The RAPIDS data science framework is a collection of libraries for running end-t
  A repository with example notebooks and "getting started" code samples to help you integrate RAPIDS with the hyperparameter optimization services from Azure ML, AWS Sagemaker, Google Cloud, and Databricks.
 
 
-**<i class="fa-solid fa-wrench"></i> Tools and Guides for [RAPIDS Deployment](/deployment/stable/)**:
+**<i class="fa-solid fa-wrench"></i> Tools and Guides for [RAPIDS Deployment](/deployment/latest/)**:
  Deployment documentation to get you up and running with RAPIDS in AWS, GCP, Azure, IBM and more. Also includes guides for HPC, HPO, Kubernetes, Dask, and more.
 
 **<i class="fa-solid fa-database"></i> ETL and Dataframe Processing with [cuDF](https://github.com/rapidsai/cudf)**:
