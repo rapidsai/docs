@@ -54,6 +54,19 @@ def test_api_docs() -> None:
 
     libs = api._api_docs(data, "libs")
     assert "https://docs.nvidia.com/rapids-cmake/latest/" in libs
+    assert "https://docs.nvidia.com/cudf/latest/libcudf/" in libs
+    assert "https://docs.nvidia.com/kvikio/latest/cpp/" in libs
+    assert "https://docs.nvidia.com/rapidsmpf/latest/cpp/" in libs
+    if tuple(map(int, stable_version.split("."))) <= (26, 8):
+        assert f"[{stable_version}](https://docs.rapids.ai/api/libcudf/stable/)" in libs
+        assert f"[{stable_version}](https://docs.rapids.ai/api/libkvikio/stable/)" in libs
+        assert f"[{stable_version}](https://docs.rapids.ai/api/librapidsmpf/stable/)" in libs
+    else:
+        assert f"[{stable_version}](https://docs.nvidia.com/cudf/{stable_version}/libcudf/)" in libs
+        assert f"[{stable_version}](https://docs.nvidia.com/kvikio/{stable_version}/cpp/)" in libs
+        assert (
+            f"[{stable_version}](https://docs.nvidia.com/rapidsmpf/{stable_version}/cpp/)" in libs
+        )
     assert f"/{nightly_version}/" not in rendered + libs
 
     inactive = api._api_docs(data, "inactive-projects")
