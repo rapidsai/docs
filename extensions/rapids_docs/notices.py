@@ -13,6 +13,7 @@ from xml.etree import ElementTree
 from bs4 import BeautifulSoup
 
 from .dates import _date, _long_date
+from .routes import _site_url
 
 _NOTICE_STATUS_COLORS = {"blue", "green", "purple", "red", "yellow"}
 
@@ -103,11 +104,12 @@ def _build_rss(app, exception) -> None:
     ElementTree.SubElement(
         channel, "description"
     ).text = "Notices communicate and document changes in RAPIDS for contributors, developers, users, and the community."
-    ElementTree.SubElement(channel, "link").text = "https://docs.rapids.ai/notices/"
+    base_url = app.config.html_baseurl
+    ElementTree.SubElement(channel, "link").text = _site_url(base_url, "/notices/")
     ElementTree.SubElement(
         channel,
         "{http://www.w3.org/2005/Atom}link",
-        href="https://docs.rapids.ai/notices/feed.xml",
+        href=_site_url(base_url, "/notices/feed.xml"),
         rel="self",
         type="application/rss+xml",
     )
@@ -129,7 +131,7 @@ def _build_rss(app, exception) -> None:
         ElementTree.SubElement(item, "description").text = html.unescape(description)
         published = notice.get("notice_updated") or notice["notice_created"]
         ElementTree.SubElement(item, "pubDate").text = _rss_date(published)
-        url = f"https://docs.rapids.ai/notices/{Path(notice['docname']).name}/"
+        url = _site_url(base_url, f"/notices/{Path(notice['docname']).name}/")
         ElementTree.SubElement(item, "link").text = url
         ElementTree.SubElement(item, "guid", isPermaLink="true").text = url
         for category in [*notice.get("tags", []), *notice.get("categories", [])]:

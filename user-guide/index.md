@@ -10,9 +10,14 @@ The NVIDIA CUDA-X libraries for data science framework is a collection of librar
 **<i class="fa-solid fa-wrench"></i> Tools and Guides for [NVIDA CUDA-X Libraries for Data Science Deployment](https://docs.nvidia.com/datascience/deployment/latest/)**:
  Deployment documentation to get you up and running with NVIDIA CUDA-X libraries for data science in AWS, GCP, Azure, IBM and more. Also includes guides for HPC, HPO, Kubernetes, Dask, and more.
 
+
 **<i class="fa-solid fa-database"></i> ETL and Dataframe Processing with [cuDF](https://github.com/NVIDIA/cudf)**:
  Start with the [10 Minutes to cuDF and Dask-cuDF User Guide](https://docs.nvidia.com/cudf/latest/cudf/10min/). Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is geared mainly for new users. The [cuDF User Guide](https://docs.nvidia.com/cudf/latest/cudf/) is generally very extensive and helpful.
 
+
+**<i class="fa-solid fa-wrench"></i> Tools and Guides for [CUDA-X Deployment](https://docs.nvidia.com/datascience/deployment/latest/)**:
+ Deployment documentation to get you up and running on AWS, GCP, Azure, IBM and more. Also includes guides for HPC, HPO, Kubernetes, Dask, and more.
+ 
 
 **<i class="fa-solid fa-list"></i> Accelerated Machine Learning with [cuML](https://github.com/NVIDIA/cuml)**:
  Start with the [User Guide](/api/cuml/stable/user_guide/) and the [Estimator Intro](https://github.com/NVIDIA/cuml/blob/branch-{{ releases.stable.version }}/docs/source/estimator_intro.ipynb), showcasing basic machine learning for training and evaluating machine learning models in cuML. The [Intro and key concepts for cuML](/api/cuml/stable/cuml_intro/) is helpful as well.

@@ -84,7 +84,7 @@ Platform Support <platform-support/index>
 User Guide <user-guide/index>
 API Docs <api>
 Visualization Guide <visualization/index>
-Deployment Guides </deployment/stable/>
+Deployment Guides </deployment/latest/>
 Maintainer Docs <maintainers/index>
 notices/index
 ```

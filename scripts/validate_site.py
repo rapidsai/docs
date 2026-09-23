@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -66,11 +67,15 @@ def main() -> None:
         missing.append(f"{len(missing_search_notices)} individual notices are absent from search")
 
     home = (args.site / "index.html").read_text(errors="ignore")
+    expected_baseurl = os.environ.get(
+        "RAPIDS_DOCS_BASE_URL", "https://docs.nvidia.com/datascience/"
+    )
+    expected_baseurl = expected_baseurl.rstrip("/") + "/"
+    if f'<link rel="canonical" href="{expected_baseurl}"' not in home:
+        missing.append(f"home page canonical URL does not use {expected_baseurl}")
     required_branding = [
         "nvidia-logo-horiz",
         "https://github.com/rapidsai/docs",
-        "018e2d71-40f3-7e89-90b8-e10ec6012ab0-test",
-        "assets.adobedtm.com",
         "fa-download",
         "fa-list-check",
         "fa-book",
@@ -89,12 +94,17 @@ def main() -> None:
     if "fa-twitter" in home or "fa-x-twitter" in home:
         missing.append("Twitter/X icon remains on the home page")
 
-    analytics = (args.site / "_static" / "js" / "portal-analytics.js").read_text()
-    if "G-DLJNCEWKZD" not in analytics or "_satellite.pageBottom" not in analytics:
-        missing.append("GA4 or Adobe page-bottom telemetry is missing")
+    if os.environ.get("RAPIDS_DOCS_BASE_URL"):
+        missing.extend(
+            f"theme-injected telemetry missing from home page: {value}"
+            for value in ("cdn.cookielaw.org", "assets.adobedtm.com")
+            if value not in home
+        )
+    if "G-DLJNCEWKZD" not in home:
+        missing.append("GA4 telemetry is missing from the home page")
 
     # Imported API docs may include upstream source links and template examples.
-    # Limit portal-specific checks to portal and deployment pages.
+    # Limit portal-specific checks to portal pages.
     html_files = [
         path
         for path in args.site.rglob("*.html")
@@ -113,13 +123,35 @@ def main() -> None:
     if markdown_links:
         missing.append("same-site Markdown links remain:\n  " + "\n  ".join(markdown_links))
 
+    if expected_baseurl == "https://docs.nvidia.com/datascience/":
+        misplaced_api_links = []
+        legacy_portal_links = []
+        for path in html_files:
+            text = path.read_text(errors="ignore")
+            if re.search(
+                r"https://docs\.nvidia\.com/datascience/api/[^\"']+/(legacy|stable|nightly)/",
+                text,
+            ):
+                misplaced_api_links.append(str(path.relative_to(args.site)))
+            if re.search(r"https://docs\.rapids\.ai/(?!api/)", text):
+                legacy_portal_links.append(str(path.relative_to(args.site)))
+        if misplaced_api_links:
+            missing.append(
+                "migrated API links incorrectly point below /datascience/api in: "
+                + ", ".join(misplaced_api_links)
+            )
+        if legacy_portal_links:
+            missing.append(
+                "portal links still point to docs.rapids.ai in: " + ", ".join(legacy_portal_links)
+            )
+
     if args.full:
         full_paths = [
+            "api/cudf/legacy",
+            "api/dask-cudf/legacy",
             "api/ucxx/stable",
             "api/ucxx/latest",
             "api/ucxx/nightly",
-            "deployment/stable/index.html",
-            "deployment/nightly/index.html",
         ]
         missing.extend(relative for relative in full_paths if not (args.site / relative).exists())
 

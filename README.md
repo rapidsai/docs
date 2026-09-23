@@ -1,7 +1,6 @@
 # NVIDIA CUDA-X libraries for Data Science Documentation
 
-This repository contains the source for the
-[NVIDIA CUDA-X libraries for data science documentation site](https://docs.nvidia.ai/datascience). The site is built
+This repository contains the source for the [NVIDIA CUDA-X libraries for data science documentation site](https://docs.nvidia.ai/datascience). The site is built
 with Sphinx and the NVIDIA Sphinx theme.
 
 ## Build the site
@@ -16,31 +15,33 @@ make serve
 The rendered site is written to `_site`. The server uses port 8000 by default;
 override it with `PORT` (for example, `make serve PORT=8080`).
 
-## Build the full site
-
-The complete docs site imports versioned API documentation and the deployment
-documentation from the private `rapidsai-docs` S3 bucket. Configure a read-only
-AWS profile named `rapids-docs`, then run:
-
-```shell
-AWS_PROFILE=rapids-docs make full
-```
-
-This applies the CUDA-X Library for Data Science and it's version selectors for its imported documentation.
+Builds use `https://docs.nvidia.com/datascience/` as the default base URL.
+Set `RAPIDS_DOCS_BASE_URL` to override it.
 
 ## Validation
+
+Run linting, tests, a strict Sphinx build, and rendered-site validation:
 
 ```shell
 make check
 ```
 
-Run checks including linting, tests, and a local build.
+This applies the CUDA-X Library for Data Science and it's version selectors for its imported documentation.
 
-Pull requests opened against `rapidsai/docs` are copied to a
-`pull-request/<number>` branch by the RAPIDS copy-PR bot. That branch runs the
-same validation and dry-runs assembly of the complete S3-backed documentation
-tree without deploying it. Netlify's repository integration separately creates
-a site preview. Merges to `main` deploy the production site.
+## Publishing
+
+Merges to `main` and the daily scheduled workflow publish the portal to
+`docs.nvidia.com/datascience/` using the shared `publish-docs` action.
+The independently published `datascience/deployment/` subtree is excluded from
+uploads and deletions. A manual run with the `dry-run` input builds everything
+and skips the upload, the CDN flush, and the production Netlify deploy.
+
+## Compatibility site
+
+`docs.rapids.ai` continues to host unmigrated API documentation and redirect
+migrated content. The `compat` job in the [deploy workflow](.github/workflows/deploy.yaml)
+imports the remaining API docs from S3 and publishes them to Netlify, and runs
+only after the portal publish to `docs.nvidia.com` has succeeded.
 
 ## Repository layout
 
