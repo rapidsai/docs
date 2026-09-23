@@ -11,7 +11,7 @@ The NVIDIA CUDA-X libraries for data science framework is a collection of librar
  Deployment documentation to get you up and running with NVIDIA CUDA-X libraries for data science in AWS, GCP, Azure, IBM and more. Also includes guides for HPC, HPO, Kubernetes, Dask, and more.
 
 **<i class="fa-solid fa-database"></i> ETL and Dataframe Processing with [cuDF](https://github.com/NVIDIA/cudf)**:
- Start with the [10 Minutes to cuDF and Dask-cuDF User Guide](/api/cudf/stable/user_guide/10min/). Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is geared mainly for new users. The [cuDF User Guide](/api/cudf/stable/user_guide/index/) is generally very extensive and helpful.
+ Start with the [10 Minutes to cuDF and Dask-cuDF User Guide](https://docs.nvidia.com/cudf/latest/cudf/10min/). Modeled after 10 Minutes to Pandas, this is a short introduction to cuDF that is geared mainly for new users. The [cuDF User Guide](https://docs.nvidia.com/cudf/latest/cudf/) is generally very extensive and helpful.
 
 
 **<i class="fa-solid fa-list"></i> Accelerated Machine Learning with [cuML](https://github.com/NVIDIA/cuml)**:
