@@ -22,7 +22,6 @@ REQUIRED_PAGES = [
     "SECURITY.md",
     "404.html",
     "api/index.html",
-    "contributing/index.html",
     "install/index.html",
     "maintainers/index.html",
     "notices/index.html",
