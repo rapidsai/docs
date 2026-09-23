@@ -20,7 +20,7 @@ NVIDIA CUDA-X libraries for data science can easily fit in visualization workflo
 
 ## GPU Accelerated Interaction
 
-The below libraries directly use cuDF/Dask-cuDF and/or cuSpatial to create charts that support accelerated crossfiltering or rendering:
+The below libraries directly use NVIDIA cuDF/Dask-cuDF and/or cuSpatial to create charts that support accelerated crossfiltering or rendering:
 - **[Holoviews with Linked Brushing User Guide](https://holoviews.org/user_guide/Linked_Brushing.html?highlight=linked%20brushing)**
 - **[Datashader User Guide](https://datashader.org/user_guide/Performance.html)**
 - **[Plotly Dash with Holoviews Docs](https://dash.plotly.com/holoviews#gpu-accelerating-datashader-and-linked-selections-with-rapids)**

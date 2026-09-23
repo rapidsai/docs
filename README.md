@@ -37,7 +37,7 @@ make check
 Run checks including linting, tests, and a local build.
 
 Pull requests opened against `rapidsai/docs` are copied to a
-`pull-request/<number>` branch by the copy-PR bot. That branch runs the
+`pull-request/<number>` branch by the RAPIDS copy-PR bot. That branch runs the
 same validation and dry-runs assembly of the complete S3-backed documentation
 tree without deploying it. Netlify's repository integration separately creates
 a site preview. Merges to `main` deploy the production site.

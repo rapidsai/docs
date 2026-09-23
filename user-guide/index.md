@@ -18,7 +18,7 @@ The NVIDIA CUDA-X libraries for data science framework is a collection of librar
  Start with the [User Guide](/api/cuml/stable/user_guide/) and the [Estimator Intro](https://github.com/NVIDIA/cuml/blob/branch-{{ releases.stable.version }}/docs/source/estimator_intro.ipynb), showcasing basic machine learning for training and evaluating machine learning models in cuML. The [Intro and key concepts for cuML](/api/cuml/stable/cuml_intro/) is helpful as well.
 
 
-**<i class="fa-solid fa-code-branch"></i> Graph Analytics with [cuGraph](https://github.com/NVIDIA/cugraph)**:
+**<i class="fa-solid fa-code-branch"></i> Graph Analytics with [cuGraph](https://github.com/rapidsai/cugraph)**:
  Start with the [Easy Path](/api/cugraph/stable/basics/nx_transition/#easy-path-use-networkx-graph-objects-accelerated-algorithms) to use NetworkX graph objects with accelerated algorithms. Or, use [nx-cugraph](/api/cugraph/stable/nx_cugraph/nx_cugraph/) to use the NetworkX API with a zero code change GPU accelerated backend. There is also a general [cuGraph Introduction](/api/cugraph/stable/basics/cugraph_intro/).
 
 
