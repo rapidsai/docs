@@ -1,6 +1,6 @@
 # NVIDIA CUDA-X libraries for data science Documentation and Resources
 
-This site serves to unify the documentation for NVIDIA Acclerated Data Science Libraries. Whether you're new here,
+This site serves to unify the documentation for NVIDIA Accelerated Data Science Libraries. Whether you're new here,
 looking to contribute, or are a part of NVIDIA's Data Science team, the docs here will help guide
 you. Visit [the NVIDIA CUDA-X libraries for data science site](https://developer.nvidia.com/topics/ai/data-science/cuda-x-for-data-science?size=n_6_n&sort-field=featured&sort-direction=desc) for more information on the overall project.
 
