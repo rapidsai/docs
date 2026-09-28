@@ -1,4 +1,4 @@
-# Contributing to RAPIDS Docs
+# Contributing to the Documentation
 
 ## Environment setup
 
@@ -49,7 +49,7 @@ AWS_PROFILE=rapids-docs make full
 
 This builds the Sphinx portal into `_site`, downloads the imported
 documentation, creates the stable, latest, nightly, and legacy aliases, adds
-the RAPIDS library and version selectors, and validates the assembled site.
+the library and version selectors, and validates the assembled site.
 Serve the result without rebuilding it with:
 
 ```shell
@@ -58,7 +58,7 @@ make serve
 
 ## PR submissions
 
-Submit changes as a pull request to `rapidsai/docs`. The RAPIDS copy-PR bot
+Submit changes as a pull request to `rapidsai/docs`. The copy-PR bot
 copies the pull request head to a `pull-request/<number>` branch in the upstream
 repository. CI validates that branch and dry-runs assembly of the complete
 S3-backed documentation site without deploying it. Netlify's repository

@@ -2,7 +2,7 @@
 
 ## API docs
 
-The site's `/api` page links to API documentation for many RAPIDS projects.
+The site's `/api` page links to API documentation for many projects.
 
 Those API docs are built in CI of the individual projects, published to object storage,
 then pulled into builds here and integrated into the rest of the docs site.
@@ -24,7 +24,7 @@ That script is reused by other automation to determine which projects and versio
 
 ### Step 2: download API docs
 
-All of the API docs for RAPIDS projects are uploaded to an S3 bucket from those projects' CI.
+All of the API docs for these projects are uploaded to an S3 bucket from those projects' CI.
 
 To integrate them into the docs site, they need to be downloaded and placed in `_site/api/` locally.
 

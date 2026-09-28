@@ -36,7 +36,7 @@ To learn more about each step, keep reading.
 
 Building the API docs requires answering these questions:
 
-* which RAPIDS projects?
+* which projects?
 * what version types? (stable? legacy? nightly?)
 * what version numbers correspond to those version types?
 
@@ -96,7 +96,7 @@ $ tree -L 2 ./_site/api
 
 ### Generate Library Map
 
-One of the ways we customize the documentation files is by adding dropdown selectors to each doc page that allows visitors to select and navigate between RAPIDS libraries and their versions.
+One of the ways we customize the documentation files is by adding dropdown selectors to each doc page that allows visitors to select and navigate between libraries and their versions.
 
 In order to know what page a user will be directed to upon selection, a map of available libraries and versions needs to be generated.
 [lib_map.sh](lib_map.sh) generates this map.
@@ -136,9 +136,9 @@ An excerpt of the generated JSON file is shown below:
 It adds the following elements to each documentation page:
 
 - A _Home_ button that links to https://docs.rapids.ai/api
-- A _library_ selector that enables navigation to different RAPIDS libraries
+- A _library_ selector that enables navigation to different libraries
   - The library selector excludes inactive projects, hidden projects, and projects without stable or nightly docs.
-- A _version_ selector that enables navigation to the different versions of each RAPIDS library
+- A _version_ selector that enables navigation to the different versions of each library
 - A `link` tag that points to [custom.css](/assets/css/custom.css) in the file's `head`
   - Pages using NVIDIA Sphinx Theme receive [custom_nvidia.css](/assets/css/custom_nvidia.css) instead, limited to the injected selector styles.
 - A `script` tag that points to [custom.js](/assets/js/custom.js) at the end the file's `body`

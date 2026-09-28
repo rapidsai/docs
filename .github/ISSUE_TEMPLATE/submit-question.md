@@ -1,6 +1,6 @@
 ---
 name: Submit question
-about: Ask a general question about RAPIDS
+about: Ask a general question about the libraries
 title: "[QST]"
 labels: "? - Needs Triage, question"
 assignees: ''

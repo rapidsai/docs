@@ -2,7 +2,7 @@
 
 ## Overview
 
-The RAPIDS team collects build-time and test-time telemetry from our CI jobs.
+The team collects build-time and test-time telemetry from our CI jobs.
 These data are used to provide insights into potential speed impacts and
 optimizations that might be worthwhile.
 
@@ -131,7 +131,7 @@ and add possible variables of interest to the stash. Extra variables of interest
 capture metadata for that particular job, such as CUDA version, Python version,
 CPU arch, or run-specific output such as sccache statistics. You should not
 generally need to change shared-actions or shared-workflows when maintaining
-other RAPIDS repositories. The content below is only necessary for someone looking to
+other project repositories. The content below is only necessary for someone looking to
 change or improve something like:
 
 * Adding new metadata to associate with a job
@@ -232,7 +232,7 @@ point to your desired tempo instance.
   Deployed using K8s as [part of a larger helm chart with many
   pieces](https://github.com/nv-gha-runners/arc-nvks-argocd/tree/main/prometheus).
 
-This is an implementation detail of Tempo. The RAPIDS ops team currently has
+This is an implementation detail of Tempo. The operations team currently has
 Tempo backed by S3 to avoid ongoing upkeep requirements of a database server.
 
 #### Grafana dashboards
@@ -260,7 +260,7 @@ Grafana has something called ["dashboard
 variables,"](https://grafana.com/docs/grafana/latest/dashboards/variables/)
 which serve to select some value for a particular dimension. Using this as the
 input to the data filters makes it easy to make multiple plots for different
-values of the variable (e.g. different machine labels or different RAPIDS repos)
+values of the variable (e.g. different machine labels or different project repositories)
 
 There is a gotcha with variables. Grafana has a way of automatically detecting
 values for variables - the "Query" variable type. This is the same as Tempo's [search tag values
