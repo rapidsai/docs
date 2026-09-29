@@ -66,10 +66,10 @@ Note that if you installed conda with [Miniforge](https://conda-forge.org/downlo
 In general [mixing `conda-forge` and `defaults` channels is not supported](https://conda-forge.org/docs/user/transitioning_from_defaults/). The packages are published to a separate `rapidsai` channel that is designed for compatibility with `conda-forge`, not `defaults`.
 
 #### Docker Issues
-<i class="fas fa-exclamation-triangle"></i> The `23.08` release brought significant Docker changes. <br/>
+<i class="fas fa-exclamation-triangle"></i> RAPIDS `23.08` brought significant Docker changes. <br/>
 To learn more about these changes, please see the [RAPIDS Container README](https://hub.docker.com/r/rapidsai/base). Some key notes below:
 - `Development` images are no longer being published; development now uses [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers)
-  - See cuDF for an example and information on [using Dev Containers](https://github.com/rapidsai/cudf/tree/main/.devcontainer)
+  - See cuDF for an example and information on [using Dev Containers](https://github.com/NVIDIA/cudf/tree/main/.devcontainer)
 - All images are Ubuntu-based
   - CUDA 12.5+ images use Ubuntu 24.04
   - All other images use Ubuntu 22.04
@@ -106,7 +106,7 @@ See the WSL2 setup [troubleshooting section](#wsl2-troubleshooting).
 
 ## System Requirements
 ### OS / GPU Driver / CUDA Versions
-All provisioned systems must meet the requirements below for the current release. For requirements of historical RAPIDS versions, see [Platform Support](/platform-support/).
+All provisioned systems must meet the requirements below for the current release. For requirements of historical releases, see [Platform Support](/platform-support/).
 
 <i class="fas fa-microchip"></i> **GPU:** NVIDIA Volta™ or higher with [compute capability](https://developer.nvidia.com/cuda-gpus) 7.0+
 - <i class="fas fa-exclamation-triangle"></i> Pascal™ GPU support was [removed in 24.02](/notices/rsn0034/). Compute capability 7.0+ is required for version 24.02 and later.
@@ -333,13 +333,13 @@ print(cudf.Series([1, 2, 3]))
 <div id="source"></div>
 
 ### Build from Source
-To build from source, find the library in the [project's GitHub organization](https://github.com/rapidsai). Libraries provide guidance on building from source in `README.md` or `CONTRIBUTING.md`. If additional help is needed, file an issue on GitHub or reach out on our [Slack channel](https://rapids.ai/slack-invite).
+To build from source, find the library in the project's GitHub. Libraries provide guidance on building from source in `README.md` or `CONTRIBUTING.md`. If additional help is needed, file an issue on GitHub or reach out on our [Slack channel](https://rapids.ai/slack-invite).
 
 
 <hr/>
 <div id="next-steps"></div>
 
 ## Next Steps
-After installing the libraries, the best place to get started is our [User Guide](/user-guide). Our [project website](https://rapids.ai/) also provides a great deal of information, as do our [Blog Page](https://medium.com/rapids-ai) and the [NVIDIA Developer Blog](https://developer.nvidia.com/blog/?search_posts_filter=rapids). We are also available on our [Slack channel](https://rapids.ai/slack-invite).
+After installing the libraries, the best place to get started is our [User Guide](/user-guide). [NVIDIA CUDA-X data science website](https://docs.nvidia.com/datascience/) also provides a great deal of information, and the [NVIDIA Developer Blog](https://developer.nvidia.com/blog/?search_posts_filter=rapids). We are also available on our [Slack channel](https://rapids.ai/slack-invite).
 
 <br/><br/>
