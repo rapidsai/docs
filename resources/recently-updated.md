@@ -39,6 +39,6 @@ recently_updated: true
 recently_updated_threshold: 5
 ```
 
-Because these repositories use squash commits for pull requests, the `recently_updated_threshold` value effectively means "how many pull requests have been merged into the source repository since the current pull request was last updated".
+Because these repositories use squash commits for pull requests, the `recently_updated_threshold` value effectively means "how many pull requests have been merged into the source repository since the current pull request was last updated."
 
 For more specific control over which commits need to be merged into pull requests, see [merge barriers](/resources/merge-barriers/).

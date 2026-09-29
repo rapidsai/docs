@@ -2,7 +2,7 @@
 
 ## Overview
 
-The team collects build-time and test-time telemetry from our CI jobs.
+CI jobs collect build-time and test-time telemetry.
 These data are used to provide insights into potential speed impacts and
 optimizations that might be worthwhile.
 

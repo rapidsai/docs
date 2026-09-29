@@ -2,7 +2,7 @@
 
 ## API docs
 
-The site's `/api` page links to API documentation for many projects.
+The site's `/api` page links to API documentation for many CUDA-X projects.
 
 Those API docs are built in CI of the individual projects, published to object storage,
 then pulled into builds here and integrated into the rest of the docs site.
