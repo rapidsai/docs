@@ -4,7 +4,7 @@ NVIDIA CUDA-X libraries for data science can easily fit in visualization workflo
 
 <img src="/assets/images/datashader-census-rapids.png" width="870px" class="visualization-hero">
 
-*[330 million+ datapoints rendered in under 1.5s via RAPIDS + Plotly Dash 2020 Census Demo](https://github.com/rapidsai/plotly-dash-rapids-census-demo)*
+*[330 million+ datapoints rendered in under 1.5s with cuDF and Plotly Dash in the 2020 Census demo](https://github.com/rapidsai/plotly-dash-rapids-census-demo)*
 
 ## Featured Libraries
 - **[HoloViews](#holoviews):** Declarative objects for quickly building complex interactive plots from high-level specifications. Directly uses cuDF.

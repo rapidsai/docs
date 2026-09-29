@@ -2,7 +2,7 @@
 
 ## Overview
 
-Summary of _Label Checker_ GitHub check used by some RAPIDS projects.
+Summary of _Label Checker_ GitHub check used by some projects.
 
 ### Intended audience
 
@@ -16,7 +16,7 @@ Summary of _Label Checker_ GitHub check used by some RAPIDS projects.
 
 ## Summary
 
-Some RAPIDS repositories have a _Label Checker_ check on GitHub pull requests. The _Label Checker_ helps ensure that each pull request can be categorized correctly in our automated changelogs that get published for each release (i.e. [cudf v21.06.00](https://github.com/rapidsai/cudf/releases/tag/v21.06.00)).
+Some project repositories have a _Label Checker_ check on GitHub pull requests. The _Label Checker_ helps ensure that each pull request can be categorized correctly in our automated changelogs that get published for each release (i.e. [cudf v21.06.00](https://github.com/rapidsai/cudf/releases/tag/v21.06.00)).
 
 In order for the _Label Checker_ check to pass, pull requests must include **one** label from **each** of the following categories:
 

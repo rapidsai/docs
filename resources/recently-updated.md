@@ -26,7 +26,7 @@ As a compromise, the _Recently Updated_ check has been introduced to ensure that
 
 This method doesn't guarantee that breaking changes will not be introduced, but it does help provide some assurances that pull requests aren't significantly out-of-date (similar to how testing merge commits work).
 
-Additional testing confidence comes from RAPIDS' nightly testing, which tests the _HEAD_ commit of each development branch.
+Additional testing confidence comes from nightly testing, which tests the _HEAD_ commit of each development branch.
 
 The _Recently Updated_ check is configurable by editing the following values in the `.github/ops-bot.yaml` file:
 
@@ -39,6 +39,6 @@ recently_updated: true
 recently_updated_threshold: 5
 ```
 
-Note that since RAPIDS uses squash commits for pull requests, the `recently_updated_threshold` value effectively means "how many pull requests have been merge into the source repository since the current pull request has last been updated".
+Because these repositories use squash commits for pull requests, the `recently_updated_threshold` value effectively means "how many pull requests have been merged into the source repository since the current pull request was last updated."
 
 For more specific control over which commits need to be merged into pull requests, see [merge barriers](/resources/merge-barriers/).

@@ -1,6 +1,6 @@
-# RAPIDS Maintainers Docs
+# Maintainer Documentation
 
-RAPIDS projects use an established set of guidelines and procedures. These are
+The projects use an established set of guidelines and procedures. These are
 available for the community to review and provide feedback on.
 
 ## Intended audience
