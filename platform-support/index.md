@@ -1,10 +1,10 @@
-# RAPIDS Platform Support
+# Platform Support
 
-RAPIDS libraries are supported on a specific set of platforms for each release. RAPIDS
-depends on CUDA and Python, and each release is built and tested against specific
+The libraries are supported on a specific set of platforms for each release. They
+depend on CUDA and Python, and each release is built and tested against specific
 versions of these dependencies.
 
-RAPIDS uses [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/) to
+The libraries use [CUDA compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/) to
 support a range of CUDA toolkit and driver versions. The NVIDIA Developer documentation
 contains a [Compute Capability](https://developer.nvidia.com/cuda-gpus) reference for
 each GPU architecture. Newer GPUs are supported through

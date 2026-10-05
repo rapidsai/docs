@@ -12,7 +12,7 @@ Summary of the automated merge process used for pull requests.
 
 ## Summary
 
-Some RAPIDS repositories use an auto-merger to merge pull requests. The auto-merger serves two purposes:
+Some project repositories use an auto-merger to merge pull requests. The auto-merger serves two purposes:
 
 1. Ensures all merged pull requests have consistent and useful commit messages
 2. Allows pull request merges to be scheduled to occur when all merge criteria (below) are satisfied

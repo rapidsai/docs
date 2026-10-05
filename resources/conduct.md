@@ -2,7 +2,7 @@
 
 ## Overview
 
-Define the code of conduct followed and enforced for all RAPIDS projects.
+Define the code of conduct followed and enforced for all projects.
 
 ### Intended audience
 

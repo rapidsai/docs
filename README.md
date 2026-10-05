@@ -1,7 +1,6 @@
-# NVIDIA RAPIDS Documentation
+# NVIDIA CUDA-X libraries for Data Science Documentation
 
-This repository contains the source for the
-[NVIDIA RAPIDS documentation site](https://docs.nvidia.com/datascience/). The site is built
+This repository contains the source for the [NVIDIA CUDA-X libraries for data science documentation site](https://docs.nvidia.ai/datascience). The site is built
 with Sphinx and the NVIDIA Sphinx theme.
 
 ## Build the site
@@ -27,7 +26,7 @@ Run linting, tests, a strict Sphinx build, and rendered-site validation:
 make check
 ```
 
-Pull requests run validation and receive a Netlify preview.
+This applies the CUDA-X Library for Data Science and it's version selectors for its imported documentation.
 
 ## Publishing
 
