@@ -293,6 +293,7 @@ Windows users can use NVIDIA CUDA-X libraries for data science on their local ma
 6. Run this code to check that the installation is working:
 ```python
 import cudf
+
 print(cudf.Series([1, 2, 3]))
 ```
 
@@ -309,6 +310,7 @@ print(cudf.Series([1, 2, 3]))
 6. Inside the Docker instance, run this code to check that the installation is working:
 ```python
 import cudf
+
 print(cudf.Series([1, 2, 3]))
 ```
 
@@ -326,6 +328,7 @@ print(cudf.Series([1, 2, 3]))
 6. Run this code to check that the installation is working:
 ```python
 import cudf
+
 print(cudf.Series([1, 2, 3]))
 ```
 <br/>
