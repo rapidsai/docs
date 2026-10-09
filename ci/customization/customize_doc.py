@@ -20,7 +20,6 @@ SCRIPT_TAG_ID = "rapids-selector-js"
 PIXEL_SRC_TAG_ID = "rapids-selector-pixel-src"
 PIXEL_INVOCATION_TAG_ID = "rapids-selector-pixel-invocation"
 STYLE_TAG_ID = "rapids-selector-css"
-NVIDIA_STYLE_TAG_ID = "nvidia-selector-css"
 FA_TAG_ID = "rapids-fa-tag"
 
 LIB_PATH_DICT = None
@@ -260,30 +259,14 @@ def create_pixel_tags(soup):
     return [head_tag, body_tag]
 
 
-def create_css_link_tag(soup, *, is_nvidia_theme: bool):
+def create_css_link_tag(soup):
     """
     Creates and returns the stylesheet tag for the injected selectors.
     """
-    if is_nvidia_theme:
-        return soup.new_tag(
-            "link",
-            id=NVIDIA_STYLE_TAG_ID,
-            rel="stylesheet",
-            href="/assets/css/custom_nvidia.css",
-        )
-
     script_tag = soup.new_tag(
         "link", id=STYLE_TAG_ID, rel="stylesheet", href="/assets/css/custom.css"
     )
     return script_tag
-
-
-def delete_rapids_custom_css_links(links):
-    """
-    Deletes global RAPIDS custom CSS links from NVIDIA-themed pages.
-    """
-    for link in links:
-        link.extract()
 
 
 def delete_existing_elements(elements, *, doc_type: str, reference_el):
@@ -297,32 +280,20 @@ def delete_existing_elements(elements, *, doc_type: str, reference_el):
         if table := reference_el.find("table", recursive=False):
             table.extract()
 
-    if doc_type == "jtd":
-        if version := reference_el.find(class_="version"):
-            version.extract()
-        if home_button := reference_el.find(
-            lambda tag: {"icon", "icon-home"}.issubset(tag.get("class", []))
-        ):
-            home_button.extract()
-
 
 def inspect_document(soup, *, filepath: str):
     """Collects theme and customization state in one document traversal."""
     removable_ids = {
-        "rapids-jtd-container",
         "rapids-pydata-container",
         "rapids-doxygen-container",
         SCRIPT_TAG_ID,
         STYLE_TAG_ID,
-        NVIDIA_STYLE_TAG_ID,
         FA_TAG_ID,
         PIXEL_SRC_TAG_ID,
         PIXEL_INVOCATION_TAG_ID,
     }
     existing_elements = []
-    rapids_css_links = []
     references = {}
-    is_nvidia_theme = False
 
     for element in soup.find_all(True):
         element_id = element.get("id")
@@ -330,27 +301,17 @@ def inspect_document(soup, *, filepath: str):
             existing_elements.append(element)
 
         classes = element.get("class", [])
-        if "wy-side-nav-search" in classes and "jtd" not in references:
-            references["jtd"] = element
-        elif element_id == "titlearea" and "doxygen" not in references:
+        if element_id == "titlearea" and "doxygen" not in references:
             references["doxygen"] = element
         elif "bd-sidebar" in classes and "pydata" not in references:
             references["pydata"] = element
 
-        if element.name == "link" and (href := element.get("href")):
-            if "nvidia-sphinx-theme" in href:
-                is_nvidia_theme = True
-            if element_id not in removable_ids and href.endswith("/assets/css/custom.css"):
-                rapids_css_links.append(element)
-
-    for doc_type in ("jtd", "doxygen", "pydata"):
+    for doc_type in ("doxygen", "pydata"):
         if doc_type in references:
             return (
                 doc_type,
                 references[doc_type],
-                is_nvidia_theme,
                 existing_elements,
-                rapids_css_links,
             )
 
     raise UnsupportedThemeError(
@@ -387,9 +348,7 @@ def main(
         (
             doc_type,
             reference_el,
-            is_nvidia_theme,
             existing_elements,
-            rapids_css_links,
         ) = inspect_document(soup, filepath=filepath)
     except UnsupportedThemeError as err:
         print(f"{str(err)}", file=sys.stderr)
@@ -401,8 +360,6 @@ def main(
         doc_type=doc_type,
         reference_el=reference_el,
     )
-    if is_nvidia_theme:
-        delete_rapids_custom_css_links(rapids_css_links)
 
     # Add Font Awesome to Doxygen for icons
     if doc_type == "doxygen":
@@ -431,7 +388,7 @@ def main(
     container = soup.new_tag("div", id=f"rapids-{doc_type}-container")
     script_tag = create_script_tag(soup)
     [pix_head_tag, pix_body_tag] = create_pixel_tags(soup)
-    style_tab = create_css_link_tag(soup, is_nvidia_theme=is_nvidia_theme)
+    style_tab = create_css_link_tag(soup)
 
     # Append elements to container
     container.append(home_btn_container)
