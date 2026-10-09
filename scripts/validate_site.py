@@ -34,7 +34,6 @@ REQUIRED_PAGES = [
     "resources/index.html",
     "user-guide/index.html",
     "visualization/index.html",
-    "assets/css/custom_nvidia.css",
     "assets/js/custom.js",
     "licenses/CubinLinker.txt",
     "licenses/cugraph-ops-EULA.txt",
