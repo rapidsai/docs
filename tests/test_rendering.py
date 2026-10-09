@@ -58,9 +58,11 @@ def test_api_docs() -> None:
     assert "https://docs.nvidia.com/kvikio/latest/cpp/" in libs
     assert "https://docs.nvidia.com/rapidsmpf/latest/cpp/" in libs
     if tuple(map(int, stable_version.split("."))) <= (26, 8):
-        assert f"[{stable_version}](https://docs.rapids.ai/api/libcudf/stable/)" in libs
-        assert f"[{stable_version}](https://docs.rapids.ai/api/libkvikio/stable/)" in libs
-        assert f"[{stable_version}](https://docs.rapids.ai/api/librapidsmpf/stable/)" in libs
+        assert f"[{stable_version}](https://docs.rapids.ai/api/libcudf/{stable_version}/)" in libs
+        assert f"[{stable_version}](https://docs.rapids.ai/api/libkvikio/{stable_version}/)" in libs
+        assert (
+            f"[{stable_version}](https://docs.rapids.ai/api/librapidsmpf/{stable_version}/)" in libs
+        )
     else:
         assert f"[{stable_version}](https://docs.nvidia.com/cudf/{stable_version}/libcudf/)" in libs
         assert f"[{stable_version}](https://docs.nvidia.com/kvikio/{stable_version}/cpp/)" in libs
@@ -77,6 +79,7 @@ def test_api_docs() -> None:
     )
     inactive_version = api._version_label(inactive_project, "stable", data["releases"])
     assert f"[{inactive_version}]" in inactive
+    assert "/legacy/" not in rendered + libs + inactive
 
 
 def test_platform_support() -> None:
@@ -244,7 +247,12 @@ def test_api_documentation_url_rewriting(version_name: str) -> None:
     assert migrated["refuri"] == (
         f"https://docs.nvidia.com/cudf/{target_version}/user_guide/10min/?source=portal#intro"
     )
-    assert unmigrated["refuri"] == f"https://docs.rapids.ai/api/ucxx/{version_name}/user_guide/"
+    ucxx_version = (
+        "nightly"
+        if version_name == "nightly"
+        else app.rapids_portal_data["releases"]["stable"]["ucxx_version"]
+    )
+    assert unmigrated["refuri"] == f"https://docs.rapids.ai/api/ucxx/{ucxx_version}/user_guide/"
 
 
 def test_theme_url_rewriting() -> None:
