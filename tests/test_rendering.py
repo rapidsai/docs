@@ -26,7 +26,7 @@ def test_api_docs() -> None:
     rendered = api._api_docs(data, "apis")
     cudf_latest = "[Latest](https://docs.nvidia.com/cudf/latest/)"
     cudf_stable = f"[{stable_version}](https://docs.nvidia.com/cudf/{stable_version}/)"
-    cudf_legacy = f"[{legacy_version}](https://docs.rapids.ai/api/cudf/legacy/)"
+    cudf_legacy = f"[{legacy_version}](https://docs.nvidia.com/cudf/{legacy_version}/)"
     assert "[Nightly (" not in rendered
     assert "[Stable (" not in rendered
     assert "[Legacy (" not in rendered

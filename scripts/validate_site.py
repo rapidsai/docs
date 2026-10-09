@@ -146,8 +146,8 @@ def main() -> None:
 
     if args.full:
         full_paths = [
-            "api/cudf/legacy",
-            "api/dask-cudf/legacy",
+            # "api/cudf/legacy",
+            # "api/dask-cudf/legacy",
             "api/ucxx/stable",
             "api/ucxx/latest",
             "api/ucxx/nightly",
