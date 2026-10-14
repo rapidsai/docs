@@ -5,7 +5,8 @@ uses a separate concurrency group and PR branch so dispatching one project does
 not displace another project's pending documentation deployment.
 
 `deploy-java-docs.yaml` receives `project` and `version` through workflow dispatch
-after the shared Maven publisher confirms publication. It also supports
+after the standalone release-tracking dispatcher validates a completed Maven
+publication receipt. It also supports
 `workflow_call`; `deploy-cudf-java-docs.yaml` delegates to it for manual recovery.
 
 Add each Java project to `ci/java-docs-projects.json` with its Maven group and
@@ -21,9 +22,12 @@ the actual Maven patch version when `generate-projects-to-versions.py` runs.
 Repeated dispatches reuse the same PR branch; an older release cannot lower the
 stable version already recorded on main.
 
-The source repository's GitHub App needs Actions write permission on this
-repository to dispatch the workflow. Its token is used only for dispatch; AWS
-and PR creation credentials remain in the docs workflow. The caller confirms
+The existing release build dispatcher App needs Actions write permission on this
+repository. Its key stays in release-tracking's `release-dispatch` environment;
+source repositories emit receipts without an App key. The token is used only for
+dispatch; AWS and PR creation credentials remain in the docs workflow. The caller confirms
 publication, while this workflow independently requires a valid javadoc jar with
 `index.html` before uploading. It can also be dispatched directly to repair docs
 for an existing Maven release without republishing artifacts.
+Run names use `Java docs <project> <version>` for deduplication across automatic
+and manual recovery runs. Preserve that run-name contract in both workflow files.
