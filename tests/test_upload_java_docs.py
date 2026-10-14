@@ -55,14 +55,24 @@ def run_upload(env, project="cudf-java", version="26.12.00"):
     )
 
 
-def test_propagation_retry_uploads_normalized_version_and_cleans_up(upload_env):
+@pytest.mark.parametrize(
+    ("project", "group", "artifact"),
+    [
+        ("cudf-java", "ai/rapids", "cudf"),
+        ("cuvs-java", "com/nvidia/cuvs", "cuvs-java"),
+        ("cuvs-lucene", "com/nvidia/cuvs/lucene", "cuvs-lucene"),
+    ],
+)
+def test_propagation_retry_uploads_normalized_version_and_cleans_up(
+    upload_env, project, group, artifact
+):
     root, env = upload_env
-    result = run_upload(env)
+    result = run_upload(env, project)
     assert result.returncode == 0, result.stderr
     curl_log = (root / "curl.log").read_text()
     assert len(curl_log.splitlines()) == 2
-    assert "/ai/rapids/cudf/26.12.0/cudf-26.12.0-javadoc.jar" in curl_log
-    assert "s3://rapidsai-docs/cudf-java/html/26.12.0/" in (root / "aws.log").read_text()
+    assert f"/{group}/{artifact}/26.12.0/{artifact}-26.12.0-javadoc.jar" in curl_log
+    assert f"s3://rapidsai-docs/{project}/html/26.12.0/" in (root / "aws.log").read_text()
     assert not Path((root / "download-path").read_text().strip()).parent.exists()
 
 

@@ -1,5 +1,9 @@
 # Released Java documentation
 
+Registered projects are `cudf-java`, `cuvs-java`, and `cuvs-lucene`. Each release
+uses a separate concurrency group and PR branch so dispatching one project does
+not displace another project's pending documentation deployment.
+
 `deploy-java-docs.yaml` receives `project` and `version` through workflow dispatch
 after the shared Maven publisher confirms publication. It also supports
 `workflow_call`; `deploy-cudf-java-docs.yaml` delegates to it for manual recovery.

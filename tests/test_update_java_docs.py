@@ -29,32 +29,35 @@ def docs_root(tmp_path):
     return tmp_path
 
 
-def test_release_patch_survives_generator_and_rerun(docs_root):
-    assert update_docs(docs_root, "cudf-java", "99.12.01")
+@pytest.mark.parametrize("project", ["cudf-java", "cuvs-java", "cuvs-lucene"])
+def test_release_patch_survives_generator_and_rerun(docs_root, project):
+    assert update_docs(docs_root, project, "99.12.01")
     expected = (docs_root / "ci/customization/projects-to-versions.json").read_text()
     subprocess.run(
         [sys.executable, "ci/generate-projects-to-versions.py"], cwd=docs_root, check=True
     )
     assert (docs_root / "ci/customization/projects-to-versions.json").read_text() == expected
     original_yaml = (docs_root / "_data/docs.yml").read_text()
-    assert update_docs(docs_root, "cudf-java", "99.12.1")
+    assert update_docs(docs_root, project, "99.12.1")
     assert (docs_root / "_data/docs.yml").read_text() == original_yaml
 
 
-def test_delayed_release_cannot_downgrade_stable(docs_root):
-    update_docs(docs_root, "cudf-java", "99.12.1")
+@pytest.mark.parametrize("project", ["cudf-java", "cuvs-java", "cuvs-lucene"])
+def test_delayed_release_cannot_downgrade_stable(docs_root, project):
+    update_docs(docs_root, project, "99.12.1")
     original = (docs_root / "_data/docs.yml").read_text()
-    assert not update_docs(docs_root, "cudf-java", "99.10.9")
+    assert not update_docs(docs_root, project, "99.10.9")
     assert (docs_root / "_data/docs.yml").read_text() == original
     mapping = json.loads((docs_root / "ci/customization/projects-to-versions.json").read_text())
-    assert mapping["cudf-java"]["stable"] == "99.12.1"
+    assert mapping[project]["stable"] == "99.12.1"
 
 
-def test_only_registered_project_changes(docs_root):
+@pytest.mark.parametrize("project", ["cudf-java", "cuvs-java", "cuvs-lucene"])
+def test_only_registered_project_changes(docs_root, project):
     before = yaml.safe_load((docs_root / "_data/docs.yml").read_text())
-    update_docs(docs_root, "cudf-java", "99.12.1")
+    update_docs(docs_root, project, "99.12.1")
     after = yaml.safe_load((docs_root / "_data/docs.yml").read_text())
-    after["apis"]["cudf-java"] = before["apis"]["cudf-java"]
+    after["apis"][project] = before["apis"][project]
     assert after == before
 
 
