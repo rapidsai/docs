@@ -56,9 +56,7 @@ def test_redirects_leave_unmigrated_api_docs_and_shared_assets_local() -> None:
     assert "/api/ucxx/stable " not in redirects
     assert "/api/ucxx/nightly " not in redirects
     assert f"/api/ucxx/{releases['stable']['ucxx_version']} " not in redirects
-    assert "/api/dask-cudf/legacy " not in redirects
-    assert f"/api/dask-cudf/{legacy} " not in redirects
-    assert "/api/cudf/legacy " not in redirects
-    assert f"/api/cudf/{legacy} " not in redirects
+    assert f"/api/dask-cudf/{legacy} https://docs.nvidia.com/dask-cudf/{legacy}/" in redirects
+    assert f"/api/cudf/{legacy} https://docs.nvidia.com/cudf/{legacy}/" in redirects
     assert "/api/* " not in redirects
     assert "/assets/* " not in redirects

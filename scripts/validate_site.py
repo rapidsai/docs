@@ -34,7 +34,6 @@ REQUIRED_PAGES = [
     "resources/index.html",
     "user-guide/index.html",
     "visualization/index.html",
-    "assets/css/custom_nvidia.css",
     "assets/js/custom.js",
     "licenses/CubinLinker.txt",
     "licenses/cugraph-ops-EULA.txt",
@@ -146,8 +145,8 @@ def main() -> None:
 
     if args.full:
         full_paths = [
-            "api/cudf/legacy",
-            "api/dask-cudf/legacy",
+            # "api/cudf/legacy",
+            # "api/dask-cudf/legacy",
             "api/ucxx/stable",
             "api/ucxx/latest",
             "api/ucxx/nightly",

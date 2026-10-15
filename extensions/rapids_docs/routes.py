@@ -37,7 +37,8 @@ def _documentation_url(
         path = project.get("docs_nvidia_com_path", f"{project['path']}/{{version}}")
         base_url = f"https://docs.nvidia.com/{path.format(version=target_version)}/"
     else:
-        base_url = f"https://docs.rapids.ai/api/{project['path']}/{version_name}/"
+        target_version = "nightly" if version_name == "nightly" else version
+        base_url = f"https://docs.rapids.ai/api/{project['path']}/{target_version}/"
     return _with_suffix(base_url, suffix)
 
 
