@@ -455,7 +455,7 @@
 
             // all possible values
             python_vers_stable: ["3.11", "3.12", "3.13", "3.14"],
-            python_vers_nightly: ["3.11", "3.12", "3.13", "3.14"],
+            python_vers_nightly: ["3.12", "3.13", "3.14"],
             conda_cuda_vers_stable: ["12", "13"],
             conda_cuda_vers_nightly: ["12", "13"],
             pip_cuda_vers_stable: ["12", "13"],
@@ -620,6 +620,33 @@
             removeLeadingZeros(version) {
                 return version.split(".").map(Number).join(".");
             },
+            // Compare two RAPIDS version strings of the form "YY.MM" (e.g. "26.10",
+            // "27.02"). Nightly suffixes such as the trailing "a" in "26.12a" are
+            // ignored so that nightly versions compare correctly against releases.
+            // Returns true if `version` is greater than or equal to `threshold`.
+            versionToArray(version) {
+                return version.split(".").map(part => parseInt(part, 10) || 0);
+            },
+
+            // Check if a version is greater than or equal to another.
+            //
+            // Useful when we make changes that are intended to apply
+            // from version XX.YY onwards (to avoid the dance of what is "stable" vs. "nightly").
+            versionGte(version, threshold) {
+                var v = this.versionToArray(version);
+                var t = this.versionToArray(threshold);
+                for (var i = 0; i < Math.max(v.length, t.length); i++) {
+                    var a = v[i] || 0;
+                    var b = t[i] || 0;
+                    if (a > b) {
+                        return true;
+                    }
+                    if (a < b) {
+                        return false;
+                    }
+                }
+                return true;
+            },
             canInstallFromPyPi() {
                 // Nightlies should always use the NVIDIA index, never PyPI
                 if (this.active_release !== "Stable") {
@@ -717,11 +744,19 @@
                     imgLoc + "rapidsai/" + imgVariant,
                 ].filter(Boolean).join("-");
 
-                var imgTag = [
-                    (isNightly ? this.getNightlyVersion() + "a" : this.getStableVersion()),
+                // RAPIDS 26.12 dropped the '-py<python>' suffix from images.
+                // ref: https://github.com/rapidsai/docker/pull/920
+                var rapids_version = isNightly ? this.getNightlyVersion() + "a" : this.getStableVersion();
+                var imgTagParts = [
+                    rapids_version,
                     "cuda" + this.active_docker_cuda_ver,
-                    "py" + this.active_python_ver
-                ].join("-");
+                ];
+
+                // TODO: remove this if statement once 'stable' is 26.12 or greater
+                if (!this.versionGte(rapids_version, "26.12")) {
+                    imgTagParts.push("py" + this.active_python_ver);
+                }
+                var imgTag = imgTagParts.join("-");
 
                 var fullImg = (this.highlightPkgOrImg(imgRepo) + ":" + imgTag).toLowerCase();
 
