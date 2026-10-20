@@ -337,7 +337,7 @@
                             class="option" x-text="'CUDA ' + version"></div>
                     </template>
                 </div>
-                <div class="options-section" x-show="active_method !== 'pip'">
+                <div class="options-section" x-show="showPythonChooser()">
                     <div class="option-label">Python</div>
                     <template x-for="version in getSupportedPythonVersions()">
                         <div x-on:click="(e) => pythonClickHandler(e, version)"
@@ -620,14 +620,10 @@
             removeLeadingZeros(version) {
                 return version.split(".").map(Number).join(".");
             },
-            // Compare two RAPIDS version strings of the form "YY.MM" (e.g. "26.10",
-            // "27.02"). Nightly suffixes such as the trailing "a" in "26.12a" are
-            // ignored so that nightly versions compare correctly against releases.
-            // Returns true if `version` is greater than or equal to `threshold`.
+            // parse a version string like "26.12" into an array like [26, 12]
             versionToArray(version) {
                 return version.split(".").map(part => parseInt(part, 10) || 0);
             },
-
             // Check if a version is greater than or equal to another.
             //
             // Useful when we make changes that are intended to apply
@@ -826,6 +822,21 @@
                 if (this.active_method === "pip")
                     return this.getpipCmdHtml();
                 return "Not implemented yet!";
+            },
+            // whether to display the Python version selector
+            showPythonChooser() {
+                if (this.active_method === "Conda") {
+                    return true;
+                }
+                if (this.active_method === "Docker") {
+                    // RAPIDS 26.12 dropped the '-py<python>' suffix from images
+                    // ref: https://github.com/rapidsai/docker/pull/920
+                    // TODO: hide the Python version picker unconditionally for 'Docker'
+                    //       once 'stable' is 26.12 or greater
+                    var rapids_version = this.active_release === "Stable" ? this.getStableVersion() : this.getNightlyVersion();
+                    return !this.versionGte(rapids_version, "26.12");
+                }
+                return false;
             },
             getSupportedPythonVersions() {
                 if (this.active_release === "Stable") {
