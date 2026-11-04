@@ -38,6 +38,7 @@ def test_api_docs() -> None:
     assert "https://docs.nvidia.com/rmm/latest/" in rendered
     assert "https://docs.nvidia.com/nvforest/latest/" in rendered
     assert "https://docs.nvidia.com/dask-cudf/latest/" in rendered
+    assert "https://docs.nvidia.com/cudf/latest/java/" in rendered
     assert "https://docs.nvidia.com/cucim/latest/" in rendered
     assert "https://docs.nvidia.com/kvikio/latest/" in rendered
     assert "https://docs.nvidia.com/raft/latest/" in rendered
