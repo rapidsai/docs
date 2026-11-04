@@ -1,0 +1,76 @@
+name: Deploy released Java docs
+run-name: Java docs ${{ inputs.project }} ${{ inputs.version }}
+on:
+  workflow_call:
+    inputs:
+      project:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      project:
+        description: Registered Java docs project, e.g. cudf-java
+        required: true
+        type: string
+      version:
+        description: Published Maven version, e.g. 26.12.0
+        required: true
+        type: string
+concurrency:
+  # Separate projects/releases must not replace one another's pending jobs.
+  group: java-docs-${{ inputs.project }}-${{ inputs.version }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+permissions: {}
+jobs:
+  deploy:
+    if: ${{ github.repository == 'rapidsai/docs' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout docs
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Set up uv
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+      - name: Install dependencies
+        run: uv sync --locked
+      - name: Update stable docs version
+        env:
+          PROJECT: ${{ inputs.project }}
+          VERSION: ${{ inputs.version }}
+        run: uv run python ci/update_java_docs.py "${PROJECT}" "${VERSION}"
+      - name: Configure docs AWS credentials
+        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-duration-seconds: 7200
+      - name: Upload published javadoc
+        env:
+          PROJECT: ${{ inputs.project }}
+          VERSION: ${{ inputs.version }}
+        run: ci/upload_java_docs.sh "${PROJECT}" "${VERSION}"
+      - name: Open stable docs update PR
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: java-docs-${{ inputs.project }}-${{ inputs.version }}
+          title: Enable ${{ inputs.project }} docs for ${{ inputs.version }}
+          commit-message: Enable ${{ inputs.project }} docs for ${{ inputs.version }}
+          author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+          add-paths: |
+            _data/docs.yml
+            ci/customization/projects-to-versions.json
+          body: |
+            Enables ${{ inputs.project }} documentation for the published Maven release ${{ inputs.version }}.
+            The javadoc was downloaded from Maven Central and uploaded before this PR was opened.
