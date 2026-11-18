@@ -14,6 +14,11 @@ artifact IDs, and add the corresponding entry under `apis` in `_data/docs.yml`.
 Only registered projects can upload to the documentation bucket. The project key
 defines the destination `s3://rapidsai-docs/<project>/html/<version>/`.
 
+The `cuvs-lucene` docs project downloads javadoc from `cuvs-lucene-10.2`.
+The legacy `cuvs-lucene` Maven coordinate is a POM-only relocation and has no
+javadoc JAR. Publication receipts retain the legacy coordinate to identify the
+complete Lucene release; the docs registration selects its versioned JAR.
+
 The workflow downloads the published javadoc jar from Maven Central, retrying
 temporary availability failures, then uploads it using the docs repository's
 existing AWS configuration. It opens a version-specific PR enabling the stable

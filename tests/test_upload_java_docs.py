@@ -60,7 +60,7 @@ def run_upload(env, project="cudf-java", version="26.12.00"):
     [
         ("cudf-java", "ai/rapids", "cudf"),
         ("cuvs-java", "com/nvidia/cuvs", "cuvs-java"),
-        ("cuvs-lucene", "com/nvidia/cuvs/lucene", "cuvs-lucene"),
+        ("cuvs-lucene", "com/nvidia/cuvs/lucene", "cuvs-lucene-10.2"),
     ],
 )
 def test_propagation_retry_uploads_normalized_version_and_cleans_up(
