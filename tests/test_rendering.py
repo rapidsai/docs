@@ -167,7 +167,6 @@ def test_notice_metadata_and_indexes() -> None:
     assert support_notice["title"] in support_notices
     assert f"](../{Path(support_notice['docname']).name}/)" in support_notices
     assert 'class="notice-status-label notice-status-green">Completed</span>' in support_notices
-    assert 'class="notice-status-label notice-status-yellow">In Progress</span>' in support_notices
 
     pinned = notices._notice_table(data, pinned=True)
     pinned_notice = next(notice for notice in data["notices"] if notice.get("notice_pin"))

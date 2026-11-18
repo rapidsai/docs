@@ -10,7 +10,6 @@ changelog
 auto-merger
 github-actions
 reproducing-ci
-telemetry
 label-checker
 merge-barriers
 recently-updated
