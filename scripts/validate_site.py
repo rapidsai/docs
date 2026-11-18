@@ -52,7 +52,8 @@ def main() -> None:
     if len(notice_pages) != len(notice_ids):
         missing.append(f"expected {len(notice_ids)} notice pages, found {len(notice_pages)}")
 
-    feed = ElementTree.parse(args.site / "notices" / "feed.xml")
+    # The feed is generated locally by the documentation build.
+    feed = ElementTree.parse(args.site / "notices" / "feed.xml")  # noqa: S314
     feed_items = feed.findall("./channel/item")
     if len(feed_items) != len(notice_ids):
         missing.append(f"expected {len(notice_ids)} RSS items, found {len(feed_items)}")

@@ -20,7 +20,7 @@ def _jinja_environment(app) -> Environment:
     return Environment(
         loader=FileSystemLoader(app.srcdir),
         undefined=StrictUndefined,
-        autoescape=False,
+        autoescape=False,  # noqa: S701 - Templates produce Markdown for Sphinx, not HTML.
         keep_trailing_newline=True,
     )
 
