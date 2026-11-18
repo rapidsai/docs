@@ -19,7 +19,7 @@ def normalize_version(version: str) -> str:
     return f"{major}.{minor}.{int(patch[0]) if patch else 0}"
 
 
-def update_docs(root: Path, project: str, version: str) -> bool:
+def update_docs(*, root: Path, project: str, version: str) -> bool:
     version = normalize_version(version)
     registry = json.loads((root / "ci/java-docs-projects.json").read_text())
     if project not in registry or not re.fullmatch(r"[a-z][a-z0-9-]+", project):
@@ -73,7 +73,9 @@ def main() -> None:
     parser.add_argument("project")
     parser.add_argument("version")
     args = parser.parse_args()
-    update_docs(Path(__file__).resolve().parents[1], args.project, args.version)
+    update_docs(
+        root=Path(__file__).resolve().parents[1], project=args.project, version=args.version
+    )
 
 
 if __name__ == "__main__":

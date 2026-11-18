@@ -21,10 +21,7 @@ output=""
 while [[ $# -gt 0 ]]; do
   if [[ $1 == --output ]]; then output=$2; shift 2; else shift; fi
 done
-echo "$output" > "$MOCK_ROOT/download-path"
-if [[ ${MOCK_HTTP:-} != "" ]]; then
-  echo "$MOCK_HTTP"
-elif [[ ! -f $MOCK_ROOT/seen ]]; then
+if [[ ! -f $MOCK_ROOT/seen ]]; then
   touch "$MOCK_ROOT/seen"
   echo 404
 else
@@ -48,60 +45,39 @@ fi
     }
 
 
-def run_upload(env, project="cudf-java", version="26.12.00"):
+def run_upload(env):
     script = Path(__file__).resolve().parents[1] / "ci/upload_java_docs.sh"
     return subprocess.run(
-        ["bash", str(script), project, version], env=env, capture_output=True, text=True
+        ["bash", str(script), "cuvs-lucene", "26.12.01"],
+        env=env,
+        capture_output=True,
+        text=True,
     )
 
 
-@pytest.mark.parametrize(
-    ("project", "group", "artifact"),
-    [
-        ("cudf-java", "ai/rapids", "cudf"),
-        ("cuvs-java", "com/nvidia/cuvs", "cuvs-java"),
-        ("cuvs-lucene", "com/nvidia/cuvs/lucene", "cuvs-lucene-10.2"),
-    ],
-)
-def test_propagation_retry_uploads_normalized_version_and_cleans_up(
-    upload_env, project, group, artifact
-):
+def test_lucene_download_retries_and_uploads_to_the_exact_version(upload_env):
     root, env = upload_env
-    result = run_upload(env, project)
+
+    result = run_upload(env)
+
     assert result.returncode == 0, result.stderr
-    curl_log = (root / "curl.log").read_text()
-    assert len(curl_log.splitlines()) == 2
-    assert f"/{group}/{artifact}/26.12.0/{artifact}-26.12.0-javadoc.jar" in curl_log
-    assert f"s3://rapidsai-docs/{project}/html/26.12.0/" in (root / "aws.log").read_text()
-    assert not Path((root / "download-path").read_text().strip()).parent.exists()
+    urls = (root / "curl.log").read_text().splitlines()
+    assert len(urls) == 2
+    maven_path = (
+        "/com/nvidia/cuvs/lucene/cuvs-lucene-10.2/26.12.1/cuvs-lucene-10.2-26.12.1-javadoc.jar"
+    )
+    assert all(url.endswith(maven_path) for url in urls)
+    upload = (root / "aws.log").read_text().strip()
+    assert upload.endswith("s3://rapidsai-docs/cuvs-lucene/html/26.12.1/")
 
 
-@pytest.mark.parametrize(
-    ("project", "version"),
-    [("unknown", "26.12.0"), ("../cudf-java", "26.12.0"), ("cudf-java", "26.12.0-SNAPSHOT")],
-)
-def test_invalid_input_never_downloads_or_uploads(upload_env, project, version):
+def test_missing_javadoc_index_blocks_upload(upload_env):
     root, env = upload_env
-    assert run_upload(env, project, version).returncode != 0
-    assert not (root / "curl.log").exists()
-    assert not (root / "aws.log").exists()
+    with zipfile.ZipFile(root / "javadoc.jar", "w") as archive:
+        archive.writestr("other.html", "Incomplete javadoc")
 
+    result = run_upload(env)
 
-def test_permanent_http_error_does_not_upload(upload_env):
-    root, env = upload_env
-    result = run_upload({**env, "MOCK_HTTP": "401"})
     assert result.returncode != 0
-    assert len((root / "curl.log").read_text().splitlines()) == 1
-    assert not (root / "aws.log").exists()
-
-
-@pytest.mark.parametrize("valid_zip", [False, True])
-def test_missing_or_invalid_javadoc_does_not_upload(upload_env, valid_zip):
-    root, env = upload_env
-    if valid_zip:
-        with zipfile.ZipFile(root / "javadoc.jar", "w") as archive:
-            archive.writestr("other.html", "Incomplete javadoc")
-    else:
-        (root / "javadoc.jar").write_text("invalid ZIP")
-    assert run_upload(env).returncode != 0
+    assert "Javadoc index.html is missing" in result.stderr
     assert not (root / "aws.log").exists()

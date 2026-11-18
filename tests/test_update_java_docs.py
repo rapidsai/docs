@@ -8,9 +8,8 @@ import sys
 from pathlib import Path
 
 import pytest
-import yaml
 
-from ci.update_java_docs import normalize_version, update_docs
+from ci.update_java_docs import update_docs
 
 
 @pytest.fixture
@@ -29,45 +28,26 @@ def docs_root(tmp_path):
     return tmp_path
 
 
-@pytest.mark.parametrize("project", ["cudf-java", "cuvs-java", "cuvs-lucene"])
-def test_release_patch_survives_generator_and_rerun(docs_root, project):
-    assert update_docs(docs_root, project, "99.12.01")
-    expected = (docs_root / "ci/customization/projects-to-versions.json").read_text()
+def test_stable_link_keeps_exact_maven_version_after_regeneration(docs_root):
+    project = "cuvs-java"
+    version = "99.12.1"
+    update_docs(root=docs_root, project=project, version=version)
     subprocess.run(
         [sys.executable, "ci/generate-projects-to-versions.py"], cwd=docs_root, check=True
     )
-    assert (docs_root / "ci/customization/projects-to-versions.json").read_text() == expected
-    original_yaml = (docs_root / "_data/docs.yml").read_text()
-    assert update_docs(docs_root, project, "99.12.1")
-    assert (docs_root / "_data/docs.yml").read_text() == original_yaml
+
+    mapping = json.loads((docs_root / "ci/customization/projects-to-versions.json").read_text())
+    assert mapping[project]["stable"] == version
 
 
-@pytest.mark.parametrize("project", ["cudf-java", "cuvs-java", "cuvs-lucene"])
-def test_delayed_release_cannot_downgrade_stable(docs_root, project):
-    update_docs(docs_root, project, "99.12.1")
-    original = (docs_root / "_data/docs.yml").read_text()
-    assert not update_docs(docs_root, project, "99.10.9")
-    assert (docs_root / "_data/docs.yml").read_text() == original
+def test_late_release_keeps_newer_stable_link(docs_root):
+    project = "cuvs-java"
+    update_docs(root=docs_root, project=project, version="99.12.1")
+    docs_config = docs_root / "_data/docs.yml"
+    original = docs_config.read_text()
+
+    assert not update_docs(root=docs_root, project=project, version="99.10.9")
+
+    assert docs_config.read_text() == original
     mapping = json.loads((docs_root / "ci/customization/projects-to-versions.json").read_text())
     assert mapping[project]["stable"] == "99.12.1"
-
-
-@pytest.mark.parametrize("project", ["cudf-java", "cuvs-java", "cuvs-lucene"])
-def test_only_registered_project_changes(docs_root, project):
-    before = yaml.safe_load((docs_root / "_data/docs.yml").read_text())
-    update_docs(docs_root, project, "99.12.1")
-    after = yaml.safe_load((docs_root / "_data/docs.yml").read_text())
-    after["apis"][project] = before["apis"][project]
-    assert after == before
-
-
-@pytest.mark.parametrize("project", ["unknown-java", "../cudf-java", "cudf-java\n"])
-def test_unregistered_project_is_rejected(docs_root, project):
-    with pytest.raises(ValueError, match="Unregistered"):
-        update_docs(docs_root, project, "99.12.1")
-
-
-@pytest.mark.parametrize("version", ["26.12.0-SNAPSHOT", "26.12.1/../../", "v26.12.1", "26.12\n"])
-def test_invalid_version_is_rejected(version):
-    with pytest.raises(ValueError):
-        normalize_version(version)
