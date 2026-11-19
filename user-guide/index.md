@@ -24,7 +24,7 @@ The NVIDIA CUDA-X libraries for data science framework is a collection of librar
 
 
 **<i class="fa-solid fa-code-branch"></i> Graph Analytics with [cuGraph](https://github.com/rapidsai/cugraph)**:
- Start with the [Easy Path](/api/cugraph/stable/basics/nx_transition/#easy-path-use-networkx-graph-objects-accelerated-algorithms) to use NetworkX graph objects with accelerated algorithms. Or, use [nx-cugraph](/api/cugraph/stable/nx_cugraph/nx_cugraph/) to use the NetworkX API with a zero code change GPU accelerated backend. There is also a general [cuGraph Introduction](/api/cugraph/stable/basics/cugraph_intro/).
+ Start with the [Easy Path](/api/cugraph/stable/basics/nx_transition/#easy-path-use-networkx-graph-objects-accelerated-algorithms) to use NetworkX graph objects with accelerated algorithms. nx-cugraph was deprecated in RAPIDS 26.12 and is no longer included starting with RAPIDS 27.02. There is also a general [cuGraph Introduction](/api/cugraph/stable/basics/cugraph_intro/).
 
 
 **<i class="fa-solid fa-images"></i> Computer Vision and Analytics with [cuCIM](https://github.com/NVIDIA/cucim)**:
